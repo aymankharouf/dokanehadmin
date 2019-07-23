@@ -1,0 +1,61 @@
+/* Your app styles here */
+/* Your app styles here */
+.sections {
+    margin: 1rem;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  .total-price {
+    margin: 20px;
+  }
+  
+  .order-button {
+    margin: 20px;
+    width: 10em;
+  }
+  
+  .search-icon {
+    margin-top: 0.8rem;
+  }
+  
+  .star {
+    color: yellow;
+    margin: 3px;
+  }
+  
+  .left {
+    text-align: left;
+  }
+  
+  .error {
+    text-align: center;
+    color: red;
+  }
+  
+  .total {
+    color: green;
+  }
+  
+  .delivery {
+    color: yellow;
+  }
+  
+  .net {
+    color: red;
+  }
+  
+  .logo {
+    width: 100px;
+  }
+  
+  .current-store {
+    background-color: lime;
+  }
+  
+  .price {
+    height: 20px;
+  }
+  
