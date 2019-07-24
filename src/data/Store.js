@@ -138,13 +138,15 @@ const Store = props => {
       })
       setRating(ratingArray)
     })
-    firebase.firestore().collection('orders').onSnapshot(docs => {
-      let ordersArray = []
-      docs.forEach(doc => {
-        ordersArray.push({...doc.data(), id:doc.id})
+    if (currentUser) {
+      firebase.firestore().collection('orders').onSnapshot(docs => {
+        let ordersArray = []
+        docs.forEach(doc => {
+          ordersArray.push({...doc.data(), id:doc.id})
+        })
+        setOrders(ordersArray)
       })
-      setOrders(ordersArray)
-    })
+    }
   }, []);
   return (
     <StoreContext.Provider value={{state, currentUser, products, rating, orders, dispatch}}>
