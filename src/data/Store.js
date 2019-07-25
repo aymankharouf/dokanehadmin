@@ -6,11 +6,10 @@ export const StoreContext = createContext()
 
 const Store = props => {
   const sections = [
-  {id: '1', name: 'بقوليات'},
-  {id: '2', name: 'سكاكر'},
-  {id: '3', name: 'معلبات'},
-  {id: '4', name: 'منظفات'},
-  {id: '5', name: 'زيوت'}
+    {id: '1', name: 'الطلبات', path: 'orders'},
+    {id: '2', name: 'المنتجات واﻻسعار', path: 'stores'},
+    {id: '3', name: 'العملاء', path: 'customers'},
+    {id: '4', name: 'المستودع', path: 'inventory'}
   ]
   const randomColors = [
     {id: '0', name: 'red'},
@@ -82,10 +81,13 @@ const Store = props => {
     {id: '3', name: 'كيلو غرام'}
   ]
   const stores = [
-    {id: '1', name: 'ربوع القدس'},
-    {id: '2', name: 'كارفور'},
-    {id: '3', name: 'سي تاون'},
-    {id: '4', name: 'سامح'}
+    {id: '1', name: 'حريص', type: 'i'},
+    {id: '2', name: 'ربوع القدس', type: 'm'},
+    {id: '3', name: 'كارفور', type: 's'},
+    {id: '4', name: 'سي تاون', type: 's'},
+    {id: '5', name: 'سامح', type: 's'},
+    {id: '6', name: 'جملة 1', type: 'w'},
+    {id: '7', name: 'جملة 2', type: 'w'}
   ]
   const orderStatus = [
     {id: 1, name: 'قيد التسليم'},

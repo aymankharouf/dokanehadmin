@@ -1,3 +1,4 @@
+
 const functions = require('firebase-functions');
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
@@ -54,4 +55,18 @@ exports.confirmOrder = functions.firestore.document('orders/{orderId}')
 					}
 				})
 		})
-	})
+  })
+  
+  exports.createCustomer = functions.auth.user().onCreate(user => {
+    return admin.firestore().collection('customers').doc(user.uid).set({
+      mobile: user.email.substring(0, 10),
+      status: 1,
+      limit: 10,
+      totalOrders: 0,
+      totalPayment: 0,
+      debit: 0,
+      time: new Date,
+      address: '',
+      notes: ''
+    })
+  });

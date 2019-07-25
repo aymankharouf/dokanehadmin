@@ -1,22 +1,5 @@
 import firebase from './firebase'
 
-export const register = user => {
-  console.log('register')
-  return (dispatch, getState) => {
-    firebase.auth().createUserWithEmailAndPassword(user.mobile + '@gmail.com', user.mobile.substring(8, 2) + user.password)
-    .then(resp => {
-      firebase.firestore().collection('users').doc(resp.user.uid).set({
-        name: user.name,
-        fullName: user.name + '-' + user.mobile,
-        location: user.location
-      })
-      .then(() => dispatch({type: 'DONE'}))
-      .catch(error => dispatch({type: 'ERROR', message: error.code}))
-    })
-    .catch(error => dispatch({type: 'ERROR', message: error.code}))
-  }
-}
-
 export const rateProduct = (product, rating) => {
   const ratingRec = {
     productId: product.id,
