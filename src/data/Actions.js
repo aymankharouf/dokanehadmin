@@ -21,18 +21,23 @@ export const confirmOrder = async order => {
 }
 
 export const addProduct = async storeProduct => {
-  const stores = [...storeProduct.product.stores, {id: storeProduct.storeId, price: parseFloat(storeProduct.price).toFixed(3), time: new Date()}]
+  const stores = [...storeProduct.product.stores, {id: storeProduct.storeId, purchasePrice: parseFloat(storeProduct.purchasePrice).toFixed(3), price: parseFloat(storeProduct.price).toFixed(3), time: new Date()}]
   const minPrice = Math.min(...stores.map(store => store.price))
   await firebase.firestore().collection('products').doc(storeProduct.product.id).set({
     stores: stores,
     price: parseFloat(minPrice).toFixed(3),
     value: minPrice / storeProduct.product.quantity,
   }, { merge: true })
+  const increment = firebase.firestore.FieldValue.increment(1)
+  await firebase.firestore().collection('stores').doc(storeProduct.storeId).set({
+    lastVisit: new Date(),
+    productsCount: increment
+  }, { merge: true })
 }
 
 export const newProduct = async product => {
   let id
-  const stores = [{id: product.storeId, price: parseFloat(product.price).toFixed(3), time: new Date()}]
+  const stores = [{id: product.storeId, purchasePrice: parseFloat(product.purchasePrice).toFixed(3), price: parseFloat(product.price).toFixed(3), time: new Date()}]
   await firebase.firestore().collection('products').add({
     category: product.category,
     name: product.name,
@@ -44,6 +49,7 @@ export const newProduct = async product => {
     trademark: product.trademark,
     quantity: parseFloat(product.quantity),
     unit: product.unit,
+    orderUnitType: product.orderUnitType,
     time: new Date()
   }).then(docRef => {
       return docRef.id
@@ -85,6 +91,10 @@ export const deleteProduct = async (storeId, product) => {
     price: parseFloat(minPrice).toFixed(3),
     value: minPrice / product.quantity,
   }, { merge: true })
+}
+
+export const addStore = async store => {
+  await firebase.firestore().collection('stores').add(store)
 }
 
 

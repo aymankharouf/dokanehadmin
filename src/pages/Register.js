@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useState } from 'react'
 import { Page, Navbar, List, ListInput, ListButton, ListItem, Block} from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import firebase from '../data/firebase'
@@ -13,15 +13,6 @@ const Register = props => {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [error, setError] = useState('')
-
-  /*useEffect(() => {
-    dispatch({type: 'CLEAR_ERRORS'})
-  }, [])
-  componentDidUpdate(){
-    if (this.$f7router.currentRoute.name === 'register' && this.props.result.finished && this.props.result.message === '') {
-      this.$f7router.navigate(`/${this.$f7route.params.callingPage}/`)
-    }
-  }*/
 
   const patterns = {
     name: /^.{4,50}$/,
@@ -67,32 +58,30 @@ const Register = props => {
     setMobile(e.target.value)
     validateMobile(e.target.value)
   }
-  const handleRegister = useCallback(
-    async e => {
-      e.preventDefault();
-      try {
-        if (name === '') {
-          setNameErrorMessage('enter your name')
-          throw 'enter your name'
-        }
-        if (mobile === '') {
-          setMobileErrorMessage('enter your mobile number')
-          throw 'enter your mobile number'
-        }
-        if (password === '') {
-          setPasswordErrorMessage('enter your password')
-          throw 'enter your password'
-        }
-        await firebase.auth().createUserWithEmailAndPassword(mobile + '@gmail.com', mobile.substring(8, 2) + password);
-        await firebase.auth().currentUser.updateProfile({
-          displayName: name + '-' + mobile
-        })
-        props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
-      } catch (err) {
-        err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
+  const handleRegister = async e => {
+    e.preventDefault();
+    try {
+      if (name === '') {
+        setNameErrorMessage('enter your name')
+        throw 'enter your name'
       }
+      if (mobile === '') {
+        setMobileErrorMessage('enter your mobile number')
+        throw 'enter your mobile number'
+      }
+      if (password === '') {
+        setPasswordErrorMessage('enter your password')
+        throw 'enter your password'
+      }
+      await firebase.auth().createUserWithEmailAndPassword(mobile + '@gmail.com', mobile.substring(8, 2) + password);
+      await firebase.auth().currentUser.updateProfile({
+        displayName: name + '-' + mobile
+      })
+      props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
+    } catch (err) {
+      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
     }
-  )
+  }
   const locations = state.locations.map(location => <option key={location.id} value={location.id}>{location.name}</option>)
   return (
     <Page loginScreen>

@@ -4,16 +4,15 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const StoreProducts = props => {
-  const { state, products } = useContext(StoreContext)
-  const storeProducts = products.filter(product => product.category === props.categoryId && product.stores.findIndex(store => store.id === props.storeId) >= 0)
-  const category = state.categories.find(category => category.id === props.categoryId)
-  const store = state.stores.find(store => store.id === props.storeId)
+  const { state, newStores, products } = useContext(StoreContext)
+  const storeProducts = products.filter(product => product.stores.findIndex(store => store.id === props.id) >= 0)
+  const store = newStores.find(store => store.id === props.id)
   const handleAdd = () => {
-    props.f7router.navigate(`/addProduct/${props.storeId}/category/${props.categoryId}`)
+    props.f7router.navigate(`/addProduct/${props.id}`)
   }
   return(
     <Page>
-      <Navbar title={`${category.name} - ${store.name}`} backLink="Back">
+      <Navbar title={`${store.name}`} backLink="Back">
       <NavRight>
         <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
       </NavRight>

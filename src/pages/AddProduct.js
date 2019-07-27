@@ -1,47 +1,81 @@
 import React, { useState, useContext } from 'react'
 import { addProduct } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Button} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Button, Block} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddProduct = props => {
-  /*componentDidUpdate(){
-    if (this.$f7router.currentRoute.name === 'addProduct' && this.props.result.finished && this.props.result.message === '') this.$f7router.navigate(`/storeCategory/${this.props.store.id}/category/${this.props.category.id}`)
-  }*/
-  const { state, products } = useContext(StoreContext)
-  const nonStoreProducts = products.filter(product => product.category === props.categoryId && product.stores.findIndex(store => store.id === props.storeId) === -1)
-  const category = state.categories.find(category => category.id === props.categoryId)
-  const store = state.stores.find(store => store.id === props.storeId)
+  const { state, newStores, products } = useContext(StoreContext)
+  const nonStoreProducts = products.filter(rec => rec.stores.findIndex(store => store.id === props.id) === -1)
+  const store = newStores.find(rec => rec.id === props.id)
   const [productId, setProductId] = useState('')
+  const [product, setProduct] = useState('')
+  const [purchasePrice, setPurchasePrice] = useState('')
   const [price, setPrice] = useState('')
+  const [error, setError] = useState('')
   const handleSubmit = () => {
-    addProduct({
-      product: products.find(product => product.id === productId),
-      storeId: props.storeId,
-      price: price
-    }).then(() => {
-      props.f7router.navigate(`/storeCategory/${props.storeId}/category/${props.categoryId}`)
-    })
+    try{
+      if (productId === '') {
+        throw 'enter product'
+      }
+      if (purchasePrice === '') {
+        throw 'enter product purchase price'
+      }
+      if (price === '') {
+        throw 'enter product price'
+      }
+      addProduct({
+        product,
+        storeId: props.id,
+        purchasePrice,
+        price
+      }).then(() => {
+        props.f7router.navigate(`/store/${props.id}`)
+      })
+    } catch (err) {
+      setError(err)
+    }
+  }
+  const handleProductChange = e => {
+    setProductId(e.target.value)
+    setProduct(products.find(rec => rec.id === e.target.value))
+  }
+  const handlePurchasePriceChange = e => {
+    const storeType = store ? store.storeType : null
+    if (storeType === 'w') {
+      const currentCategory = state.categories.find(rec => rec.id === product.category)
+      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
+      const percent = currentSection ? currentSection.percent : 0
+      setPrice(Math.round(((1 + (percent / 100)) * e.target.value) * 1000) / 1000)
+    } else {
+      setPrice(e.target.value)
+    }
+    setPurchasePrice(e.target.value)
   }
   const productsOptionsTags = nonStoreProducts.map(product => <option key={product.id} value={product.id}>{product.name}</option>)
   return (
     <Page>
-      <Navbar title={`Add to ${category.name} - ${store.name}`} backLink="Back" />
+      <Navbar title={`Add to ${store.name}`} backLink="Back" />
       <List form>
         <ListItem
           title="Product"
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search product'}}
         >
-          <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
+          <select name="productId" defaultValue="" onChange={(e) => handleProductChange(e)}>
             <option value="" disabled></option>
             {productsOptionsTags}
           </select>
         </ListItem>
-        <ListInput name="price" label="Price" floatingLabel type="number" onChange={(e) => setPrice(e.target.value)}/>
+        <img src={product.imageUrl} alt=""/>
+        <ListInput name="puchasePrice" label="Puchase Price" value={purchasePrice} floatingLabel type="number" onChange={(e) => handlePurchasePriceChange(e)}/>
+        <ListInput name="price" label="Price" value={price} floatingLabel type="number" onChange={(e) => setPrice(e.target.value)}/>
         <Button fill onClick={() => handleSubmit()}>Submit</Button>
-        <Button href={`/newProduct/${props.storeId}/category/${props.categoryId}`}>New</Button>
+        <Button href={`/newProduct/${props.id}`}>New</Button>
       </List>
+      <Block strong className="error">
+        <p>{error}</p>
+      </Block>
     </Page>
   )
 }

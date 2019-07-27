@@ -6,11 +6,13 @@ export const StoreContext = createContext()
 
 const Store = props => {
   const sections = [
-    {id: '1', name: 'الطلبات', path: 'orders'},
-    {id: '2', name: 'المنتجات واﻻسعار', path: 'stores'},
-    {id: '3', name: 'العملاء', path: 'customers'},
-    {id: '4', name: 'المستودع', path: 'inventory'}
-  ]
+    {id: '1', name: 'بقوليات', percent: 5},
+    {id: '2', name: 'سكاكر', percent: 10},
+    {id: '3', name: 'معلبات', percent: 5},
+    {id: '4', name: 'منظفات', percent: 10},
+    {id: '5', name: 'زيوت', percent: 5}
+    ]
+  
   const randomColors = [
     {id: '0', name: 'red'},
     {id: '1', name: 'green'},
@@ -78,7 +80,13 @@ const Store = props => {
   const units = [
     {id: '1', name: 'حبة'},
     {id: '2', name: 'غرام'},
-    {id: '3', name: 'كيلو غرام'}
+    {id: '3', name: 'كيلو غرام'},
+    {id: '4', name: 'مل لتر'},
+    {id: '5', name: 'لتر'}
+  ]
+  const orderUnitTypes = [
+    {id: '1', name: 'عبوة'},
+    {id: '2', name: 'بالوزن'}
   ]
   const stores = [
     {id: '1', name: 'حريص', type: 'i'},
@@ -93,6 +101,12 @@ const Store = props => {
     {id: 1, name: 'قيد التسليم'},
     {id: 2, name: 'تم اﻻستلام'},
     {id: 3, name: 'ملغي'}
+  ]  
+  const storeTypes = [
+    {id: 'i', name: 'مستودع'},
+    {id: 'm', name: 'محل'},
+    {id: 's', name: 'سوبرماركت'},
+    {id: 'w', name: 'محل جملة'}
   ]  
   const labels = {
     appTitle: 'حريص',
@@ -117,15 +131,35 @@ const Store = props => {
     auth_wrong_password: 'كلمة السر غير صحيحة'
   }
   const basket = []
-  const initState = {sections, randomColors, categories, locations, countries, units, labels, orderStatus, basket, trademarks, orderByList, stores}
+  const initState = {sections, randomColors, categories, locations, countries, units, labels, 
+                    orderStatus, basket, trademarks, orderByList, stores, storeTypes, orderUnitTypes}
 
   const [state, dispatch] = useReducer(Reducer, initState)
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
   const [rating, setRating] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [newStores, setNewStores] = useState([]);
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(setCurrentUser);
+    firebase.auth().onAuthStateChanged(user => {
+      setUser(user)
+      if (user){
+        firebase.firestore().collection('orders').onSnapshot(docs => {
+          let ordersArray = []
+          docs.forEach(doc => {
+            ordersArray.push({...doc.data(), id:doc.id})
+          })
+          setOrders(ordersArray)
+        })  
+        firebase.firestore().collection('stores').onSnapshot(docs => {
+          let storesArray = []
+          docs.forEach(doc => {
+            storesArray.push({...doc.data(), id:doc.id})
+          })
+          setNewStores(storesArray)
+        })  
+      }
+    });
     firebase.firestore().collection('products').onSnapshot(docs => {
       let productsArray = []
       docs.forEach(doc => {
@@ -140,18 +174,9 @@ const Store = props => {
       })
       setRating(ratingArray)
     })
-    if (currentUser) {
-      firebase.firestore().collection('orders').onSnapshot(docs => {
-        let ordersArray = []
-        docs.forEach(doc => {
-          ordersArray.push({...doc.data(), id:doc.id})
-        })
-        setOrders(ordersArray)
-      })
-    }
   }, []);
   return (
-    <StoreContext.Provider value={{state, currentUser, products, rating, orders, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, rating, orders, newStores, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

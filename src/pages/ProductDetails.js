@@ -10,9 +10,9 @@ const ProductDetails = props => {
     dispatch({type: 'ADD_TO_BASKET', product})
     props.f7router.back()
   }
-  const { products, rating, currentUser, dispatch } = useContext(StoreContext)
+  const { products, rating, user, dispatch } = useContext(StoreContext)
   const product = products.find(product => product.id === props.id)
-  const rating_links = currentUser && rating.findIndex(rating => rating.productId === props.id) === -1 ? <RateProduct product={product}/> : null
+  const rating_links = user && rating.findIndex(rating => rating.productId === props.id) === -1 ? <RateProduct product={product}/> : null
   return (
     <Page>
       <Navbar title={product.name} backLink="Back" />

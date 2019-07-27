@@ -7,8 +7,8 @@ import { StoreContext } from '../data/Store';
 
 
 const OrdersList = props => {
-  const { state, orders, currentUser } = useContext(StoreContext)
-  const userOrders = orders.filter(order => order.user === currentUser.uid)
+  const { state, orders, user } = useContext(StoreContext)
+  const userOrders = orders.filter(order => order.user === user.uid)
   userOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
   return(
     <Page>

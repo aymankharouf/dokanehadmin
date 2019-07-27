@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 
 const OrderDetails = props => {
-  const { state, orders, currentUser, dispatch } = useContext(StoreContext)
+  const { state, orders, user, dispatch } = useContext(StoreContext)
   const order = orders.find(order => order.id === props.id)
   const [error, setError] = useState('')
   const handleEdit = () => {
@@ -22,7 +22,7 @@ const OrderDetails = props => {
   }
 
 
-  if (!currentUser) return <ReLogin callingPage="order"/>
+  if (!user) return <ReLogin callingPage="order"/>
   return(
     <Page>
       <Navbar title="Order" backLink="Back" />

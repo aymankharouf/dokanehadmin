@@ -4,11 +4,19 @@ import { StoreContext } from '../data/Store';
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
+  const sections = [
+    {id: '1', name: 'الطلبات', path: 'orders'},
+    {id: '2', name: 'المنتجات واﻻسعار', path: 'stores'},
+    {id: '3', name: 'العملاء', path: 'customers'},
+    {id: '4', name: 'المستودع', path: 'inventory'}
+  ]
+
+  let i = 0
   return (
     <Block>
-      {state.sections.map(section => {
+      {sections.map(section => {
         return (
-          <Button large fill className="sections" color={state.randomColors[parseInt(section.id) % 13].name} href={`/section/${section.id}`} key={section.id}>
+          <Button large fill className="sections" color={state.randomColors[i++ % 13].name} href={`/${section.path}/`} key={section.id}>
             {section.name}
           </Button>
         )

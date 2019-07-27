@@ -13,8 +13,6 @@ import Basket from './pages/Basket'
 import ConfirmOrder from './pages/ConfirmOrder'
 import Search from './pages/Search'
 import Stores from './pages/Stores';
-import StoreSections from './pages/StoreSections';
-import StoreCategories from './pages/StoreCategories';
 import StoreProducts from './pages/StoreProducts';
 import AddProduct from './pages/AddProduct';
 import NewProduct from './pages/NewProduct';
@@ -22,6 +20,7 @@ import ActiveOrders from './pages/ActiveOrders';
 import OrdersList from './pages/OrdersList';
 import OrderDetails from './pages/OrderDetails';
 import StoreProductDetails from './pages/StoreProductDetails';
+import AddStore from './pages/AddStore';
 
 export default [
   {
@@ -81,23 +80,19 @@ export default [
     component: Stores
   },
   {
+    path: '/addStore/',
+    component: AddStore
+  },
+  {
     path: '/store/:id',
-    component: StoreSections
-  },
-  {
-    path: '/storeSection/:storeId/section/:sectionId',
-    component: StoreCategories
-  },
-  {
-    path: '/storeCategory/:storeId/category/:categoryId',
     component: StoreProducts
   },
   {
-    path: '/addProduct/:storeId/category/:categoryId',
+    path: '/addProduct/:id',
     component: AddProduct
   },
   {
-    path: '/newProduct/:storeId/category/:categoryId',
+    path: '/newProduct/:id',
     component: NewProduct
   },
   {

@@ -7,11 +7,8 @@ import { confirmOrder } from '../data/Actions'
 
 
 const ConfirmOrder = props => {
-  const { state, currentUser, dispatch } = useContext(StoreContext)
+  const { state, user, dispatch } = useContext(StoreContext)
   const totalPrice = state.basket.reduce((a, product) => a + Number(product.netPrice), 0)
-  /*componentDidUpdate(){
-    if (this.props.result.finished && this.props.result.message === '') this.$f7router.navigate('/home/')
-  }*/
   const [note, setNote] = useState('')
   const handleOrder = e => {
     const order = {
@@ -24,7 +21,7 @@ const ConfirmOrder = props => {
       dispatch({type: 'CLEAR_BASKET'})
     })
   }
-  if (!currentUser) return <ReLogin callingPage="order"/>
+  if (!user) return <ReLogin callingPage="order"/>
   return(
     <Page>
     <Navbar title="Order" backLink="Back" />
