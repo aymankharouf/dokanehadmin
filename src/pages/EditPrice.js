@@ -7,7 +7,8 @@ import { editPrice } from '../data/Actions'
 const EditPrice = props => {
   const { state, products } = useContext(StoreContext)
   const product = products.find(rec => rec.id === props.productId)
-	const store = product.stores.find(rec => rec.id === props.storeId)
+  let store = product.stores.find(rec => rec.id === props.storeId)
+  store = {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
   const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice || '')
   const [price, setPrice] = useState(store.price)
   const [inStock, setInStock] = useState(store.inStock || '')
@@ -57,27 +58,39 @@ const EditPrice = props => {
       if (price === '') {
         throw 'enter price'
       }
+      if (price < purchasePrice) {
+        throw 'enter a valid price'
+      }
       if (hasOffer) {
         if (offerPurchasePrice === '') {
-            throw 'enter offer purchase price'
-          }
-          if (offerPrice === '') {
-            throw 'enter offer price'
-          }    
-          if (offerEnd === '') {
-            throw 'enter offer end date'
-          }
+          throw 'enter offer purchase price'
+        }
+        if (offerPrice === '') {
+          throw 'enter offer price'
+        }
+        if (offerPrice < offerPurchasePrice) {
+          throw 'enter a valid offer price'
+        }
+        if (offerPrice > price) {
+          throw 'enter a valid offer price'
+        }
+        if (offerEnd === '') {
+          throw 'enter offer end date'
+        }
+        if (new Date(offerEnd) < new Date()) {
+          throw 'enter a valid offer end date'
+        }
       }
-      editPrice({
-        product,
+      editPrice(
         store,
+        product,
         purchasePrice,
         price,
+        inStock,
         offerPurchasePrice,
         offerPrice,
-        inStock,
         offerEnd
-      }).then(() => {
+      ).then(() => {
         props.f7router.navigate(`/storeProduct/${props.storeId}/product/${props.productId}`)
       })  
     } catch (err){
@@ -86,7 +99,7 @@ const EditPrice = props => {
   }
   return (
     <Page>
-      <Navbar title='Edit Price' backLink="Back" />
+      <Navbar title={`Edit Price - ${store.name}`} backLink="Back" />
       <List form>
         <img src={imageUrl} alt=""/>
         <ListInput name="purchasePrice" label="Purchase Price" floatingLabel type="number" value={purchasePrice} onChange={(e) => handlePurchasePriceChange(e)}/>
@@ -100,7 +113,13 @@ const EditPrice = props => {
        		<React.Fragment>
             <ListInput name="offerPurchasePrice" label="Offer Purchase Price" floatingLabel type="number" value={offerPurchasePrice} onChange={(e) => handleOfferPurchasePriceChange(e)}/>
             <ListInput name="offerPrice" label="Offer Price" floatingLabel type="number" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)}/>
-            <ListInput name="offerEnd" label="Offer End At" floatingLabel type="date" value={offerEnd} onChange={(e) => setOfferEnd(e.target.value)}/>
+            <ListInput
+              name="offerEnd"
+              label="Offer End At"
+              type="datepicker"
+              value={offerEnd} 
+              onCalendarChange={(value) => setOfferEnd(value)}
+            />
         	</React.Fragment>
         : null}
         <Button fill onClick={(e) => handleEdit(e)}>Submit</Button>

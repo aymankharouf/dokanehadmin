@@ -5,7 +5,7 @@ import { StoreContext } from '../data/Store';
 
 
 const AddStore = props => {
-  const { state } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StoreContext)
   const [storeType, setStoreType] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState('')
@@ -21,7 +21,8 @@ const AddStore = props => {
         name,
         storeType,
         sales: 0,
-      }).then(() => {
+      }).then(id => {
+        dispatch({type: 'ADD_STORE', store: {id, name, storeType, sales: 0}})
         props.f7router.navigate('/stores/')
       })
     } catch(err) {

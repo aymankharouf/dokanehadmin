@@ -4,23 +4,24 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 
-const Stores = props => {
+const SectionCategories = props => {
   const { state } = useContext(StoreContext)
-  const stores = state.stores.filter(rec => rec.storeType !== 'i')
+  const section = state.sections.find(rec => rec.id === props.id)
+  const categories = state.categories.filter(rec => rec.sectionId === props.id)
   const handleAdd = () => {
-    props.f7router.navigate('/addStore/')
+    props.f7router.navigate(`/addCategory/${props.id}`)
   }
 
   return (
     <Page>
-      <Navbar title="Stores" backLink="Back" />
+      <Navbar title={`Categories - ${section.name}`} backLink="Back" />
       <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>
       <Block>
           <List>
-            {stores && stores.map(store =>
-              <ListItem title={store.name} link={`/store/${store.id}`} key={store.id}>
+            {categories && categories.map(rec =>
+              <ListItem title={rec.name} key={rec.id}>
               </ListItem>
             )}
           </List>
@@ -32,4 +33,4 @@ const Stores = props => {
   )
 }
 
-export default Stores
+export default SectionCategories

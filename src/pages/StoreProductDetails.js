@@ -4,9 +4,9 @@ import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 
 const StoreProductDetails = props => {
-  const { products, stores } = useContext(StoreContext)
+  const { state, products } = useContext(StoreContext)
   const product = products.find(product => product.id === props.productId)
-  const store = stores.find(rec => rec.id === props.storeId)
+  const store = state.stores.find(rec => rec.id === props.storeId)
   const storePrice = product.stores.find(rec => rec.id === props.storeId).price
   const handleEditPrice = () => {
     props.f7router.navigate(`/editPrice/${props.storeId}/product/${props.productId}`)

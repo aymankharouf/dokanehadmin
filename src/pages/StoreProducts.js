@@ -6,20 +6,20 @@ import moment from 'moment'
 import 'moment/locale/ar'
 
 const StoreProducts = props => {
-  const { state, stores, products } = useContext(StoreContext)
+  const { state, products } = useContext(StoreContext)
   let storeProducts = products.filter(product => product.stores.findIndex(store => store.id === props.id) >= 0)
   storeProducts = storeProducts.map(product => {
     return {
       id: product.id,
       name: product.name,
-      trademark: state.trademarks.find(rec => rec.id === product.trademark).name,
+      trademark: product.trademark ? state.trademarks.find(rec => rec.id === product.trademark).name : '',
       price: parseFloat(product.stores.find(rec => rec.id === props.id).price).toFixed(3),
       time: product.stores.find(rec => rec.id === props.id).time,
       imageUrl: product.imageUrl
     }
   })
   storeProducts.sort((producta, productb) => producta.time.seconds - productb.time.seconds)
-  const store = stores.find(store => store.id === props.id)
+  const store = state.stores.find(store => store.id === props.id)
   const handleAdd = () => {
     props.f7router.navigate(`/addProduct/${props.id}`)
   }

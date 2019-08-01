@@ -1,15 +1,5 @@
 import firebase from './firebase'
 
-export const rateProduct = (product, rating) => {
-  const ratingRec = {
-    productId: product.id,
-    user: firebase.auth().currentUser.uid,
-    rating: rating,
-    time: new Date()
-  }
-  firebase.firestore().collection('rating').add(ratingRec)
-}
-
 export const confirmOrder = async order => {
   const newOrder = {
     ...order,
@@ -20,47 +10,49 @@ export const confirmOrder = async order => {
   await firebase.firestore().collection('orders').add(newOrder)
 }
 
-export const addProduct = async storeProduct => {
-  const stores = [...storeProduct.product.stores, {id: storeProduct.storeId, purchasePrice: parseFloat(storeProduct.purchasePrice).toFixed(3), price: parseFloat(storeProduct.price).toFixed(3), time: new Date()}]
+export const addProduct = async (product, store, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd) => {
+  const stores = [...product.stores, {id: store.id, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd, time: new Date()}]
   const minPrice = Math.min(...stores.map(store => store.price))
-  await firebase.firestore().collection('products').doc(storeProduct.product.id).update({
+  await firebase.firestore().collection('products').doc(product.id).update({
     stores: stores,
     price: parseFloat(minPrice).toFixed(3),
-    value: minPrice / storeProduct.product.quantity,
+    value: minPrice / product.quantity,
     status: 1
   })
 }
 
 export const newProduct = async product => {
-  let id
-  const stores = [{id: product.storeId, purchasePrice: parseFloat(product.purchasePrice).toFixed(3), price: parseFloat(product.price).toFixed(3), time: new Date()}]
-  await firebase.firestore().collection('products').add({
+  const stores = [{
+    id: product.storeId, 
+    purchasePrice: product.purchasePrice, 
+    price: product.price, 
+    inStock: product.inStock, 
+    offerPurchasePrice: product.offerPurchasePrice, 
+    offerPrice: product.offerPrice,
+    offerEnd: product.offerEnd,
+    time: new Date()
+  }]
+  const docRef = await firebase.firestore().collection('products').add({
     category: product.category,
     name: product.name,
     stores: stores,
-    price: parseFloat(product.price).toFixed(3),
+    price: product.price,
     sales: 0,
     rating: '',
     value: product.price / product.quantity,
     trademark: product.trademark,
-    quantity: parseFloat(product.quantity),
+    quantity: product.quantity,
     unit: product.unit,
     byWeight: product.byWeight,
     country: product.country,
     time: new Date(),
     status: 1
-  }).then(docRef => {
-      return docRef.id
-    }).then(key => {
-      const filename = product.image.name
-      const ext = filename.slice(filename.lastIndexOf('.'))
-      id = key
-      return firebase.storage().ref().child('products/' + key + ext).put(product.image)
-    }).then(fileData => {
-      return firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
-    }).then(url => {
-      return firebase.firestore().collection('products').doc(id).update({imageUrl: url})
-    })
+  })
+  const filename = product.image.name
+  const ext = filename.slice(filename.lastIndexOf('.'))
+  const fileData = await firebase.storage().ref().child('products/' + docRef.id + ext).put(product.image)
+  const url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+  return firebase.firestore().collection('products').doc(docRef.id).update({imageUrl: url})
 }
 
 export const editProduct = async product => {
@@ -69,7 +61,7 @@ export const editProduct = async product => {
     const filename = product.image.name
     const ext = filename.slice(filename.lastIndexOf('.'))
     const fileData = await firebase.storage().ref().child('products/' + product.id + ext).put(product.image)
-    url = firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+    url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
   } else {
     url = product.imageUrl
   }
@@ -78,11 +70,11 @@ export const editProduct = async product => {
     name: product.name,
     value: product.price / product.quantity,
     trademark: product.trademark,
-    quantity: parseFloat(product.quantity),
+    quantity: product.quantity,
     unit: product.unit,
     byWeight: product.byWeight,
     country: product.country,
-    imageUrl: url
+    imageUrl: url,
   })
 }
 
@@ -124,8 +116,26 @@ export const deleteProduct = async (store, product) => {
 }
 
 export const addStore = async store => {
-  await firebase.firestore().collection('stores').add(store)
+  const docRef = await firebase.firestore().collection('stores').add(store)
+  return docRef.id
 }
 
+export const addCountry = async country => {
+  const docRef = await firebase.firestore().collection('countries').add(country)
+  return docRef.id
+}
 
+export const addSection = async section => {
+  const docRef = await firebase.firestore().collection('sections').add(section)
+  return docRef.id
+}
 
+export const addCategory = async category => {
+  const docRef = await firebase.firestore().collection('categories').add(category)
+  return docRef.id
+}
+
+export const addTrademark = async trademark => {
+  const docRef = await firebase.firestore().collection('trademarks').add(trademark)
+  return docRef.id
+}

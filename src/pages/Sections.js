@@ -1,29 +1,34 @@
 import React, { useContext } from 'react'
-import { Button, Block } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
+import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
+
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
-  const sections = [
-    {id: '1', name: 'الطلبات', path: 'orders'},
-    {id: '2', name: 'اﻻسعار', path: 'stores'},
-    {id: '3', name: 'المنتجات', path: 'products'},
-    {id: '4', name: 'العملاء', path: 'customers'},
-    {id: '5', name: 'المستودع', path: 'inventory'}
-  ]
+  const handleAdd = () => {
+    props.f7router.navigate('/addSection/')
+  }
 
-  let i = 0
   return (
-    <Block>
-      {sections.map(section => {
-        return (
-          <Button large fill className="sections" color={state.randomColors[i++ % 13].name} href={`/${section.path}/`} key={section.id}>
-            {section.name}
-          </Button>
-        )
-      })}
-    </Block>
+    <Page>
+      <Navbar title="Sections" backLink="Back" />
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
+        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+      </Fab>
+      <Block>
+          <List>
+            {state.sections && state.sections.map(rec =>
+              <ListItem title={rec.name} link={`/section/${rec.id}`} key={rec.id}>
+              </ListItem>
+            )}
+          </List>
+      </Block>
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
+    </Page>
   )
-
 }
+
 export default Sections

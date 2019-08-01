@@ -24,6 +24,31 @@ const Reducer = (state, action) => {
           ...state,
           basket: action.order.basket
         }
+      case 'ADD_COUNTRY':
+        return {
+          ...state,
+          countries: [...state.countries, action.country]
+        }
+      case 'ADD_STORE':
+        return {
+          ...state,
+          stores: [...state.stores, action.store]
+        }
+      case 'ADD_SECTION':
+        return {
+          ...state,
+          sections: [...state.sections, action.section]
+        }
+      case 'ADD_CATEGORY':
+        return {
+          ...state,
+          categories: [...state.categories, action.category]
+        }
+      case 'ADD_TRADEMARK':
+        return {
+          ...state,
+          trademarks: [...state.trademarks, action.trademark]
+        }
       case 'DONE':
         return {
           ...state,

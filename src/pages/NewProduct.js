@@ -5,8 +5,8 @@ import { newProduct } from '../data/Actions'
 
 
 const NewProduct = props => {
-  const { state, stores } = useContext(StoreContext)
-  const store = stores.find(rec => rec.id === props.id)
+  const { state } = useContext(StoreContext)
+  const store = state.stores.find(rec => rec.id === props.id)
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [trademark, setTrademark] = useState('')
@@ -18,6 +18,11 @@ const NewProduct = props => {
   const [price, setPrice] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
+  const [inStock, setInStock] = useState(store.inStock || '')
+  const [hasOffer, setHasOffer] = useState(false)
+  const [offerPurchasePrice, setOfferPurchasePrice] = useState(store.offerPurchasePrice || '')
+  const [offerPrice, setOfferPrice] = useState(store.offerPrice || '')
+  const [offerEnd, setOfferEnd] = useState(store.offerEnd || '')
   const [error, setError] = useState('')
   const handleFileChange = e => {
     const files = e.target.files
@@ -36,15 +41,33 @@ const NewProduct = props => {
   const handlePurchasePriceChange = e => {
     const storeType = store ? store.storeType : null
     if (storeType === 'w') {
-      const currentCategory = state.categories.find(rec => rec.id === category)
-      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
-      const percent = currentSection ? currentSection.percent : 0
+      const section = category ? state.sections.find(rec => rec.id === category.section) : null
+      const percent = section ? section.percent : 0
       setPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
     } else {
       setPrice(e.target.value)
     }
     setPurchasePrice(e.target.value)
   }
+  const handleOfferPurchasePriceChange = e => {
+    const storeType = store ? store.storeType : null
+    if (storeType === 'w') {
+      const section = category ? state.sections.find(rec => rec.id === category.section) : null
+      const percent = section ? section.percent : 0
+      setOfferPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
+    } else {
+      setOfferPrice(e.target.value)
+    }
+    setOfferPurchasePrice(e.target.value)
+  }
+	const handleToggle = () => {
+		if (hasOffer) {
+			setOfferPurchasePrice('')
+			setOfferPrice('')
+			setOfferEnd('')
+		}
+		setHasOffer(!hasOffer)
+	}
   const handleSubmit = () => {
     try{
       if (name === '') {
@@ -71,6 +94,29 @@ const NewProduct = props => {
       if (imageUrl === '') {
         throw 'enter product image'
       }
+      if (price < purchasePrice) {
+        throw 'enter a valid price'
+      }
+      if (hasOffer) {
+        if (offerPurchasePrice === '') {
+          throw 'enter offer purchase price'
+        }
+        if (offerPrice === '') {
+          throw 'enter offer price'
+        }
+        if (offerPrice < offerPurchasePrice) {
+          throw 'enter a valid offer price'
+        }
+        if (offerPrice > price) {
+          throw 'enter a valid offer price'
+        }
+        if (offerEnd === '') {
+          throw 'enter offer end date'
+        }
+        if (new Date(offerEnd) < new Date()) {
+          throw 'enter a valid offer end date'
+        }
+      }
       newProduct({
         storeId: props.id,
         category,
@@ -82,6 +128,10 @@ const NewProduct = props => {
         country,
         purchasePrice,
         price,
+        inStock,
+        offerPurchasePrice,
+        offerPrice,
+        offerEnd,
         imageUrl,
         image
       }).then(() => {
@@ -147,6 +197,24 @@ const NewProduct = props => {
         </ListItem>
         <ListInput name="purchacePrice" label="Purchase Price" value={purchasePrice} floatingLabel type="number" onChange={(e) => handlePurchasePriceChange(e)}/>
         <ListInput name="price" label="Price" value={price} floatingLabel type="number" onChange={(e) => setPrice(e.target.value)}/>
+        <ListInput name="inStock" label="In Stock" floatingLabel type="number" value={inStock} onChange={(e) => setInStock(e.target.value)}/>
+        <ListItem>
+          <span>There is an offer?</span>
+          <Toggle name="hasOffer" color="green" checked={hasOffer} onToggleChange={() => handleToggle()}/>
+        </ListItem>
+        {hasOffer ? 
+       		<React.Fragment>
+            <ListInput name="offerPurchasePrice" label="Offer Purchase Price" floatingLabel type="number" value={offerPurchasePrice} onChange={(e) => handleOfferPurchasePriceChange(e)}/>
+            <ListInput name="offerPrice" label="Offer Price" floatingLabel type="number" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)}/>
+            <ListInput
+              name="offerEnd"
+              label="Offer End At"
+              type="datepicker"
+              value={offerEnd} 
+              onCalendarChange={(value) => setOfferEnd(value)}
+            />
+        	</React.Fragment>
+        : null}
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
         <Button fill onClick={() => handleSubmit()}>Submit</Button>

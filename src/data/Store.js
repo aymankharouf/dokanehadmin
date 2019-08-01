@@ -5,13 +5,6 @@ import firebase from './firebase'
 export const StoreContext = createContext()
 
 const Store = props => {
-  const sections = [
-    {id: '1', name: 'بقوليات', percent: 5},
-    {id: '2', name: 'سكاكر', percent: 10},
-    {id: '3', name: 'معلبات', percent: 5},
-    {id: '4', name: 'منظفات', percent: 10},
-    {id: '5', name: 'زيوت', percent: 5}
-    ]
   
   const randomColors = [
     {id: '0', name: 'red'},
@@ -28,38 +21,12 @@ const Store = props => {
     {id: '11', name: 'deeporange'},
     {id: '12', name: 'gray'}
   ]
-  const categories = [
-    {id: '1', section: '1', name: 'رز'},
-    {id: '2', section: '1', name: 'رز بسمتي'},
-    {id: '3', section: '1', name: 'عدس حب'},
-    {id: '4', section: '1', name: 'عدس مجروش'},
-    {id: '5', section: '1', name: 'برغل'},
-    {id: '6', section: '1', name: 'فريكة'},
-    {id: '7', section: '1', name: 'فاصولياء'},
-    {id: '8', section: '1', name: 'حمص'},
-    {id: '9', section: '1', name: 'ذرة'},
-    {id: '10', section: '2', name: 'فول'},
-    {id: '11', section: '2', name: 'حمص'},
-    {id: '12', section: '2', name: 'ذرة'},
-    {id: '13', section: '2', name: 'فاصولياء'},
-    {id: '14', section: '2', name: 'فاصولياء حمراء'}
-  ]
   const locations = [
     {id: '1', name: 'جبل النزهة'},
     {id: '2', name: 'ضاحية اﻻمير حسن'},
     {id: '3', name: 'عرجان'},
     {id: '4', name: 'جبل الحسين'},
     {id: '5', name: 'مخيم جبل الحسين'}
-  ]
-  const trademarks = [
-    {id: '1', name: 'نستلة'},
-    {id: '2', name: 'جالاكسي'},
-    {id: '3', name: 'صن وايت'},
-    {id: '4', name: 'صن بيرد'},
-    {id: '5', name: 'الكسيح'},
-    {id: '6', name: 'شعبان'},
-    {id: '7', name: 'الاسرة'},
-    {id: '8', name: 'الدرة'}
   ]
   const orderByList = [
     {id: '0', name: 'بلا'},
@@ -69,13 +36,6 @@ const Store = props => {
     {id: '4', name: 'التقييم'},
     {id: '5', name: 'اﻻحدث'},
     {id: '6', name: 'العلامة التجارية'}
-  ]
-  const countries = [
-    {id: '1', name: 'الاردن'},
-    {id: '2', name: 'الصين'},
-    {id: '3', name: 'سوريا'},
-    {id: '4', name: 'مصر'},
-    {id: '5', name: 'السعودية'}
   ]
   const units = [
     {id: '1', name: 'حبة'},
@@ -118,14 +78,14 @@ const Store = props => {
     auth_wrong_password: 'كلمة السر غير صحيحة'
   }
   const basket = []
-  const initState = {sections, randomColors, categories, locations, countries, units, labels, 
-                    orderStatus, basket, trademarks, orderByList, storeTypes}
-
-  const [state, dispatch] = useReducer(Reducer, initState)
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [stores, setStores] = useState([]);
+  let countries = []
+  let stores = []
+  let sections = []
+  let categories = []
+  let trademarks = []
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
@@ -137,15 +97,33 @@ const Store = props => {
           })
           setOrders(ordersArray)
         })  
-        firebase.firestore().collection('stores').onSnapshot(docs => {
-          let storesArray = []
+        firebase.firestore().collection('stores').get().then(docs => {
           docs.forEach(doc => {
-            storesArray.push({...doc.data(), id:doc.id})
+            stores.push({...doc.data(), id:doc.id})
           })
-          setStores(storesArray)
         })  
       }
-    });
+    })
+    firebase.firestore().collection('sections').get().then(docs => {
+      docs.forEach(doc => {
+        sections.push({...doc.data(), id:doc.id})
+      })
+    })  
+    firebase.firestore().collection('categories').get().then(docs => {
+      docs.forEach(doc => {
+        categories.push({...doc.data(), id:doc.id})
+      })
+    })  
+    firebase.firestore().collection('trademarks').get().then(docs => {
+      docs.forEach(doc => {
+        trademarks.push({...doc.data(), id:doc.id})
+      })
+    })  
+    firebase.firestore().collection('countries').get().then(docs => {
+      docs.forEach(doc => {
+        countries.push({...doc.data(), id:doc.id})
+      })
+    })  
     firebase.firestore().collection('products').onSnapshot(docs => {
       let productsArray = []
       docs.forEach(doc => {
@@ -154,8 +132,11 @@ const Store = props => {
       setProducts(productsArray)
     })
   }, []);
+  const initState = {sections, randomColors, categories, locations, countries, stores, units, 
+    labels, orderStatus, basket, trademarks, orderByList, storeTypes}
+  const [state, dispatch] = useReducer(Reducer, initState)
   return (
-    <StoreContext.Provider value={{state, user, products, orders, stores, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, orders, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

@@ -21,6 +21,15 @@ import StoreProductDetails from './pages/StoreProductDetails';
 import AddStore from './pages/AddStore';
 import EditProduct from './pages/EditProduct';
 import EditPrice from './pages/EditPrice';
+import Countries from './pages/Countries';
+import AddCountry from './pages/AddCountry';
+import Settings from './pages/Settings';
+import Sections from './pages/Sections';
+import AddSection from './pages/AddSection';
+import SectionCategories from './pages/SectionCategories';
+import AddCategory from './pages/AddCategory';
+import Trademarks from './pages/Trademarks';
+import AddTrademark from './pages/AddTrademark';
 
 export default [
   {
@@ -72,12 +81,48 @@ export default [
     component: ConfirmOrder
   },
   {
+    path: '/settings/',
+    component: Settings
+  },
+  {
     path: '/stores/',
     component: Stores
   },
   {
     path: '/addStore/',
     component: AddStore
+  },
+  {
+    path: '/countries/',
+    component: Countries
+  },
+  {
+    path: '/addCountry/',
+    component: AddCountry,
+  },
+  {
+    path: '/sections/',
+    component: Sections
+  },
+  {
+    path: '/addSection/',
+    component: AddSection,
+  },
+  {
+    path: '/section/:id',
+    component: SectionCategories
+  },
+  {
+    path: '/addCategory/:id',
+    component: AddCategory
+  },
+  {
+    path: '/trademarks/',
+    component: Trademarks
+  },
+  {
+    path: '/addTrademark/',
+    component: AddTrademark,
   },
   {
     path: '/store/:id',

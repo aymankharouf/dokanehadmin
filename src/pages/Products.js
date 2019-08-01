@@ -31,7 +31,6 @@ const Products = props => {
   useEffect(() => {
     sort(orderBy)
   }, [orderBy])
-
   const orderByList = state.orderByList.map(orderByItem => orderByItem.id === 0 ? <option key={orderByItem.id} value={orderByItem.id} disabled>{orderByItem.name}</option> : <option key={orderByItem.id} value={orderByItem.id}>{orderByItem.name}</option>)
   return(
       <Page>
@@ -70,7 +69,7 @@ const Products = props => {
                     link={`/product/${product.id}`}
                     title={product.name}
                     after={parseFloat(product.price).toFixed(3)}
-                    subtitle={state.trademarks.find(trademark => trademark.id === product.trademark).name}
+                    subtitle={product.trademark ? state.trademarks.find(trademark => trademark.id === product.trademark).name : ''}
                     text={product.name}
                     key={product.id}
                     className={product.status === '2' ? 'disable-product' : ''}

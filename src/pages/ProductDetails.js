@@ -10,12 +10,12 @@ const ProductDetails = props => {
   const handleEditProduct = () => {
     props.f7router.navigate(`/editProduct/${props.id}`)
   }
-  const { products, stores } = useContext(StoreContext)
+  const { state, products } = useContext(StoreContext)
   const product = products.find(product => product.id === props.id)
   let productStores = [...product.stores]
   productStores = productStores.sort((productStorea, productStoreb) => productStorea.price - productStoreb.price)
   productStores = productStores.map(productStore => {
-    const currentStore = stores.find(store => store.id === productStore.id)
+    const currentStore = state.stores.find(store => store.id === productStore.id)
     const storeName = currentStore.name
     return {...productStore, name: storeName}
   })
