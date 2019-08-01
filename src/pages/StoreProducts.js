@@ -2,11 +2,24 @@ import React, { useContext } from 'react'
 import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
+import moment from 'moment'
+import 'moment/locale/ar'
 
 const StoreProducts = props => {
-  const { state, newStores, products } = useContext(StoreContext)
-  const storeProducts = products.filter(product => product.stores.findIndex(store => store.id === props.id) >= 0)
-  const store = newStores.find(store => store.id === props.id)
+  const { state, stores, products } = useContext(StoreContext)
+  let storeProducts = products.filter(product => product.stores.findIndex(store => store.id === props.id) >= 0)
+  storeProducts = storeProducts.map(product => {
+    return {
+      id: product.id,
+      name: product.name,
+      trademark: state.trademarks.find(rec => rec.id === product.trademark).name,
+      price: parseFloat(product.stores.find(rec => rec.id === props.id).price).toFixed(3),
+      time: product.stores.find(rec => rec.id === props.id).time,
+      imageUrl: product.imageUrl
+    }
+  })
+  storeProducts.sort((producta, productb) => producta.time.seconds - productb.time.seconds)
+  const store = stores.find(store => store.id === props.id)
   const handleAdd = () => {
     props.f7router.navigate(`/addProduct/${props.id}`)
   }
@@ -17,13 +30,13 @@ const StoreProducts = props => {
         <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
       </NavRight>
       <Searchbar
-        className="searchbar-demo"
-        searchContainer=".search-list"
-        searchIn=".item-title, .item-subtitle"
-        clearButton
-        expandable
-        placeholder={state.labels.search}
-      ></Searchbar>
+          className="searchbar-demo"
+          searchContainer=".search-list"
+          searchIn=".item-title, .item-subtitle"
+          clearButton
+          expandable
+          placeholder={state.labels.search}
+        ></Searchbar>
       </Navbar>
       <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
@@ -38,9 +51,9 @@ const StoreProducts = props => {
               <ListItem
                 link={`/storeProduct/${store.id}/product/${product.id}`}
                 title={product.name}
-                after={parseFloat(product.stores.find(productStore => productStore.id === store.id).price).toFixed(3)}
-                subtitle={state.trademarks.find(trademark => trademark.id === product.trademark).name}
-                text={product.name}
+                after={product.price}
+                subtitle={product.trademark}
+                text={moment(product.time.toDate()).fromNow()}
                 key={product.id}
               >
                 <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>

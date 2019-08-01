@@ -5,7 +5,8 @@ import { StoreContext } from '../data/Store';
 
 
 const Stores = props => {
-  const { newStores } = useContext(StoreContext)
+  const { stores } = useContext(StoreContext)
+  const outerStores = stores.filter(rec => rec.storeType !== 'i')
   const handleAdd = () => {
     props.f7router.navigate('/addStore/')
   }
@@ -18,7 +19,7 @@ const Stores = props => {
       </Fab>
       <Block>
           <List>
-            {newStores && newStores.map(store =>
+            {outerStores && outerStores.map(store =>
               <ListItem title={store.name} link={`/store/${store.id}`} key={store.id}>
               </ListItem>
             )}

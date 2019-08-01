@@ -20,8 +20,6 @@ const AddStore = props => {
       addStore({
         name,
         storeType,
-        lastVisit: null,
-        productsCount: 0,
         sales: 0,
       }).then(() => {
         props.f7router.navigate('/stores/')

@@ -1,18 +1,25 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, Card, CardContent, CardFooter, Icon, Row, Col, Fab, Toolbar} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Row, Col, Fab, Toolbar} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import RateProduct from './RateProduct'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
+import moment from 'moment'
+import 'moment/locale/ar'
 
 const ProductDetails = props => {
-  const handleAddProduct = () => {
-    dispatch({type: 'ADD_TO_BASKET', product})
-    props.f7router.back()
+  const handleEditProduct = () => {
+    props.f7router.navigate(`/editProduct/${props.id}`)
   }
-  const { products, rating, user, dispatch } = useContext(StoreContext)
+  const { products, stores } = useContext(StoreContext)
   const product = products.find(product => product.id === props.id)
-  const rating_links = user && rating.findIndex(rating => rating.productId === props.id) === -1 ? <RateProduct product={product}/> : null
+  let productStores = [...product.stores]
+  productStores = productStores.sort((productStorea, productStoreb) => productStorea.price - productStoreb.price)
+  productStores = productStores.map(productStore => {
+    const currentStore = stores.find(store => store.id === productStore.id)
+    const storeName = currentStore.name
+    return {...productStore, name: storeName}
+  })
+  const storesTag = productStores.map(store => <ListItem header={store.name} title={moment(store.time.toDate()).fromNow()} after={store.price} key={store.id} />)
   return (
     <Page>
       <Navbar title={product.name} backLink="Back" />
@@ -28,15 +35,18 @@ const ProductDetails = props => {
               <Rating rating={product.rating} />
             </Col>
             </Row>
-            <p>Quisque eget vestibulum nulla. Quisque quis dui quis ex ultricies efficitur vitae non felis. Phasellus quis nibh hendrerit...</p>
+            <Row>
+              <Col>
+                <List>
+                  {storesTag}
+                </List>
+              </Col>
+            </Row>
           </CardContent>
-          <CardFooter>
-            {rating_links}
-          </CardFooter>
         </Card>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text="Create" color="red" onClick={() => handleAddProduct()}>
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+      <Fab position="center-bottom" slot="fixed" text="Edit" color="red" onClick={() => handleEditProduct()}>
+        <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>
       <Toolbar bottom>
         <BottomToolbar/>

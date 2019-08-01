@@ -1,22 +1,21 @@
 import React, {useState, useContext } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { newProduct } from '../data/Actions'
+import { editProduct } from '../data/Actions'
 
 
-const NewProduct = props => {
-  const { state, stores } = useContext(StoreContext)
-  const store = stores.find(rec => rec.id === props.id)
-  const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
-  const [trademark, setTrademark] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [unit, setUnit] = useState('')
+const EditProduct = props => {
+  const { state, products } = useContext(StoreContext)
+  const product = products.find(rec => rec.id === props.id)
+  const [name, setName] = useState(product.name)
+  const [category, setCategory] = useState(product.category)
+  const [trademark, setTrademark] = useState(product.trademark)
+  const [quantity, setQuantity] = useState(product.quantity)
+  const [unit, setUnit] = useState(product.unit)
   const [byWeight, setByWeight] = useState(false)
-  const [country, setCountry] = useState('')
-  const [purchasePrice, setPurchasePrice] = useState('')
-  const [price, setPrice] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [country, setCountry] = useState(product.country)
+  const [price, setPrice] = useState(product.price)
+  const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
   const [error, setError] = useState('')
   const handleFileChange = e => {
@@ -32,18 +31,6 @@ const NewProduct = props => {
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
-  }
-  const handlePurchasePriceChange = e => {
-    const storeType = store ? store.storeType : null
-    if (storeType === 'w') {
-      const currentCategory = state.categories.find(rec => rec.id === category)
-      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
-      const percent = currentSection ? currentSection.percent : 0
-      setPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
-    } else {
-      setPrice(e.target.value)
-    }
-    setPurchasePrice(e.target.value)
   }
   const handleSubmit = () => {
     try{
@@ -62,30 +49,23 @@ const NewProduct = props => {
       if (country === '') {
         throw 'enter product country'
       }
-      if (purchasePrice === '') {
-        throw 'enter product purshase price'
-      }
-      if (price === '') {
-        throw 'enter product price'
-      }
       if (imageUrl === '') {
         throw 'enter product image'
       }
-      newProduct({
-        storeId: props.id,
+      editProduct({
+        id: props.id,
         category,
         name,
+        price,
         trademark,
         unit,
         byWeight,
         quantity,
         country,
-        purchasePrice,
-        price,
         imageUrl,
         image
       }).then(() => {
-        props.f7router.navigate(`/store/${props.id}`)
+        props.f7router.navigate(`/product/${props.id}`)
       })  
     } catch (err){
       setError(err)
@@ -97,7 +77,7 @@ const NewProduct = props => {
   const unitsOptionsTags = state.units.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={`Add New Product to ${store.name}`} backLink="Back" />
+      <Navbar title='Edit Product' backLink="Back" />
       <List form>
         <ListInput name="name" label="Name" floatingLabel type="text" value={name} onChange={(e) => setName(e.target.value)}/>
         <ListItem
@@ -125,7 +105,7 @@ const NewProduct = props => {
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search country'}}
         >
-          <select name="country" defaultValue="" onChange={(e) => setCountry(e.target.value)}>
+          <select name="country" value={country} onChange={(e) => setCountry(e.target.value)}>
             <option value="" disabled></option>
             {countriesOptionsTags}
           </select>
@@ -143,10 +123,8 @@ const NewProduct = props => {
         </ListItem>
         <ListItem>
           <span>Can be ordered by weight</span>
-          <Toggle name="byWeight" color="green" checked={byWeight} disabled={unit === '2' || unit === '3' ? false : true} onToggleChange={() => setByWeight(!byWeight)}/>
+          <Toggle name="byWeight" color="green" checked={byWeight} disabled={unit === '2' || unit === '3' ? false : true} onChange={() => setByWeight(!byWeight)}/>
         </ListItem>
-        <ListInput name="purchacePrice" label="Purchase Price" value={purchasePrice} floatingLabel type="number" onChange={(e) => handlePurchasePriceChange(e)}/>
-        <ListInput name="price" label="Price" value={price} floatingLabel type="number" onChange={(e) => setPrice(e.target.value)}/>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
         <Button fill onClick={() => handleSubmit()}>Submit</Button>
@@ -157,4 +135,4 @@ const NewProduct = props => {
     </Page>
   )
 }
-export default NewProduct
+export default EditProduct

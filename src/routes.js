@@ -6,12 +6,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import PanelPage from './pages/PanelPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Categories from './pages/Categories'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Basket from './pages/Basket'
 import ConfirmOrder from './pages/ConfirmOrder'
-import Search from './pages/Search'
 import Stores from './pages/Stores';
 import StoreProducts from './pages/StoreProducts';
 import AddProduct from './pages/AddProduct';
@@ -21,6 +19,8 @@ import OrdersList from './pages/OrdersList';
 import OrderDetails from './pages/OrderDetails';
 import StoreProductDetails from './pages/StoreProductDetails';
 import AddStore from './pages/AddStore';
+import EditProduct from './pages/EditProduct';
+import EditPrice from './pages/EditPrice';
 
 export default [
   {
@@ -52,16 +52,16 @@ export default [
     component: Register
   },
   {
-    path: '/section/:id',
-    component: Categories
-  },
-  {
-    path: '/category/:id',
+    path: '/products/',
     component: Products
   },
   {
     path: '/product/:id',
     component: ProductDetails
+  },
+  {
+    path: '/editProduct/:id',
+    component: EditProduct
   },
   {
     path: '/basket/',
@@ -70,10 +70,6 @@ export default [
   {
     path: '/confirmOrder/',
     component: ConfirmOrder
-  },
-  {
-    path: '/search/',
-    component: Search,
   },
   {
     path: '/stores/',
@@ -98,6 +94,10 @@ export default [
   {
     path: '/storeProduct/:storeId/product/:productId',
     component: StoreProductDetails
+  },
+  {
+    path: '/editPrice/:storeId/product/:productId',
+    component: EditPrice
   },
   {
     path: '/activeOrders/',

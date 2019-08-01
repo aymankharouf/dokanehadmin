@@ -23,16 +23,12 @@ export const confirmOrder = async order => {
 export const addProduct = async storeProduct => {
   const stores = [...storeProduct.product.stores, {id: storeProduct.storeId, purchasePrice: parseFloat(storeProduct.purchasePrice).toFixed(3), price: parseFloat(storeProduct.price).toFixed(3), time: new Date()}]
   const minPrice = Math.min(...stores.map(store => store.price))
-  await firebase.firestore().collection('products').doc(storeProduct.product.id).set({
+  await firebase.firestore().collection('products').doc(storeProduct.product.id).update({
     stores: stores,
     price: parseFloat(minPrice).toFixed(3),
     value: minPrice / storeProduct.product.quantity,
-  }, { merge: true })
-  const increment = firebase.firestore.FieldValue.increment(1)
-  await firebase.firestore().collection('stores').doc(storeProduct.storeId).set({
-    lastVisit: new Date(),
-    productsCount: increment
-  }, { merge: true })
+    status: 1
+  })
 }
 
 export const newProduct = async product => {
@@ -49,8 +45,10 @@ export const newProduct = async product => {
     trademark: product.trademark,
     quantity: parseFloat(product.quantity),
     unit: product.unit,
-    orderUnitType: product.orderUnitType,
-    time: new Date()
+    byWeight: product.byWeight,
+    country: product.country,
+    time: new Date(),
+    status: 1
   }).then(docRef => {
       return docRef.id
     }).then(key => {
@@ -61,36 +59,68 @@ export const newProduct = async product => {
     }).then(fileData => {
       return firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
     }).then(url => {
-      return firebase.firestore().collection('products').doc(id).set({imageUrl: url}, { merge: true})
+      return firebase.firestore().collection('products').doc(id).update({imageUrl: url})
     })
 }
 
+export const editProduct = async product => {
+  let url
+  if (product.image) {
+    const filename = product.image.name
+    const ext = filename.slice(filename.lastIndexOf('.'))
+    const fileData = await firebase.storage().ref().child('products/' + product.id + ext).put(product.image)
+    url = firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+  } else {
+    url = product.imageUrl
+  }
+  await firebase.firestore().collection('products').doc(product.id).update({
+    category: product.category,
+    name: product.name,
+    value: product.price / product.quantity,
+    trademark: product.trademark,
+    quantity: parseFloat(product.quantity),
+    unit: product.unit,
+    byWeight: product.byWeight,
+    country: product.country,
+    imageUrl: url
+  })
+}
+
 export const editOrder = async order => {
-  await firebase.firestore().collection("orders").doc(order.id).set({
+  await firebase.firestore().collection("orders").doc(order.id).update({
     status: 3
-  }, { merge: true })
+  })
 }
 
-export const editPrice = async (storeId, product, price) => {
-  let stores = product.stores.filter(store => store.id !== storeId)
-  stores = [...stores, {id: storeId, price: parseFloat(price).toFixed(3), time: new Date()}]
+export const editPrice = async (store, product, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd) => {
+  let stores = product.stores.filter(rec => rec.id !== store.id)
+  stores = [...stores, {id: store.id, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd, time: new Date()}]
   const minPrice = Math.min(...stores.map(store => store.price))
-  await firebase.firestore().collection('products').doc(product.id).set({
+  await firebase.firestore().collection('products').doc(product.id).update({
     stores: stores,
-    price: parseFloat(minPrice).toFixed(3),
+    price: minPrice,
     value: minPrice / product.quantity,
-  }, { merge: true })
+  })
 }
 
 
-export const deleteProduct = async (storeId, product) => {
-  const stores = product.stores.filter(store => store.id !== storeId)
-  const minPrice = (stores.length > 0) ? Math.min(...stores.map(store => store.price)) : 0
-  await firebase.firestore().collection('products').doc(product.id).set({
-    stores: stores,
-    price: parseFloat(minPrice).toFixed(3),
-    value: minPrice / product.quantity,
-  }, { merge: true })
+export const deleteProduct = async (store, product) => {
+  const stores = product.stores.filter(rec => rec.id !== store.id)
+  if (stores.length > 0) {
+    const minPrice = Math.min(...stores.map(store => store.price))
+    await firebase.firestore().collection('products').doc(product.id).update({
+      stores: stores,
+      price: minPrice,
+      value: minPrice / product.quantity,
+    })
+  } else {
+    await firebase.firestore().collection('products').doc(product.id).update({
+      stores: [],
+      price: 0,
+      value: 0,
+      status: 2
+    })
+  }
 }
 
 export const addStore = async store => {

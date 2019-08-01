@@ -1,12 +1,12 @@
 *split to app and admin
 *configure security
 forget password
-product status => stopped, active, new
-finish quantity in a store
+*product status => stopped, active
+add quantity in a store & offers
 customer status => active, blacklist, vip, special
 customer limit
 news
-order status => new, postpond, active, finished, canceled, delayed, in stoke
+order status => active, postpond, rejected, in-process, ready, canceled, delayed, in stoke
 pick an order
 cancel an order
 finished orders

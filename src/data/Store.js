@@ -84,19 +84,6 @@ const Store = props => {
     {id: '4', name: 'مل لتر'},
     {id: '5', name: 'لتر'}
   ]
-  const orderUnitTypes = [
-    {id: '1', name: 'عبوة'},
-    {id: '2', name: 'بالوزن'}
-  ]
-  const stores = [
-    {id: '1', name: 'حريص', type: 'i'},
-    {id: '2', name: 'ربوع القدس', type: 'm'},
-    {id: '3', name: 'كارفور', type: 's'},
-    {id: '4', name: 'سي تاون', type: 's'},
-    {id: '5', name: 'سامح', type: 's'},
-    {id: '6', name: 'جملة 1', type: 'w'},
-    {id: '7', name: 'جملة 2', type: 'w'}
-  ]
   const orderStatus = [
     {id: 1, name: 'قيد التسليم'},
     {id: 2, name: 'تم اﻻستلام'},
@@ -132,14 +119,13 @@ const Store = props => {
   }
   const basket = []
   const initState = {sections, randomColors, categories, locations, countries, units, labels, 
-                    orderStatus, basket, trademarks, orderByList, stores, storeTypes, orderUnitTypes}
+                    orderStatus, basket, trademarks, orderByList, storeTypes}
 
   const [state, dispatch] = useReducer(Reducer, initState)
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
-  const [rating, setRating] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [newStores, setNewStores] = useState([]);
+  const [stores, setStores] = useState([]);
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
@@ -156,7 +142,7 @@ const Store = props => {
           docs.forEach(doc => {
             storesArray.push({...doc.data(), id:doc.id})
           })
-          setNewStores(storesArray)
+          setStores(storesArray)
         })  
       }
     });
@@ -167,16 +153,9 @@ const Store = props => {
       })
       setProducts(productsArray)
     })
-    firebase.firestore().collection('rating').onSnapshot(docs => {
-      let ratingArray = []
-      docs.forEach(doc => {
-        ratingArray.push({...doc.data(), id: doc.id})
-      })
-      setRating(ratingArray)
-    })
   }, []);
   return (
-    <StoreContext.Provider value={{state, user, products, rating, orders, newStores, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, orders, stores, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

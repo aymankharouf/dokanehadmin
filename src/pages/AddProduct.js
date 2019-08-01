@@ -5,9 +5,9 @@ import { StoreContext } from '../data/Store';
 
 
 const AddProduct = props => {
-  const { state, newStores, products } = useContext(StoreContext)
+  const { state, stores, products } = useContext(StoreContext)
   const nonStoreProducts = products.filter(rec => rec.stores.findIndex(store => store.id === props.id) === -1)
-  const store = newStores.find(rec => rec.id === props.id)
+  const store = stores.find(rec => rec.id === props.id)
   const [productId, setProductId] = useState('')
   const [product, setProduct] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
@@ -46,7 +46,7 @@ const AddProduct = props => {
       const currentCategory = state.categories.find(rec => rec.id === product.category)
       const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
       const percent = currentSection ? currentSection.percent : 0
-      setPrice(Math.round(((1 + (percent / 100)) * e.target.value) * 1000) / 1000)
+      setPrice(parseFloat(((1 + (percent / 100)) * e.target.value)).toFixed(3))
     } else {
       setPrice(e.target.value)
     }
