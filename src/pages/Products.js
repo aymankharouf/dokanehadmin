@@ -10,7 +10,7 @@ const Products = props => {
   const sort = () => {
     switch(orderBy){
       case '1':
-        setAllProducts([...allProducts].sort((producta, productb) => producta.value - productb.value))
+        setAllProducts([...allProducts].sort((producta, productb) => producta.price / producta.quantity - productb.price / productb.quantity))
         break
       case '2':
         setAllProducts([...allProducts].sort((producta, productb) => producta.price - productb.price))

@@ -19,7 +19,7 @@ const AddCategory = props => {
         name
       }).then(id => {
         dispatch({type: 'ADD_CATEGORY', category: {id, name, sectionId: props.id}})
-        props.f7router.navigate(`/section/${props.id}`)
+        props.f7router.back()
       })
     } catch(err) {
       setError(err)

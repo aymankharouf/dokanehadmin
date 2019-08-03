@@ -10,13 +10,10 @@ export const confirmOrder = async order => {
   await firebase.firestore().collection('orders').add(newOrder)
 }
 
-export const addProduct = async (product, store, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd) => {
-  const stores = [...product.stores, {id: store.id, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd, time: new Date()}]
-  const minPrice = Math.min(...stores.map(store => store.price))
+export const addProduct = async (product, store, purchasePrice, price, offerEnd) => {
+  const stores = [...product.stores, {id: store.id, purchasePrice, price, oldPurchasePrice: '', oldPrice: '', offerEnd, time: new Date()}]
   await firebase.firestore().collection('products').doc(product.id).update({
     stores: stores,
-    price: parseFloat(minPrice).toFixed(3),
-    value: minPrice / product.quantity,
     status: 1
   })
 }
@@ -26,9 +23,8 @@ export const newProduct = async product => {
     id: product.storeId, 
     purchasePrice: product.purchasePrice, 
     price: product.price, 
-    inStock: product.inStock, 
-    offerPurchasePrice: product.offerPurchasePrice, 
-    offerPrice: product.offerPrice,
+    oldPurchasePrice: '', 
+    oldPrice: '',
     offerEnd: product.offerEnd,
     time: new Date()
   }]
@@ -36,10 +32,8 @@ export const newProduct = async product => {
     category: product.category,
     name: product.name,
     stores: stores,
-    price: product.price,
     sales: 0,
     rating: '',
-    value: product.price / product.quantity,
     trademark: product.trademark,
     quantity: product.quantity,
     unit: product.unit,
@@ -68,7 +62,6 @@ export const editProduct = async product => {
   await firebase.firestore().collection('products').doc(product.id).update({
     category: product.category,
     name: product.name,
-    value: product.price / product.quantity,
     trademark: product.trademark,
     quantity: product.quantity,
     unit: product.unit,
@@ -84,14 +77,11 @@ export const editOrder = async order => {
   })
 }
 
-export const editPrice = async (store, product, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd) => {
+export const editPrice = async (store, product, purchasePrice, price, oldPurchasePrice, oldPrice, offerEnd) => {
   let stores = product.stores.filter(rec => rec.id !== store.id)
-  stores = [...stores, {id: store.id, purchasePrice, price, inStock, offerPurchasePrice, offerPrice, offerEnd, time: new Date()}]
-  const minPrice = Math.min(...stores.map(store => store.price))
+  stores = [...stores, {id: store.id, purchasePrice, price, oldPurchasePrice, oldPrice, offerEnd, time: new Date()}]
   await firebase.firestore().collection('products').doc(product.id).update({
-    stores: stores,
-    price: minPrice,
-    value: minPrice / product.quantity,
+    stores
   })
 }
 
@@ -99,20 +89,24 @@ export const editPrice = async (store, product, purchasePrice, price, inStock, o
 export const deleteProduct = async (store, product) => {
   const stores = product.stores.filter(rec => rec.id !== store.id)
   if (stores.length > 0) {
-    const minPrice = Math.min(...stores.map(store => store.price))
     await firebase.firestore().collection('products').doc(product.id).update({
-      stores: stores,
-      price: minPrice,
-      value: minPrice / product.quantity,
+      stores
     })
   } else {
     await firebase.firestore().collection('products').doc(product.id).update({
       stores: [],
-      price: 0,
-      value: 0,
       status: 2
     })
   }
+}
+
+export const confirmPrice = async (store, product) => {
+  let stores = product.stores.filter(rec => rec.id !== store.id)
+  const newStore = product.stores.find(rec => rec.id === store.id)
+  stores = [...stores, {...newStore, time: new Date()}]
+  await firebase.firestore().collection('products').doc(product.id).update({
+    stores
+  })
 }
 
 export const addStore = async store => {

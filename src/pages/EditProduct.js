@@ -14,7 +14,6 @@ const EditProduct = props => {
   const [unit, setUnit] = useState(product.unit)
   const [byWeight, setByWeight] = useState(false)
   const [country, setCountry] = useState(product.country)
-  const [price, setPrice] = useState(product.price)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
   const [error, setError] = useState('')
@@ -56,7 +55,6 @@ const EditProduct = props => {
         id: props.id,
         category,
         name,
-        price,
         trademark,
         unit,
         byWeight,
@@ -65,7 +63,7 @@ const EditProduct = props => {
         imageUrl,
         image
       }).then(() => {
-        props.f7router.navigate(`/product/${props.id}`)
+        props.f7router.back()
       })  
     } catch (err){
       setError(err)

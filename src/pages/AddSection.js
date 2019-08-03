@@ -22,7 +22,7 @@ const AddSection = props => {
         percent
       }).then(id => {
         dispatch({type: 'ADD_SECTION', section: {id, name, percent}})
-        props.f7router.navigate('/sections/')
+        props.f7router.back()
       })
     } catch(err) {
       setError(err)

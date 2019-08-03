@@ -1,4 +1,4 @@
-import React, {useState, useContext } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { newProduct } from '../data/Actions'
@@ -38,36 +38,17 @@ const NewProduct = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
-  const handlePurchasePriceChange = e => {
+  useEffect(() => {
     const storeType = store ? store.storeType : null
     if (storeType === 'w') {
       const section = category ? state.sections.find(rec => rec.id === category.section) : null
       const percent = section ? section.percent : 0
-      setPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
+      setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
     } else {
-      setPrice(e.target.value)
+      setPrice(purchasePrice)
     }
-    setPurchasePrice(e.target.value)
-  }
-  const handleOfferPurchasePriceChange = e => {
-    const storeType = store ? store.storeType : null
-    if (storeType === 'w') {
-      const section = category ? state.sections.find(rec => rec.id === category.section) : null
-      const percent = section ? section.percent : 0
-      setOfferPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
-    } else {
-      setOfferPrice(e.target.value)
-    }
-    setOfferPurchasePrice(e.target.value)
-  }
-	const handleToggle = () => {
-		if (hasOffer) {
-			setOfferPurchasePrice('')
-			setOfferPrice('')
-			setOfferEnd('')
-		}
-		setHasOffer(!hasOffer)
-	}
+  }, [purchasePrice])
+
   const handleSubmit = () => {
     try{
       if (name === '') {
@@ -97,26 +78,10 @@ const NewProduct = props => {
       if (price < purchasePrice) {
         throw 'enter a valid price'
       }
-      if (hasOffer) {
-        if (offerPurchasePrice === '') {
-          throw 'enter offer purchase price'
-        }
-        if (offerPrice === '') {
-          throw 'enter offer price'
-        }
-        if (offerPrice < offerPurchasePrice) {
-          throw 'enter a valid offer price'
-        }
-        if (offerPrice > price) {
-          throw 'enter a valid offer price'
-        }
-        if (offerEnd === '') {
-          throw 'enter offer end date'
-        }
-        if (new Date(offerEnd) < new Date()) {
-          throw 'enter a valid offer end date'
-        }
+      if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
+        throw 'enter a valid offer end date'
       }
+      const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
       newProduct({
         storeId: props.id,
         category,
@@ -128,14 +93,11 @@ const NewProduct = props => {
         country,
         purchasePrice,
         price,
-        inStock,
-        offerPurchasePrice,
-        offerPrice,
         offerEnd,
         imageUrl,
         image
       }).then(() => {
-        props.f7router.navigate(`/store/${props.id}`)
+        props.f7router.back()
       })  
     } catch (err){
       setError(err)
@@ -149,7 +111,16 @@ const NewProduct = props => {
     <Page>
       <Navbar title={`Add New Product to ${store.name}`} backLink="Back" />
       <List form>
-        <ListInput name="name" label="Name" floatingLabel type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+        <ListInput 
+          name="name" 
+          label="Name" 
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+          onInputClear={() => setName('')}
+        />
         <ListItem
           title="Category"
           smartSelect
@@ -180,7 +151,16 @@ const NewProduct = props => {
             {countriesOptionsTags}
           </select>
         </ListItem>
-        <ListInput name="quantity" label="Quantity" floatingLabel type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
+        <ListInput 
+          name="quantity" 
+          label="Quantity" 
+          clearButton
+          floatingLabel 
+          type="number" 
+          value={quantity} 
+          onChange={(e) => setQuantity(e.target.value)}
+          onInputClear={() => setQuantity('')}
+        />
         <ListItem
           title="Unit"
           smartSelect
@@ -195,26 +175,35 @@ const NewProduct = props => {
           <span>Can be ordered by weight</span>
           <Toggle name="byWeight" color="green" checked={byWeight} disabled={unit === '2' || unit === '3' ? false : true} onToggleChange={() => setByWeight(!byWeight)}/>
         </ListItem>
-        <ListInput name="purchacePrice" label="Purchase Price" value={purchasePrice} floatingLabel type="number" onChange={(e) => handlePurchasePriceChange(e)}/>
-        <ListInput name="price" label="Price" value={price} floatingLabel type="number" onChange={(e) => setPrice(e.target.value)}/>
-        <ListInput name="inStock" label="In Stock" floatingLabel type="number" value={inStock} onChange={(e) => setInStock(e.target.value)}/>
-        <ListItem>
-          <span>There is an offer?</span>
-          <Toggle name="hasOffer" color="green" checked={hasOffer} onToggleChange={() => handleToggle()}/>
-        </ListItem>
-        {hasOffer ? 
-       		<React.Fragment>
-            <ListInput name="offerPurchasePrice" label="Offer Purchase Price" floatingLabel type="number" value={offerPurchasePrice} onChange={(e) => handleOfferPurchasePriceChange(e)}/>
-            <ListInput name="offerPrice" label="Offer Price" floatingLabel type="number" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)}/>
-            <ListInput
-              name="offerEnd"
-              label="Offer End At"
-              type="datepicker"
-              value={offerEnd} 
-              onCalendarChange={(value) => setOfferEnd(value)}
-            />
-        	</React.Fragment>
-        : null}
+        <ListInput 
+          name="purchacePrice" 
+          label="Purchase Price" 
+          value={purchasePrice} 
+          clearButton
+          floatingLabel 
+          type="number" 
+          onChange={(e) => setPurchasePrice(e.target.value)}
+          onInputClear={() => setPurchasePrice('')}
+        />
+        <ListInput 
+          name="price" 
+          label="Price" 
+          value={price}
+          clearButton 
+          floatingLabel 
+          type="number" 
+          onChange={(e) => setPrice(e.target.value)}
+          onInputClear={() => setPrice('')}
+        />
+        <ListInput
+          name="offerEnd"
+          label="Offer End At"
+          type="datepicker"
+          value={offerEnd} 
+          clearButton
+          onCalendarChange={(value) => setOfferEnd(value)}
+          onInputClear={() => setOfferEnd([])}
+        />
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
         <Button fill onClick={() => handleSubmit()}>Submit</Button>

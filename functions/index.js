@@ -70,3 +70,4 @@ exports.confirmOrder = functions.firestore.document('orders/{orderId}')
       notes: ''
     })
   });
+

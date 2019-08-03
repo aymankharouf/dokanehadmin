@@ -23,7 +23,7 @@ const AddStore = props => {
         sales: 0,
       }).then(id => {
         dispatch({type: 'ADD_STORE', store: {id, name, storeType, sales: 0}})
-        props.f7router.navigate('/stores/')
+        props.f7router.back()
       })
     } catch(err) {
       setError(err)

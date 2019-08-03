@@ -17,7 +17,7 @@ const AddTrademark = props => {
         name,
       }).then(id => {
         dispatch({type: 'ADD_TRADEMARK', trademark: {id, name}})
-        props.f7router.navigate('/trademarks/')
+        props.f7router.back()
       })
     } catch(err) {
       setError(err)

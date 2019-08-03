@@ -17,7 +17,7 @@ const AddCountry = props => {
         name,
       }).then(id => {
         dispatch({type: 'ADD_COUNTRY', country: {id, name}})
-        props.f7router.navigate('/countries/')
+        props.f7router.back()
       })
     } catch(err) {
       setError(err)

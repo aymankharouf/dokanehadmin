@@ -1,4 +1,4 @@
-import React, {useState, useContext } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editPrice } from '../data/Actions'
@@ -10,46 +10,21 @@ const EditPrice = props => {
   let store = product.stores.find(rec => rec.id === props.storeId)
   store = {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
   const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice || '')
-  const [price, setPrice] = useState(store.price)
-  const [inStock, setInStock] = useState(store.inStock || '')
-  const [hasOffer, setHasOffer] = useState(false)
-  const [offerPurchasePrice, setOfferPurchasePrice] = useState(store.offerPurchasePrice || '')
-  const [offerPrice, setOfferPrice] = useState(store.offerPrice || '')
-  const [offerEnd, setOfferEnd] = useState(store.offerEnd || '')
-  const [imageUrl, setImageUrl] = useState(product.imageUrl)
+  const [price, setPrice] = useState(store.price || '')
+  const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
+  const [offerEnd, setOfferEnd] = useState(initOfferEnd || '')
   const [error, setError] = useState('')
-  const handlePurchasePriceChange = e => {
+  useEffect(() => {
     const storeType = store ? store.storeType : null
     if (storeType === 'w') {
       const currentCategory = state.categories.find(rec => rec.id === product.category)
       const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
       const percent = currentSection ? currentSection.percent : 0
-      setPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
+      setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
     } else {
-      setPrice(e.target.value)
+      setPrice(purchasePrice)
     }
-    setPurchasePrice(e.target.value)
-  }
-  const handleOfferPurchasePriceChange = e => {
-    const storeType = store ? store.storeType : null
-    if (storeType === 'w') {
-      const currentCategory = state.categories.find(rec => rec.id === product.category)
-      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
-      const percent = currentSection ? currentSection.percent : 0
-      setOfferPrice(parseFloat((1 + (percent / 100)) * e.target.value).toFixed(3))
-    } else {
-      setOfferPrice(e.target.value)
-    }
-    setOfferPurchasePrice(e.target.value)
-  }
-	const handleToggle = () => {
-		if (hasOffer) {
-			setOfferPurchasePrice('')
-			setOfferPrice('')
-			setOfferEnd('')
-		}
-		setHasOffer(!hasOffer)
-	}
+  }, [purchasePrice])
   const handleEdit = () => {
     try{
       if (purchasePrice === '') {
@@ -61,37 +36,22 @@ const EditPrice = props => {
       if (price < purchasePrice) {
         throw 'enter a valid price'
       }
-      if (hasOffer) {
-        if (offerPurchasePrice === '') {
-          throw 'enter offer purchase price'
-        }
-        if (offerPrice === '') {
-          throw 'enter offer price'
-        }
-        if (offerPrice < offerPurchasePrice) {
-          throw 'enter a valid offer price'
-        }
-        if (offerPrice > price) {
-          throw 'enter a valid offer price'
-        }
-        if (offerEnd === '') {
-          throw 'enter offer end date'
-        }
-        if (new Date(offerEnd) < new Date()) {
-          throw 'enter a valid offer end date'
-        }
+      if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
+        throw 'enter a valid offer end date'
       }
+      const oldPurchasePrice = store.offerEnd ? store.oldPurchasePrice || '' : store.purchasePrice
+      const oldPrice = store.offerEnd ? store.oldPrice || '' : store.price
+      const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
       editPrice(
         store,
         product,
         purchasePrice,
         price,
-        inStock,
-        offerPurchasePrice,
-        offerPrice,
-        offerEnd
+        oldPurchasePrice,
+        oldPrice,
+        offerEndDate 
       ).then(() => {
-        props.f7router.navigate(`/storeProduct/${props.storeId}/product/${props.productId}`)
+        props.f7router.back()
       })  
     } catch (err){
       setError(err)
@@ -101,27 +61,36 @@ const EditPrice = props => {
     <Page>
       <Navbar title={`Edit Price - ${store.name}`} backLink="Back" />
       <List form>
-        <img src={imageUrl} alt=""/>
-        <ListInput name="purchasePrice" label="Purchase Price" floatingLabel type="number" value={purchasePrice} onChange={(e) => handlePurchasePriceChange(e)}/>
-        <ListInput name="price" label="Price" floatingLabel type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
-        <ListInput name="inStock" label="In Stock" floatingLabel type="number" value={inStock} onChange={(e) => setInStock(e.target.value)}/>
-        <ListItem>
-          <span>There is an offer?</span>
-          <Toggle name="hasOffer" color="green" checked={hasOffer} onToggleChange={() => handleToggle()}/>
-        </ListItem>
-        {hasOffer ? 
-       		<React.Fragment>
-            <ListInput name="offerPurchasePrice" label="Offer Purchase Price" floatingLabel type="number" value={offerPurchasePrice} onChange={(e) => handleOfferPurchasePriceChange(e)}/>
-            <ListInput name="offerPrice" label="Offer Price" floatingLabel type="number" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)}/>
-            <ListInput
-              name="offerEnd"
-              label="Offer End At"
-              type="datepicker"
-              value={offerEnd} 
-              onCalendarChange={(value) => setOfferEnd(value)}
-            />
-        	</React.Fragment>
-        : null}
+        <img src={product.imageUrl} alt=""/>
+        <ListInput 
+          name="purchasePrice" 
+          label="Purchase Price" 
+          clearButton 
+          floatingLabel 
+          type="number" 
+          value={purchasePrice} 
+          onChange={(e) => setPurchasePrice(e.target.value)}
+          onInputClear={() => setPurchasePrice('')}
+        />
+        <ListInput 
+          name="price" 
+          label="Price" 
+          clearButton 
+          floatingLabel 
+          type="number" 
+          value={price} 
+          onChange={(e) => setPrice(e.target.value)}
+          onInputClear={() => setPrice('')}
+        />
+        <ListInput
+          name="offerEnd"
+          label="Offer End"
+          type="datepicker"
+          clearButton
+          value={offerEnd} 
+          onCalendarChange={(value) => setOfferEnd(value)}
+          onInputClear={() => setOfferEnd([])}
+        />
         <Button fill onClick={(e) => handleEdit(e)}>Submit</Button>
       </List>
       <Block strong className="error">
