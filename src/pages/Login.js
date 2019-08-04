@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Page, Navbar, List, ListInput, ListButton, Block, Link} from 'framework7-react'
+import { Page, Navbar, List, ListInput, ListButton, Block } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import firebase from '../data/firebase'
 
@@ -24,9 +24,6 @@ const Login = props => {
     }
   }
 
-  const handleForgetPassword = () => {
-    console.log('handle forget password')
-  }
   return (
     <Page loginScreen>
       <Navbar title="Login" backLink="Back" />
@@ -48,8 +45,6 @@ const Login = props => {
       </List>
       <List>
         <ListButton onClick={(e) => handleLogin(e)}>Sign In</ListButton>
-        <Link href={`/register/${props.f7route.params.callingPage}/`}>New User</Link>
-        <ListButton onClick={() => handleForgetPassword()}>Forget Password</ListButton>
       </List>
       <Block strong className="error">
         <p>{error}</p>

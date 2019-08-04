@@ -7,25 +7,28 @@ import { StoreContext } from '../data/Store';
 
 
 const OrdersList = props => {
-  const { state, orders, user } = useContext(StoreContext)
-  const userOrders = orders.filter(order => order.user === user.uid)
-  userOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
+  const { state, orders, users } = useContext(StoreContext)
+  const status = state.orderStatus.find(rec => rec.id === props.id)
+  let statusOrders = orders.filter(rec => rec.status === props.id)
+  statusOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
   return(
     <Page>
-      <Navbar title="Orders" backLink="Back" />
+      <Navbar title={`Orders - ${status.name}`} backLink="Back" />
       <Block>
           <List mediaList>
-            {userOrders && userOrders.map(order =>
-              <ListItem
-                link={`/order/${order.id}`}
-                title={moment(order.time.toDate()).fromNow()}
-                after={parseFloat(order.total).toFixed(3)}
-                text={state.orderStatus.find(orderStatus => orderStatus.id === order.status).name}
-                key={order.id}
-              >
-              </ListItem>
+            {statusOrders && statusOrders.map(order => {
+              return (
+                <ListItem
+                  link={`/order/${order.id}`}
+                  title={moment(order.time.toDate()).fromNow()}
+                  after={parseFloat(order.total).toFixed(3)}
+                  text={users.find(rec => rec.id === order.user).name}
+                  key={order.id}
+                >
+                </ListItem>
+              )}
             )}
-            { userOrders.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
+            { statusOrders.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
 
           </List>
       </Block>

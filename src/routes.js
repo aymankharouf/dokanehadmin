@@ -5,7 +5,6 @@ import DynamicRoutePage from './pages/DynamicRoutePage';
 import NotFoundPage from './pages/NotFoundPage';
 import PanelPage from './pages/PanelPage'
 import Login from './pages/Login'
-import Register from './pages/Register'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Basket from './pages/Basket'
@@ -30,6 +29,7 @@ import SectionCategories from './pages/SectionCategories';
 import AddCategory from './pages/AddCategory';
 import Trademarks from './pages/Trademarks';
 import AddTrademark from './pages/AddTrademark';
+import Orders from './pages/Orders';
 
 export default [
   {
@@ -55,10 +55,6 @@ export default [
   {
     path: '/login/:callingPage',
     component: Login
-  },
-  {
-    path: '/register/:callingPage',
-    component: Register
   },
   {
     path: '/products/',
@@ -149,7 +145,11 @@ export default [
     component: ActiveOrders
   },
   {
-    path: '/ordersList/',
+    path: '/orders/',
+    component: Orders
+  },
+  {
+    path: '/ordersList/:id',
     component: OrdersList
   },
   {

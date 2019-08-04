@@ -5,23 +5,23 @@ import { StoreContext } from '../data/Store';
 
 const Products = props => {
   const { state, products } = useContext(StoreContext)
-  const [orderBy, setOrderBy] = useState('1')
+  const [orderBy, setOrderBy] = useState('v')
   const [allProducts, setAllProducts] = useState(products)
   const sort = () => {
     switch(orderBy){
-      case '1':
+      case 'v':
         setAllProducts([...allProducts].sort((producta, productb) => producta.price / producta.quantity - productb.price / productb.quantity))
         break
-      case '2':
+      case 'p':
         setAllProducts([...allProducts].sort((producta, productb) => producta.price - productb.price))
         break
-      case '3':
+      case 's':
         setAllProducts([...allProducts].sort((producta, productb) => productb.sales - producta.sales))
         break
-      case '4':
+      case 'r':
         setAllProducts([...allProducts].sort((producta, productb) => productb.rating - producta.rating))
         break
-      case '5':
+      case 't':
         setAllProducts([...allProducts].sort((producta, productb) => productb.time.seconds - producta.time.seconds))
         break
       default:

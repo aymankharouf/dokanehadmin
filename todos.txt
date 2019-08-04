@@ -6,7 +6,7 @@ add quantity in a store & offers
 customer status => active, blacklist, vip, special
 customer limit
 news
-order status => active, postpond, rejected, in-process, ready, canceled, delayed, in stoke
+*order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
 pick an order
 cancel an order
 finished orders
