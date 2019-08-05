@@ -19,7 +19,7 @@ const ActiveOrders = props => {
               <ListItem
                 link={`/order/${order.id}`}
                 title={order.user}
-                after={parseFloat(order.total).toFixed(3)}
+                after={order.total}
                 text={moment(order.time.toDate()).fromNow()}
                 key={order.id}
               >

@@ -3,7 +3,7 @@ import { Icon } from 'framework7-react'
 
 
 const Rating = props => {
-  const rating_round = Math.round(parseFloat(props.rating) / .5 ) * .5
+  const rating_round = Math.round(props.rating / .5 ) * .5
   const rating_int = parseInt(rating_round)
   const rating_fraction = rating_round - rating_int
   let color

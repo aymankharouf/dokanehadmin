@@ -10,7 +10,7 @@ const NewProduct = props => {
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [trademark, setTrademark] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [size, setSize] = useState('')
   const [unit, setUnit] = useState('')
   const [byWeight, setByWeight] = useState(false)
   const [country, setCountry] = useState('')
@@ -18,10 +18,6 @@ const NewProduct = props => {
   const [price, setPrice] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [inStock, setInStock] = useState(store.inStock || '')
-  const [hasOffer, setHasOffer] = useState(false)
-  const [offerPurchasePrice, setOfferPurchasePrice] = useState(store.offerPurchasePrice || '')
-  const [offerPrice, setOfferPrice] = useState(store.offerPrice || '')
   const [offerEnd, setOfferEnd] = useState(store.offerEnd || '')
   const [error, setError] = useState('')
   const handleFileChange = e => {
@@ -43,7 +39,7 @@ const NewProduct = props => {
     if (storeType === 'w') {
       const section = category ? state.sections.find(rec => rec.id === category.section) : null
       const percent = section ? section.percent : 0
-      setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
+      setPrice((1 + (percent / 100)) * purchasePrice)
     } else {
       setPrice(purchasePrice)
     }
@@ -57,8 +53,8 @@ const NewProduct = props => {
       if (category === '') {
         throw 'enter product category'
       }
-      if (quantity === '') {
-        throw 'enter product quantity'
+      if (size === '') {
+        throw 'enter product size'
       }
       if (unit === '') {
         throw 'enter product unit'
@@ -89,10 +85,10 @@ const NewProduct = props => {
         trademark,
         unit,
         byWeight,
-        quantity,
+        size,
         country,
-        purchasePrice,
-        price,
+        purchasePrice: parseFloat(purchasePrice).toFixed(3),
+        price: parseFloat(price).toFixed(3),
         offerEnd,
         imageUrl,
         image
@@ -152,14 +148,14 @@ const NewProduct = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="quantity" 
-          label="Quantity" 
+          name="size" 
+          label="Size" 
           clearButton
           floatingLabel 
           type="number" 
-          value={quantity} 
-          onChange={(e) => setQuantity(e.target.value)}
-          onInputClear={() => setQuantity('')}
+          value={size} 
+          onChange={(e) => setSize(e.target.value)}
+          onInputClear={() => setSize('')}
         />
         <ListItem
           title="Unit"

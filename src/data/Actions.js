@@ -4,7 +4,7 @@ export const confirmOrder = async order => {
   const newOrder = {
     ...order,
     user: firebase.auth().currentUser.uid,
-    status: 1,
+    status: 'a',
     time: new Date()
   }
   await firebase.firestore().collection('orders').add(newOrder)
@@ -14,7 +14,7 @@ export const addProduct = async (product, store, purchasePrice, price, offerEnd)
   const stores = [...product.stores, {id: store.id, purchasePrice, price, oldPurchasePrice: '', oldPrice: '', offerEnd, time: new Date()}]
   await firebase.firestore().collection('products').doc(product.id).update({
     stores: stores,
-    status: 1
+    status: 'a'
   })
 }
 
@@ -35,12 +35,12 @@ export const newProduct = async product => {
     sales: 0,
     rating: '',
     trademark: product.trademark,
-    quantity: product.quantity,
+    size: product.size,
     unit: product.unit,
     byWeight: product.byWeight,
     country: product.country,
     time: new Date(),
-    status: 1
+    status: 'a'
   })
   const filename = product.image.name
   const ext = filename.slice(filename.lastIndexOf('.'))
@@ -63,7 +63,7 @@ export const editProduct = async product => {
     category: product.category,
     name: product.name,
     trademark: product.trademark,
-    quantity: product.quantity,
+    size: product.size,
     unit: product.unit,
     byWeight: product.byWeight,
     country: product.country,
@@ -73,7 +73,7 @@ export const editProduct = async product => {
 
 export const editOrder = async order => {
   await firebase.firestore().collection("orders").doc(order.id).update({
-    status: 3
+    status: 'c'
   })
 }
 
@@ -95,7 +95,7 @@ export const deleteProduct = async (store, product) => {
   } else {
     await firebase.firestore().collection('products').doc(product.id).update({
       stores: [],
-      status: 2
+      status: 'd'
     })
   }
 }

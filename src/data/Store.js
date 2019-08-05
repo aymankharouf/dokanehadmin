@@ -143,7 +143,7 @@ const Store = props => {
       let productsArray = []
       docs.forEach(doc => {
         const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
-        productsArray.push({...doc.data(), id: doc.id, price: minPrice})
+        productsArray.push({...doc.data(), id: doc.id, price: parseFloat(minPrice).toFixed(3)})
       })
       setProducts(productsArray)
     })

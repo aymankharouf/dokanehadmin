@@ -13,7 +13,7 @@ const StoreProducts = props => {
       id: product.id,
       name: product.name,
       trademark: product.trademark ? state.trademarks.find(rec => rec.id === product.trademark).name : '',
-      price: parseFloat(product.stores.find(rec => rec.id === props.id).price).toFixed(3),
+      price: product.stores.find(rec => rec.id === props.id).price,
       time: product.stores.find(rec => rec.id === props.id).time,
       imageUrl: product.imageUrl
     }

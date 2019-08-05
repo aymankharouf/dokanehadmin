@@ -64,6 +64,7 @@ exports.confirmOrder = functions.firestore.document('orders/{orderId}')
       totalOrders: 0,
       totalPayment: 0,
       debit: 0,
+      address: '',
       notes: ''
     })
   });

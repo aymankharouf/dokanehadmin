@@ -1,6 +1,5 @@
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
-import FormPage from './pages/FormPage';
 import DynamicRoutePage from './pages/DynamicRoutePage';
 import NotFoundPage from './pages/NotFoundPage';
 import PanelPage from './pages/PanelPage'
@@ -43,10 +42,6 @@ export default [
   {
     path: '/about/',
     component: AboutPage,
-  },
-  {
-    path: '/form/',
-    component: FormPage,
   },
   {
     path: '/panel/',

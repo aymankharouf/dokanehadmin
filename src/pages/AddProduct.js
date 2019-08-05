@@ -20,7 +20,7 @@ const AddProduct = props => {
       const currentCategory = state.categories.find(rec => rec.id === product.category)
       const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
       const percent = currentSection ? currentSection.percent : 0
-      setPrice(parseFloat(((1 + (percent / 100)) * purchasePrice)).toFixed(3))
+      setPrice(((1 + (percent / 100)) * purchasePrice))
     } else {
       setPrice(purchasePrice)
     }
@@ -47,8 +47,8 @@ const AddProduct = props => {
       addProduct(
         product,
         store,
-        purchasePrice,
-        price,
+        parseFloat(purchasePrice).toFixed(3),
+        parseFloat(price).toFixed(3),
         offerEndDate
       ).then(() => {
         props.f7router.back()

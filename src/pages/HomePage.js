@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
-import {Page, Navbar, NavLeft, NavTitle, Link, Block, BlockTitle,
-        List, ListItem, Toolbar, Row, Col, Button} from 'framework7-react'
+import {Page, Navbar, NavLeft, NavTitle, Link, Block, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import logo from '../coollogo_com-18673500.png'
 import { StoreContext } from '../data/Store';
@@ -13,7 +12,8 @@ const HomePage = props => {
     {id: '2', name: 'اﻻسعار', path: 'stores'},
     {id: '3', name: 'المنتجات', path: 'products'},
     {id: '4', name: 'العملاء', path: 'customers'},
-    {id: '5', name: 'المستودع', path: 'inventory'}
+    {id: '5', name: 'المستودع', path: 'inventory'},
+    {id: '6', name: 'المصاريف', path: 'costs'}
   ]
 
   let i = 0
@@ -28,7 +28,6 @@ const HomePage = props => {
       <Block strong>
         <p>Here is your blank Framework7 app what we have here.</p>
       </Block>
-      <BlockTitle>Navigation</BlockTitle>
       <Block>
         {mainPages.map(page => {
           return (
@@ -38,22 +37,6 @@ const HomePage = props => {
           )
         })}
       </Block>
-      <List>
-        <ListItem link="/about/" title="About"></ListItem>
-        <ListItem link="/form/" title="Form"></ListItem>
-        <ListItem link="/addProduct/1/category/1" title="Add Product"></ListItem>
-      </List>
-      <BlockTitle>Modals</BlockTitle>
-      <Block strong>
-        <Row>
-          <Col width="50">
-            <Button fill raised popupOpen="#popup">Popup</Button>
-          </Col>
-        </Row>
-      </Block>
-      <List>
-        <ListItem link="/load-something-that-doesnt-exist/" title="Default Route (404)"></ListItem>
-      </List>
       <Toolbar bottom>
         <BottomToolbar isHome="1"/>
       </Toolbar>

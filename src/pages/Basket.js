@@ -25,7 +25,7 @@ const Basket = props => {
             return (
               <ListItem
                 title={product.name}
-                after={parseFloat(product.netPrice).toFixed(3)}
+                after={product.netPrice}
                 subtitle={product.trademark}
                 key={product.id}
               >
@@ -49,7 +49,7 @@ const Basket = props => {
     </Block>
     <Toolbar bottom>
       <Link href="#" onClick={(e) => handleConfirm(e)}>Order</Link>
-      <p className="total-price">{parseFloat(totalPrice).toFixed(3)}</p>
+      <p className="total-price">{totalPrice}</p>
     </Toolbar>
   </Page>
   )

@@ -10,7 +10,7 @@ const EditProduct = props => {
   const [name, setName] = useState(product.name)
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)
-  const [quantity, setQuantity] = useState(product.quantity)
+  const [size, setSize] = useState(product.size)
   const [unit, setUnit] = useState(product.unit)
   const [byWeight, setByWeight] = useState(false)
   const [country, setCountry] = useState(product.country)
@@ -39,8 +39,8 @@ const EditProduct = props => {
       if (category === '') {
         throw 'enter product category'
       }
-      if (quantity === '') {
-        throw 'enter product quantity'
+      if (size === '') {
+        throw 'enter product size'
       }
       if (unit === '') {
         throw 'enter product unit'
@@ -58,7 +58,7 @@ const EditProduct = props => {
         trademark,
         unit,
         byWeight,
-        quantity,
+        size,
         country,
         imageUrl,
         image
@@ -108,7 +108,14 @@ const EditProduct = props => {
             {countriesOptionsTags}
           </select>
         </ListItem>
-        <ListInput name="quantity" label="Quantity" floatingLabel type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
+        <ListInput 
+          name="size" 
+          label="Size" 
+          floatingLabel 
+          type="number" 
+          value={size} 
+          onChange={(e) => setSize(parseInt(e.target.value))}
+        />
         <ListItem
           title="Unit"
           smartSelect
