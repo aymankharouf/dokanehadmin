@@ -1,29 +1,30 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
-const PurchaseProducts = props => {
-	const { state, products, orders } = useContext(StoreContext)
+const RequestedProducts = props => {
+	const { state, orders } = useContext(StoreContext)
 	const activeOrders = orders.filter(rec => rec.status === 'a')
-  const wantedProducts = activeOrders.map(order => {
-		order.basket.forEach(rec => {
-			return {...rec, quantity: rec.basket.quantity}
+	const [products, setProducts] = useState([])
+	useEffect(() => {
+		let productsArray = []
+		activeOrders.forEach(order => {
+			order.basket.forEach(product => {
+				const found = productsArray.find(rec => rec.id === product.id)
+				if (found) {
+					productsArray = productsArray.filter(rec => rec.id !== found.id)
+					productsArray.push({...product, quantity: product.quantity + found.quantity})
+				} else {
+					productsArray.push({...product, quantity: product.quantity})
+				}
+			})
 		})
-	})
-	let uniqueProducts = []
-	wantedProducts.forEach(product => {
-		const found = uniqueProducts.find(rec => rec.id === product.id)
-		if (found) {
-			uniqueProducts = uniqueProducts.filter(rec => rec.id !== found.id)
-			uniqueProducts.push({id: product.id, quantity: product.quantity + found.quantity})
-		} else {
-			uniqueProducts.push({id: product.id, quantity: product.quantity})
-		}
-	})
+		setProducts(productsArray)
+	}, [])
   return(
     <Page>
-      <Navbar title='All Products' backLink="Back">
+      <Navbar title='Requested Products' backLink="Back">
         <NavRight>
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>
@@ -43,16 +44,16 @@ const PurchaseProducts = props => {
 					<ListItem title={state.labels.not_found} />
 				</List>
 				<List mediaList className="search-list searchbar-found">
-					{allProducts && allProducts.map(product => {
+					{products && products.map(product => {
 						return (
 							<ListItem
 								link={`/product/${product.id}`}
 								title={product.name}
-								after={product.price}
-								subtitle={product.trademark ? state.trademarks.find(trademark => trademark.id === product.trademark).name : ''}
-								text={product.name}
+								after={product.quantity}
+								subtitle={product.price}
+								text="test"
 								key={product.id}
-								className={product.status === '2' ? 'disable-product' : ''}
+								className={product.status === 'd' ? 'disable-product' : ''}
 							>
 								<img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
 							</ListItem>
@@ -67,4 +68,4 @@ const PurchaseProducts = props => {
   )
 }
 
-export default PurchaseProducts
+export default RequestedProducts

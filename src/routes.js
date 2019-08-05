@@ -29,6 +29,7 @@ import AddCategory from './pages/AddCategory';
 import Trademarks from './pages/Trademarks';
 import AddTrademark from './pages/AddTrademark';
 import Orders from './pages/Orders';
+import RequestedProducts from './pages/RequestedProducts';
 
 export default [
   {
@@ -150,6 +151,10 @@ export default [
   {
     path: '/order/:id',
     component: OrderDetails
+  },
+  {
+    path: '/requestedProducts/',
+    component: RequestedProducts
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

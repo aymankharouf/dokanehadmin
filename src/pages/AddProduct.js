@@ -15,16 +15,20 @@ const AddProduct = props => {
   const [offerEnd, setOfferEnd] = useState('')
   const [error, setError] = useState('')
   useEffect(() => {
-    const storeType = store ? store.storeType : null
-    if (storeType === 'w') {
-      const currentCategory = state.categories.find(rec => rec.id === product.category)
-      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
-      const percent = currentSection ? currentSection.percent : 0
-      setPrice(((1 + (percent / 100)) * purchasePrice))
+    if (product && purchasePrice) {
+      const storeType = store ? store.storeType : null
+      if (storeType === 'w') {
+        const category = state.categories.find(rec => rec.id === product.category)
+        const section = category ? state.sections.find(rec => rec.id === category.sectionId) : null
+        const percent = section ? section.percent : 0
+        setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
+      } else {
+        setPrice(purchasePrice)
+      }
     } else {
-      setPrice(purchasePrice)
+      setPrice('')
     }
-  }, [purchasePrice])
+  }, [product, purchasePrice])
 
   const handleSubmit = () => {
     try{

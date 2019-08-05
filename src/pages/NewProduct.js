@@ -35,15 +35,19 @@ const NewProduct = props => {
     setImage(files[0])
   }
   useEffect(() => {
-    const storeType = store ? store.storeType : null
-    if (storeType === 'w') {
-      const section = category ? state.sections.find(rec => rec.id === category.section) : null
-      const percent = section ? section.percent : 0
-      setPrice((1 + (percent / 100)) * purchasePrice)
+    if (category && purchasePrice) {
+      if (store.storeType === 'w') {
+        const currentCategory = state.categories.find(rec => rec.id === category)
+        const section = state.sections.find(rec => rec.id === currentCategory.sectionId)
+        const percent = section ? section.percent : 0
+        setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
+      } else {
+        setPrice(purchasePrice)
+      }
     } else {
-      setPrice(purchasePrice)
+      setPrice('')
     }
-  }, [purchasePrice])
+  }, [category, purchasePrice])
 
   const handleSubmit = () => {
     try{
