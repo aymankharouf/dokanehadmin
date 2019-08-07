@@ -7,7 +7,6 @@ import Login from './pages/Login'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Basket from './pages/Basket'
-import ConfirmOrder from './pages/ConfirmOrder'
 import Stores from './pages/Stores';
 import StoreProducts from './pages/StoreProducts';
 import AddProduct from './pages/AddProduct';
@@ -30,6 +29,10 @@ import Trademarks from './pages/Trademarks';
 import AddTrademark from './pages/AddTrademark';
 import Orders from './pages/Orders';
 import RequestedProducts from './pages/RequestedProducts';
+import RequestedProductDetails from './pages/RequestedProductDetails';
+import ConfirmPurchase from './pages/ConfirmPurchase';
+import Purchases from './pages/Purchases';
+import PurchaseDetails from './pages/PurchaseDetail';
 
 export default [
   {
@@ -69,8 +72,8 @@ export default [
     component: Basket
   },
   {
-    path: '/confirmOrder/',
-    component: ConfirmOrder
+    path: '/confirmPurchase/',
+    component: ConfirmPurchase
   },
   {
     path: '/settings/',
@@ -155,6 +158,18 @@ export default [
   {
     path: '/requestedProducts/',
     component: RequestedProducts
+  },
+  {
+    path: '/requestedProduct/:productId/quantity/:quantity',
+    component: RequestedProductDetails
+  },
+  {
+    path: '/purchases/',
+    component: Purchases
+  },
+  {
+    path: '/purchase/:id',
+    component: PurchaseDetails
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

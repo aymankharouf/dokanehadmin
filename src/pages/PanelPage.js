@@ -19,6 +19,7 @@ const PanelPage = props => {
       <BlockTitle>Load page in main view</BlockTitle>
       <List>
         { user ? <ListItem link="/settings/" title="Settings" view="#main-view" panelClose></ListItem> : null }
+        { user ? <ListItem link="/requestedProducts/" title="New Purchase" view="#main-view" panelClose></ListItem> : null }
       </List>
     </Page>
   )

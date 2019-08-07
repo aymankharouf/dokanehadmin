@@ -43,10 +43,11 @@ const Store = props => {
     {id: '5', name: 'لتر'}
   ]
   const orderStatus = [
-    {id: 'a', name: 'فعال'},
+    {id: 'n', name: 'جديد'},
+    {id: 'a', name: 'معتمد'},
     {id: 's', name: 'معلق'},
     {id: 'r', name: 'مرفوض'},
-    {id: 'e', name: 'قيد التسليم'},
+    {id: 'e', name: 'قيد التجهيز'},
     {id: 'f', name: 'جاهز'},
     {id: 'd', name: 'تم اﻻستلام'},
     {id: 'l', name: 'متأخر'},
@@ -81,7 +82,8 @@ const Store = props => {
     auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
     auth_wrong_password: 'كلمة السر غير صحيحة'
   }
-  const basket = []
+  const localData = localStorage.getItem('basket');
+  const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -91,8 +93,9 @@ const Store = props => {
   let sections = []
   let categories = []
   let trademarks = []
+  let purchases = []
   const initState = {sections, randomColors, categories, locations, countries, stores, units, 
-    labels, orderStatus, basket, trademarks, orderByList, storeTypes}
+    labels, orderStatus, basket, trademarks, orderByList, storeTypes, purchases}
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -115,6 +118,11 @@ const Store = props => {
         firebase.firestore().collection('stores').get().then(docs => {
           docs.forEach(doc => {
             stores.push({...doc.data(), id:doc.id})
+          })
+        })  
+        firebase.firestore().collection('purchases').get().then(docs => {
+          docs.forEach(doc => {
+            purchases.push({...doc.data(), id:doc.id})
           })
         })  
       }

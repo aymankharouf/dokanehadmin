@@ -1,15 +1,15 @@
 import firebase from './firebase'
 
-export const confirmOrder = async order => {
-  const newOrder = {
-    ...order,
-    user: firebase.auth().currentUser.uid,
-    status: 'a',
-    time: new Date()
-  }
-  await firebase.firestore().collection('orders').add(newOrder)
+export const confirmPurchase = async purchase => {
+  await firebase.firestore().collection('purchases').add(purchase)
 }
 
+export const updateOrder = async order => {
+  await firebase.firestore().collection('orders').doc(order.id).update({
+    basket: order.basket,
+    status: order.status
+  })
+}
 export const addProduct = async (product, store, purchasePrice, price, offerEnd) => {
   const stores = [...product.stores, {id: store.id, purchasePrice, price, oldPurchasePrice: '', oldPrice: '', offerEnd, time: new Date()}]
   await firebase.firestore().collection('products').doc(product.id).update({

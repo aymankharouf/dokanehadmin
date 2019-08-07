@@ -1,45 +1,43 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Row, Col} from 'framework7-react'
 import { StoreContext } from '../data/Store';
 
 
 const Basket = props => {
-  const { state, dispatch } = useContext(StoreContext)
-  const totalPrice = state.basket.reduce((a, product) => a + Number(product.netPrice), 0)
-  const handleConfirm = e => {
-    if (totalPrice > 0) props.f7router.navigate('/confirmOrder/')
-  }
-  const handleClear = () => {
-    dispatch({type: 'CLEAR_BASKET'})
-    props.f7router.navigate('/home/')
-  }
+  const { state, orders, dispatch } = useContext(StoreContext)
+  const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
+  const totalPrice = state.basket.products ? parseFloat(state.basket.products.reduce((a, product) => a + Number(product.netPrice), 0)).toFixed(3) : null
+  useEffect(() => {
+    if (!state.basket.store) props.f7router.navigate('/home/')
+  }, [state.basket])
   return(
     <Page>
-    <Navbar title="basket" backLink="Back" />
-    <Fab position="left-top" slot="fixed" text="Clear" color="red" onClick={() => handleClear()}>
-      <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-    </Fab>
+    <Navbar title={`basket from ${store ? store.name: ''}`} backLink="Back" />
     <Block>
         <List mediaList>
-          {state.basket && state.basket.map(product => {
+          {state.basket.products && state.basket.products.map(product => {
             return (
               <ListItem
                 title={product.name}
                 after={product.netPrice}
-                subtitle={product.trademark}
+                subtitle={`انتاج ${state.countries.find(rec => rec.id === product.country).name}`}
                 key={product.id}
               >
                 <img slot="media" src={product.imageUrl} width="80" alt=""/>
                 <Row noGap>
                   <Col width="60"></Col>
                   <Col width="10">
-                    <Link onClick={() => dispatch({type: 'ADD_QUANTITY', product})} iconMaterial="add"></Link>
+                    <Link onClick={() => dispatch({type: 'ADD_QUANTITY', product})}>
+                      <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>                    
+                    </Link>
                   </Col>
                   <Col width="20" className="center">
                     {product.quantity}
                   </Col>
                   <Col width="10">
-                    <Link onClick={() => dispatch({type: 'REMOVE_QUANTITY', product})}><Icon material="remove"></Icon></Link>              
+                    <Link onClick={() => dispatch({type: 'REMOVE_QUANTITY', product})}>
+                      <Icon ios="f7:chevron_down" aurora="f7:chevron_down" md="material:keyboard_arrow_down"></Icon>
+                    </Link>              
                   </Col>
                 </Row>
               </ListItem>
@@ -47,9 +45,17 @@ const Basket = props => {
           })}
         </List>
     </Block>
+    <Fab position="center-bottom" slot="fixed" text={`اعتماد ${totalPrice}`} color="red" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
+      <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+    </Fab>
+
     <Toolbar bottom>
-      <Link href="#" onClick={(e) => handleConfirm(e)}>Order</Link>
-      <p className="total-price">{totalPrice}</p>
+      <Link href='/home/'>
+        <Icon ios="f7:home_fill" aurora="f7:home_fill" md="material:home"></Icon>
+      </Link>
+      <Link href='#' onClick={() => dispatch({type: 'CLEAR_BASKET'})}>
+        <Icon ios="f7:trash_fill" aurora="f7:trash_fill" md="material:delete"></Icon>
+      </Link>
     </Toolbar>
   </Page>
   )

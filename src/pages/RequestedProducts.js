@@ -5,23 +5,27 @@ import { StoreContext } from '../data/Store';
 
 const RequestedProducts = props => {
 	const { state, orders } = useContext(StoreContext)
-	const activeOrders = orders.filter(rec => rec.status === 'a')
+	const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
 	const [products, setProducts] = useState([])
 	useEffect(() => {
 		let productsArray = []
-		activeOrders.forEach(order => {
+		approvedOrders.forEach(order => {
 			order.basket.forEach(product => {
 				const found = productsArray.find(rec => rec.id === product.id)
-				if (found) {
-					productsArray = productsArray.filter(rec => rec.id !== found.id)
-					productsArray.push({...product, quantity: product.quantity + found.quantity})
-				} else {
-					productsArray.push({...product, quantity: product.quantity})
+				const inBasket = state.basket.products ? state.basket.products.find(rec => rec.id === product.id) : false
+				const inBasketQuantity = inBasket ? inBasket.quantity : 0
+				if (product.quantity - (product.purchasedQuantity || 0) - inBasketQuantity > 0) {
+					if (found) {
+						productsArray = productsArray.filter(rec => rec.id !== found.id)
+						productsArray.push({...product, quantity: product.quantity - (product.purchasedQuantity || 0) + found.quantity})
+					} else {
+						productsArray.push({...product, quantity: product.quantity - (product.purchaesedQuantity || 0)})
+					}
 				}
 			})
 		})
 		setProducts(productsArray)
-	}, [])
+	}, [state.basket])
   return(
     <Page>
       <Navbar title='Requested Products' backLink="Back">
@@ -47,7 +51,7 @@ const RequestedProducts = props => {
 					{products && products.map(product => {
 						return (
 							<ListItem
-								link={`/product/${product.id}`}
+								link={`/requestedProduct/${product.id}/quantity/${product.quantity}`}
 								title={product.name}
 								after={product.quantity}
 								subtitle={product.price}

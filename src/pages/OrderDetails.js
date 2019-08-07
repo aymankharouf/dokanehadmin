@@ -1,26 +1,19 @@
 import React, { useContext, useState } from 'react'
-import { editOrder } from '../data/Actions'
-import { Block, Page, Navbar, List, ListItem, Toolbar, ListInput, Button} from 'framework7-react'
+import { updateOrder } from '../data/Actions'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, FabButtons, FabButton, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
 
 
 const OrderDetails = props => {
-  const { state, orders, user, dispatch } = useContext(StoreContext)
+  const { orders, user } = useContext(StoreContext)
   const order = orders.find(order => order.id === props.id)
-  const [error, setError] = useState('')
-  const handleEdit = () => {
-    if (state.basket.length > 0) {
-      setError('your basket must be empty')
-      return
-    }
-    editOrder(order).then(() => {
-      dispatch({type: 'LOAD_BASKET', order})
-      props.f7router.navigate('/basket/')
+  const handleApprove = () => {
+    updateOrder({...order, status: 'a'}).then(() => {
+      props.f7router.back()
     })
   }
-
 
   if (!user) return <ReLogin callingPage="order"/>
   return(
@@ -28,27 +21,26 @@ const OrderDetails = props => {
       <Navbar title="Order" backLink="Back" />
       <Block>
           <List>
-            {order.basket && order.basket.map(product => {
-              return (
-                <ListItem key={product.id} title={product.name} after={product.netPrice}></ListItem>
-              )
-            })}
+            {order.basket && order.basket.map(product => 
+              <ListItem 
+                key={product.id} 
+                title={`${product.name} (${product.quantity})`} 
+                after={parseFloat(product.netPrice).toFixed(3)}
+              ></ListItem>
+            )}
             <ListItem title="Total" className="total" after={parseFloat(order.total - 0.250).toFixed(3)}></ListItem>
-            <ListItem title="Delivery" className="delivery" after="0.250"></ListItem>
-            <ListItem title="Net Total" className="net" after={order.total}></ListItem>
-            <ListInput
-              label="Note"
-              type="textarea"
-              inputId="note"
-              value={order.note}
-              readonly
-            />
-            { order.status === 1 ? <Button fill onClick={() => handleEdit()}>Edit</Button> : null }
           </List>
       </Block>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
+      <Fab position="right-bottom" slot="fixed" color="orange">
+        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
+        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
+        <FabButtons position="top">
+          <FabButton color="green" onClick={() => handleApprove()}>
+            <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+          </FabButton>
+        </FabButtons>
+      </Fab>
+
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

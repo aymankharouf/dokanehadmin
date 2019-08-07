@@ -33,30 +33,6 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
       })
   })
 
-exports.confirmOrder = functions.firestore.document('orders/{orderId}')
-  .onCreate(doc => {
-    doc.data().basket.map(product => {
-      admin.firestore().collection('purshase').where('product.id', '==', product.id).where('isDone', '==', 'false').get()
-        .then(querySnapshot => {
-          let i = 0
-          querySnapshot.forEach(purshase => {
-            i++
-            admin.firestore().collection('purshase').doc(purshase.id).set({
-              amount: purshase.data().amount + product.quantity
-              }, { merge: true })
-          })
-          if (i === 0) {
-						admin.firestore().collection('purshase').add({
-							product: product,
-							amount: product.quantity,
-							isDone: 'false',
-							time: new Date()
-						})
-					}
-				})
-		})
-  })
-  
   exports.createCustomer = functions.auth.user().onCreate(user => {
     return admin.firestore().collection('customers').doc(user.uid).set({
       status: 'a',
