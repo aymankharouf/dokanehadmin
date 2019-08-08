@@ -16,17 +16,14 @@ const OrdersList = props => {
       <Navbar title={`Orders - ${status.name}`} backLink="Back" />
       <Block>
           <List mediaList>
-            {statusOrders && statusOrders.map(order => {
-              return (
-                <ListItem
-                  link={`/order/${order.id}`}
-                  title={moment(order.time.toDate()).fromNow()}
-                  after={order.total}
-                  text={users.find(rec => rec.id === order.user).name}
-                  key={order.id}
-                >
-                </ListItem>
-              )}
+            {statusOrders && statusOrders.map(order => 
+              <ListItem
+                link={`/order/${order.id}`}
+                title={moment(order.time.toDate()).fromNow()}
+                after={order.total}
+                text={users.find(rec => rec.id === order.user).name}
+                key={order.id}
+              />
             )}
             { statusOrders.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
           </List>

@@ -24,11 +24,12 @@ const OrderDetails = props => {
             {order.basket && order.basket.map(product => 
               <ListItem 
                 key={product.id} 
-                title={`${product.name} (${product.quantity})`} 
+                title={product.name} 
+                footer={`المطلوب: ${product.quantity}, ما تم شراؤه: ${product.purchasedQuantity}`} 
                 after={parseFloat(product.netPrice).toFixed(3)}
-              ></ListItem>
+              />
             )}
-            <ListItem title="Total" className="total" after={parseFloat(order.total - 0.250).toFixed(3)}></ListItem>
+            <ListItem title="Total" className="total" after={parseFloat(order.total - 0.250).toFixed(3)} />
           </List>
       </Block>
       <Fab position="right-bottom" slot="fixed" color="orange">

@@ -12,12 +12,18 @@ const Orders = props => {
       <Navbar title="Orders" backLink="Back" />
       <Block>
 				<List>
-				{state.orderStatus.map(status => {
-					const count = orders.filter(rec => rec.status === status.id).length
-					return (
-						<ListItem title={status.name} badge={count} badgeColor={state.randomColors[i++ % 13].name} link={`/ordersList/${status.id}/`} key={status.id}/>
-						)
-					})}
+          {state.orderStatus.map(status => {
+            const count = orders.filter(rec => rec.status === status.id).length
+            return (
+              <ListItem 
+                title={status.name} 
+                badge={count} 
+                badgeColor={state.randomColors[i++ % 13].name} 
+                link={`/ordersList/${status.id}/`} 
+                key={status.id}
+              />
+            )
+          })}
 				</List>
       </Block>
       <Toolbar bottom>

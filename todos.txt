@@ -26,9 +26,9 @@ last ordered product by the user in the same category & its price & quantity
 purchase history by category for the user
 *localstorage for basket
 *moving functions to admin
-edit product : name, section
+*edit product : name, section
 *order unit
-
+cancel a purchase or part of it
 
 
 

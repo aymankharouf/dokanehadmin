@@ -8,7 +8,7 @@ const Basket = props => {
   const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
   const totalPrice = state.basket.products ? parseFloat(state.basket.products.reduce((a, product) => a + Number(product.netPrice), 0)).toFixed(3) : null
   useEffect(() => {
-    if (!state.basket.store) props.f7router.navigate('/home/')
+    if (!state.basket.storeId) props.f7router.navigate('/home/')
   }, [state.basket])
   return(
     <Page>

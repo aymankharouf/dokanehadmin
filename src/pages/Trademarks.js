@@ -19,8 +19,7 @@ const Trademarks = props => {
       <Block>
           <List>
             {state.trademarks && state.trademarks.map(rec =>
-              <ListItem title={rec.name} key={rec.id}>
-              </ListItem>
+              <ListItem title={rec.name} key={rec.id} />
             )}
           </List>
       </Block>

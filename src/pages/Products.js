@@ -63,21 +63,19 @@ const Products = props => {
             <ListItem title={state.labels.not_found} />
           </List>
           <List mediaList className="search-list searchbar-found">
-            {allProducts && allProducts.map(product => {
-              return (
-                <ListItem
-                  link={`/product/${product.id}`}
-                  title={product.name}
-                  after={product.price}
-                  subtitle={product.trademark ? state.trademarks.find(trademark => trademark.id === product.trademark).name : ''}
-                  text={product.name}
-                  key={product.id}
-                  className={product.status === 'd' ? 'disable-product' : ''}
-                >
-                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
-                </ListItem>
-              )
-            })}
+            {allProducts && allProducts.map(product => 
+              <ListItem
+                link={`/product/${product.id}`}
+                title={product.name}
+                after={product.price}
+                subtitle={product.trademark ? state.trademarks.find(trademark => trademark.id === product.trademark).name : ''}
+                text={product.name}
+                key={product.id}
+                className={product.status === 'd' ? 'disable-product' : ''}
+              >
+                <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              </ListItem>
+            )}
           </List>
       </Block>
       <Toolbar bottom>

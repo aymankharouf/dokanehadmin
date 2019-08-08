@@ -21,8 +21,7 @@ const SectionCategories = props => {
       <Block>
           <List>
             {categories && categories.map(rec =>
-              <ListItem title={rec.name} key={rec.id}>
-              </ListItem>
+              <ListItem title={rec.name} key={rec.id} />
             )}
           </List>
       </Block>

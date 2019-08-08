@@ -19,8 +19,7 @@ const Sections = props => {
       <Block>
           <List>
             {state.sections && state.sections.map(rec =>
-              <ListItem title={rec.name} link={`/section/${rec.id}`} key={rec.id}>
-              </ListItem>
+              <ListItem title={rec.name} link={`/section/${rec.id}`} key={rec.id} />
             )}
           </List>
       </Block>

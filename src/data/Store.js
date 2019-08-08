@@ -94,8 +94,9 @@ const Store = props => {
   let categories = []
   let trademarks = []
   let purchases = []
+  let stockTrans = []
   const initState = {sections, randomColors, categories, locations, countries, stores, units, 
-    labels, orderStatus, basket, trademarks, orderByList, storeTypes, purchases}
+    labels, orderStatus, basket, trademarks, orderByList, storeTypes, purchases, stockTrans}
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -123,6 +124,11 @@ const Store = props => {
         firebase.firestore().collection('purchases').get().then(docs => {
           docs.forEach(doc => {
             purchases.push({...doc.data(), id:doc.id})
+          })
+        })  
+        firebase.firestore().collection('stockTrans').get().then(docs => {
+          docs.forEach(doc => {
+            stockTrans.push({...doc.data(), id:doc.id})
           })
         })  
       }

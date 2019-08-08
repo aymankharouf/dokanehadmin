@@ -13,7 +13,7 @@ const HomePage = props => {
     {id: '3', name: 'المنتجات', path: 'products'},
     {id: '4', name: 'المشتريات', path: 'purchases'},
     {id: '5', name: 'العملاء', path: 'customers'},
-    {id: '6', name: 'المستودع', path: 'inventory'},
+    {id: '6', name: 'المستودع', path: 'stock'},
     {id: '7', name: 'المصاريف', path: 'costs'}
   ]
 

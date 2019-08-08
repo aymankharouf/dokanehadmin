@@ -15,17 +15,14 @@ const Purchases = props => {
       <Navbar title='Purchases' backLink="Back" />
       <Block>
           <List mediaList>
-            {purchases && purchases.map(purchase => {
-              return (
-                <ListItem
-                  link={`/purchase/${purchase.id}`}
-                  title={moment(purchase.time.toDate()).fromNow()}
-                  after={purchase.total}
-                  text={state.stores.find(rec => rec.id === purchase.store).name}
-                  key={purchase.id}
-                >
-                </ListItem>
-              )}
+            {purchases && purchases.map(purchase => 
+              <ListItem
+                link={`/purchase/${purchase.id}`}
+                title={state.stores.find(rec => rec.id === purchase.storeId).name}
+                after={purchase.total}
+                text={moment(purchase.time.toDate()).fromNow()}
+                key={purchase.id}
+              />
             )}
             { purchases.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
           </List>

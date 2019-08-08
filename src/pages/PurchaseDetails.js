@@ -16,14 +16,14 @@ const PurchaseDetails = props => {
       <Navbar title="Purchase Detail" backLink="Back" />
       <Block>
           <List>
-            {purchase.basket && purchase.basket.map(product => {
-              return (
-                <ListItem key={product.id} title={product.name} after={product.netPrice}></ListItem>
-              )
-            })}
-            <ListItem title="Total" className="total" after={parseFloat(purchase.total - 0.250).toFixed(3)}></ListItem>
-            <ListItem title="Delivery" className="delivery" after="0.250"></ListItem>
-            <ListItem title="Net Total" className="net" after={purchase.total}></ListItem>
+            {purchase.basket && purchase.basket.map(product => 
+              <ListItem 
+                key={product.id} 
+                title={`${product.name} (${product.quantity})`} 
+                after={product.netPrice}
+              />
+            )}
+            <ListItem title="Total" className="net" after={purchase.total} />
           </List>
       </Block>
       <Toolbar bottom>

@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Block, Toggle, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { newProduct } from '../data/Actions'
 
@@ -206,8 +206,11 @@ const NewProduct = props => {
         />
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
-        <Button fill onClick={() => handleSubmit()}>Submit</Button>
       </List>
+      <Fab position="center-bottom" slot="fixed" text='submit' color="green" onClick={() => handleSubmit()}>
+        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      </Fab>
+
       <Block strong className="error">
         <p>{error}</p>
       </Block>

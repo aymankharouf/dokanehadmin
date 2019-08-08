@@ -1,22 +1,37 @@
 const Reducer = (state, action) => {
     let newQuantity
     let otherProducts
+    let product
     switch (action.type){
       case 'ADD_TO_BASKET':
-        const product = {...action.basket.product, quantity: action.basket.quantity, netPrice: parseFloat(action.basket.product.price * action.basket.quantity).toFixed(3)}
-        if (!state.basket.store) {
-          return {...state, basket: {store: action.basket.store, products: [product]}}
+        product = {
+          ...action.basket.product,
+          price: action.basket.price,
+          quantity: action.basket.quantity,
+          actualPrice: action.basket.store.price,
+          purchasePrice: action.basket.store.purchasePrice,
+          netPrice: parseFloat(action.basket.store.purchasePrice * action.basket.quantity).toFixed(3)
+        }
+        if (!state.basket.storeId) {
+          return {...state, basket: {storeId: action.basket.store.id, products: [product]}}
         } else {
-          if (state.basket.store.id !== action.basket.store.id) return state
+          if (state.basket.storeId !== action.basket.store.id) return state
           if (state.basket.products && state.basket.products.find(product => product.id === action.basket.product.id)) return state
           return {...state, basket: {...state.basket, products: [...state.basket.products, product]}}
         }
       case 'ADD_QUANTITY':
-        newQuantity = state.basket.products.find(product => product.id === action.product.id).quantity
+        product = state.basket.products.find(product => product.id === action.product.id)
+        newQuantity = product.quantity
         otherProducts = state.basket.products.filter(product => product.id !== action.product.id)
-        return {...state, basket: {...state.basket, products: [...otherProducts, {...action.product, quantity: ++newQuantity, netPrice: parseFloat(newQuantity * action.product.price).toFixed(3)}]}}
+        product = {
+          ...product,
+          quantity: ++newQuantity,
+          netPrice: parseFloat(newQuantity * product.purchasePrice).toFixed(3)
+        }
+        return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
       case 'REMOVE_QUANTITY':
-        newQuantity = state.basket.products.find(product => product.id === action.product.id).quantity--
+        product = state.basket.products.find(product => product.id === action.product.id)
+        newQuantity = product.quantity
         otherProducts = state.basket.products.filter(product => product.id !== action.product.id)
         if (--newQuantity === 0) {
           if (otherProducts.length > 0){
@@ -24,22 +39,23 @@ const Reducer = (state, action) => {
           } else {
             return {...state, basket: ''}
           }
+        } else {
+          product = {
+            ...product,
+            quantity: newQuantity,
+            netPrice: parseFloat(newQuantity * product.purchasePrice).toFixed(3)
+          }  
+          return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
         }
-        else return {...state, basket: {...state.basket, products: [...otherProducts, {...action.product, quantity: newQuantity, netPrice: parseFloat(newQuantity * action.product.price).toFixed(3)}]}}
       case 'CLEAR_BASKET':
         return {
           ...state,
           basket: ''
         }
-      case 'UPDATE_ORDER':
-        const order = state.orders.find(rec => rec.id === action.order.orderId)
-        const otherOrders = state.orders.filter(rec => rec.id !== action.order.orderId)
-        let orderProduct = order.basket.find(rec => rec.id === action.order.productId)
-        const otherOrderProducts = order.basket.filter(rec => rec.id !== action.order.productId)
-        orderProduct = {...orderProduct, status: 'b'}
+      case 'ADD_PURCHASE':
         return {
           ...state,
-          orders: [...otherOrders, {...order, status: 'e', basket: [...otherOrderProducts, orderProduct]}]
+          purchases: [...state.purchases, action.purchase]
         }
       case 'ADD_COUNTRY':
         return {

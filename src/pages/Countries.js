@@ -19,7 +19,7 @@ const Countries = props => {
       <Block>
         <List>
           {state.countries && state.countries.map(rec =>
-            <ListItem title={rec.name} key={rec.id}></ListItem>
+            <ListItem title={rec.name} key={rec.id} />
           )}
         </List>
       </Block>

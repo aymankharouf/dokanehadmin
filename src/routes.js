@@ -32,7 +32,9 @@ import RequestedProducts from './pages/RequestedProducts';
 import RequestedProductDetails from './pages/RequestedProductDetails';
 import ConfirmPurchase from './pages/ConfirmPurchase';
 import Purchases from './pages/Purchases';
-import PurchaseDetails from './pages/PurchaseDetail';
+import PurchaseDetails from './pages/PurchaseDetails';
+import Stock from './pages/Stock';
+import StockTrans from './pages/StockTrans';
 
 export default [
   {
@@ -160,7 +162,7 @@ export default [
     component: RequestedProducts
   },
   {
-    path: '/requestedProduct/:productId/quantity/:quantity',
+    path: '/requestedProduct/:productId/quantity/:quantity/price/:price',
     component: RequestedProductDetails
   },
   {
@@ -170,6 +172,14 @@ export default [
   {
     path: '/purchase/:id',
     component: PurchaseDetails
+  },
+  {
+    path: '/stock/',
+    component: Stock
+  },
+  {
+    path: '/stockTrans/:id',
+    component: StockTrans
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

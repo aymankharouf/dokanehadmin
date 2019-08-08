@@ -20,8 +20,7 @@ const Stores = props => {
       <Block>
           <List>
             {stores && stores.map(store =>
-              <ListItem title={store.name} link={`/store/${store.id}`} key={store.id}>
-              </ListItem>
+              <ListItem title={store.name} link={`/store/${store.id}`} key={store.id} />
             )}
           </List>
       </Block>

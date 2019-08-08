@@ -1,28 +1,30 @@
 import React, { useContext } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, FabButton, FabButtons} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
+import ReLogin from './ReLogin'
 
-const StoreProducts = props => {
-  const { state, products } = useContext(StoreContext)
-  let storeProducts = products.filter(product => product.stores.find(store => store.id === props.id))
+const Stock = props => {
+  const { state, products, user } = useContext(StoreContext)
+  if (!user) return <ReLogin callingPage="inventory"/>
+  const stock = state.stores.find(rec => rec.storeType === 'i')
+  let storeProducts = products.filter(product => product.stores.find(store => store.id === stock.id))
   storeProducts = storeProducts.map(product => {
     return {
       id: product.id,
       name: product.name,
-      trademark: product.trademark ? state.trademarks.find(rec => rec.id === product.trademark).name : '',
-      price: product.stores.find(rec => rec.id === props.id).price,
-      time: product.stores.find(rec => rec.id === props.id).time,
+      quantity: product.stores.find(rec => rec.id === stock.id).quantity,
+      price: product.stores.find(rec => rec.id === stock.id).price,
+      time: product.stores.find(rec => rec.id === stock.id).time,
       imageUrl: product.imageUrl
     }
   })
   storeProducts.sort((producta, productb) => producta.time.seconds - productb.time.seconds)
-  const store = state.stores.find(store => store.id === props.id)
   return(
     <Page>
-      <Navbar title={`${store.name}`} backLink="Back">
+      <Navbar title={stock.name} backLink="Back">
       <NavRight>
         <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
       </NavRight>
@@ -42,10 +44,10 @@ const StoreProducts = props => {
         <List mediaList className="search-list searchbar-found">
           {storeProducts.map(product => 
             <ListItem
-              link={`/storeProduct/${store.id}/product/${product.id}`}
+              link={`/stockTrans/${product.id}`}
               title={product.name}
-              after={product.price}
-              subtitle={product.trademark}
+              after={parseFloat(product.price).toFixed(3)}
+              subtitle={product.quantity}
               text={moment(product.time.toDate()).fromNow()}
               key={product.id}
             >
@@ -55,19 +57,6 @@ const StoreProducts = props => {
           {storeProducts.length === 0 ? <ListItem title="No Products" /> : null}
         </List>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="pink">
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-        <FabButtons position="top">
-          <FabButton color="green" label='new' onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>
-            <Icon ios="f7:star_fill" aurora="f7:star_fill" md="material:star"></Icon>
-          </FabButton>
-          <FabButton color="blue" label='exists' onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>
-            <Icon ios="f7:search" aurora="f7:search" md="material:search"></Icon>
-          </FabButton>
-        </FabButtons>
-      </Fab>
-
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
@@ -75,4 +64,4 @@ const StoreProducts = props => {
   )
 }
 
-export default StoreProducts
+export default Stock

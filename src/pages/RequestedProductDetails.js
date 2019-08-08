@@ -10,7 +10,7 @@ const RequestedProductDetails = props => {
 	const [error, setError] = useState('')
   const product = products.find(product => product.id === props.productId)
   let productStores = [...product.stores]
-  productStores = productStores.sort((productStorea, productStoreb) => productStorea.purchasePrice - productStoreb.purchasePrice)
+  productStores = productStores.sort((productStore1, productStore2) => productStore1.purchasePrice - productStore2.purchasePrice)
   productStores = productStores.map(productStore => {
     const currentStore = state.stores.find(store => store.id === productStore.id)
     const storeName = currentStore.name
@@ -18,10 +18,10 @@ const RequestedProductDetails = props => {
 	})
 	const handlePurchase = store => {
 		try{
-			if (state.basket.store && state.basket.store.id !== store.id){
+			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw 'can not add to basket from two different stores'
       }
-      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: props.quantity}})
+      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: props.quantity, price: props.price}})
 			props.f7router.back()
 		} catch(err) {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
@@ -34,7 +34,8 @@ const RequestedProductDetails = props => {
 			after={store.price} 
 			key={store.id}
 			link="#"
-			onClick={() => handlePurchase(store)}
+      onClick={() => handlePurchase(store)}
+      className={store.price <= props.price ? 'current-store' : ''}
 		/>
 	)
   return (
@@ -46,21 +47,17 @@ const RequestedProductDetails = props => {
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
             <Row>
             <Col width="20">
-              {product.price}
+              {props.price}
             </Col>
             <Col width="60" className="left">
               {props.quantity} 
             </Col>
             </Row>
-            <Row>
-              <Col>
-                <List>
-                  {storesTag}
-                </List>
-              </Col>
-            </Row>
           </CardContent>
         </Card>
+        <List>
+          {storesTag}
+        </List>
       </Block>
 			<Block strong className="error">
         <p>{error}</p>

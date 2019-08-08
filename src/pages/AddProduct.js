@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { addProduct } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Button, Block} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
@@ -110,9 +110,11 @@ const AddProduct = props => {
           onInputClear={() => setOfferEnd([])}
         />
         <img src={product.imageUrl} alt=""/>
-        <Button fill onClick={() => handleSubmit()}>Submit</Button>
-        <Button href={`/newProduct/${props.id}`}>New</Button>
       </List>
+      <Fab position="center-bottom" slot="fixed" text='submit' color="green" onClick={() => handleSubmit()}>
+        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      </Fab>
+
       <Block strong className="error">
         <p>{error}</p>
       </Block>
