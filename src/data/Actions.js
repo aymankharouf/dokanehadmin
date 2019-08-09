@@ -1,8 +1,7 @@
 import firebase from './firebase'
 
 export const confirmPurchase = async purchase => {
-  const docRef = await firebase.firestore().collection('purchases').add(purchase)
-  return docRef.id
+  await firebase.firestore().collection('purchases').add(purchase)
 }
 
 export const updateOrder = async order => {
@@ -59,7 +58,8 @@ export const newProduct = async product => {
     trademark: product.trademark,
     size: product.size,
     unit: product.unit,
-    byWeight: product.byWeight,
+    isDivided: product.isDivided,
+    isNew: product.isNew,
     country: product.country,
     time: new Date(),
     status: 'a'
@@ -87,7 +87,8 @@ export const editProduct = async product => {
     trademark: product.trademark,
     size: product.size,
     unit: product.unit,
-    byWeight: product.byWeight,
+    isDivided: product.isDivided,
+    isNew: product.isNew,
     country: product.country,
     imageUrl: url,
   })

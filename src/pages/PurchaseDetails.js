@@ -7,8 +7,8 @@ import { StoreContext } from '../data/Store';
 
 
 const PurchaseDetails = props => {
-  const { state, user } = useContext(StoreContext)
-  const purchase = state.purchases.find(rec => rec.id === props.id)
+  const { purchases, user } = useContext(StoreContext)
+  const purchase = purchases.find(rec => rec.id === props.id)
 
   if (!user) return <ReLogin callingPage="purchase"/>
   return(

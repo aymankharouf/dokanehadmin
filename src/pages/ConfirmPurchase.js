@@ -10,6 +10,30 @@ const ConfirmPurchase = props => {
   const { state, user, orders, dispatch } = useContext(StoreContext)
   const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
   const totalPrice = state.basket.products ? state.basket.products.reduce((a, product) => a + Number(product.netPrice), 0) : 0
+  const updateOrders = async (orders, product) => {
+    let remainingQuantity = product.quantity
+    for (const order of orders) {
+      const orderProduct = order.basket.find(rec => rec.id === product.id)
+      const otherProducts = order.basket.filter(rec => rec.id !== product.id)
+      let purchasedQuantity
+      let orderStatus = 'e'
+      if (remainingQuantity > 0){
+        if (remainingQuantity >= orderProduct.quantity - orderProduct.purchasedQuantity) {
+          purchasedQuantity = orderProduct.quantity - orderProduct.purchasedQuantity
+          if (otherProducts.length === otherProducts.filter(rec => rec.quantity === rec.purchasedQuantity).length) {
+            orderStatus = 'f'
+          }
+        } else {
+          purchasedQuantity = orderProduct.quantity - orderProduct.purchasedQuantity - remainingQuantity
+        }
+        const newOrder = {...order, status: orderStatus, basket: [...otherProducts, {...orderProduct, purchasedQuantity: orderProduct.purchasedQuantity + purchasedQuantity}]}
+        await updateOrder(newOrder)
+        remainingQuantity -=  purchasedQuantity
+      }
+    }
+    return remainingQuantity
+  }
+
   const handlePurchase = () => {
     const basket = state.basket.products.map(product => {
       return ({
@@ -28,37 +52,18 @@ const ConfirmPurchase = props => {
       total: parseFloat(totalPrice).toFixed(3),
       time: new Date()
     }
-    confirmPurchase(purchase).then(purchaseId => {
-      dispatch({type: 'ADD_PURCHASE', purchase: {...purchase, id: purchaseId}})
+    confirmPurchase(purchase).then(async () => {
       const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
-      state.basket.products.forEach(product => {
-        let remainingQuantity = product.quantity 
+      for (const product of state.basket.products) {
         let inOrders = approvedOrders.filter(order => order.basket.find(rec => rec.id === product.id && rec.price === product.price))
         inOrders.sort((order1, order2) => order1.time - order2.time)
-        inOrders.forEach(async order => {
-          const orderProduct = order.basket.find(rec => rec.id === product.id)
-          const otherProducts = order.basket.filter(rec => rec.id !== product.id)
-          let purchasedQuantity
-          let orderStatus = 'e'
-          if (remainingQuantity > 0){
-            if (remainingQuantity >= orderProduct.quantity - orderProduct.purchasedQuantity) {
-              purchasedQuantity = orderProduct.quantity - orderProduct.purchasedQuantity
-              if (otherProducts.length === otherProducts.filter(rec => rec.quantity === rec.purchasedQuantity).length) {
-                orderStatus = 'f'
-              }
-            } else {
-              purchasedQuantity = orderProduct.quantity - orderProduct.purchasedQuantity - remainingQuantity
-            }
-            const newOrder = {...order, status: orderStatus, basket: [...otherProducts, {...orderProduct, purchasedQuantity: orderProduct.purchasedQuantity + purchasedQuantity}]}
-            await updateOrder(newOrder)
-            remainingQuantity -=  purchasedQuantity
-          }
-        })
+        const remainingQuantity = await updateOrders(inOrders, product)
+        console.log('remaining == ', remainingQuantity)
         if (remainingQuantity > 0) {
           const stock = state.stores.find(rec => rec.storeType === 'i')
           stockIn(product, stock, remainingQuantity)
         }
-      })
+      }
       props.f7router.navigate('/home/')
       dispatch({type: 'CLEAR_BASKET'})
     })

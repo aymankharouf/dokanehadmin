@@ -4,9 +4,9 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const RequestedProducts = props => {
-	const { state, orders } = useContext(StoreContext)
+	const { state, products, orders } = useContext(StoreContext)
 	const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
-	const [products, setProducts] = useState([])
+	const [requiredProducts, setRequiredProducts] = useState([])
 	useEffect(() => {
 		let productsArray = []
 		approvedOrders.forEach(order => {
@@ -15,16 +15,27 @@ const RequestedProducts = props => {
 				const inBasket = state.basket.products ? state.basket.products.find(rec => rec.id === product.id && rec.price === product.price) : false
 				const inBasketQuantity = inBasket ? inBasket.quantity : 0
 				if (product.quantity - product.purchasedQuantity - inBasketQuantity > 0) {
+					const productInfo = products.find(rec => rec.id === product.id)
 					if (found) {
 						productsArray = productsArray.filter(rec => rec.id !== found.id)
-						productsArray.push({...product, quantity: product.quantity - product.purchasedQuantity - inBasketQuantity + found.quantity})
+						productsArray.push({
+							...productInfo, 
+							price: product.price, 
+							purchasedPrice: product.purchasedPrice, 
+							quantity: product.quantity - product.purchasedQuantity - inBasketQuantity + found.quantity
+						})
 					} else {
-						productsArray.push({...product, quantity: product.quantity - product.purchasedQuantity - inBasketQuantity})
+						productsArray.push({
+							...productInfo, 
+							price: product.price, 
+							purchasedPrice: product.purchasedPrice, 
+							quantity: product.quantity - product.purchasedQuantity - inBasketQuantity
+						})
 					}
 				}
 			})
 		})
-		setProducts(productsArray)
+		setRequiredProducts(productsArray)
 	}, [state.basket])
   return(
     <Page>
@@ -32,12 +43,13 @@ const RequestedProducts = props => {
       </Navbar>
       <Block>
 				<List mediaList>
-					{products && products.map(product => 
+					{requiredProducts && requiredProducts.map(product => 
 						<ListItem
 							link={`/requestedProduct/${product.id}/quantity/${product.quantity}/price/${product.price}`}
 							title={product.name}
 							after={product.quantity}
-							subtitle={product.price}
+							subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+							text={product.price}
 							key={product.id}
 							className={product.status === 'd' ? 'disable-product' : ''}
 						>

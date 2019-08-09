@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { updateOrder } from '../data/Actions'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, FabButtons, FabButton, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, FabButtons, FabButton, Icon, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
 
 
 const OrderDetails = props => {
-  const { orders, user } = useContext(StoreContext)
+  const { state, orders, products, user } = useContext(StoreContext)
   const order = orders.find(order => order.id === props.id)
   const handleApprove = () => {
     updateOrder({...order, status: 'a'}).then(() => {
@@ -18,16 +18,20 @@ const OrderDetails = props => {
   if (!user) return <ReLogin callingPage="order"/>
   return(
     <Page>
-      <Navbar title="Order" backLink="Back" />
+      <Navbar title={state.labels.orderDetails} backLink="Back" />
       <Block>
           <List>
-            {order.basket && order.basket.map(product => 
-              <ListItem 
-                key={product.id} 
-                title={product.name} 
-                footer={`المطلوب: ${product.quantity}, ما تم شراؤه: ${product.purchasedQuantity}`} 
-                after={parseFloat(product.netPrice).toFixed(3)}
-              />
+            {order.basket && order.basket.map(product => {
+              const productInfo = products.find(rec => rec.id === product.id)
+              return (
+                <ListItem 
+                  key={product.id} 
+                  title={productInfo.name}
+                  footer={`${productInfo.size} ${state.units.find(rec => rec.id === productInfo.unit).name}`}
+                  after={parseFloat(product.price * product.quantity).toFixed(3)}>
+                  <Badge slot="title" color={product.purchasedQuantity === product.quantity ? 'green' : 'red'}>{`${product.purchasedQuantity} - ${product.quantity}`}</Badge>
+                </ListItem>
+              )}
             )}
             <ListItem title="Total" className="total" after={parseFloat(order.total - 0.250).toFixed(3)} />
           </List>

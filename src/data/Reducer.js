@@ -52,11 +52,6 @@ const Reducer = (state, action) => {
           ...state,
           basket: ''
         }
-      case 'ADD_PURCHASE':
-        return {
-          ...state,
-          purchases: [...state.purchases, action.purchase]
-        }
       case 'ADD_COUNTRY':
         return {
           ...state,

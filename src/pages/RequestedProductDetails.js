@@ -40,18 +40,18 @@ const RequestedProductDetails = props => {
 	)
   return (
     <Page>
-      <Navbar title={product.name} backLink="Back" />
+      <Navbar title={`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`} backLink="Back" />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
             <Row>
-            <Col width="20">
-              {props.price}
-            </Col>
-            <Col width="60" className="left">
-              {props.quantity} 
-            </Col>
+              <Col width="20">
+                {props.price}
+              </Col>
+              <Col width="60" className="left">
+                {props.quantity} 
+              </Col>
             </Row>
           </CardContent>
         </Card>

@@ -12,13 +12,14 @@ const StoreProducts = props => {
     return {
       id: product.id,
       name: product.name,
-      trademark: product.trademark ? state.trademarks.find(rec => rec.id === product.trademark).name : '',
+      size: product.size,
+      unit: product.unit,
       price: product.stores.find(rec => rec.id === props.id).price,
       time: product.stores.find(rec => rec.id === props.id).time,
       imageUrl: product.imageUrl
     }
   })
-  storeProducts.sort((producta, productb) => producta.time.seconds - productb.time.seconds)
+  storeProducts.sort((product1, product2) => product1.time - product2.time)
   const store = state.stores.find(store => store.id === props.id)
   return(
     <Page>
@@ -45,7 +46,7 @@ const StoreProducts = props => {
               link={`/storeProduct/${store.id}/product/${product.id}`}
               title={product.name}
               after={product.price}
-              subtitle={product.trademark}
+              subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
               text={moment(product.time.toDate()).fromNow()}
               key={product.id}
             >

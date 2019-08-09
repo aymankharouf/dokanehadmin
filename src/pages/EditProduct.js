@@ -12,7 +12,8 @@ const EditProduct = props => {
   const [trademark, setTrademark] = useState(product.trademark)
   const [size, setSize] = useState(product.size)
   const [unit, setUnit] = useState(product.unit)
-  const [byWeight, setByWeight] = useState(false)
+  const [isDivided, setIsDivided] = useState(false)
+  const [isNew, setIsNew] = useState(false)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
@@ -57,7 +58,8 @@ const EditProduct = props => {
         name,
         trademark,
         unit,
-        byWeight,
+        isDivided,
+        isNew,
         size,
         country,
         imageUrl,
@@ -127,8 +129,12 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>Can be ordered by weight</span>
-          <Toggle name="byWeight" color="green" checked={byWeight} disabled={unit === '2' || unit === '3' ? false : true} onChange={() => setByWeight(!byWeight)}/>
+          <span>Can be divided?</span>
+          <Toggle name="isDivided" color="green" checked={isDivided} onToggleChange={() => setIsDivided(!isDivided)}/>
+        </ListItem>
+        <ListItem>
+          <span>Is new?</span>
+          <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
         </ListItem>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>

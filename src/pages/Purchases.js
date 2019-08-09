@@ -7,8 +7,7 @@ import { StoreContext } from '../data/Store';
 
 
 const Purchases = props => {
-  const { state } = useContext(StoreContext)
-  let purchases = state.purchases
+  let { state, purchases } = useContext(StoreContext)
   purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
   return(
     <Page>

@@ -4,15 +4,15 @@ import { StoreContext } from '../data/Store';
 
 
 const Basket = props => {
-  const { state, orders, dispatch } = useContext(StoreContext)
-  const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
+  const { state, dispatch } = useContext(StoreContext)
+  const store = state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : null
   const totalPrice = state.basket.products ? parseFloat(state.basket.products.reduce((a, product) => a + Number(product.netPrice), 0)).toFixed(3) : null
   useEffect(() => {
     if (!state.basket.storeId) props.f7router.navigate('/home/')
   }, [state.basket])
   return(
     <Page>
-    <Navbar title={`basket from ${store ? store.name: ''}`} backLink="Back" />
+    <Navbar title={`${state.labels.basket_from} ${store ? store.name: ''}`} backLink="Back" />
     <Block>
         <List mediaList>
           {state.basket.products && state.basket.products.map(product => {
@@ -20,7 +20,8 @@ const Basket = props => {
               <ListItem
                 title={product.name}
                 after={product.netPrice}
-                subtitle={`انتاج ${state.countries.find(rec => rec.id === product.country).name}`}
+                subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+                text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
                 key={product.id}
               >
                 <img slot="media" src={product.imageUrl} width="80" alt=""/>

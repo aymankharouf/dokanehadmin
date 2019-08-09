@@ -36,11 +36,11 @@ const Store = props => {
     {id: 't', name: 'اﻻحدث'},
   ]
   const units = [
-    {id: '1', name: 'حبة'},
-    {id: '2', name: 'غرام'},
-    {id: '3', name: 'كيلو غرام'},
-    {id: '4', name: 'مل لتر'},
-    {id: '5', name: 'لتر'}
+    {id: 'p', name: 'حبة'},
+    {id: 'g', name: 'غرام'},
+    {id: 'kg', name: 'كيلو غرام'},
+    {id: 'ml', name: 'مل لتر'},
+    {id: 'l', name: 'لتر'}
   ]
   const orderStatus = [
     {id: 'n', name: 'جديد'},
@@ -80,7 +80,10 @@ const Store = props => {
     open_order_found: 'هناك طلبية سابقة لم يتم استلامها',
     auth_user_not_found: 'الرجاء التأكد من رقم الموبايل وكلمة المرور',
     auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
-    auth_wrong_password: 'كلمة السر غير صحيحة'
+    auth_wrong_password: 'كلمة السر غير صحيحة',
+    orderDetails: 'تفاصيل الطلب',
+    productOf: 'انتاج',
+    basket_from: 'سلة المشتريات من'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -88,15 +91,15 @@ const Store = props => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   let countries = []
   let stores = []
   let sections = []
   let categories = []
   let trademarks = []
-  let purchases = []
   let stockTrans = []
   const initState = {sections, randomColors, categories, locations, countries, stores, units, 
-    labels, orderStatus, basket, trademarks, orderByList, storeTypes, purchases, stockTrans}
+    labels, orderStatus, basket, trademarks, orderByList, storeTypes, stockTrans}
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -121,10 +124,12 @@ const Store = props => {
             stores.push({...doc.data(), id:doc.id})
           })
         })  
-        firebase.firestore().collection('purchases').get().then(docs => {
+        firebase.firestore().collection('purchases').onSnapshot(docs => {
+          let purchasessArray = []
           docs.forEach(doc => {
-            purchases.push({...doc.data(), id:doc.id})
+            purchasessArray.push({...doc.data(), id:doc.id})
           })
+          setPurchases(purchasessArray)
         })  
         firebase.firestore().collection('stockTrans').get().then(docs => {
           docs.forEach(doc => {
@@ -163,7 +168,7 @@ const Store = props => {
     })
   }, []);
   return (
-    <StoreContext.Provider value={{state, user, products, orders, users, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, orders, users, purchases, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

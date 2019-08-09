@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const AddProduct = props => {
   const { state, products } = useContext(StoreContext)
-  const nonStoreProducts = products.filter(rec => rec.stores.findIndex(store => store.id === props.id) === -1)
+  const nonStoreProducts = products.filter(rec => !rec.stores.find(store => store.id === props.id))
   const store = state.stores.find(rec => rec.id === props.id)
   const [productId, setProductId] = useState('')
   const [product, setProduct] = useState('')
@@ -29,6 +29,13 @@ const AddProduct = props => {
       setPrice('')
     }
   }, [product, purchasePrice])
+  useEffect(() => {
+    if (productId) {
+      setProduct(products.find(rec => rec.id === productId))
+    } else {
+      setProduct('')
+    }
+  }, [productId])
 
   const handleSubmit = () => {
     try{
@@ -61,11 +68,14 @@ const AddProduct = props => {
       setError(err)
     }
   }
-  const handleProductChange = e => {
-    setProductId(e.target.value)
-    setProduct(products.find(rec => rec.id === e.target.value))
-  }
-  const productsOptionsTags = nonStoreProducts.map(product => <option key={product.id} value={product.id}>{product.name}</option>)
+  const productsOptionsTags = nonStoreProducts.map(product => 
+    <option 
+      key={product.id} 
+      value={product.id}
+    >
+      {`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+    </option>
+  )
   return (
     <Page>
       <Navbar title={`Add to ${store.name}`} backLink="Back" />
@@ -75,7 +85,7 @@ const AddProduct = props => {
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search product'}}
         >
-          <select name="productId" defaultValue="" onChange={(e) => handleProductChange(e)}>
+          <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
             <option value="" disabled></option>
             {productsOptionsTags}
           </select>
