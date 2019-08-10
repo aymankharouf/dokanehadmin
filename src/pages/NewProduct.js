@@ -82,7 +82,6 @@ const NewProduct = props => {
       if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
         throw 'enter a valid offer end date'
       }
-      const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
       newProduct({
         storeId: props.id,
         category,
@@ -100,7 +99,7 @@ const NewProduct = props => {
         image
       }).then(() => {
         props.f7router.back()
-      })  
+      }) 
     } catch (err){
       setError(err)
     }
@@ -111,11 +110,11 @@ const NewProduct = props => {
   const unitsOptionsTags = state.units.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={`Add New Product to ${store.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.newProduct} ${store.name}`} backLink="Back" />
       <List form>
         <ListInput 
           name="name" 
-          label="Name" 
+          label={state.labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -124,7 +123,7 @@ const NewProduct = props => {
           onInputClear={() => setName('')}
         />
         <ListItem
-          title="Category"
+          title={state.labels.category}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
         >
@@ -134,7 +133,7 @@ const NewProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title="Trademark"
+          title={state.labels.trademark}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
         >
@@ -144,7 +143,7 @@ const NewProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title="Country"
+          title={state.labels.country}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search country'}}
         >
@@ -155,7 +154,7 @@ const NewProduct = props => {
         </ListItem>
         <ListInput 
           name="size" 
-          label="Size" 
+          label={state.labels.size}
           clearButton
           floatingLabel 
           type="number" 
@@ -164,7 +163,7 @@ const NewProduct = props => {
           onInputClear={() => setSize('')}
         />
         <ListItem
-          title="Unit"
+          title={state.labels.unit}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search unit'}}
         >
@@ -174,16 +173,16 @@ const NewProduct = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>Can be divided?</span>
+          <span>{state.labels.isDivided}</span>
           <Toggle name="isDivided" color="green" checked={isDivided} onToggleChange={() => setIsDivided(!isDivided)}/>
         </ListItem>
         <ListItem>
-          <span>Is new?</span>
+          <span>{state.labels.isNew}</span>
           <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
         </ListItem>
         <ListInput 
           name="purchacePrice" 
-          label="Purchase Price" 
+          label={state.labels.purchasePrice}
           value={purchasePrice} 
           clearButton
           floatingLabel 
@@ -193,7 +192,7 @@ const NewProduct = props => {
         />
         <ListInput 
           name="price" 
-          label="Price" 
+          label={state.labels.price}
           value={price}
           clearButton 
           floatingLabel 
@@ -203,17 +202,17 @@ const NewProduct = props => {
         />
         <ListInput
           name="offerEnd"
-          label="Offer End At"
+          label={state.labels.offerEnd}
           type="datepicker"
           value={offerEnd} 
           clearButton
           onCalendarChange={(value) => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
-        <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
+        <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
       </List>
-      <Fab position="center-bottom" slot="fixed" text='submit' color="green" onClick={() => handleSubmit()}>
+      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
 

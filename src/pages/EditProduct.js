@@ -116,7 +116,7 @@ const EditProduct = props => {
           floatingLabel 
           type="number" 
           value={size} 
-          onChange={(e) => setSize(parseInt(e.target.value))}
+          onChange={(e) => setSize(e.target.value)}
         />
         <ListItem
           title="Unit"

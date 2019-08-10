@@ -38,12 +38,10 @@ const ConfirmPurchase = props => {
     const basket = state.basket.products.map(product => {
       return ({
         id: product.id,
-        name: product.name,
         quantity: product.quantity,
         price: product.price,
         actualPrice: product.actualPrice,
         purchasePrice: product.purchasePrice,
-        netPrice: product.netPrice
       })
     })
     const purchase = {
@@ -58,10 +56,17 @@ const ConfirmPurchase = props => {
         let inOrders = approvedOrders.filter(order => order.basket.find(rec => rec.id === product.id && rec.price === product.price))
         inOrders.sort((order1, order2) => order1.time - order2.time)
         const remainingQuantity = await updateOrders(inOrders, product)
-        console.log('remaining == ', remainingQuantity)
         if (remainingQuantity > 0) {
           const stock = state.stores.find(rec => rec.storeType === 'i')
-          stockIn(product, stock, remainingQuantity)
+          const transId = await stockIn(product, stock, remainingQuantity)
+          const trans = {
+            id: transId,
+            productId: product.id,
+            quantity: remainingQuantity,
+            pirce: product.price,
+            purchasePrice: product.purchasePrice,
+            time: new Date()
+          }
         }
       }
       props.f7router.navigate('/home/')

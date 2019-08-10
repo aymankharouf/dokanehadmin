@@ -11,7 +11,7 @@ const Purchases = props => {
   purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
   return(
     <Page>
-      <Navbar title='Purchases' backLink="Back" />
+      <Navbar title={state.labels.purchases} backLink="Back" />
       <Block>
           <List mediaList>
             {purchases && purchases.map(purchase => 
@@ -23,7 +23,7 @@ const Purchases = props => {
                 key={purchase.id}
               />
             )}
-            { purchases.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
+            { purchases.length === 0 ? <ListItem title={state.labels.noData} /> : null }
           </List>
       </Block>
       <Toolbar bottom>

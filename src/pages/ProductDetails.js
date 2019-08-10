@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Row, Col, Fab, Toolbar} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, List, ListItem, Icon, Row, Col, Fab, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
@@ -12,6 +12,7 @@ const ProductDetails = props => {
   }
   const handlePurchase = store => {
 		try{
+      if (state.stores.find(rec => rec.id === store.id).storeType === 'i') return
 			if (state.basket.store && state.basket.store.id !== store.id){
 				throw 'can not add to basket from two different stores'
       }
@@ -33,17 +34,19 @@ const ProductDetails = props => {
   })
   const storesTag = productStores.map(store => 
     <ListItem 
-      header={store.name} 
-      title={moment(store.time.toDate()).fromNow()} 
-      after={store.price} 
+      title={store.name} 
+      footer={moment(store.time.toDate()).fromNow()} 
+      after={parseFloat(store.price).toFixed(3)} 
       key={store.id} 
       link="#"
       onClick={() => handlePurchase(store)}
-    />
+    >
+      {store.quantity ? <Badge slot="title" color='red'>{store.quantity}</Badge> : null}
+    </ListItem>
   )
   return (
     <Page>
-      <Navbar title={product.name} backLink="Back" />
+      <Navbar title={`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`} backLink="Back" />
       <Fab position="left-top" slot="fixed" color="red" onClick={() => handleEditProduct()}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>

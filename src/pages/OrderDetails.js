@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 
 const OrderDetails = props => {
-  const { state, orders, products, user } = useContext(StoreContext)
+  const { state, products, orders, user } = useContext(StoreContext)
   const order = orders.find(order => order.id === props.id)
   const handleApprove = () => {
     updateOrder({...order, status: 'a'}).then(() => {

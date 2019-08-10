@@ -19,7 +19,7 @@ const StoreProducts = props => {
       imageUrl: product.imageUrl
     }
   })
-  storeProducts.sort((product1, product2) => product1.time - product2.time)
+  storeProducts.sort((product1, product2) => product2.time.seconds - product1.time.seconds)
   const store = state.stores.find(store => store.id === props.id)
   return(
     <Page>
@@ -38,7 +38,7 @@ const StoreProducts = props => {
       </Navbar>
       <Block>
         <List className="searchbar-not-found">
-          <ListItem title={state.labels.not_found} />
+          <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
           {storeProducts.map(product => 
@@ -53,17 +53,17 @@ const StoreProducts = props => {
               <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
             </ListItem>
           )}
-          {storeProducts.length === 0 ? <ListItem title="No Products" /> : null}
+          {storeProducts.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
       <Fab position="right-bottom" slot="fixed" color="pink">
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
         <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
         <FabButtons position="top">
-          <FabButton color="green" label='new' onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>
+          <FabButton color="green" label={state.labels.newProduct} onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>
             <Icon ios="f7:star_fill" aurora="f7:star_fill" md="material:star"></Icon>
           </FabButton>
-          <FabButton color="blue" label='exists' onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>
+          <FabButton color="blue" label={state.labels.existProduct} onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>
             <Icon ios="f7:search" aurora="f7:search" md="material:search"></Icon>
           </FabButton>
         </FabButtons>

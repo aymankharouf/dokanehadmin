@@ -77,6 +77,11 @@ const Reducer = (state, action) => {
           ...state,
           trademarks: [...state.trademarks, action.trademark]
         }
+      case 'ADD_ORDER':
+        return {
+          ...state,
+          orders: [...state.orders, action.order]
+        }
       case 'DONE':
         return {
           ...state,

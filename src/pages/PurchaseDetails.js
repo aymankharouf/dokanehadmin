@@ -7,21 +7,25 @@ import { StoreContext } from '../data/Store';
 
 
 const PurchaseDetails = props => {
-  const { purchases, user } = useContext(StoreContext)
+  const { state, purchases, products, user } = useContext(StoreContext)
   const purchase = purchases.find(rec => rec.id === props.id)
 
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>
-      <Navbar title="Purchase Detail" backLink="Back" />
+      <Navbar title={state.labels.purchaseDetails} backLink="Back" />
       <Block>
           <List>
-            {purchase.basket && purchase.basket.map(product => 
-              <ListItem 
-                key={product.id} 
-                title={`${product.name} (${product.quantity})`} 
-                after={product.netPrice}
-              />
+            {purchase.basket && purchase.basket.map(product => {
+              const productInfo = products.find(rec => rec.id === product.id)
+              return (
+                <ListItem 
+                  title={productInfo.name}
+                  footer={`${productInfo.size} ${state.units.find(rec => rec.id === productInfo.unit).name}`}
+                  after={product.netPrice}
+                  key={product.id} 
+                />
+              )}
             )}
             <ListItem title="Total" className="net" after={purchase.total} />
           </List>

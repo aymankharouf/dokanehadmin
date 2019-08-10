@@ -24,7 +24,7 @@ const ActiveOrders = props => {
                 key={order.id} 
               />
             )}
-            { activeOrders.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
+            { activeOrders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
 
           </List>
       </Block>

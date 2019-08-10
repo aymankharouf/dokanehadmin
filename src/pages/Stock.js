@@ -15,40 +15,43 @@ const Stock = props => {
     return {
       id: product.id,
       name: product.name,
+      size: product.size,
+      unit: product.unit,
       quantity: product.stores.find(rec => rec.id === stock.id).quantity,
       price: product.stores.find(rec => rec.id === stock.id).price,
+      purchasePrice: product.stores.find(rec => rec.id === stock.id).purchasePrice,
       time: product.stores.find(rec => rec.id === stock.id).time,
       imageUrl: product.imageUrl
     }
   })
-  storeProducts.sort((producta, productb) => producta.time.seconds - productb.time.seconds)
+  storeProducts.sort((product1, product2) => product1.time - product2.time)
   return(
     <Page>
-      <Navbar title={stock.name} backLink="Back">
+      <Navbar title={state.labels.stock} backLink="Back">
       <NavRight>
         <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
       </NavRight>
       <Searchbar
-          className="searchbar-demo"
-          searchContainer=".search-list"
-          searchIn=".item-title, .item-subtitle"
-          clearButton
-          expandable
-          placeholder={state.labels.search}
-        ></Searchbar>
+        className="searchbar-demo"
+        searchContainer=".search-list"
+        searchIn=".item-title, .item-subtitle"
+        clearButton
+        expandable
+        placeholder={state.labels.search}
+      ></Searchbar>
       </Navbar>
       <Block>
         <List className="searchbar-not-found">
-          <ListItem title={state.labels.not_found} />
+          <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
           {storeProducts.map(product => 
             <ListItem
               link={`/stockTrans/${product.id}`}
               title={product.name}
-              after={parseFloat(product.price).toFixed(3)}
-              subtitle={product.quantity}
-              text={moment(product.time.toDate()).fromNow()}
+              after={product.quantity}
+              subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+              text={parseFloat(product.purchasePrice).toFixed(3)}
               key={product.id}
             >
               <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>

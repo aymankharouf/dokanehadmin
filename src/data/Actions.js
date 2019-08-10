@@ -22,13 +22,14 @@ export const stockIn = async (product, stock, quantity) => {
   await firebase.firestore().collection('products').doc(product.id).update({
     stores: [...otherStores, {id: stock.id, price: avgPrice, purchasePrice: avgPurchasePrice, quantity: quantity + quantityInStck, time: new Date()}]
   })
-  await firebase.firestore().collection('stockTrans').add({
+  const docRef = await firebase.firestore().collection('stockTrans').add({
     productId: product.id,
     quantity: quantity,
     pirce: product.actualPrice,
     purchasePrice: product.purchasePrice,
     time: new Date()
   })
+  return docRef.id
 }
 
 export const addProduct = async (product, store, purchasePrice, price, offerEnd) => {
@@ -68,7 +69,7 @@ export const newProduct = async product => {
   const ext = filename.slice(filename.lastIndexOf('.'))
   const fileData = await firebase.storage().ref().child('products/' + docRef.id + ext).put(product.image)
   const url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
-  return firebase.firestore().collection('products').doc(docRef.id).update({imageUrl: url})
+  await firebase.firestore().collection('products').doc(docRef.id).update({imageUrl: url})
 }
 
 export const editProduct = async product => {

@@ -8,8 +8,7 @@ const Login = props => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
-  const handleLogin = async e => {
-    e.preventDefault();
+  const handleLogin = async () => {
     try {
       if (email === '') {
         throw 'enter your email'
@@ -44,7 +43,7 @@ const Login = props => {
         />
       </List>
       <List>
-        <ListButton onClick={(e) => handleLogin(e)}>Sign In</ListButton>
+        <ListButton onClick={() => handleLogin()}>Sign In</ListButton>
       </List>
       <Block strong className="error">
         <p>{error}</p>

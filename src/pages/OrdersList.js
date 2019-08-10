@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 
 const OrdersList = props => {
-  const { state, orders, users } = useContext(StoreContext)
+  const { state, users, orders } = useContext(StoreContext)
   const status = state.orderStatus.find(rec => rec.id === props.id)
   let statusOrders = orders.filter(rec => rec.status === props.id)
   statusOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
@@ -25,7 +25,7 @@ const OrdersList = props => {
                 key={order.id}
               />
             )}
-            { statusOrders.length === 0 ? <ListItem title={state.labels.not_found} /> : null }
+            { statusOrders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
           </List>
       </Block>
       <Toolbar bottom>
