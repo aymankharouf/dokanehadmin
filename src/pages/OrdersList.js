@@ -13,7 +13,7 @@ const OrdersList = props => {
   statusOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
   return(
     <Page>
-      <Navbar title={`Orders - ${status.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.orders} - ${status.name}`} backLink="Back" />
       <Block>
           <List mediaList>
             {statusOrders && statusOrders.map(order => 

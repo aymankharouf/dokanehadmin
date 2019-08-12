@@ -1,5 +1,5 @@
 import React, {useState, useContext } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Block, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editProduct } from '../data/Actions'
 
@@ -8,12 +8,12 @@ const EditProduct = props => {
   const { state, products } = useContext(StoreContext)
   const product = products.find(rec => rec.id === props.id)
   const [name, setName] = useState(product.name)
+  const [description, setDescription] = useState(product.description)
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)
-  const [size, setSize] = useState(product.size)
-  const [unit, setUnit] = useState(product.unit)
-  const [isDivided, setIsDivided] = useState(false)
-  const [isNew, setIsNew] = useState(false)
+  const [byWeight, setByWeight] = useState(product.byWeight)
+  const [isNew, setIsNew] = useState(product.isNew)
+  const [isOffer, setIsOffer] = useState(product.isOffer)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
@@ -40,11 +40,8 @@ const EditProduct = props => {
       if (category === '') {
         throw 'enter product category'
       }
-      if (size === '') {
-        throw 'enter product size'
-      }
-      if (unit === '') {
-        throw 'enter product unit'
+      if (description === '') {
+        throw 'enter product description'
       }
       if (country === '') {
         throw 'enter product country'
@@ -56,11 +53,11 @@ const EditProduct = props => {
         id: props.id,
         category,
         name,
+        description,
         trademark,
-        unit,
-        isDivided,
+        byWeight,
         isNew,
-        size,
+        isOffer,
         country,
         imageUrl,
         image
@@ -74,14 +71,12 @@ const EditProduct = props => {
   const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   const trademarksOptionsTags = state.trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   const countriesOptionsTags = state.countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const unitsOptionsTags = state.units.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title='Edit Product' backLink="Back" />
+      <Navbar title={state.labels.editProduct} backLink="Back" />
       <List form>
-        <ListInput name="name" label="Name" floatingLabel type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-        <ListItem
-          title="Category"
+      <ListItem
+          title={state.labels.category}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
         >
@@ -91,7 +86,7 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title="Trademark"
+          title={state.labels.trademark}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
         >
@@ -101,7 +96,7 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title="Country"
+          title={state.labels.country}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search country'}}
         >
@@ -111,35 +106,43 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="size" 
-          label="Size" 
+          name="name" 
+          label={state.labels.name}
           floatingLabel 
-          type="number" 
-          value={size} 
-          onChange={(e) => setSize(e.target.value)}
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
-        <ListItem
-          title="Unit"
-          smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search unit'}}
-        >
-          <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)}>
-            <option value="" disabled></option>
-            {unitsOptionsTags}
-          </select>
+        <ListInput 
+          name="description" 
+          label={state.labels.description}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={description} 
+          onChange={(e) => setDescription(e.target.value)}
+          onInputClear={() => setDescription('')}
+        />
+        <ListItem>
+          <span>{state.labels.byWeight}</span>
+          <Toggle name="byWeight" color="green" checked={byWeight} onToggleChange={() => setByWeight(!byWeight)}/>
         </ListItem>
         <ListItem>
-          <span>Can be divided?</span>
-          <Toggle name="isDivided" color="green" checked={isDivided} onToggleChange={() => setIsDivided(!isDivided)}/>
-        </ListItem>
-        <ListItem>
-          <span>Is new?</span>
+          <span>{state.labels.isNew}</span>
           <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
+        </ListItem>
+        <ListItem>
+          <span>{state.labels.isOffer}</span>
+          <Toggle name="isOffer" color="green" checked={isOffer} onToggleChange={() => setIsOffer(!isOffer)}/>
         </ListItem>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
-        <Button fill onClick={() => handleSubmit()}>Submit</Button>
       </List>
+      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
+        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      </Fab>
       <Block strong className="error">
         <p>{error}</p>
       </Block>

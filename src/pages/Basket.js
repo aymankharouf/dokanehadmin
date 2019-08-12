@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Row, Col} from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge} from 'framework7-react'
 import { StoreContext } from '../data/Store';
 
 
@@ -19,28 +19,20 @@ const Basket = props => {
             return (
               <ListItem
                 title={product.name}
-                after={product.netPrice}
-                subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
-                text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
+                footer={product.netPrice}
+                subtitle={product.description}
                 key={product.id}
               >
                 <img slot="media" src={product.imageUrl} width="80" alt=""/>
-                <Row noGap>
-                  <Col width="60"></Col>
-                  <Col width="10">
-                    <Link onClick={() => dispatch({type: 'ADD_QUANTITY', product})}>
-                      <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>                    
-                    </Link>
-                  </Col>
-                  <Col width="20" className="center">
-                    {product.quantity}
-                  </Col>
-                  <Col width="10">
-                    <Link onClick={() => dispatch({type: 'REMOVE_QUANTITY', product})}>
-                      <Icon ios="f7:chevron_down" aurora="f7:chevron_down" md="material:keyboard_arrow_down"></Icon>
-                    </Link>              
-                  </Col>
-                </Row>
+                {product.quantity > 1 ? <Badge slot="title" color="red">{product.quantity}</Badge> : null}
+                <Stepper 
+                  slot="after" 
+                  buttonsOnly={true} 
+                  small 
+                  raised
+                  onStepperPlusClick={() => dispatch({type: 'ADD_QUANTITY', product})}
+                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', product})}
+                />
               </ListItem>
             )
           })}

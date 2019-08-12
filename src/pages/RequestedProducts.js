@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
@@ -47,13 +47,14 @@ const RequestedProducts = props => {
 						<ListItem
 							link={`/requestedProduct/${product.id}/quantity/${product.quantity}/price/${product.price}`}
 							title={product.name}
-							after={product.quantity}
-							subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
-							text={product.price}
+							after={product.price}
+							subtitle={product.description}
+							text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
 							key={product.id}
 							className={product.status === 'd' ? 'disable-product' : ''}
 						>
 							<img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+							{product.quantity > 1 ? <Badge slot="title" color="red">{product.quantity}</Badge> : null}
 						</ListItem>
 					)}
 				</List>

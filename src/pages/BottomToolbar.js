@@ -4,13 +4,17 @@ import { StoreContext } from '../data/Store';
 
 const BottomToolbar = props => {
   const { state } = useContext(StoreContext)
-  const badge = state.basket.products ? <Badge color="red">{state.basket.products.length}</Badge> : ''
-  const href = state.basket.products ? '/basket/' : null
   const searchHome = props.isHome === '1' ? 'search' : 'home'
   return (
     <React.Fragment>
-      <Link href={`/${searchHome}/`}><Icon material={searchHome}></Icon></Link>
-      <Link href={href}><Icon material="shopping_cart">{badge}</Icon></Link>
+      <Link href={`/${searchHome}/`}>
+        <Icon material={searchHome} />
+      </Link>
+      <Link href={state.basket.products ? '/basket/' : ''}
+        ><Icon material="shopping_cart">
+          {state.basket.products ? <Badge color="red">{state.basket.products.length}</Badge> : ''}
+        </Icon>
+      </Link>
     </React.Fragment>
   )
 }

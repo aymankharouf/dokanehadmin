@@ -58,8 +58,8 @@ const AddProduct = props => {
       addProduct(
         product,
         store,
-        parseFloat(purchasePrice).toFixed(3),
-        parseFloat(price).toFixed(3),
+        purchasePrice,
+        price,
         offerEndDate
       ).then(() => {
         props.f7router.back()
@@ -73,15 +73,15 @@ const AddProduct = props => {
       key={product.id} 
       value={product.id}
     >
-      {`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+      {`${product.name} ${product.description}`}
     </option>
   )
   return (
     <Page>
-      <Navbar title={`Add to ${store.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink="Back" />
       <List form>
         <ListItem
-          title="Product"
+          title={state.labels.product}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search product'}}
         >
@@ -92,7 +92,7 @@ const AddProduct = props => {
         </ListItem>
         <ListInput 
           name="puchasePrice" 
-          label="Puchase Price" 
+          label={state.labels.purchasePrice}
           value={purchasePrice}
           clearButton
           floatingLabel 
@@ -102,7 +102,7 @@ const AddProduct = props => {
         />
         <ListInput 
           name="price" 
-          label="Price" 
+          label={state.labels.price}
           value={price}
           clearButton 
           floatingLabel 
@@ -112,7 +112,7 @@ const AddProduct = props => {
         />
         <ListInput
           name="offerEnd"
-          label="Offer End At"
+          label={state.labels.offerEnd}
           type="datepicker"
           value={offerEnd} 
           clearButton
@@ -121,7 +121,7 @@ const AddProduct = props => {
         />
         <img src={product.imageUrl} alt=""/>
       </List>
-      <Fab position="center-bottom" slot="fixed" text='submit' color="green" onClick={() => handleSubmit()}>
+      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
 

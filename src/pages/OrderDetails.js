@@ -27,7 +27,7 @@ const OrderDetails = props => {
                 <ListItem 
                   key={product.id} 
                   title={productInfo.name}
-                  footer={`${productInfo.size} ${state.units.find(rec => rec.id === productInfo.unit).name}`}
+                  footer={productInfo.description}
                   after={parseFloat(product.price * product.quantity).toFixed(3)}>
                   <Badge slot="title" color={product.purchasedQuantity === product.quantity ? 'green' : 'red'}>{`${product.purchasedQuantity} - ${product.quantity}`}</Badge>
                 </ListItem>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, FabButton, FabButtons} from 'framework7-react'
+import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -12,8 +12,9 @@ const StoreProducts = props => {
     return {
       id: product.id,
       name: product.name,
-      size: product.size,
-      unit: product.unit,
+      description: product.description,
+      isNew: product.isNew,
+      isOffer: product.isOffer,
       price: product.stores.find(rec => rec.id === props.id).price,
       time: product.stores.find(rec => rec.id === props.id).time,
       imageUrl: product.imageUrl
@@ -24,10 +25,10 @@ const StoreProducts = props => {
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink="Back">
-      <NavRight>
-        <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
-      </NavRight>
-      <Searchbar
+        <NavRight>
+          <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
+        </NavRight>
+        <Searchbar
           className="searchbar-demo"
           searchContainer=".search-list"
           searchIn=".item-title, .item-subtitle"
@@ -45,32 +46,28 @@ const StoreProducts = props => {
             <ListItem
               link={`/storeProduct/${store.id}/product/${product.id}`}
               title={product.name}
-              after={product.price}
-              subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
+              after={parseFloat(product.price).toFixed(3)}
+              subtitle={product.description}
               text={moment(product.time.toDate()).fromNow()}
               key={product.id}
             >
               <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
+              {product.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
             </ListItem>
           )}
           {storeProducts.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="pink">
+      <Fab position="right-bottom" slot="fixed" color="pink" morphTo=".toolbar.fab-morph-target">
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-        <FabButtons position="top">
-          <FabButton color="green" label={state.labels.newProduct} onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>
-            <Icon ios="f7:star_fill" aurora="f7:star_fill" md="material:star"></Icon>
-          </FabButton>
-          <FabButton color="blue" label={state.labels.existProduct} onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>
-            <Icon ios="f7:search" aurora="f7:search" md="material:search"></Icon>
-          </FabButton>
-        </FabButtons>
       </Fab>
-
       <Toolbar bottom>
         <BottomToolbar/>
+      </Toolbar>
+      <Toolbar bottom className="fab-morph-target">
+        <Link onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>{state.labels.newProduct}</Link>
+        <Link onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>{state.labels.existProduct}</Link>
       </Toolbar>
     </Page>
   )

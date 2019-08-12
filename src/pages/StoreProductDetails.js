@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, Card, CardContent, Icon, Fab, Toolbar, FabButtons, FabButton} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, Icon, Fab, Toolbar, FabButtons, FabButton, CardFooter} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import { deleteProduct, confirmPrice } from '../data/Actions'
@@ -28,8 +28,11 @@ const StoreProductDetails = props => {
         <Card className="test">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
-            {storePrice}
           </CardContent>
+          <CardFooter>
+            <p>{product.description}</p>
+            <p>{product.price}</p>
+          </CardFooter>
         </Card>
       </Block>
       <Fab position="right-bottom" slot="fixed" color="orange">

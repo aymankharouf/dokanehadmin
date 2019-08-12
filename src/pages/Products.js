@@ -1,18 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Button, Popover} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const Products = props => {
   const { state, products } = useContext(StoreContext)
-  const [orderBy, setOrderBy] = useState('v')
+  const [orderBy, setOrderBy] = useState('p')
   const [allProducts, setAllProducts] = useState(products)
   useEffect(() => {
     const sort = (value) => {
       switch(value){
-        case 'v':
-          setAllProducts([...allProducts].sort((product1, product2) => product1.price / product1.size - product2.price / product2.size))
-          break
         case 'p':
           setAllProducts([...allProducts].sort((product1, product2) => product1.price - product2.price))
           break
@@ -28,7 +25,15 @@ const Products = props => {
     }
     sort(orderBy)
   }, [orderBy])
-  const orderByList = state.orderByList.map(orderByItem => orderByItem.id === 0 ? <option key={orderByItem.id} value={orderByItem.id} disabled>{orderByItem.name}</option> : <option key={orderByItem.id} value={orderByItem.id}>{orderByItem.name}</option>)
+  const orderByList = state.orderByList.filter(rec => rec.id !== orderBy)
+  const orderByListTags = orderByList.map(orderByItem => 
+    <ListItem 
+      link="#" 
+      popoverClose 
+      key={orderByItem.id} 
+      title={orderByItem.name} 
+      onClick={() => setOrderBy(orderByItem.id)}/> 
+  )
   return(
     <Page>
       <Navbar title={state.labels.allProducts} backLink="Back">
@@ -36,44 +41,43 @@ const Products = props => {
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>
       </Navbar>
-      <Block>
-        <List>
-          <ListItem
-            title={state.labels.order}
-            smartSelect
-            smartSelectParams={{openIn: 'popover', closeOnSelect: true}}
-          >
-            <select name="order" value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
-              {orderByList}
-            </select>
-          </ListItem>
-          <Searchbar
-            className="searchbar-demo"
-            searchContainer=".search-list"
-            searchIn=".item-title, .item-subtitle"
-            clearButton
-            expandable
-            placeholder={state.labels.search}
-          ></Searchbar>
-        </List>
-        <List className="searchbar-not-found">
-          <ListItem title={state.labels.noData} />
-        </List>
-        <List mediaList className="search-list searchbar-found">
-          {allProducts && allProducts.map(product => 
-            <ListItem
-              link={`/product/${product.id}`}
-              title={product.name}
-              after={product.price}
-              subtitle={`${product.size} ${state.units.find(rec => rec.id === product.unit).name}`}
-              text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
-              key={product.id}
-              className={product.status === 'd' ? 'disable-product' : ''}
-            >
-              <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
-            </ListItem>
-          )}
-        </List>
+      <Block inset>
+        <Button raised popoverOpen=".popover-menu">{`${state.labels.orderBy} ${state.orderByList.find(rec => rec.id === orderBy).name}`}</Button>
+        <Searchbar
+          className="searchbar-demo"
+          searchContainer=".search-list"
+          searchIn=".item-title, .item-subtitle"
+          clearButton
+          expandable
+          placeholder={state.labels.search}
+        />
+        </Block>
+        <Popover className="popover-menu">
+          <List>
+            {orderByListTags}
+          </List>
+        </Popover>
+        <Block>
+          <List className="searchbar-not-found">
+            <ListItem title={state.labels.noData} />
+          </List>
+          <List mediaList className="search-list searchbar-found">
+            {allProducts && allProducts.map(product => 
+              <ListItem
+                link={`/product/${product.id}`}
+                title={product.name}
+                after={product.price}
+                subtitle={product.description}
+                text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
+                key={product.id}
+                className={product.status === 'd' ? 'disable-product' : ''}
+              >
+                <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+                {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
+                {product.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
+              </ListItem>
+            )}
+          </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Button, Block, Toggle} from 'framework7-react';
+import {Page, Navbar, List, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editPrice } from '../data/Actions'
 
@@ -59,12 +59,12 @@ const EditPrice = props => {
   }
   return (
     <Page>
-      <Navbar title={`Edit Price - ${store.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink="Back" />
       <List form>
         <img src={product.imageUrl} alt=""/>
         <ListInput 
           name="purchasePrice" 
-          label="Purchase Price" 
+          label={state.labels.purchasePrice}
           clearButton 
           floatingLabel 
           type="number" 
@@ -74,7 +74,7 @@ const EditPrice = props => {
         />
         <ListInput 
           name="price" 
-          label="Price" 
+          label={state.labels.price}
           clearButton 
           floatingLabel 
           type="number" 
@@ -84,15 +84,17 @@ const EditPrice = props => {
         />
         <ListInput
           name="offerEnd"
-          label="Offer End"
+          label={state.labels.offerEnd}
           type="datepicker"
           clearButton
           value={offerEnd} 
           onCalendarChange={(value) => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
-        <Button fill onClick={(e) => handleEdit(e)}>Submit</Button>
       </List>
+      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleEdit()}>
+        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      </Fab>
       <Block strong className="error">
         <p>{error}</p>
       </Block>

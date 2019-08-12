@@ -54,7 +54,7 @@ const ConfirmPurchase = props => {
       const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
       for (const product of state.basket.products) {
         let inOrders = approvedOrders.filter(order => order.basket.find(rec => rec.id === product.id && rec.price === product.price))
-        inOrders.sort((order1, order2) => order1.time - order2.time)
+        inOrders.sort((order1, order2) => order1.time.seconds - order2.time.seconds)
         const remainingQuantity = await updateOrders(inOrders, product)
         if (remainingQuantity > 0) {
           const stock = state.stores.find(rec => rec.storeType === 'i')

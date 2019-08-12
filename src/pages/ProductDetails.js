@@ -46,7 +46,7 @@ const ProductDetails = props => {
   )
   return (
     <Page>
-      <Navbar title={`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
       <Fab position="left-top" slot="fixed" color="red" onClick={() => handleEditProduct()}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>

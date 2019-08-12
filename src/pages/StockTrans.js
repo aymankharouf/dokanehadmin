@@ -10,7 +10,7 @@ const StockTrans = props => {
   const { state, stockTrans, products } = useContext(StoreContext)
   const product = products.find(rec => rec.id === props.id)
   let trans = stockTrans
-  trans.sort((trans1, trans2) => trans1.time - trans2.time)
+  trans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
   return(
     <Page>
       <Navbar title={`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`} backLink="Back" />

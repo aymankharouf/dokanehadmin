@@ -51,17 +51,17 @@ export const newProduct = async product => {
     time: new Date()
   }]
   const docRef = await firebase.firestore().collection('products').add({
-    category: product.category,
     name: product.name,
+    description: product.description,
+    category: product.category,
+    trademark: product.trademark,
+    country: product.country,
     stores: stores,
     sales: 0,
     rating: '',
-    trademark: product.trademark,
-    size: product.size,
-    unit: product.unit,
-    isDivided: product.isDivided,
+    byWeight: product.byWeight,
     isNew: product.isNew,
-    country: product.country,
+    isOffer: product.isOffer,
     time: new Date(),
     status: 'a'
   })
@@ -83,13 +83,13 @@ export const editProduct = async product => {
     url = product.imageUrl
   }
   await firebase.firestore().collection('products').doc(product.id).update({
-    category: product.category,
     name: product.name,
+    description: product.description,
+    category: product.category,
     trademark: product.trademark,
-    size: product.size,
-    unit: product.unit,
-    isDivided: product.isDivided,
+    byWeight: product.byWeight,
     isNew: product.isNew,
+    isOffer: product.isOffer,
     country: product.country,
     imageUrl: url,
   })

@@ -29,18 +29,9 @@ const Store = props => {
     {id: '5', name: 'مخيم جبل الحسين'}
   ]
   const orderByList = [
-    {id: 'v', name: 'القيمة'},
     {id: 'p', name: 'السعر'},
     {id: 's', name: 'المبيعات'},
-    {id: 'r', name: 'التقييم'},
-    {id: 't', name: 'اﻻحدث'},
-  ]
-  const units = [
-    {id: 'p', name: 'حبة'},
-    {id: 'g', name: 'غرام'},
-    {id: 'kg', name: 'كيلو غرام'},
-    {id: 'ml', name: 'مل لتر'},
-    {id: 'l', name: 'لتر'}
+    {id: 'r', name: 'التقييم'}
   ]
   const orderStatus = [
     {id: 'n', name: 'جديد'},
@@ -91,10 +82,10 @@ const Store = props => {
     category: 'التصنيف',
     trademark: 'العلامة التجارية',
     country: 'الدولة',
-    size: 'الحجم',
-    unit: 'الوحدة',
+    description: 'الوصف',
     isNew: 'جديد؟',
-    isDivided: 'يمكن تقسمه؟',
+    byWeight: 'بالوزن؟',
+    isOffer: 'عرض؟',
     purchasePrice: 'سعر الشراء',
     price: 'السعر',
     offerEnd: 'تاريخ انتهاء العرض',
@@ -103,8 +94,15 @@ const Store = props => {
     existProduct: 'منتج موجود',
     image: 'الصورة',
     submit: 'موافق',
-    order: 'الترتيب',
-    allProducts: 'كل المنتجات'
+    orderBy: 'الترتيب حسب',
+    allProducts: 'كل المنتجات',
+    product: 'المنتج',
+    addProduct: 'اضافة منتج',
+    new: 'جديد',
+    offer: 'عرض',
+    editProduct: 'تعديل منتج',
+    editPrice: 'تعديل سعر',
+    orders: 'الطلبات'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -126,7 +124,6 @@ const Store = props => {
     locations, 
     countries, 
     stores, 
-    units, 
     labels, 
     orderStatus, 
     basket, 

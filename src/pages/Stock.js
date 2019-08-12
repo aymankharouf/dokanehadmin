@@ -24,7 +24,7 @@ const Stock = props => {
       imageUrl: product.imageUrl
     }
   })
-  storeProducts.sort((product1, product2) => product1.time - product2.time)
+  storeProducts.sort((product1, product2) => product1.time.seconds - product2.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.stock} backLink="Back">

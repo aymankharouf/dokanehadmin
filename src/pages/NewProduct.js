@@ -8,12 +8,12 @@ const NewProduct = props => {
   const { state } = useContext(StoreContext)
   const store = state.stores.find(rec => rec.id === props.id)
   const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [trademark, setTrademark] = useState('')
-  const [size, setSize] = useState('')
-  const [unit, setUnit] = useState('')
-  const [isDivided, setIsDivided] = useState(false)
+  const [byWeight, setByWeight] = useState(false)
   const [isNew, setIsNew] = useState(false)
+  const [isOffer, setIsOffer] = useState(false)
   const [country, setCountry] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
   const [price, setPrice] = useState('')
@@ -55,23 +55,20 @@ const NewProduct = props => {
       if (name === '') {
         throw 'enter product name'
       }
-      if (category === '') {
-        throw 'enter product category'
-      }
-      if (size === '') {
-        throw 'enter product size'
-      }
-      if (unit === '') {
-        throw 'enter product unit'
-      }
-      if (country === '') {
-        throw 'enter product country'
+      if (description === '') {
+        throw 'enter product description'
       }
       if (purchasePrice === '') {
         throw 'enter product purshase price'
       }
       if (price === '') {
         throw 'enter product price'
+      }
+      if (category === '') {
+        throw 'enter product category'
+      }
+      if (country === '') {
+        throw 'enter product country'
       }
       if (imageUrl === '') {
         throw 'enter product image'
@@ -86,14 +83,14 @@ const NewProduct = props => {
         storeId: props.id,
         category,
         name,
+        description,
         trademark,
-        unit,
-        isDivided,
+        byWeight,
         isNew,
-        size,
+        isOffer,
         country,
-        purchasePrice: parseFloat(purchasePrice).toFixed(3),
-        price: parseFloat(price).toFixed(3),
+        purchasePrice,
+        price,
         offerEnd,
         imageUrl,
         image
@@ -107,22 +104,11 @@ const NewProduct = props => {
   const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   const trademarksOptionsTags = state.trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   const countriesOptionsTags = state.countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const unitsOptionsTags = state.units.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={`${state.labels.newProduct} ${store.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.newProduct} - ${store.name}`} backLink="Back" />
       <List form>
-        <ListInput 
-          name="name" 
-          label={state.labels.name}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListItem
+      <ListItem
           title={state.labels.category}
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
@@ -153,33 +139,25 @@ const NewProduct = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="size" 
-          label={state.labels.size}
-          clearButton
+          name="name" 
+          label={state.labels.name}
           floatingLabel 
-          type="number" 
-          value={size} 
-          onChange={(e) => setSize(e.target.value)}
-          onInputClear={() => setSize('')}
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
-        <ListItem
-          title={state.labels.unit}
-          smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search unit'}}
-        >
-          <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)}>
-            <option value="" disabled></option>
-            {unitsOptionsTags}
-          </select>
-        </ListItem>
-        <ListItem>
-          <span>{state.labels.isDivided}</span>
-          <Toggle name="isDivided" color="green" checked={isDivided} onToggleChange={() => setIsDivided(!isDivided)}/>
-        </ListItem>
-        <ListItem>
-          <span>{state.labels.isNew}</span>
-          <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
-        </ListItem>
+        <ListInput 
+          name="description" 
+          label={state.labels.description}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={description} 
+          onChange={(e) => setDescription(e.target.value)}
+          onInputClear={() => setDescription('')}
+        />
         <ListInput 
           name="purchacePrice" 
           label={state.labels.purchasePrice}
@@ -200,6 +178,18 @@ const NewProduct = props => {
           onChange={(e) => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
+        <ListItem>
+          <span>{state.labels.byWeight}</span>
+          <Toggle name="byWeight" color="green" checked={byWeight} onToggleChange={() => setByWeight(!byWeight)}/>
+        </ListItem>
+        <ListItem>
+          <span>{state.labels.isNew}</span>
+          <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
+        </ListItem>
+        <ListItem>
+          <span>{state.labels.isOffer}</span>
+          <Toggle name="isOffer" color="green" checked={isOffer} onToggleChange={() => setIsOffer(!isOffer)}/>
+        </ListItem>
         <ListInput
           name="offerEnd"
           label={state.labels.offerEnd}

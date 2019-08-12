@@ -31,7 +31,7 @@ const RequestedProductDetails = props => {
     <ListItem 
 			header={store.name} 
 			title={moment(store.time.toDate()).fromNow()} 
-			after={store.price} 
+			after={parseFloat(store.price).toFixed(3)} 
 			key={store.id}
 			link="#"
       onClick={() => handlePurchase(store)}
@@ -40,7 +40,7 @@ const RequestedProductDetails = props => {
 	)
   return (
     <Page>
-      <Navbar title={`${product.name} ${product.size} ${state.units.find(rec => rec.id === product.unit).name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>
