@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, List, ListItem, Row, Col, Toolbar} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -21,7 +21,7 @@ const RequestedProductDetails = props => {
 			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw 'can not add to basket from two different stores'
       }
-      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: props.quantity, price: props.price}})
+      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
 			props.f7router.back()
 		} catch(err) {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
@@ -29,14 +29,16 @@ const RequestedProductDetails = props => {
 	}
   const storesTag = productStores.map(store => 
     <ListItem 
-			header={store.name} 
-			title={moment(store.time.toDate()).fromNow()} 
-			after={parseFloat(store.price).toFixed(3)} 
+			title={store.name} 
+			footer={moment(store.time.toDate()).fromNow()} 
+			after={(store.price / 1000).toFixed(3)} 
 			key={store.id}
 			link="#"
       onClick={() => handlePurchase(store)}
-      className={store.price <= props.price ? 'current-store' : ''}
-		/>
+		>
+      {store.quantity ? <Badge slot='title' color='red'>{store.quantity}</Badge> : null}
+      {store.price <= props.price ? <Badge slot='title' color='green'> $ </Badge> : null}
+    </ListItem>
 	)
   return (
     <Page>
@@ -45,15 +47,11 @@ const RequestedProductDetails = props => {
         <Card className="demo-card-header-pic">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
-            <Row>
-              <Col width="20">
-                {props.price}
-              </Col>
-              <Col width="60" className="left">
-                {props.quantity} 
-              </Col>
-            </Row>
           </CardContent>
+          <CardFooter>
+            <p>{(props.price / 1000).toFixed(3)}</p>
+            <p>{props.quantity}</p>
+          </CardFooter>
         </Card>
         <List>
           {storesTag}

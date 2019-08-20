@@ -19,7 +19,7 @@ const NewProduct = props => {
   const [price, setPrice] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [offerEnd, setOfferEnd] = useState(store.offerEnd || '')
+  const [offerEnd, setOfferEnd] = useState('')
   const [error, setError] = useState('')
   const handleFileChange = e => {
     const files = e.target.files
@@ -41,7 +41,7 @@ const NewProduct = props => {
         const currentCategory = state.categories.find(rec => rec.id === category)
         const section = state.sections.find(rec => rec.id === currentCategory.sectionId)
         const percent = section ? section.percent : 0
-        setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
+        setPrice(((1 + (percent / 100)) * purchasePrice).toFixed(3))
       } else {
         setPrice(purchasePrice)
       }
@@ -73,7 +73,7 @@ const NewProduct = props => {
       if (imageUrl === '') {
         throw 'enter product image'
       }
-      if (price < purchasePrice) {
+      if ((price * 1000) < (purchasePrice * 1000)) {
         throw 'enter a valid price'
       }
       if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {

@@ -6,9 +6,12 @@ import { deleteProduct, confirmPrice } from '../data/Actions'
 
 const StoreProductDetails = props => {
   const { state, products } = useContext(StoreContext)
-  const product = products.find(product => product.id === props.productId)
+  let product = products.find(product => product.id === props.productId)
+  product = {
+    ...product,
+    price: product.stores.find(rec => rec.id === props.storeId).price
+  }
   const store = state.stores.find(rec => rec.id === props.storeId)
-  const storePrice = product.stores.find(rec => rec.id === props.storeId).price
   const handleEditPrice = () => {
     props.f7router.navigate(`/editPrice/${props.storeId}/product/${props.productId}`)
   }
@@ -25,13 +28,13 @@ const StoreProductDetails = props => {
     <Page>
       <Navbar title={`${product.name} - ${store.name}`} backLink="Back" />
       <Block>
-        <Card className="test">
+        <Card className="demo-card-header-pic">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
           </CardContent>
           <CardFooter>
             <p>{product.description}</p>
-            <p>{product.price}</p>
+            <p>{(product.price / 1000).toFixed(3)}</p>
           </CardFooter>
         </Card>
       </Block>

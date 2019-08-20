@@ -78,7 +78,6 @@ const Store = props => {
     stock:'المستودع',
     purchaseDetails: 'تفاصيل المشتريات',
     purchases: 'المشتريات',
-    newProduct: 'اضافة منتج',
     category: 'التصنيف',
     trademark: 'العلامة التجارية',
     country: 'الدولة',
@@ -102,7 +101,14 @@ const Store = props => {
     offer: 'عرض',
     editProduct: 'تعديل منتج',
     editPrice: 'تعديل سعر',
-    orders: 'الطلبات'
+    orders: 'الطلبات',
+    confirmPurchase: 'اعتماد الشراء',
+    total: 'المجموع',
+    RequestedProducts: 'المنتجات المطلوبة',
+    newStore: 'محل جديد',
+    type: 'النوع',
+    address: 'العنوان',
+    confirm: 'اعتماد'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -112,6 +118,7 @@ const Store = props => {
   const [orders, setOrders] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [stockTrans, setStockTrans] = useState([]);
+  const [lessPrice, setLessPrice] = useState([]);
   let countries = []
   let stores = []
   let sections = []
@@ -162,12 +169,19 @@ const Store = props => {
           })
           setPurchases(purchasessArray)
         })  
-        firebase.firestore().collection('stockTrans').get().then(docs => {
+        firebase.firestore().collection('stockTrans').onSnapshot(docs => {
           let stockTransArray = []
           docs.forEach(doc => {
             stockTransArray.push({...doc.data(), id:doc.id})
           })
           setStockTrans(stockTransArray)
+        })  
+        firebase.firestore().collection('lessPrice').onSnapshot(docs => {
+          let lessPriceArray = []
+          docs.forEach(doc => {
+            lessPriceArray.push({...doc.data(), id:doc.id})
+          })
+          setLessPrice(lessPriceArray)
         })  
       }
     })
@@ -195,13 +209,13 @@ const Store = props => {
       let productsArray = []
       docs.forEach(doc => {
         const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
-        productsArray.push({...doc.data(), id: doc.id, price: parseFloat(minPrice).toFixed(3)})
+        productsArray.push({...doc.data(), id: doc.id, price: minPrice})
       })
       setProducts(productsArray)
     })
   }, []);
   return (
-    <StoreContext.Provider value={{state, user, products, users, orders, purchases, stockTrans, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, users, orders, purchases, stockTrans, lessPrice, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

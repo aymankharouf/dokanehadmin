@@ -21,7 +21,7 @@ const AddProduct = props => {
         const category = state.categories.find(rec => rec.id === product.category)
         const section = category ? state.sections.find(rec => rec.id === category.sectionId) : null
         const percent = section ? section.percent : 0
-        setPrice(parseFloat((1 + (percent / 100)) * purchasePrice).toFixed(3))
+        setPrice(((1 + (percent / 100)) * purchasePrice).toFixed(3))
       } else {
         setPrice(purchasePrice)
       }
@@ -122,7 +122,7 @@ const AddProduct = props => {
         <img src={product.imageUrl} alt=""/>
       </List>
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>>
       </Fab>
 
       <Block strong className="error">

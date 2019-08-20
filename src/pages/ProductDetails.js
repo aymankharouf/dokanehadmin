@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, List, ListItem, Icon, Row, Col, Fab, Toolbar, Badge} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
@@ -36,7 +36,7 @@ const ProductDetails = props => {
     <ListItem 
       title={store.name} 
       footer={moment(store.time.toDate()).fromNow()} 
-      after={parseFloat(store.price).toFixed(3)} 
+      after={(store.price / 1000).toFixed(3)} 
       key={store.id} 
       link="#"
       onClick={() => handlePurchase(store)}
@@ -54,15 +54,11 @@ const ProductDetails = props => {
         <Card className="demo-card-header-pic">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
-            <Row>
-            <Col width="20">
-              {product.price}
-            </Col>
-            <Col width="60" className="left">
-              <Rating rating={product.rating} />
-            </Col>
-            </Row>
           </CardContent>
+          <CardFooter>
+            <p>{(product.price / 1000).toFixed(3)}</p>
+            <p><Rating rating={product.rating} /></p>
+          </CardFooter>
         </Card>
         <List>
           {storesTag}

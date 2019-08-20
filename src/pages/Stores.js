@@ -17,7 +17,12 @@ const Stores = props => {
       <Block>
         <List>
           {stores && stores.map(store =>
-            <ListItem title={store.name} link={`/store/${store.id}`} key={store.id} />
+            <ListItem 
+              link={`/store/${store.id}`} 
+              title={store.name} 
+              footer={`${store.address || ''} ${store.mobile || ''}`}
+              key={store.id} 
+            />
           )}
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>

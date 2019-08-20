@@ -46,7 +46,7 @@ const StoreProducts = props => {
             <ListItem
               link={`/storeProduct/${store.id}/product/${product.id}`}
               title={product.name}
-              after={parseFloat(product.price).toFixed(3)}
+              after={(product.price / 1000).toFixed(3)}
               subtitle={product.description}
               text={moment(product.time.toDate()).fromNow()}
               key={product.id}

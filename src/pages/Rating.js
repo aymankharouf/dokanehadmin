@@ -22,14 +22,14 @@ const Rating = props => {
   let stars = []
   let i = 0
   while (++i <= rating_int) {
-    stars.push(<Icon key={i} material="star" color={color}></Icon>)
+    stars.push(<Icon key={i} ios="f7:star_fill" aurora="f7:star_fill" md="material:star" color={color}></Icon>)
   }
   if (rating_fraction > 0) {
-    stars.unshift(<Icon key={i} material="star_half" color={color}></Icon>)
+    stars.unshift(<Icon key={i} ios="f7:star_half" aurora="f7:star_half" md="material:star_half" color={color}></Icon>)
     i++
   }
   while (i++ <= 5) {
-    stars.unshift(<Icon key={i} material="star_border" color={color}></Icon>)
+    stars.unshift(<Icon key={i} ios="f7:star" aurora="f7:star" md="material:star_border" color={color}></Icon>)
   }
 
   return(

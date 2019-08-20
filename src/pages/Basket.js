@@ -2,13 +2,20 @@ import React, { useContext, useEffect } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge} from 'framework7-react'
 import { StoreContext } from '../data/Store';
 
-
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : null
-  const totalPrice = state.basket.products ? parseFloat(state.basket.products.reduce((a, product) => a + Number(product.netPrice), 0)).toFixed(3) : null
+  const totalPrice = state.basket.products ? (state.basket.products.reduce((a, product) => a + product.netPrice, 0)) : null
+  const handleAdd = (product) => {
+    const storeQuantity = product.stores.find(rec => rec.id === store.id).quantity
+    if (!storeQuantity || storeQuantity > product.quantity) {
+      dispatch({type: 'ADD_QUANTITY', product})
+    }
+  }
   useEffect(() => {
-    if (!state.basket.storeId) props.f7router.navigate('/home/')
+    if (!state.basket.storeId) {
+      props.f7router.navigate('/home/')
+    }
   }, [state.basket])
   return(
     <Page>
@@ -19,7 +26,7 @@ const Basket = props => {
             return (
               <ListItem
                 title={product.name}
-                footer={product.netPrice}
+                footer={(product.netPrice / 1000).toFixed(3)}
                 subtitle={product.description}
                 key={product.id}
               >
@@ -30,7 +37,7 @@ const Basket = props => {
                   buttonsOnly={true} 
                   small 
                   raised
-                  onStepperPlusClick={() => dispatch({type: 'ADD_QUANTITY', product})}
+                  onStepperPlusClick={() => handleAdd(product)}
                   onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', product})}
                 />
               </ListItem>
@@ -38,7 +45,7 @@ const Basket = props => {
           })}
         </List>
     </Block>
-    <Fab position="center-bottom" slot="fixed" text={`اعتماد ${totalPrice}`} color="red" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
+    <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="red" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
       <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
     </Fab>
 

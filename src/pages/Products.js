@@ -66,7 +66,7 @@ const Products = props => {
               <ListItem
                 link={`/product/${product.id}`}
                 title={product.name}
-                after={product.price}
+                after={(product.price / 1000).toFixed(3)}
                 subtitle={product.description}
                 text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
                 key={product.id}

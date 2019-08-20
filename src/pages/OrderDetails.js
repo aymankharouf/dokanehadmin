@@ -28,12 +28,12 @@ const OrderDetails = props => {
                   key={product.id} 
                   title={productInfo.name}
                   footer={productInfo.description}
-                  after={parseFloat(product.price * product.quantity).toFixed(3)}>
+                  after={(product.price * product.quantity / 1000).toFixed(3)}>
                   <Badge slot="title" color={product.purchasedQuantity === product.quantity ? 'green' : 'red'}>{`${product.purchasedQuantity} - ${product.quantity}`}</Badge>
                 </ListItem>
               )}
             )}
-            <ListItem title="Total" className="total" after={parseFloat(order.total - 0.250).toFixed(3)} />
+            <ListItem title="Total" className="total" after={((order.total - 250) / 1000).toFixed(3)} />
           </List>
       </Block>
       <Fab position="right-bottom" slot="fixed" color="orange">

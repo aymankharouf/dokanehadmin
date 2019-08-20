@@ -9,10 +9,10 @@ const EditPrice = props => {
   const product = products.find(rec => rec.id === props.productId)
   let store = product.stores.find(rec => rec.id === props.storeId)
   store = {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
-  const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice || '')
-  const [price, setPrice] = useState(store.price || '')
+  const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice / 1000)
+  const [price, setPrice] = useState(store.price / 1000)
   const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
-  const [offerEnd, setOfferEnd] = useState(initOfferEnd || '')
+  const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [error, setError] = useState('')
   useEffect(() => {
     const storeType = store ? store.storeType : null

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { addSection } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Button, Block} from 'framework7-react';
+import {Page, Navbar, List, ListInput, Button, Block} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 

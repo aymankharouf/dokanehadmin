@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { editOrder } from '../data/Actions'
-import { Block, Page, Navbar, List, ListItem, Toolbar, ListInput, Button} from 'framework7-react'
+import React, { useContext } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -21,13 +20,15 @@ const PurchaseDetails = props => {
               return (
                 <ListItem 
                   title={productInfo.name}
-                  footer={`${productInfo.size} ${state.units.find(rec => rec.id === productInfo.unit).name}`}
-                  after={product.netPrice}
+                  footer={productInfo.description}
+                  after={(product.price * product.quantity / 1000).toFixed(3)}
                   key={product.id} 
-                />
+                >
+                  {product.quantity > 1 ? <Badge slot="title" color="red">{product.quantity}</Badge> : null}
+                </ListItem>
               )}
             )}
-            <ListItem title="Total" className="net" after={purchase.total} />
+            <ListItem title={state.labels.total} className="net" after={(purchase.total / 1000).toFixed(3)} />
           </List>
       </Block>
       <Toolbar bottom>

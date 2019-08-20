@@ -19,9 +19,9 @@ const OrdersList = props => {
             {statusOrders && statusOrders.map(order => 
               <ListItem
                 link={`/order/${order.id}`}
-                title={moment(order.time.toDate()).fromNow()}
-                after={order.total}
-                text={users.find(rec => rec.id === order.user).name}
+                title={users.find(rec => rec.id === order.user).name}
+                after={(order.total / 1000).toFixed(3)}
+                text={moment(order.time.toDate()).fromNow()}
                 key={order.id}
               />
             )}

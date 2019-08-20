@@ -10,7 +10,7 @@ const Reducer = (state, action) => {
           quantity: action.basket.quantity,
           actualPrice: action.basket.store.price,
           purchasePrice: action.basket.store.purchasePrice,
-          netPrice: parseFloat(action.basket.store.purchasePrice * action.basket.quantity).toFixed(3)
+          netPrice: action.basket.store.purchasePrice * action.basket.quantity
         }
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.basket.store.id, products: [product]}}
@@ -26,7 +26,7 @@ const Reducer = (state, action) => {
         product = {
           ...product,
           quantity: ++newQuantity,
-          netPrice: parseFloat(newQuantity * product.purchasePrice).toFixed(3)
+          netPrice: newQuantity * product.purchasePrice
         }
         return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
       case 'REMOVE_QUANTITY':
@@ -43,7 +43,7 @@ const Reducer = (state, action) => {
           product = {
             ...product,
             quantity: newQuantity,
-            netPrice: parseFloat(newQuantity * product.purchasePrice).toFixed(3)
+            netPrice: newQuantity * product.purchasePrice
           }  
           return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
         }

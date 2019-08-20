@@ -7,8 +7,9 @@ import { StoreContext } from '../data/Store';
 
 
 const Purchases = props => {
-  let { state, purchases } = useContext(StoreContext)
-  purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
+  const { state, purchases } = useContext(StoreContext)
+  let allPurchases = purchases
+  allPurchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.purchases} backLink="Back" />
@@ -18,7 +19,7 @@ const Purchases = props => {
               <ListItem
                 link={`/purchase/${purchase.id}`}
                 title={state.stores.find(rec => rec.id === purchase.storeId).name}
-                after={purchase.total}
+                after={(purchase.total / 1000).toFixed(3)}
                 text={moment(purchase.time.toDate()).fromNow()}
                 key={purchase.id}
               />
