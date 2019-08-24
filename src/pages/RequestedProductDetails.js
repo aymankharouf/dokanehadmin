@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge, Icon} from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -19,12 +19,12 @@ const RequestedProductDetails = props => {
 	const handlePurchase = store => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== store.id){
-				throw 'can not add to basket from two different stores'
+				throw new Error(state.labels.twoDiffStores)
       }
       dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
 			props.f7router.back()
 		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
+			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
 		}
 	}
   const storesTag = productStores.map(store => 

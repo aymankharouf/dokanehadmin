@@ -25,7 +25,7 @@ const NewProduct = props => {
     const files = e.target.files
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
-      setError('Please add a valid file')
+      setError(state.labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
@@ -53,31 +53,31 @@ const NewProduct = props => {
   const handleSubmit = () => {
     try{
       if (name === '') {
-        throw 'enter product name'
+        throw new Error(state.labels.enterName)
       }
       if (description === '') {
-        throw 'enter product description'
+        throw new Error(state.labels.enterDescription)
       }
-      if (purchasePrice === '') {
-        throw 'enter product purshase price'
+      if (purchasePrice === '' || Number(purchasePrice) === 0) {
+        throw new Error(state.labels.enterPurchasePrice)
       }
-      if (price === '') {
-        throw 'enter product price'
+      if (price === '' || Number(price) === 0) {
+        throw new Error(state.labels.enterPrice)
       }
       if (category === '') {
-        throw 'enter product category'
+        throw new Error(state.labels.enterCategory)
       }
       if (country === '') {
-        throw 'enter product country'
+        throw new Error(state.labels.enterCountry)
       }
       if (imageUrl === '') {
-        throw 'enter product image'
+        throw new Error(state.labels.enterImage)
       }
       if ((price * 1000) < (purchasePrice * 1000)) {
-        throw 'enter a valid price'
+        throw new Error(state.labels.invalidPrice)
       }
       if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
-        throw 'enter a valid offer end date'
+        throw new Error(state.labels.invalidOfferEnd)
       }
       newProduct({
         storeId: props.id,
@@ -98,7 +98,7 @@ const NewProduct = props => {
         props.f7router.back()
       }) 
     } catch (err){
-      setError(err)
+      setError(err.message)
     }
   }
   const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
@@ -107,6 +107,7 @@ const NewProduct = props => {
   return (
     <Page>
       <Navbar title={`${state.labels.newProduct} - ${store.name}`} backLink="Back" />
+      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
       <ListItem
           title={state.labels.category}
@@ -205,10 +206,6 @@ const NewProduct = props => {
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
-
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
     </Page>
   )
 }

@@ -53,6 +53,10 @@ export default [
     component: Login
   },
   {
+    path: '/search/',
+    component: Products
+  },
+  {
     path: '/products/',
     component: Products
   },

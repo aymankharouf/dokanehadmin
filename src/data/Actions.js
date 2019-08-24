@@ -7,20 +7,21 @@ export const confirmPurchase = async purchase => {
 export const updateOrder = async order => {
   await firebase.firestore().collection('orders').doc(order.id).update({
     basket: order.basket,
-    status: order.status
+    status: order.status,
+    statusTime: new Date()
   })
 }
 
 export const stockIn = async (product, storeId, stock, quantity) => {
   const otherStores = product.stores.filter(rec => rec.id !== stock.id)
   const found = product.stores.find(rec => rec.id === stock.id)
-  const quantityInStck = found ? found.quantity : 0
+  const quantityInStock = found ? found.quantity : 0
   const grossPrice = found ? found.quantity * found.price : 0
-  const avgPrice = (grossPrice + (quantity * product.actualPrice)) / (quantity + quantityInStck)
+  const avgPrice = (grossPrice + (quantity * product.actualPrice)) / (quantity + quantityInStock)
   const grossPurchasePrice = found ? found.quantity * found.purchasePrice : 0
-  const avgPurchasePrice = (grossPurchasePrice + (quantity * product.purchasePrice)) / (quantity + quantityInStck)
+  const avgPurchasePrice = (grossPurchasePrice + (quantity * product.purchasePrice)) / (quantity + quantityInStock)
   await firebase.firestore().collection('products').doc(product.id).update({
-    stores: [...otherStores, {id: stock.id, price: avgPrice, purchasePrice: avgPurchasePrice, quantity: quantity + quantityInStck, time: new Date()}]
+    stores: [...otherStores, {id: stock.id, price: avgPrice, purchasePrice: avgPurchasePrice, quantity: quantity + quantityInStock, time: new Date()}]
   })
   await firebase.firestore().collection('stockTrans').add({
     productId: product.id,

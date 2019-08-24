@@ -22,7 +22,7 @@ const EditProduct = props => {
     const files = e.target.files
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
-      setError('Please add a valid file')
+      setError(state.labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
@@ -35,19 +35,19 @@ const EditProduct = props => {
   const handleSubmit = () => {
     try{
       if (name === '') {
-        throw 'enter product name'
+        throw new Error(state.labels.enterName)
       }
       if (category === '') {
-        throw 'enter product category'
+        throw new Error(state.labels.enterCategory)
       }
       if (description === '') {
-        throw 'enter product description'
+        throw new Error(state.labels.enterDescription)
       }
       if (country === '') {
-        throw 'enter product country'
+        throw new Error(state.labels.enterCountry)
       }
       if (imageUrl === '') {
-        throw 'enter product image'
+        throw new Error(state.labels.enterImage)
       }
       editProduct({
         id: props.id,
@@ -65,7 +65,7 @@ const EditProduct = props => {
         props.f7router.back()
       })  
     } catch (err){
-      setError(err)
+      setError(err.message)
     }
   }
   const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
@@ -74,6 +74,7 @@ const EditProduct = props => {
   return (
     <Page>
       <Navbar title={state.labels.editProduct} backLink="Back" />
+      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
       <ListItem
           title={state.labels.category}
@@ -127,15 +128,30 @@ const EditProduct = props => {
         />
         <ListItem>
           <span>{state.labels.byWeight}</span>
-          <Toggle name="byWeight" color="green" checked={byWeight} onToggleChange={() => setByWeight(!byWeight)}/>
+          <Toggle 
+            name="byWeight" 
+            color="green" 
+            checked={byWeight} 
+            onToggleChange={() => setByWeight(!byWeight)}
+          />
         </ListItem>
         <ListItem>
           <span>{state.labels.isNew}</span>
-          <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
+          <Toggle 
+            name="isNew" 
+            color="green" 
+            checked={isNew} 
+            onToggleChange={() => setIsNew(!isNew)}
+          />
         </ListItem>
         <ListItem>
           <span>{state.labels.isOffer}</span>
-          <Toggle name="isOffer" color="green" checked={isOffer} onToggleChange={() => setIsOffer(!isOffer)}/>
+          <Toggle 
+            name="isOffer" 
+            color="green" 
+            checked={isOffer} 
+            onToggleChange={() => setIsOffer(!isOffer)}
+          />
         </ListItem>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
@@ -143,9 +159,6 @@ const EditProduct = props => {
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
     </Page>
   )
 }

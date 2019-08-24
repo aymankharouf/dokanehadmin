@@ -20,7 +20,7 @@ const StockTrans = props => {
             <ListItem
               title={state.stores.find(rec => rec.id === trans.storeId).name}
               subtitle={moment(trans.time.toDate()).fromNow()}
-              after={(trans.purchasePrice).toFixed(3)}
+              after={(trans.purchasePrice / 1000).toFixed(3)}
               key={trans.id}
             >
               <Badge slot="title" color="red">{trans.quantity}</Badge>

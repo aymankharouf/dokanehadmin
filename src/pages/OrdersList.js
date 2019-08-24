@@ -21,7 +21,8 @@ const OrdersList = props => {
                 link={`/order/${order.id}`}
                 title={users.find(rec => rec.id === order.user).name}
                 after={(order.total / 1000).toFixed(3)}
-                text={moment(order.time.toDate()).fromNow()}
+                subtitle={moment(order.time.toDate()).fromNow()}
+                text={order.statusTime ? moment(order.statusTime.toDate()).fromNow() : ''}
                 key={order.id}
               />
             )}

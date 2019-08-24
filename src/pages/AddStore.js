@@ -11,18 +11,16 @@ const AddStore = props => {
   const [mobile, setMobile] = useState('')
   const [address, setAddress] = useState('')
   const [error, setError] = useState('')
-  const patterns = {
-    mobile: /^07[7-9][0-9]{7}$/
-  }
 
   useEffect(() => {
+    const patterns = {
+      mobile: /^07[7-9][0-9]{7}$/
+    }
     const validateMobile = (value) => {
-      if (patterns.mobile) {
-        if (patterns.mobile.test(value)){
-          setError('')
-        } else {
-          setError('not a valid mobile number')
-        }
+      if (patterns.mobile.test(value)){
+        setError('')
+      } else {
+        setError(state.labels.invalidMobile)
       }
     }
     if (mobile !== '') validateMobile(mobile)
@@ -31,10 +29,10 @@ const AddStore = props => {
   const handleSubmit = () => {
     try{
       if (name === '') {
-        throw 'enter store name'
+        throw new Error(state.labels.enterName)
       }
       if (storeType === '') {
-        throw 'enter store type'
+        throw new Error(state.labels.enterCategory)
       }
       addStore({
         name,
@@ -46,13 +44,14 @@ const AddStore = props => {
         props.f7router.back()
       })
     } catch(err) {
-      setError(err)
+      setError(err.message)
     }
   }
   const storeTypesOptionsTags = state.storeTypes.map(storeType => <option key={storeType.id} value={storeType.id}>{storeType.name}</option>)
   return (
     <Page>
       <Navbar title={state.labels.newStore} backLink='Back' />
+      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <ListInput 
           name="name" 
@@ -94,9 +93,6 @@ const AddStore = props => {
           </select>
         </ListItem>
       </List>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>

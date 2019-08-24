@@ -21,13 +21,6 @@ const Store = props => {
     {id: '11', name: 'deeporange'},
     {id: '12', name: 'gray'}
   ]
-  const locations = [
-    {id: '1', name: 'جبل النزهة'},
-    {id: '2', name: 'ضاحية اﻻمير حسن'},
-    {id: '3', name: 'عرجان'},
-    {id: '4', name: 'جبل الحسين'},
-    {id: '5', name: 'مخيم جبل الحسين'}
-  ]
   const orderByList = [
     {id: 'p', name: 'السعر'},
     {id: 's', name: 'المبيعات'},
@@ -39,11 +32,11 @@ const Store = props => {
     {id: 's', name: 'معلق'},
     {id: 'r', name: 'مرفوض'},
     {id: 'e', name: 'قيد التجهيز'},
-    {id: 'f', name: 'جاهز'},
+    {id: 'f', name: 'جاهز للاستلام'},
+    {id: 'b', name: 'جاهز للتوصيل'},
     {id: 'd', name: 'تم اﻻستلام'},
-    {id: 'l', name: 'متأخر'},
     {id: 'c', name: 'ملغي'},
-    {id: 'i', name: 'في المستودع'}
+    {id: 'i', name: 'استيداع'}
   ]  
   const storeTypes = [
     {id: 'i', name: 'مستودع'},
@@ -65,10 +58,6 @@ const Store = props => {
     error: 'خطأ',
     noData: 'ﻻ يوجد بيانات',
     search: 'بحث',
-    password_placeholder: '4 ارقام',
-    name_placeholder: 'من 4-50 حرف',
-    mobile_placeholder: 'يجب ان يبدأ ب07',
-    open_order_found: 'هناك طلبية سابقة لم يتم استلامها',
     auth_user_not_found: 'الرجاء التأكد من رقم الموبايل وكلمة المرور',
     auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
     auth_wrong_password: 'كلمة السر غير صحيحة',
@@ -108,7 +97,29 @@ const Store = props => {
     newStore: 'محل جديد',
     type: 'النوع',
     address: 'العنوان',
-    confirm: 'اعتماد'
+    confirm: 'اعتماد',
+    fixedFees: 500,
+    feesTitle: 'الرسوم',
+    discount: 'الخصم',
+    net: 'الصافي',
+    delivery: 'خدمة التوصيل',
+    deliveryFees: 'رسوم التوصيل',
+    cost: 'التكلفة',
+    profit: 'الربح',
+    enterName: 'الرجاء ادخال الاسم',
+    enterDescription: 'الرجاء ادخال الشرح',
+    enterPurchasePrice: 'الرجاء ادخال سعر الشراء',
+    enterPrice: 'الرجاء ادخال السعر',
+    enterCategory: 'الرجاء ادخال التصنيف',
+    enterCountry: 'الرجاء ادخال بلد المنشأ',
+    enterImage: 'الرجاء ادخال صورة',
+    invalidPrice: 'الرجاء التأكد من السعر',
+    invalidOfferEnd: 'الرجاء التأكد من تاريخ انتهاء العرض',
+    chooseProduct: 'الرجاء اختيار منتج',
+    enterPercent: 'الرجاء ادخال النسبة',
+    invalidMobile: 'رقم الموبايل غير صحيح',
+    twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
+    invalidFile: 'الرجاء التأكد من ملف الصورة'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -128,7 +139,6 @@ const Store = props => {
     sections, 
     randomColors, 
     categories, 
-    locations, 
     countries, 
     stores, 
     labels, 

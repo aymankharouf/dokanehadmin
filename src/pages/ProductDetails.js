@@ -14,12 +14,12 @@ const ProductDetails = props => {
 		try{
       if (state.stores.find(rec => rec.id === store.id).storeType === 'i') return
 			if (state.basket.store && state.basket.store.id !== store.id){
-				throw 'can not add to basket from two different stores'
+				throw new Error(state.labels.twoDiffStores)
       }
       dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: 1, price: store.price}})
 			props.f7router.back()
 		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
+			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
 		}
 	}
   const { state, products, dispatch } = useContext(StoreContext)

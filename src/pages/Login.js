@@ -11,15 +11,15 @@ const Login = props => {
   const handleLogin = async () => {
     try {
       if (email === '') {
-        throw 'enter your email'
+        throw new Error('enter your email')
       }
       if (password === '') {
-        throw 'enter your password'
+        throw new Error('enter your password')
       }
       await firebase.auth().signInWithEmailAndPassword(email, password);
       props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
     } catch (err) {
-      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err)
+      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
     }
   }
 

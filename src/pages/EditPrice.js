@@ -27,17 +27,17 @@ const EditPrice = props => {
   }, [purchasePrice])
   const handleEdit = () => {
     try{
-      if (purchasePrice === '') {
-        throw 'enter purchase price'
+      if (purchasePrice === '' || Number(purchasePrice) === 0) {
+        throw new Error(state.labels.enterPurchasePrice)
       }
-      if (price === '') {
-        throw 'enter price'
+      if (price === '' || Number(price) === 0) {
+        throw new Error(state.labels.enterPrice)
       }
-      if (price < purchasePrice) {
-        throw 'enter a valid price'
+      if (price * 1000 < purchasePrice * 1000) {
+        throw new Error(state.labels.invalidPrice)
       }
       if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
-        throw 'enter a valid offer end date'
+        throw new Error(state.labels.invalidOfferEnd)
       }
       const oldPurchasePrice = store.offerEnd ? store.oldPurchasePrice || '' : store.purchasePrice
       const oldPrice = store.offerEnd ? store.oldPrice || '' : store.price
@@ -54,12 +54,13 @@ const EditPrice = props => {
         props.f7router.back()
       })  
     } catch (err){
-      setError(err)
+      setError(err.message)
     }
   }
   return (
     <Page>
       <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink="Back" />
+      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <img src={product.imageUrl} alt=""/>
         <ListInput 
@@ -95,9 +96,6 @@ const EditPrice = props => {
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleEdit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
     </Page>
   )
 }
