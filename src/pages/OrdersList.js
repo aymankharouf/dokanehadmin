@@ -16,15 +16,19 @@ const OrdersList = props => {
       <Navbar title={`${state.labels.orders} - ${status.name}`} backLink="Back" />
       <Block>
           <List mediaList>
-            {statusOrders && statusOrders.map(order => 
-              <ListItem
-                link={`/order/${order.id}`}
-                title={users.find(rec => rec.id === order.user).name}
-                after={(order.total / 1000).toFixed(3)}
-                subtitle={moment(order.time.toDate()).fromNow()}
-                text={order.statusTime ? moment(order.statusTime.toDate()).fromNow() : ''}
-                key={order.id}
-              />
+            {statusOrders && statusOrders.map(order => {
+              const userInfo = users.find(rec => rec.id === order.user)
+              return (
+                <ListItem
+                  link={`/order/${order.id}`}
+                  title={`${userInfo.name} - ${userInfo.mobile}`}
+                  after={(order.total / 1000).toFixed(3)}
+                  subtitle={moment(order.time.toDate()).fromNow()}
+                  text={order.statusTime ? moment(order.statusTime.toDate()).fromNow() : ''}
+                  key={order.id}
+                />
+              )
+            }
             )}
             { statusOrders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
           </List>

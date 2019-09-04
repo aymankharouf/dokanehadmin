@@ -33,7 +33,10 @@ import ConfirmPurchase from './pages/ConfirmPurchase';
 import Purchases from './pages/Purchases';
 import PurchaseDetails from './pages/PurchaseDetails';
 import Stock from './pages/Stock';
+import ProductTrans from './pages/ProductTrans';
 import StockTrans from './pages/StockTrans';
+import StockTransDetails from './pages/StockTransDetails';
+import EditOrder from './pages/EditOrder';
 
 export default [
   {
@@ -161,6 +164,10 @@ export default [
     component: RequestedProducts
   },
   {
+    path: '/editOrder/:id',
+    component: EditOrder
+  },
+  {
     path: '/requestedProduct/:productId/quantity/:quantity/price/:price',
     component: RequestedProductDetails
   },
@@ -177,8 +184,16 @@ export default [
     component: Stock
   },
   {
-    path: '/stockTrans/:id',
+    path: '/productTrans/:id',
+    component: ProductTrans
+  },
+  {
+    path: '/stockTrans/',
     component: StockTrans
+  },
+  {
+    path: '/stockTrans/:id',
+    component: StockTransDetails
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

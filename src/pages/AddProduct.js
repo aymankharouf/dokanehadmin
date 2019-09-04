@@ -16,7 +16,7 @@ const AddProduct = props => {
   const [error, setError] = useState('')
   useEffect(() => {
     if (product && purchasePrice) {
-      const storeType = store ? store.storeType : null
+      const storeType = store ? store.type : null
       if (storeType === 'w') {
         const category = state.categories.find(rec => rec.id === product.category)
         const section = category ? state.sections.find(rec => rec.id === category.sectionId) : null

@@ -34,6 +34,7 @@ const Products = props => {
       title={orderByItem.name} 
       onClick={() => setOrderBy(orderByItem.id)}/> 
   )
+  if (!products) return (<div> Loading... </div>)
   return(
     <Page>
       <Navbar title={state.labels.allProducts} backLink="Back">

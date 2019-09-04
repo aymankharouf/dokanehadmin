@@ -1,24 +1,22 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge} from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Icon } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 
 const Stock = props => {
   const { state, products, user } = useContext(StoreContext)
   if (!user) return <ReLogin callingPage="stock"/>
-  const stock = state.stores.find(rec => rec.storeType === 'i')
-  let storeProducts = products.filter(product => product.stores.find(store => store.id === stock.id))
+  let storeProducts = products.filter(product => product.stores.find(store => store.id === 's'))
   storeProducts = storeProducts.map(product => {
     return {
       id: product.id,
       name: product.name,
       country: product.country,
       description: product.description,
-      quantity: product.stores.find(rec => rec.id === stock.id).quantity,
-      price: product.stores.find(rec => rec.id === stock.id).price,
-      purchasePrice: product.stores.find(rec => rec.id === stock.id).purchasePrice,
-      time: product.stores.find(rec => rec.id === stock.id).time,
+      quantity: product.stores.find(rec => rec.id === 's').quantity,
+      price: product.stores.find(rec => rec.id === 's').price,
+      purchasePrice: product.stores.find(rec => rec.id === 's').purchasePrice,
+      time: product.stores.find(rec => rec.id === 's').time,
       imageUrl: product.imageUrl
     }
   })
@@ -45,7 +43,7 @@ const Stock = props => {
         <List mediaList className="search-list searchbar-found">
           {storeProducts.map(product => 
             <ListItem
-              link={`/stockTrans/${product.id}`}
+              link={`/productTrans/${product.id}`}
               title={product.name}
               after={(product.purchasePrice / 1000).toFixed(3)}
               subtitle={product.description}
@@ -60,7 +58,12 @@ const Stock = props => {
         </List>
       </Block>
       <Toolbar bottom>
-        <BottomToolbar/>
+      <Link href='/home/'>
+          <Icon ios='f7:home' aurora='f7:home' md='material:home' />
+        </Link>
+        <Link href='/stockTrans/'>
+          <Icon ios='f7:layers_alt_fill' aurora='f7:layers_alt_fill' md='material:layers' />
+        </Link>
       </Toolbar>
     </Page>
   )

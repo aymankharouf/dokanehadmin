@@ -1,13 +1,21 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
+import { addStock } from '../data/Actions'
 
 
 const Stores = props => {
-  const { state } = useContext(StoreContext)
-  const stores = state.stores.filter(rec => rec.storeType !== 'i')
+  const { state, dispatch } = useContext(StoreContext)
+  const stores = state.stores.filter(rec => rec.id !== 's')
+  const stock = state.stores.find(rec => rec.id === 's')
+  const handleAddStock = (name) => {
+    addStock(name).then(() => {
+      dispatch({type: 'ADD_STORE', store: {id: 's', name}})
+      props.f7router.back()
+    })
 
+}
   return (
     <Page>
       <Navbar title={state.labels.stores} backLink="Back" />
@@ -27,6 +35,11 @@ const Stores = props => {
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
+      {stock ? null : 
+        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddStock(state.labels.stockName)}>
+          <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+        </Fab>
+      }
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
@@ -34,4 +47,4 @@ const Stores = props => {
   )
 }
 
-export default Stores
+export default React.memo(Stores)

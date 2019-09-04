@@ -12,7 +12,7 @@ const ProductDetails = props => {
   }
   const handlePurchase = store => {
 		try{
-      if (state.stores.find(rec => rec.id === store.id).storeType === 'i') return
+      if (store.id === 's') return
 			if (state.basket.store && state.basket.store.id !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }

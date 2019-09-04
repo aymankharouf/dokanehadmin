@@ -15,7 +15,7 @@ const EditPrice = props => {
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [error, setError] = useState('')
   useEffect(() => {
-    const storeType = store ? store.storeType : null
+    const storeType = store ? store.type : null
     if (storeType === 'w') {
       const currentCategory = state.categories.find(rec => rec.id === product.category)
       const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null

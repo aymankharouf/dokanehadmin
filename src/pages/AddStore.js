@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const AddStore = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const [storeType, setStoreType] = useState('')
+  const [type, setType] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
   const [address, setAddress] = useState('')
@@ -31,16 +31,16 @@ const AddStore = props => {
       if (name === '') {
         throw new Error(state.labels.enterName)
       }
-      if (storeType === '') {
+      if (type === '') {
         throw new Error(state.labels.enterCategory)
       }
       addStore({
         name,
-        storeType,
+        type,
         mobile,
         address
       }).then(id => {
-        dispatch({type: 'ADD_STORE', store: {id, name, storeType, mobile, address}})
+        dispatch({type: 'ADD_STORE', store: {id, name, type, mobile, address}})
         props.f7router.back()
       })
     } catch(err) {
@@ -87,7 +87,7 @@ const AddStore = props => {
           smartSelect
           smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search store type'}}
         >
-          <select name='storeType' defaultValue="" onChange={(e) => setStoreType(e.target.value)}>
+          <select name='type' defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value="" disabled></option>
             {storeTypesOptionsTags}
           </select>

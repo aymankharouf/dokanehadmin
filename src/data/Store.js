@@ -30,20 +30,25 @@ const Store = props => {
     {id: 'n', name: 'جديد'},
     {id: 'a', name: 'معتمد'},
     {id: 's', name: 'معلق'},
-    {id: 'r', name: 'مرفوض'},
+    {id: 'u', name: 'مرفوض'},
     {id: 'e', name: 'قيد التجهيز'},
-    {id: 'f', name: 'جاهز للاستلام'},
+    {id: 'f', name: 'جاهز'},
+    {id: 'd', name: 'جاهز للاستلام'},
     {id: 'b', name: 'جاهز للتوصيل'},
-    {id: 'd', name: 'تم اﻻستلام'},
+    {id: 'r', name: 'تم اﻻستلام'},
     {id: 'c', name: 'ملغي'},
     {id: 'i', name: 'استيداع'}
   ]  
   const storeTypes = [
-    {id: 'i', name: 'مستودع'},
     {id: 'm', name: 'محل'},
     {id: 's', name: 'سوبرماركت'},
     {id: 'w', name: 'محل جملة'}
-  ]  
+  ]
+  const stockTransTypes = [
+    {id: 'p', name: 'شراء'},
+    {id: 's', name: 'بيع'},
+    {id: 'r', name: 'ارجاع'}
+  ]
   const labels = {
     appTitle: 'حريص',
     news: 'آخر الاخبار',
@@ -119,7 +124,11 @@ const Store = props => {
     enterPercent: 'الرجاء ادخال النسبة',
     invalidMobile: 'رقم الموبايل غير صحيح',
     twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
-    invalidFile: 'الرجاء التأكد من ملف الصورة'
+    invalidFile: 'الرجاء التأكد من ملف الصورة',
+    stockTrans: 'حركات المستودع',
+    stockTransDetails: 'تفاصيل حركة المستودع',
+    stockName: 'المستودع',
+    editOrder: 'تعديل طلب'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -129,6 +138,7 @@ const Store = props => {
   const [orders, setOrders] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [stockTrans, setStockTrans] = useState([]);
+  const [productTrans, setProductTrans] = useState([]);
   const [lessPrice, setLessPrice] = useState([]);
   let countries = []
   let stores = []
@@ -146,7 +156,8 @@ const Store = props => {
     basket, 
     trademarks, 
     orderByList, 
-    storeTypes
+    storeTypes,
+    stockTransTypes
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -171,7 +182,7 @@ const Store = props => {
           docs.forEach(doc => {
             dispatch({type: 'ADD_STORE', store: {...doc.data(), id:doc.id}})
           })
-        })  
+        })
         firebase.firestore().collection('purchases').onSnapshot(docs => {
           let purchasessArray = []
           docs.forEach(doc => {
@@ -186,13 +197,20 @@ const Store = props => {
           })
           setStockTrans(stockTransArray)
         })  
+        firebase.firestore().collection('productTrans').onSnapshot(docs => {
+          let productTransArray = []
+          docs.forEach(doc => {
+            productTransArray.push({...doc.data(), id:doc.id})
+          })
+          setProductTrans(productTransArray)
+        })  
         firebase.firestore().collection('lessPrice').onSnapshot(docs => {
           let lessPriceArray = []
           docs.forEach(doc => {
             lessPriceArray.push({...doc.data(), id:doc.id})
           })
           setLessPrice(lessPriceArray)
-        })  
+        })
       }
     })
     firebase.firestore().collection('sections').get().then(docs => {
@@ -225,7 +243,7 @@ const Store = props => {
     })
   }, []);
   return (
-    <StoreContext.Provider value={{state, user, products, users, orders, purchases, stockTrans, lessPrice, dispatch}}>
+    <StoreContext.Provider value={{state, user, products, users, orders, purchases, stockTrans, productTrans, lessPrice, dispatch}}>
       {props.children}
     </StoreContext.Provider>
   );

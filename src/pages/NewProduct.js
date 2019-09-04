@@ -37,7 +37,7 @@ const NewProduct = props => {
   }
   useEffect(() => {
     if (category && purchasePrice) {
-      if (store.storeType === 'w') {
+      if (store.type === 'w') {
         const currentCategory = state.categories.find(rec => rec.id === category)
         const section = state.sections.find(rec => rec.id === currentCategory.sectionId)
         const percent = section ? section.percent : 0

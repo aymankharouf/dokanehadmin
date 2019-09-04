@@ -1,33 +1,30 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
+import BottomToolbar from './BottomToolbar';
 
 
 const StockTrans = props => {
-  const { state, stockTrans, products } = useContext(StoreContext)
-  const product = products.find(rec => rec.id === props.id)
+  const { state, stockTrans } = useContext(StoreContext)
   let trans = stockTrans
-  trans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
+  trans.sort((trans1, trans2) => trans2.time.seconds - trans1.time.seconds)
   return(
     <Page>
-      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
+      <Navbar title={state.labels.stockTrans} backLink="Back" />
       <Block>
-        <List mediaList>
-          {trans && trans.map(trans => 
-            <ListItem
-              title={state.stores.find(rec => rec.id === trans.storeId).name}
-              subtitle={moment(trans.time.toDate()).fromNow()}
-              after={(trans.purchasePrice / 1000).toFixed(3)}
-              key={trans.id}
-            >
-              <Badge slot="title" color="red">{trans.quantity}</Badge>
-            </ListItem>
-          )}
-          { trans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
-        </List>
+          <List mediaList>
+            {trans && trans.map(trans => 
+              <ListItem
+                link={`/stockTrans/${trans.id}`}
+                title={state.stockTransTypes.find(rec => rec.id === trans.type).name}
+                text={moment(trans.time.toDate()).fromNow()}
+                key={trans.id}
+              />
+            )}
+            { trans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+          </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>
