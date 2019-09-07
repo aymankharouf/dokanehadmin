@@ -6,8 +6,8 @@ import moment from 'moment'
 import 'moment/locale/ar'
 
 const StoreProducts = props => {
-  const { state, products } = useContext(StoreContext)
-  let storeProducts = products.filter(product => product.stores.find(store => store.id === props.id))
+  const { state } = useContext(StoreContext)
+  let storeProducts = state.products.filter(product => product.stores.find(store => store.id === props.id))
   storeProducts = storeProducts.map(product => {
     return {
       id: product.id,

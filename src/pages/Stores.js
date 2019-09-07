@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Button} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import { addStock } from '../data/Actions'

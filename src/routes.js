@@ -10,7 +10,6 @@ import Stores from './pages/Stores';
 import StoreProducts from './pages/StoreProducts';
 import AddProduct from './pages/AddProduct';
 import NewProduct from './pages/NewProduct';
-import ActiveOrders from './pages/ActiveOrders';
 import OrdersList from './pages/OrdersList';
 import OrderDetails from './pages/OrderDetails';
 import StoreProductDetails from './pages/StoreProductDetails';
@@ -37,6 +36,8 @@ import ProductTrans from './pages/ProductTrans';
 import StockTrans from './pages/StockTrans';
 import StockTransDetails from './pages/StockTransDetails';
 import EditOrder from './pages/EditOrder';
+import Customers from './pages/Customers';
+import ForgetPassword from './pages/ForgetPassword';
 
 export default [
   {
@@ -92,6 +93,14 @@ export default [
     component: AddStore
   },
   {
+    path: '/customers/',
+    component: Customers
+  },
+  {
+    path: '/forgetPassword/',
+    component: ForgetPassword
+  },
+  {
     path: '/countries/',
     component: Countries
   },
@@ -142,10 +151,6 @@ export default [
   {
     path: '/editPrice/:storeId/product/:productId',
     component: EditPrice
-  },
-  {
-    path: '/activeOrders/',
-    component: ActiveOrders
   },
   {
     path: '/orders/',

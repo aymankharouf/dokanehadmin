@@ -7,9 +7,9 @@ import { StoreContext } from '../data/Store';
 
 
 const Purchases = props => {
-  const { state, purchases } = useContext(StoreContext)
-  let allPurchases = purchases
-  allPurchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
+  const { state } = useContext(StoreContext)
+  let purchases = state.purchases
+  purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.purchases} backLink="Back" />

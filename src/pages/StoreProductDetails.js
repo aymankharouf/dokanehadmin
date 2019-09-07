@@ -5,8 +5,8 @@ import { StoreContext } from '../data/Store';
 import { deleteProduct, confirmPrice } from '../data/Actions'
 
 const StoreProductDetails = props => {
-  const { state, products } = useContext(StoreContext)
-  let product = products.find(product => product.id === props.productId)
+  const { state } = useContext(StoreContext)
+  let product = state.products.find(product => product.id === props.productId)
   product = {
     ...product,
     price: product.stores.find(rec => rec.id === props.storeId).price

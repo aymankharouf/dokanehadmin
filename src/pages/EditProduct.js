@@ -5,8 +5,8 @@ import { editProduct } from '../data/Actions'
 
 
 const EditProduct = props => {
-  const { state, products } = useContext(StoreContext)
-  const product = products.find(rec => rec.id === props.id)
+  const { state } = useContext(StoreContext)
+  const product = state.products.find(rec => rec.id === props.id)
   const [name, setName] = useState(product.name)
   const [description, setDescription] = useState(product.description)
   const [category, setCategory] = useState(product.category)

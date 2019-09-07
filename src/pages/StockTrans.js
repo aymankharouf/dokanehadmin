@@ -7,15 +7,15 @@ import BottomToolbar from './BottomToolbar';
 
 
 const StockTrans = props => {
-  const { state, stockTrans } = useContext(StoreContext)
-  let trans = stockTrans
-  trans.sort((trans1, trans2) => trans2.time.seconds - trans1.time.seconds)
+  const { state } = useContext(StoreContext)
+  let stockTrans = state.stockTrans
+  stockTrans.sort((trans1, trans2) => trans2.time.seconds - trans1.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.stockTrans} backLink="Back" />
       <Block>
           <List mediaList>
-            {trans && trans.map(trans => 
+            {stockTrans && stockTrans.map(trans => 
               <ListItem
                 link={`/stockTrans/${trans.id}`}
                 title={state.stockTransTypes.find(rec => rec.id === trans.type).name}
@@ -23,7 +23,7 @@ const StockTrans = props => {
                 key={trans.id}
               />
             )}
-            { trans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+            { stockTrans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
           </List>
       </Block>
       <Toolbar bottom>

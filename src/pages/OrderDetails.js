@@ -6,8 +6,8 @@ import { StoreContext } from '../data/Store';
 
 
 const OrderDetails = props => {
-  const { state, products, orders, user } = useContext(StoreContext)
-  const order = orders.find(order => order.id === props.id)
+  const { state, user } = useContext(StoreContext)
+  const order = state.orders.find(order => order.id === props.id)
   const netPrice = order.total + order.fixedFees + order.deliveryFees - (order.specialDiscount + order.customerDiscount)
   let i = 0
   let totalPurchase = 0
@@ -45,7 +45,7 @@ const OrderDetails = props => {
       <Block>
         <List mediaList>
           {order.basket && order.basket.map(product => {
-            const productInfo = products.find(rec => rec.id === product.id)
+            const productInfo = state.products.find(rec => rec.id === product.id)
             if (order.status === 'f' || order.status === 'd' || order.status === 'b' || order.status === 'r') {
               return (
                 product.stores.map(store => {
@@ -64,9 +64,9 @@ const OrderDetails = props => {
                       <Badge slot="title">
                         {store.quantity}
                       </Badge>
-                      {storePrice !== product.price ? 
+                      {store.price !== product.price ? 
                         <Badge slot='text' color={storePrice <= product.price ? 'green' : 'red'}> 
-                          {((storePrice - product.price) / 1000).toFixed(3)} 
+                          {((store.price - product.price) / 1000).toFixed(3)} 
                         </Badge>
                         : null
                       }

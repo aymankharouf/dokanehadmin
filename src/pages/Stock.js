@@ -4,9 +4,9 @@ import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 
 const Stock = props => {
-  const { state, products, user } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   if (!user) return <ReLogin callingPage="stock"/>
-  let storeProducts = products.filter(product => product.stores.find(store => store.id === 's'))
+  let storeProducts = state.products.filter(product => product.stores.find(store => store.id === 's'))
   storeProducts = storeProducts.map(product => {
     return {
       id: product.id,

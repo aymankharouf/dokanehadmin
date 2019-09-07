@@ -5,8 +5,8 @@ import { StoreContext } from '../data/Store';
 
 
 const AddProduct = props => {
-  const { state, products } = useContext(StoreContext)
-  const nonStoreProducts = products.filter(rec => !rec.stores.find(store => store.id === props.id))
+  const { state } = useContext(StoreContext)
+  const nonStoreProducts = state.products.filter(rec => !rec.stores.find(store => store.id === props.id))
   const store = state.stores.find(rec => rec.id === props.id)
   const [productId, setProductId] = useState('')
   const [product, setProduct] = useState('')
@@ -31,7 +31,7 @@ const AddProduct = props => {
   }, [product, purchasePrice])
   useEffect(() => {
     if (productId) {
-      setProduct(products.find(rec => rec.id === productId))
+      setProduct(state.products.find(rec => rec.id === productId))
     } else {
       setProduct('')
     }

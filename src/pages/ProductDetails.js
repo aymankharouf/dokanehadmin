@@ -22,9 +22,9 @@ const ProductDetails = props => {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
 		}
 	}
-  const { state, products, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const product = products.find(product => product.id === props.id)
+  const product = state.products.find(product => product.id === props.id)
   let productStores = [...product.stores]
   productStores = productStores.sort((productStorea, productStoreb) => productStorea.price - productStoreb.price)
   productStores = productStores.map(productStore => {

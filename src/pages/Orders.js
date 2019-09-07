@@ -5,7 +5,7 @@ import { StoreContext } from '../data/Store';
 
 
 const Orders = props => {
-  const { state, orders } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   let i = 0
   return(
     <Page>
@@ -13,7 +13,7 @@ const Orders = props => {
       <Block>
 				<List>
           {state.orderStatus.map(status => {
-            const count = orders.filter(rec => rec.status === status.id).length
+            const count = state.orders.filter(rec => rec.status === status.id).length
             return (
               <ListItem 
                 title={status.name} 

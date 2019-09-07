@@ -120,7 +120,7 @@ export const confirmPurchase = async (orders, storeId, basket, trans, total) => 
   let remainingQuantity
   let productsIn = []
   for (const product of basket) {
-    productOrders = orders.filter(rec => rec.id === product.id && rec.price === product.price)
+    productOrders = orders.filter(rec => rec.basket.find(basketProduct => basketProduct.id === product.id && basketProduct.price === product.price))
     productOrders.sort((order1, order2) => order1.time.seconds - order2.time.seconds)
     productTrans = trans.filter(rec => rec.productId === product.id)
     productTrans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)

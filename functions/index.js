@@ -42,7 +42,7 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
       var batch = admin.firestore().batch()
       let productRef
       for (const product of newOrder.basket) {
-        productRef = db.collection("products").doc(product.id)
+        productRef = admin.firestore().collection("products").doc(product.id)
         batch.update(productRef, { sales: admin.firestore.FieldValue.increment(product.quantity)});
       }
       const netPrice = newOrder.total + newOrder.fixedFees + newOrder.deliveryFees - (newOrder.customerDiscount + newOrder.specialDiscount)

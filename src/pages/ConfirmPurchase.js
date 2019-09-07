@@ -7,7 +7,7 @@ import { confirmPurchase, stockOut } from '../data/Actions'
 
 
 const ConfirmPurchase = props => {
-  const { state, user, orders, productTrans, dispatch } = useContext(StoreContext)
+  const { state, user, dispatch } = useContext(StoreContext)
   const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
   const total = state.basket.products ? state.basket.products.reduce((a, product) => a + product.netPrice, 0) : 0
   const handlePurchase = () => {
@@ -21,14 +21,14 @@ const ConfirmPurchase = props => {
         stores: product.stores
       })
     })
-    const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+    const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
     if (state.basket.storeId === 's') {
-      stockOut(approvedOrders, basket, productTrans).then(() => {
+      stockOut(approvedOrders, basket, state.productTrans).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })
     } else { 
-      confirmPurchase(approvedOrders, state.basket.storeId, basket, productTrans, total).then(() => {
+      confirmPurchase(approvedOrders, state.basket.storeId, basket, state.productTrans, total).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })

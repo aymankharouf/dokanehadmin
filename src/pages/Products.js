@@ -4,20 +4,20 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const Products = props => {
-  const { state, products } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [orderBy, setOrderBy] = useState('p')
-  const [allProducts, setAllProducts] = useState(products)
+  const [products, setProducts] = useState(state.products)
   useEffect(() => {
     const sort = (value) => {
       switch(value){
         case 'p':
-          setAllProducts([...allProducts].sort((product1, product2) => product1.price - product2.price))
+          setProducts([...products].sort((product1, product2) => product1.price - product2.price))
           break
         case 's':
-          setAllProducts([...allProducts].sort((product1, product2) => product2.sales - product1.sales))
+          setProducts([...products].sort((product1, product2) => product2.sales - product1.sales))
           break
         case 'r':
-          setAllProducts([...allProducts].sort((product1, product2) => product2.rating - product1.rating))
+          setProducts([...products].sort((product1, product2) => product2.rating - product1.rating))
           break
         default:
           return null
@@ -34,7 +34,7 @@ const Products = props => {
       title={orderByItem.name} 
       onClick={() => setOrderBy(orderByItem.id)}/> 
   )
-  if (!products) return (<div> Loading... </div>)
+  if (!state.products) return (<div> Loading... </div>)
   return(
     <Page>
       <Navbar title={state.labels.allProducts} backLink="Back">
@@ -63,7 +63,7 @@ const Products = props => {
             <ListItem title={state.labels.noData} />
           </List>
           <List mediaList className="search-list searchbar-found">
-            {allProducts && allProducts.map(product => 
+            {products && products.map(product => 
               <ListItem
                 link={`/product/${product.id}`}
                 title={product.name}

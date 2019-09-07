@@ -6,8 +6,8 @@ import { StoreContext } from '../data/Store';
 
 
 const PurchaseDetails = props => {
-  const { state, purchases, products, user } = useContext(StoreContext)
-  const purchase = purchases.find(rec => rec.id === props.id)
+  const { state, user } = useContext(StoreContext)
+  const purchase = state.purchases.find(rec => rec.id === props.id)
 
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
@@ -16,7 +16,7 @@ const PurchaseDetails = props => {
       <Block>
           <List>
             {purchase.basket && purchase.basket.map(product => {
-              const productInfo = products.find(rec => rec.id === product.id)
+              const productInfo = state.products.find(rec => rec.id === product.id)
               return (
                 <ListItem 
                   title={productInfo.name}
@@ -28,7 +28,6 @@ const PurchaseDetails = props => {
                 </ListItem>
               )}
             )}
-            <ListItem title={state.labels.total} className="net" after={(purchase.total / 1000).toFixed(3)} />
           </List>
       </Block>
       <Toolbar bottom>

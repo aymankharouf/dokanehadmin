@@ -6,16 +6,16 @@ import { StoreContext } from '../data/Store';
 
 
 const StockTransDetails = props => {
-  const { state, stockTrans, products, user } = useContext(StoreContext)
-  const trans = stockTrans.find(rec => rec.id === props.id)
+  const { state, user } = useContext(StoreContext)
+  const stockTrans = state.stockTrans.find(rec => rec.id === props.id)
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>
       <Navbar title={state.labels.stockTransDetails} backLink="Back" />
       <Block>
           <List>
-            {trans.basket && trans.basket.map(product => {
-              const productInfo = products.find(rec => rec.id === product.id)
+            {stockTrans.basket && stockTrans.basket.map(product => {
+              const productInfo = state.products.find(rec => rec.id === product.id)
               return (
                 <ListItem 
                   title={productInfo.name}

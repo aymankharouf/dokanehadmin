@@ -6,9 +6,9 @@ import moment from 'moment'
 import 'moment/locale/ar'
 
 const RequestedProductDetails = props => {
-	const { state, products, dispatch } = useContext(StoreContext)
+	const { state, dispatch } = useContext(StoreContext)
 	const [error, setError] = useState('')
-  const product = products.find(product => product.id === props.productId)
+  const product = state.products.find(product => product.id === props.productId)
   let productStores = [...product.stores]
   productStores = productStores.sort((productStore1, productStore2) => productStore1.purchasePrice - productStore2.purchasePrice)
   productStores = productStores.map(productStore => {

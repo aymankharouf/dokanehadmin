@@ -7,17 +7,17 @@ import { StoreContext } from '../data/Store';
 
 
 const OrdersList = props => {
-  const { state, users, orders } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const status = state.orderStatus.find(rec => rec.id === props.id)
-  let statusOrders = orders.filter(rec => rec.status === props.id)
-  statusOrders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
+  let orders = state.orders.filter(rec => rec.status === props.id)
+  orders.sort((ordera, orderb) => orderb.time.seconds - ordera.time.seconds)
   return(
     <Page>
       <Navbar title={`${state.labels.orders} - ${status.name}`} backLink="Back" />
       <Block>
           <List mediaList>
-            {statusOrders && statusOrders.map(order => {
-              const userInfo = users.find(rec => rec.id === order.user)
+            {orders && orders.map(order => {
+              const userInfo = state.users.find(rec => rec.id === order.user)
               return (
                 <ListItem
                   link={`/order/${order.id}`}
@@ -30,7 +30,7 @@ const OrdersList = props => {
               )
             }
             )}
-            { statusOrders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+            { orders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
           </List>
       </Block>
       <Toolbar bottom>

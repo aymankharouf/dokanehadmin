@@ -4,8 +4,8 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const RequestedProducts = props => {
-	const { state, products, orders } = useContext(StoreContext)
-	const approvedOrders = orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+	const { state } = useContext(StoreContext)
+	const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
 	approvedOrders.sort((order1, order2) => order1.time.seconds - order2.time.seconds)
 	const [requiredProducts, setRequiredProducts] = useState([])
 	let i = 0
@@ -15,7 +15,7 @@ const RequestedProducts = props => {
 			order.basket.forEach(product => {
 				if (product.quantity - product.purchasedQuantity > 0) {
 					const found = productsArray.find(rec => rec.id === product.id && rec.price === product.price)
-					const productInfo = products.find(rec => rec.id === product.id)
+					const productInfo = state.products.find(rec => rec.id === product.id)
 					if (found) {
 						productsArray = productsArray.filter(rec => rec.id !== found.id)
 						productsArray.push({
