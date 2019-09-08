@@ -135,40 +135,27 @@ const Store = props => {
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
-  let countries = []
-  let stores = []
-  let sections = []
-  let categories = []
-  let trademarks = []
-  let users = []
-  let purchases = []
-  let orders = []
-  let lessPrice = []
-  let productTrans = []
-  let stockTrans = []
-  let products = []
-  let forgetPassword = []
   const initState = {
-    sections, 
+    sections: [], 
     randomColors, 
-    categories, 
-    countries, 
-    stores, 
+    categories: [], 
+    countries: [], 
+    stores: [], 
     labels, 
     orderStatus, 
     basket, 
-    trademarks, 
+    trademarks: [], 
     orderByList, 
     storeTypes,
     stockTransTypes,
-    users,
-    purchases,
-    orders,
-    lessPrice,
-    productTrans,
-    stockTrans,
-    products,
-    forgetPassword
+    users: [],
+    purchases: [],
+    orders: [],
+    lessPrice: [],
+    productTrans: [],
+    stockTrans: [],
+    products: [],
+    forgetPassword: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -176,12 +163,14 @@ const Store = props => {
       setUser(user)
       if (user){
         firebase.firestore().collection('orders').onSnapshot(docs => {
+          let orders = []
           docs.forEach(doc => {
             orders.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_ORDERS', orders})
         })  
         firebase.firestore().collection('users').onSnapshot(docs => {
+          let users = []
           docs.forEach(doc => {
             users.push({...doc.data(), id:doc.id})
           })
@@ -193,12 +182,14 @@ const Store = props => {
           })
         })
         firebase.firestore().collection('purchases').onSnapshot(docs => {
+          let purchases = []
           docs.forEach(doc => {
             purchases.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_PURCHASES', purchases})
         })  
         firebase.firestore().collection('stockTrans').onSnapshot(docs => {
+          let stockTrans = []
           docs.forEach(doc => {
             stockTrans.push({...doc.data(), id:doc.id})
           })
@@ -248,6 +239,7 @@ const Store = props => {
       })
     })  
     firebase.firestore().collection('products').onSnapshot(docs => {
+      let products = []
       docs.forEach(doc => {
         const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
         products.push({...doc.data(), id: doc.id, price: minPrice})

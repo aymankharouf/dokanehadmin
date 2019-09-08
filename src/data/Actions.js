@@ -349,3 +349,10 @@ export const addTrademark = async trademark => {
   const docRef = await firebase.firestore().collection('trademarks').add(trademark)
   return docRef.id
 }
+
+export const resolveForgetPassword = async trans => {
+  await firebase.firestore().collection('forgetPassword').doc(trans.id).update({
+    resolved: true
+  })
+}
+

@@ -4,12 +4,17 @@ import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
-
+import { resolveForgetPassword } from '../data/Actions'
 
 const ForgetPassword = props => {
   const { state } = useContext(StoreContext)
   let forgetPassword = state.forgetPassword.filter(rec => rec.resolved === false)
-  forgetPassword.sort((forgetPassword1, forgetPassword2) => forgetPassword2.time.seconds - forgetPassword1.time.seconds)
+  forgetPassword.sort((forgetPassword1, forgetPassword2) => forgetPassword1.time.seconds - forgetPassword2.time.seconds)
+  const handleResolveForgetPassword = trans => {
+    resolveForgetPassword(trans).then(() => {
+      props.f7router.back()
+    })
+  }
   return(
     <Page>
       <Navbar title={state.labels.forgetPassword} backLink="Back" />
@@ -24,6 +29,7 @@ const ForgetPassword = props => {
                   title={`${userInfo.name} - ${userInfo.mobile}`}
                   subtitle={moment(trans.time.toDate()).fromNow()}
                   key={trans.id}
+                  onClick={() => handleResolveForgetPassword(trans)}
                 />
               )
             }
