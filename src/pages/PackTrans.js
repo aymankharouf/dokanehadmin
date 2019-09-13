@@ -6,17 +6,18 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
 
 
-const ProductTrans = props => {
+const PackTrans = props => {
   const { state } = useContext(StoreContext)
-  const product = state.products.find(rec => rec.id === props.id)
-  let productTrans = state.productTrans.filter(rec => rec.quantity > 0)
-  productTrans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
+  const pack = state.packs.find(rec => rec.id === props.id)
+  const product = state.products.find(rec => rec.id === pack.productId)
+  let packTrans = state.packTrans.filter(rec => rec.quantity > 0)
+  packTrans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
   return(
     <Page>
-      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
       <Block>
         <List mediaList>
-          {productTrans && productTrans.map(trans => 
+          {packTrans && packTrans.map(trans => 
             <ListItem
               title={state.stores.find(rec => rec.id === trans.storeId).name}
               subtitle={moment(trans.time.toDate()).fromNow()}
@@ -26,7 +27,7 @@ const ProductTrans = props => {
               <Badge slot="title" color="red">{trans.quantity}</Badge>
             </ListItem>
           )}
-          { productTrans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+          { packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
         </List>
       </Block>
       <Toolbar bottom>
@@ -36,4 +37,4 @@ const ProductTrans = props => {
   )
 }
 
-export default ProductTrans
+export default PackTrans

@@ -11,8 +11,8 @@ const EditOrder = props => {
   const netPrice = order.total + order.fixedFees + order.deliveryFees - (order.specialDiscount + order.customerDiscount)
   let i = 0
   let totalPurchase = 0
-  const handleCancel = (product, store) => {
-    editOrder(order, product, store)
+  const handleCancel = (pack, store) => {
+    editOrder(order, pack, store)
   }
   if (!user) return <ReLogin callingPage="orders"/>
   return(
@@ -20,11 +20,12 @@ const EditOrder = props => {
       <Navbar title={state.labels.editOrder} backLink="Back" />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(product => {
-            const productInfo = state.products.find(rec => rec.id === product.id)
-            if (product.stores) {
+          {order.basket && order.basket.map(pack => {
+            const packInfo = state.packs.find(rec => rec.id === pack.id)
+            const productInfo = state.products.find(rec => rec.id === packInfo.productId)
+            if (pack.stores) {
               return (
-                product.stores.map(store => {
+                pack.stores.map(store => {
                   let storeName = state.stores.find(rec => rec.id === store.storeId).name
                   const storePrice = store.price * store.quantity
                   storeName = store.transId ? `${state.labels.stockName} - ${storeName}` : storeName
@@ -34,17 +35,17 @@ const EditOrder = props => {
                       link='#'
                       key={i++} 
                       title={productInfo.name}
-                      subtitle={productInfo.description}
+                      subtitle={packInfo.name}
                       text={storeName}
-                      after={(product.price * store.quantity / 1000).toFixed(3)}
-                      onClick={() => handleCancel(product, store)}
+                      after={(pack.price * store.quantity / 1000).toFixed(3)}
+                      onClick={() => handleCancel(pack, store)}
                     >
                       <Badge slot="title">
                         {store.quantity}
                       </Badge>
-                      {store.price !== product.price ? 
-                        <Badge slot='text' color={storePrice <= product.price ? 'green' : 'red'}> 
-                          {((store.price - product.price) / 1000).toFixed(3)} 
+                      {store.price !== pack.price ? 
+                        <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
+                          {((store.price - pack.price) / 1000).toFixed(3)} 
                         </Badge>
                         : null
                       }
@@ -55,11 +56,11 @@ const EditOrder = props => {
             } else {
               return (
                 <ListItem 
-                  key={product.id} 
+                  key={pack.id} 
                   title={productInfo.name}
-                  footer={productInfo.description}
-                  after={(product.price * product.quantity / 1000).toFixed(3)}>
-                  <Badge slot="title" color={product.purchasedQuantity === product.quantity ? 'green' : 'red'}>{`${product.purchasedQuantity} - ${product.quantity}`}</Badge>
+                  footer={pack.name}
+                  after={(pack.price * pack.quantity / 1000).toFixed(3)}>
+                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
                 </ListItem>
               )
             }

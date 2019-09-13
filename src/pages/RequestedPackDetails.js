@@ -5,29 +5,30 @@ import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
 
-const RequestedProductDetails = props => {
+const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
 	const [error, setError] = useState('')
-  const product = state.products.find(product => product.id === props.productId)
-  let productStores = [...product.stores]
-  productStores = productStores.sort((productStore1, productStore2) => productStore1.purchasePrice - productStore2.purchasePrice)
-  productStores = productStores.map(productStore => {
-    const currentStore = state.stores.find(store => store.id === productStore.id)
+  const pack = state.packs.find(rec => rec.id === props.packId)
+  const product = state.products.find(rec => rec.id === pack.productId)
+  let packStores = [...pack.stores]
+  packStores = packStores.sort((packStore1, packStore2) => packStore1.purchasePrice - packStore2.purchasePrice)
+  packStores = packStores.map(packStore => {
+    const currentStore = state.stores.find(store => store.id === packStore.id)
     const storeName = currentStore.name
-    return {...productStore, name: storeName}
+    return {...packStore, name: storeName}
 	})
 	const handlePurchase = store => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }
-      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
+      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
 			props.f7router.back()
 		} catch(err) {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
 		}
 	}
-  const storesTag = productStores.map(store => 
+  const storesTag = packStores.map(store => 
     <ListItem 
 			title={store.name} 
 			footer={moment(store.time.toDate()).fromNow()} 
@@ -42,7 +43,7 @@ const RequestedProductDetails = props => {
 	)
   return (
     <Page>
-      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>
@@ -57,9 +58,7 @@ const RequestedProductDetails = props => {
           {storesTag}
         </List>
       </Block>
-			<Block strong className="error">
-        <p>{error}</p>
-      </Block>
+      {error ? <Block strong className="error">{error}</Block> : null}
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
@@ -67,4 +66,4 @@ const RequestedProductDetails = props => {
   )
 }
 
-export default RequestedProductDetails
+export default RequestedPackDetails

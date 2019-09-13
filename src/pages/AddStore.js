@@ -39,8 +39,7 @@ const AddStore = props => {
         type,
         mobile,
         address
-      }).then(id => {
-        dispatch({type: 'ADD_STORE', store: {id, name, type, mobile, address}})
+      }).then(() => {
         props.f7router.back()
       })
     } catch(err) {

@@ -9,26 +9,26 @@ import { confirmPurchase, stockOut } from '../data/Actions'
 const ConfirmPurchase = props => {
   const { state, user, dispatch } = useContext(StoreContext)
   const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
-  const total = state.basket.products ? state.basket.products.reduce((a, product) => a + product.netPrice, 0) : 0
+  const total = state.basket.packs ? state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0) : 0
   const handlePurchase = () => {
-    const basket = state.basket.products.map(product => {
+    const basket = state.basket.packs.map(pack => {
       return ({
-        id: product.id,
-        quantity: product.quantity,
-        price: product.price,
-        actualPrice: product.actualPrice,
-        purchasePrice: product.purchasePrice,
-        stores: product.stores
+        id: pack.id,
+        quantity: pack.quantity,
+        price: pack.price,
+        actualPrice: pack.actualPrice,
+        purchasePrice: pack.purchasePrice,
+        stores: pack.stores
       })
     })
     const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
     if (state.basket.storeId === 's') {
-      stockOut(approvedOrders, basket, state.productTrans).then(() => {
+      stockOut(approvedOrders, basket, state.packTrans).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })
     } else { 
-      confirmPurchase(approvedOrders, state.basket.storeId, basket, state.productTrans, total).then(() => {
+      confirmPurchase(approvedOrders, state.basket.storeId, basket, state.packTrans, total).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })
@@ -40,14 +40,14 @@ const ConfirmPurchase = props => {
     <Navbar title={`${state.labels.confirmPurchase} ${store ? store.name: ''}`} backLink="Back" />
     <Block>
         <List>
-          {state.basket.products && state.basket.products.map(product => 
+          {state.basket.packs && state.basket.packs.map(pack => 
             <ListItem 
-              key={product.id} 
-              title={product.name}
-              footer={product.description} 
-              after={(product.netPrice / 1000).toFixed(3)}
+              key={pack.id} 
+              title={state.products.find(rec => rec.id === pack.productId).name}
+              footer={pack.name} 
+              after={(pack.netPrice / 1000).toFixed(3)}
             >
-              {product.quantity > 1 ? <Badge slot="title" color="red">{product.quantity}</Badge> : null}
+              {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
             </ListItem>
           )}
           <ListItem title={state.labels.total} className="total" after={(total / 1000).toFixed(3)} />

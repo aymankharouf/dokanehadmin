@@ -6,21 +6,22 @@ import ReLogin from './ReLogin'
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
   if (!user) return <ReLogin callingPage="stock"/>
-  let storeProducts = state.products.filter(product => product.stores.find(store => store.id === 's'))
-  storeProducts = storeProducts.map(product => {
+  let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === 's'))
+  storePacks = storePacks.map(pack => {
+    const productInfo = state.products.find(rec => rec.id === pack.productId)
     return {
-      id: product.id,
-      name: product.name,
-      country: product.country,
-      description: product.description,
-      quantity: product.stores.find(rec => rec.id === 's').quantity,
-      price: product.stores.find(rec => rec.id === 's').price,
-      purchasePrice: product.stores.find(rec => rec.id === 's').purchasePrice,
-      time: product.stores.find(rec => rec.id === 's').time,
-      imageUrl: product.imageUrl
+      id: pack.id,
+      productName: productInfo.name,
+      country: productInfo.country,
+      name: pack.name,
+      quantity: pack.stores.find(rec => rec.id === 's').quantity,
+      price: pack.stores.find(rec => rec.id === 's').price,
+      purchasePrice: pack.stores.find(rec => rec.id === 's').purchasePrice,
+      time: pack.stores.find(rec => rec.id === 's').time,
+      imageUrl: productInfo.imageUrl
     }
   })
-  storeProducts.sort((product1, product2) => product1.time.seconds - product2.time.seconds)
+  storePacks.sort((pack1, pack2) => pack1.time.seconds - pack2.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.stock} backLink="Back">
@@ -41,20 +42,20 @@ const Stock = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {storeProducts.map(product => 
+          {storePacks.map(pack => 
             <ListItem
-              link={`/productTrans/${product.id}`}
-              title={product.name}
-              after={(product.purchasePrice / 1000).toFixed(3)}
-              subtitle={product.description}
-              text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
-              key={product.id}
+              link={`/packTrans/${pack.id}`}
+              title={pack.productName}
+              after={(pack.purchasePrice / 1000).toFixed(3)}
+              subtitle={pack.name}
+              text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === pack.country).name}`}
+              key={pack.id}
             >
-              <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
-              <Badge slot="title" color="red">{product.quantity}</Badge>
+              <img slot="media" src={pack.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              <Badge slot="title" color="red">{pack.quantity}</Badge>
             </ListItem>
           )}
-          {storeProducts.length === 0 ? <ListItem title={state.labels.noData} /> : null}
+          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
       <Toolbar bottom>

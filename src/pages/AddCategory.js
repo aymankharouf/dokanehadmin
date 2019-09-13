@@ -17,8 +17,7 @@ const AddCategory = props => {
       addCategory({
         sectionId: props.id,
         name
-      }).then(id => {
-        dispatch({type: 'ADD_CATEGORY', category: {id, name, sectionId: props.id}})
+      }).then(() => {
         props.f7router.back()
       })
     } catch(err) {

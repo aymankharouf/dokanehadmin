@@ -83,8 +83,6 @@ const Store = props => {
     price: 'السعر',
     offerEnd: 'تاريخ انتهاء العرض',
     stores: 'المحال التجارية',
-    newProduct: 'منتج جديد',
-    existProduct: 'منتج موجود',
     image: 'الصورة',
     submit: 'موافق',
     orderBy: 'الترتيب حسب',
@@ -130,7 +128,18 @@ const Store = props => {
     stockName: 'المستودع',
     editOrder: 'تعديل طلب',
     forgetPassword: 'طلبات نسيان كلمة السر',
-    customers: 'العملاء'
+    customers: 'العملاء',
+    choosePack: 'الرجاء اختيار الحزمة',
+    pack: 'الحزمة',
+    enterQuantity: 'الرجاء تحديد الكمية',
+    addPackComponent: 'اضافة مكون للحزمة',
+    addPack: 'اضافة حزمة',
+    edit: 'تعديل',
+    delete: 'حذف',
+    editPack: 'تعديل حزمة',
+    packComponents: 'مكونات الحزمة',
+    packs: 'الحزم والعروض',
+    sameComponentFound: 'لا يمكن تكرار نفس المكون في الحزمة'
   }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -152,9 +161,10 @@ const Store = props => {
     purchases: [],
     orders: [],
     lessPrice: [],
-    productTrans: [],
+    packTrans: [],
     stockTrans: [],
     products: [],
+    packs: [],
     forgetPassword: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
@@ -176,10 +186,12 @@ const Store = props => {
           })
           dispatch({type: 'SET_USERS', users})
         })  
-        firebase.firestore().collection('stores').get().then(docs => {
+        firebase.firestore().collection('stores').onSnapshot(docs => {
+          let stores = []
           docs.forEach(doc => {
-            dispatch({type: 'ADD_STORE', store: {...doc.data(), id:doc.id}})
+            stores.push({...doc.data(), id:doc.id})
           })
+          dispatch({type: 'SET_STORES', stores})
         })
         firebase.firestore().collection('purchases').onSnapshot(docs => {
           let purchases = []
@@ -195,12 +207,12 @@ const Store = props => {
           })
           dispatch({type: 'SET_STOCK_TRANS', stockTrans})
         })  
-        firebase.firestore().collection('productTrans').onSnapshot(docs => {
-          let productTrans = []
+        firebase.firestore().collection('packTrans').onSnapshot(docs => {
+          let packTrans = []
           docs.forEach(doc => {
-            productTrans.push({...doc.data(), id:doc.id})
+            packTrans.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_PRODUCT_TRANS', productTrans})
+          dispatch({type: 'SET_PACK_TRANS', packTrans})
         })  
         firebase.firestore().collection('lessPrice').onSnapshot(docs => {
           let lessPrice = []
@@ -218,33 +230,48 @@ const Store = props => {
         })
       }
     })
-    firebase.firestore().collection('sections').get().then(docs => {
+    firebase.firestore().collection('sections').onSnapshot(docs => {
+      let sections = []
       docs.forEach(doc => {
-        dispatch({type: 'ADD_SECTION', section: {...doc.data(), id:doc.id}})
+        sections.push({...doc.data(), id:doc.id})
       })
+      dispatch({type: 'SET_SECTIONS', sections})
     })  
-    firebase.firestore().collection('categories').get().then(docs => {
+    firebase.firestore().collection('categories').onSnapshot(docs => {
+      let categories = []
       docs.forEach(doc => {
-        dispatch({type: 'ADD_CATEGORY', category: {...doc.data(), id:doc.id}})
+        categories.push({...doc.data(), id:doc.id})
       })
+      dispatch({type: 'SET_CATEGORIES', categories})
+    })
+    firebase.firestore().collection('trademarks').onSnapshot(docs => {
+      let trademarks = []
+      docs.forEach(doc => {
+        trademarks.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_TRADEMARKS', trademarks})
     })  
-    firebase.firestore().collection('trademarks').get().then(docs => {
+    firebase.firestore().collection('countries').onSnapshot(docs => {
+      let countries = []
       docs.forEach(doc => {
-        dispatch({type: 'ADD_TRADEMARK', trademark: {...doc.data(), id:doc.id}})
+        countries.push({...doc.data(), id:doc.id})
       })
-    })  
-    firebase.firestore().collection('countries').get().then(docs => {
-      docs.forEach(doc => {
-        dispatch({type: 'ADD_COUNTRY', country: {...doc.data(), id:doc.id}})
-      })
+      dispatch({type: 'SET_COUNTRIES', countries})
     })  
     firebase.firestore().collection('products').onSnapshot(docs => {
       let products = []
       docs.forEach(doc => {
-        const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
-        products.push({...doc.data(), id: doc.id, price: minPrice})
+        products.push({...doc.data(), id: doc.id})
       })
       dispatch({type: 'SET_PRODUCTS', products})
+    })
+    firebase.firestore().collection('packs').onSnapshot(docs => {
+      let packs = []
+      docs.forEach(doc => {
+        const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
+        packs.push({...doc.data(), id: doc.id, price: minPrice === Infinity ? 0 : minPrice})
+      })
+      dispatch({type: 'SET_PACKS', packs})
     })
   }, []);
   return (

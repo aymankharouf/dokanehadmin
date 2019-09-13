@@ -7,20 +7,21 @@ import 'moment/locale/ar'
 
 const StoreProducts = props => {
   const { state } = useContext(StoreContext)
-  let storeProducts = state.products.filter(product => product.stores.find(store => store.id === props.id))
-  storeProducts = storeProducts.map(product => {
+  let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
+  storePacks = storePacks.map(pack => {
+    const productInfo = state.products.find(rec => rec.id === pack.productId)
     return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      isNew: product.isNew,
-      isOffer: product.isOffer,
-      price: product.stores.find(rec => rec.id === props.id).price,
-      time: product.stores.find(rec => rec.id === props.id).time,
-      imageUrl: product.imageUrl
+      id: pack.id,
+      productName: productInfo.name,
+      name: pack.name,
+      isNew: productInfo.isNew,
+      isOffer: pack.isOffer,
+      price: pack.stores.find(rec => rec.id === props.id).price,
+      time: pack.stores.find(rec => rec.id === props.id).time,
+      imageUrl: productInfo.imageUrl
     }
   })
-  storeProducts.sort((product1, product2) => product2.time.seconds - product1.time.seconds)
+  storePacks.sort((pack1, pack2) => pack2.time.seconds - pack1.time.seconds)
   const store = state.stores.find(store => store.id === props.id)
   return(
     <Page>
@@ -42,32 +43,28 @@ const StoreProducts = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {storeProducts.map(product => 
+          {storePacks.map(pack => 
             <ListItem
-              link={`/storeProduct/${store.id}/product/${product.id}`}
-              title={product.name}
-              after={(product.price / 1000).toFixed(3)}
-              subtitle={product.description}
-              text={moment(product.time.toDate()).fromNow()}
-              key={product.id}
+              link={`/storeProduct/${store.id}/pack/${pack.id}`}
+              title={pack.productName}
+              after={(pack.price / 1000).toFixed(3)}
+              subtitle={pack.name}
+              text={moment(pack.time.toDate()).fromNow()}
+              key={pack.id}
             >
-              <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
-              {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
-              {product.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
+              <img slot="media" src={pack.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              {pack.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
+              {pack.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
             </ListItem>
           )}
-          {storeProducts.length === 0 ? <ListItem title={state.labels.noData} /> : null}
+          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="pink" morphTo=".toolbar.fab-morph-target">
+      <Fab position="right-bottom" slot="fixed" color="pink" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
-      </Toolbar>
-      <Toolbar bottom className="fab-morph-target">
-        <Link onClick={() => props.f7router.navigate(`/newProduct/${props.id}`)}>{state.labels.newProduct}</Link>
-        <Link onClick={() => props.f7router.navigate(`/addProduct/${props.id}`)}>{state.labels.existProduct}</Link>
       </Toolbar>
     </Page>
   )

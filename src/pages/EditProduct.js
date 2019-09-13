@@ -1,19 +1,17 @@
 import React, {useState, useContext } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Block, Toggle} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Block, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editProduct } from '../data/Actions'
+import { editProduct, deleteProduct } from '../data/Actions'
 
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
   const product = state.products.find(rec => rec.id === props.id)
   const [name, setName] = useState(product.name)
-  const [description, setDescription] = useState(product.description)
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)
   const [byWeight, setByWeight] = useState(product.byWeight)
   const [isNew, setIsNew] = useState(product.isNew)
-  const [isOffer, setIsOffer] = useState(product.isOffer)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
@@ -40,9 +38,6 @@ const EditProduct = props => {
       if (category === '') {
         throw new Error(state.labels.enterCategory)
       }
-      if (description === '') {
-        throw new Error(state.labels.enterDescription)
-      }
       if (country === '') {
         throw new Error(state.labels.enterCountry)
       }
@@ -53,11 +48,9 @@ const EditProduct = props => {
         id: props.id,
         category,
         name,
-        description,
         trademark,
         byWeight,
         isNew,
-        isOffer,
         country,
         imageUrl,
         image
@@ -67,6 +60,11 @@ const EditProduct = props => {
     } catch (err){
       setError(err.message)
     }
+  }
+  const handleDelete = () => {
+    deleteProduct(product).then(() => {
+      props.f7router.back()
+    })
   }
   const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   const trademarksOptionsTags = state.trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
@@ -116,16 +114,6 @@ const EditProduct = props => {
           onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListInput 
-          name="description" 
-          label={state.labels.description}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)}
-          onInputClear={() => setDescription('')}
-        />
         <ListItem>
           <span>{state.labels.byWeight}</span>
           <Toggle 
@@ -144,20 +132,14 @@ const EditProduct = props => {
             onToggleChange={() => setIsNew(!isNew)}
           />
         </ListItem>
-        <ListItem>
-          <span>{state.labels.isOffer}</span>
-          <Toggle 
-            name="isOffer" 
-            color="green" 
-            checked={isOffer} 
-            onToggleChange={() => setIsOffer(!isOffer)}
-          />
-        </ListItem>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
       </List>
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      </Fab>
+      <Fab position="left-bottom" slot="fixed" color="red" onClick={() => handleDelete()}>
+        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
       </Fab>
     </Page>
   )

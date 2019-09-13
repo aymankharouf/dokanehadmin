@@ -1,11 +1,11 @@
 const Reducer = (state, action) => {
     let newQuantity
-    let otherProducts
-    let product
+    let otherPacks
+    let pack
     switch (action.type){
       case 'ADD_TO_BASKET':
-        product = {
-          ...action.basket.product,
+        pack = {
+          ...action.basket.pack,
           price: action.basket.price,
           quantity: action.basket.quantity,
           actualPrice: action.basket.store.price,
@@ -13,69 +13,69 @@ const Reducer = (state, action) => {
           netPrice: action.basket.store.purchasePrice * action.basket.quantity
         }
         if (!state.basket.storeId) {
-          return {...state, basket: {storeId: action.basket.store.id, products: [product]}}
+          return {...state, basket: {storeId: action.basket.store.id, packs: [pack]}}
         } else {
           if (state.basket.storeId !== action.basket.store.id) return state
-          if (state.basket.products && state.basket.products.find(product => product.id === action.basket.product.id)) return state
-          return {...state, basket: {...state.basket, products: [...state.basket.products, product]}}
+          if (state.basket.packs && state.basket.packs.find(rec => rec.id === action.basket.pack.id)) return state
+          return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'ADD_QUANTITY':
-        product = state.basket.products.find(product => product.id === action.product.id)
-        newQuantity = product.quantity
-        otherProducts = state.basket.products.filter(product => product.id !== action.product.id)
-        product = {
-          ...product,
+        pack = state.basket.packs.find(rec => rec.id === action.pack.id)
+        newQuantity = pack.quantity
+        otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
+        pack = {
+          ...pack,
           quantity: ++newQuantity,
-          netPrice: newQuantity * product.purchasePrice
+          netPrice: newQuantity * pack.purchasePrice
         }
-        return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
+        return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
       case 'REMOVE_QUANTITY':
-        product = state.basket.products.find(product => product.id === action.product.id)
-        newQuantity = product.quantity
-        otherProducts = state.basket.products.filter(product => product.id !== action.product.id)
+        pack = state.basket.packs.find(rec => rec.id === action.pack.id)
+        newQuantity = pack.quantity
+        otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
         if (--newQuantity === 0) {
-          if (otherProducts.length > 0){
-            return {...state, basket: {...state.basket, products: otherProducts}}
+          if (otherPacks.length > 0){
+            return {...state, basket: {...state.basket, packs: otherPacks}}
           } else {
             return {...state, basket: ''}
           }
         } else {
-          product = {
-            ...product,
+          pack = {
+            ...pack,
             quantity: newQuantity,
-            netPrice: newQuantity * product.purchasePrice
+            netPrice: newQuantity * pack.purchasePrice
           }  
-          return {...state, basket: {...state.basket, products: [...otherProducts, product]}}
+          return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
         }
       case 'CLEAR_BASKET':
         return {
           ...state,
           basket: ''
         }
-      case 'ADD_COUNTRY':
+      case 'SET_COUNTRIES':
         return {
           ...state,
-          countries: [...state.countries, action.country]
+          countries: action.countries
         }
-      case 'ADD_STORE':
+      case 'SET_STORES':
         return {
           ...state,
-          stores: [...state.stores, action.store]
+          stores: action.stores
         }
-      case 'ADD_SECTION':
+      case 'SET_SECTIONS':
         return {
           ...state,
-          sections: [...state.sections, action.section]
+          sections: action.sections
         }
-      case 'ADD_CATEGORY':
+      case 'SET_CATEGORIES':
         return {
           ...state,
-          categories: [...state.categories, action.category]
+          categories: action.categories
         }
-      case 'ADD_TRADEMARK':
+      case 'SET_TRADEMARKS':
         return {
           ...state,
-          trademarks: [...state.trademarks, action.trademark]
+          trademarks: action.trademarks
         }
       case 'SET_USERS':
         return {
@@ -92,10 +92,10 @@ const Reducer = (state, action) => {
           ...state,
           orders: action.orders
         }
-      case 'SET_PRODUCT_TRANS':
+      case 'SET_PACK_TRANS':
         return {
           ...state,
-          productTrans: action.productTrans
+          packTrans: action.packTrans
         }
       case 'SET_STOCK_TRANS':
         return {
@@ -116,6 +116,34 @@ const Reducer = (state, action) => {
         return {
           ...state,
           products: action.products
+        }
+      case 'SET_PACKS':
+        return {
+          ...state,
+          packs: action.packs
+        }
+      case 'ADD_PACK_COMPONENT':
+        return {
+          ...state,
+          packComponents: [...state.packComponents, action.component]
+        }
+      case 'CLEAR_PACK_COMPONENTS':
+        return {
+          ...state,
+          packComponents: []
+        }
+      case 'LOAD_PACK_COMPONENTS':
+        return {
+          ...state,
+          packComponents: action.components
+        }
+      case 'DELETE_COMPONENT':
+        const i = state.packComponents.findIndex(rec => rec.productId === action.component.productId && rec.packId === action.component.packId)
+        let newPackComponents = [...state.packComponents]
+        newPackComponents.splice(i, 1)
+        return {
+          ...state,
+          packComponents: newPackComponents
         }
       case 'DONE':
         return {

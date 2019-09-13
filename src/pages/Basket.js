@@ -5,11 +5,11 @@ import { StoreContext } from '../data/Store';
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : null
-  const totalPrice = state.basket.products ? (state.basket.products.reduce((a, product) => a + product.netPrice, 0)) : null
-  const handleAdd = (product) => {
-    const storeQuantity = product.stores.find(rec => rec.id === store.id).quantity
+  const totalPrice = state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0)) : null
+  const handleAdd = pack => {
+    const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
     if (!storeQuantity) {
-      dispatch({ type: 'ADD_QUANTITY', product })
+      dispatch({type: 'ADD_QUANTITY', pack})
     }
   }
   useEffect(() => {
@@ -22,30 +22,31 @@ const Basket = props => {
       <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink="Back" />
       <Block>
         <List mediaList>
-          {state.basket.products && state.basket.products.map(product => {
+          {state.basket.packs && state.basket.packs.map(pack => {
+            const productInfo = state.products.find(rec => rec.id === pack.productId)
             return (
               <ListItem
-                title={product.name}
-                footer={(product.netPrice / 1000).toFixed(3)}
-                subtitle={product.description}
-                key={product.id}
+                title={productInfo.name}
+                footer={(pack.netPrice / 1000).toFixed(3)}
+                subtitle={pack.name}
+                key={pack.id}
               >
-                <img slot="media" src={product.imageUrl} width="80" alt="" />
-                {product.quantity > 1 ? <Badge slot="title" color="red">{product.quantity}</Badge> : null}
+                <img slot="media" src={productInfo.imageUrl} width="80" alt="" />
+                {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
                 <Stepper
                   slot="after"
                   buttonsOnly={true}
                   small
                   raised
-                  onStepperPlusClick={() => handleAdd(product)}
-                  onStepperMinusClick={() => dispatch({ type: 'REMOVE_QUANTITY', product })}
+                  onStepperPlusClick={() => handleAdd(pack)}
+                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', pack})}
                 />
               </ListItem>
             )
           })}
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="red" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
+      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>
 
@@ -53,7 +54,7 @@ const Basket = props => {
         <Link href='/home/'>
           <Icon ios="f7:home_fill" aurora="f7:home_fill" md="material:home"></Icon>
         </Link>
-        <Link href='#' onClick={() => dispatch({ type: 'CLEAR_BASKET' })}>
+        <Link href='#' onClick={() => dispatch({type: 'CLEAR_BASKET'})}>
           <Icon ios="f7:trash_fill" aurora="f7:trash_fill" md="material:delete"></Icon>
         </Link>
       </Toolbar>

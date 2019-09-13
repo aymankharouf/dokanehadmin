@@ -1,40 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Button, Popover} from 'framework7-react'
+import React, { useContext } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Button, Popover, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const Products = props => {
   const { state } = useContext(StoreContext)
-  const [orderBy, setOrderBy] = useState('p')
-  const [products, setProducts] = useState(state.products)
-  useEffect(() => {
-    const sort = (value) => {
-      switch(value){
-        case 'p':
-          setProducts([...products].sort((product1, product2) => product1.price - product2.price))
-          break
-        case 's':
-          setProducts([...products].sort((product1, product2) => product2.sales - product1.sales))
-          break
-        case 'r':
-          setProducts([...products].sort((product1, product2) => product2.rating - product1.rating))
-          break
-        default:
-          return null
-      }
-    }
-    sort(orderBy)
-  }, [orderBy])
-  const orderByList = state.orderByList.filter(rec => rec.id !== orderBy)
-  const orderByListTags = orderByList.map(orderByItem => 
-    <ListItem 
-      link="#" 
-      popoverClose 
-      key={orderByItem.id} 
-      title={orderByItem.name} 
-      onClick={() => setOrderBy(orderByItem.id)}/> 
-  )
-  if (!state.products) return (<div> Loading... </div>)
   return(
     <Page>
       <Navbar title={state.labels.allProducts} backLink="Back">
@@ -50,36 +20,33 @@ const Products = props => {
           placeholder={state.labels.search}
         />
       </Navbar>
-      <Block inset>
-        <Button raised popoverOpen=".popover-menu">{`${state.labels.orderBy} ${state.orderByList.find(rec => rec.id === orderBy).name}`}</Button>
-        </Block>
-        <Popover className="popover-menu">
-          <List>
-            {orderByListTags}
-          </List>
-        </Popover>
         <Block>
           <List className="searchbar-not-found">
             <ListItem title={state.labels.noData} />
           </List>
           <List mediaList className="search-list searchbar-found">
-            {products && products.map(product => 
-              <ListItem
-                link={`/product/${product.id}`}
-                title={product.name}
-                after={(product.price / 1000).toFixed(3)}
-                subtitle={product.description}
-                text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
-                key={product.id}
-                className={product.status === 'd' ? 'disable-product' : ''}
-              >
-                <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
-                {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
-                {product.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
-              </ListItem>
+            {state.products && state.products.map(product => {
+              return (
+                <ListItem
+                  link={`/product/${product.id}`}
+                  title={product.name}
+                  subtitle={state.categories.find(rec => rec.id === product.category).name}
+                  text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
+                  key={product.id}
+                  className={product.status === 'd' ? 'disable-product' : ''}
+                >
+                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+                  {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
+                </ListItem>
+              )
+            }
             )}
+            {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : null}
           </List>
       </Block>
+      <Fab position="right-bottom" slot="fixed" color="pink" onClick={() => props.f7router.navigate(`/addProduct/`)}>
+        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

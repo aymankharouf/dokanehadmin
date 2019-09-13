@@ -15,8 +15,7 @@ const AddTrademark = props => {
       }
       addTrademark({
         name,
-      }).then(id => {
-        dispatch({type: 'ADD_TRADEMARK', trademark: {id, name}})
+      }).then(() => {
         props.f7router.back()
       })
     } catch(err) {

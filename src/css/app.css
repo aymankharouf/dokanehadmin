@@ -62,3 +62,7 @@
   .disable-product {
     background-color: red;
   }
+
+  .block-title {
+    color: blue;
+  }

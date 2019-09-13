@@ -8,8 +8,8 @@ import ProductDetails from './pages/ProductDetails'
 import Basket from './pages/Basket'
 import Stores from './pages/Stores';
 import StoreProducts from './pages/StoreProducts';
+import AddStorePack from './pages/AddStorePack';
 import AddProduct from './pages/AddProduct';
-import NewProduct from './pages/NewProduct';
 import OrdersList from './pages/OrdersList';
 import OrderDetails from './pages/OrderDetails';
 import StoreProductDetails from './pages/StoreProductDetails';
@@ -26,18 +26,22 @@ import AddCategory from './pages/AddCategory';
 import Trademarks from './pages/Trademarks';
 import AddTrademark from './pages/AddTrademark';
 import Orders from './pages/Orders';
-import RequestedProducts from './pages/RequestedProducts';
-import RequestedProductDetails from './pages/RequestedProductDetails';
+import RequestedPacks from './pages/RequestedPacks';
+import RequestedPackDetails from './pages/RequestedPackDetails';
 import ConfirmPurchase from './pages/ConfirmPurchase';
 import Purchases from './pages/Purchases';
 import PurchaseDetails from './pages/PurchaseDetails';
 import Stock from './pages/Stock';
-import ProductTrans from './pages/ProductTrans';
+import PackTrans from './pages/PackTrans';
 import StockTrans from './pages/StockTrans';
 import StockTransDetails from './pages/StockTransDetails';
 import EditOrder from './pages/EditOrder';
 import Customers from './pages/Customers';
 import ForgetPassword from './pages/ForgetPassword';
+import AddPack from './pages/AddPack';
+import AddPackComponent from './pages/AddPackComponent';
+import PackDetails from './pages/PackDetails';
+import EditPack from './pages/EditPack';
 
 export default [
   {
@@ -137,19 +141,35 @@ export default [
     component: StoreProducts
   },
   {
-    path: '/addProduct/:id',
+    path: '/addStorePack/:id',
+    component: AddStorePack
+  },
+  {
+    path: '/addProduct/',
     component: AddProduct
   },
   {
-    path: '/newProduct/:id',
-    component: NewProduct
+    path: '/addPack/:id',
+    component: AddPack
   },
   {
-    path: '/storeProduct/:storeId/product/:productId',
+    path: '/addPackComponent/',
+    component: AddPackComponent
+  },
+  {
+    path: '/packDetails/:id',
+    component: PackDetails
+  },
+  {
+    path: '/editPack/:id',
+    component: EditPack
+  },
+  {
+    path: '/storeProduct/:storeId/pack/:packId',
     component: StoreProductDetails
   },
   {
-    path: '/editPrice/:storeId/product/:productId',
+    path: '/editPrice/:storeId/pack/:packId',
     component: EditPrice
   },
   {
@@ -165,16 +185,16 @@ export default [
     component: OrderDetails
   },
   {
-    path: '/requestedProducts/',
-    component: RequestedProducts
+    path: '/requestedPacks/',
+    component: RequestedPacks
   },
   {
     path: '/editOrder/:id',
     component: EditOrder
   },
   {
-    path: '/requestedProduct/:productId/quantity/:quantity/price/:price',
-    component: RequestedProductDetails
+    path: '/requestedPack/:packId/quantity/:quantity/price/:price',
+    component: RequestedPackDetails
   },
   {
     path: '/purchases/',
@@ -189,8 +209,8 @@ export default [
     component: Stock
   },
   {
-    path: '/productTrans/:id',
-    component: ProductTrans
+    path: '/packTrans/:id',
+    component: PackTrans
   },
   {
     path: '/stockTrans/',

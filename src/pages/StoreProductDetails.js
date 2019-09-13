@@ -2,26 +2,29 @@ import React, { useContext } from 'react'
 import { Block, Page, Navbar, Card, CardContent, Icon, Fab, Toolbar, FabButtons, FabButton, CardFooter} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
-import { deleteProduct, confirmPrice } from '../data/Actions'
+import { deleteStorePack, confirmPrice } from '../data/Actions'
 
 const StoreProductDetails = props => {
   const { state } = useContext(StoreContext)
-  let product = state.products.find(product => product.id === props.productId)
-  product = {
-    ...product,
-    price: product.stores.find(rec => rec.id === props.storeId).price
+  let pack = state.packs.find(rec => rec.id === props.packId)
+  const product = state.products.find(rec => rec.id === pack.productId)
+  pack = {
+    ...pack,
+    price: pack.stores.find(rec => rec.id === props.storeId).price
   }
   const store = state.stores.find(rec => rec.id === props.storeId)
   const handleEditPrice = () => {
-    props.f7router.navigate(`/editPrice/${props.storeId}/product/${props.productId}`)
+    props.f7router.navigate(`/editPrice/${props.storeId}/pack/${props.packId}`)
   }
   const handleDelete = () => {
-    if (window.confirm('Are you sure to delete this product from the store?')) {
-    deleteProduct(store, product).then(() => props.f7router.navigate(`/store/${props.storeId}`))
-    }
+    deleteStorePack(store, pack).then(() => {
+      props.f7router.navigate(`/store/${props.storeId}`)
+    })
   }
   const handleConfirm = () => {
-    confirmPrice(store, product).then(() => props.f7router.back())
+    confirmPrice(store, pack).then(() => {
+      props.f7router.back()
+    })
   }
 
   return (
@@ -33,8 +36,8 @@ const StoreProductDetails = props => {
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
           </CardContent>
           <CardFooter>
-            <p>{product.description}</p>
-            <p>{(product.price / 1000).toFixed(3)}</p>
+            <p>{pack.name}</p>
+            <p>{(pack.price / 1000).toFixed(3)}</p>
           </CardFooter>
         </Card>
       </Block>
@@ -46,10 +49,10 @@ const StoreProductDetails = props => {
             <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
           </FabButton>
           <FabButton color="green" onClick={() => handleConfirm()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+            <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={() => handleDelete()}>
-          <Icon ios="f7:trash" aurora="f7:trash" md="material:delete"></Icon>
+            <Icon ios="f7:trash" aurora="f7:trash" md="material:delete"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

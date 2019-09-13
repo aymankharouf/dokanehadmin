@@ -6,8 +6,9 @@ import { editPrice } from '../data/Actions'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
-  const product = state.products.find(rec => rec.id === props.productId)
-  let store = product.stores.find(rec => rec.id === props.storeId)
+  const pack = state.packs.find(rec => rec.id === props.packId)
+  const product = state.products.find(rec => rec.id === pack.productId)
+  let store = pack.stores.find(rec => rec.id === props.storeId)
   store = {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
   const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice / 1000)
   const [price, setPrice] = useState(store.price / 1000)
@@ -44,7 +45,7 @@ const EditPrice = props => {
       const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
       editPrice(
         store,
-        product,
+        pack,
         purchasePrice,
         price,
         oldPurchasePrice,

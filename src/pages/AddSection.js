@@ -20,8 +20,7 @@ const AddSection = props => {
       addSection({
         name,
         percent
-      }).then(id => {
-        dispatch({type: 'ADD_SECTION', section: {id, name, percent}})
+      }).then(() => {
         props.f7router.back()
       })
     } catch(err) {

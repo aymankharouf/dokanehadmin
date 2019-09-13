@@ -44,11 +44,12 @@ const OrderDetails = props => {
       <Navbar title={state.labels.orderDetails} backLink="Back" />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(product => {
-            const productInfo = state.products.find(rec => rec.id === product.id)
+          {order.basket && order.basket.map(pack => {
+            const packInfo = state.packs.find(rec => rec.id === pack.id)
+            const productInfo = state.products.find(rec => rec.id === packInfo.productId)
             if (order.status === 'f' || order.status === 'd' || order.status === 'b' || order.status === 'r') {
               return (
-                product.stores.map(store => {
+                pack.stores.map(store => {
                   let storeName = state.stores.find(rec => rec.id === store.storeId).name
                   const storePrice = store.price * store.quantity
                   storeName = store.transId ? `${state.labels.stockName} - ${storeName}` : storeName
@@ -57,16 +58,16 @@ const OrderDetails = props => {
                     <ListItem 
                       key={i++} 
                       title={productInfo.name}
-                      subtitle={productInfo.description}
+                      subtitle={packInfo.name}
                       text={storeName}
-                      after={(product.price * store.quantity / 1000).toFixed(3)}
+                      after={(pack.price * store.quantity / 1000).toFixed(3)}
                     >
                       <Badge slot="title">
                         {store.quantity}
                       </Badge>
-                      {store.price !== product.price ? 
-                        <Badge slot='text' color={storePrice <= product.price ? 'green' : 'red'}> 
-                          {((store.price - product.price) / 1000).toFixed(3)} 
+                      {store.price !== pack.price ? 
+                        <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
+                          {((store.price - pack.price) / 1000).toFixed(3)} 
                         </Badge>
                         : null
                       }
@@ -77,11 +78,11 @@ const OrderDetails = props => {
             } else {
               return (
                 <ListItem 
-                  key={product.id} 
+                  key={pack.id} 
                   title={productInfo.name}
-                  footer={productInfo.description}
-                  after={(product.price * product.quantity / 1000).toFixed(3)}>
-                  <Badge slot="title" color={product.purchasedQuantity === product.quantity ? 'green' : 'red'}>{`${product.purchasedQuantity} - ${product.quantity}`}</Badge>
+                  footer={packInfo.name}
+                  after={(pack.price * pack.quantity / 1000).toFixed(3)}>
+                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
                 </ListItem>
               )
             }

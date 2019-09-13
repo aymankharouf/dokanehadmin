@@ -1,72 +1,57 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
-import BottomToolbar from './BottomToolbar'
+import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, BlockTitle, Row, Col, Button } from 'framework7-react'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
+import BottomToolbar from './BottomToolbar'
 
 const ProductDetails = props => {
-  const handleEditProduct = () => {
-    props.f7router.navigate(`/editProduct/${props.id}`)
-  }
-  const handlePurchase = store => {
-		try{
-      if (store.id === 's') return
-			if (state.basket.store && state.basket.store.id !== store.id){
-				throw new Error(state.labels.twoDiffStores)
-      }
-      dispatch({type: 'ADD_TO_BASKET', basket: {product, store, quantity: 1, price: store.price}})
-			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-		}
-	}
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const product = state.products.find(product => product.id === props.id)
-  let productStores = [...product.stores]
-  productStores = productStores.sort((productStorea, productStoreb) => productStorea.price - productStoreb.price)
-  productStores = productStores.map(productStore => {
-    const currentStore = state.stores.find(store => store.id === productStore.id)
-    const storeName = currentStore.name
-    return {...productStore, name: storeName}
-  })
-  const storesTag = productStores.map(store => 
+  const product = state.products.find(rec => rec.id === props.id)
+  const packs = state.packs.filter(rec => rec.productId === props.id)
+  const packsTags = packs.map(pack => 
     <ListItem 
-      title={store.name} 
-      footer={moment(store.time.toDate()).fromNow()} 
-      after={(store.price / 1000).toFixed(3)} 
-      key={store.id} 
-      link="#"
-      onClick={() => handlePurchase(store)}
+      title={pack.name} 
+      footer={moment(pack.time.toDate()).fromNow()} 
+      after={pack.price ? (pack.price / 1000).toFixed(3) : ''} 
+      key={pack.id} 
+      link={`/packDetails/${pack.id}`}
     >
-      {store.quantity ? <Badge slot="title" color='red'>{store.quantity}</Badge> : null}
+      {pack.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : null}
     </ListItem>
   )
   return (
     <Page>
-      <Navbar title={`${product.name} ${product.description}`} backLink="Back" />
-      <Fab position="left-top" slot="fixed" color="red" onClick={() => handleEditProduct()}>
-        <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
-      </Fab>
+      <Navbar title={product.name} backLink="Back" />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
           </CardContent>
           <CardFooter>
-            <p>{(product.price / 1000).toFixed(3)}</p>
             <p><Rating rating={product.rating} /></p>
           </CardFooter>
         </Card>
+        <BlockTitle>
+        <Row>
+          <Col>
+            {state.labels.packs}
+          </Col>
+          <Col>
+            <Button small fill round iconIos="f7:add" iconAurora="f7:add" iconMd="material:add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)}></Button>
+          </Col>
+        </Row>
+        </BlockTitle>
         <List>
-          {storesTag}
+          {packsTags}
         </List>
       </Block>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
+      <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editProduct/${props.id}`)}>
+        <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+      </Fab>
+
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

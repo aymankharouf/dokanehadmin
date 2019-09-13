@@ -19,7 +19,7 @@ cancel part of an order(prices changing or not avaliable)
 harees stores - purshasing & not picked orders
 in stoke (quantity & net value)
 discounts
-offers: packages, discounts for group
+offers: packages, discounts for group, extra
 cost types & costs
 product details (in stoke, sales, stores, in order)
 last ordered product by the user in the same category & its price & quantity
