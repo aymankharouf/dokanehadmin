@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Block, Toggle, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { addProduct } from '../data/Actions'
+import { addProduct, showMessage } from '../data/Actions'
 
 
 const AddProduct = props => {
@@ -29,51 +29,53 @@ const AddProduct = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
+  useEffect(() => {
+    if (error) {
+      showMessage(props, 'error', error)
+      setError('')
+    }
+  }, [error])
 
   const handleSubmit = () => {
-    try{
-      if (name === '') {
-        throw new Error(state.labels.enterName)
-      }
-      if (category === '') {
-        throw new Error(state.labels.enterCategory)
-      }
-      if (country === '') {
-        throw new Error(state.labels.enterCountry)
-      }
-      if (imageUrl === '') {
-        throw new Error(state.labels.enterImage)
-      }
-      addProduct({
-        category,
-        name,
-        trademark,
-        byWeight,
-        isNew,
-        country,
-        imageUrl,
-        image
-      }).then(() => {
-        props.f7router.back()
-      }) 
-    } catch (err){
-      setError(err.message)
-    }
+    addProduct({
+      category,
+      name,
+      trademark,
+      byWeight,
+      isNew,
+      country,
+      imageUrl,
+      image
+    }).then(() => {
+      showMessage(props, 'success', state.labels.addSuccess)
+      props.f7router.back()
+    }) 
   }
-  const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const trademarksOptionsTags = state.trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const countriesOptionsTags = state.countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let categories = state.categories.filter(rec => rec.isActive === true)
+  categories.sort((category1, category2) => category1.name > category2.name ? 1 : -1)
+  const categoriesOptionsTags = categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let trademarks = state.trademarks.filter(rec => rec.isActive === true)
+  trademarks.sort((trademark1, trademark2) => trademark1.name > trademark2.name ? 1 : -1)
+  const trademarksOptionsTags = trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let countries = state.countries.filter(rec => rec.isActive === true)
+  countries.sort((country1, country2) => country1.name > country2.name ? 1 : -1)
+  const countriesOptionsTags = countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
       <Navbar title={state.labels.addProduct} backLink="Back" />
-      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
-      <ListItem
+        <ListItem
           title={state.labels.category}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
-          <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+          <select name='category' value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="" disabled></option>
             {categoriesOptionsTags}
           </select>
@@ -81,9 +83,15 @@ const AddProduct = props => {
         <ListItem
           title={state.labels.trademark}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
-          <select name="trademark" value={trademark} onChange={(e) => setTrademark(e.target.value)}>
+          <select name='trademark' value={trademark} onChange={(e) => setTrademark(e.target.value)}>
             <option value="" disabled></option>
             {trademarksOptionsTags}
           </select>
@@ -91,9 +99,15 @@ const AddProduct = props => {
         <ListItem
           title={state.labels.country}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search country'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
-          <select name="country" defaultValue="" onChange={(e) => setCountry(e.target.value)}>
+          <select name='country' defaultValue="" onChange={(e) => setCountry(e.target.value)}>
             <option value="" disabled></option>
             {countriesOptionsTags}
           </select>
@@ -110,18 +124,28 @@ const AddProduct = props => {
         />
         <ListItem>
           <span>{state.labels.byWeight}</span>
-          <Toggle name="byWeight" color="green" checked={byWeight} onToggleChange={() => setByWeight(!byWeight)}/>
+          <Toggle 
+            name="byWeight" 
+            color="green" 
+            checked={byWeight} 
+            onToggleChange={() => setByWeight(!byWeight)}/>
         </ListItem>
         <ListItem>
           <span>{state.labels.isNew}</span>
-          <Toggle name="isNew" color="green" checked={isNew} onToggleChange={() => setIsNew(!isNew)}/>
+          <Toggle 
+          name="isNew" 
+          color="green" 
+          checked={isNew} 
+          onToggleChange={() => setIsNew(!isNew)}/>
         </ListItem>
         <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
       </List>
-      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
-      </Fab>
+      {!name || !country || !category || !imageUrl ? ''
+      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        </Fab>
+      }
     </Page>
   )
 }

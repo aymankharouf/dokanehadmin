@@ -14,7 +14,7 @@ const Settings = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title="Settings" backLink="Back" />
+      <Navbar title={state.labels.settings} backLink="Back" />
       <Block>
         {sections.map(section => {
             return (

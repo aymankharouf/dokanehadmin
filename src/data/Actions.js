@@ -1,5 +1,21 @@
 import firebase from './firebase'
 
+export const showMessage = (props, type, messageText) => {
+  const message = props.f7router.app.toast.create({
+    text: `<span class=${type}>${messageText}<span>`,
+    position: 'top',
+    closeTimeout: 3000,
+  });
+  message.open();
+}
+
+export const login = async (email, password) => {
+  await firebase.auth().signInWithEmailAndPassword(email, password)
+}
+
+export const logout = async () => {
+  await firebase.auth().signOut()
+}
 
 export const updateOrders = (batch, storeId, orders, pack, packTrans, type) => {
   let remainingQuantity = pack.quantity
@@ -8,7 +24,7 @@ export const updateOrders = (batch, storeId, orders, pack, packTrans, type) => {
     const otherPacks = order.basket.filter(rec => rec.id !== pack.id)
     let purchasedQuantity
     let orderStatus = 'e'
-    let orderPackStores = orderPack.stores
+    let orderPackStores = orderPack.stores || []
     if (remainingQuantity > 0){
       if (remainingQuantity >= orderPack.quantity - orderPack.purchasedQuantity) {
         purchasedQuantity = orderPack.quantity - orderPack.purchasedQuantity
@@ -229,11 +245,12 @@ export const addProduct = async product => {
     category: product.category,
     trademark: product.trademark,
     country: product.country,
+    byWeight: product.byWeight,
+    isNew: product.isNew,
+    isActive: false,
     sales: 0,
     rating: null,
-    byWeight: product.byWeight,
-    time: new Date(),
-    status: 'a'
+    time: new Date()
   })
   const filename = product.image.name
   const ext = filename.slice(filename.lastIndexOf('.'))
@@ -258,6 +275,7 @@ export const editProduct = async product => {
     trademark: product.trademark,
     byWeight: product.byWeight,
     isNew: product.isNew,
+    isActive: product.isActive,
     country: product.country,
     imageUrl: url,
   })
@@ -279,13 +297,6 @@ export const editPrice = async (store, pack, purchasePrice, price, oldPurchasePr
     stores
   })
 }
-
-export const deleteProduct = async product => {
-  await firebase.firestore().collection('products').doc(product.id).update({
-    status: 'd'
-  })
-}
-
 
 export const deleteStorePack = async (store, pack) => {
   const stores = pack.stores.filter(rec => rec.id !== store.id)
@@ -317,16 +328,44 @@ export const addCountry = async country => {
   await firebase.firestore().collection('countries').add(country)
 }
 
+export const editCountry = async country => {
+  await firebase.firestore().collection('countries').doc(country.id).update({
+    name: country.name,
+    isActive: country.isActive
+  })
+}
+
 export const addSection = async section => {
   await firebase.firestore().collection('sections').add(section)
+}
+
+export const editSection = async section => {
+  await firebase.firestore().collection('sections').doc(section.id).update({
+    name: section.name,
+    isActive: section.isActive
+  })
 }
 
 export const addCategory = async category => {
   await firebase.firestore().collection('categories').add(category)
 }
 
+export const editCategory = async category => {
+  await firebase.firestore().collection('categories').doc(category.id).update({
+    name: category.name,
+    isActive: category.isActive
+  })
+}
+
 export const addTrademark = async trademark => {
   await firebase.firestore().collection('trademarks').add(trademark)
+}
+
+export const editTrademark = async trademark => {
+  await firebase.firestore().collection('trademarks').doc(trademark.id).update({
+    name: trademark.name,
+    isActive: trademark.isActive
+  })
 }
 
 export const resolveForgetPassword = async trans => {
@@ -335,12 +374,9 @@ export const resolveForgetPassword = async trans => {
   })
 }
 
-export const addPack = async (product, name, isOffer, components) => {
+export const addPack = async pack => {
   await firebase.firestore().collection('packs').add({
-    productId: product.id,
-    name,
-    isOffer,
-    components: components || [],
+    ...pack,
     stores: [],
     time: new Date(),
     status: 'a'
@@ -348,11 +384,7 @@ export const addPack = async (product, name, isOffer, components) => {
 }
 
 export const editPack = async pack => {
-  await firebase.firestore().collection('packs').doc(pack.id).update({
-    name: pack.name,
-    isOffer: pack.isOffer,
-    components: pack.components
-  })
+  await firebase.firestore().collection('packs').doc(pack.id).update(pack)
 }
 
 export const deletePack = async pack => {

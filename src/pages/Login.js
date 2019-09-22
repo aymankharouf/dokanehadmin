@@ -1,53 +1,50 @@
-import React, { useContext, useState } from 'react'
-import { Page, Navbar, List, ListInput, ListButton, Block } from 'framework7-react'
+import React, { useContext, useState, useEffect } from 'react'
+import { Page, Navbar, List, ListInput, ListButton } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-import firebase from '../data/firebase'
+import { login, showMessage } from '../data/Actions'
 
 const Login = props => {
   const { state } = useContext(StoreContext)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
-  const handleLogin = async () => {
-    try {
-      if (email === '') {
-        throw new Error('enter your email')
-      }
-      if (password === '') {
-        throw new Error('enter your password')
-      }
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
-    } catch (err) {
-      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+  useEffect(() => {
+    if (error) {
+      showMessage(props, 'error', error)
+      setError('')
     }
+  }, [error])
+
+  const handleLogin = () => {
+    login(email, password).then(() => {
+      showMessage(props, 'success', state.labels.loginSuccess)
+      props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
+      props.f7router.app.panel.close('right')  
+    }).catch (err => {
+      setError(state.labels[err.code.replace(/-|\//g, '_')])
+    })
   }
 
   return (
     <Page loginScreen>
-      <Navbar title="Login" backLink="Back" />
+      <Navbar title={state.labels.login} backLink="Back" />
       <List form>
         <ListInput
-          label="email"
+          label={state.labels.email}
           type="text"
-          placeholder="Your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <ListInput
-          label="Password"
+          label={state.labels.password}
           type="text"
-          placeholder="Your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </List>
       <List>
-        <ListButton onClick={() => handleLogin()}>Sign In</ListButton>
+        {!email || !password ? '' : <ListButton onClick={() => handleLogin()}>{state.labels.loginSubmit}</ListButton>}
       </List>
-      <Block strong className="error">
-        <p>{error}</p>
-      </Block>
     </Page>
   )
 }

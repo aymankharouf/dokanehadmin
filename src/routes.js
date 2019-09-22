@@ -42,6 +42,10 @@ import AddPack from './pages/AddPack';
 import AddPackComponent from './pages/AddPackComponent';
 import PackDetails from './pages/PackDetails';
 import EditPack from './pages/EditPack';
+import EditCountry from './pages/EditCountry';
+import EditSection from './pages/EditSection';
+import EditCategory from './pages/EditCategory';
+import EditTrademark from './pages/EditTrademark';
 
 export default [
   {
@@ -110,7 +114,11 @@ export default [
   },
   {
     path: '/addCountry/',
-    component: AddCountry,
+    component: AddCountry
+  },
+  {
+    path: '/editCountry/:id',
+    component: EditCountry
   },
   {
     path: '/sections/',
@@ -118,15 +126,23 @@ export default [
   },
   {
     path: '/addSection/',
-    component: AddSection,
+    component: AddSection
   },
   {
     path: '/section/:id',
     component: SectionCategories
   },
   {
+    path: '/editSection/:id',
+    component: EditSection
+  },
+  {
     path: '/addCategory/:id',
     component: AddCategory
+  },
+  {
+    path: '/editCategory/:id',
+    component: EditCategory
   },
   {
     path: '/trademarks/',
@@ -135,6 +151,10 @@ export default [
   {
     path: '/addTrademark/',
     component: AddTrademark,
+  },
+  {
+    path: '/editTrademark/:id',
+    component: EditTrademark,
   },
   {
     path: '/store/:id',

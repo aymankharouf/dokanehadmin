@@ -10,8 +10,23 @@ const EditPack = props => {
   const product = state.products.find(rec => rec.id === pack.productId)
   const [name, setName] = useState(pack.name)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
+  const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
+  const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
+  const [offerQuantity, setOfferQuantity] = useState(pack.offerQuantity)
+  const [bonusProductId, setBonusProductId] = useState(pack.bonusProductId)
+  const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
+  const [bonusProductPacks, setBonusProductPacks] = useState([])
+  const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
+  const [isBonusFree, setIsBonusFree] = useState(pack.isBonusFree)
   const [error, setError] = useState('')
-  let i = 0
+  useEffect(() => {
+    if (bonusProductId) {
+      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
+    } else {
+      setBonusProductPacks([])
+    }
+  }, [bonusProductId])
+
   const handleSubmit = () => {
     try{
       if (name === '') {
@@ -21,10 +36,14 @@ const EditPack = props => {
         ...pack,
         name,
         isOffer,
-        components: state.packComponents
+        offerPackId,
+        offerQuantity,
+        bonusProductId,
+        bonusPackId,
+        bonusQuantity,
+        isBonusFree
       }
       editPack(newPack).then(() => {
-        dispatch({type: 'CLEAR_PACK_COMPONENTS'})
         props.f7router.back()
       })
     } catch (err) {
@@ -36,21 +55,31 @@ const EditPack = props => {
       props.f7router.back()
     })
   }
-  useEffect(() => {
-    dispatch({type: 'LOAD_PACK_COMPONENTS', components: pack.components})
-  }, [])
-  const componentTags = state.packComponents ? state.packComponents.map(component => {
-    return(
-      <ListItem
-        link='#'
-        title={state.products.find(rec => rec.id === component.productId).name}
-        after={component.quantity}
-        footer={state.packs.find(rec => rec.id === component.packId).name}
-        key={i++}
-        onClick={() => dispatch({type: 'DELETE_COMPONENT', component})}
-      />
-    )
-  }) : ''
+  const offerPacksOptionsTags = offerProductPacks.map(pack => 
+    <option 
+      key={pack.id} 
+      value={pack.id}
+    >
+      {pack.name}
+    </option>
+  )
+  const bonusProductsOptionsTags = state.products.map(product => 
+    <option 
+      key={product.id} 
+      value={product.id}
+    >
+      {product.name}
+    </option>
+  )
+  const bonusPacksOptionsTags = bonusProductPacks.map(pack => 
+    <option 
+      key={pack.id} 
+      value={pack.id}
+    >
+      {pack.name}
+    </option>
+  )
+
   return (
     <Page>
       <Navbar title={`${state.labels.editPack} - ${product.name} ${pack.name}`} backLink="Back" />
@@ -71,19 +100,71 @@ const EditPack = props => {
           <Toggle name="isOffer" color="green" checked={isOffer} onToggleChange={() => setIsOffer(!isOffer)}/>
         </ListItem>
       </List>
-      <BlockTitle>
-        <Row>
-          <Col>
-            {state.labels.packComponents}
-          </Col>
-          <Col>
-            <Button small fill round iconIos="f7:add" iconAurora="f7:add" iconMd="material:add" onClick={() => props.f7router.navigate(`/addPackComponent/`)}></Button>
-          </Col>
-        </Row>
-      </BlockTitle>
-      <List>
-        {componentTags}
-      </List> 
+      {isOffer ?
+        <React.Fragment>
+          <List form>
+            <ListItem
+              title={state.labels.pack}
+              smartSelect
+              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+            >
+              <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
+                <option value="" disabled></option>
+                {offerPacksOptionsTags}
+              </select>
+            </ListItem>
+            <ListInput 
+              name="offerQuantity" 
+              label={state.labels.quantity}
+              value={offerQuantity}
+              clearButton
+              floatingLabel 
+              type="number" 
+              onChange={e => setOfferQuantity(e.target.value)}
+              onInputClear={() => setOfferQuantity('')}
+            />
+          </List>
+          <BlockTitle>
+            {state.labels.bonusProduct}
+          </BlockTitle>
+          <List>
+            <ListItem>
+              <span>{state.labels.isBonusFree}</span>
+              <Toggle name="isBonusFree" color="green" checked={isBonusFree} onToggleChange={() => setIsBonusFree(!isBonusFree)}/>
+            </ListItem>
+            <ListItem
+              title={state.labels.product}
+              smartSelect
+              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+            >
+              <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
+                <option value="" disabled></option>
+                {bonusProductsOptionsTags}
+              </select>
+            </ListItem>
+            <ListItem
+              title={state.labels.pack}
+              smartSelect
+              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+            >
+              <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
+                <option value="" disabled></option>
+                {bonusPacksOptionsTags}
+              </select>
+            </ListItem>
+            <ListInput 
+              name="bonusQuantity" 
+              label={state.labels.quantity}
+              value={bonusQuantity}
+              clearButton
+              floatingLabel 
+              type="number" 
+              onChange={e => setBonusQuantity(e.target.value)}
+              onInputClear={() => setBonusQuantity('')}
+            />
+          </List>
+        </React.Fragment>
+      : null}
       <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
         <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
       </Fab>

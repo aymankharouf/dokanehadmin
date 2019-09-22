@@ -6,22 +6,27 @@ import { StoreContext } from '../data/Store';
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
-  const handleAdd = () => {
-    props.f7router.navigate('/addSection/')
-  }
+  let sections = state.sections
+  sections.sort((section1, section2) => section1.name > section2.name ? 1 : -1)
 
   return (
     <Page>
-      <Navbar title="Sections" backLink="Back" />
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
+      <Navbar title={state.labels.sections} backLink="Back" />
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addSection/')}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>
       <Block>
-          <List>
-            {state.sections && state.sections.map(rec =>
-              <ListItem title={rec.name} link={`/section/${rec.id}`} key={rec.id} />
-            )}
-          </List>
+        <List>
+          {sections && sections.map(rec =>
+            <ListItem 
+              link={`/section/${rec.id}`} 
+              title={rec.name} 
+              key={rec.id} 
+              badge={rec.isActive === false ? state.labels.inActive : ''}
+              badgeColor='red' 
+            />
+          )}
+        </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

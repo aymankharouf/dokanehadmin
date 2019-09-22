@@ -40,14 +40,21 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
     const oldOrder = change.before.data()
     if (newOrder.status === 'r' && oldOrder.status !== 'r'){
       var batch = admin.firestore().batch()
-      let productRef
-      for (const product of newOrder.basket) {
-        productRef = admin.firestore().collection("products").doc(product.id)
-        batch.update(productRef, { sales: admin.firestore.FieldValue.increment(product.quantity)});
+      let packRef
+      for (const pack of newOrder.basket) {
+        productRef = admin.firestore().collection("packs").doc(pack.id)
+        batch.update(packRef, {sales: admin.firestore.FieldValue.increment(pack.quantity)});
       }
       const netPrice = newOrder.total + newOrder.fixedFees + newOrder.deliveryFees - (newOrder.customerDiscount + newOrder.specialDiscount)
       const customerRef = admin.firestore().collection('customers').doc(newOrder.user)
-      batch.update(customerRef, {totalPayments: admin.firestore.FieldValue.increment(netPrice)})
+      batch.update(customerRef, {
+        totalPayments: admin.firestore.FieldValue.increment(netPrice),
+        totalOrders: admin.firestore.FieldValue.increment(1),
+        limit: admin.firestore.FieldValue.increment(5),
+        registrationDiscount: newOrder.discountType === 'r' ? 0 : registrationDiscount,
+        friendsDiscount: newOrder.discountType === 'f' ? admin.firestore.FieldValue.increment(-0.5) : friendsDiscount,
+        lessPriceDiscount: newOrder.discountType === 'p' ? admin.firestore.FieldValue.increment(-0.5) : lessPriceDiscount
+      })
       return batch.commit()
     }
   })
@@ -63,6 +70,9 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
       notes: '',
       withDelivery: false,
       deliveryFees: 0,
+      registrationDiscount: 0.5,
+      friendsDiscount: 0,
+      lessPriceDiscount: 0
     })
   });
     

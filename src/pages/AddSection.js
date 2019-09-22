@@ -1,40 +1,42 @@
 import React, { useState, useContext } from 'react'
-import { addSection } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Button, Block} from 'framework7-react';
+import { addSection, showMessage } from '../data/Actions'
+import {Page, Navbar, List, ListInput, ListButton} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddSection = props => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [name, setName] = useState('')
   const [percent, setPercent] = useState('')
-  const [error, setError] = useState('')
   const handleSubmit = () => {
-    try{
-      if (name === '') {
-        throw new Error(state.labels.enterName)
-      }
-      if (percent === '') {
-        throw new Error(state.labels.enterPercent)
-      }
-      addSection({
-        name,
-        percent
-      }).then(() => {
-        props.f7router.back()
-      })
-    } catch(err) {
-      setError(err.message)
-    }
+    addSection({
+      name,
+      percent,
+      isActive: false
+    }).then(() => {
+      showMessage(props, 'success', state.labels.addSuccess)
+      props.f7router.back()
+    })
   }
   return (
-    <Page>
-      <Navbar title='Add New Section' backLink='Back' />
-      {error ? <Block strong className="error">{error}</Block> : null}
+    <Page loginScreen>
+      <Navbar title={state.labels.addSection} backLink='Back' />
       <List form>
-        <ListInput name="name" label="Name" floatingLabel type="text" onChange={(e) => setName(e.target.value)}/>
-        <ListInput name="percent" label="Percent" floatingLabel type="number" onChange={(e) => setPercent(e.target.value)}/>
-        <Button fill onClick={() => handleSubmit()}>Submit</Button>
+        <ListInput 
+          name="name" 
+          label={state.labels.name} 
+          floatingLabel 
+          type="text" 
+          onChange={(e) => setName(e.target.value)}
+        />
+        <ListInput 
+          name="percent" 
+          label={state.labels.percent}
+          floatingLabel 
+          type="number" 
+          onChange={(e) => setPercent(e.target.value)}
+        />
+        {!name || !percent ? '' : <ListButton onClick={() => handleSubmit()}>{state.labels.add}</ListButton>}
       </List>
     </Page>
   )

@@ -26,9 +26,6 @@ const HomePage = props => {
         </NavLeft>
         <NavTitle><img src={logo} className="logo" alt=""/></NavTitle>
       </Navbar>
-      <Block strong>
-        <p>Here is your blank Framework7 app what we have here.</p>
-      </Block>
       <Block>
         {mainPages.map(page => {
           return (

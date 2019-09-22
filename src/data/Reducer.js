@@ -122,21 +122,6 @@ const Reducer = (state, action) => {
           ...state,
           packs: action.packs
         }
-      case 'ADD_PACK_COMPONENT':
-        return {
-          ...state,
-          packComponents: [...state.packComponents, action.component]
-        }
-      case 'CLEAR_PACK_COMPONENTS':
-        return {
-          ...state,
-          packComponents: []
-        }
-      case 'LOAD_PACK_COMPONENTS':
-        return {
-          ...state,
-          packComponents: action.components
-        }
       case 'DELETE_COMPONENT':
         const i = state.packComponents.findIndex(rec => rec.productId === action.component.productId && rec.packId === action.component.packId)
         let newPackComponents = [...state.packComponents]
@@ -144,21 +129,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           packComponents: newPackComponents
-        }
-      case 'DONE':
-        return {
-          ...state,
-          result: {message: '', finished: true}
-        }
-      case 'ERROR':
-        return {
-          ...state,
-          result: {message: action.message, finished: true}
-        }
-      case 'CLEAR_ERRORS':
-        return {
-          ...state,
-          result: {message: '', finished: false}
         }
       default:
         return state

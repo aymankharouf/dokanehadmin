@@ -33,7 +33,8 @@ const Products = props => {
                   subtitle={state.categories.find(rec => rec.id === product.category).name}
                   text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
                   key={product.id}
-                  className={product.status === 'd' ? 'disable-product' : ''}
+                  badge={product.isActive === false ? state.labels.inActive : ''}
+                  badgeColor='red' 
                 >
                   <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
                   {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
@@ -44,7 +45,7 @@ const Products = props => {
             {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : null}
           </List>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="pink" onClick={() => props.f7router.navigate(`/addProduct/`)}>
+      <Fab position="left-bottom" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addProduct/`)}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>
       <Toolbar bottom>

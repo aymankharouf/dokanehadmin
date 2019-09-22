@@ -32,5 +32,11 @@ cancel a purchase or part of it
 *lazy loading
 customer follow-up
 branches
-
-
+first time discount
+friends discount
+send basket to friends(payment: sender or receiver)
+direct delivery
+*offers first (ordering products)
+smart basket
+suggestions
+invitations

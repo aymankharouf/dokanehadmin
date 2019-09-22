@@ -1,7 +1,7 @@
 import React, {useState, useContext } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Block, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editProduct, deleteProduct } from '../data/Actions'
+import { editProduct, showMessage } from '../data/Actions'
 
 
 const EditProduct = props => {
@@ -11,7 +11,8 @@ const EditProduct = props => {
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)
   const [byWeight, setByWeight] = useState(product.byWeight)
-  const [isNew, setIsNew] = useState(product.isNew)
+  const [isNew, setIsNew] = useState(product.isNew || false)
+  const [isActive, setIsActive] = useState(product.isActive || false)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState(null)
@@ -31,44 +32,31 @@ const EditProduct = props => {
     setImage(files[0])
   }
   const handleSubmit = () => {
-    try{
-      if (name === '') {
-        throw new Error(state.labels.enterName)
-      }
-      if (category === '') {
-        throw new Error(state.labels.enterCategory)
-      }
-      if (country === '') {
-        throw new Error(state.labels.enterCountry)
-      }
-      if (imageUrl === '') {
-        throw new Error(state.labels.enterImage)
-      }
-      editProduct({
-        id: props.id,
-        category,
-        name,
-        trademark,
-        byWeight,
-        isNew,
-        country,
-        imageUrl,
-        image
-      }).then(() => {
-        props.f7router.back()
-      })  
-    } catch (err){
-      setError(err.message)
-    }
-  }
-  const handleDelete = () => {
-    deleteProduct(product).then(() => {
+    editProduct({
+      id: props.id,
+      category,
+      name,
+      trademark,
+      byWeight,
+      isNew,
+      country,
+      imageUrl,
+      image,
+      isActive
+    }).then(() => {
+      showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
-    })
+    })  
   }
-  const categoriesOptionsTags = state.categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const trademarksOptionsTags = state.trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  const countriesOptionsTags = state.countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let categories = state.categories.filter(rec => rec.isActive === true)
+  categories.sort((category1, category2) => category1.name > category2.name ? 1 : -1)
+  const categoriesOptionsTags = categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let trademarks = state.trademarks.filter(rec => rec.isActive === true)
+  trademarks.sort((trademark1, trademark2) => trademark1.name > trademark2.name ? 1 : -1)
+  const trademarksOptionsTags = trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  let countries = state.countries.filter(rec => rec.isActive === true)
+  countries.sort((country1, country2) => country1.name > country2.name ? 1 : -1)
+  const countriesOptionsTags = countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
       <Navbar title={state.labels.editProduct} backLink="Back" />
@@ -77,7 +65,13 @@ const EditProduct = props => {
       <ListItem
           title={state.labels.category}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
           <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="" disabled></option>
@@ -87,7 +81,13 @@ const EditProduct = props => {
         <ListItem
           title={state.labels.trademark}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search trademark'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
           <select name="trademark" value={trademark} onChange={(e) => setTrademark(e.target.value)}>
             <option value="" disabled></option>
@@ -97,7 +97,13 @@ const EditProduct = props => {
         <ListItem
           title={state.labels.country}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search country'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
           <select name="country" value={country} onChange={(e) => setCountry(e.target.value)}>
             <option value="" disabled></option>
@@ -132,15 +138,23 @@ const EditProduct = props => {
             onToggleChange={() => setIsNew(!isNew)}
           />
         </ListItem>
+        <ListItem>
+          <span>{state.labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(!isActive)}
+          />
+        </ListItem>
         <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} alt=""/>
       </List>
-      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
-      </Fab>
-      <Fab position="left-bottom" slot="fixed" color="red" onClick={() => handleDelete()}>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-      </Fab>
+      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && byWeight === product.byWeight && isNew === product.isNew && isActive === product.isActive && imageUrl === product.imageUrl) ? ''
+      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        </Fab>
+      }
     </Page>
   )
 }

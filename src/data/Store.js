@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react';
 import Reducer from './Reducer'
 import firebase from './firebase'
+import labels from './labels'
 
 export const StoreContext = createContext()
 
@@ -49,98 +50,6 @@ const Store = props => {
     {id: 's', name: 'بيع'},
     {id: 'r', name: 'ارجاع'}
   ]
-  const labels = {
-    appTitle: 'حريص',
-    news: 'آخر الاخبار',
-    offers: 'العروض',
-    popular: 'اﻻكثر مبيعا',
-    registerTitle: 'التسجيل ﻷول مرة',
-    name: 'اﻻسم',
-    mobile: 'الموبايل',
-    password: 'كلمة السر',
-    location: 'الموقع',
-    register: 'تسجيل',
-    error: 'خطأ',
-    noData: 'ﻻ يوجد بيانات',
-    search: 'بحث',
-    auth_user_not_found: 'الرجاء التأكد من رقم الموبايل وكلمة المرور',
-    auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
-    auth_wrong_password: 'كلمة السر غير صحيحة',
-    orderDetails: 'تفاصيل الطلب',
-    productOf: 'انتاج',
-    basket_from: 'سلة المشتريات من',
-    stock:'المستودع',
-    purchaseDetails: 'تفاصيل المشتريات',
-    purchases: 'المشتريات',
-    category: 'التصنيف',
-    trademark: 'العلامة التجارية',
-    country: 'الدولة',
-    description: 'الوصف',
-    isNew: 'جديد؟',
-    byWeight: 'بالوزن؟',
-    isOffer: 'عرض؟',
-    purchasePrice: 'سعر الشراء',
-    price: 'السعر',
-    offerEnd: 'تاريخ انتهاء العرض',
-    stores: 'المحال التجارية',
-    image: 'الصورة',
-    submit: 'موافق',
-    orderBy: 'الترتيب حسب',
-    allProducts: 'كل المنتجات',
-    product: 'المنتج',
-    addProduct: 'اضافة منتج',
-    new: 'جديد',
-    offer: 'عرض',
-    editProduct: 'تعديل منتج',
-    editPrice: 'تعديل سعر',
-    orders: 'الطلبات',
-    confirmPurchase: 'اعتماد الشراء',
-    total: 'المجموع',
-    RequestedProducts: 'المنتجات المطلوبة',
-    newStore: 'محل جديد',
-    type: 'النوع',
-    address: 'العنوان',
-    confirm: 'اعتماد',
-    fixedFees: 500,
-    feesTitle: 'الرسوم',
-    discount: 'الخصم',
-    net: 'الصافي',
-    delivery: 'خدمة التوصيل',
-    deliveryFees: 'رسوم التوصيل',
-    cost: 'التكلفة',
-    profit: 'الربح',
-    enterName: 'الرجاء ادخال الاسم',
-    enterDescription: 'الرجاء ادخال الشرح',
-    enterPurchasePrice: 'الرجاء ادخال سعر الشراء',
-    enterPrice: 'الرجاء ادخال السعر',
-    enterCategory: 'الرجاء ادخال التصنيف',
-    enterCountry: 'الرجاء ادخال بلد المنشأ',
-    enterImage: 'الرجاء ادخال صورة',
-    invalidPrice: 'الرجاء التأكد من السعر',
-    invalidOfferEnd: 'الرجاء التأكد من تاريخ انتهاء العرض',
-    chooseProduct: 'الرجاء اختيار منتج',
-    enterPercent: 'الرجاء ادخال النسبة',
-    invalidMobile: 'رقم الموبايل غير صحيح',
-    twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
-    invalidFile: 'الرجاء التأكد من ملف الصورة',
-    stockTrans: 'حركات المستودع',
-    stockTransDetails: 'تفاصيل حركة المستودع',
-    stockName: 'المستودع',
-    editOrder: 'تعديل طلب',
-    forgetPassword: 'طلبات نسيان كلمة السر',
-    customers: 'العملاء',
-    choosePack: 'الرجاء اختيار الحزمة',
-    pack: 'الحزمة',
-    enterQuantity: 'الرجاء تحديد الكمية',
-    addPackComponent: 'اضافة مكون للحزمة',
-    addPack: 'اضافة حزمة',
-    edit: 'تعديل',
-    delete: 'حذف',
-    editPack: 'تعديل حزمة',
-    packComponents: 'مكونات الحزمة',
-    packs: 'الحزم والعروض',
-    sameComponentFound: 'لا يمكن تكرار نفس المكون في الحزمة'
-  }
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
@@ -165,7 +74,7 @@ const Store = props => {
     stockTrans: [],
     products: [],
     packs: [],
-    forgetPassword: []
+    forgetPassword: [],
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -269,7 +178,16 @@ const Store = props => {
       let packs = []
       docs.forEach(doc => {
         const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
-        packs.push({...doc.data(), id: doc.id, price: minPrice === Infinity ? 0 : minPrice})
+        let isOffer = doc.data().isOffer
+        if (isOffer === false) {
+          const store = doc.data().stores.find(rec => rec.offerEnd && new Date() <= rec.offerEnd.toDate())
+          if (store) {
+            if (store.price === minPrice) {
+              isOffer = true
+            }
+          }
+        }
+        packs.push({...doc.data(), id: doc.id, isOffer, price: minPrice === Infinity ? 0 : minPrice})
       })
       dispatch({type: 'SET_PACKS', packs})
     })

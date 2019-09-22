@@ -1,37 +1,41 @@
 import React, { useState, useContext } from 'react'
-import { addCategory } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Button, Block} from 'framework7-react';
+import { addCategory, showMessage } from '../data/Actions'
+import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddCategory = props => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const section = state.sections.find(rec => rec.id === props.id)
   const [name, setName] = useState('')
-  const [error, setError] = useState('')
+
   const handleSubmit = () => {
-    try{
-      if (name === '') {
-        throw new Error(state.labels.enterName)
-      }
-      addCategory({
-        sectionId: props.id,
-        name
-      }).then(() => {
-        props.f7router.back()
-      })
-    } catch(err) {
-      setError(err.message)
-    }
+    addCategory({
+      sectionId: props.id,
+      name,
+      isActive: false
+    }).then(() => {
+      showMessage(props, 'success', state.labels.addSuccess)
+      props.f7router.back()
+    })
   }
   return (
     <Page>
-      <Navbar title={`Add New Category - ${section.name}`} backLink='Back' />
-      {error ? <Block strong className="error">{error}</Block> : null}
+      <Navbar title={`${state.labels.addCategory} - ${section.name}`} backLink='Back' />
       <List form>
-        <ListInput name="name" label="Name" floatingLabel type="text" onChange={(e) => setName(e.target.value)}/>
-        <Button fill onClick={() => handleSubmit()}>Submit</Button>
+        <ListInput 
+          name="name" 
+          label={state.labels.name}
+          floatingLabel 
+          type="text" 
+          onChange={(e) => setName(e.target.value)}
+        />
       </List>
+      {!name ? ''
+      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        </Fab>
+      }
     </Page>
   )
 }
