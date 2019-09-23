@@ -58,17 +58,8 @@ const labels = {
   deliveryFees: 'رسوم التوصيل',
   cost: 'التكلفة',
   profit: 'الربح',
-  enterName: 'الرجاء ادخال الاسم',
-  enterDescription: 'الرجاء ادخال الشرح',
-  enterPurchasePrice: 'الرجاء ادخال سعر الشراء',
-  enterPrice: 'الرجاء ادخال السعر',
-  enterCategory: 'الرجاء ادخال التصنيف',
-  enterCountry: 'الرجاء ادخال بلد المنشأ',
-  enterImage: 'الرجاء ادخال صورة',
   invalidPrice: 'الرجاء التأكد من السعر',
   invalidOfferEnd: 'الرجاء التأكد من تاريخ انتهاء العرض',
-  chooseProduct: 'الرجاء اختيار منتج',
-  enterPercent: 'الرجاء ادخال النسبة',
   invalidMobile: 'رقم الموبايل غير صحيح',
   twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
   invalidFile: 'الرجاء التأكد من ملف الصورة',
@@ -118,7 +109,8 @@ const labels = {
   trademarks: 'العلامات التجارية',
   editTrademark: 'تعديل العلامة التجارية',
   addTrademark: 'اضافة علامة تجارية',
-  close: 'اغلاق'
+  close: 'اغلاق',
+  editStore: 'تعديل محل'
 }
 
 export default labels

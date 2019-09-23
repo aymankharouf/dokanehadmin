@@ -8,6 +8,7 @@ import { addStock } from '../data/Actions'
 const Stores = props => {
   const { state, dispatch } = useContext(StoreContext)
   const stores = state.stores.filter(rec => rec.id !== 's')
+  stores.sort((store1, store2) => store1.name > store2.name ? 1 : -1)
   const stock = state.stores.find(rec => rec.id === 's')
   const handleAddStock = (name) => {
     addStock(name).then(() => {
@@ -24,12 +25,14 @@ const Stores = props => {
       </Fab>
       <Block>
         <List>
-          {stores && stores.map(store =>
+          {stores && stores.map(rec =>
             <ListItem 
-              link={`/store/${store.id}`} 
-              title={store.name} 
-              footer={`${store.address || ''} ${store.mobile || ''}`}
-              key={store.id} 
+              link={`/store/${rec.id}`} 
+              title={rec.name} 
+              footer={`${rec.address || ''} ${rec.mobile || ''}`}
+              key={rec.id} 
+              badge={rec.isActive === false ? state.labels.inActive : ''}
+              badgeColor='red' 
             />
           )}
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : null}

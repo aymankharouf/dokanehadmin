@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge} from 'framework7-react'
+import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
 
-const StoreProducts = props => {
+const StorePacks = props => {
   const { state } = useContext(StoreContext)
   let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
   storePacks = storePacks.map(pack => {
@@ -45,7 +45,7 @@ const StoreProducts = props => {
         <List mediaList className="search-list searchbar-found">
           {storePacks.map(pack => 
             <ListItem
-              link={`/storeProduct/${store.id}/pack/${pack.id}`}
+              link={`/storePack/${store.id}/pack/${pack.id}`}
               title={pack.productName}
               after={(pack.price / 1000).toFixed(3)}
               subtitle={pack.name}
@@ -60,9 +60,19 @@ const StoreProducts = props => {
           {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="pink" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+      <Fab position="left-bottom" slot="fixed" color="orange">
+        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
+        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
+        <FabButtons position="top">
+          <FabButton color="blue" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
+            <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+          </FabButton>
+          <FabButton color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
+            <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+          </FabButton>
+        </FabButtons>
       </Fab>
+
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
@@ -70,4 +80,4 @@ const StoreProducts = props => {
   )
 }
 
-export default StoreProducts
+export default StorePacks

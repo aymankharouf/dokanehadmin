@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import Rating from './Rating'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -54,7 +53,7 @@ const PackDetails = props => {
           </CardContent>
           <CardFooter>
             <p>{(pack.price / 1000).toFixed(3)}</p>
-            <p><Rating rating={product.rating} /></p>
+            <p>{pack.isActive === false ? state.labels.inActive : ''}</p>
           </CardFooter>
         </Card>
         <List>

@@ -318,6 +318,10 @@ export const addStore = async store => {
   await firebase.firestore().collection('stores').add(store)
 }
 
+export const editStore = async store => {
+  await firebase.firestore().collection('stores').doc(store.id).update(store)
+}
+
 export const addStock = async name => {
   await firebase.firestore().collection("stores").doc("s").set({
     name
@@ -329,10 +333,7 @@ export const addCountry = async country => {
 }
 
 export const editCountry = async country => {
-  await firebase.firestore().collection('countries').doc(country.id).update({
-    name: country.name,
-    isActive: country.isActive
-  })
+  await firebase.firestore().collection('countries').doc(country.id).update(country)
 }
 
 export const addSection = async section => {
@@ -340,10 +341,7 @@ export const addSection = async section => {
 }
 
 export const editSection = async section => {
-  await firebase.firestore().collection('sections').doc(section.id).update({
-    name: section.name,
-    isActive: section.isActive
-  })
+  await firebase.firestore().collection('sections').doc(section.id).update(section)
 }
 
 export const addCategory = async category => {
@@ -351,10 +349,7 @@ export const addCategory = async category => {
 }
 
 export const editCategory = async category => {
-  await firebase.firestore().collection('categories').doc(category.id).update({
-    name: category.name,
-    isActive: category.isActive
-  })
+  await firebase.firestore().collection('categories').doc(category.id).update(category)
 }
 
 export const addTrademark = async trademark => {
@@ -362,10 +357,7 @@ export const addTrademark = async trademark => {
 }
 
 export const editTrademark = async trademark => {
-  await firebase.firestore().collection('trademarks').doc(trademark.id).update({
-    name: trademark.name,
-    isActive: trademark.isActive
-  })
+  await firebase.firestore().collection('trademarks').doc(trademark.id).update(trademark)
 }
 
 export const resolveForgetPassword = async trans => {
@@ -375,20 +367,10 @@ export const resolveForgetPassword = async trans => {
 }
 
 export const addPack = async pack => {
-  await firebase.firestore().collection('packs').add({
-    ...pack,
-    stores: [],
-    time: new Date(),
-    status: 'a'
-  })
+  await firebase.firestore().collection('packs').add(pack)
 }
 
 export const editPack = async pack => {
   await firebase.firestore().collection('packs').doc(pack.id).update(pack)
 }
 
-export const deletePack = async pack => {
-  await firebase.firestore().collection('packs').doc(pack.id).update({
-    status: 'd'
-  })
-}

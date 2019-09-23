@@ -1,16 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addStore, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
+import { editStore, showMessage } from '../data/Actions'
+import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
-const AddStore = props => {
+const EditStore = props => {
   const { state } = useContext(StoreContext)
-  const [type, setType] = useState('')
-  const [name, setName] = useState('')
-  const [mobile, setMobile] = useState('')
+  const store = state.stores.find(rec => rec.id === props.id)
+  const [type, setType] = useState(store.type)
+  const [name, setName] = useState(store.name)
+  const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState(store.address)
+  const [isActive, setIsActive] = useState(store.isActive || false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -29,21 +31,22 @@ const AddStore = props => {
   }, [mobile])
 
   const handleSubmit = () => {
-    addStore({
+    editStore({
+      id: store.id,
       name,
       type,
       mobile,
       address,
-      isActive: false
+      isActive
     }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+      showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })
   }
   const storeTypesOptionsTags = state.storeTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={state.labels.newStore} backLink='Back' />
+      <Navbar title={state.labels.editStore} backLink='Back' />
       <List form>
       <ListItem
           title={state.labels.type}
@@ -56,7 +59,7 @@ const AddStore = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='type' defaultValue="" onChange={(e) => setType(e.target.value)}>
+          <select name='type' value={type} onChange={(e) => setType(e.target.value)}>
             <option value="" disabled></option>
             {storeTypesOptionsTags}
           </select>
@@ -71,6 +74,10 @@ const AddStore = props => {
           onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListItem>
+          <span>{state.labels.isActive}</span>
+          <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
+        </ListItem>
         <ListInput
           label={state.labels.mobile}
           type="text"
@@ -94,7 +101,7 @@ const AddStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage ? ''
+      {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address && isActive === store.isActive) ? ''
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
         </Fab>
@@ -102,4 +109,4 @@ const AddStore = props => {
     </Page>
   )
 }
-export default AddStore
+export default EditStore

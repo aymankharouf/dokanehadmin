@@ -7,12 +7,12 @@ import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Basket from './pages/Basket'
 import Stores from './pages/Stores';
-import StoreProducts from './pages/StoreProducts';
+import StorePacks from './pages/StorePacks';
 import AddStorePack from './pages/AddStorePack';
 import AddProduct from './pages/AddProduct';
 import OrdersList from './pages/OrdersList';
 import OrderDetails from './pages/OrderDetails';
-import StoreProductDetails from './pages/StoreProductDetails';
+import StorePackDetails from './pages/StorePackDetails';
 import AddStore from './pages/AddStore';
 import EditProduct from './pages/EditProduct';
 import EditPrice from './pages/EditPrice';
@@ -46,6 +46,7 @@ import EditCountry from './pages/EditCountry';
 import EditSection from './pages/EditSection';
 import EditCategory from './pages/EditCategory';
 import EditTrademark from './pages/EditTrademark';
+import EditStore from './pages/EditStore';
 
 export default [
   {
@@ -158,7 +159,11 @@ export default [
   },
   {
     path: '/store/:id',
-    component: StoreProducts
+    component: StorePacks
+  },
+  {
+    path: '/editStore/:id',
+    component: EditStore
   },
   {
     path: '/addStorePack/:id',
@@ -185,8 +190,8 @@ export default [
     component: EditPack
   },
   {
-    path: '/storeProduct/:storeId/pack/:packId',
-    component: StoreProductDetails
+    path: '/storePack/:storeId/pack/:packId',
+    component: StorePackDetails
   },
   {
     path: '/editPrice/:storeId/pack/:packId',

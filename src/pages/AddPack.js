@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addPack } from '../data/Actions'
+import { addPack, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon, Toggle, BlockTitle, Link, Button, Row, Col} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
@@ -10,7 +10,7 @@ const AddPack = props => {
   const [name, setName] = useState('')
   const [isOffer, setIsOffer] = useState(false)
   const [offerPackId, setOfferPackId] = useState('')
-  const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
+  const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
   const [offerQuantity, setOfferQuantity] = useState('')
   const [bonusProductId, setBonusProductId] = useState('')
   const [bonusPackId, setBonusPackId] = useState('')
@@ -20,35 +20,31 @@ const AddPack = props => {
   const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
-      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
+      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false && rec.isActive === true))
     } else {
       setBonusProductPacks([])
     }
   }, [bonusProductId])
 
   const handleSubmit = () => {
-    try{
-      if (name === '') {
-        throw new Error(state.labels.enterName)
-      }
-      addPack({
-        productId: product.id,
-        name,
-        isOffer,
-        offerPackId,
-        offerQuantity,
-        bonusProductId,
-        bonusPackId,
-        bonusQuantity,
-        isBonusFree
-      }).then(() => {
-        props.f7router.back()
-      })
-    } catch (err) {
-      setError(err.message)
-    }
+    addPack({
+      productId: product.id,
+      name,
+      isOffer,
+      offerPackId,
+      offerQuantity,
+      bonusProductId,
+      bonusPackId,
+      bonusQuantity,
+      isBonusFree,
+      isActive: false,
+      stores: [],
+      time: new Date()
+    }).then(() => {
+      showMessage(props, 'success', state.labels.addSuccess)
+      props.f7router.back()
+    })
   }
-
   const offerPacksOptionsTags = offerProductPacks.map(pack => 
     <option 
       key={pack.id} 
@@ -57,7 +53,9 @@ const AddPack = props => {
       {pack.name}
     </option>
   )
-  const bonusProductsOptionsTags = state.products.map(product => 
+  let products = state.products.filter(rec => rec.isActive === true)
+  products.sort((product1, product2) => product1.name > product2.name ? 1 : -1)
+  const bonusProductsOptionsTags = products.map(product => 
     <option 
       key={product.id} 
       value={product.id}
@@ -77,7 +75,6 @@ const AddPack = props => {
   return (
     <Page>
       <Navbar title={`${state.labels.addPack} - ${product.name}`} backLink="Back" />
-      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <ListInput 
           name="name" 
@@ -91,7 +88,12 @@ const AddPack = props => {
         />
         <ListItem>
           <span>{state.labels.isOffer}</span>
-          <Toggle name="isOffer" color="green" checked={isOffer} onToggleChange={() => setIsOffer(!isOffer)}/>
+          <Toggle 
+            name="isOffer" 
+            color="green" 
+            checked={isOffer} 
+            onToggleChange={() => setIsOffer(!isOffer)}
+          />
         </ListItem>
       </List>
       {isOffer ?
@@ -100,7 +102,13 @@ const AddPack = props => {
             <ListItem
               title={state.labels.pack}
               smartSelect
-              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+              smartSelectParams={{
+                openIn: 'popup', 
+                closeOnSelect: true, 
+                searchbar: true, 
+                searchbarPlaceholder: state.labels.search,
+                popupCloseLinkText: state.labels.close
+              }}
             >
               <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
                 <option value="" disabled></option>
@@ -124,12 +132,23 @@ const AddPack = props => {
           <List>
             <ListItem>
               <span>{state.labels.isBonusFree}</span>
-              <Toggle name="isBonusFree" color="green" checked={isBonusFree} onToggleChange={() => setIsBonusFree(!isBonusFree)}/>
+              <Toggle 
+                name="isBonusFree" 
+                color="green" 
+                checked={isBonusFree} 
+                onToggleChange={() => setIsBonusFree(!isBonusFree)}
+              />
             </ListItem>
             <ListItem
               title={state.labels.product}
               smartSelect
-              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+              smartSelectParams={{
+                openIn: 'popup', 
+                closeOnSelect: true, 
+                searchbar: true, 
+                searchbarPlaceholder: state.labels.search,
+                popupCloseLinkText: state.labels.close
+              }}
             >
               <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
                 <option value="" disabled></option>
@@ -139,7 +158,13 @@ const AddPack = props => {
             <ListItem
               title={state.labels.pack}
               smartSelect
-              smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+              smartSelectParams={{
+                openIn: 'popup', 
+                closeOnSelect: true, 
+                searchbar: true, 
+                searchbarPlaceholder: state.labels.search,
+                popupCloseLinkText: state.labels.close
+              }}
             >
               <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
                 <option value="" disabled></option>
@@ -158,10 +183,12 @@ const AddPack = props => {
             />
           </List>
         </React.Fragment>
-      : null}
-      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
-      </Fab>
+      : ''}
+      {!name ? ''
+      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        </Fab>
+      }
     </Page>
   )
 }

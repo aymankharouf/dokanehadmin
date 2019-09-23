@@ -4,7 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import { deleteStorePack, confirmPrice } from '../data/Actions'
 
-const StoreProductDetails = props => {
+const StorePackDetails = props => {
   const { state } = useContext(StoreContext)
   let pack = state.packs.find(rec => rec.id === props.packId)
   const product = state.products.find(rec => rec.id === pack.productId)
@@ -63,4 +63,4 @@ const StoreProductDetails = props => {
   )
 }
 
-export default StoreProductDetails
+export default StorePackDetails

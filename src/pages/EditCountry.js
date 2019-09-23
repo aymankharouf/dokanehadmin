@@ -36,7 +36,6 @@ const EditCountry = props => {
           <span>{state.labels.isActive}</span>
           <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
         </ListItem>
-
       </List>
       {!name || (name === country.name && isActive === country.isActive)
       ? ''

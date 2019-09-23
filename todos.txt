@@ -18,7 +18,6 @@ net profit & sales (daily, weekly, monthly, yearly)
 cancel part of an order(prices changing or not avaliable)
 harees stores - purshasing & not picked orders
 in stoke (quantity & net value)
-discounts
 offers: packages, discounts for group, extra
 cost types & costs
 product details (in stoke, sales, stores, in order)
@@ -37,6 +36,8 @@ friends discount
 send basket to friends(payment: sender or receiver)
 direct delivery
 *offers first (ordering products)
+ordering products by type (product)
 smart basket
 suggestions
 invitations
+maps
