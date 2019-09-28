@@ -59,20 +59,4 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
     }
   })
 
-  exports.createCustomer = functions.auth.user().onCreate(user => {
-    return admin.firestore().collection('customers').doc(user.uid).set({
-      status: 'n',
-      limit: 10,
-      totalOrders: 0,
-      totalPayments: 0,
-      debit: 0,
-      address: '',
-      notes: '',
-      withDelivery: false,
-      deliveryFees: 0,
-      registrationDiscount: 0.5,
-      friendsDiscount: 0,
-      lessPriceDiscount: 0
-    })
-  });
     

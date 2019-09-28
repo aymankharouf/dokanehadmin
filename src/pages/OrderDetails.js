@@ -8,7 +8,7 @@ import { StoreContext } from '../data/Store';
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
   const order = state.orders.find(order => order.id === props.id)
-  const netPrice = order.total + order.fixedFees + order.deliveryFees - (order.specialDiscount + order.customerDiscount)
+  const netPrice = order.total + order.fixedFees + order.deliveryFees - order.discount.value
   let i = 0
   let totalPurchase = 0
   let statusActions = [
@@ -67,9 +67,9 @@ const OrderDetails = props => {
                       </Badge>
                       {store.price !== pack.price ? 
                         <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
-                          {((store.price - pack.price) / 1000).toFixed(3)} 
+                          {(Math.abs(store.price - pack.price) / 1000).toFixed(3)} 
                         </Badge>
-                        : null
+                        : ''
                       }
                     </ListItem>
                   )
@@ -87,14 +87,14 @@ const OrderDetails = props => {
               )
             }
           })}
-          {order.withDelivery ? <ListItem title={state.labels.delivery}></ListItem> : null}
+          {order.withDelivery ? <ListItem title={state.labels.delivery}></ListItem> : ''}
           <ListItem title={state.labels.total} after={(order.total / 1000).toFixed(3)} />
           <ListItem title={state.labels.feesTitle} className="red" after={(order.fixedFees / 1000).toFixed(3)} />
-          {order.deliveryFees > 0 ? <ListItem title={state.labels.deliveryFees} className="red" after={(order.deliveryFees / 1000).toFixed(3)} /> : null}
-          {order.specialDiscount + order.customerDiscount > 0 ? <ListItem title={state.labels.discount} className="discount" after={((order.specialDiscount + order.customerDiscount) / 1000).toFixed(3)} /> : null}
+          {order.deliveryFees > 0 ? <ListItem title={state.labels.deliveryFees} className="red" after={(order.deliveryFees / 1000).toFixed(3)} /> : ''}
+          {order.discount.value > 0 ? <ListItem title={state.discountTypes.find(rec => rec.id === order.discount.type).name} className="discount" after={(order.discount.value / 1000).toFixed(3)} /> : ''}
           <ListItem title={state.labels.net} className="blue" after={(netPrice / 1000).toFixed(3)} />
-          {totalPurchase > 0 ? <ListItem title={state.labels.cost} className="blue" after={(totalPurchase / 1000).toFixed(3)} /> : null}
-          {totalPurchase > 0 ? <ListItem title={state.labels.profit} className={netPrice > totalPurchase ? 'green' : 'red'} after={((netPrice - totalPurchase) / 1000).toFixed(3)} /> : null}
+          {totalPurchase > 0 ? <ListItem title={state.labels.cost} className="blue" after={(totalPurchase / 1000).toFixed(3)} /> : ''}
+          {totalPurchase > 0 ? <ListItem title={state.labels.profit} className={netPrice > totalPurchase ? 'green' : 'red'} after={((netPrice - totalPurchase) / 1000).toFixed(3)} /> : ''}
         </List>
       </Block>
       <Popover className="popover-menu">

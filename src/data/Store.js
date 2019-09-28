@@ -22,6 +22,11 @@ const Store = props => {
     {id: '11', name: 'deeporange'},
     {id: '12', name: 'gray'}
   ]
+  const unitTypes = [
+    {id: 'w', name: 'وزن'},
+    {id: 'v', name: 'حجم'},
+    {id: 'l', name: 'طول'}
+  ]
   const orderByList = [
     {id: 'p', name: 'السعر'},
     {id: 's', name: 'المبيعات'},
@@ -50,6 +55,20 @@ const Store = props => {
     {id: 's', name: 'بيع'},
     {id: 'r', name: 'ارجاع'}
   ]
+  const customerTypes = [
+    {id: 'n', name: 'عادي'},
+    {id: 'o', name: 'صاحب محل'},
+    {id: 'b', name: 'قائمة سوداء'},
+    {id: 'v', name: 'مميز'},
+    {id: 's', name: 'خاص'}
+  ]
+  const discountTypes = [
+    {id: 'f', name: 'خصم اول طلب'},
+    {id: 's', name: 'خصم خاص'},
+    {id: 'i', name: 'خصم دعوة صديق'},
+    {id: 'l', name: 'خصم ابلاغ عن سعر اقل'}
+  ]
+
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
@@ -75,6 +94,10 @@ const Store = props => {
     products: [],
     packs: [],
     forgetPassword: [],
+    unitTypes,
+    customerTypes,
+    customers: [],
+    discountTypes
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -94,6 +117,13 @@ const Store = props => {
             users.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_USERS', users})
+        })  
+        firebase.firestore().collection('customers').onSnapshot(docs => {
+          let customers = []
+          docs.forEach(doc => {
+            customers.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_CUSTOMERS', customers})
         })  
         firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores = []
@@ -177,7 +207,9 @@ const Store = props => {
     firebase.firestore().collection('packs').onSnapshot(docs => {
       let packs = []
       docs.forEach(doc => {
-        const minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
+        let minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
+        minPrice = minPrice === Infinity ? 0 : minPrice
+        const value = doc.data().units ? minPrice / doc.data().units : 0
         let isOffer = doc.data().isOffer
         if (isOffer === false) {
           const store = doc.data().stores.find(rec => rec.offerEnd && new Date() <= rec.offerEnd.toDate())
@@ -187,7 +219,7 @@ const Store = props => {
             }
           }
         }
-        packs.push({...doc.data(), id: doc.id, isOffer, price: minPrice === Infinity ? 0 : minPrice})
+        packs.push({...doc.data(), id: doc.id, isOffer, value, price: minPrice})
       })
       dispatch({type: 'SET_PACKS', packs})
     })

@@ -8,6 +8,7 @@ const AddPack = props => {
   const { state } = useContext(StoreContext)
   const product = state.products.find(rec => rec.id === props.id)
   const [name, setName] = useState('')
+  const [unitsCount, setUnitsCount] = useState('')
   const [isOffer, setIsOffer] = useState(false)
   const [offerPackId, setOfferPackId] = useState('')
   const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
@@ -16,7 +17,7 @@ const AddPack = props => {
   const [bonusPackId, setBonusPackId] = useState('')
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState('')
-  const [isBonusFree, setIsBonusFree] = useState(false)
+  const [isBonusFree, setIsBonusFree] = useState('')
   const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
@@ -25,11 +26,22 @@ const AddPack = props => {
       setBonusProductPacks([])
     }
   }, [bonusProductId])
+  useEffect(() => {
+    if (!isOffer) {
+      setOfferPackId('')
+      setOfferQuantity('')
+      setBonusProductId('')
+      setBonusPackId('')
+      setBonusQuantity('')
+      setIsBonusFree('')
+    }
+  }, [isOffer])
 
   const handleSubmit = () => {
     addPack({
       productId: product.id,
       name,
+      unitsCount,
       isOffer,
       offerPackId,
       offerQuantity,
@@ -85,6 +97,16 @@ const AddPack = props => {
           value={name} 
           onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="unitsCount" 
+          label={state.labels.unitsCount}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={unitsCount} 
+          onChange={(e) => setUnitsCount(e.target.value)}
+          onInputClear={() => setUnitsCount('')}
         />
         <ListItem>
           <span>{state.labels.isOffer}</span>
@@ -184,7 +206,7 @@ const AddPack = props => {
           </List>
         </React.Fragment>
       : ''}
-      {!name ? ''
+      {!name || !unitsCount ? ''
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
         </Fab>

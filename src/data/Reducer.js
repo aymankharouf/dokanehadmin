@@ -122,13 +122,10 @@ const Reducer = (state, action) => {
           ...state,
           packs: action.packs
         }
-      case 'DELETE_COMPONENT':
-        const i = state.packComponents.findIndex(rec => rec.productId === action.component.productId && rec.packId === action.component.packId)
-        let newPackComponents = [...state.packComponents]
-        newPackComponents.splice(i, 1)
+      case 'SET_CUSTOMERS':
         return {
           ...state,
-          packComponents: newPackComponents
+          customers: action.customers
         }
       default:
         return state

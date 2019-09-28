@@ -3,7 +3,6 @@ import firebase from './firebase'
 export const showMessage = (props, type, messageText) => {
   const message = props.f7router.app.toast.create({
     text: `<span class=${type}>${messageText}<span>`,
-    position: 'top',
     closeTimeout: 3000,
   });
   message.open();
@@ -140,12 +139,14 @@ export const confirmPurchase = async (orders, storeId, basket, trans, total) => 
     packOrders.sort((order1, order2) => order1.time.seconds - order2.time.seconds)
     packTrans = trans.filter(rec => rec.packId === pack.id)
     packTrans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
-    remainingQuantity = updateOrders(batch, 's', packOrders, pack, packTrans, 'p')
+    remainingQuantity = updateOrders(batch, storeId, packOrders, pack, packTrans, 'p')
     if (remainingQuantity > 0) {
       packsIn.push({...pack, quantity: remainingQuantity})
     }
   }
-  stockIn(batch, storeId, packsIn, 'p')
+  if (packsIn.length > 0) {
+    stockIn(batch, storeId, packsIn, 'p')
+  }
   await batch.commit()
 }
 
@@ -234,8 +235,7 @@ export const addStorePack = async (pack, store, purchasePrice, price, offerEnd) 
       time: new Date()
     }]
   await firebase.firestore().collection('packs').doc(pack.id).update({
-    stores: stores,
-    status: 'a'
+    stores: stores
   })
 }
 
@@ -374,3 +374,34 @@ export const editPack = async pack => {
   await firebase.firestore().collection('packs').doc(pack.id).update(pack)
 }
 
+export const editCustomer = async customer => {
+  await firebase.firestore().collection('customers').doc(customer.id).update(customer)
+}
+
+export const editUser = async user => {
+  await firebase.firestore().collection('users').doc(user.id).update(user)
+}
+
+export const approveUser = async user => {
+  await firebase.firestore().collection('customers').doc(user.id).set({
+    isActive: true,
+    type: user.storeId ? 'o' : 'n',
+    storeId: user.storeId,
+    address: user.address,
+    limit: 10000,
+    totalOrders: 0,
+    totalPayments: 0,
+    debit: 0,
+    withDelivery: false,
+    deliveryFees: 0,
+    invitationsDiscount: 0,
+    lessPriceDiscount: 0
+  })
+  await firebase.firestore().collection('users').doc(user.id).update({
+    name: user.name,
+    isActive: true,
+    storeName: firebase.firestore.FieldValue.delete(),
+    address: firebase.firestore.FieldValue.delete()
+  })
+
+}

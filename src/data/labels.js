@@ -110,7 +110,26 @@ const labels = {
   editTrademark: 'تعديل العلامة التجارية',
   addTrademark: 'اضافة علامة تجارية',
   close: 'اغلاق',
-  editStore: 'تعديل محل'
+  editStore: 'تعديل محل',
+  unitType: 'الوحدة',
+  unitsCount: 'عدد الوحدات',
+  storeName: 'اسم المحل',
+  storeId: 'المحل',
+  customerDetails: 'تفاصيل العميل',
+  limit: 'السقف',
+  totalOrders: 'عدد الطلبات',
+  totalPayments: 'مجموع الدفعات',
+  forgetPasswords: 'نسيان كلمة السر',
+  allCustomers: 'كل العملاء',
+  editCustomer: 'تعديل بيانات عميل',
+  type: 'التصنيف',
+  store: 'المحل',
+  newUsers: 'عملاء جدد',
+  approveSuccess: 'تم اﻻعتماد بنجاح',
+  approveUser: 'اعتماد عميل جديد',
+  deliveryFees: 'رسوم التوصيل',
+  invitationsDiscount: 'خصم دعوات اﻻصدقاء',
+  lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل'
 }
 
 export default labels

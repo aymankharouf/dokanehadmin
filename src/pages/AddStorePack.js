@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addStorePack } from '../data/Actions'
+import { addStorePack, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
@@ -12,8 +12,11 @@ const AddStorePack = props => {
   const [productPacks, setProductPacks] = useState([])
   const [product, setProduct] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
+  const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
   const [price, setPrice] = useState('')
+  const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const [offerEnd, setOfferEnd] = useState('')
+  const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
   const [error, setError] = useState('')
   useEffect(() => {
     if (product && purchasePrice) {
@@ -33,48 +36,56 @@ const AddStorePack = props => {
   useEffect(() => {
     if (productId) {
       setProduct(state.products.find(rec => rec.id === productId))
-      setProductPacks(state.packs.filter(rec => rec.productId === productId))
+      setProductPacks(state.packs.filter(rec => rec.productId === productId && rec.isActive === true))
     } else {
       setProduct('')
       setProductPacks([])
     }
   }, [productId])
-
-  const handleSubmit = () => {
-    try{
-      if (productId === '') {
-        throw new Error(state.labels.chooseProduct)
+  useEffect(() => {
+    const validatePrice = () => {
+      if (price * 1000 >= purchasePrice * 1000){
+        setPriceErrorMessage('')
+        setPurchasePriceErrorMessage('')
+      } else {
+        setPriceErrorMessage(state.labels.invalidPrice)
+        setPurchasePriceErrorMessage(state.labels.invalidPrice)
       }
-      if (packId === '') {
-        throw new Error(state.labels.choosePack)
-      }
-      if (purchasePrice === '' || Number(purchasePrice) === 0) {
-        throw new Error(state.labels.enterPurchasePrice)
-      }
-      if (price === '' || Number(price) === 0) {
-        throw new Error(state.labels.enterPrice)
-      }
-      if (price * 1000 < purchasePrice * 1000) {
-        throw new Error(state.labels.invalidPrice)
-      }
-      if (offerEnd.length > 0 && new Date(offerEnd) < new Date()) {
-        throw new Error(state.labels.invalidOfferEnd)
-      }
-      const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-      addStorePack(
-        state.packs.find(rec => rec.id === packId),
-        store,
-        purchasePrice,
-        price,
-        offerEndDate
-      ).then(() => {
-        props.f7router.back()
-      })
-    } catch (err) {
-      setError(err.message)
     }
+    if (price || purchasePrice) {
+      validatePrice()
+    } else {
+      setPriceErrorMessage('')
+      setPurchasePriceErrorMessage('')
+    }
+  }, [price, purchasePrice])
+  useEffect(() => {
+    const validateDate = (value) => {
+      if (new Date(value) >= new Date()){
+        setOfferEndErrorMessage('')
+      } else {
+        setOfferEndErrorMessage(state.labels.invalidOfferEnd)
+      }
+    }
+    if (offerEnd.length > 0) validateDate(offerEnd)
+    else setOfferEndErrorMessage('')
+  }, [offerEnd])
+  const handleSubmit = () => {
+    const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
+    addStorePack(
+      state.packs.find(rec => rec.id === packId),
+      store,
+      purchasePrice,
+      price,
+      offerEndDate
+    ).then(() => {
+      showMessage(props, 'success', state.labels.addSuccess)
+      props.f7router.back()
+    })
   }
-  const productsOptionsTags = state.products.map(product => 
+  let products = state.products.filter(rec => rec.isActive === true)
+  products.sort((product1, product2) => product1.name > product2.name ? 1 : -1)
+  const productsOptionsTags = products.map(product => 
     <option 
       key={product.id} 
       value={product.id}
@@ -93,12 +104,17 @@ const AddStorePack = props => {
   return (
     <Page>
       <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink="Back" />
-      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <ListItem
           title={state.labels.product}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search product'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
           <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
             <option value="" disabled></option>
@@ -108,7 +124,13 @@ const AddStorePack = props => {
         <ListItem
           title={state.labels.pack}
           smartSelect
-          smartSelectParams={{openIn: 'popup', closeOnSelect: true, searchbar: true, searchbarPlaceholder: 'Search pack'}}
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
         >
           <select name="packId" defaultValue="" onChange={(e) => setPackId(e.target.value)}>
             <option value="" disabled></option>
@@ -122,6 +144,8 @@ const AddStorePack = props => {
           clearButton
           floatingLabel 
           type="number" 
+          errorMessage={purchasePriceErrorMessage}
+          errorMessageForce
           onChange={(e) => setPurchasePrice(e.target.value)}
           onInputClear={() => setPurchasePrice('')}
         />
@@ -132,6 +156,8 @@ const AddStorePack = props => {
           clearButton 
           floatingLabel 
           type="number" 
+          errorMessage={priceErrorMessage}
+          errorMessageForce
           onChange={(e) => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
@@ -141,14 +167,20 @@ const AddStorePack = props => {
           type="datepicker"
           value={offerEnd} 
           clearButton
+          errorMessage={offerEndErrorMessage}
+          errorMessageForce
           onCalendarChange={(value) => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
         <img src={product.imageUrl} alt=""/>
       </List>
-      <Fab position="center-bottom" slot="fixed" text={state.labels.submit} color="green" onClick={() => handleSubmit()}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
-      </Fab>
+      {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
+      ? '' 
+      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        </Fab>
+      }
+      
     </Page>
   )
 }

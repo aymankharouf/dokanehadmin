@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Block, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -46,21 +46,18 @@ const PackDetails = props => {
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>
-      <Block>
-        <Card className="demo-card-header-pic">
-          <CardContent>
-            <img src={product.imageUrl} width="100%" height="250" alt=""/>
-          </CardContent>
-          <CardFooter>
-            <p>{(pack.price / 1000).toFixed(3)}</p>
-            <p>{pack.isActive === false ? state.labels.inActive : ''}</p>
-          </CardFooter>
-        </Card>
-        <List>
-          {storesTags}
-        </List>
-      </Block>
-      {error ? <Block strong className="error">{error}</Block> : null}
+      <Card className="demo-card-header-pic">
+        <CardContent>
+          <img src={product.imageUrl} width="100%" height="250" alt=""/>
+        </CardContent>
+        <CardFooter>
+          <p>{(pack.price / 1000).toFixed(3)}</p>
+          <p>{pack.isActive === false ? state.labels.inActive : ''}</p>
+        </CardFooter>
+      </Card>
+      <List>
+        {storesTags}
+      </List>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

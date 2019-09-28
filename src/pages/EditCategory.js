@@ -9,17 +9,20 @@ const EditCategory = props => {
   const { state } = useContext(StoreContext)
   const category = state.categories.find(rec => rec.id === props.id)
   const [name, setName] = useState(category.name)
+  const [unitType, setUnitType] = useState(category.unitType || '')
   const [isActive, setIsActive] = useState(category.isActive || false)
   const handleEdit = () => {
     editCategory({
       id: category.id,
       name,
+      unitType,
       isActive
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })
   }
+  const unitTypesOptionsTags = state.unitTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
       <Navbar title={state.labels.editCategory} backLink='Back' />
@@ -32,13 +35,29 @@ const EditCategory = props => {
           type="text" 
           onChange={(e) => setName(e.target.value)}
         />
+        <ListItem
+          title={state.labels.unitType}
+          smartSelect
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
+            <option value="" disabled></option>
+            {unitTypesOptionsTags}
+          </select>
+        </ListItem>
         <ListItem>
           <span>{state.labels.isActive}</span>
           <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
         </ListItem>
 
       </List>
-      {!name || (name === category.name && isActive === category.isActive)
+      {!name || !unitType || (name === category.name && unitType === category.unitType && isActive === category.isActive)
       ? ''
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>

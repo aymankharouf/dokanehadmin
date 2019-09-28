@@ -47,6 +47,11 @@ import EditSection from './pages/EditSection';
 import EditCategory from './pages/EditCategory';
 import EditTrademark from './pages/EditTrademark';
 import EditStore from './pages/EditStore';
+import CustomersList from './pages/CustomersList';
+import CustomerDetails from './pages/CustomerDetails';
+import EditCustomer from './pages/EditCustomer';
+import NewUsers from './pages/NewUsers';
+import ApproveUser from './pages/ApproveUser';
 
 export default [
   {
@@ -104,6 +109,30 @@ export default [
   {
     path: '/customers/',
     component: Customers
+  },
+  {
+    path: '/customersList/:id',
+    component: CustomersList
+  },
+  {
+    path: '/newUsers/',
+    component: NewUsers
+  },
+  {
+    path: '/approveUser/:id',
+    component: ApproveUser
+  },
+  {
+    path: '/customer/:id',
+    component: CustomerDetails
+  },
+  {
+    path: '/editCustomer/:id',
+    component: EditCustomer
+  },
+  {
+    path: '/store/:id',
+    component: StorePacks
   },
   {
     path: '/forgetPassword/',

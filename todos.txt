@@ -41,3 +41,4 @@ smart basket
 suggestions
 invitations
 maps
+user as store admin

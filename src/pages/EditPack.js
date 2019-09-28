@@ -9,7 +9,8 @@ const EditPack = props => {
   const pack = state.packs.find(rec => rec.id === props.id)
   const product = state.products.find(rec => rec.id === pack.productId)
   const [name, setName] = useState(pack.name)
-  const [isActive, setIsActive] = useState(pack.isActive || false)
+  const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
+  const [isActive, setIsActive] = useState(pack.isActive)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
   const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
   const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
@@ -42,6 +43,7 @@ const EditPack = props => {
     const newPack = {
       ...pack,
       name,
+      unitsCount,
       isActive,
       isOffer,
       offerPackId,
@@ -82,7 +84,6 @@ const EditPack = props => {
       {pack.name}
     </option>
   )
-
   return (
     <Page>
       <Navbar title={`${state.labels.editPack} - ${product.name} ${pack.name}`} backLink="Back" />
@@ -96,6 +97,16 @@ const EditPack = props => {
           value={name} 
           onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="unitsCount" 
+          label={state.labels.unitsCount}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={unitsCount} 
+          onChange={(e) => setUnitsCount(e.target.value)}
+          onInputClear={() => setUnitsCount('')}
         />
         <ListItem>
           <span>{state.labels.isActive}</span>
@@ -199,7 +210,7 @@ const EditPack = props => {
           </List>
         </React.Fragment>
       : ''}
-      {!name || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && isActive === pack.isActive && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? ''
+      {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && unitsCount === pack.unitsCount && isActive === pack.isActive && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? ''
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
         </Fab>
@@ -207,4 +218,4 @@ const EditPack = props => {
     </Page>
   )
 }
-export default EditPack
+export default React.memo(EditPack)
