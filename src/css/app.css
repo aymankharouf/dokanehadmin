@@ -58,10 +58,12 @@
     color: white;
   }
   
-  .price {
-    height: 20px;
-  }
-  
-  .block-title {
+   .block-title {
     color: blue;
+  }
+
+  .price {
+    font-size: 1.2rem;
+    color: blue;
+    margin-right: 0.2rem;
   }

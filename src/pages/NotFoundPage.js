@@ -1,0 +1,17 @@
+import React, { useContext } from 'react';
+import { Page, Navbar, Block } from 'framework7-react';
+import { StoreContext } from '../data/Store';
+
+const NotFoundPage = props => {
+  const { state } = useContext(StoreContext)
+  return (
+    <Page>
+      <Navbar title={StaticRange.labels.notFoundPageTitle} backLink="Back" />
+      <Block strong>
+        <p>{state.labels.notFoundPageError}</p>
+      </Block>
+    </Page>
+  )
+}
+
+export default NotFoundPage

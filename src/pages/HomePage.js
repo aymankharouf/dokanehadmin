@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import {Page, Navbar, NavLeft, NavTitle, Link, Block, Toolbar, Button} from 'framework7-react'
+import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import logo from '../coollogo_com-18673500.png'
 import { StoreContext } from '../data/Store';
@@ -20,11 +20,12 @@ const HomePage = props => {
   let i = 0
   return (
     <Page>
-      <Navbar>
+      <Navbar large largeTransparent sliding={false}>
         <NavLeft>
           <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="right"></Link>
         </NavLeft>
-        <NavTitle><img src={logo} className="logo" alt=""/></NavTitle>
+        <NavTitle sliding>test</NavTitle>
+        <NavTitleLarge>test</NavTitleLarge>
       </Navbar>
       <Block>
         {mainPages.map(page => {

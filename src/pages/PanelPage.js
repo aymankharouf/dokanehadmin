@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Page, Navbar, Block, BlockTitle, List, ListItem } from 'framework7-react';
+import { Page, Navbar, Block, List, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { logout } from '../data/Actions'
 
@@ -16,8 +16,9 @@ const PanelPage = props => {
         {login_logout}
       </List>
       <List>
-        { user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : null }
-        { user ? <ListItem link="/requestedPacks/" title={state.labels.newPurchase} view="#main-view" panelClose /> : null }
+        {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/requestedPacks/" title={state.labels.newPurchase} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/priceAlarms/" title={state.labels.priceAlarms} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

@@ -1,5 +1,4 @@
 import HomePage from './pages/HomePage';
-import DynamicRoutePage from './pages/DynamicRoutePage';
 import NotFoundPage from './pages/NotFoundPage';
 import PanelPage from './pages/PanelPage'
 import Login from './pages/Login'
@@ -52,6 +51,8 @@ import CustomerDetails from './pages/CustomerDetails';
 import EditCustomer from './pages/EditCustomer';
 import NewUsers from './pages/NewUsers';
 import ApproveUser from './pages/ApproveUser';
+import PriceAlarms from './pages/PriceAlarms';
+import PriceAlarmDetails from './pages/PriceAlarmDetails';
 
 export default [
   {
@@ -137,6 +138,14 @@ export default [
   {
     path: '/forgetPassword/',
     component: ForgetPassword
+  },
+  {
+    path: '/priceAlarms/',
+    component: PriceAlarms
+  },
+  {
+    path: '/priceAlarmDetails/:id',
+    component: PriceAlarmDetails
   },
   {
     path: '/countries/',
@@ -273,10 +282,6 @@ export default [
   {
     path: '/stockTrans/:id',
     component: StockTransDetails
-  },
-  {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    component: DynamicRoutePage,
   },
   {
     path: '(.*)',

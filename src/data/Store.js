@@ -88,7 +88,7 @@ const Store = props => {
     users: [],
     purchases: [],
     orders: [],
-    lessPrice: [],
+    priceAlarms: [],
     packTrans: [],
     stockTrans: [],
     products: [],
@@ -153,12 +153,12 @@ const Store = props => {
           })
           dispatch({type: 'SET_PACK_TRANS', packTrans})
         })  
-        firebase.firestore().collection('lessPrice').onSnapshot(docs => {
-          let lessPrice = []
+        firebase.firestore().collection('priceAlarms').onSnapshot(docs => {
+          let priceAlarms = []
           docs.forEach(doc => {
-            lessPrice.push({...doc.data(), id:doc.id})
+            priceAlarms.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_LESS_PIRCE', lessPrice})
+          dispatch({type: 'SET_PRICE_ALARMS', priceAlarms})
         })
         firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
           let forgetPassword = []

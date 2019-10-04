@@ -36,9 +36,10 @@ friends discount
 send basket to friends(payment: sender or receiver)
 direct delivery
 *offers first (ordering products)
-ordering products by type (product)
+*ordering products by type (product)
 smart basket
 suggestions
 invitations
 maps
-user as store admin
+*user as store admin
+advertisements

@@ -129,7 +129,10 @@ const labels = {
   approveUser: 'اعتماد عميل جديد',
   deliveryFees: 'رسوم التوصيل',
   invitationsDiscount: 'خصم دعوات اﻻصدقاء',
-  lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل'
+  lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل',
+  priceAlarms: 'اشعارات اﻻسعار',
+  notFoundPageTitle: 'الصفحة غير موجودة',
+  notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة'
 }
 
 export default labels
