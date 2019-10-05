@@ -25,7 +25,7 @@ const ProductDetails = props => {
   )
   return (
     <Page>
-      <Navbar title={product.name} backLink="Back" />
+      <Navbar title={product.name} backLink={state.labels.back} />
       <Card className="demo-card-header-pic">
         <CardContent>
           <img src={product.imageUrl} width="100%" height="250" alt=""/>

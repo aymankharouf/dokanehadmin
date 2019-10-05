@@ -42,7 +42,7 @@ const PackDetails = props => {
   )
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>

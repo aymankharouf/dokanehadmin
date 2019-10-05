@@ -17,7 +17,7 @@ const EditOrder = props => {
   if (!user) return <ReLogin callingPage="orders"/>
   return(
     <Page>
-      <Navbar title={state.labels.editOrder} backLink="Back" />
+      <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {order.basket && order.basket.map(pack => {

@@ -1,15 +1,13 @@
 import React from 'react';
 import { App, Panel, View } from 'framework7-react';
-
 import routes from './routes';
 import Store from './data/Store';
 
-export default function (props) {
-
+const app = props => {
   const f7params = {
-    id: 'io.framework7.harees', // App bundle ID
-    name: 'Harees', // App name
-    theme: 'auto', // Automatic theme detection
+    id: 'io.framework7.harees',
+    name: 'Harees',
+    theme: 'ios', 
     routes,
   };
 
@@ -23,4 +21,6 @@ export default function (props) {
       </App>
     </Store>
   );
-};
+}
+
+export default app

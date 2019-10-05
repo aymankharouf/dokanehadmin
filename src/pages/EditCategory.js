@@ -25,7 +25,7 @@ const EditCategory = props => {
   const unitTypesOptionsTags = state.unitTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={state.labels.editCategory} backLink='Back' />
+      <Navbar title={state.labels.editCategory} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

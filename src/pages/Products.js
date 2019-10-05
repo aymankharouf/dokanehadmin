@@ -7,7 +7,7 @@ const Products = props => {
   const { state } = useContext(StoreContext)
   return(
     <Page>
-      <Navbar title={state.labels.allProducts} backLink="Back">
+      <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>

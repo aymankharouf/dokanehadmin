@@ -43,7 +43,7 @@ const AddStore = props => {
   const storeTypesOptionsTags = state.storeTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={state.labels.newStore} backLink='Back' />
+      <Navbar title={state.labels.newStore} backLink={state.labels.back} />
       <List form>
       <ListItem
           title={state.labels.type}

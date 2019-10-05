@@ -23,7 +23,7 @@ const Customers = props => {
   let i = 0
   return (
     <Page>
-      <Navbar title={state.labels.customers} backLink="Back" />
+      <Navbar title={state.labels.customers} backLink={state.labels.back} />
       <Block>
         <List>
           {sections.map(section => {

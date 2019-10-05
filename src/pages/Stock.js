@@ -24,7 +24,7 @@ const Stock = props => {
   storePacks.sort((pack1, pack2) => pack1.time.seconds - pack2.time.seconds)
   return(
     <Page>
-      <Navbar title={state.labels.stock} backLink="Back">
+      <Navbar title={state.labels.stock} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>

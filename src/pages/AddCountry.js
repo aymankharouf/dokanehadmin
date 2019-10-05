@@ -19,7 +19,7 @@ const AddCountry = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addCountry} backLink='Back' />
+      <Navbar title={state.labels.addCountry} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

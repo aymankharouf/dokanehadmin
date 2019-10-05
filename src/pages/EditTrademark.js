@@ -22,7 +22,7 @@ const EditTrademark = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editTrademark} backLink='Back' />
+      <Navbar title={state.labels.editTrademark} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

@@ -25,7 +25,7 @@ const StorePacks = props => {
   const store = state.stores.find(store => store.id === props.id)
   return(
     <Page>
-      <Navbar title={`${store.name}`} backLink="Back">
+      <Navbar title={`${store.name}`} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>
@@ -52,7 +52,7 @@ const StorePacks = props => {
               text={moment(pack.time.toDate()).fromNow()}
               key={pack.id}
             >
-              <img slot="media" src={pack.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
               {pack.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
               {pack.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
             </ListItem>

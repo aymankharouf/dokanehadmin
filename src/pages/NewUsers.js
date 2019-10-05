@@ -12,7 +12,7 @@ const NewUsers = props => {
   newUsers.sort((user1, user2) => user1.time.seconds - user2.time.seconds)
   return(
     <Page>
-      <Navbar title={state.labels.newUsers} backLink="Back" />
+      <Navbar title={state.labels.newUsers} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {newUsers && newUsers.map(user => 

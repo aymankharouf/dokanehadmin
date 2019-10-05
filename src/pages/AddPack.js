@@ -86,7 +86,7 @@ const AddPack = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.addPack} - ${product.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.addPack} - ${product.name}`} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

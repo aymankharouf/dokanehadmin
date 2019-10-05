@@ -11,7 +11,7 @@ const BottomToolbar = props => {
         <Icon ios={`f7:${searchHome}`} aurora={`f7:${searchHome}`} md={`material:${searchHome}`} />
       </Link>
       <Link href={state.basket.packs ? '/basket/' : ''}>
-        <Icon ios="f7:shopping_cart" aurora="f7:shopping_cart" md="material:shopping_cart">
+        <Icon ios='material:shopping_cart' aurora='f7:shopping_cart' md='material:shopping_cart' >
           {state.basket.packs ? <Badge color="red">{state.basket.packs.length}</Badge> : ''}
         </Icon>
       </Link>

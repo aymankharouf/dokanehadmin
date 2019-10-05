@@ -11,7 +11,7 @@ const PriceAlarms = props => {
   priceAlarms.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
   return(
     <Page>
-      <Navbar title={state.labels.priceAlarms} backLink="Back" />
+      <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} />
       <Block>
           <List mediaList>
             {priceAlarms && priceAlarms.map(alarm => {

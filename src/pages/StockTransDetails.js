@@ -11,7 +11,7 @@ const StockTransDetails = props => {
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>
-      <Navbar title={state.labels.stockTransDetails} backLink="Back" />
+      <Navbar title={state.labels.stockTransDetails} backLink={state.labels.back} />
       <Block>
           <List>
             {stockTrans.basket && stockTrans.basket.map(pack => {

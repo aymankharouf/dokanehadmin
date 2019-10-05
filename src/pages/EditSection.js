@@ -24,7 +24,7 @@ const EditSection = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editSection} backLink='Back' />
+      <Navbar title={state.labels.editSection} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

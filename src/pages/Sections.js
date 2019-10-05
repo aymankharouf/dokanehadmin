@@ -11,7 +11,7 @@ const Sections = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.sections} backLink="Back" />
+      <Navbar title={state.labels.sections} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addSection/')}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>

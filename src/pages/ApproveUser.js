@@ -34,7 +34,7 @@ const ApproveUser = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.approveUser} backLink='Back' />
+      <Navbar title={state.labels.approveUser} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

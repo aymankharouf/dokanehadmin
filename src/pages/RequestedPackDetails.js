@@ -43,7 +43,7 @@ const RequestedPackDetails = props => {
 	)
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>

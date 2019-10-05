@@ -11,7 +11,7 @@ const Trademarks = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.trademarks} backLink="Back" />
+      <Navbar title={state.labels.trademarks} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addTrademark/')}>
         <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
       </Fab>

@@ -13,7 +13,7 @@ const CustomerDetails = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.customerDetails} backLink='Back' />
+      <Navbar title={state.labels.customerDetails} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editCustomer/${props.id}`)}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>

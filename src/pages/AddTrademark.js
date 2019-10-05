@@ -18,7 +18,7 @@ const AddTrademark = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addTrademark} backLink='Back' />
+      <Navbar title={state.labels.addTrademark} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

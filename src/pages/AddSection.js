@@ -20,7 +20,7 @@ const AddSection = props => {
   }
   return (
     <Page loginScreen>
-      <Navbar title={state.labels.addSection} backLink='Back' />
+      <Navbar title={state.labels.addSection} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

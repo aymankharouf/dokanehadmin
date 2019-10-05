@@ -62,7 +62,7 @@ const AddProduct = props => {
   const countriesOptionsTags = countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={state.labels.addProduct} backLink="Back" />
+      <Navbar title={state.labels.addProduct} backLink={state.labels.back} />
       <List form>
         <ListItem
           title={state.labels.category}

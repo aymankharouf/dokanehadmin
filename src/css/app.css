@@ -67,3 +67,7 @@
     color: blue;
     margin-right: 0.2rem;
   }
+
+  .avatar {
+    width: 100px;
+  }

@@ -12,7 +12,7 @@ const StockTrans = props => {
   stockTrans.sort((trans1, trans2) => trans2.time.seconds - trans1.time.seconds)
   return(
     <Page>
-      <Navbar title={state.labels.stockTrans} backLink="Back" />
+      <Navbar title={state.labels.stockTrans} backLink={state.labels.back} />
       <Block>
           <List mediaList>
             {stockTrans && stockTrans.map(trans => 

@@ -60,7 +60,7 @@ const EditPrice = props => {
   }
   return (
     <Page>
-      <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink={state.labels.back} />
       {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <img src={product.imageUrl} alt=""/>

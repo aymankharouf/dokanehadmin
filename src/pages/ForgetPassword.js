@@ -17,7 +17,7 @@ const ForgetPassword = props => {
   }
   return(
     <Page>
-      <Navbar title={state.labels.forgetPassword} backLink="Back" />
+      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} />
       <Block>
           <List mediaList>
             {forgetPassword && forgetPassword.map(trans => {

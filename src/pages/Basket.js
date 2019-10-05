@@ -19,7 +19,7 @@ const Basket = props => {
   }, [state.basket])
   return (
     <Page>
-      <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink="Back" />
+      <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {state.basket.packs && state.basket.packs.map(pack => {

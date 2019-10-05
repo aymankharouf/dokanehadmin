@@ -14,7 +14,7 @@ const PackTrans = props => {
   packTrans.sort((trans1, trans2) => trans1.time.seconds - trans2.time.seconds)
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {packTrans && packTrans.map(trans => 

@@ -132,7 +132,8 @@ const labels = {
   lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل',
   priceAlarms: 'اشعارات اﻻسعار',
   notFoundPageTitle: 'الصفحة غير موجودة',
-  notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة'
+  notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة',
+  back: 'رجوع'
 }
 
 export default labels

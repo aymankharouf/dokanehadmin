@@ -29,7 +29,7 @@ const StorePackDetails = props => {
 
   return (
     <Page>
-      <Navbar title={`${product.name} - ${store.name}`} backLink="Back" />
+      <Navbar title={`${product.name} - ${store.name}`} backLink={state.labels.back} />
       <Block>
         <Card className="demo-card-header-pic">
           <CardContent>

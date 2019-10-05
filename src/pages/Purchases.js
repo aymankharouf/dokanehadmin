@@ -12,7 +12,7 @@ const Purchases = props => {
   purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
   return(
     <Page>
-      <Navbar title={state.labels.purchases} backLink="Back" />
+      <Navbar title={state.labels.purchases} backLink={state.labels.back} />
       <Block>
           <List mediaList>
             {purchases && purchases.map(purchase => 

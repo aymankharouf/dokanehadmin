@@ -4,7 +4,7 @@ import { Page, Block, Link, Navbar} from 'framework7-react'
 const ReLogin = props => {
   return(
     <Page>
-      <Navbar title="ReLogin" backLink="Back" />
+      <Navbar title="ReLogin" backLink={state.labels.back} />
       <Block>
         <h3 className="center">
           You have to login first <br/>

@@ -46,7 +46,7 @@ const PriceAlarmDetails = props => {
   )
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink="Back" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="blue">
         <Icon ios="f7:chevron_down" aurora="f7:chevron_down" md="material:keyboard_arrow_down"></Icon>
         <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>

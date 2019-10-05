@@ -59,7 +59,7 @@ const EditProduct = props => {
   const countriesOptionsTags = countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
   return (
     <Page>
-      <Navbar title={state.labels.editProduct} backLink="Back" />
+      <Navbar title={state.labels.editProduct} backLink={state.labels.back} />
       {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
       <ListItem

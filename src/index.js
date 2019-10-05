@@ -18,6 +18,7 @@ import 'framework7/css/framework7.bundle.rtl.min.css';
 import './css/icons.css';
 
 // Custom app styles
+import './css/demo.css';
 import './css/app.css';
 
 // Init Framework7-React plugin

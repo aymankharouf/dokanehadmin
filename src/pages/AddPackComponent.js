@@ -66,7 +66,7 @@ const AddStoreProduct = props => {
   )
   return (
     <Page>
-      <Navbar title={state.labels.addPackComponent} backLink="Back" />
+      <Navbar title={state.labels.addPackComponent} backLink={state.labels.back} />
       {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
         <ListItem

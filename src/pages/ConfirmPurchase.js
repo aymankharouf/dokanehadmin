@@ -37,7 +37,7 @@ const ConfirmPurchase = props => {
   if (!user) return <ReLogin callingPage="confirmPurchase"/>
   return(
     <Page>
-    <Navbar title={`${state.labels.confirmPurchase} ${store ? store.name: ''}`} backLink="Back" />
+    <Navbar title={`${state.labels.confirmPurchase} ${store ? store.name: ''}`} backLink={state.labels.back} />
     <Block>
         <List>
           {state.basket.packs && state.basket.packs.map(pack => 

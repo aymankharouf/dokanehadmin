@@ -22,7 +22,7 @@ const CustomersList = props => {
   customers.sort((customer1, customer2) => customer2.time.seconds - customer1.time.seconds)
   return(
     <Page>
-      <Navbar title={`${state.labels.customers} - ${typeName}`} backLink="Back">
+      <Navbar title={`${state.labels.customers} - ${typeName}`} backLink={state.labels.back} >
         <NavRight>
           <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>

@@ -12,7 +12,7 @@ const SectionCategories = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.categories} - ${section.name}`} backLink="Back" />
+      <Navbar title={`${state.labels.categories} - ${section.name}`} backLink={state.labels.back} />
       <Block>
         <List>
           {categories && categories.map(rec =>

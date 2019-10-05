@@ -237,7 +237,10 @@ export default [
   },
   {
     path: '/orders/',
-    component: Orders
+    component: Orders,
+    options: {
+      animate: true,
+    },
   },
   {
     path: '/ordersList/:id',
