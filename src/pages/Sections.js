@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -6,8 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
-  let sections = state.sections
-  sections.sort((section1, section2) => section1.name > section2.name ? 1 : -1)
+  const sections = useMemo(() => [...state.sections].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.sections])
 
   return (
     <Page>

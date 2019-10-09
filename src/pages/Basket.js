@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const store = state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : null
-  const totalPrice = state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0)) : null
+  const store = useMemo(() => state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : '', [state.basket, state.stores])
+  const totalPrice = useMemo(() => state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0)) : '', [state.basket])
   const handleAdd = pack => {
     const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
     if (!storeQuantity) {

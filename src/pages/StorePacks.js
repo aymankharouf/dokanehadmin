@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -7,22 +7,24 @@ import 'moment/locale/ar'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
-  let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
-  storePacks = storePacks.map(pack => {
-    const productInfo = state.products.find(rec => rec.id === pack.productId)
-    return {
-      id: pack.id,
-      productName: productInfo.name,
-      name: pack.name,
-      isNew: productInfo.isNew,
-      isOffer: pack.isOffer,
-      price: pack.stores.find(rec => rec.id === props.id).price,
-      time: pack.stores.find(rec => rec.id === props.id).time,
-      imageUrl: productInfo.imageUrl
-    }
-  })
-  storePacks.sort((pack1, pack2) => pack2.time.seconds - pack1.time.seconds)
-  const store = state.stores.find(store => store.id === props.id)
+  let storePacks = useMemo(() => {
+    let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
+    storePacks = storePacks.map(pack => {
+      const productInfo = state.products.find(rec => rec.id === pack.productId)
+      return {
+        id: pack.id,
+        productName: productInfo.name,
+        name: pack.name,
+        isNew: productInfo.isNew,
+        isOffer: pack.isOffer,
+        price: pack.stores.find(rec => rec.id === props.id).price,
+        time: pack.stores.find(rec => rec.id === props.id).time,
+        imageUrl: productInfo.imageUrl
+      }
+    })
+    return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec2.time.seconds)
+  }, [state.packs, state.products])
+  const store = useMemo(() => state.stores.find(store => store.id === props.id), [state.stores])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>

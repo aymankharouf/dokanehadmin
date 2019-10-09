@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { editTrademark, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditTrademark = props => {
   const { state } = useContext(StoreContext)
-  const trademark = state.trademarks.find(rec => rec.id === props.id)
+  const trademark = useMemo(() => state.trademarks.find(rec => rec.id === props.id), [state.trademarks])
   const [name, setName] = useState(trademark.name)
   const [isActive, setIsActive] = useState(trademark.isActive || false)
   const handleEdit = () => {
@@ -51,4 +51,4 @@ const EditTrademark = props => {
     </Page>
   )
 }
-export default React.memo(EditTrademark)
+export default EditTrademark

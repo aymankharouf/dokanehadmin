@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useMemo } from 'react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
@@ -8,15 +8,8 @@ import 'moment/locale/ar'
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
 	const [error, setError] = useState('')
-  const pack = state.packs.find(rec => rec.id === props.packId)
-  const product = state.products.find(rec => rec.id === pack.productId)
-  let packStores = [...pack.stores]
-  packStores = packStores.sort((packStore1, packStore2) => packStore1.purchasePrice - packStore2.purchasePrice)
-  packStores = packStores.map(packStore => {
-    const currentStore = state.stores.find(store => store.id === packStore.id)
-    const storeName = currentStore.name
-    return {...packStore, name: storeName}
-	})
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId), [state.packs])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
 	const handlePurchase = store => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== store.id){
@@ -28,19 +21,28 @@ const RequestedPackDetails = props => {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
 		}
 	}
-  const storesTag = packStores.map(store => 
-    <ListItem 
-			title={store.name} 
-			footer={moment(store.time.toDate()).fromNow()} 
-			after={(store.price / 1000).toFixed(3)} 
-			key={store.id}
-			link="#"
-      onClick={() => handlePurchase(store)}
-		>
-      {store.quantity ? <Badge slot='title' color='red'>{store.quantity}</Badge> : null}
-      {store.price <= props.price ? <Badge slot='title' color='green'> $ </Badge> : null}
-    </ListItem>
-	)
+  const storesTag = useMemo(() => {
+    let packStores = pack.stores
+    packStores.sort((rec1, rec2) => rec1.purchasePrice - rec2.purchasePrice)
+    packStores = packStores.map(packStore => {
+      const currentStore = state.stores.find(store => store.id === packStore.id)
+      const storeName = currentStore.name
+      return {...packStore, name: storeName}
+    })
+    return packStores.map(rec => 
+      <ListItem 
+        title={rec.name} 
+        footer={moment(rec.time.toDate()).fromNow()} 
+        after={(rec.price / 1000).toFixed(3)} 
+        key={rec.id}
+        link="#"
+        onClick={() => handlePurchase(rec)}
+      >
+        {rec.quantity ? <Badge slot='title' color='red'>{rec.quantity}</Badge> : null}
+        {rec.price <= rec.price ? <Badge slot='title' color='green'> $ </Badge> : null}
+      </ListItem>
+    )
+  }, [pack, state.stores]) 
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />

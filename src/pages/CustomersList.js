@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
@@ -8,18 +8,20 @@ import { StoreContext } from '../data/Store';
 
 const CustomersList = props => {
   const { state } = useContext(StoreContext)
-  const typeName = props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(rec => rec.id === props.id).name
-  let customers = state.customers.filter(rec => props.id === 'a' ? true : rec.type === props.id)
-  customers = customers.map(customer => {
-    const userInfo = state.users.find(rec => rec.id === customer.id)
-    return {
-      ...customer,
-      name: userInfo.name,
-      mobile: userInfo.mobile,
-      time: userInfo.time
-    }
-  })
-  customers.sort((customer1, customer2) => customer2.time.seconds - customer1.time.seconds)
+  const typeName = useMemo(() => props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(rec => rec.id === props.id).name, [state.customerTypes])
+  const customers = useMemo(() => {
+    let customers = state.customers.filter(rec => props.id === 'a' ? true : rec.type === props.id)
+    customers = customers.map(customer => {
+      const userInfo = state.users.find(rec => rec.id === customer.id)
+      return {
+        ...customer,
+        name: userInfo.name,
+        mobile: userInfo.mobile,
+        time: userInfo.time
+      }
+    })
+    return customers.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
+  }, [state.customers, state.users]) 
   return(
     <Page>
       <Navbar title={`${state.labels.customers} - ${typeName}`} backLink={state.labels.back} >

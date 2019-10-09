@@ -36,4 +36,4 @@ const AddTrademark = props => {
     </Page>
   )
 }
-export default React.memo(AddTrademark)
+export default AddTrademark

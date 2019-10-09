@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -7,9 +7,11 @@ import { addStock } from '../data/Actions'
 
 const Stores = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const stores = state.stores.filter(rec => rec.id !== 's')
-  stores.sort((store1, store2) => store1.name > store2.name ? 1 : -1)
-  const stock = state.stores.find(rec => rec.id === 's')
+  const stores = useMemo(() => {
+    let stores = state.stores.filter(rec => rec.id !== 's')
+    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  }, [state.stores])
+  const stock = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
   const handleAddStock = (name) => {
     addStock(name).then(() => {
       dispatch({type: 'ADD_STORE', store: {id: 's', name}})
@@ -50,4 +52,4 @@ const Stores = props => {
   )
 }
 
-export default React.memo(Stores)
+export default Stores

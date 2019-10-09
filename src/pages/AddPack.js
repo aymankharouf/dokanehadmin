@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon, Toggle, BlockTitle, Link, Button, Row, Col} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -6,12 +6,11 @@ import { StoreContext } from '../data/Store';
 
 const AddPack = props => {
   const { state } = useContext(StoreContext)
-  const product = state.products.find(rec => rec.id === props.id)
+  const product = useMemo(() => state.products.find(rec => rec.id === props.id), [state.products])
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [isOffer, setIsOffer] = useState(false)
   const [offerPackId, setOfferPackId] = useState('')
-  const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
   const [offerQuantity, setOfferQuantity] = useState('')
   const [bonusProductId, setBonusProductId] = useState('')
   const [bonusPackId, setBonusPackId] = useState('')
@@ -57,32 +56,37 @@ const AddPack = props => {
       props.f7router.back()
     })
   }
-  const offerPacksOptionsTags = offerProductPacks.map(pack => 
+  const offerPacksTags = useMemo(() => {
+    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
+    return offerProductPacks.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.packs])
+  const bonusProductsTags = useMemo(() => {
+    let products = state.products.filter(rec => rec.isActive === true)
+    products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return products.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.products]) 
+  const bonusPacksTags = useMemo(() => bonusProductPacks.map(rec => 
     <option 
-      key={pack.id} 
-      value={pack.id}
+      key={rec.id} 
+      value={rec.id}
     >
-      {pack.name}
+      {rec.name}
     </option>
-  )
-  let products = state.products.filter(rec => rec.isActive === true)
-  products.sort((product1, product2) => product1.name > product2.name ? 1 : -1)
-  const bonusProductsOptionsTags = products.map(product => 
-    <option 
-      key={product.id} 
-      value={product.id}
-    >
-      {product.name}
-    </option>
-  )
-  const bonusPacksOptionsTags = bonusProductPacks.map(pack => 
-    <option 
-      key={pack.id} 
-      value={pack.id}
-    >
-      {pack.name}
-    </option>
-  )
+  ), [bonusProductPacks])
 
   return (
     <Page>
@@ -134,7 +138,7 @@ const AddPack = props => {
             >
               <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
                 <option value="" disabled></option>
-                {offerPacksOptionsTags}
+                {offerPacksTags}
               </select>
             </ListItem>
             <ListInput 
@@ -174,7 +178,7 @@ const AddPack = props => {
             >
               <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
                 <option value="" disabled></option>
-                {bonusProductsOptionsTags}
+                {bonusProductsTags}
               </select>
             </ListItem>
             <ListItem
@@ -190,7 +194,7 @@ const AddPack = props => {
             >
               <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
                 <option value="" disabled></option>
-                {bonusPacksOptionsTags}
+                {bonusPacksTags}
               </select>
             </ListItem>
             <ListInput 

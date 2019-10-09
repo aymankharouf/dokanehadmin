@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Button, Block, Page, Navbar, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -6,8 +6,8 @@ import BottomToolbar from './BottomToolbar';
 
 const Categories = props => {
   const { state } = useContext(StoreContext)
-  const section = state.sections.find(section => section.id === props.id)
-  const categories = state.categories.filter(category => category.section === props.id)
+  const section = useMemo(() => state.sections.find(section => section.id === props.id), [state.sections])
+  const categories = useMemo(() => state.categories.filter(category => category.section === props.id), [state.categories])
   return(
     <Page>
       <Navbar title={section.name} backLink={state.labels.back} />

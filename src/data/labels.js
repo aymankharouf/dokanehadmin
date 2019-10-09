@@ -47,7 +47,6 @@ const labels = {
   total: 'المجموع',
   RequestedProducts: 'المنتجات المطلوبة',
   newStore: 'محل جديد',
-  type: 'النوع',
   address: 'العنوان',
   confirm: 'اعتماد',
   fixedFees: 500,
@@ -82,7 +81,6 @@ const labels = {
   quantity: 'الكمية',
   bonusProduct: 'المنتج اﻻضافي',
   loginSuccess: 'اهلا وسهلا بك',
-  password: 'كلمة السر',
   email: 'البريد اﻻلكتروني',
   login: 'تسجيل دخول',
   loginSubmit: 'دخول',
@@ -127,13 +125,13 @@ const labels = {
   newUsers: 'عملاء جدد',
   approveSuccess: 'تم اﻻعتماد بنجاح',
   approveUser: 'اعتماد عميل جديد',
-  deliveryFees: 'رسوم التوصيل',
   invitationsDiscount: 'خصم دعوات اﻻصدقاء',
   lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل',
   priceAlarms: 'اشعارات اﻻسعار',
   notFoundPageTitle: 'الصفحة غير موجودة',
   notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة',
-  back: 'رجوع'
+  back: 'رجوع',
+  reloginTitle: 'طلب تسجيل دخول',
 }
 
 export default labels

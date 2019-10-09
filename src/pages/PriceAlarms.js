@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
@@ -7,8 +7,10 @@ import { StoreContext } from '../data/Store';
 
 const PriceAlarms = props => {
   const { state } = useContext(StoreContext)
-  let priceAlarms = state.priceAlarms.filter(rec => rec.isActive === false)
-  priceAlarms.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+  const priceAlarms = useMemo(() => {
+    let priceAlarms = state.priceAlarms.filter(rec => rec.status === 'n')
+    return priceAlarms.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+  }, [state.priceAlarms])
   return(
     <Page>
       <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} />
@@ -40,4 +42,4 @@ const PriceAlarms = props => {
   )
 }
 
-export default React.memo(PriceAlarms)
+export default PriceAlarms

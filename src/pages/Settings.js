@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -6,11 +6,11 @@ import { StoreContext } from '../data/Store';
 
 const Settings = props => {
   const { state } = useContext(StoreContext)
-  const sections = [
+  const sections = useMemo(() => [
     {id: '1', name: 'الدول', path: 'countries'},
     {id: '2', name: 'اﻻقسام', path: 'sections'},
     {id: '3', name: 'العلامات التجارية', path: 'trademarks'},
-  ]
+  ], [])
   let i = 0
   return(
     <Page>

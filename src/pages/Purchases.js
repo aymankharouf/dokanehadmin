@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
@@ -8,8 +8,7 @@ import { StoreContext } from '../data/Store';
 
 const Purchases = props => {
   const { state } = useContext(StoreContext)
-  let purchases = state.purchases
-  purchases.sort((purchase1, purchase2) => purchase2.time.seconds - purchase1.time.seconds)
+  const purchases = useMemo(() => [...state.purchases].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.purchases])
   return(
     <Page>
       <Navbar title={state.labels.purchases} backLink={state.labels.back} />

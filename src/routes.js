@@ -38,7 +38,6 @@ import EditOrder from './pages/EditOrder';
 import Customers from './pages/Customers';
 import ForgetPassword from './pages/ForgetPassword';
 import AddPack from './pages/AddPack';
-import AddPackComponent from './pages/AddPackComponent';
 import PackDetails from './pages/PackDetails';
 import EditPack from './pages/EditPack';
 import EditCountry from './pages/EditCountry';
@@ -214,10 +213,6 @@ export default [
   {
     path: '/addPack/:id',
     component: AddPack
-  },
-  {
-    path: '/addPackComponent/',
-    component: AddPackComponent
   },
   {
     path: '/packDetails/:id',

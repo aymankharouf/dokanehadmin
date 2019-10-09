@@ -403,5 +403,26 @@ export const approveUser = async user => {
     storeName: firebase.firestore.FieldValue.delete(),
     address: firebase.firestore.FieldValue.delete()
   })
+}
+
+export const approveStorePrice = async (priceAlarm, store, pack, price) => {
+  const batch = firebase.firestore().batch()
+  const priceAlarmRef = firebase.firestore().collection('priceAlarms').doc(priceAlarm.id)
+  batch.update(priceAlarmRef, {
+    status: 'a'
+  })
+  let stores = pack.stores.filter(rec => rec.id !== store.id)
+  stores = [
+    ...stores, 
+    { id: store.id, 
+      price: price * 1000,
+      time: new Date(),
+      user: priceAlarm.user
+    }
+  ]
+  const packRef = firebase.firestore().collection('packs').doc(pack.id)
+  batch.update(packRef, {
+    stores
+  })
 
 }

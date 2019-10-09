@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const HomePage = props => {
   const { state } = useContext(StoreContext)
-  const mainPages = [
+  const mainPages = useMemo(() => [
     {id: '1', name: 'الطلبات', path: 'orders'},
     {id: '2', name: 'اﻻسعار', path: 'stores'},
     {id: '3', name: 'المنتجات', path: 'products'},
@@ -14,7 +14,7 @@ const HomePage = props => {
     {id: '5', name: 'العملاء', path: 'customers'},
     {id: '6', name: 'المستودع', path: 'stock'},
     {id: '7', name: 'المصاريف', path: 'costs'}
-  ]
+  ], [])
 
   let i = 0
   return (

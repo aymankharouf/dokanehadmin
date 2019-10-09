@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { editCategory, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditCategory = props => {
   const { state } = useContext(StoreContext)
-  const category = state.categories.find(rec => rec.id === props.id)
+  const category = useMemo(() => state.categories.find(rec => rec.id === props.id), [state.categories])
   const [name, setName] = useState(category.name)
   const [unitType, setUnitType] = useState(category.unitType || '')
   const [isActive, setIsActive] = useState(category.isActive || false)
@@ -22,7 +22,9 @@ const EditCategory = props => {
       props.f7router.back()
     })
   }
-  const unitTypesOptionsTags = state.unitTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  const unitTypesTags = useMemo(() => state.unitTypes.map(rec => 
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
+  ), [state.unitTypes])
   return (
     <Page>
       <Navbar title={state.labels.editCategory} backLink={state.labels.back} />
@@ -48,7 +50,7 @@ const EditCategory = props => {
         >
           <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
             <option value="" disabled></option>
-            {unitTypesOptionsTags}
+            {unitTypesTags}
           </select>
         </ListItem>
         <ListItem>
@@ -70,4 +72,4 @@ const EditCategory = props => {
     </Page>
   )
 }
-export default React.memo(EditCategory)
+export default EditCategory

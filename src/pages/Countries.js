@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -6,8 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const Countries = props => {
   const { state } = useContext(StoreContext)
-  let countries = state.countries
-  countries.sort((country1, country2) => country1.name > country2.name ? 1 : -1)
+  const countries = useMemo(() => [...state.countries].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.countries])
   const handleAdd = () => {
     props.f7router.navigate('/addCountry/')
   }

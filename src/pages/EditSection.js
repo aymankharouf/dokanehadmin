@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { editSection, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditSection = props => {
   const { state } = useContext(StoreContext)
-  const section = state.sections.find(rec => rec.id === props.id)
+  const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections])
   const [name, setName] = useState(section.name)
   const [percent, setPercent] = useState(section.percent)
   const [isActive, setIsActive] = useState(section.isActive || false)
@@ -61,4 +61,4 @@ const EditSection = props => {
     </Page>
   )
 }
-export default React.memo(EditSection)
+export default (EditSection)

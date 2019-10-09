@@ -1,49 +1,44 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useMemo } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
+import { approveStorePrice } from '../data/Actions'
 
 const PriceAlarmDetails = props => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const priceAlarm = state.priceAlarms.find(rec => rec.id === props.id)
-  const pack = state.packs.find(rec => rec.id === priceAlarm.packId)
-  const product = state.products.find(rec => rec.id === pack.productId)
-  const userInfo = state.users.find(rec => rec.id === priceAlarm.user)
-  const customer = state.customers.find(rec => rec.id === priceAlarm.user)
-  const storeName = customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName
-  let packStores = pack.stores
-  packStores = packStores.sort((packStore1, packStore2) => packStore1.price - packStore2.price)
-  packStores = packStores.map(packStore => {
-    const currentStore = state.stores.find(rec => rec.id === packStore.id)
-    return {...packStore, name: currentStore.name}
-  })
-  const handlePurchase = store => {
-		try{
-      if (store.id === 's') return
-			if (state.basket.store && state.basket.store.id !== store.id){
-				throw new Error(state.labels.twoDiffStores)
-      }
-      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: 1, price: store.price}})
+  const priceAlarm = useMemo(() => state.priceAlarms.find(rec => rec.id === props.id), [state.priceAlarms])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === priceAlarm.packId), [state.packs])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === priceAlarm.user), [state.users])
+  const customer = useMemo(() => state.customers.find(rec => rec.id === priceAlarm.user), [state.customers])
+  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName, [customer, state.stores])
+  const handleApprove = () => {
 			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-		}
-	}
-  const storesTags = packStores.map(store => 
-    <ListItem 
-      title={store.name} 
-      footer={moment(store.time.toDate()).fromNow()} 
-      after={(store.price / 1000).toFixed(3)} 
-      key={store.id} 
-      link="#"
-      onClick={() => handlePurchase(store)}
-    >
-      {store.quantity ? <Badge slot="title" color='red'>{store.quantity}</Badge> : null}
-    </ListItem>
-  )
+  }
+  const handleReject = () => {
+    props.f7router.back()
+}
+  const storesTags = useMemo(() => {
+    let packStores = pack.stores
+    packStores.sort((rec1, rec2) => rec1.price - rec2.price)
+    packStores = packStores.map(packStore => {
+      const currentStore = state.stores.find(rec => rec.id === packStore.id)
+      return {...packStore, name: currentStore.name}
+    })
+    return packStores.map(rec => 
+      <ListItem 
+        title={rec.name} 
+        footer={moment(rec.time.toDate()).fromNow()} 
+        after={(rec.price / 1000).toFixed(3)} 
+        key={rec.id} 
+      >
+        {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : null}
+      </ListItem>
+    )
+  }, [pack, state.stores])
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
@@ -51,10 +46,10 @@ const PriceAlarmDetails = props => {
         <Icon ios="f7:chevron_down" aurora="f7:chevron_down" md="material:keyboard_arrow_down"></Icon>
         <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => handlePurchase(1)}>
+          <FabButton color="green" onClick={() => handleApprove()}>
             <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
           </FabButton>
-          <FabButton color="red" onClick={() => handlePurchase(-1)}>
+          <FabButton color="red" onClick={() => handleReject()}>
           <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
           </FabButton>
         </FabButtons>

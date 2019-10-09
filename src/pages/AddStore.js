@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addStore, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -40,7 +40,9 @@ const AddStore = props => {
       props.f7router.back()
     })
   }
-  const storeTypesOptionsTags = state.storeTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  const storeTypesOptionsTags = useMemo(() => state.storeTypes.map(rec => 
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
+  ), [state.storeTypes])
   return (
     <Page>
       <Navbar title={state.labels.newStore} backLink={state.labels.back} />

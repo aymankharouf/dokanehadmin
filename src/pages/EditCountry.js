@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { editCountry, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditCountry = props => {
   const { state } = useContext(StoreContext)
-  const country = state.countries.find(rec => rec.id === props.id)
+  const country = useMemo(() => state.countries.find(rec => rec.id === props.id), [state.countries])
   const [name, setName] = useState(country.name)
   const [isActive, setIsActive] = useState(country.isActive || false)
   const handleEdit = () => {
@@ -50,4 +50,4 @@ const EditCountry = props => {
     </Page>
   )
 }
-export default React.memo(EditCountry)
+export default EditCountry

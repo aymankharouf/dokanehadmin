@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { updateOrder } from '../data/Actions'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Icon, Badge, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
@@ -7,20 +7,22 @@ import { StoreContext } from '../data/Store';
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
-  const order = state.orders.find(order => order.id === props.id)
-  const netPrice = order.total + order.fixedFees + order.deliveryFees - order.discount.value
+  const order = useMemo(() => state.orders.find(order => order.id === props.id), [state.orders])
+  const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
   let i = 0
   let totalPurchase = 0
-  let statusActions = [
-    {id: 'a', title: 'اعتماد', status: ['n', 's', 'f']},
-    {id: 'e', title: 'تعديل', status: ['f']},
-    {id: 's', title: 'تعليق', status: ['n', 'a']},
-    {id: 'u', title: 'رفض', status: ['n', 's']},
-    {id: 'c', title: 'الغاء', status: ['n', 'a']},
-    {id: 'r', title: 'تسليم', status: ['d', 'b']},
-    {id: 'i', title: 'استيداع', status: ['d', 'b']}
-  ]
-  statusActions = statusActions.filter(rec => rec.status.find(status => status === order.status))
+  const statusActions = useMemo(() => {
+    const statusActions = [
+      {id: 'a', title: 'اعتماد', status: ['n', 's', 'f']},
+      {id: 'e', title: 'تعديل', status: ['f']},
+      {id: 's', title: 'تعليق', status: ['n', 'a']},
+      {id: 'u', title: 'رفض', status: ['n', 's']},
+      {id: 'c', title: 'الغاء', status: ['n', 'a']},
+      {id: 'r', title: 'تسليم', status: ['d', 'b']},
+      {id: 'i', title: 'استيداع', status: ['d', 'b']}
+    ]
+    return statusActions.filter(rec => rec.status.find(status => status === order.status))
+  }, [])
   const handleAction = type => {
     let newStatus
     switch (order.status) {
@@ -115,4 +117,4 @@ const OrderDetails = props => {
     </Page>
   )
 }
-export default React.memo(OrderDetails)
+export default OrderDetails

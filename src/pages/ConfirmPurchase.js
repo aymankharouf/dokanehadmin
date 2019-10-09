@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
@@ -8,8 +8,8 @@ import { confirmPurchase, stockOut } from '../data/Actions'
 
 const ConfirmPurchase = props => {
   const { state, user, dispatch } = useContext(StoreContext)
-  const store = state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : null
-  const total = state.basket.packs ? state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0) : 0
+  const store = useMemo(() => state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : '', [state.basket, state.stores])
+  const total = useMemo(() => state.basket.packs ? state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0) : 0, [state.basket])
   const handlePurchase = () => {
     const basket = state.basket.packs.map(pack => {
       return ({

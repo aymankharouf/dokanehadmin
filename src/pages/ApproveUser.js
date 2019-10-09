@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,20 +7,22 @@ import { approveUser, showMessage } from '../data/Actions'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
-  const userInfo = state.users.find(rec => rec.id === props.id)
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(userInfo.address || '')
   const [storeId, setStoreId] = useState('')
-  let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
-  stores.sort((store1, store2) => store1.name > store2.name ? 1 : -1)
-  const storesOptionsTags = stores.map(store => 
-    <option 
-      key={store.id} 
-      value={store.id}
-    >
-      {store.name}
-    </option>
-  )
+  const storesTags = useMemo(() => {
+    let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
+    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return stores.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.stores]) 
   const handleSubmit = () => {
     approveUser({
       id: props.id,
@@ -73,7 +75,7 @@ const ApproveUser = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value="" disabled></option>
-            {storesOptionsTags}
+            {storesTags}
           </select>
         </ListItem>
         <ListInput 
@@ -97,4 +99,4 @@ const ApproveUser = props => {
     </Page>
   )
 }
-export default React.memo(ApproveUser)
+export default ApproveUser

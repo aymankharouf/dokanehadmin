@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addStorePack, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const AddStorePack = props => {
   const { state } = useContext(StoreContext)
-  const store = state.stores.find(rec => rec.id === props.id)
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
   const [productId, setProductId] = useState('')
   const [packId, setPackId] = useState('')
   const [productPacks, setProductPacks] = useState([])
@@ -83,24 +83,27 @@ const AddStorePack = props => {
       props.f7router.back()
     })
   }
-  let products = state.products.filter(rec => rec.isActive === true)
-  products.sort((product1, product2) => product1.name > product2.name ? 1 : -1)
-  const productsOptionsTags = products.map(product => 
+
+  const productsTags = useMemo(() => {
+    let products = state.products.filter(rec => rec.isActive === true)
+    products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return products.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.products])
+  const packsTags = useMemo(() => productPacks.map(rec => 
     <option 
-      key={product.id} 
-      value={product.id}
+      key={rec.id} 
+      value={rec.id}
     >
-      {product.name}
+      {rec.name}
     </option>
-  )
-  const packsOptionsTags = productPacks.map(pack => 
-    <option 
-      key={pack.id} 
-      value={pack.id}
-    >
-      {pack.name}
-    </option>
-  )
+  ), [productPacks])
   return (
     <Page>
       <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink={state.labels.back} />
@@ -118,7 +121,7 @@ const AddStorePack = props => {
         >
           <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
             <option value="" disabled></option>
-            {productsOptionsTags}
+            {productsTags}
           </select>
         </ListItem>
         <ListItem
@@ -134,7 +137,7 @@ const AddStorePack = props => {
         >
           <select name="packId" defaultValue="" onChange={(e) => setPackId(e.target.value)}>
             <option value="" disabled></option>
-            {packsOptionsTags}
+            {packsTags}
           </select>
         </ListItem>
         <ListInput 

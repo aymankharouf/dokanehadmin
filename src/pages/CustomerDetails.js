@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -6,10 +6,10 @@ import BottomToolbar from './BottomToolbar';
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
-  const customer = state.customers.find(rec => rec.id === props.id)
-  const userInfo = state.users.find(rec => rec.id === props.id)
-  const storeName = customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : ''
-  const typeName = state.customerTypes.find(rec => rec.id === customer.type).name 
+  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id), [state.customers])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
+  const storeName = useMemo(() => customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : '', [customer, state.stores])
+  const typeName = useMemo(() => state.customerTypes.find(rec => rec.id === customer.type).name , [state.customerTypes])
 
   return (
     <Page>
@@ -117,4 +117,4 @@ const CustomerDetails = props => {
     </Page>
   )
 }
-export default React.memo(CustomerDetails)
+export default CustomerDetails

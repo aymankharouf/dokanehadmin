@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { addCategory, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const AddCategory = props => {
   const { state } = useContext(StoreContext)
-  const section = state.sections.find(rec => rec.id === props.id)
+  const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections]) 
   const [name, setName] = useState('')
   const [unitType, setUnitType] = useState('')
   const handleSubmit = () => {
@@ -20,7 +20,9 @@ const AddCategory = props => {
       props.f7router.back()
     })
   }
-  const unitTypesOptionsTags = state.unitTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  const unitTypesOptionsTags = useMemo(() => state.unitTypes.map(rec => 
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
+  ), [state.unitTypes])
   return (
     <Page>
       <Navbar title={`${state.labels.addCategory} - ${section.name}`} backLink={state.labels.back} />

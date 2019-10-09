@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
@@ -8,8 +8,10 @@ import { resolveForgetPassword } from '../data/Actions'
 
 const ForgetPassword = props => {
   const { state } = useContext(StoreContext)
-  let forgetPassword = state.forgetPassword.filter(rec => rec.resolved === false)
-  forgetPassword.sort((forgetPassword1, forgetPassword2) => forgetPassword1.time.seconds - forgetPassword2.time.seconds)
+  const forgetPassword = useMemo(() => {
+    let forgetpassword = state.forgetPassword.filter(rec => rec.resolved === false)
+    return forgetpassword.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+  } , [state.forgetPassword])
   const handleResolveForgetPassword = trans => {
     resolveForgetPassword(trans).then(() => {
       props.f7router.back()

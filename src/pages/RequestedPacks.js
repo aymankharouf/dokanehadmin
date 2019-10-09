@@ -1,12 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
-	const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
-	approvedOrders.sort((order1, order2) => order1.time.seconds - order2.time.seconds)
+	const approvedOrders = useMemo(() => {
+		let approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+		return approvedOrders.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+	}, [state.orders])
+	
 	const [requiredPacks, setRequiredPacks] = useState([])
 	let i = 0
 	useEffect(() => {

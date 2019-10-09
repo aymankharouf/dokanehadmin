@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Button, Popover, Fab, Icon} from 'framework7-react'
+import React, { useContext, useEffect, useMemo } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 const Products = props => {
   const { state } = useContext(StoreContext)
+  const products = useMemo(() => [...state.products].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.products])
   return(
     <Page>
       <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
@@ -25,7 +26,7 @@ const Products = props => {
             <ListItem title={state.labels.noData} />
           </List>
           <List mediaList className="search-list searchbar-found">
-            {state.products && state.products.map(product => {
+            {products && products.map(product => {
               return (
                 <ListItem
                   link={`/product/${product.id}`}
@@ -36,7 +37,7 @@ const Products = props => {
                   badge={product.isActive === false ? state.labels.inActive : ''}
                   badgeColor='red' 
                 >
-                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+                  <img slot="media" src={product.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
                   {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
                 </ListItem>
               )

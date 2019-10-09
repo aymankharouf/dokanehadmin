@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect } from 'react'
+import React, {useState, useContext, useEffect, useMemo } from 'react'
 import {Page, Navbar, List, ListItem, ListInput, Block, Toggle, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { addProduct, showMessage } from '../data/Actions'
@@ -51,15 +51,27 @@ const AddProduct = props => {
       props.f7router.back()
     }) 
   }
-  let categories = state.categories.filter(rec => rec.isActive === true)
-  categories.sort((category1, category2) => category1.name > category2.name ? 1 : -1)
-  const categoriesOptionsTags = categories.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  let trademarks = state.trademarks.filter(rec => rec.isActive === true)
-  trademarks.sort((trademark1, trademark2) => trademark1.name > trademark2.name ? 1 : -1)
-  const trademarksOptionsTags = trademarks.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
-  let countries = state.countries.filter(rec => rec.isActive === true)
-  countries.sort((country1, country2) => country1.name > country2.name ? 1 : -1)
-  const countriesOptionsTags = countries.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  const categoriesTags = useMemo(() => {
+    let categories = state.categories.filter(rec => rec.isActive === true)
+    categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return categories.map(rec => 
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
+    )
+  }, [state.categories])
+  const trademarksTags = useMemo(() => {
+    let trademarks = state.trademarks.filter(rec => rec.isActive === true)
+    trademarks.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return trademarks.map(rec => 
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
+    )
+  }, [state.trademarks])
+  const countriesTags = useMemo(() => {
+    let countries = state.countries.filter(rec => rec.isActive === true)
+    countries.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return countries.map(rec => 
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
+    )
+  }, [state.countries]) 
   return (
     <Page>
       <Navbar title={state.labels.addProduct} backLink={state.labels.back} />
@@ -77,7 +89,7 @@ const AddProduct = props => {
         >
           <select name='category' value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="" disabled></option>
-            {categoriesOptionsTags}
+            {categoriesTags}
           </select>
         </ListItem>
         <ListItem
@@ -93,7 +105,7 @@ const AddProduct = props => {
         >
           <select name='trademark' value={trademark} onChange={(e) => setTrademark(e.target.value)}>
             <option value="" disabled></option>
-            {trademarksOptionsTags}
+            {trademarksTags}
           </select>
         </ListItem>
         <ListItem
@@ -109,7 +121,7 @@ const AddProduct = props => {
         >
           <select name='country' defaultValue="" onChange={(e) => setCountry(e.target.value)}>
             <option value="" disabled></option>
-            {countriesOptionsTags}
+            {countriesTags}
           </select>
         </ListItem>
         <ListInput 

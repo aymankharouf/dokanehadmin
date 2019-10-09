@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
+import React, { useState, useContext, useMemo } from 'react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 import { editCustomer, showMessage, editUser } from '../data/Actions'
@@ -7,32 +7,34 @@ import { editCustomer, showMessage, editUser } from '../data/Actions'
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
-  const customer = state.customers.find(rec => rec.id === props.id)
-  const userInfo = state.users.find(rec => rec.id === props.id)
+  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id), [state.customers])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
   const [isActive, setIsActive] = useState(customer.isActive)
   const [type, setType] = useState(customer.type)
   const [storeId, setStoreId] = useState(customer.storeId)
   const [deliveryFees, setDeliveryFees] = useState(customer.deliveryFees)
-  let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
-  stores.sort((store1, store2) => store1.name > store2.name ? 1 : -1)
-  const storesOptionsTags = stores.map(store => 
+  const storesTags = useMemo(() => {
+    let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
+    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return stores.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.stores]) 
+  const customerTypesTags = useMemo(() => state.customerTypes.map(rec => 
     <option 
-      key={store.id} 
-      value={store.id}
+      key={rec.id} 
+      value={rec.id}
     >
-      {store.name}
+      {rec.name}
     </option>
-  )
-  const customerTypesOptionsTags = state.customerTypes.map(type => 
-    <option 
-      key={type.id} 
-      value={type.id}
-    >
-      {type.name}
-    </option>
-  )
+  ), [state.customerTypes])
   const handleSubmit = () => {
     editCustomer({
       id: props.id,
@@ -86,7 +88,7 @@ const EditCustomer = props => {
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value="" disabled></option>
-            {customerTypesOptionsTags}
+            {customerTypesTags}
           </select>
         </ListItem>
         <ListItem>
@@ -106,7 +108,7 @@ const EditCustomer = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value="" disabled></option>
-            {storesOptionsTags}
+            {storesTags}
           </select>
         </ListItem>
         <ListInput 
@@ -143,4 +145,4 @@ const EditCustomer = props => {
     </Page>
   )
 }
-export default React.memo(EditCustomer)
+export default EditCustomer

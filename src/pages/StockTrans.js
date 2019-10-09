@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -8,8 +8,7 @@ import BottomToolbar from './BottomToolbar';
 
 const StockTrans = props => {
   const { state } = useContext(StoreContext)
-  let stockTrans = state.stockTrans
-  stockTrans.sort((trans1, trans2) => trans2.time.seconds - trans1.time.seconds)
+  const stockTrans = useMemo(() => [...state.stockTrans].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.stockTrans])
   return(
     <Page>
       <Navbar title={state.labels.stockTrans} backLink={state.labels.back} />

@@ -1,27 +1,29 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Icon } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
+  const storePacks = useMemo(() => {
+    let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === 's'))
+    storePacks = storePacks.map(pack => {
+      const productInfo = state.products.find(rec => rec.id === pack.productId)
+      return {
+        id: pack.id,
+        productName: productInfo.name,
+        country: productInfo.country,
+        name: pack.name,
+        quantity: pack.stores.find(rec => rec.id === 's').quantity,
+        price: pack.stores.find(rec => rec.id === 's').price,
+        purchasePrice: pack.stores.find(rec => rec.id === 's').purchasePrice,
+        time: pack.stores.find(rec => rec.id === 's').time,
+        imageUrl: productInfo.imageUrl
+      }
+    })
+    return storePacks.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+    }, [state.packs])
   if (!user) return <ReLogin callingPage="stock"/>
-  let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === 's'))
-  storePacks = storePacks.map(pack => {
-    const productInfo = state.products.find(rec => rec.id === pack.productId)
-    return {
-      id: pack.id,
-      productName: productInfo.name,
-      country: productInfo.country,
-      name: pack.name,
-      quantity: pack.stores.find(rec => rec.id === 's').quantity,
-      price: pack.stores.find(rec => rec.id === 's').price,
-      purchasePrice: pack.stores.find(rec => rec.id === 's').purchasePrice,
-      time: pack.stores.find(rec => rec.id === 's').time,
-      imageUrl: productInfo.imageUrl
-    }
-  })
-  storePacks.sort((pack1, pack2) => pack1.time.seconds - pack2.time.seconds)
   return(
     <Page>
       <Navbar title={state.labels.stock} backLink={state.labels.back}>
@@ -51,7 +53,7 @@ const Stock = props => {
               text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === pack.country).name}`}
               key={pack.id}
             >
-              <img slot="media" src={pack.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
               <Badge slot="title" color="red">{pack.quantity}</Badge>
             </ListItem>
           )}

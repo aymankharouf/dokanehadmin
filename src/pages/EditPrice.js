@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect } from 'react'
+import React, {useState, useContext, useEffect, useMemo } from 'react'
 import {Page, Navbar, List, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editPrice } from '../data/Actions'
@@ -6,10 +6,12 @@ import { editPrice } from '../data/Actions'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
-  const pack = state.packs.find(rec => rec.id === props.packId)
-  const product = state.products.find(rec => rec.id === pack.productId)
-  let store = pack.stores.find(rec => rec.id === props.storeId)
-  store = {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId), [state.packs])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
+  const store = useMemo(() => {
+    const store = pack.stores.find(rec => rec.id === props.storeId)
+    return {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
+  }, [pack])
   const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice / 1000)
   const [price, setPrice] = useState(store.price / 1000)
   const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''

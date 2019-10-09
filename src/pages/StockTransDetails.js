@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
-  const stockTrans = state.stockTrans.find(rec => rec.id === props.id)
+  const stockTrans = useMemo(() => state.stockTrans.find(rec => rec.id === props.id), [state.stockTrans])
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>

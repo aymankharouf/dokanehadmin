@@ -1,19 +1,18 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editPack, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon, Toggle, BlockTitle, Row, Col, Button} from 'framework7-react';
+import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, BlockTitle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const EditPack = props => {
   const { state } = useContext(StoreContext)
-  const pack = state.packs.find(rec => rec.id === props.id)
-  const product = state.products.find(rec => rec.id === pack.productId)
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), state.products)
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [isActive, setIsActive] = useState(pack.isActive)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
   const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
-  const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
   const [offerQuantity, setOfferQuantity] = useState(pack.offerQuantity)
   const [bonusProductId, setBonusProductId] = useState(pack.bonusProductId)
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
@@ -58,32 +57,37 @@ const EditPack = props => {
       props.f7router.back()
     })
   }
-  const offerPacksOptionsTags = offerProductPacks.map(pack => 
+  const offerPacksTags = useMemo(() => {
+    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
+    return offerProductPacks.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.packs])
+  const bonusProductsTags = useMemo(() => {
+    let products = state.products.filter(rec => rec.isActive === true)
+    products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return products.map(rec => 
+      <option 
+        key={rec.id} 
+        value={rec.id}
+      >
+        {rec.name}
+      </option>
+    )
+  }, [state.products]) 
+  const bonusPacksTags = useMemo(() => bonusProductPacks.map(rec => 
     <option 
-      key={pack.id} 
-      value={pack.id}
+      key={rec.id} 
+      value={rec.id}
     >
-      {pack.name}
+      {rec.name}
     </option>
-  )
-  let products = state.products.filter(rec => rec.isActive === true)
-  products.sort((product1, product2) => product1.name > product2.name ? 1 : -1)
-  const bonusProductsOptionsTags = products.map(product => 
-    <option 
-      key={product.id} 
-      value={product.id}
-    >
-      {product.name}
-    </option>
-  )
-  const bonusPacksOptionsTags = bonusProductPacks.map(pack => 
-    <option 
-      key={pack.id} 
-      value={pack.id}
-    >
-      {pack.name}
-    </option>
-  )
+  ), [bonusProductPacks])
   return (
     <Page>
       <Navbar title={`${state.labels.editPack} - ${product.name} ${pack.name}`} backLink={state.labels.back} />
@@ -143,7 +147,7 @@ const EditPack = props => {
             >
               <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
                 <option value="" disabled></option>
-                {offerPacksOptionsTags}
+                {offerPacksTags}
               </select>
             </ListItem>
             <ListInput 
@@ -178,7 +182,7 @@ const EditPack = props => {
             >
               <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
                 <option value="" disabled></option>
-                {bonusProductsOptionsTags}
+                {bonusProductsTags}
               </select>
             </ListItem>
             <ListItem
@@ -194,7 +198,7 @@ const EditPack = props => {
             >
               <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
                 <option value="" disabled></option>
-                {bonusPacksOptionsTags}
+                {bonusPacksTags}
               </select>
             </ListItem>
             <ListInput 
@@ -218,4 +222,4 @@ const EditPack = props => {
     </Page>
   )
 }
-export default React.memo(EditPack)
+export default EditPack

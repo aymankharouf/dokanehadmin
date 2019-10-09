@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editStore, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
-  const store = state.stores.find(rec => rec.id === props.id)
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
   const [type, setType] = useState(store.type)
   const [name, setName] = useState(store.name)
   const [mobile, setMobile] = useState(store.mobile)
@@ -43,7 +43,9 @@ const EditStore = props => {
       props.f7router.back()
     })
   }
-  const storeTypesOptionsTags = state.storeTypes.map(rec => <option key={rec.id} value={rec.id}>{rec.name}</option>)
+  const storeTypesTags = useMemo(() => state.storeTypes.map(rec => 
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
+  ), [state.storeTypes])
   return (
     <Page>
       <Navbar title={state.labels.editStore} backLink={state.labels.back} />
@@ -61,7 +63,7 @@ const EditStore = props => {
         >
           <select name='type' value={type} onChange={(e) => setType(e.target.value)}>
             <option value="" disabled></option>
-            {storeTypesOptionsTags}
+            {storeTypesTags}
           </select>
         </ListItem>
         <ListInput 
