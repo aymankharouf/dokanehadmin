@@ -9,7 +9,7 @@ import { StoreContext } from '../data/Store';
 const NewUsers = props => {
   const { state } = useContext(StoreContext)
   const newUsers = useMemo(() => {
-    let newUsers = state.users.filter(rec => rec.isActive === false)
+    const newUsers = state.users.filter(rec => rec.isActive === false)
     return newUsers.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
   }, [state.users])
   return(

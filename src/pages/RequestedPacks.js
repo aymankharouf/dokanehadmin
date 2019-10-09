@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
 	const approvedOrders = useMemo(() => {
-		let approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+		const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
 		return approvedOrders.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
 	}, [state.orders])
 	

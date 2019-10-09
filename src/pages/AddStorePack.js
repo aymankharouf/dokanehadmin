@@ -85,7 +85,7 @@ const AddStorePack = props => {
   }
 
   const productsTags = useMemo(() => {
-    let products = state.products.filter(rec => rec.isActive === true)
+    const products = state.products.filter(rec => rec.isActive === true)
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
       <option 

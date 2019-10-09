@@ -8,7 +8,7 @@ import { StoreContext } from '../data/Store';
 const PriceAlarms = props => {
   const { state } = useContext(StoreContext)
   const priceAlarms = useMemo(() => {
-    let priceAlarms = state.priceAlarms.filter(rec => rec.status === 'n')
+    const priceAlarms = state.priceAlarms.filter(rec => rec.status === 'n')
     return priceAlarms.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
   }, [state.priceAlarms])
   return(

@@ -10,7 +10,7 @@ const OrdersList = props => {
   const { state } = useContext(StoreContext)
   const status = useMemo(() => state.orderStatus.find(rec => rec.id === props.id), [state.orderStatus])
   const orders = useMemo(() => {
-    let orders = state.orders.filter(rec => rec.status === props.id)
+    const orders = state.orders.filter(rec => rec.status === props.id)
     return orders.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
   }, [state.orders])
   return(

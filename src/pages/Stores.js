@@ -8,7 +8,7 @@ import { addStock } from '../data/Actions'
 const Stores = props => {
   const { state, dispatch } = useContext(StoreContext)
   const stores = useMemo(() => {
-    let stores = state.stores.filter(rec => rec.id !== 's')
+    const stores = state.stores.filter(rec => rec.id !== 's')
     return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.stores])
   const stock = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])

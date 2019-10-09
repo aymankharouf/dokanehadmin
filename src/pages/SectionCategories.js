@@ -8,7 +8,7 @@ const SectionCategories = props => {
   const { state } = useContext(StoreContext)
   const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections])
   const categories = useMemo(() => {
-    let categories = state.categories.filter(rec => rec.sectionId === props.id)
+    const categories = state.categories.filter(rec => rec.sectionId === props.id)
     return categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.categories])
 

@@ -49,21 +49,21 @@ const EditProduct = props => {
     })  
   }
   const categoriesTags = useMemo(() => {
-    let categories = state.categories.filter(rec => rec.isActive === true)
+    const categories = state.categories.filter(rec => rec.isActive === true)
     categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return categories.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.categories]) 
   const trademarksTags = useMemo(() => {
-    let trademarks = state.trademarks.filter(rec => rec.isActive === true)
+    const trademarks = state.trademarks.filter(rec => rec.isActive === true)
     trademarks.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return trademarks.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.trademarks]) 
   const countriesTags = useMemo(() => {
-    let countries = state.countries.filter(rec => rec.isActive === true)
+    const countries = state.countries.filter(rec => rec.isActive === true)
     countries.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return countries.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>

@@ -16,7 +16,7 @@ const EditCustomer = props => {
   const [storeId, setStoreId] = useState(customer.storeId)
   const [deliveryFees, setDeliveryFees] = useState(customer.deliveryFees)
   const storesTags = useMemo(() => {
-    let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
+    const stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
     stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return stores.map(rec => 
       <option 

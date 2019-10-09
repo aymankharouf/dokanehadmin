@@ -12,7 +12,7 @@ const ApproveUser = props => {
   const [address, setAddress] = useState(userInfo.address || '')
   const [storeId, setStoreId] = useState('')
   const storesTags = useMemo(() => {
-    let stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
+    const stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
     stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return stores.map(rec => 
       <option 
