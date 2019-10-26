@@ -223,7 +223,7 @@ export const editOrder = async (order, pack, store) => {
   await batch.commit()
 }
 
-export const addStorePack = async (pack, store, purchasePrice, price, offerEnd) => {
+export const addStorePack = (pack, store, purchasePrice, price, offerEnd) => {
   const stores = [
     ...pack.stores, 
     {id: store.id, 
@@ -234,7 +234,7 @@ export const addStorePack = async (pack, store, purchasePrice, price, offerEnd) 
       offerEnd, 
       time: new Date()
     }]
-  await firebase.firestore().collection('packs').doc(pack.id).update({
+  return firebase.firestore().collection('packs').doc(pack.id).update({
     stores: stores
   })
 }
@@ -281,7 +281,7 @@ export const editProduct = async product => {
   })
 }
 
-export const editPrice = async (store, pack, purchasePrice, price, oldPurchasePrice, oldPrice, offerEnd) => {
+export const editPrice = (store, pack, purchasePrice, price, oldPurchasePrice, oldPrice, offerEnd) => {
   let stores = pack.stores.filter(rec => rec.id !== store.id)
   stores = [
     ...stores, 
@@ -293,93 +293,93 @@ export const editPrice = async (store, pack, purchasePrice, price, oldPurchasePr
       offerEnd, 
       time: new Date()
     }]
-  await firebase.firestore().collection('packs').doc(pack.id).update({
+  return firebase.firestore().collection('packs').doc(pack.id).update({
     stores
   })
 }
 
-export const deleteStorePack = async (store, pack) => {
+export const deleteStorePack = (store, pack) => {
   const stores = pack.stores.filter(rec => rec.id !== store.id)
-  await firebase.firestore().collection('packs').doc(pack.id).update({
+  return firebase.firestore().collection('packs').doc(pack.id).update({
     stores
   })
 }
 
-export const confirmPrice = async (store, pack) => {
+export const confirmPrice = (store, pack) => {
   let stores = pack.stores.filter(rec => rec.id !== store.id)
   const newStore = pack.stores.find(rec => rec.id === store.id)
   stores = [...stores, {...newStore, time: new Date()}]
-  await firebase.firestore().collection('packs').doc(pack.id).update({
+  return firebase.firestore().collection('packs').doc(pack.id).update({
     stores
   })
 }
 
-export const addStore = async store => {
-  await firebase.firestore().collection('stores').add(store)
+export const addStore = store => {
+  return firebase.firestore().collection('stores').add(store)
 }
 
-export const editStore = async store => {
-  await firebase.firestore().collection('stores').doc(store.id).update(store)
+export const editStore = store => {
+  return firebase.firestore().collection('stores').doc(store.id).update(store)
 }
 
-export const addStock = async name => {
-  await firebase.firestore().collection("stores").doc("s").set({
+export const addStock = name => {
+  return firebase.firestore().collection("stores").doc("s").set({
     name
 })
 }
 
-export const addCountry = async country => {
-  await firebase.firestore().collection('countries').add(country)
+export const addCountry = country => {
+  return firebase.firestore().collection('countries').add(country)
 }
 
-export const editCountry = async country => {
-  await firebase.firestore().collection('countries').doc(country.id).update(country)
+export const editCountry = country => {
+  return firebase.firestore().collection('countries').doc(country.id).update(country)
 }
 
-export const addSection = async section => {
-  await firebase.firestore().collection('sections').add(section)
+export const addSection = section => {
+  return firebase.firestore().collection('sections').add(section)
 }
 
-export const editSection = async section => {
-  await firebase.firestore().collection('sections').doc(section.id).update(section)
+export const editSection = section => {
+  return firebase.firestore().collection('sections').doc(section.id).update(section)
 }
 
-export const addCategory = async category => {
-  await firebase.firestore().collection('categories').add(category)
+export const addCategory = category => {
+  return firebase.firestore().collection('categories').add(category)
 }
 
-export const editCategory = async category => {
-  await firebase.firestore().collection('categories').doc(category.id).update(category)
+export const editCategory = category => {
+  return firebase.firestore().collection('categories').doc(category.id).update(category)
 }
 
-export const addTrademark = async trademark => {
-  await firebase.firestore().collection('trademarks').add(trademark)
+export const addTrademark = trademark => {
+  return firebase.firestore().collection('trademarks').add(trademark)
 }
 
-export const editTrademark = async trademark => {
-  await firebase.firestore().collection('trademarks').doc(trademark.id).update(trademark)
+export const editTrademark = trademark => {
+  return firebase.firestore().collection('trademarks').doc(trademark.id).update(trademark)
 }
 
-export const resolveForgetPassword = async trans => {
-  await firebase.firestore().collection('forgetPassword').doc(trans.id).update({
+export const resolveForgetPassword = trans => {
+  return firebase.firestore().collection('forgetPassword').doc(trans.id).update({
     resolved: true
   })
 }
 
-export const addPack = async pack => {
-  await firebase.firestore().collection('packs').add(pack)
+export const addPack = pack => {
+  return firebase.firestore().collection('packs').add(pack)
 }
 
-export const editPack = async pack => {
-  await firebase.firestore().collection('packs').doc(pack.id).update(pack)
+export const editPack = pack => {
+  return firebase.firestore().collection('packs').doc(pack.id).update(pack)
 }
 
-export const editCustomer = async customer => {
-  await firebase.firestore().collection('customers').doc(customer.id).update(customer)
+export const editCustomer = customer => {
+  return firebase.firestore().collection('customers').doc(customer.id).update(customer)
 }
 
-export const editUser = async user => {
-  await firebase.firestore().collection('users').doc(user.id).update(user)
+export const editUser = user => {
+  return firebase.firestore().collection('users').doc(user.id).update(user)
 }
 
 export const approveUser = async user => {

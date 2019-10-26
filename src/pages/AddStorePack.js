@@ -19,20 +19,17 @@ const AddStorePack = props => {
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
   const [error, setError] = useState('')
   useEffect(() => {
-    if (product && purchasePrice) {
-      const storeType = store ? store.type : null
+    if (purchasePrice) {
+      const storeType = store ? store.type : ''
       if (storeType === 'w') {
-        const category = state.categories.find(rec => rec.id === product.category)
-        const section = category ? state.sections.find(rec => rec.id === category.sectionId) : null
-        const percent = section ? section.percent : 0
-        setPrice(((1 + (percent / 100)) * purchasePrice).toFixed(3))
+        setPrice(((1 + (Number(state.labels.profitPercent) / 100)) * purchasePrice).toFixed(3))
       } else {
         setPrice(purchasePrice)
       }
     } else {
       setPrice('')
     }
-  }, [product, purchasePrice])
+  }, [purchasePrice])
   useEffect(() => {
     if (productId) {
       setProduct(state.products.find(rec => rec.id === productId))

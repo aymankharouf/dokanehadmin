@@ -9,13 +9,11 @@ const EditSection = props => {
   const { state } = useContext(StoreContext)
   const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections])
   const [name, setName] = useState(section.name)
-  const [percent, setPercent] = useState(section.percent)
   const [isActive, setIsActive] = useState(section.isActive || false)
   const handleEdit = () => {
     editSection({
       id: section.id,
       name,
-      percent,
       isActive
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
@@ -34,21 +32,13 @@ const EditSection = props => {
           type="text" 
           onChange={(e) => setName(e.target.value)}
         />
-        <ListInput 
-          name="percent" 
-          label={state.labels.percent}
-          value={percent}
-          floatingLabel 
-          type="text" 
-          onChange={(e) => setPercent(e.target.value)}
-        />
         <ListItem>
           <span>{state.labels.isActive}</span>
           <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
         </ListItem>
 
       </List>
-      {!name || (name === section.name && percent === section.percent && isActive === section.isActive)
+      {!name || (name === section.name && isActive === section.isActive)
       ? ''
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>

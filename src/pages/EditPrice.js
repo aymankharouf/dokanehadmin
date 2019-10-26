@@ -18,12 +18,9 @@ const EditPrice = props => {
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [error, setError] = useState('')
   useEffect(() => {
-    const storeType = store ? store.type : null
+    const storeType = store ? store.type : ''
     if (storeType === 'w') {
-      const currentCategory = state.categories.find(rec => rec.id === product.category)
-      const currentSection = currentCategory ? state.sections.find(rec => rec.id === currentCategory.section) : null
-      const percent = currentSection ? currentSection.percent : 0
-      setPrice((1 + (percent / 100) * purchasePrice))
+      setPrice((1 + (Number(state.labels.profitPercent) / 100) * purchasePrice))
     } else {
       setPrice(purchasePrice)
     }

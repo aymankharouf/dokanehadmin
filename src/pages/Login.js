@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, ListButton } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { login, showMessage } from '../data/Actions'
 
@@ -26,7 +26,7 @@ const Login = props => {
   }
 
   return (
-    <Page loginScreen>
+    <Page>
       <Navbar title={state.labels.login} backLink={state.labels.back} />
       <List form>
         <ListInput
@@ -42,9 +42,7 @@ const Login = props => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </List>
-      <List>
-        {!email || !password ? '' : <ListButton onClick={() => handleLogin()}>{state.labels.loginSubmit}</ListButton>}
-      </List>
+      {!email || !password ? '' : <Button onClick={() => handleLogin()}>{state.labels.loginSubmit}</Button>}
     </Page>
   )
 }

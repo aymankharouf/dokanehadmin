@@ -43,3 +43,4 @@ invitations
 maps
 *user as store admin
 advertisements
+categorize stores, ordering stores for equity

@@ -5,7 +5,7 @@
   }
   
   .center {
-    text-align: center;
+    text-align: center !important;
   }
   
   .total-price {
@@ -70,5 +70,9 @@
 
   .avatar {
     width: 100px;
+  }
+
+  .section-label {
+    font-size: 1.2rem;
   }
 

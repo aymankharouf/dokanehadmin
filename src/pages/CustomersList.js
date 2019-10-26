@@ -26,10 +26,10 @@ const CustomersList = props => {
     <Page>
       <Navbar title={`${state.labels.customers} - ${typeName}`} backLink={state.labels.back} >
         <NavRight>
-          <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
+          <Link searchbarEnable=".searchbar" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
         </NavRight>
         <Searchbar
-          className="searchbar-demo"
+          className="searchbar"
           searchContainer=".search-list"
           searchIn=".item-title, .item-subtitle"
           clearButton

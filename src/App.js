@@ -7,7 +7,7 @@ const app = props => {
   const f7params = {
     id: 'io.framework7.harees',
     name: 'Harees',
-    theme: 'ios', 
+    theme: 'auto', 
     routes,
   };
 

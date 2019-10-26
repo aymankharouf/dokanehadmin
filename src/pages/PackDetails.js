@@ -26,7 +26,7 @@ const PackDetails = props => {
         link="#"
         onClick={() => handlePurchase(rec)}
       >
-        {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : null}
+        {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : ''}
       </ListItem>
     )
   }, [pack, state.stores]) 
@@ -48,7 +48,7 @@ const PackDetails = props => {
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
         <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
       </Fab>
-      <Card className="demo-card-header-pic">
+      <Card>
         <CardContent>
           <img src={product.imageUrl} width="100%" height="250" alt=""/>
         </CardContent>

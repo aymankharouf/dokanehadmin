@@ -46,8 +46,9 @@ const Store = props => {
     {id: 'i', name: 'استيداع'}
   ]  
   const storeTypes = [
+    {id: 's', name: 'دكانة'},
     {id: 'm', name: 'محل'},
-    {id: 's', name: 'سوبرماركت'},
+    {id: 'b', name: 'سوبرماركت'},
     {id: 'w', name: 'محل جملة'}
   ]
   const stockTransTypes = [
@@ -104,69 +105,87 @@ const Store = props => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
-        firebase.firestore().collection('orders').onSnapshot(docs => {
+        const unsubscribeOrders = firebase.firestore().collection('orders').onSnapshot(docs => {
           let orders = []
           docs.forEach(doc => {
             orders.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_ORDERS', orders})
+        }, err => {
+          unsubscribeOrders()
         })  
-        firebase.firestore().collection('users').onSnapshot(docs => {
+        const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
           let users = []
           docs.forEach(doc => {
             users.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_USERS', users})
+        }, err => {
+          unsubscribeUsers()
         })  
-        firebase.firestore().collection('customers').onSnapshot(docs => {
+        const unsubscribeCustomers = firebase.firestore().collection('customers').onSnapshot(docs => {
           let customers = []
           docs.forEach(doc => {
             customers.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_CUSTOMERS', customers})
+        }, err => {
+          unsubscribeCustomers()
         })  
-        firebase.firestore().collection('stores').onSnapshot(docs => {
+        const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores = []
           docs.forEach(doc => {
             stores.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_STORES', stores})
-        })
-        firebase.firestore().collection('purchases').onSnapshot(docs => {
+        }, err => {
+          unsubscribeStores()
+        })  
+        const unsubscribePurchases = firebase.firestore().collection('purchases').onSnapshot(docs => {
           let purchases = []
           docs.forEach(doc => {
             purchases.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_PURCHASES', purchases})
+        }, err => {
+          unsubscribePurchases()
         })  
-        firebase.firestore().collection('stockTrans').onSnapshot(docs => {
+        const unsubscribeStockTrans = firebase.firestore().collection('stockTrans').onSnapshot(docs => {
           let stockTrans = []
           docs.forEach(doc => {
             stockTrans.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_STOCK_TRANS', stockTrans})
+        }, err => {
+          unsubscribeStockTrans()
         })  
-        firebase.firestore().collection('packTrans').onSnapshot(docs => {
+        const unsubscribePackTrans = firebase.firestore().collection('packTrans').onSnapshot(docs => {
           let packTrans = []
           docs.forEach(doc => {
             packTrans.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_PACK_TRANS', packTrans})
+        }, err => {
+          unsubscribePackTrans()
         })  
-        firebase.firestore().collection('priceAlarms').onSnapshot(docs => {
+        const unsubscribePriceAlarms = firebase.firestore().collection('priceAlarms').onSnapshot(docs => {
           let priceAlarms = []
           docs.forEach(doc => {
             priceAlarms.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_PRICE_ALARMS', priceAlarms})
-        })
-        firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
+        }, err => {
+          unsubscribePriceAlarms()
+        })  
+        const unsubscribeForgetPassword = firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
           let forgetPassword = []
           docs.forEach(doc => {
             forgetPassword.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_FORGET_PASSWORD', forgetPassword})
-        })
+        }, err => {
+          unsubscribeForgetPassword()
+        })  
       }
     })
     firebase.firestore().collection('sections').onSnapshot(docs => {

@@ -7,11 +7,9 @@ import { StoreContext } from '../data/Store';
 const AddSection = props => {
   const { state } = useContext(StoreContext)
   const [name, setName] = useState('')
-  const [percent, setPercent] = useState('')
   const handleSubmit = () => {
     addSection({
       name,
-      percent,
       isActive: false
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
@@ -29,14 +27,7 @@ const AddSection = props => {
           type="text" 
           onChange={(e) => setName(e.target.value)}
         />
-        <ListInput 
-          name="percent" 
-          label={state.labels.percent}
-          floatingLabel 
-          type="number" 
-          onChange={(e) => setPercent(e.target.value)}
-        />
-        {!name || !percent ? '' : <ListButton onClick={() => handleSubmit()}>{state.labels.add}</ListButton>}
+        {!name ? '' : <ListButton onClick={() => handleSubmit()}>{state.labels.add}</ListButton>}
       </List>
     </Page>
   )

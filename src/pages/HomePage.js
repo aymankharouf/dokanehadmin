@@ -19,7 +19,7 @@ const HomePage = props => {
   let i = 0
   return (
     <Page className="page-home">
-      <Navbar large largeTransparent sliding={false}>
+      <Navbar large>
         <NavLeft>
           <Link iconIos="f7:bars" iconMd="material:menu" panelOpen="right"></Link>
         </NavLeft>
@@ -30,7 +30,7 @@ const HomePage = props => {
         {mainPages.map(page => {
           return (
             <Button large fill className="sections" color={state.randomColors[i++ % 13].name} href={`/${page.path}/`} key={page.id}>
-              {page.name}
+              <span className="section-label">{page.name}</span>
             </Button>
           )
         })}

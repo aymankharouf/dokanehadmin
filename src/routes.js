@@ -76,7 +76,10 @@ export default [
   },
   {
     path: '/products/',
-    component: Products
+    component: Products,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/product/:id',
@@ -100,7 +103,10 @@ export default [
   },
   {
     path: '/stores/',
-    component: Stores
+    component: Stores,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/addStore/',
@@ -108,7 +114,10 @@ export default [
   },
   {
     path: '/customers/',
-    component: Customers
+    component: Customers,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/customersList/:id',
@@ -148,7 +157,10 @@ export default [
   },
   {
     path: '/countries/',
-    component: Countries
+    component: Countries,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/addCountry/',
@@ -234,12 +246,15 @@ export default [
     path: '/orders/',
     component: Orders,
     options: {
-      animate: true,
+      transition: 'f7-cover',
     },
   },
   {
     path: '/ordersList/:id',
-    component: OrdersList
+    component: OrdersList,
+    options: {
+      transition: 'f7-cover',
+    },
   },
   {
     path: '/order/:id',
@@ -259,7 +274,10 @@ export default [
   },
   {
     path: '/purchases/',
-    component: Purchases
+    component: Purchases,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/purchase/:id',
@@ -267,7 +285,10 @@ export default [
   },
   {
     path: '/stock/',
-    component: Stock
+    component: Stock,
+    options: {
+      transition: 'f7-cover',
+    }
   },
   {
     path: '/packTrans/:id',
