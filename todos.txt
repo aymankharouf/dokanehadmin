@@ -44,3 +44,4 @@ maps
 *user as store admin
 advertisements
 categorize stores, ordering stores for equity
+page for ending offers

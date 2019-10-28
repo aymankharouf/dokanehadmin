@@ -223,19 +223,18 @@ const Store = props => {
       })
       dispatch({type: 'SET_PRODUCTS', products})
     })
+    const today = (new Date()).setHours(0, 0, 0, 0)
     firebase.firestore().collection('packs').onSnapshot(docs => {
       let packs = []
       docs.forEach(doc => {
-        let minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || new Date() <= store.offerEnd.toDate() ? store.price : store.oldPrice))
+        let minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || today <= store.offerEnd.toDate() ? store.price : null))
         minPrice = minPrice === Infinity ? 0 : minPrice
         const value = doc.data().units ? minPrice / doc.data().units : 0
         let isOffer = doc.data().isOffer
         if (isOffer === false) {
-          const store = doc.data().stores.find(rec => rec.offerEnd && new Date() <= rec.offerEnd.toDate())
+          const store = doc.data().stores.find(rec => rec.price === minPrice && rec.offerEnd && today <= rec.offerEnd.toDate())
           if (store) {
-            if (store.price === minPrice) {
-              isOffer = true
-            }
+            isOffer = true
           }
         }
         packs.push({...doc.data(), id: doc.id, isOffer, value, price: minPrice})

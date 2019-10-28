@@ -2,77 +2,78 @@
 /* Your app styles here */
 .sections {
     margin: 1rem;
-  }
+}
   
-  .center {
-    text-align: center !important;
-  }
-  
-  .total-price {
-    margin: 20px;
-  }
-  
-  .order-button {
-    margin: 20px;
-    width: 10em;
-  }
-  
-  .search-icon {
-    margin-top: 0.8rem;
-  }
-  
-  .star {
-    color: yellow;
-    margin: 3px;
-  }
-  
-  .left {
-    text-align: left;
-  }
-  
-  .error {
-    color: red;
-  }
-  
-  .success {
-    color: green;
-  }
+.center {
+  text-align: center;
+}
 
-  .green {
-    color: green;
-  }
-  
-  .blue {
-    color: blue;
-  }
-  
-  .red {
-    color: red;
-  }
-  
-  .logo {
-    width: 100px;
-  }
-  
-  .icons {
-    color: white;
-  }
-  
-   .block-title {
-    color: blue;
-  }
+.total-price {
+  margin: 20px;
+}
 
-  .price {
-    font-size: 1.2rem;
-    color: blue;
-    margin-right: 0.2rem;
-  }
+.order-button {
+  margin: 20px;
+  width: 10em;
+}
 
-  .avatar {
-    width: 100px;
-  }
+.search-icon {
+  margin-top: 0.8rem;
+}
 
-  .section-label {
-    font-size: 1.2rem;
-  }
+.star {
+  color: yellow;
+  margin: 3px;
+}
+
+.left {
+  text-align: left;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.success {
+  color: green;
+}
+
+.green {
+  color: green;
+}
+
+.blue {
+  color: blue;
+}
+
+.red {
+  color: red;
+}
+
+.logo {
+  width: 100px;
+}
+
+.icons {
+  color: white;
+}
+
+  .block-title {
+  color: blue;
+}
+
+.price {
+  font-size: 1.2rem;
+  color: blue;
+  margin-right: 0.2rem;
+}
+
+.avatar {
+  width: 100px;
+}
+
+.section-label {
+  font-size: 1.2rem;
+}
 

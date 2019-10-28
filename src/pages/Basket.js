@@ -47,7 +47,7 @@ const Basket = props => {
         </List>
       </Block>
       <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
-        <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+        <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
       </Fab>
 
       <Toolbar bottom>

@@ -132,7 +132,8 @@ const labels = {
   notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة',
   back: 'رجوع',
   reloginTitle: 'طلب تسجيل دخول',
-  profitPercent: '10'
+  profitPercent: '10',
+  endOffer: 'انتهى العرض'
 }
 
 export default labels

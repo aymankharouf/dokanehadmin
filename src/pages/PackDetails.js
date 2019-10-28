@@ -11,6 +11,7 @@ const PackDetails = props => {
   const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
   const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
   const storesTags = useMemo(() => {
+    const today = (new Date()).setHours(0, 0, 0, 0)
     let packStores = pack.stores
     packStores.sort((rec1, rec2) => rec1.price - rec2.price)
     packStores = packStores.map(packStore => {
@@ -27,12 +28,14 @@ const PackDetails = props => {
         onClick={() => handlePurchase(rec)}
       >
         {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : ''}
+        {rec.offerEnd && today > rec.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
       </ListItem>
     )
   }, [pack, state.stores]) 
   const handlePurchase = store => {
 		try{
       if (store.id === 's') return
+      if (store.offerEnd && new Date() > store.offerEnd.toDate()) return
 			if (state.basket.store && state.basket.store.id !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }

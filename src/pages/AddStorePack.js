@@ -41,7 +41,7 @@ const AddStorePack = props => {
   }, [productId])
   useEffect(() => {
     const validatePrice = () => {
-      if (price * 1000 >= purchasePrice * 1000){
+      if (price > 0 && purchasePrice > 0 && price >= purchasePrice){
         setPriceErrorMessage('')
         setPurchasePriceErrorMessage('')
       } else {
@@ -58,7 +58,7 @@ const AddStorePack = props => {
   }, [price, purchasePrice])
   useEffect(() => {
     const validateDate = (value) => {
-      if (new Date(value) >= new Date()){
+      if (new Date(value) > new Date()){
         setOfferEndErrorMessage('')
       } else {
         setOfferEndErrorMessage(state.labels.invalidOfferEnd)
@@ -177,7 +177,7 @@ const AddStorePack = props => {
       {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
       ? '' 
       : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+          <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
         </Fab>
       }
       

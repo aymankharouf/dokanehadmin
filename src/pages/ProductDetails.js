@@ -22,7 +22,7 @@ const ProductDetails = props => {
         badge={rec.isActive === false ? state.labels.inActive : ''}
         badgeColor='red' 
       >
-        {rec.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : null}
+        {rec.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
       </ListItem>
     )
   }, [state.packs]) 

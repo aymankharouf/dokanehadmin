@@ -281,15 +281,13 @@ export const editProduct = async product => {
   })
 }
 
-export const editPrice = (store, pack, purchasePrice, price, oldPurchasePrice, oldPrice, offerEnd) => {
+export const editPrice = (store, pack, purchasePrice, price, offerEnd) => {
   let stores = pack.stores.filter(rec => rec.id !== store.id)
   stores = [
     ...stores, 
     {id: store.id, 
       purchasePrice: purchasePrice * 1000,
       price: price * 1000,
-      oldPurchasePrice, 
-      oldPrice, 
       offerEnd, 
       time: new Date()
     }]

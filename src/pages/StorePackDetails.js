@@ -12,7 +12,7 @@ const StorePackDetails = props => {
       ...pack,
       price: pack.stores.find(rec => rec.id === props.storeId).price
     }
-  }, [state.packs])
+  }, [])
   const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
   const store = useMemo(() => state.stores.find(rec => rec.id === props.storeId), [state.stores])
   const handleEditPrice = () => {
@@ -20,7 +20,7 @@ const StorePackDetails = props => {
   }
   const handleDelete = () => {
     deleteStorePack(store, pack).then(() => {
-      props.f7router.navigate(`/store/${props.storeId}`)
+      props.f7router.back()
     })
   }
   const handleConfirm = () => {
@@ -43,7 +43,7 @@ const StorePackDetails = props => {
           </CardFooter>
         </Card>
       </Block>
-      <Fab position="right-bottom" slot="fixed" color="orange">
+      <Fab position="left-bottom" slot="fixed" color="orange">
         <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
         <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
         <FabButtons position="top">
@@ -51,7 +51,7 @@ const StorePackDetails = props => {
             <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
           </FabButton>
           <FabButton color="green" onClick={() => handleConfirm()}>
-            <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+            <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={() => handleDelete()}>
             <Icon ios="f7:trash" aurora="f7:trash" md="material:delete"></Icon>

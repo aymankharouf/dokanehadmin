@@ -77,9 +77,6 @@ export default [
   {
     path: '/products/',
     component: Products,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/product/:id',
@@ -104,9 +101,6 @@ export default [
   {
     path: '/stores/',
     component: Stores,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/addStore/',
@@ -115,9 +109,6 @@ export default [
   {
     path: '/customers/',
     component: Customers,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/customersList/:id',
@@ -158,9 +149,6 @@ export default [
   {
     path: '/countries/',
     component: Countries,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/addCountry/',
@@ -245,16 +233,10 @@ export default [
   {
     path: '/orders/',
     component: Orders,
-    options: {
-      transition: 'f7-cover',
-    },
   },
   {
     path: '/ordersList/:id',
     component: OrdersList,
-    options: {
-      transition: 'f7-cover',
-    },
   },
   {
     path: '/order/:id',
@@ -275,9 +257,6 @@ export default [
   {
     path: '/purchases/',
     component: Purchases,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/purchase/:id',
@@ -286,9 +265,6 @@ export default [
   {
     path: '/stock/',
     component: Stock,
-    options: {
-      transition: 'f7-cover',
-    }
   },
   {
     path: '/packTrans/:id',
