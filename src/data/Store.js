@@ -57,11 +57,11 @@ const Store = props => {
     {id: 'r', name: 'ارجاع'}
   ]
   const customerTypes = [
-    {id: 'n', name: 'عادي'},
+    {id: 'n', name: 'عميل عادي'},
     {id: 'o', name: 'صاحب محل'},
     {id: 'b', name: 'قائمة سوداء'},
-    {id: 'v', name: 'مميز'},
-    {id: 's', name: 'خاص'}
+    {id: 'v', name: 'عميل مميز'},
+    {id: 's', name: 'عميل خاص'}
   ]
   const discountTypes = [
     {id: 'f', name: 'خصم اول طلب'},

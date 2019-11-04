@@ -21,7 +21,7 @@ const HomePage = props => {
     <Page className="page-home">
       <Navbar large>
         <NavLeft>
-          <Link iconIos="f7:bars" iconMd="material:menu" panelOpen="right"></Link>
+          <Link iconMaterial="menu" panelOpen="right"></Link>
         </NavLeft>
         <NavTitle sliding><img src="/logo.png" alt="" className="logo" /></NavTitle>
         <NavTitleLarge><img src="/logo.png" alt="" className="logo" /></NavTitleLarge>

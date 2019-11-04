@@ -118,7 +118,6 @@ const EditCustomer = props => {
           floatingLabel 
           type="number"
           clearButton
-          value={deliveryFees}
           onChange={(e) => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
         />
@@ -138,8 +137,8 @@ const EditCustomer = props => {
       </Toolbar>
       {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && isActive === customer.isActive && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees)
       ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

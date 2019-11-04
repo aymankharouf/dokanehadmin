@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
@@ -10,10 +10,10 @@ const Products = props => {
     <Page>
       <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
         <NavRight>
-          <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
+          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
         <Searchbar
-          className="searchbar-demo"
+          className="searchbar"
           searchContainer=".search-list"
           searchIn=".item-title, .item-subtitle"
           clearButton
@@ -37,7 +37,7 @@ const Products = props => {
                   badge={product.isActive === false ? state.labels.inActive : ''}
                   badgeColor='red' 
                 >
-                  <img slot="media" src={product.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
+                  <img slot="media" src={product.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
                   {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
                 </ListItem>
               )
@@ -46,8 +46,8 @@ const Products = props => {
             {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : null}
           </List>
       </Block>
-      <Fab position="left-bottom" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addProduct/`)}>
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addProduct/`)}>
+        <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>
         <BottomToolbar/>

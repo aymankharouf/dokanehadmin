@@ -215,8 +215,8 @@ const EditPack = props => {
         </React.Fragment>
       : ''}
       {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && unitsCount === pack.unitsCount && isActive === pack.isActive && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

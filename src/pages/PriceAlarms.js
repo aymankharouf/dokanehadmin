@@ -28,7 +28,7 @@ const PriceAlarms = props => {
                   text={moment(alarm.time.toDate()).fromNow()}
                   key={alarm.id}
                 >
-                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn" alt=""/>
                 </ListItem>
               )
             })}

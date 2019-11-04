@@ -28,15 +28,15 @@ const SectionCategories = props => {
           )}
         </List>
       </Block>
-      <Fab position="left-bottom" slot="fixed" color="orange">
-        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-        <FabButtons position="top">
+      <Fab position="left-top" slot="fixed" color="orange">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
           <FabButton color="blue" onClick={() => props.f7router.navigate(`/editSection/${props.id}`)}>
-            <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+            <Icon material="edit"></Icon>
           </FabButton>
           <FabButton color="green" onClick={() => props.f7router.navigate(`/addCategory/${props.id}`)}>
-            <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+            <Icon material="add"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

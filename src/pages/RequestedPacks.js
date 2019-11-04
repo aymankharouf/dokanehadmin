@@ -64,7 +64,7 @@ const RequestedPacks = props => {
 								key={i++}
 								className={productInfo.status === 'd' ? 'disable-product' : ''}
 							>
-								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn demo-lazy" alt=""/>
+								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn" alt=""/>
 								{pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
 							</ListItem>
 						)

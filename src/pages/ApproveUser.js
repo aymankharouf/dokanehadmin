@@ -92,8 +92,8 @@ const ApproveUser = props => {
       </Toolbar>
       {!name || (userInfo.storeName && !storeId)
       ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

@@ -53,8 +53,8 @@ const ConfirmPurchase = props => {
           <ListItem title={state.labels.total} className="total" after={(total / 1000).toFixed(3)} />
         </List>
     </Block>
-    <Fab position="center-bottom" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>
-      <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+    <Fab position="center-top" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>
+      <Icon material="done"></Icon>
     </Fab>
     <Toolbar bottom>
       <BottomToolbar/>

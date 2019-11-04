@@ -29,10 +29,10 @@ const StorePacks = props => {
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>
         <NavRight>
-          <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
+          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
         <Searchbar
-          className="searchbar-demo"
+          className="searchbar"
           searchContainer=".search-list"
           searchIn=".item-title, .item-subtitle"
           clearButton
@@ -54,7 +54,7 @@ const StorePacks = props => {
               text={moment(pack.time.toDate()).fromNow()}
               key={pack.id}
             >
-              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
+              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
               {pack.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
               {pack.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
             </ListItem>
@@ -62,15 +62,15 @@ const StorePacks = props => {
           {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      <Fab position="left-bottom" slot="fixed" color="orange">
-        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-        <FabButtons position="top">
+      <Fab position="left-top" slot="fixed" color="orange">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
           <FabButton color="blue" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
-            <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+            <Icon material="edit"></Icon>
           </FabButton>
           <FabButton color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
-            <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+            <Icon material="add"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

@@ -76,8 +76,8 @@ const EditOrder = props => {
         </List>
       </Block>
       <Toolbar bottom>
-        <Link href='/home/'>
-          <Icon ios='f7:home' aurora='f7:home' md='material:home' />
+        <Link href="/home/">
+          <Icon material="home" />
         </Link>
       </Toolbar>
     </Page>

@@ -19,6 +19,7 @@ const PanelPage = props => {
         {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requestedPacks/" title={state.labels.newPurchase} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/priceAlarms/" title={state.labels.priceAlarms} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/endedOffers/" title={state.labels.endedOffers} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

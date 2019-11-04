@@ -40,7 +40,7 @@ const EditPrice = props => {
   useEffect(() => {
     const storeType = store ? store.type : ''
     if (storeType === 'w') {
-      setPrice((1 + (Number(state.labels.profitPercent) / 100) * purchasePrice))
+      setPrice((1 + (state.labels.profitPercent / 100) * purchasePrice))
     } else {
       setPrice(purchasePrice)
     }
@@ -137,8 +137,8 @@ const EditPrice = props => {
         />
       </List>
       {!purchasePrice || !price || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage || !hasChanged ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleEdit()}>
-          <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

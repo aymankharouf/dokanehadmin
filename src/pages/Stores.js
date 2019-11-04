@@ -22,9 +22,6 @@ const Stores = props => {
   return (
     <Page>
       <Navbar title={state.labels.stores} backLink={state.labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addStore/')}>
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
-      </Fab>
       <Block>
         <List>
           {stores && stores.map(rec =>
@@ -40,9 +37,12 @@ const Stores = props => {
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      {stock ? null : 
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addStore/')}>
+        <Icon material="add"></Icon>
+      </Fab>
+      {stock ? '' : 
         <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddStock(state.labels.stockName)}>
-          <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
+          <Icon material="add"></Icon>
         </Fab>
       }
       <Toolbar bottom>

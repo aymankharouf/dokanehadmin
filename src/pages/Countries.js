@@ -14,9 +14,6 @@ const Countries = props => {
   return (
     <Page>
       <Navbar title={state.labels.countries} backLink={state.labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
-        <Icon ios="f7:add" aurora="f7:add" md="material:add"></Icon>
-      </Fab>
       <Block>
         <List>
           {countries && countries.map(rec =>
@@ -30,6 +27,9 @@ const Countries = props => {
           )}
         </List>
       </Block>
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleAdd()}>
+        <Icon material="add"></Icon>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

@@ -4,24 +4,40 @@ import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
-import { approveStorePrice } from '../data/Actions'
+import { approvePriceAlarm, rejectPriceAlarm, showMessage } from '../data/Actions'
 
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [store, setStore] = useState('')
   const priceAlarm = useMemo(() => state.priceAlarms.find(rec => rec.id === props.id), [state.priceAlarms])
   const pack = useMemo(() => state.packs.find(rec => rec.id === priceAlarm.packId), [state.packs])
   const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
   const userInfo = useMemo(() => state.users.find(rec => rec.id === priceAlarm.user), [state.users])
   const customer = useMemo(() => state.customers.find(rec => rec.id === priceAlarm.user), [state.customers])
   const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName, [customer, state.stores])
+  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).address : priceAlarm.storePlace, [customer, state.stores])
   const handleApprove = () => {
+    approvePriceAlarm(priceAlarm, pack, store, customer).then(() => {
+      showMessage(props, 'success', state.labels.approveSuccess)
 			props.f7router.back()
+    })
   }
   const handleReject = () => {
-    props.f7router.back()
-}
+    rejectPriceAlarm(priceAlarm).then(() => {
+      showMessage(props, 'success', state.labels.rejectSuccess)
+      props.f7router.back()
+    })
+  }
   const storesTags = useMemo(() => {
+    const stores = state.stores.filter(rec => rec.isActive === true)
+    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    return stores.map(rec => 
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
+    )
+  }, [state.stores])
+
+  const pricesTags = useMemo(() => {
     let packStores = pack.stores
     packStores.sort((rec1, rec2) => rec1.price - rec2.price)
     packStores = packStores.map(packStore => {
@@ -43,30 +59,53 @@ const PriceAlarmDetails = props => {
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="blue">
-        <Icon ios="f7:chevron_down" aurora="f7:chevron_down" md="material:keyboard_arrow_down"></Icon>
-        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
+        {customer.type === 'o' || store ? 
           <FabButton color="green" onClick={() => handleApprove()}>
-            <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+            <Icon material="done"></Icon>
           </FabButton>
+          : '' 
+        }
           <FabButton color="red" onClick={() => handleReject()}>
-          <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
+          <Icon material="close"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>
-      <Card className="demo-card-header-pic">
+      <Card>
         <CardContent>
           <img src={product.imageUrl} width="100%" height="250" alt=""/>
-          <p>{`${userInfo.name} ${userInfo.mobile}`}</p>
-          <p>{`${storeName} ${priceAlarm.storePlace}`}</p>
+          <p>{`${userInfo.name} ${userInfo.mobile} (${state.customerTypes.find(rec => rec.id === customer.type).name})`}</p>
+          <p>{`${storeName} ${storeAddress}`}</p>
         </CardContent>
         <CardFooter>
           <p>{(priceAlarm.price / 1000).toFixed(3)}</p>
           <p className='price'>{(pack.price / 1000).toFixed(3)}</p>
         </CardFooter>
       </Card>
+      {customer.type === 'o' ? '' :
+        <List form>
+          <ListItem
+            title={state.labels.store}
+            smartSelect
+            smartSelectParams={{
+              openIn: 'popup', 
+              closeOnSelect: true, 
+              searchbar: true, 
+              searchbarPlaceholder: state.labels.search,
+              popupCloseLinkText: state.labels.close
+            }}
+          >
+            <select name='store' value={store} onChange={(e) => setStore(e.target.value)}>
+              <option value="" disabled></option>
+              {storesTags}
+            </select>
+          </ListItem>
+        </List>
+      }
       <List>
-        {storesTags}
+        {pricesTags}
       </List>
       <Toolbar bottom>
         <BottomToolbar/>

@@ -40,8 +40,8 @@ const EditSection = props => {
       </List>
       {!name || (name === section.name && isActive === section.isActive)
       ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleEdit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
       <Toolbar bottom>

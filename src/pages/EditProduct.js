@@ -15,13 +15,13 @@ const EditProduct = props => {
   const [isActive, setIsActive] = useState(product.isActive)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
-  const [image, setImage] = useState(null)
-  const [error, setError] = useState('')
+  const [image, setImage] = useState('')
+  const [fileErrorMessage, setFileErrorMessage] = useState('')
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
-      setError(state.labels.invalidFile)
+      setFileErrorMessage(state.labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
@@ -72,9 +72,18 @@ const EditProduct = props => {
   return (
     <Page>
       <Navbar title={state.labels.editProduct} backLink={state.labels.back} />
-      {error ? <Block strong className="error">{error}</Block> : null}
       <List form>
-      <ListItem
+        <ListInput 
+          name="name" 
+          label={state.labels.name}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
+        />
+        <ListItem
           title={state.labels.category}
           smartSelect
           smartSelectParams={{
@@ -122,16 +131,6 @@ const EditProduct = props => {
             {countriesTags}
           </select>
         </ListItem>
-        <ListInput 
-          name="name" 
-          label={state.labels.name}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
         <ListItem>
           <span>{state.labels.byWeight}</span>
           <Toggle 
@@ -159,12 +158,20 @@ const EditProduct = props => {
             onToggleChange={() => setIsActive(!isActive)}
           />
         </ListItem>
-        <ListInput name="image" label="Image" type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
+        <ListInput 
+          name="image" 
+          label="Image" 
+          type="file" 
+          accept="image/*" 
+          errorMessage={fileErrorMessage}
+          errorMessageForce
+          onChange={e => handleFileChange(e)}
+        />
         <img src={imageUrl} alt=""/>
       </List>
       {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && byWeight === product.byWeight && isNew === product.isNew && isActive === product.isActive && imageUrl === product.imageUrl) ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

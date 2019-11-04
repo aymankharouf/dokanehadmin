@@ -47,7 +47,7 @@ const RequestedPackDetails = props => {
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
-        <Card className="demo-card-header-pic">
+        <Card>
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
           </CardContent>

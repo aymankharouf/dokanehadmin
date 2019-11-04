@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge} from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, Block } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -49,8 +49,9 @@ const PackDetails = props => {
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
-        <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+        <Icon material="edit"></Icon>
       </Fab>
+      {error ? <Block strong className="error">{error}</Block> : ''}
       <Card>
         <CardContent>
           <img src={product.imageUrl} width="100%" height="250" alt=""/>

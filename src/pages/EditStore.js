@@ -104,8 +104,8 @@ const EditStore = props => {
         />
       </List>
       {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address && isActive === store.isActive) ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

@@ -76,6 +76,16 @@ const AddProduct = props => {
     <Page>
       <Navbar title={state.labels.addProduct} backLink={state.labels.back} />
       <List form>
+        <ListInput 
+          name="name" 
+          label={state.labels.name}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+          onInputClear={() => setName('')}
+        />
         <ListItem
           title={state.labels.category}
           smartSelect
@@ -124,16 +134,6 @@ const AddProduct = props => {
             {countriesTags}
           </select>
         </ListItem>
-        <ListInput 
-          name="name" 
-          label={state.labels.name}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
         <ListItem>
           <span>{state.labels.byWeight}</span>
           <Toggle 
@@ -154,8 +154,8 @@ const AddProduct = props => {
         <img src={imageUrl} alt=""/>
       </List>
       {!name || !country || !category || !imageUrl ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
     </Page>

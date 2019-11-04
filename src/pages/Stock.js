@@ -28,10 +28,10 @@ const Stock = props => {
     <Page>
       <Navbar title={state.labels.stock} backLink={state.labels.back}>
         <NavRight>
-          <Link searchbarEnable=".searchbar-demo" iconIos="f7:search" iconAurora="f7:search" iconMd="material:search"></Link>
+          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
         <Searchbar
-          className="searchbar-demo"
+          className="searchbar"
           searchContainer=".search-list"
           searchIn=".item-title, .item-subtitle"
           clearButton
@@ -53,7 +53,7 @@ const Stock = props => {
               text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === pack.country).name}`}
               key={pack.id}
             >
-              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn demo-lazy avatar" alt=""/>
+              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
               <Badge slot="title" color="red">{pack.quantity}</Badge>
             </ListItem>
           )}
@@ -61,11 +61,11 @@ const Stock = props => {
         </List>
       </Block>
       <Toolbar bottom>
-      <Link href='/home/'>
-          <Icon ios='f7:home' aurora='f7:home' md='material:home' />
+        <Link href="/home/">
+          <Icon material="home" />
         </Link>
-        <Link href='/stockTrans/'>
-          <Icon ios='f7:layers_alt_fill' aurora='f7:layers_alt_fill' md='material:layers' />
+        <Link href="/stockTrans/">
+          <Icon material="layers" />
         </Link>
       </Toolbar>
     </Page>

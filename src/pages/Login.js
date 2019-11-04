@@ -42,7 +42,7 @@ const Login = props => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </List>
-      {!email || !password ? '' : <Button onClick={() => handleLogin()}>{state.labels.loginSubmit}</Button>}
+      {!email || !password ? '' : <Button large onClick={() => handleLogin()}>{state.labels.loginSubmit}</Button>}
     </Page>
   )
 }

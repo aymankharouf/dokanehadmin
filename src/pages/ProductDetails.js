@@ -7,7 +7,6 @@ import 'moment/locale/ar'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
-  const [error, setError] = useState('')
   const product = useMemo(() => state.products.find(rec => rec.id === props.id), [state.products])
   
   const packsTags = useMemo(() => {
@@ -29,7 +28,7 @@ const ProductDetails = props => {
   return (
     <Page>
       <Navbar title={product.name} backLink={state.labels.back} />
-      <Card className="demo-card-header-pic">
+      <Card>
         <CardContent>
           <img src={product.imageUrl} width="100%" height="250" alt=""/>
         </CardContent>
@@ -43,7 +42,7 @@ const ProductDetails = props => {
           {state.labels.packs}
         </Col>
         <Col>
-          <Button small fill round iconIos="f7:add" iconAurora="f7:add" iconMd="material:add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)}></Button>
+          <Button small fill round iconMaterial="add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)}></Button>
         </Col>
       </Row>
       </BlockTitle>
@@ -51,7 +50,7 @@ const ProductDetails = props => {
         {packsTags}
       </List>
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editProduct/${props.id}`)}>
-        <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+        <Icon material="edit"></Icon>
       </Fab>
 
     </Page>

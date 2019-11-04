@@ -52,6 +52,7 @@ import NewUsers from './pages/NewUsers';
 import ApproveUser from './pages/ApproveUser';
 import PriceAlarms from './pages/PriceAlarms';
 import PriceAlarmDetails from './pages/PriceAlarmDetails';
+import EndedOffers from './pages/EndedOffers';
 
 export default [
   {
@@ -145,6 +146,10 @@ export default [
   {
     path: '/priceAlarmDetails/:id',
     component: PriceAlarmDetails
+  },
+  {
+    path: '/endedOffers/',
+    component: EndedOffers
   },
   {
     path: '/countries/',

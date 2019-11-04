@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { addTrademark, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react';
+import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
+import BottomToolbar from './BottomToolbar';
 
 
 const AddTrademark = props => {
@@ -28,11 +29,16 @@ const AddTrademark = props => {
           onChange={(e) => setName(e.target.value)}
         />
       </List>
-      {!name ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      {name ? 
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
+        : ''
       }
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
+
     </Page>
   )
 }

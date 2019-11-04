@@ -22,7 +22,7 @@ const AddStorePack = props => {
     if (purchasePrice) {
       const storeType = store ? store.type : ''
       if (storeType === 'w') {
-        setPrice(((1 + (Number(state.labels.profitPercent) / 100)) * purchasePrice).toFixed(3))
+        setPrice(((1 + (state.labels.profitPercent / 100)) * purchasePrice).toFixed(3))
       } else {
         setPrice(purchasePrice)
       }
@@ -176,8 +176,8 @@ const AddStorePack = props => {
       </List>
       {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
       ? '' 
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
       }
       

@@ -33,7 +33,7 @@ const StorePackDetails = props => {
     <Page>
       <Navbar title={`${product.name} - ${store.name}`} backLink={state.labels.back} />
       <Block>
-        <Card className="demo-card-header-pic">
+        <Card>
           <CardContent>
             <img src={product.imageUrl} width="100%" height="250" alt=""/>
           </CardContent>
@@ -43,18 +43,18 @@ const StorePackDetails = props => {
           </CardFooter>
         </Card>
       </Block>
-      <Fab position="left-bottom" slot="fixed" color="orange">
-        <Icon ios="f7:chevron_up" aurora="f7:chevron_up" md="material:keyboard_arrow_up"></Icon>
-        <Icon ios="f7:close" aurora="f7:close" md="material:close"></Icon>
-        <FabButtons position="top">
+      <Fab position="left-top" slot="fixed" color="orange">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
           <FabButton color="blue" onClick={() => handleEditPrice()}>
-            <Icon ios="f7:edit" aurora="f7:edit" md="material:edit"></Icon>
+            <Icon material="edit"></Icon>
           </FabButton>
           <FabButton color="green" onClick={() => handleConfirm()}>
-            <Icon ios="f7:checkmark" aurora="f7:checkmark" md="material:done"></Icon>
+            <Icon material="done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={() => handleDelete()}>
-            <Icon ios="f7:trash" aurora="f7:trash" md="material:delete"></Icon>
+            <Icon material="delete"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

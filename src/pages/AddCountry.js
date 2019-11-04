@@ -24,16 +24,19 @@ const AddCountry = props => {
         <ListInput 
           name="name" 
           label={state.labels.name} 
-          floatingLabel 
+          floatingLabel
+          clearButton
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
-      {!name ? ''
-      : <Fab position="left-bottom" slot="fixed" color="green" onClick={() => handleSubmit()}>
-          <Icon ios="f7:check" aurora="f7:check" md="material:done"></Icon>
+      {name ? 
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
         </Fab>
+        : ''
       }
       <Toolbar bottom>
         <BottomToolbar/>

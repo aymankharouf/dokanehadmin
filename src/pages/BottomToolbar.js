@@ -9,7 +9,7 @@ const BottomToolbar = props => {
   return (
     <React.Fragment>
       <Link href={`/${searchHome}/`}>
-        <Icon ios={`f7:${searchHome}`} aurora={`f7:${searchHome}`} md={`material:${searchHome}`} />
+        <Icon material={searchHome} />
       </Link>
       <Link href={state.basket.packs ? '/basket/' : ''}>
         <Icon material='shopping_cart' >

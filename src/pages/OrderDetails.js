@@ -107,11 +107,11 @@ const OrderDetails = props => {
         </List>
       </Popover>
       <Toolbar bottom>
-        <Link href='/home/'>
-          <Icon ios='f7:home' aurora='f7:home' md='material:home' />
+        <Link href="/home/">
+          <Icon material="home" />
         </Link>
         <Link popoverOpen=".popover-menu">
-          <Icon ios='f7:more_vertical_fill' aurora='f7:more_vertical_fill' md='material:more_vert' />
+          <Icon material="more_vert" />
         </Link>
       </Toolbar>
     </Page>

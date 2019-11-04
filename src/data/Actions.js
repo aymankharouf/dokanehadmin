@@ -195,7 +195,7 @@ const packStockOut = (batch, pack, packTrans) => {
   }
 }
 
-export const editOrder = async (order, pack, store) => {
+export const editOrder = (order, pack, store) => {
   const batch = firebase.firestore().batch()
   const orderPack = order.basket.find(rec => rec.id === pack.id)
   const otherPacks = order.basket.filter(rec => rec.id !== pack.id)
@@ -220,7 +220,7 @@ export const editOrder = async (order, pack, store) => {
   if (transId) {
     stockIn(batch, store.storeId, {...pack, quantity}, 'r', store.transId)
   }
-  await batch.commit()
+  return batch.commit()
 }
 
 export const addStorePack = (pack, store, purchasePrice, price, offerEnd) => {
@@ -285,7 +285,7 @@ export const editPrice = (store, pack, purchasePrice, price, offerEnd) => {
   let stores = pack.stores.filter(rec => rec.id !== store.id)
   stores = [
     ...stores, 
-    {id: store.id, 
+    { id: store.id, 
       purchasePrice: purchasePrice * 1000,
       price: price * 1000,
       offerEnd, 
@@ -403,24 +403,45 @@ export const approveUser = async user => {
   })
 }
 
-export const approveStorePrice = async (priceAlarm, store, pack, price) => {
+export const approvePriceAlarm = (priceAlarm, pack, store, customer) => {
+  const storeId = customer.type === 'o' ? customer.storeId : store.id
   const batch = firebase.firestore().batch()
   const priceAlarmRef = firebase.firestore().collection('priceAlarms').doc(priceAlarm.id)
-  batch.update(priceAlarmRef, {
-    status: 'a'
-  })
-  let stores = pack.stores.filter(rec => rec.id !== store.id)
-  stores = [
-    ...stores, 
-    { id: store.id, 
-      price: price * 1000,
-      time: new Date(),
-      user: priceAlarm.user
-    }
-  ]
+  if (customer.type === 'o'){
+    batch.update(priceAlarmRef, {
+      status: 'a'
+    })  
+  } else {
+    batch.update(priceAlarmRef, {
+      status: 'a',
+      storeId
+    })  
+  }
+  let stores = pack.stores.filter(rec => rec.id !== storeId)
+  if (priceAlarm.price > 0) {
+    stores = [
+      ...stores, 
+      { id: storeId,
+        purchasePrice: priceAlarm.price * 1000,
+        price: priceAlarm.price * 1000,
+        time: new Date(),
+        user: priceAlarm.user
+      }
+    ]  
+  }
   const packRef = firebase.firestore().collection('packs').doc(pack.id)
   batch.update(packRef, {
     stores
   })
+  if (customer.type !== 'o'){
+    const customerRef = firebase.firestore().collection('customers').doc(customer.id)
+    batch.update(customerRef, {lessPriceDiscount: firebase.firestore.FieldValue.increment(500)});
+  }
+  return batch.commit()
+}
 
+export const rejectPriceAlarm = priceAlarm => {
+  return firebase.firestore().collection('priceAlarms').doc(priceAlarm.id).update({
+    status: 'r'
+  })
 }

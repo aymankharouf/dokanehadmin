@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { addSection, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, ListButton} from 'framework7-react';
+import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
+import BottomToolbar from './BottomToolbar';
 
 
 const AddSection = props => {
@@ -17,18 +18,29 @@ const AddSection = props => {
     })
   }
   return (
-    <Page loginScreen>
+    <Page>
       <Navbar title={state.labels.addSection} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 
           label={state.labels.name} 
-          floatingLabel 
-          type="text" 
-          onChange={(e) => setName(e.target.value)}
+          floatingLabel
+          clearButton
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
-        {!name ? '' : <ListButton onClick={() => handleSubmit()}>{state.labels.add}</ListButton>}
       </List>
+      {name ?
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
+        </Fab>
+        : ''
+      }
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
     </Page>
   )
 }
