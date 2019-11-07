@@ -21,8 +21,6 @@ const Trademarks = props => {
               link={`/editTrademark/${rec.id}`}
               title={rec.name} 
               key={rec.id} 
-              badge={rec.isActive === false ? state.labels.inActive : ''}
-              badgeColor='red' 
             />
           )}
         </List>

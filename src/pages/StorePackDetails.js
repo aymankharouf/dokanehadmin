@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, Card, CardContent, Icon, Fab, Toolbar, FabButtons, FabButton, CardFooter} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
-import { deleteStorePack, confirmPrice } from '../data/Actions'
+import { deleteStorePack, confirmPrice, showMessage } from '../data/Actions'
 
 const StorePackDetails = props => {
   const { state } = useContext(StoreContext)
@@ -20,11 +20,13 @@ const StorePackDetails = props => {
   }
   const handleDelete = () => {
     deleteStorePack(store, pack).then(() => {
+      showMessage(props, 'success', state.labels.deleteSuccess)
       props.f7router.back()
     })
   }
   const handleConfirm = () => {
     confirmPrice(store, pack).then(() => {
+      showMessage(props, 'success', state.labels.approveSuccess)
       props.f7router.back()
     })
   }

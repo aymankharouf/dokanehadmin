@@ -10,13 +10,11 @@ const EditCategory = props => {
   const category = useMemo(() => state.categories.find(rec => rec.id === props.id), [state.categories])
   const [name, setName] = useState(category.name)
   const [unitType, setUnitType] = useState(category.unitType || '')
-  const [isActive, setIsActive] = useState(category.isActive || false)
   const handleEdit = () => {
     editCategory({
       id: category.id,
       name,
-      unitType,
-      isActive
+      unitType
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
@@ -53,13 +51,8 @@ const EditCategory = props => {
             {unitTypesTags}
           </select>
         </ListItem>
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
-        </ListItem>
-
       </List>
-      {!name || !unitType || (name === category.name && unitType === category.unitType && isActive === category.isActive)
+      {!name || !unitType || (name === category.name && unitType === category.unitType)
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>

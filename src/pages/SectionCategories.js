@@ -22,8 +22,6 @@ const SectionCategories = props => {
               link={`/editCategory/${rec.id}`}
               title={rec.name} 
               key={rec.id} 
-              badge={rec.isActive === false ? state.labels.inActive : ''}
-              badgeColor='red' 
             />
           )}
         </List>

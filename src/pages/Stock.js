@@ -28,7 +28,7 @@ const Stock = props => {
     <Page>
       <Navbar title={state.labels.stock} backLink={state.labels.back}>
         <NavRight>
-          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
+          <Link searchbarEnable=".searchbar" iconMaterial="search" />
         </NavRight>
         <Searchbar
           className="searchbar"
@@ -53,20 +53,16 @@ const Stock = props => {
               text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === pack.country).name}`}
               key={pack.id}
             >
-              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
+              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt={pack.productName} />
               <Badge slot="title" color="red">{pack.quantity}</Badge>
             </ListItem>
           )}
-          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
+          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>
-        <Link href="/home/">
-          <Icon material="home" />
-        </Link>
-        <Link href="/stockTrans/">
-          <Icon material="layers" />
-        </Link>
+        <Link href="/home/" iconMaterial="home" />
+        <Link href="/stockTrans/" iconMaterial="layers" />
       </Toolbar>
     </Page>
   )

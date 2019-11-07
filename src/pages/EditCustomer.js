@@ -11,27 +11,22 @@ const EditCustomer = props => {
   const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
-  const [isActive, setIsActive] = useState(customer.isActive)
   const [type, setType] = useState(customer.type)
   const [storeId, setStoreId] = useState(customer.storeId)
   const [deliveryFees, setDeliveryFees] = useState(customer.deliveryFees)
+  const [isOld, setIsOld] = useState(customer.isOld)
+  const [position, setPosition] = useState(customer.position)
   const storesTags = useMemo(() => {
-    const stores = state.stores.filter(rec => rec.id !== 's' && rec.isActive === true)
+    const stores = state.stores.filter(rec => rec.id !== 's')
     stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return stores.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
+      <option key={rec.id} value={rec.id}>
         {rec.name}
       </option>
     )
   }, [state.stores]) 
   const customerTypesTags = useMemo(() => state.customerTypes.map(rec => 
-    <option 
-      key={rec.id} 
-      value={rec.id}
-    >
+    <option key={rec.id} value={rec.id}>
       {rec.name}
     </option>
   ), [state.customerTypes])
@@ -41,16 +36,12 @@ const EditCustomer = props => {
       storeId,
       type,
       address,
-      isActive,
-      deliveryFees: deliveryFees * 1000
+      deliveryFees: deliveryFees * 1000,
+      isOld,
+      position
     }).then(() => {
-      editUser({
-        id: props.id,
-        name
-      }).then(() => {
-        showMessage(props, 'success', state.labels.editSuccess)
-        props.f7router.back()  
-      })
+      showMessage(props, 'success', state.labels.editSuccess)
+      props.f7router.back()  
     })
   }
   return (
@@ -91,10 +82,6 @@ const EditCustomer = props => {
             {customerTypesTags}
           </select>
         </ListItem>
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
-        </ListItem>
         <ListItem
           title={state.labels.store}
           smartSelect
@@ -122,6 +109,16 @@ const EditCustomer = props => {
           onInputClear={() => setDeliveryFees('')}
         />
         <ListInput 
+          name="position" 
+          label={state.labels.position}
+          value={position}
+          floatingLabel 
+          clearButton
+          type="text" 
+          onChange={e => setPosition(e.target.value)}
+          onInputClear={() => setPosition('')}
+        />
+        <ListInput 
           name="address" 
           label={state.labels.address}
           value={address}
@@ -135,7 +132,7 @@ const EditCustomer = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && isActive === customer.isActive && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees)
+      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees)
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>

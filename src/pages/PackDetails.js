@@ -1,7 +1,8 @@
 import React, { useContext, useState, useMemo } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, Block } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/Store'
+import { showMessage } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
 
@@ -25,7 +26,7 @@ const PackDetails = props => {
         after={(rec.price / 1000).toFixed(3)} 
         key={rec.id} 
         link="#"
-        onClick={() => handlePurchase(rec)}
+        onClick={rec => handlePurchase(rec)}
       >
         {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : ''}
         {rec.offerEnd && today > rec.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
@@ -40,6 +41,7 @@ const PackDetails = props => {
 				throw new Error(state.labels.twoDiffStores)
       }
       dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: 1, price: store.price}})
+      showMessage(props, 'success', state.labels.addToBasketSuccess)
 			props.f7router.back()
 		} catch(err) {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
@@ -58,7 +60,6 @@ const PackDetails = props => {
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
-          <p>{pack.isActive === false ? state.labels.inActive : ''}</p>
         </CardFooter>
       </Card>
       <List>

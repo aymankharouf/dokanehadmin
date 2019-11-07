@@ -18,8 +18,6 @@ const ProductDetails = props => {
         after={rec.price ? (rec.price / 1000).toFixed(3) : ''} 
         key={rec.id} 
         link={`/packDetails/${rec.id}`}
-        badge={rec.isActive === false ? state.labels.inActive : ''}
-        badgeColor='red' 
       >
         {rec.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
       </ListItem>

@@ -100,8 +100,6 @@ const labels = {
   editCountry: 'تعديل دولة',
   editSuccess: 'تم التعديل بنجاح',
   deleteSuccess: 'تم الحذف بنجاح',
-  isActive: 'فعال؟',
-  inActive: 'غير فعال',
   editSection: 'تعديل قسم',
   editCategory: 'تعديل صنف',
   trademarks: 'العلامات التجارية',
@@ -126,7 +124,7 @@ const labels = {
   approveSuccess: 'تم اﻻعتماد بنجاح',
   approveUser: 'اعتماد عميل جديد',
   invitationsDiscount: 'خصم دعوات اﻻصدقاء',
-  lessPriceDiscount: 'خصم اﻻبلاغ عن سعر اقل',
+  priceAlarmsDiscount: 'خصم اﻻبلاغ عن سعر اقل',
   priceAlarms: 'اشعارات اﻻسعار',
   notFoundPageTitle: 'الصفحة غير موجودة',
   notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة',
@@ -135,7 +133,20 @@ const labels = {
   profitPercent: 10,
   endOffer: 'انتهى العرض',
   endedOffers: 'العروض المنتهية',
-  rejectSuccess: 'تم الرفض بنجاح'
+  rejectSuccess: 'تم الرفض بنجاح',
+  costTypes: 'انواع المصاريف',
+  addCostType: 'اضافة نوع مصروف',
+  editCostType: 'تعديل نوع مصروف',
+  costs: 'المصاريف',
+  invalidCostDate: 'الرجاء التأكد من التاريخ المدخل',
+  invalidCostValue: 'الرجاء التأكد من القيمة المدخلة',
+  newCost: 'اضافة مصروف',
+  value: 'القيمة',
+  costDate: 'التاريخ',
+  profits: 'اﻻرباح والمبيعات',
+  resolveSuccess: 'تم معالجة الحالة بنجاح',
+  addToBasketSuccess: 'تم الاضافة الى سلة المشتريات بنجاح',
+  
 }
 
 export default labels

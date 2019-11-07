@@ -32,7 +32,7 @@ const OrdersList = props => {
               )
             }
             )}
-            { orders.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+            {orders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Toolbar bottom>

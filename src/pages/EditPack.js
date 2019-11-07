@@ -10,7 +10,6 @@ const EditPack = props => {
   const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), state.products)
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
-  const [isActive, setIsActive] = useState(pack.isActive)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
   const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
   const [offerQuantity, setOfferQuantity] = useState(pack.offerQuantity)
@@ -22,7 +21,7 @@ const EditPack = props => {
   const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
-      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false && rec.isActive === true))
+      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
     } else {
       setBonusProductPacks([])
     }
@@ -43,7 +42,6 @@ const EditPack = props => {
       ...pack,
       name,
       unitsCount,
-      isActive,
       isOffer,
       offerPackId,
       offerQuantity,
@@ -58,33 +56,24 @@ const EditPack = props => {
     })
   }
   const offerPacksTags = useMemo(() => {
-    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
+    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
     return offerProductPacks.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
+      <option key={rec.id} value={rec.id}>
         {rec.name}
       </option>
     )
   }, [state.packs])
   const bonusProductsTags = useMemo(() => {
-    const products = state.products.filter(rec => rec.isActive === true)
+    const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
+      <option key={rec.id} value={rec.id}>
         {rec.name}
       </option>
     )
   }, [state.products]) 
   const bonusPacksTags = useMemo(() => bonusProductPacks.map(rec => 
-    <option 
-      key={rec.id} 
-      value={rec.id}
-    >
+    <option key={rec.id} value={rec.id}>
       {rec.name}
     </option>
   ), [bonusProductPacks])
@@ -112,15 +101,6 @@ const EditPack = props => {
           onChange={(e) => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
         />
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(!isActive)}
-          />
-        </ListItem>
         <ListItem>
           <span>{state.labels.isOffer}</span>
           <Toggle 
@@ -214,7 +194,7 @@ const EditPack = props => {
           </List>
         </React.Fragment>
       : ''}
-      {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && unitsCount === pack.unitsCount && isActive === pack.isActive && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? ''
+      {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && unitsCount === pack.unitsCount && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

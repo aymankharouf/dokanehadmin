@@ -112,6 +112,11 @@ const Reducer = (state, action) => {
           ...state,
           forgetPassword: action.forgetPassword
         }
+      case 'SET_INVITATIONS':
+        return {
+          ...state,
+          invitations: action.invitations
+        }
       case 'SET_PRODUCTS':
         return {
           ...state,
@@ -126,6 +131,11 @@ const Reducer = (state, action) => {
         return {
           ...state,
           customers: action.customers
+        }
+      case 'SET_COST_TYPES':
+        return {
+          ...state,
+          costTypes: action.costTypes
         }
       default:
         return state

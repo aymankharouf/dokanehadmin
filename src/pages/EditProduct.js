@@ -12,7 +12,6 @@ const EditProduct = props => {
   const [trademark, setTrademark] = useState(product.trademark)
   const [byWeight, setByWeight] = useState(product.byWeight)
   const [isNew, setIsNew] = useState(product.isNew)
-  const [isActive, setIsActive] = useState(product.isActive)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
@@ -41,29 +40,28 @@ const EditProduct = props => {
       isNew,
       country,
       imageUrl,
-      image,
-      isActive
+      image
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })  
   }
   const categoriesTags = useMemo(() => {
-    const categories = state.categories.filter(rec => rec.isActive === true)
+    const categories = state.categories
     categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return categories.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.categories]) 
   const trademarksTags = useMemo(() => {
-    const trademarks = state.trademarks.filter(rec => rec.isActive === true)
+    const trademarks = state.trademarks
     trademarks.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return trademarks.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.trademarks]) 
   const countriesTags = useMemo(() => {
-    const countries = state.countries.filter(rec => rec.isActive === true)
+    const countries = state.countries
     countries.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return countries.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
@@ -149,15 +147,6 @@ const EditProduct = props => {
             onToggleChange={() => setIsNew(!isNew)}
           />
         </ListItem>
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(!isActive)}
-          />
-        </ListItem>
         <ListInput 
           name="image" 
           label="Image" 
@@ -169,7 +158,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} alt=""/>
       </List>
-      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && byWeight === product.byWeight && isNew === product.isNew && isActive === product.isActive && imageUrl === product.imageUrl) ? ''
+      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

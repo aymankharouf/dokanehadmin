@@ -20,6 +20,7 @@ const PanelPage = props => {
         {user ? <ListItem link="/requestedPacks/" title={state.labels.newPurchase} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/priceAlarms/" title={state.labels.priceAlarms} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/endedOffers/" title={state.labels.endedOffers} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/profits/" title={state.labels.profits} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

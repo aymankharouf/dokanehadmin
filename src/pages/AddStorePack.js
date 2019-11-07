@@ -21,7 +21,7 @@ const AddStorePack = props => {
   useEffect(() => {
     if (purchasePrice) {
       const storeType = store ? store.type : ''
-      if (storeType === 'w') {
+      if (storeType === '5') {
         setPrice(((1 + (state.labels.profitPercent / 100)) * purchasePrice).toFixed(3))
       } else {
         setPrice(purchasePrice)
@@ -33,7 +33,7 @@ const AddStorePack = props => {
   useEffect(() => {
     if (productId) {
       setProduct(state.products.find(rec => rec.id === productId))
-      setProductPacks(state.packs.filter(rec => rec.productId === productId && rec.isActive === true))
+      setProductPacks(state.packs.filter(rec => rec.productId === productId))
     } else {
       setProduct('')
       setProductPacks([])
@@ -82,7 +82,7 @@ const AddStorePack = props => {
   }
 
   const productsTags = useMemo(() => {
-    const products = state.products.filter(rec => rec.isActive === true)
+    const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
       <option 
@@ -94,10 +94,7 @@ const AddStorePack = props => {
     )
   }, [state.products])
   const packsTags = useMemo(() => productPacks.map(rec => 
-    <option 
-      key={rec.id} 
-      value={rec.id}
-    >
+    <option key={rec.id} value={rec.id}>
       {rec.name}
     </option>
   ), [productPacks])

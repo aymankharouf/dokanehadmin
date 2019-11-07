@@ -2,6 +2,7 @@ import React, { useContext, useState, useMemo } from 'react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
+import { showMessage } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
 
@@ -16,6 +17,7 @@ const RequestedPackDetails = props => {
 				throw new Error(state.labels.twoDiffStores)
       }
       dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
+      showMessage(props, 'success', state.labels.addToBasketSuccess)
 			props.f7router.back()
 		} catch(err) {
 			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
@@ -23,7 +25,17 @@ const RequestedPackDetails = props => {
 	}
   const storesTag = useMemo(() => {
     let packStores = pack.stores
-    packStores.sort((rec1, rec2) => rec1.purchasePrice - rec2.purchasePrice)
+    packStores.sort((rec1, rec2) => {
+      if (rec1.purchasePrice === rec2.purchasePrice) {
+        if (Number(state.stores.find(rec => rec.id === rec2.storeId).type) === Number(state.stores.find(rec => rec.id === rec1.storeId).type)){
+          return rec1.time.seconds - rec2.time.seconds
+        } else {
+          return Number(state.stores.find(rec => rec.id === rec2.storeId).type) - Number(state.stores.find(rec => rec.id === rec1.storeId).type)
+        }
+      } else {
+        return rec1.purchasePrice - rec2.purchasePrice
+      }
+    })
     packStores = packStores.map(packStore => {
       const currentStore = state.stores.find(store => store.id === packStore.id)
       const storeName = currentStore.name

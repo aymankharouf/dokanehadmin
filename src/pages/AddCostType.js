@@ -1,15 +1,15 @@
 import React, { useState, useContext } from 'react'
-import { addTrademark, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
+import { addCostType, showMessage } from '../data/Actions'
+import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
 
-const AddTrademark = props => {
+const AddCostType = props => {
   const { state } = useContext(StoreContext)
   const [name, setName] = useState('')
   const handleSubmit = () => {
-    addTrademark({
+    addCostType({
       name
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
@@ -18,14 +18,17 @@ const AddTrademark = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addTrademark} backLink={state.labels.back} />
+      <Navbar title={state.labels.addCostType} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
-          floatingLabel 
-          type="text" 
-          onChange={(e) => setName(e.target.value)}
+          label={state.labels.name} 
+          floatingLabel
+          clearButton
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
       {name ? 
@@ -37,8 +40,7 @@ const AddTrademark = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-
     </Page>
   )
 }
-export default AddTrademark
+export default AddCostType

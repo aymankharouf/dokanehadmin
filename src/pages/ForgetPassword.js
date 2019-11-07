@@ -4,7 +4,7 @@ import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
-import { resolveForgetPassword } from '../data/Actions'
+import { resolveForgetPassword, showMessage } from '../data/Actions'
 
 const ForgetPassword = props => {
   const { state } = useContext(StoreContext)
@@ -14,6 +14,7 @@ const ForgetPassword = props => {
   } , [state.forgetPassword])
   const handleResolveForgetPassword = trans => {
     resolveForgetPassword(trans).then(() => {
+      showMessage(props, 'success', state.labels.resolveSuccess)
       props.f7router.back()
     })
   }

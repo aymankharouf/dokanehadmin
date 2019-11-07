@@ -13,8 +13,7 @@ const AddCategory = props => {
     addCategory({
       sectionId: props.id,
       name,
-      unitType,
-      isActive: false
+      unitType
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()

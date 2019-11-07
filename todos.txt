@@ -1,10 +1,10 @@
 *split to app and admin
 *configure security
-forget password
+*forget password
 *product status => stopped, active
-add quantity in a store & offers
-customer status => active, blacklist, vip, special
-customer limit
+*add quantity in a store & offers
+*customer status => active, blacklist, vip, special
+*customer limit
 news
 *order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
 pick an order
@@ -31,17 +31,35 @@ cancel a purchase or part of it
 *lazy loading
 customer follow-up
 branches
-first time discount
-friends discount
+*first time discount
+*friends discount
 send basket to friends(payment: sender or receiver)
 direct delivery
 *offers first (ordering products)
 *ordering products by type (product)
 smart basket
 suggestions
-invitations
-maps
+*invitations
 *user as store admin
-advertisements
-categorize stores, ordering stores for equity
-page for ending offers
+advertisements & request for advert from store owner
+categorize stores, ordering stores for equity : oldest trans, less purchase, most active
+*outdated offers
+rounding
+*offerend in price alarm
+*prevent blacklist users from login or do any action
+from more than one store
+stock trans (in & out)
+prevent purchase with price above requested price
+purchase from the lowest price always
+average price for purchase pack in order
+purchase with best price flag for each customer
+change password
+resolve forget password from the system
+auto merge between not approved orders for the same customer
+request to cancel an approved order
+*old age flag for customers
+*position info into customers table
+destroy patch in stock
+auto blacklist customer who did not pick his order
+return to store
+store trans

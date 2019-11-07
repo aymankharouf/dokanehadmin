@@ -34,36 +34,5 @@ exports.rateProduct = functions.firestore.document('rating/{ratingId}')
     })
   })
 
-  exports.deliveredOrder = functions.firestore.document('orders/{orderId}')
-  .onUpdate(change => {
-    const newOrder = change.after.data()
-    const oldOrder = change.before.data()
-    if (newOrder.status === 'r' && oldOrder.status !== 'r'){
-      const batch = admin.firestore().batch()
-      let packRef
-      for (const pack of newOrder.basket) {
-        productRef = admin.firestore().collection("packs").doc(pack.id)
-        batch.update(packRef, {sales: admin.firestore.FieldValue.increment(pack.quantity)});
-      }
-      const netPrice = newOrder.total + newOrder.fixedFees + newOrder.deliveryFees - (newOrder.customerDiscount + newOrder.specialDiscount)
-      const customerRef = admin.firestore().collection('customers').doc(newOrder.user)
-      batch.update(customerRef, {
-        totalPayments: admin.firestore.FieldValue.increment(netPrice),
-        totalOrders: admin.firestore.FieldValue.increment(1),
-        limit: admin.firestore.FieldValue.increment(5000),
-        registrationDiscount: newOrder.discountType === 'r' ? 0 : registrationDiscount,
-        friendsDiscount: newOrder.discountType === 'f' ? admin.firestore.FieldValue.increment(-500) : friendsDiscount,
-        lessPriceDiscount: newOrder.discountType === 'p' ? admin.firestore.FieldValue.increment(-500) : lessPriceDiscount
-      })
-      let userInfo
-      admin.firestore().collection('users').doc(newOrder.user).get().then(doc => {
-        userInfo = doc.data()
-        admin.firestore().collection('invitations').where('friendMobile', '==', userInfo.mobile).get().then(docs => {
-          
-        })
-      })
-      return batch.commit()
-    }
-  })
 
     

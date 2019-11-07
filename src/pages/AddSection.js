@@ -10,8 +10,7 @@ const AddSection = props => {
   const [name, setName] = useState('')
   const handleSubmit = () => {
     addSection({
-      name,
-      isActive: false
+      name
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()

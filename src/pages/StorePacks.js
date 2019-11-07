@@ -22,9 +22,9 @@ const StorePacks = props => {
         imageUrl: productInfo.imageUrl
       }
     })
-    return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec2.time.seconds)
+    return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
   }, [state.packs, state.products])
-  const store = useMemo(() => state.stores.find(store => store.id === props.id), [state.stores])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>

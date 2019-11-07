@@ -2,19 +2,20 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
-import { addStock } from '../data/Actions'
+import { addHareesStore, showMessage } from '../data/Actions'
 
 
 const Stores = props => {
   const { state, dispatch } = useContext(StoreContext)
   const stores = useMemo(() => {
-    const stores = state.stores.filter(rec => rec.id !== 's')
+    const stores = state.stores
     return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.stores])
-  const stock = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
-  const handleAddStock = (name) => {
-    addStock(name).then(() => {
-      dispatch({type: 'ADD_STORE', store: {id: 's', name}})
+  const hareesStore = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
+  const handleAddHareesStore = (name) => {
+    addHareesStore(name).then(() => {
+      dispatch({type: 'ADD_STORE', store: {id: 's', name, type: '1'}})
+      showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })
 
@@ -30,8 +31,6 @@ const Stores = props => {
               title={rec.name} 
               footer={`${rec.address || ''} ${rec.mobile || ''}`}
               key={rec.id} 
-              badge={rec.isActive === false ? state.labels.inActive : ''}
-              badgeColor='red' 
             />
           )}
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : null}
@@ -40,8 +39,8 @@ const Stores = props => {
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addStore/')}>
         <Icon material="add"></Icon>
       </Fab>
-      {stock ? '' : 
-        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddStock(state.labels.stockName)}>
+      {hareesStore ? '' : 
+        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddHareesStore(state.labels.stockName)}>
           <Icon material="add"></Icon>
         </Fab>
       }

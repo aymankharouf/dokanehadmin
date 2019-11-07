@@ -48,8 +48,6 @@ const CustomersList = props => {
               title={`${customer.name} - ${customer.mobile}`}
               subtitle={moment(customer.time.toDate()).fromNow()}
               key={customer.id}
-              badge={customer.isActive === false ? state.labels.inActive : ''}
-              badgeColor='red' 
             />
           )}
           {customers.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

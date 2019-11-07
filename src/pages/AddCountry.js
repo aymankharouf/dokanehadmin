@@ -10,8 +10,7 @@ const AddCountry = props => {
   const [name, setName] = useState('')
   const handleSubmit = () => {
     addCountry({
-      name,
-      isActive: false
+      name
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()

@@ -34,8 +34,6 @@ const Products = props => {
                   subtitle={state.categories.find(rec => rec.id === product.category).name}
                   text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}
                   key={product.id}
-                  badge={product.isActive === false ? state.labels.inActive : ''}
-                  badgeColor='red' 
                 >
                   <img slot="media" src={product.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
                   {product.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}

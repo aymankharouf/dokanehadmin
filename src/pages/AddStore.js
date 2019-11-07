@@ -33,8 +33,7 @@ const AddStore = props => {
       name,
       type,
       mobile,
-      address,
-      isActive: false
+      address
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()

@@ -8,9 +8,7 @@ const BottomToolbar = props => {
 
   return (
     <React.Fragment>
-      <Link href={`/${searchHome}/`}>
-        <Icon material={searchHome} />
-      </Link>
+      <Link href={`/${searchHome}/`} iconMaterial={searchHome} />
       <Link href={state.basket.packs ? '/basket/' : ''}>
         <Icon material='shopping_cart' >
           {state.basket.packs ? <Badge color="red">{state.basket.packs.length}</Badge> : ''}

@@ -9,12 +9,10 @@ const EditCountry = props => {
   const { state } = useContext(StoreContext)
   const country = useMemo(() => state.countries.find(rec => rec.id === props.id), [state.countries])
   const [name, setName] = useState(country.name)
-  const [isActive, setIsActive] = useState(country.isActive || false)
   const handleEdit = () => {
     editCountry({
       id: country.id,
-      name,
-      isActive
+      name
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
@@ -32,12 +30,8 @@ const EditCountry = props => {
           type="text" 
           onChange={(e) => setName(e.target.value)}
         />
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
-        </ListItem>
       </List>
-      {!name || (name === country.name && isActive === country.isActive)
+      {!name || (name === country.name)
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>

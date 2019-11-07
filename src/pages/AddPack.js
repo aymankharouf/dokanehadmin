@@ -20,7 +20,7 @@ const AddPack = props => {
   const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
-      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false && rec.isActive === true))
+      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
     } else {
       setBonusProductPacks([])
     }
@@ -48,7 +48,6 @@ const AddPack = props => {
       bonusPackId,
       bonusQuantity,
       isBonusFree,
-      isActive: false,
       stores: [],
       time: new Date()
     }).then(() => {
@@ -57,7 +56,7 @@ const AddPack = props => {
     })
   }
   const offerPacksTags = useMemo(() => {
-    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false && rec.isActive === true)
+    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
     return offerProductPacks.map(rec => 
       <option 
         key={rec.id} 
@@ -68,7 +67,7 @@ const AddPack = props => {
     )
   }, [state.packs])
   const bonusProductsTags = useMemo(() => {
-    const products = state.products.filter(rec => rec.isActive === true)
+    const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
       <option 

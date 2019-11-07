@@ -42,10 +42,6 @@ const CustomerDetails = props => {
           type="text"
           readonly
         />
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle name="isActive" color="green" checked={customer.isActive} disabled/>
-        </ListItem>
         <ListInput 
           name="limit" 
           label={state.labels.limit}
@@ -88,8 +84,8 @@ const CustomerDetails = props => {
         />
         <ListInput 
           name="lessPriceDiscount" 
-          label={state.labels.lessPriceDiscount}
-          value={(customer.lessPriceDiscount / 1000).toFixed(3)}
+          label={state.labels.priceAlarmsDiscount}
+          value={(customer.priceAlarmsDiscount / 1000).toFixed(3)}
           floatingLabel 
           type="number"
           readonly

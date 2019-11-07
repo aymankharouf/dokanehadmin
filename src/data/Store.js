@@ -46,10 +46,11 @@ const Store = props => {
     {id: 'i', name: 'استيداع'}
   ]  
   const storeTypes = [
-    {id: 's', name: 'دكانة'},
-    {id: 'm', name: 'محل'},
-    {id: 'b', name: 'سوبرماركت'},
-    {id: 'w', name: 'محل جملة'}
+    {id: '1', name: 'المستودع'},
+    {id: '2', name: 'دكانة'},
+    {id: '3', name: 'محل'},
+    {id: '4', name: 'سوبرماركت'},
+    {id: '5', name: 'محل جملة'}
   ]
   const stockTransTypes = [
     {id: 'p', name: 'شراء'},
@@ -64,10 +65,10 @@ const Store = props => {
     {id: 's', name: 'عميل خاص'}
   ]
   const discountTypes = [
-    {id: 'f', name: 'خصم اول طلب'},
-    {id: 's', name: 'خصم خاص'},
-    {id: 'i', name: 'خصم دعوة صديق'},
-    {id: 'l', name: 'خصم ابلاغ عن سعر اقل'}
+    {id: 'f', name: 'خصم اول طلب', value: 500},
+    {id: 's', name: 'خصم خاص', value: 500},
+    {id: 'i', name: 'خصم دعوة صديق', value: 500},
+    {id: 'p', name: 'خصم ابلاغ عن سعر اقل', value: 500}
   ]
 
   const localData = localStorage.getItem('basket');
@@ -95,10 +96,12 @@ const Store = props => {
     products: [],
     packs: [],
     forgetPassword: [],
+    invitations: [],
     unitTypes,
     customerTypes,
     customers: [],
-    discountTypes
+    discountTypes,
+    costTypes: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -185,6 +188,24 @@ const Store = props => {
           dispatch({type: 'SET_FORGET_PASSWORD', forgetPassword})
         }, err => {
           unsubscribeForgetPassword()
+        })
+        const unsubscribeInvitations = firebase.firestore().collection('invitations').onSnapshot(docs => {
+          let invitations = []
+          docs.forEach(doc => {
+            invitations.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_INVITATIONS', invitations})
+        }, err => {
+          unsubscribeInvitations()
+        })
+        const unsubscribeCostTypes = firebase.firestore().collection('costTypes').onSnapshot(docs => {
+          let costTypes = []
+          docs.forEach(doc => {
+            costTypes.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_COST_TYPES', costTypes})
+        }, err => {
+          unsubscribeCostTypes()
         })  
       }
     })

@@ -53,6 +53,15 @@ import ApproveUser from './pages/ApproveUser';
 import PriceAlarms from './pages/PriceAlarms';
 import PriceAlarmDetails from './pages/PriceAlarmDetails';
 import EndedOffers from './pages/EndedOffers';
+import CostTypes from './pages/CostTypes';
+import AddCostType from './pages/AddCostType';
+import EditCostType from './pages/EditCostType';
+import Costs from './pages/Costs';
+import AddCost from './pages/AddCost';
+import EditCost from './pages/EditCost';
+import Profits from './pages/Profits';
+import MonthlyProfits from './pages/MonthlyProfits';
+
 
 export default [
   {
@@ -162,6 +171,30 @@ export default [
   {
     path: '/editCountry/:id',
     component: EditCountry
+  },
+  {
+    path: '/costTypes/',
+    component: CostTypes
+  },
+  {
+    path: '/addCostType/',
+    component: AddCostType
+  },
+  {
+    path: '/editCostType/:id',
+    component: EditCostType
+  },
+  {
+    path: '/costs/',
+    component: Costs
+  },
+  {
+    path: '/addCost/',
+    component: AddCost
+  },
+  {
+    path: '/editCost/:id',
+    component: EditCost
   },
   {
     path: '/sections/',
@@ -282,6 +315,14 @@ export default [
   {
     path: '/stockTrans/:id',
     component: StockTransDetails
+  },
+  {
+    path: '/profits/',
+    component: Profits,
+  },
+  {
+    path: '/monthlyProfits/:id',
+    component: MonthlyProfits,
   },
   {
     path: '(.*)',

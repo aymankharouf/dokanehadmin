@@ -12,7 +12,6 @@ const EditStore = props => {
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
-  const [isActive, setIsActive] = useState(store.isActive || false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -36,8 +35,7 @@ const EditStore = props => {
       name,
       type,
       mobile,
-      address,
-      isActive
+      address
     }).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
@@ -76,10 +74,6 @@ const EditStore = props => {
           onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle name="isActive" color="green" checked={isActive} onToggleChange={() => setIsActive(!isActive)}/>
-        </ListItem>
         <ListInput
           label={state.labels.mobile}
           type="text"
@@ -103,7 +97,7 @@ const EditStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address && isActive === store.isActive) ? ''
+      {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

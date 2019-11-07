@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect, useMemo } from 'react'
 import {Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editPrice } from '../data/Actions'
+import { editPrice, showMessage } from '../data/Actions'
 
 
 const EditPrice = props => {
@@ -39,7 +39,7 @@ const EditPrice = props => {
   }, [price, purchasePrice, offerEnd])
   useEffect(() => {
     const storeType = store ? store.type : ''
-    if (storeType === 'w') {
+    if (storeType === '5') {
       setPrice((1 + (state.labels.profitPercent / 100) * purchasePrice))
     } else {
       setPrice(purchasePrice)
@@ -84,6 +84,7 @@ const EditPrice = props => {
       price,
       offerEndDate 
     ).then(() => {
+      showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })  
   }
@@ -111,6 +112,7 @@ const EditPrice = props => {
           errorMessageForce
           onChange={e => setPurchasePrice(e.target.value)}
           onInputClear={() => setPurchasePrice('')}
+          readonly={store.id === 's'}
         />
         <ListInput 
           name="price" 

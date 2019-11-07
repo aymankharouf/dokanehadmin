@@ -47,7 +47,7 @@ const EditOrder = props => {
                         <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
                           {((store.price - pack.price) / 1000).toFixed(3)} 
                         </Badge>
-                        : null
+                        : ''
                       }
                     </ListItem>
                   )
@@ -76,9 +76,7 @@ const EditOrder = props => {
         </List>
       </Block>
       <Toolbar bottom>
-        <Link href="/home/">
-          <Icon material="home" />
-        </Link>
+        <Link href="/home/" iconMaterial="home" />
       </Toolbar>
     </Page>
   )

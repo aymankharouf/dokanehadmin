@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { updateOrder } from '../data/Actions'
+import { updateOrderStatus, showMessage } from '../data/Actions'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Icon, Badge, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
-  const order = useMemo(() => state.orders.find(order => order.id === props.id), [state.orders])
+  const order = useMemo(() => state.orders.find(rec => rec.id === props.id), [state.orders])
   const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
   let i = 0
   let totalPurchase = 0
@@ -24,18 +24,20 @@ const OrderDetails = props => {
     return statusActions.filter(rec => rec.status.find(status => status === order.status))
   }, [])
   const handleAction = type => {
-    let newStatus
-    switch (order.status) {
-      case 'f':
-        newStatus = order.withDelivery ? 'b' : 'd'
-        break;
-      default:
-        newStatus = type
-    }
     if (type === 'e') {
       props.f7router.navigate(`/editOrder/${props.id}`)
     } else {
-      updateOrder({...order, status: newStatus}).then(() => {
+      const newStatus = order.status === 'f' ? (order.withDelivery ? 'b' : 'd') : type
+      updateOrderStatus(
+        {...order, 
+          status: newStatus, 
+          oldStatus: order.status
+        }, 
+        state.users, 
+        state.invitations,
+        state.discountTypes
+      ).then(() => {
+        showMessage(props, 'success', state.labels.editSuccess)
         props.f7router.back()
       })  
     }
@@ -107,12 +109,8 @@ const OrderDetails = props => {
         </List>
       </Popover>
       <Toolbar bottom>
-        <Link href="/home/">
-          <Icon material="home" />
-        </Link>
-        <Link popoverOpen=".popover-menu">
-          <Icon material="more_vert" />
-        </Link>
+        <Link href="/home/" iconMaterial="home" />
+        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
       </Toolbar>
     </Page>
   )
