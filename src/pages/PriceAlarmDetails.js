@@ -98,7 +98,7 @@ const PriceAlarmDetails = props => {
             }}
           >
             <select name='store' value={store} onChange={(e) => setStore(e.target.value)}>
-              <option value="" disabled></option>
+              <option value=""></option>
               {storesTags}
             </select>
           </ListItem>

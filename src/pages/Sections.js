@@ -23,6 +23,7 @@ const Sections = props => {
               key={rec.id} 
             />
           )}
+          {sections.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

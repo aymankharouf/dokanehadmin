@@ -137,6 +137,11 @@ const Reducer = (state, action) => {
           ...state,
           costTypes: action.costTypes
         }
+      case 'SET_COSTS':
+        return {
+          ...state,
+          costs: action.costs
+        }
       default:
         return state
     }

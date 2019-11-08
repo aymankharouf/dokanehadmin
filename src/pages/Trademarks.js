@@ -23,6 +23,7 @@ const Trademarks = props => {
               key={rec.id} 
             />
           )}
+          {trademarks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

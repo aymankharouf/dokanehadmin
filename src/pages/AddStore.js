@@ -58,7 +58,7 @@ const AddStore = props => {
           }}
         >
           <select name='type' defaultValue="" onChange={(e) => setType(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {storeTypesOptionsTags}
           </select>
         </ListItem>

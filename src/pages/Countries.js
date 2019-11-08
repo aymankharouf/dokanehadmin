@@ -20,6 +20,7 @@ const Countries = props => {
               key={rec.id}
             />
           )}
+          {countries.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addCountry/')}>

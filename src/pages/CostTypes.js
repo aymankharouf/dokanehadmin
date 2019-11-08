@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const CostTypes = props => {
   const { state } = useContext(StoreContext)
-  const costTypes = useMemo(() => [...state.costTypes].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.countries])
+  const costTypes = useMemo(() => [...state.costTypes].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.costTypes])
 
   return (
     <Page>
@@ -20,6 +20,7 @@ const CostTypes = props => {
               key={rec.id}
             />
           )}
+          {costTypes.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addCostType/')}>

@@ -47,7 +47,7 @@ const EditCategory = props => {
           }}
         >
           <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {unitTypesTags}
           </select>
         </ListItem>

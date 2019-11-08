@@ -60,7 +60,7 @@ const EditStore = props => {
           }}
         >
           <select name='type' value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {storeTypesTags}
           </select>
         </ListItem>

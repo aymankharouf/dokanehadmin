@@ -74,7 +74,7 @@ const ApproveUser = props => {
           }}
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {storesTags}
           </select>
         </ListItem>

@@ -101,7 +101,8 @@ const Store = props => {
     customerTypes,
     customers: [],
     discountTypes,
-    costTypes: []
+    costTypes: [],
+    costs: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -206,6 +207,15 @@ const Store = props => {
           dispatch({type: 'SET_COST_TYPES', costTypes})
         }, err => {
           unsubscribeCostTypes()
+        })  
+        const unsubscribeCosts = firebase.firestore().collection('costs').onSnapshot(docs => {
+          let costs = []
+          docs.forEach(doc => {
+            costs.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_COSTS', costs})
+        }, err => {
+          unsubscribeCosts()
         })  
       }
     })

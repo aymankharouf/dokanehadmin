@@ -78,7 +78,7 @@ const EditCustomer = props => {
           }}
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {customerTypesTags}
           </select>
         </ListItem>
@@ -94,7 +94,7 @@ const EditCustomer = props => {
           }}
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {storesTags}
           </select>
         </ListItem>

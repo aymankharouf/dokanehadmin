@@ -24,6 +24,7 @@ const SectionCategories = props => {
               key={rec.id} 
             />
           )}
+          {categories.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="orange">

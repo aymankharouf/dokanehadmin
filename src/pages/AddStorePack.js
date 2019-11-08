@@ -114,7 +114,7 @@ const AddStorePack = props => {
           }}
         >
           <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {productsTags}
           </select>
         </ListItem>
@@ -130,7 +130,7 @@ const AddStorePack = props => {
           }}
         >
           <select name="packId" defaultValue="" onChange={(e) => setPackId(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {packsTags}
           </select>
         </ListItem>

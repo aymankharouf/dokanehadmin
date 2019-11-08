@@ -126,7 +126,7 @@ const EditPack = props => {
               }}
             >
               <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
-                <option value="" disabled></option>
+                <option value=""></option>
                 {offerPacksTags}
               </select>
             </ListItem>
@@ -161,7 +161,7 @@ const EditPack = props => {
               }}
             >
               <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
-                <option value="" disabled></option>
+                <option value=""></option>
                 {bonusProductsTags}
               </select>
             </ListItem>
@@ -177,7 +177,7 @@ const EditPack = props => {
               }}
             >
               <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
-                <option value="" disabled></option>
+                <option value=""></option>
                 {bonusPacksTags}
               </select>
             </ListItem>

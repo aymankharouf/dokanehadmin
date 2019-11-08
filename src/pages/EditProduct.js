@@ -93,7 +93,7 @@ const EditProduct = props => {
           }}
         >
           <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {categoriesTags}
           </select>
         </ListItem>
@@ -109,7 +109,7 @@ const EditProduct = props => {
           }}
         >
           <select name="trademark" value={trademark} onChange={(e) => setTrademark(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {trademarksTags}
           </select>
         </ListItem>
@@ -125,7 +125,7 @@ const EditProduct = props => {
           }}
         >
           <select name="country" value={country} onChange={(e) => setCountry(e.target.value)}>
-            <option value="" disabled></option>
+            <option value=""></option>
             {countriesTags}
           </select>
         </ListItem>
