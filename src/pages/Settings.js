@@ -19,7 +19,7 @@ const Settings = props => {
       <Block>
         {sections.map(section => {
             return (
-            <Button large fill className="sections" color={state.randomColors[i++ % 13].name} href={`/${section.path}/`} key={section.id}>
+            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${section.path}/`} key={section.id}>
                 {section.name}
             </Button>
             )

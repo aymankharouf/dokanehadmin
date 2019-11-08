@@ -8,19 +8,16 @@ export const StoreContext = createContext()
 const Store = props => {
   
   const randomColors = [
-    {id: '0', name: 'red'},
-    {id: '1', name: 'green'},
-    {id: '2', name: 'blue'},
-    {id: '3', name: 'pink'},
-    {id: '4', name: 'yellow'},
-    {id: '5', name: 'orange'},
-    {id: '6', name: 'purple'},
-    {id: '7', name: 'deeppurple'},
-    {id: '8', name: 'lightblue'},
-    {id: '9', name: 'teal'},
-    {id: '10', name: 'lime'},
-    {id: '11', name: 'deeporange'},
-    {id: '12', name: 'gray'}
+    {id: 0, name: 'red'},
+    {id: 1, name: 'green'},
+    {id: 2, name: 'blue'},
+    {id: 3, name: 'pink'},
+    {id: 4, name: 'yellow'},
+    {id: 5, name: 'orange'},
+    {id: 6, name: 'purple'},
+    {id: 7, name: 'deeppurple'},
+    {id: 8, name: 'lightblue'},
+    {id: 9, name: 'teal'},
   ]
   const unitTypes = [
     {id: 'w', name: 'وزن'},

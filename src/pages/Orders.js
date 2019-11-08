@@ -18,7 +18,7 @@ const Orders = props => {
               <ListItem 
                 title={status.name} 
                 badge={count} 
-                badgeColor={state.randomColors[i++ % 13].name} 
+                badgeColor={state.randomColors[i++ % 10].name} 
                 link={`/ordersList/${status.id}/`} 
                 key={status.id}
               />

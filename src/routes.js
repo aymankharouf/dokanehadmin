@@ -61,6 +61,7 @@ import AddCost from './pages/AddCost';
 import EditCost from './pages/EditCost';
 import Profits from './pages/Profits';
 import MonthlyProfits from './pages/MonthlyProfits';
+import RetreivePassword from './pages/RetreivePassword';
 
 
 export default [
@@ -323,6 +324,10 @@ export default [
   {
     path: '/monthlyProfits/:id',
     component: MonthlyProfits,
+  },
+  {
+    path: '/retreivePassword/:id',
+    component: RetreivePassword,
   },
   {
     path: '(.*)',

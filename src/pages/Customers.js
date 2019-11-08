@@ -35,7 +35,7 @@ const Customers = props => {
               <ListItem 
                 title={section.name} 
                 badge={section.id === 'f' ? forgetPassword.length : section.id === 'u' ? newUsers.length : customers.length} 
-                badgeColor={state.randomColors[i++ % 13].name} 
+                badgeColor={state.randomColors[i++ % 10].name} 
                 link={section.path}
                 key={section.id}
               />

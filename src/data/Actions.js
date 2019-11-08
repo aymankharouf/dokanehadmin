@@ -419,8 +419,8 @@ export const editTrademark = trademark => {
   return firebase.firestore().collection('trademarks').doc(trademark.id).update(trademark)
 }
 
-export const resolveForgetPassword = trans => {
-  return firebase.firestore().collection('forgetPassword').doc(trans.id).update({
+export const resolveForgetPassword = transId => {
+  return firebase.firestore().collection('forgetPassword').doc(transId).update({
     resolved: true
   })
 }

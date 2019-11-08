@@ -144,9 +144,11 @@ const labels = {
   value: 'القيمة',
   costDate: 'التاريخ',
   profits: 'اﻻرباح والمبيعات',
-  resolveSuccess: 'تم معالجة الحالة بنجاح',
   addToBasketSuccess: 'تم الاضافة الى سلة المشتريات بنجاح',
-  
+  retreivePassword: 'استرجاع كلمة السر',
+  sendSuccess: 'تم الارسال بنجاح',
+  send: 'تم ارسال'
+
 }
 
 export default labels

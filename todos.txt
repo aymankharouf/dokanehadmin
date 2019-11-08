@@ -61,5 +61,9 @@ request to cancel an approved order
 *position info into customers table
 destroy patch in stock
 auto blacklist customer who did not pick his order
-return to store
+return to store except type 5
 store trans
+image size
+rate product bonus
+hints & help
+alert & notifications

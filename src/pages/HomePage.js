@@ -29,7 +29,7 @@ const HomePage = props => {
       <Block>
         {mainPages.map(page => {
           return (
-            <Button large fill className="sections" color={state.randomColors[i++ % 13].name} href={`/${page.path}/`} key={page.id}>
+            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${page.path}/`} key={page.id}>
               <span className="section-label">{page.name}</span>
             </Button>
           )

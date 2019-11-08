@@ -158,7 +158,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} alt=""/>
       </List>
-      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
+      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && trademark === product.trademark && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

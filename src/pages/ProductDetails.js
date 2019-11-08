@@ -31,6 +31,7 @@ const ProductDetails = props => {
           <img src={product.imageUrl} width="100%" height="250" alt=""/>
         </CardContent>
         <CardFooter>
+          <p>{`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}</p>
           <p><Rating rating={product.rating} /></p>
         </CardFooter>
       </Card>
