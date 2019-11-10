@@ -11,7 +11,15 @@ const PackTrans = props => {
   const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
   const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
   const packTrans = useMemo(() => {
-    const packTrans = state.packTrans.filter(rec => rec.quantity > 0)
+    const stockTrans = state.stockTrans.filter(trans => trans.basket.find(rec => rec.id === pack.id))
+    const packTrans = stockTrans.map(trans => {
+      const transPack = trans.basket.find(rec => rec.id === pack.id)
+      return {
+        ...transPack,
+        storeId: trans.storeId,
+        time: trans.time
+      }
+    })
     return packTrans.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
   }, [state.packTrans])
   return(

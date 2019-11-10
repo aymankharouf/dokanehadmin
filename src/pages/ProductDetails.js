@@ -1,9 +1,10 @@
 import React, { useContext, useState, useMemo } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Badge, BlockTitle, Row, Col, Button } from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Badge, BlockTitle, Row, Col, Button, Toolbar } from 'framework7-react'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
+import BottomToolbar from './BottomToolbar'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
@@ -51,7 +52,9 @@ const ProductDetails = props => {
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editProduct/${props.id}`)}>
         <Icon material="edit"></Icon>
       </Fab>
-
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
     </Page>
   )
 }

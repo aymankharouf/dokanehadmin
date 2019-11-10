@@ -14,7 +14,7 @@ const EditCustomer = props => {
   const [type, setType] = useState(customer.type)
   const [storeId, setStoreId] = useState(customer.storeId)
   const [deliveryFees, setDeliveryFees] = useState(customer.deliveryFees)
-  const [isOld, setIsOld] = useState(customer.isOld)
+  const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [position, setPosition] = useState(customer.position)
   const storesTags = useMemo(() => {
     const stores = state.stores.filter(rec => rec.id !== 's')
@@ -31,15 +31,16 @@ const EditCustomer = props => {
     </option>
   ), [state.customerTypes])
   const handleSubmit = () => {
-    editCustomer({
+    const customer = {
       id: props.id,
       storeId,
       type,
       address,
       deliveryFees: deliveryFees * 1000,
-      isOld,
+      isOldAge,
       position
-    }).then(() => {
+    }
+    editCustomer(customer, name).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()  
     })
@@ -101,13 +102,17 @@ const EditCustomer = props => {
         <ListInput 
           name="deliveryFees" 
           label={state.labels.deliveryFees}
-          value={(customer.deliveryFees / 1000).toFixed(3)}
+          value={(deliveryFees / 1000).toFixed(3)}
           floatingLabel 
           type="number"
           clearButton
-          onChange={(e) => setDeliveryFees(e.target.value)}
+          onChange={e => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
         />
+        <ListItem>
+          <span>{state.labels.isOldAge}</span>
+          <Toggle color="blue" checked={isOldAge} onToggleChange={() => setIsOldAge(!isOldAge)} />
+        </ListItem>
         <ListInput 
           name="position" 
           label={state.labels.position}
@@ -132,7 +137,7 @@ const EditCustomer = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees)
+      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees && isOldAge === customer.isOldAge && position === customer.position)
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>

@@ -8,7 +8,7 @@ const Customers = props => {
   const { state } = useContext(StoreContext)
   const sections = useMemo(() => {
     let sections = [
-      {id: 'f', name: state.labels.forgetPasswords, path: '/forgetPassword/'},
+      {id: 'p', name: state.labels.forgetPasswords, path: '/forgetPassword/'},
       {id: 'u', name: state.labels.newUsers, path: '/newUsers/'},
       {id: 'a', name: state.labels.allCustomers, path: '/customersList/a'},
     ]
@@ -34,7 +34,7 @@ const Customers = props => {
             return (
               <ListItem 
                 title={section.name} 
-                badge={section.id === 'f' ? forgetPassword.length : section.id === 'u' ? newUsers.length : customers.length} 
+                badge={section.id === 'p' ? forgetPassword.length : section.id === 'u' ? newUsers.length : customers.length} 
                 badgeColor={state.randomColors[i++ % 10].name} 
                 link={section.path}
                 key={section.id}

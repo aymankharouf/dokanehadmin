@@ -5,10 +5,10 @@ import { StoreContext } from '../data/Store';
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = useMemo(() => state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : '', [state.basket, state.stores])
-  const totalPrice = useMemo(() => state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0)) : '', [state.basket])
+  const totalPrice = useMemo(() => state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0)) : '', [state.basket])
   const handleAdd = pack => {
     const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
-    if (!storeQuantity) {
+    if (!storeQuantity || pack.quantity < storeQuantity) {
       dispatch({type: 'ADD_QUANTITY', pack})
     }
   }
@@ -27,20 +27,19 @@ const Basket = props => {
             return (
               <ListItem
                 title={productInfo.name}
-                footer={(pack.netPrice / 1000).toFixed(3)}
+                footer={((pack.purchasePrice * pack.quantity) / 1000).toFixed(3)}
                 subtitle={pack.name}
                 key={pack.id}
               >
                 <img slot="media" src={productInfo.imageUrl} width="80" alt="" />
-                {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
                 <Stepper
                   slot="after"
-                  buttonsOnly={true}
-                  small
-                  raised
+                  fill
+                  buttonsOnly
                   onStepperPlusClick={() => handleAdd(pack)}
                   onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', pack})}
                 />
+                {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : ''}
               </ListItem>
             )
           })}

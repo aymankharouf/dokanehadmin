@@ -32,12 +32,12 @@
 
 .error {
   font-size: 1.2rem;
-  color: red;
+  color: gold;
 }
 
 .success {
   font-size: 1.2rem;
-  color: rgb(0, 225, 255);
+  color: cyan;
 }
 
 .green {
@@ -60,7 +60,7 @@
   color: white;
 }
 
-  .block-title {
+.block-title {
   color: blue;
 }
 

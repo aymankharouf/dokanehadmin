@@ -15,10 +15,7 @@ const ApproveUser = props => {
     const stores = state.stores.filter(rec => rec.id !== 's')
     stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return stores.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
+      <option key={rec.id} value={rec.id}>
         {rec.name}
       </option>
     )

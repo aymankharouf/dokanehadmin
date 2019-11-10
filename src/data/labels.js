@@ -64,7 +64,7 @@ const labels = {
   invalidFile: 'الرجاء التأكد من ملف الصورة',
   stockTrans: 'حركات المستودع',
   stockTransDetails: 'تفاصيل حركة المستودع',
-  stockName: 'المستودع',
+  stockName: 'مستودعات حريص',
   editOrder: 'تعديل طلب',
   forgetPassword: 'طلبات نسيان كلمة السر',
   customers: 'العملاء',
@@ -147,7 +147,11 @@ const labels = {
   addToBasketSuccess: 'تم الاضافة الى سلة المشتريات بنجاح',
   retreivePassword: 'استرجاع كلمة السر',
   sendSuccess: 'تم الارسال بنجاح',
-  send: 'تم ارسال'
+  send: 'تم ارسال',
+  storeOwners: 'موظفي المحل',
+  position: 'احداثيات الموقع',
+  isOldAge: 'كبير في السن',
+  multipleStores: 'من أكثر من محل'
 
 }
 

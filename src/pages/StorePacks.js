@@ -7,6 +7,7 @@ import 'moment/locale/ar'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
   let storePacks = useMemo(() => {
     let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
     storePacks = storePacks.map(pack => {
@@ -24,7 +25,6 @@ const StorePacks = props => {
     })
     return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
   }, [state.packs, state.products])
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>
@@ -62,19 +62,20 @@ const StorePacks = props => {
           {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="orange">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          <FabButton color="blue" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
-            <Icon material="edit"></Icon>
-          </FabButton>
-          <FabButton color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
-            <Icon material="add"></Icon>
-          </FabButton>
-        </FabButtons>
-      </Fab>
-
+      {store.id === 's' ? '' : 
+        <Fab position="left-top" slot="fixed" color="orange">
+          <Icon material="keyboard_arrow_down"></Icon>
+          <Icon material="close"></Icon>
+          <FabButtons position="bottom">
+            <FabButton color="blue" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
+              <Icon material="edit"></Icon>
+            </FabButton>
+            <FabButton color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
+              <Icon material="add"></Icon>
+            </FabButton>
+          </FabButtons>
+        </Fab>
+      }
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

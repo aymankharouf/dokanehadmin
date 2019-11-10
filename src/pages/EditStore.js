@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editStore, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
+import BottomToolbar from './BottomToolbar';
 
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
   const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
+  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id), [state.users])
   const [type, setType] = useState(store.type)
   const [name, setName] = useState(store.name)
   const [mobile, setMobile] = useState(store.mobile)
@@ -42,13 +44,35 @@ const EditStore = props => {
     })
   }
   const storeTypesTags = useMemo(() => state.storeTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
+    rec.id === '1' ? '' : <option key={rec.id} value={rec.id}>{rec.name}</option>
   ), [state.storeTypes])
   return (
     <Page>
       <Navbar title={state.labels.editStore} backLink={state.labels.back} />
       <List form>
-      <ListItem
+        <ListInput 
+          name="name" 
+          label={state.labels.name}
+          value={name}
+          floatingLabel
+          clearButton 
+          type="text" 
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
+        />
+        <ListInput
+          name="mobile"
+          label={state.labels.mobile}
+          value={mobile}
+          floatingLabel
+          clearButton
+          type="number"
+          errorMessage={mobileErrorMessage}
+          errorMessageForce
+          onChange={e => setMobile(e.target.value)}
+          onInputClear={() => setMobile('')}
+        />
+        <ListItem
           title={state.labels.type}
           smartSelect
           smartSelectParams={{
@@ -65,36 +89,19 @@ const EditStore = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="name" 
-          label={state.labels.name}
-          value={name}
-          floatingLabel
-          clearButton 
-          type="text" 
-          onChange={(e) => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput
-          label={state.labels.mobile}
-          type="text"
-          placeholder={state.labels.mobilePlaceholder}
-          name="mobile"
-          clearButton
-          value={mobile}
-          errorMessage={mobileErrorMessage}
-          errorMessageForce
-          onChange={(e) => setMobile(e.target.value)}
-          onInputClear={() => setMobile('')}
-        />
-        <ListInput 
           name="address" 
           label={state.labels.address}
           value={address}
           floatingLabel
           clearButton 
           type="textarea" 
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={e => setAddress(e.target.value)}
           onInputClear={() => setAddress('')}
+        />
+        <ListItem
+          link={`/storeOwners/${store.id}`}
+          title={state.labels.storeOwners}
+          after={storeOwners.length}
         />
       </List>
       {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address) ? ''
@@ -102,6 +109,9 @@ const EditStore = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
     </Page>
   )
 }

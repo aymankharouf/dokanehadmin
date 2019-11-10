@@ -10,7 +10,6 @@ const Reducer = (state, action) => {
           quantity: action.basket.quantity,
           actualPrice: action.basket.store.price,
           purchasePrice: action.basket.store.purchasePrice,
-          netPrice: action.basket.store.purchasePrice * action.basket.quantity
         }
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.basket.store.id, packs: [pack]}}
@@ -26,7 +25,6 @@ const Reducer = (state, action) => {
         pack = {
           ...pack,
           quantity: ++newQuantity,
-          netPrice: newQuantity * pack.purchasePrice
         }
         return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
       case 'REMOVE_QUANTITY':
@@ -43,7 +41,6 @@ const Reducer = (state, action) => {
           pack = {
             ...pack,
             quantity: newQuantity,
-            netPrice: newQuantity * pack.purchasePrice
           }  
           return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
         }
@@ -91,11 +88,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           orders: action.orders
-        }
-      case 'SET_PACK_TRANS':
-        return {
-          ...state,
-          packTrans: action.packTrans
         }
       case 'SET_STOCK_TRANS':
         return {

@@ -88,7 +88,6 @@ const Store = props => {
     purchases: [],
     orders: [],
     priceAlarms: [],
-    packTrans: [],
     stockTrans: [],
     products: [],
     packs: [],
@@ -159,15 +158,6 @@ const Store = props => {
           dispatch({type: 'SET_STOCK_TRANS', stockTrans})
         }, err => {
           unsubscribeStockTrans()
-        })  
-        const unsubscribePackTrans = firebase.firestore().collection('packTrans').onSnapshot(docs => {
-          let packTrans = []
-          docs.forEach(doc => {
-            packTrans.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_PACK_TRANS', packTrans})
-        }, err => {
-          unsubscribePackTrans()
         })  
         const unsubscribePriceAlarms = firebase.firestore().collection('priceAlarms').onSnapshot(docs => {
           let priceAlarms = []
@@ -257,7 +247,7 @@ const Store = props => {
       docs.forEach(doc => {
         let minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || today <= store.offerEnd.toDate() ? store.price : null))
         minPrice = minPrice === Infinity ? 0 : minPrice
-        const value = doc.data().units ? minPrice / doc.data().units : 0
+        const value = doc.data().unitsCount ? minPrice / doc.data().unitsCount : 0
         let isOffer = doc.data().isOffer
         if (isOffer === false) {
           const store = doc.data().stores.find(rec => rec.price === minPrice && rec.offerEnd && today <= rec.offerEnd.toDate())

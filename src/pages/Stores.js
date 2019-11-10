@@ -6,7 +6,7 @@ import { addHareesStore, showMessage } from '../data/Actions'
 
 
 const Stores = props => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const stores = useMemo(() => {
     const stores = state.stores
     return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
@@ -14,7 +14,6 @@ const Stores = props => {
   const hareesStore = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
   const handleAddHareesStore = (name) => {
     addHareesStore(name).then(() => {
-      dispatch({type: 'ADD_STORE', store: {id: 's', name, type: '1'}})
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })

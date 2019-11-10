@@ -12,9 +12,9 @@ const EditPrice = props => {
     const store = pack.stores.find(rec => rec.id === props.storeId)
     return {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
   }, [pack])
-  const [purchasePrice, setPurchasePrice] = useState(store.purchasePrice / 1000)
+  const [purchasePrice, setPurchasePrice] = useState((store.purchasePrice / 1000).toFixed(3))
   const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
-  const [price, setPrice] = useState(store.price / 1000)
+  const [price, setPrice] = useState((store.price / 1000).toFixed(3))
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
@@ -38,30 +38,33 @@ const EditPrice = props => {
     return false
   }, [price, purchasePrice, offerEnd])
   useEffect(() => {
-    const storeType = store ? store.type : ''
-    if (storeType === '5') {
-      setPrice((1 + (state.labels.profitPercent / 100) * purchasePrice))
-    } else {
-      setPrice(purchasePrice)
+    const setDefaultPrice = value => {
+      if (store.type === '5') {
+        setPrice((1 + (state.labels.profitPercent / 100) * value))
+      } else {
+        setPrice(value)
+      }
     }
-  }, [purchasePrice])
-  useEffect(() => {
-    const validatePrice = () => {
-      if (price > 0 && purchasePrice > 0 && price >= purchasePrice){
-        setPriceErrorMessage('')
+    const validatePrice = value => {
+      if (value > 0 && (price ? price >= value : true)){
         setPurchasePriceErrorMessage('')
       } else {
-        setPriceErrorMessage(state.labels.invalidPrice)
         setPurchasePriceErrorMessage(state.labels.invalidPrice)
       }
     }
-    if (price || purchasePrice) {
-      validatePrice()
-    } else {
-      setPriceErrorMessage('')
-      setPurchasePriceErrorMessage('')
+    if (purchasePrice && !price) setDefaultPrice(purchasePrice)
+    if (purchasePrice) validatePrice(purchasePrice)
+  }, [purchasePrice])
+  useEffect(() => {
+    const validatePrice = value => {
+      if (value > 0 && (purchasePrice ? purchasePrice <= value : true)){
+        setPriceErrorMessage('')
+      } else {
+        setPriceErrorMessage(state.labels.invalidPrice)
+      }
     }
-  }, [price, purchasePrice])
+    if (price) validatePrice(price)
+  }, [price])
 
   useEffect(() => {
     const validateDate = (value) => {
@@ -123,7 +126,7 @@ const EditPrice = props => {
           value={price} 
           errorMessage={priceErrorMessage}
           errorMessageForce
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
         <ListInput

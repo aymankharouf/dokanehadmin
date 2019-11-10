@@ -58,33 +58,18 @@ const AddPack = props => {
   const offerPacksTags = useMemo(() => {
     const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
     return offerProductPacks.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
-        {rec.name}
-      </option>
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.packs])
   const bonusProductsTags = useMemo(() => {
     const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
-        {rec.name}
-      </option>
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.products]) 
   const bonusPacksTags = useMemo(() => bonusProductPacks.map(rec => 
-    <option 
-      key={rec.id} 
-      value={rec.id}
-    >
-      {rec.name}
-    </option>
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
   ), [bonusProductPacks])
 
   return (

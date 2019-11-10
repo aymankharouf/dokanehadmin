@@ -9,7 +9,7 @@ import { confirmPurchase, stockOut } from '../data/Actions'
 const ConfirmPurchase = props => {
   const { state, user, dispatch } = useContext(StoreContext)
   const store = useMemo(() => state.basket.store ? state.stores.find(rec => rec.id === state.basket.store.id) : '', [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs ? state.basket.packs.reduce((a, pack) => a + pack.netPrice, 0) : 0, [state.basket])
+  const total = useMemo(() => state.basket.packs ? state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0) : 0, [state.basket])
   const handlePurchase = () => {
     const basket = state.basket.packs.map(pack => {
       return ({
@@ -23,12 +23,12 @@ const ConfirmPurchase = props => {
     })
     const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
     if (state.basket.storeId === 's') {
-      stockOut(approvedOrders, basket, state.packTrans).then(() => {
+      stockOut(approvedOrders, basket).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })
     } else { 
-      confirmPurchase(approvedOrders, state.basket.storeId, basket, state.packTrans, total).then(() => {
+      confirmPurchase(approvedOrders, state.basket.storeId, basket, total).then(() => {
         props.f7router.navigate('/home/')
         dispatch({type: 'CLEAR_BASKET'})    
       })
@@ -45,7 +45,7 @@ const ConfirmPurchase = props => {
               key={pack.id} 
               title={state.products.find(rec => rec.id === pack.productId).name}
               footer={pack.name} 
-              after={(pack.netPrice / 1000).toFixed(3)}
+              after={((pack.purchasePrice * pack.quantity) / 1000).toFixed(3)}
             >
               {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
             </ListItem>
@@ -53,7 +53,7 @@ const ConfirmPurchase = props => {
           <ListItem title={state.labels.total} className="total" after={(total / 1000).toFixed(3)} />
         </List>
     </Block>
-    <Fab position="center-top" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>
+    <Fab position="center-bottom" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>
       <Icon material="done"></Icon>
     </Fab>
     <Toolbar bottom>

@@ -85,18 +85,11 @@ const AddStorePack = props => {
     const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
     return products.map(rec => 
-      <option 
-        key={rec.id} 
-        value={rec.id}
-      >
-        {rec.name}
-      </option>
+      <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
   }, [state.products])
   const packsTags = useMemo(() => productPacks.map(rec => 
-    <option key={rec.id} value={rec.id}>
-      {rec.name}
-    </option>
+    <option key={rec.id} value={rec.id}>{rec.name}</option>
   ), [productPacks])
   return (
     <Page>

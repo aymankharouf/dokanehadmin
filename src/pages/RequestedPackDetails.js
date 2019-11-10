@@ -27,10 +27,10 @@ const RequestedPackDetails = props => {
     let packStores = pack.stores
     packStores.sort((rec1, rec2) => {
       if (rec1.purchasePrice === rec2.purchasePrice) {
-        if (Number(state.stores.find(rec => rec.id === rec2.storeId).type) === Number(state.stores.find(rec => rec.id === rec1.storeId).type)){
+        if (Number(state.stores.find(rec => rec.id === rec2.id).type) === Number(state.stores.find(rec => rec.id === rec1.id).type)){
           return rec1.time.seconds - rec2.time.seconds
         } else {
-          return Number(state.stores.find(rec => rec.id === rec2.storeId).type) - Number(state.stores.find(rec => rec.id === rec1.storeId).type)
+          return Number(state.stores.find(rec => rec.id === rec1.id).type) - Number(state.stores.find(rec => rec.id === rec2.id).type)
         }
       } else {
         return rec1.purchasePrice - rec2.purchasePrice
@@ -43,11 +43,11 @@ const RequestedPackDetails = props => {
     })
     return packStores.map(rec => 
       <ListItem 
+        link="#"
         title={rec.name} 
         footer={moment(rec.time.toDate()).fromNow()} 
         after={(rec.price / 1000).toFixed(3)} 
         key={rec.id}
-        link="#"
         onClick={() => handlePurchase(rec)}
       >
         {rec.quantity ? <Badge slot='title' color='red'>{rec.quantity}</Badge> : null}

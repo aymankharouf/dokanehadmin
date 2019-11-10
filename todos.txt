@@ -53,8 +53,8 @@ prevent purchase with price above requested price
 purchase from the lowest price always
 average price for purchase pack in order
 purchase with best price flag for each customer
-change password
-resolve forget password from the system
+*change password
+*resolve forget password from the system
 auto merge between not approved orders for the same customer
 request to cancel an approved order
 *old age flag for customers
@@ -62,8 +62,9 @@ request to cancel an approved order
 destroy patch in stock
 auto blacklist customer who did not pick his order
 return to store except type 5
-store trans
+store trans --purchases & returns
 image size
 rate product bonus
 hints & help
 alert & notifications
+withdrawals

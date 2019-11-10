@@ -9,7 +9,6 @@ const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
   const order = useMemo(() => state.orders.find(rec => rec.id === props.id), [state.orders])
   const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
-  let i = 0
   let totalPurchase = 0
   const statusActions = useMemo(() => {
     const statusActions = [
@@ -52,32 +51,15 @@ const OrderDetails = props => {
             const packInfo = state.packs.find(rec => rec.id === pack.id)
             const productInfo = state.products.find(rec => rec.id === packInfo.productId)
             if (order.status === 'f' || order.status === 'd' || order.status === 'b' || order.status === 'r') {
+              const storeName = pack.storeId === 'm' ? state.labels.multipleStores : state.stores.find(rec => rec.id === pack.storeId).name
               return (
-                pack.stores.map(store => {
-                  let storeName = state.stores.find(rec => rec.id === store.storeId).name
-                  const storePrice = store.price * store.quantity
-                  storeName = store.transId ? `${state.labels.stockName} - ${storeName}` : storeName
-                  totalPurchase += storePrice
-                  return (
-                    <ListItem 
-                      key={i++} 
-                      title={productInfo.name}
-                      subtitle={packInfo.name}
-                      text={storeName}
-                      after={(pack.price * store.quantity / 1000).toFixed(3)}
-                    >
-                      <Badge slot="title">
-                        {store.quantity}
-                      </Badge>
-                      {store.price !== pack.price ? 
-                        <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
-                          {(Math.abs(store.price - pack.price) / 1000).toFixed(3)} 
-                        </Badge>
-                        : ''
-                      }
-                    </ListItem>
-                  )
-                })
+                <ListItem 
+                  key={pack.id} 
+                  title={productInfo.name}
+                  subtitle={packInfo.name}
+                  text={storeName}
+                  after={(pack.price * pack.quantity / 1000).toFixed(3)}
+                />
               )
             } else {
               return (
@@ -85,7 +67,8 @@ const OrderDetails = props => {
                   key={pack.id} 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(pack.price * pack.quantity / 1000).toFixed(3)}>
+                  after={(pack.price * pack.quantity / 1000).toFixed(3)}
+                >
                   <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
                 </ListItem>
               )

@@ -21,12 +21,12 @@ const PackDetails = props => {
     })
     return packStores.map(rec => 
       <ListItem 
+        link="#"
         title={rec.name} 
         footer={moment(rec.time.toDate()).fromNow()} 
         after={(rec.price / 1000).toFixed(3)} 
         key={rec.id} 
-        link="#"
-        onClick={rec => handlePurchase(rec)}
+        onClick={() => handlePurchase(rec)}
       >
         {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : ''}
         {rec.offerEnd && today > rec.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
