@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react'
+import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
@@ -16,7 +16,10 @@ const RequestedPackDetails = props => {
 			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }
-      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price)}})
+      if (state.basket.packs && state.basket.packs.find(rec => rec.id === pack.id)) {
+        throw new Error(state.labels.alreadyInBasket)
+      }
+      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
       showMessage(props, 'success', state.labels.addToBasketSuccess)
 			props.f7router.back()
 		} catch(err) {
@@ -55,6 +58,13 @@ const RequestedPackDetails = props => {
       </ListItem>
     )
   }, [pack, state.stores]) 
+  useEffect(() => {
+    if (error) {
+      showMessage(props, 'error', error)
+      setError('')
+    }
+  }, [error])
+
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />

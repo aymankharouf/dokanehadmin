@@ -151,7 +151,8 @@ const labels = {
   storeOwners: 'موظفي المحل',
   position: 'احداثيات الموقع',
   isOldAge: 'كبير في السن',
-  multipleStores: 'من أكثر من محل'
+  multipleStores: 'من أكثر من محل',
+  alreadyInBasket: 'هذا المنتج موجود في سلة المشتريات'
 
 }
 

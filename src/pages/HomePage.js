@@ -23,8 +23,8 @@ const HomePage = props => {
         <NavLeft>
           <Link iconMaterial="menu" panelOpen="right"></Link>
         </NavLeft>
-        <NavTitle sliding><img src="/logo.png" alt="" className="logo" /></NavTitle>
-        <NavTitleLarge><img src="/logo.png" alt="" className="logo" /></NavTitleLarge>
+        <NavTitle sliding><img src="/dokaneh_logo.png" alt="" className="logo" /></NavTitle>
+        <NavTitleLarge><img src="/dokaneh_logo.png" alt="" className="logo" /></NavTitleLarge>
       </Navbar>
       <Block>
         {mainPages.map(page => {

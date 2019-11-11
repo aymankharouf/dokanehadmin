@@ -8,7 +8,7 @@ const Basket = props => {
   const totalPrice = useMemo(() => state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0)) : '', [state.basket])
   const handleAdd = pack => {
     const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
-    if (!storeQuantity || pack.quantity < storeQuantity) {
+    if (!storeQuantity || pack.quantity < Math.min(storeQuantity, pack.requestedQuantity)) {
       dispatch({type: 'ADD_QUANTITY', pack})
     }
   }

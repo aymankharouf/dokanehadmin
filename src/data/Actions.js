@@ -30,9 +30,9 @@ export const updateOrders = (batch, storeId, orders, pack) => {
         orderStatus = 'f'
       }
     } else {
-      purchasedQuantity = orderPack.quantity - orderPack.purchasedQuantity - remainingQuantity
+      purchasedQuantity = remainingQuantity
     }
-    const avgPurchasePrice = (orderPack.purchasePrice * orderPack.purchasedQuantity) + (pack.purchasePrice * purchasedQuantity)
+    const avgPurchasePrice = ((orderPack.purchasePrice * orderPack.purchasedQuantity) + (pack.purchasePrice * purchasedQuantity)) / (orderPack.purchasedQuantity + purchasedQuantity)
     const basket = [
       ...otherPacks, 
       {

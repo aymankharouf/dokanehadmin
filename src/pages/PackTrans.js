@@ -16,11 +16,13 @@ const PackTrans = props => {
       const transPack = trans.basket.find(rec => rec.id === pack.id)
       return {
         ...transPack,
+        id: trans.id,
         storeId: trans.storeId,
+        type: trans.type,
         time: trans.time
       }
     })
-    return packTrans.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+    return packTrans.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
   }, [state.packTrans])
   return(
     <Page>
@@ -29,7 +31,7 @@ const PackTrans = props => {
         <List mediaList>
           {packTrans && packTrans.map(trans => 
             <ListItem
-              title={state.stores.find(rec => rec.id === trans.storeId).name}
+              title={trans.type === 's' ? state.stockTransTypes.find(rec => rec.id === trans.type).name : state.stores.find(rec => rec.id === trans.storeId).name}
               subtitle={moment(trans.time.toDate()).fromNow()}
               after={(trans.purchasePrice / 1000).toFixed(3)}
               key={trans.id}
@@ -37,7 +39,7 @@ const PackTrans = props => {
               <Badge slot="title" color="red">{trans.quantity}</Badge>
             </ListItem>
           )}
-          { packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+          {packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

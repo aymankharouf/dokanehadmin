@@ -10,6 +10,7 @@ const Reducer = (state, action) => {
           quantity: action.basket.quantity,
           actualPrice: action.basket.store.price,
           purchasePrice: action.basket.store.purchasePrice,
+          requestedQuantity: action.basket.requestedQuantity
         }
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.basket.store.id, packs: [pack]}}
