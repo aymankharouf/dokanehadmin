@@ -21,6 +21,12 @@ const MonthlyProfits = props => {
     const profit = deliveredOrders.reduce((a, order) => a + order.profit, 0)
     return (profit / 1000).toFixed(3)
   }, [deliveredOrders])
+  const fixedFeesTotal = (ordersCount * state.labels.fixedFees / 1000).toFixed(3)
+  const deliveryFeesTotal = useMemo(() => {
+    const deliveryFees = deliveredOrders.reduce((a, order) => a + order.deliveryFees, 0)
+    return (deliveryFees / 1000).toFixed(3)
+  }, [deliveredOrders])
+  const netProfit = profit + fixedFeesTotal + deliveryFeesTotal
   const specialDiscounts = useMemo(() => {
     const specialDiscount = deliveredOrders.reduce((a, order) => a + (order.discount && order.discount.type === 's' ? order.discount.value : 0) , 0)
     return (specialDiscount / 1000).toFixed(3)

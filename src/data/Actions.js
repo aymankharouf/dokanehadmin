@@ -32,19 +32,23 @@ export const updateOrders = (batch, storeId, orders, pack) => {
     } else {
       purchasedQuantity = remainingQuantity
     }
-    const avgPurchasePrice = ((orderPack.purchasePrice * orderPack.purchasedQuantity) + (pack.purchasePrice * purchasedQuantity)) / (orderPack.purchasedQuantity + purchasedQuantity)
+    const avgPurchasePrice = orderPack.purchasedQuantity === 0 ? pack.purchasePrice : parseInt(((orderPack.purchasePrice * orderPack.purchasedQuantity) + (pack.purchasePrice * purchasedQuantity)) / (orderPack.purchasedQuantity + purchasedQuantity))
+    const avgActualPrice = orderPack.purchasedQuantity === 0 ? pack.actualPrice : parseInt(((orderPack.actualPrice * orderPack.purchasedQuantity) + (pack.actualPrice * purchasedQuantity)) / (orderPack.purchasedQuantity + purchasedQuantity))
     const basket = [
       ...otherPacks, 
       {
         ...orderPack, 
         purchasedQuantity: orderPack.purchasedQuantity + purchasedQuantity,
         storeId: orderPack.purchasedQuantity === 0 ? storeId : 'm',
-        purchasePrice: orderPack.purchasedQuantity === 0 ? pack.purchasePrice : avgPurchasePrice
+        purchasePrice: avgPurchasePrice,
+        actualPrice: avgActualPrice
       }
     ]
+    const profit = basket.reduce((a, pack) => a + ((pack.actualPrice - pack.purchasePrice) * pack.quantity), 0)
     const orderRef = firebase.firestore().collection('orders').doc(order.id)
     batch.update(orderRef, {
       basket,
+      profit,
       status: orderStatus,
       statusTime: new Date()
     })
@@ -215,25 +219,6 @@ const packStockOut = (batch, pack) => {
       quantity: found.quantity - pack.quantity, 
       time: new Date()}
     ]
-  })
-}
-
-export const editOrder = (order, pack, store) => {
-  const orderPack = order.basket.find(rec => rec.id === pack.id)
-  const otherPacks = order.basket.filter(rec => rec.id !== pack.id)
-  const orderPackStores = orderPack.stores
-  const quantity = orderPackStores.find(rec => rec.storeId === store.storeId).quantity
-  const basket = [
-    ...otherPacks, 
-    {
-      ...orderPack, 
-      purchasedQuantity: orderPack.purchasedQuantity - quantity
-    }
-  ]
-  return firebase.firestore().collection('orders').doc(order.id).update({
-    basket,
-    status: 'e',
-    statusTime: new Date()
   })
 }
 

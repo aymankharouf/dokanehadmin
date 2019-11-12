@@ -38,13 +38,6 @@ const EditPrice = props => {
     return false
   }, [price, purchasePrice, offerEnd])
   useEffect(() => {
-    const setDefaultPrice = value => {
-      if (store.type === '5') {
-        setPrice((1 + (state.labels.profitPercent / 100) * value))
-      } else {
-        setPrice(value)
-      }
-    }
     const validatePrice = value => {
       if (value > 0 && (price ? price >= value : true)){
         setPurchasePriceErrorMessage('')
@@ -52,7 +45,6 @@ const EditPrice = props => {
         setPurchasePriceErrorMessage(state.labels.invalidPrice)
       }
     }
-    if (purchasePrice && !price) setDefaultPrice(purchasePrice)
     if (purchasePrice) validatePrice(purchasePrice)
   }, [purchasePrice])
   useEffect(() => {

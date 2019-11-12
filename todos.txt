@@ -70,4 +70,5 @@ alert & notifications
 withdrawals
 comments when rating
 show ratings count
-edit orders?
+edit orders
+purchase discounts
