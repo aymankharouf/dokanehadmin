@@ -23,47 +23,15 @@ const EditOrder = props => {
           {order.basket && order.basket.map(pack => {
             const packInfo = state.packs.find(rec => rec.id === pack.id)
             const productInfo = state.products.find(rec => rec.id === packInfo.productId)
-            if (pack.stores) {
-              return (
-                pack.stores.map(store => {
-                  let storeName = state.stores.find(rec => rec.id === store.storeId).name
-                  const storePrice = store.price * store.quantity
-                  storeName = store.transId ? `${state.labels.stockName} - ${storeName}` : storeName
-                  totalPurchase += storePrice
-                  return (
-                    <ListItem 
-                      link='#'
-                      key={i++} 
-                      title={productInfo.name}
-                      subtitle={packInfo.name}
-                      text={storeName}
-                      after={(pack.price * store.quantity / 1000).toFixed(3)}
-                      onClick={() => handleCancel(pack, store)}
-                    >
-                      <Badge slot="title">
-                        {store.quantity}
-                      </Badge>
-                      {store.price !== pack.price ? 
-                        <Badge slot='text' color={storePrice <= pack.price ? 'green' : 'red'}> 
-                          {((store.price - pack.price) / 1000).toFixed(3)} 
-                        </Badge>
-                        : ''
-                      }
-                    </ListItem>
-                  )
-                })
-              )
-            } else {
-              return (
-                <ListItem 
-                  key={pack.id} 
-                  title={productInfo.name}
-                  footer={pack.name}
-                  after={(pack.price * pack.quantity / 1000).toFixed(3)}>
-                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
-                </ListItem>
-              )
-            }
+            return (
+              <ListItem 
+                key={pack.id} 
+                title={productInfo.name}
+                footer={pack.name}
+                after={(pack.price * pack.quantity / 1000).toFixed(3)}>
+                <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
+              </ListItem>
+            )
           })}
           {order.withDelivery ? <ListItem title={state.labels.delivery}></ListItem> : null}
           <ListItem title={state.labels.total} after={(order.total / 1000).toFixed(3)} />

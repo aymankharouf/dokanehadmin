@@ -13,7 +13,7 @@ const StockTransDetails = props => {
     <Page>
       <Navbar title={state.labels.stockTransDetails} backLink={state.labels.back} />
       <Block>
-          <List>
+          <List mediaList>
             {stockTrans.basket && stockTrans.basket.map(pack => {
               const packInfo = state.packs.find(rec => rec.id === pack.id)
               const productInfo = state.products.find(rec => rec.id === packInfo.productId)
@@ -21,10 +21,11 @@ const StockTransDetails = props => {
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(pack.price * pack.quantity / 1000).toFixed(3)}
+                  after={(pack.purchasePrice * pack.quantity / 1000).toFixed(3)}
                   key={pack.id} 
                 >
-                  {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
+                  <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
+                  {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : ''}
                 </ListItem>
               )}
             )}

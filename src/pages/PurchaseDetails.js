@@ -21,7 +21,7 @@ const PurchaseDetails = props => {
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(pack.price * pack.quantity / 1000).toFixed(3)}
+                  after={(pack.purchasePrice * pack.quantity / 1000).toFixed(3)}
                   key={pack.id} 
                 >
                   {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}

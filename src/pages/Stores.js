@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
-import { addHareesStore, showMessage } from '../data/Actions'
+import { addStock, showMessage } from '../data/Actions'
 
 
 const Stores = props => {
@@ -11,9 +11,9 @@ const Stores = props => {
     const stores = state.stores
     return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.stores])
-  const hareesStore = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
-  const handleAddHareesStore = (name) => {
-    addHareesStore(name).then(() => {
+  const stock = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
+  const handleAddStock = (name) => {
+    addStock(name).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })
@@ -38,8 +38,8 @@ const Stores = props => {
       <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addStore/')}>
         <Icon material="add"></Icon>
       </Fab>
-      {hareesStore ? '' : 
-        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddHareesStore(state.labels.stockName)}>
+      {stock ? '' : 
+        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddStock(state.labels.stockName)}>
           <Icon material="add"></Icon>
         </Fab>
       }

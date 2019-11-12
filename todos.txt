@@ -16,7 +16,7 @@ postpond an order
 most wanted products
 net profit & sales (daily, weekly, monthly, yearly)
 cancel part of an order(prices changing or not avaliable)
-harees stores - purshasing & not picked orders
+dokaneh stores - purshasing & not picked orders
 in stoke (quantity & net value)
 offers: packages, discounts for group, extra
 cost types & costs
@@ -64,7 +64,10 @@ auto blacklist customer who did not pick his order
 return to store except type 5
 store trans --purchases & returns
 image size
-rate product bonus
+rate product discounts
 hints & help
 alert & notifications
 withdrawals
+comments when rating
+show ratings count
+edit orders?

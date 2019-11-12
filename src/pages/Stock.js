@@ -54,7 +54,7 @@ const Stock = props => {
               key={pack.id}
             >
               <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt={pack.productName} />
-              <Badge slot="title" color="red">{pack.quantity}</Badge>
+              {pack.quantity > 0 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : ''}
             </ListItem>
           )}
           {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

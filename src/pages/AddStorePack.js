@@ -72,8 +72,8 @@ const AddStorePack = props => {
     addStorePack(
       state.packs.find(rec => rec.id === packId),
       store,
-      purchasePrice,
-      price,
+      parseInt(purchasePrice * 1000),
+      parseInt(price * 1000),
       offerEndDate
     ).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
@@ -136,7 +136,7 @@ const AddStorePack = props => {
           type="number" 
           errorMessage={purchasePriceErrorMessage}
           errorMessageForce
-          onChange={(e) => setPurchasePrice(e.target.value)}
+          onChange={e => setPurchasePrice(e.target.value)}
           onInputClear={() => setPurchasePrice('')}
         />
         <ListInput 
@@ -148,7 +148,7 @@ const AddStorePack = props => {
           type="number" 
           errorMessage={priceErrorMessage}
           errorMessageForce
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
         <ListInput
@@ -159,7 +159,7 @@ const AddStorePack = props => {
           clearButton
           errorMessage={offerEndErrorMessage}
           errorMessageForce
-          onCalendarChange={(value) => setOfferEnd(value)}
+          onCalendarChange={value => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
         <img src={product.imageUrl} alt=""/>

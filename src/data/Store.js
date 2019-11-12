@@ -245,7 +245,9 @@ const Store = props => {
     firebase.firestore().collection('packs').onSnapshot(docs => {
       let packs = []
       docs.forEach(doc => {
-        let minPrice = Math.min(...doc.data().stores.map(store => !store.offerEnd || today <= store.offerEnd.toDate() ? store.price : null))
+        let storesPrices = doc.data().stores.map(store => !store.offerEnd || today <= store.offerEnd.toDate() ? store.price : null)
+        storesPrices = storesPrices.filter(rec => rec !== null)
+        let minPrice = Math.min(...storesPrices)
         minPrice = minPrice === Infinity ? 0 : minPrice
         const value = doc.data().unitsCount ? minPrice / doc.data().unitsCount : 0
         let isOffer = doc.data().isOffer

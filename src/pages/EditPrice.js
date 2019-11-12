@@ -83,8 +83,8 @@ const EditPrice = props => {
     editPrice(
       store,
       pack,
-      purchasePrice,
-      price,
+      parseInt(purchasePrice * 1000),
+      parseInt(price * 1000),
       offerEndDate 
     ).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)

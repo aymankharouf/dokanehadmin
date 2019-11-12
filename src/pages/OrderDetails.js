@@ -48,7 +48,6 @@ const OrderDetails = props => {
       <Block>
         <List mediaList>
           {order.basket && order.basket.map(pack => {
-            console.log('pack == ', pack)
             const packInfo = state.packs.find(rec => rec.id === pack.id)
             const productInfo = state.products.find(rec => rec.id === packInfo.productId)
             if (order.status === 'f' || order.status === 'd' || order.status === 'b' || order.status === 'r') {

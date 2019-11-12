@@ -1,5 +1,4 @@
 const labels = {
-  appTitle: 'حريص',
   news: 'آخر الاخبار',
   offers: 'العروض',
   popular: 'اﻻكثر مبيعا',
@@ -64,7 +63,7 @@ const labels = {
   invalidFile: 'الرجاء التأكد من ملف الصورة',
   stockTrans: 'حركات المستودع',
   stockTransDetails: 'تفاصيل حركة المستودع',
-  stockName: 'مستودعات حريص',
+  stockName: 'مستودعات دكانة نت',
   editOrder: 'تعديل طلب',
   forgetPassword: 'طلبات نسيان كلمة السر',
   customers: 'العملاء',
