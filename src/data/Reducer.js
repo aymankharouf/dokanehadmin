@@ -125,15 +125,10 @@ const Reducer = (state, action) => {
           ...state,
           customers: action.customers
         }
-      case 'SET_COST_TYPES':
+      case 'SET_SPENDINGS':
         return {
           ...state,
-          costTypes: action.costTypes
-        }
-      case 'SET_COSTS':
-        return {
-          ...state,
-          costs: action.costs
+          spendings: action.spendings
         }
       default:
         return state

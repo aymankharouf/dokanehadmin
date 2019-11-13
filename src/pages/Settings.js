@@ -10,7 +10,6 @@ const Settings = props => {
     {id: '1', name: 'الدول', path: 'countries'},
     {id: '2', name: 'اﻻقسام', path: 'sections'},
     {id: '3', name: 'العلامات التجارية', path: 'trademarks'},
-    {id: '4', name: 'انواع المصاريف', path: 'costTypes'}
   ], [])
   let i = 0
   return(

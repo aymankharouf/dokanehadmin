@@ -1,70 +1,72 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addCost, showMessage } from '../data/Actions'
+import { addSpending, showMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
-const AddCost = props => {
+const AddSpending = props => {
   const { state } = useContext(StoreContext)
   const [type, setType] = useState('')
-  const [value, setValue] = useState('')
-  const [valueErrorMessage, setValueErrorMessage] = useState('')
-  const [costDate, setCostDate] = useState('')
-  const [costDateErrorMessage, setCostDateErrorMessage] = useState('')
+  const [spendingAmount, setSpendingAmount] = useState('')
+  const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
+  const [spendingDate, setSpendingDate] = useState('')
+  const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
 
   useEffect(() => {
-    const validateValue = v => {
-      if (v > 0){
-        setValueErrorMessage('')
+    const validateAmount = value => {
+      if (value > 0){
+        setSpendingAmountErrorMessage('')
       } else {
-        setValueErrorMessage(state.labels.invalidCostValue)
+        setSpendingAmountErrorMessage(state.labels.invalidSpendingAmount)
       }
     }
-    if (value) validateValue(value)
-    else setValueErrorMessage('')
-  }, [value])
+    if (spendingAmount) validateAmount(spendingAmount)
+    else setSpendingAmountErrorMessage('')
+  }, [spendingAmount])
 
   useEffect(() => {
     const validateDate = value => {
       if (new Date(value) > new Date()){
-        setCostDateErrorMessage(state.labels.invalidCostDate)
+        setSpendingDateErrorMessage(state.labels.invalidSpendingDate)
       } else {
-        setCostDateErrorMessage('')
+        setSpendingDateErrorMessage('')
       }
     }
-    if (costDate.length > 0) validateDate(costDate)
-    else setCostDateErrorMessage('')
-  }, [costDate])
+    if (spendingDate.length > 0) validateDate(spendingDate)
+    else setSpendingDateErrorMessage('')
+  }, [spendingDate])
 
   const handleSubmit = () => {
-    const date = costDate.length > 0 ? new Date(costDate) : ''
-    addCost({
+    const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
+    addSpending({
       type,
-      value,
-      costDate: date,
+      spendingAmount,
+      spendingDate: formatedDate,
       description
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })
   }
-  const costTypesTags = useMemo(() => state.costTypes.map(rec => 
+  const spendingTypesTags = useMemo(() => state.spendingTypes.map(rec => 
     <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.costTypes])
+  ), [state.spendingTypes])
   return (
     <Page>
-      <Navbar title={state.labels.newCost} backLink={state.labels.back} />
+      <Navbar title={state.labels.newSpending} backLink={state.labels.back} />
       <List form>
         <ListInput 
-          name="value" 
-          label={state.labels.value}
-          value={value}
+          name="spendingAmount" 
+          label={state.labels.spendingAmount}
+          value={spendingAmount}
           floatingLabel
           clearButton 
           type="number" 
-          onChange={e => setValue(e.target.value)}
-          onInputClear={() => setValue('')}
+          errorMessage={spendingAmountErrorMessage}
+          errorMessageForce
+          onChange={e => setSpendingAmount(e.target.value)}
+          onInputClear={() => setSpendingAmount('')}
         />
         <ListItem
           title={state.labels.type}
@@ -79,7 +81,7 @@ const AddCost = props => {
         >
           <select name='type' defaultValue="" onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {costTypesTags}
+            {spendingTypesTags}
           </select>
         </ListItem>
         <ListInput 
@@ -93,19 +95,19 @@ const AddCost = props => {
           onInputClear={() => setDescription('')}
         />
         <ListInput
-          name="costDate"
-          label={state.labels.costDate}
+          name="spendingDate"
+          label={state.labels.spendingDate}
           type="datepicker"
-          value={costDate} 
+          value={spendingDate} 
           clearButton
-          errorMessage={costDateErrorMessage}
+          errorMessage={spendingDateErrorMessage}
           errorMessageForce
-          onCalendarChange={(value) => setCostDate(value)}
-          onInputClear={() => setCostDate([])}
+          onCalendarChange={value => setSpendingDate(value)}
+          onInputClear={() => setSpendingDate([])}
         />
 
       </List>
-      {!value || !type || !costDate || valueErrorMessage || costDateErrorMessage ? ''
+      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
@@ -113,4 +115,4 @@ const AddCost = props => {
     </Page>
   )
 }
-export default AddCost
+export default AddSpending

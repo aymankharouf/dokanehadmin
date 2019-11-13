@@ -133,15 +133,12 @@ const labels = {
   endOffer: 'انتهى العرض',
   endedOffers: 'العروض المنتهية',
   rejectSuccess: 'تم الرفض بنجاح',
-  costTypes: 'انواع المصاريف',
-  addCostType: 'اضافة نوع مصروف',
-  editCostType: 'تعديل نوع مصروف',
-  costs: 'المصاريف',
-  invalidCostDate: 'الرجاء التأكد من التاريخ المدخل',
-  invalidCostValue: 'الرجاء التأكد من القيمة المدخلة',
-  newCost: 'اضافة مصروف',
-  value: 'القيمة',
-  costDate: 'التاريخ',
+  spendings: 'المصاريف',
+  invalidSpendingDate: 'الرجاء التأكد من التاريخ المدخل',
+  invalidSpendingAmount: 'الرجاء التأكد من القيمة المدخلة',
+  newSpending: 'اضافة مصروف',
+  spendingAmount: 'القيمة',
+  spendingDate: 'التاريخ',
   profits: 'اﻻرباح والمبيعات',
   addToBasketSuccess: 'تم الاضافة الى سلة المشتريات بنجاح',
   retreivePassword: 'استرجاع كلمة السر',
@@ -151,8 +148,8 @@ const labels = {
   position: 'احداثيات الموقع',
   isOldAge: 'كبير في السن',
   multipleStores: 'من أكثر من محل',
-  alreadyInBasket: 'هذا المنتج موجود في سلة المشتريات'
-
+  alreadyInBasket: 'هذا المنتج موجود في سلة المشتريات',
+  editSpending: 'تعديل مصروف'
 }
 
 export default labels

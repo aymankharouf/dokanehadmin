@@ -67,7 +67,11 @@ const Store = props => {
     {id: 'i', name: 'خصم دعوة صديق', value: 500},
     {id: 'p', name: 'خصم ابلاغ عن سعر اقل', value: 500}
   ]
-
+  const spendingTypes = [
+    {id: 'w', name: 'سحب'},
+    {id: 'f', name: 'بنزين'},
+    {id: 'm', name: 'صيانة'},
+  ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
@@ -97,8 +101,8 @@ const Store = props => {
     customerTypes,
     customers: [],
     discountTypes,
-    costTypes: [],
-    costs: []
+    spendingTypes,
+    spendings: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -186,23 +190,14 @@ const Store = props => {
         }, err => {
           unsubscribeInvitations()
         })
-        const unsubscribeCostTypes = firebase.firestore().collection('costTypes').onSnapshot(docs => {
-          let costTypes = []
+        const unsubscribeSpendings = firebase.firestore().collection('spendings').onSnapshot(docs => {
+          let spendings = []
           docs.forEach(doc => {
-            costTypes.push({...doc.data(), id:doc.id})
+            spendings.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_COST_TYPES', costTypes})
+          dispatch({type: 'SET_SPENDINGS', spendings})
         }, err => {
-          unsubscribeCostTypes()
-        })  
-        const unsubscribeCosts = firebase.firestore().collection('costs').onSnapshot(docs => {
-          let costs = []
-          docs.forEach(doc => {
-            costs.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_COSTS', costs})
-        }, err => {
-          unsubscribeCosts()
+          unsubscribeSpendings()
         })  
       }
     })

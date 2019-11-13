@@ -6,7 +6,7 @@ const NotFoundPage = props => {
   const { state } = useContext(StoreContext)
   return (
     <Page>
-      <Navbar title={StaticRange.labels.notFoundPageTitle} backLink={state.labels.back} />
+      <Navbar title={state.labels.notFoundPageTitle} backLink={state.labels.back} />
       <Block strong>
         <p>{state.labels.notFoundPageError}</p>
       </Block>

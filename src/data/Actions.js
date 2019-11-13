@@ -323,15 +323,15 @@ export const addStock = name => {
   })
 }
 
-export const addCost = cost => {
-  return firebase.firestore().collection("costs").add({
-    ...cost,
+export const addSpending = spending => {
+  return firebase.firestore().collection("spendings").add({
+    ...spending,
     time: new Date()
   })
 }
 
-export const editCost = cost => {
-  return firebase.firestore().collection("costs").doc(cost.id).update(cost)
+export const editSpending = spending => {
+  return firebase.firestore().collection("spendings").doc(spending.id).update(spending)
 }
 
 export const addCountry = country => {
@@ -340,14 +340,6 @@ export const addCountry = country => {
 
 export const editCountry = country => {
   return firebase.firestore().collection('countries').doc(country.id).update(country)
-}
-
-export const addCostType = costType => {
-  return firebase.firestore().collection('costTypes').add(costType)
-}
-
-export const editCostType = costType => {
-  return firebase.firestore().collection('costTypes').doc(costType.id).update(costType)
 }
 
 export const addSection = section => {

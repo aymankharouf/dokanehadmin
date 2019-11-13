@@ -13,7 +13,7 @@ const HomePage = props => {
     {id: '4', name: 'المشتريات', path: 'purchases'},
     {id: '5', name: 'العملاء', path: 'customers'},
     {id: '6', name: 'المستودع', path: 'stock'},
-    {id: '7', name: 'المصاريف', path: 'costs'}
+    {id: '7', name: 'المصاريف', path: 'spendings'}
   ], [])
 
   let i = 0

@@ -53,12 +53,9 @@ import ApproveUser from './pages/ApproveUser';
 import PriceAlarms from './pages/PriceAlarms';
 import PriceAlarmDetails from './pages/PriceAlarmDetails';
 import EndedOffers from './pages/EndedOffers';
-import CostTypes from './pages/CostTypes';
-import AddCostType from './pages/AddCostType';
-import EditCostType from './pages/EditCostType';
-import Costs from './pages/Costs';
-import AddCost from './pages/AddCost';
-import EditCost from './pages/EditCost';
+import Spendings from './pages/Spendings';
+import AddSpending from './pages/AddSpending';
+import EditSpending from './pages/EditSpending';
 import Profits from './pages/Profits';
 import MonthlyProfits from './pages/MonthlyProfits';
 import RetreivePassword from './pages/RetreivePassword';
@@ -175,28 +172,16 @@ export default [
     component: EditCountry
   },
   {
-    path: '/costTypes/',
-    component: CostTypes
+    path: '/spendings/',
+    component: Spendings
   },
   {
-    path: '/addCostType/',
-    component: AddCostType
+    path: '/addSpending/',
+    component: AddSpending
   },
   {
-    path: '/editCostType/:id',
-    component: EditCostType
-  },
-  {
-    path: '/costs/',
-    component: Costs
-  },
-  {
-    path: '/addCost/',
-    component: AddCost
-  },
-  {
-    path: '/editCost/:id',
-    component: EditCost
+    path: '/editSpending/:id',
+    component: EditSpending
   },
   {
     path: '/sections/',
