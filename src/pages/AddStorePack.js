@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addStorePack, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddStorePack = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
+  , [state.stores, props.id])
   const [productId, setProductId] = useState('')
   const [packId, setPackId] = useState('')
   const [productPacks, setProductPacks] = useState([])
@@ -17,19 +18,26 @@ const AddStorePack = props => {
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const [offerEnd, setOfferEnd] = useState('')
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
-  const [error, setError] = useState('')
   useEffect(() => {
-    if (purchasePrice) {
-      const storeType = store ? store.type : ''
-      if (storeType === '5') {
-        setPrice(((1 + (state.labels.profitPercent / 100)) * purchasePrice).toFixed(3))
+    const validatePrice = value => {
+      if (value > 0 && (price ? price >= value : true)){
+        setPurchasePriceErrorMessage('')
       } else {
-        setPrice(purchasePrice)
+        setPurchasePriceErrorMessage(state.labels.invalidPrice)
       }
-    } else {
-      setPrice('')
     }
-  }, [purchasePrice])
+    if (purchasePrice) validatePrice(purchasePrice)
+  }, [purchasePrice, price, state.labels])
+  useEffect(() => {
+    const validatePrice = value => {
+      if (value > 0 && (purchasePrice ? purchasePrice <= value : true)){
+        setPriceErrorMessage('')
+      } else {
+        setPriceErrorMessage(state.labels.invalidPrice)
+      }
+    }
+    if (price) validatePrice(price)
+  }, [price, purchasePrice, state.labels])
   useEffect(() => {
     if (productId) {
       setProduct(state.products.find(rec => rec.id === productId))
@@ -38,24 +46,7 @@ const AddStorePack = props => {
       setProduct('')
       setProductPacks([])
     }
-  }, [productId])
-  useEffect(() => {
-    const validatePrice = () => {
-      if (price > 0 && purchasePrice > 0 && price >= purchasePrice){
-        setPriceErrorMessage('')
-        setPurchasePriceErrorMessage('')
-      } else {
-        setPriceErrorMessage(state.labels.invalidPrice)
-        setPurchasePriceErrorMessage(state.labels.invalidPrice)
-      }
-    }
-    if (price || purchasePrice) {
-      validatePrice()
-    } else {
-      setPriceErrorMessage('')
-      setPurchasePriceErrorMessage('')
-    }
-  }, [price, purchasePrice])
+  }, [state.packs, state.products, productId])
   useEffect(() => {
     const validateDate = (value) => {
       if (new Date(value) > new Date()){
@@ -66,7 +57,7 @@ const AddStorePack = props => {
     }
     if (offerEnd.length > 0) validateDate(offerEnd)
     else setOfferEndErrorMessage('')
-  }, [offerEnd])
+  }, [offerEnd, state.labels])
   const handleSubmit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
     addStorePack(

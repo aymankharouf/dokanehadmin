@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -11,7 +11,7 @@ const NewUsers = props => {
   const newUsers = useMemo(() => {
     const newUsers = state.users.filter(user => !state.customers.find(rec => rec.id === user.id))
     return newUsers.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
-  }, [state.users])
+  }, [state.users, state.customers])
   return(
     <Page>
       <Navbar title={state.labels.newUsers} backLink={state.labels.back} />

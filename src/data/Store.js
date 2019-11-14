@@ -33,12 +33,10 @@ const Store = props => {
     {id: 'n', name: 'جديد'},
     {id: 'a', name: 'معتمد'},
     {id: 's', name: 'معلق'},
-    {id: 'u', name: 'مرفوض'},
+    {id: 'r', name: 'مرفوض'},
     {id: 'e', name: 'قيد التجهيز'},
     {id: 'f', name: 'جاهز'},
-    {id: 'd', name: 'جاهز للاستلام'},
-    {id: 'b', name: 'جاهز للتوصيل'},
-    {id: 'r', name: 'تم اﻻستلام'},
+    {id: 'd', name: 'تم اﻻستلام'},
     {id: 'c', name: 'ملغي'},
     {id: 'i', name: 'استيداع'}
   ]  

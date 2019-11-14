@@ -2,13 +2,15 @@ import React, { useState, useContext, useMemo } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
-import { editCustomer, showMessage, editUser } from '../data/Actions'
+import { editCustomer, showMessage } from '../data/Actions'
 
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
-  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id), [state.customers])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
+  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id)
+  , [state.customers, props.id])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
   const [type, setType] = useState(customer.type)

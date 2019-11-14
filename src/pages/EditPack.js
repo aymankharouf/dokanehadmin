@@ -6,8 +6,10 @@ import { StoreContext } from '../data/Store';
 
 const EditPack = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), state.products)
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  , [state.packs, props.id])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
@@ -18,14 +20,13 @@ const EditPack = props => {
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [isBonusFree, setIsBonusFree] = useState(pack.isBonusFree)
-  const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
       setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
     } else {
       setBonusProductPacks([])
     }
-  }, [bonusProductId])
+  }, [state.packs, bonusProductId])
   useEffect(() => {
     if (!isOffer) {
       setOfferPackId('')
@@ -62,7 +63,7 @@ const EditPack = props => {
         {rec.name}
       </option>
     )
-  }, [state.packs])
+  }, [state.packs, props.id])
   const bonusProductsTags = useMemo(() => {
     const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)

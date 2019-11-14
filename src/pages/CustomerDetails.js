@@ -1,15 +1,19 @@
 import React, { useContext, useMemo } from 'react'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
-  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id), [state.customers])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
-  const storeName = useMemo(() => customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : '', [customer, state.stores])
-  const typeName = useMemo(() => state.customerTypes.find(rec => rec.id === customer.type).name , [state.customerTypes])
+  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id)
+  , [state.customers, props.id])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  , [state.users, props.id])
+  const storeName = useMemo(() => customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : ''
+  , [customer, state.stores])
+  const typeName = useMemo(() => state.customerTypes.find(rec => rec.id === customer.type).name
+  , [state.customerTypes, customer])
 
   return (
     <Page>

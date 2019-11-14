@@ -14,9 +14,9 @@ const Basket = props => {
   }
   useEffect(() => {
     if (!state.basket.storeId) {
-      props.f7router.navigate('/home/')
+      props.f7router.navigate('/home/', {reloadAll: true})
     }
-  }, [state.basket])
+  }, [state.basket, props])
   return (
     <Page>
       <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink={state.labels.back} />

@@ -6,7 +6,8 @@ import moment from 'moment'
 
 const EndedOffers = props => {
   const { state } = useContext(StoreContext)
-  const packs = useMemo(() => state.packs.filter(rec => rec.stores.find(store => store.offerEnd && new Date() > store.offerEnd.toDate())), [state.packs])
+  const packs = useMemo(() => state.packs.filter(rec => rec.stores.find(store => store.offerEnd && new Date() > store.offerEnd.toDate()))
+  , [state.packs])
   const packStores = useMemo(() => {
     let stores = []
     let i = 0
@@ -27,7 +28,7 @@ const EndedOffers = props => {
     })
     stores.sort((rec1, rec2) => rec1.offerEnd.seconds - rec2.offerEnd.seconds)
     return stores
-  }, [state.packs])
+  }, [packs])
   return(
     <Page>
       <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} />

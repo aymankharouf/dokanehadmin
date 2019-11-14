@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 import { approveUser, showMessage } from '../data/Actions'
@@ -7,7 +7,8 @@ import { approveUser, showMessage } from '../data/Actions'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id), [state.users])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(userInfo.address || '')
   const [storeId, setStoreId] = useState('')

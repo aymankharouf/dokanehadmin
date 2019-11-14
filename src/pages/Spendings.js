@@ -8,7 +8,7 @@ import { StoreContext } from '../data/Store';
 
 const Spendings = props => {
   const { state } = useContext(StoreContext)
-  const spendings = useMemo(() => [...state.spendings].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.costs])
+  const spendings = useMemo(() => [...state.spendings].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.spendings])
   return(
     <Page>
       <Navbar title={state.labels.spendings} backLink={state.labels.back} />

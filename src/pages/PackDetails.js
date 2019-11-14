@@ -9,8 +9,24 @@ import 'moment/locale/ar'
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  , [state.packs, props.id])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
+  const handlePurchase = store => {
+		try{
+      if (store.id === 's') return
+      if (store.offerEnd && new Date() > store.offerEnd.toDate()) return
+			if (state.basket.store && state.basket.store.id !== store.id){
+				throw new Error(state.labels.twoDiffStores)
+      }
+      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: 1, price: store.price}})
+      showMessage(props, 'success', state.labels.addToBasketSuccess)
+			props.f7router.back()
+		} catch(err) {
+			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+		}
+	}
   const storesTags = useMemo(() => {
     const today = (new Date()).setHours(0, 0, 0, 0)
     let packStores = pack.stores
@@ -32,21 +48,7 @@ const PackDetails = props => {
         {rec.offerEnd && today > rec.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
       </ListItem>
     )
-  }, [pack, state.stores]) 
-  const handlePurchase = store => {
-		try{
-      if (store.id === 's') return
-      if (store.offerEnd && new Date() > store.offerEnd.toDate()) return
-			if (state.basket.store && state.basket.store.id !== store.id){
-				throw new Error(state.labels.twoDiffStores)
-      }
-      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: 1, price: store.price}})
-      showMessage(props, 'success', state.labels.addToBasketSuccess)
-			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-		}
-	}
+  }, [pack, state.stores, state.labels, handlePurchase]) 
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />

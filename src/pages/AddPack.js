@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon, Toggle, BlockTitle, Link, Button, Row, Col} from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, BlockTitle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddPack = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(rec => rec.id === props.id), [state.products])
+  const product = useMemo(() => state.products.find(rec => rec.id === props.id)
+  , [state.products, props.id])
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [isOffer, setIsOffer] = useState(false)
@@ -17,14 +18,13 @@ const AddPack = props => {
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState('')
   const [isBonusFree, setIsBonusFree] = useState('')
-  const [error, setError] = useState('')
   useEffect(() => {
     if (bonusProductId) {
       setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
     } else {
       setBonusProductPacks([])
     }
-  }, [bonusProductId])
+  }, [state.packs, bonusProductId])
   useEffect(() => {
     if (!isOffer) {
       setOfferPackId('')
@@ -60,7 +60,7 @@ const AddPack = props => {
     return offerProductPacks.map(rec => 
       <option key={rec.id} value={rec.id}>{rec.name}</option>
     )
-  }, [state.packs])
+  }, [state.packs, props.id])
   const bonusProductsTags = useMemo(() => {
     const products = state.products
     products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)

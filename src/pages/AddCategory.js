@@ -6,7 +6,8 @@ import { StoreContext } from '../data/Store';
 
 const AddCategory = props => {
   const { state } = useContext(StoreContext)
-  const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections]) 
+  const section = useMemo(() => state.sections.find(rec => rec.id === props.id)
+  , [state.sections, props.id]) 
   const [name, setName] = useState('')
   const [unitType, setUnitType] = useState('')
   const handleSubmit = () => {

@@ -16,7 +16,7 @@ const RequestedPacks = props => {
 		let packsArray = []
 		approvedOrders.forEach(order => {
 			order.basket.forEach(pack => {
-				if (pack.quantity - pack.purchasedQuantity > 0) {
+				if (pack.quantity - pack.purchasedQuantity - (pack.unavailableQuantity ? pack.unavailableQuantity : 0)> 0) {
 					const found = packsArray.find(rec => rec.id === pack.id && rec.price === pack.price)
 					const packInfo = state.packs.find(rec => rec.id === pack.id)
 					if (found) {
@@ -45,7 +45,7 @@ const RequestedPacks = props => {
 			}
 		})
 		setRequiredPacks(packsArray.filter(rec => rec.quantity > 0))
-	}, [state.basket])
+	}, [state.basket, approvedOrders, state.packs])
   return(
     <Page>
       <Navbar title={state.labels.RequestedProducts} backLink={state.labels.back}>

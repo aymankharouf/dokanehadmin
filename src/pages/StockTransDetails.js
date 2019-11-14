@@ -7,7 +7,7 @@ import { StoreContext } from '../data/Store';
 
 const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
-  const stockTrans = useMemo(() => state.stockTrans.find(rec => rec.id === props.id), [state.stockTrans])
+  const stockTrans = useMemo(() => state.stockTrans.find(rec => rec.id === props.id), [state.stockTrans, props.id])
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>

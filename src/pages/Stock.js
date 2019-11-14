@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 
@@ -22,7 +22,7 @@ const Stock = props => {
       }
     })
     return storePacks.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
-    }, [state.packs])
+    }, [state.packs, state.products])
   if (!user) return <ReLogin callingPage="stock"/>
   return(
     <Page>

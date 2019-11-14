@@ -1,13 +1,14 @@
 import React, { useState, useContext, useMemo } from 'react'
 import { editCategory, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
 
 const EditCategory = props => {
   const { state } = useContext(StoreContext)
-  const category = useMemo(() => state.categories.find(rec => rec.id === props.id), [state.categories])
+  const category = useMemo(() => state.categories.find(rec => rec.id === props.id)
+  , [state.categories, props.id])
   const [name, setName] = useState(category.name)
   const [unitType, setUnitType] = useState(category.unitType || '')
   const handleEdit = () => {

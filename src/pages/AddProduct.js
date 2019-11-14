@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect, useMemo } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Block, Toggle, Fab, Icon} from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Toggle, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { addProduct, showMessage } from '../data/Actions'
 
@@ -34,7 +34,7 @@ const AddProduct = props => {
       showMessage(props, 'error', error)
       setError('')
     }
-  }, [error])
+  }, [error, props])
 
   const handleSubmit = () => {
     addProduct({

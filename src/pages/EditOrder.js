@@ -1,14 +1,14 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Icon, Badge, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
 
 
 const EditOrder = props => {
   const { state, user } = useContext(StoreContext)
-  const order = useMemo(() => state.orders.find(order => order.id === props.id), [state.orders])
+  const order = useMemo(() => state.orders.find(order => order.id === props.id)
+  , [state.orders, props.id])
   const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
-  let i = 0
   let totalPurchase = 0
   if (!user) return <ReLogin callingPage="orders"/>
   return(

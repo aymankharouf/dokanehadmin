@@ -8,15 +8,21 @@ import { approvePriceAlarm, rejectPriceAlarm, showMessage } from '../data/Action
 
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
-  const [error, setError] = useState('')
   const [store, setStore] = useState('')
-  const priceAlarm = useMemo(() => state.priceAlarms.find(rec => rec.id === props.id), [state.priceAlarms])
-  const pack = useMemo(() => state.packs.find(rec => rec.id === priceAlarm.packId), [state.packs])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === priceAlarm.user), [state.users])
-  const customer = useMemo(() => state.customers.find(rec => rec.id === priceAlarm.user), [state.customers])
-  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName, [customer, state.stores])
-  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).address : priceAlarm.storePlace, [customer, state.stores])
+  const priceAlarm = useMemo(() => state.priceAlarms.find(rec => rec.id === props.id)
+  , [state.priceAlarms, props.id])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === priceAlarm.packId)
+  , [state.packs, priceAlarm])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
+  const userInfo = useMemo(() => state.users.find(rec => rec.id === priceAlarm.user)
+  , [state.users, priceAlarm])
+  const customer = useMemo(() => state.customers.find(rec => rec.id === priceAlarm.user)
+  , [state.customers, priceAlarm])
+  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName
+  , [customer, state.stores, priceAlarm])
+  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).address : priceAlarm.storePlace
+  , [customer, state.stores, priceAlarm])
   const handleApprove = () => {
     approvePriceAlarm(priceAlarm, pack, store, customer).then(() => {
       showMessage(props, 'success', state.labels.approveSuccess)

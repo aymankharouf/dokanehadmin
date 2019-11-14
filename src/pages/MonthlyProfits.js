@@ -6,7 +6,8 @@ import { StoreContext } from '../data/Store'
 
 const MonthlyProfits = props => {
   const { state } = useContext(StoreContext)
-  const deliveredOrders = useMemo(() => state.orders.filter(rec => rec.status === 'r' && rec.statusTime.fotmat('YYYYMM') === props.id), [state.orders])
+  const deliveredOrders = useMemo(() => state.orders.filter(rec => rec.status === 'r' && rec.statusTime.fotmat('YYYYMM') === props.id)
+  , [state.orders, props.id])
   const ordersCount = deliveredOrders.length
   const storePacks = useMemo(() => {
     const storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === 's'))
@@ -43,27 +44,67 @@ const MonthlyProfits = props => {
     deliveredOrders.reduce((a, order) => a + (order.discount && order.discount.type === 'p' ? order.discount.value : 0) , 0)
     return (deliveredOrders / 1000).toFixed(3)
   }, [deliveredOrders])
-  const costs = useMemo(() => {
-    const costTypes = state.costTypes.map(rec => {
-      
-    })
-    const costs = state.costs.filter(rec => rec.costDate.format('YYYYMM') === props.id)
-  }, [])
   return(
     <Page>
       <Navbar title={`${state.labels.costs} - ${props.id}`} backLink={state.labels.back} />
       <Block>
-          <List mediaList>
-            {costs && costs.map(rec => 
-              <ListItem
-                link="#"
-                title={rec.name}
-                after={(rec.value / 1000).toFixed(3)}
-                key={rec.id}
-              />
-            )}
-            {costs.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
-          </List>
+        <List>
+          <ListItem
+            link="#"
+            title={state.labels.ordersCount}
+            after={ordersCount}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.storePacks}
+            after={(storePacks / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.sales}
+            after={(sales / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.profit}
+            after={(profit / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.fixedFeesTotal}
+            after={(fixedFeesTotal / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.deliveryFeesTotal}
+            after={(deliveryFeesTotal / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.netProfit}
+            after={(netProfit / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.specialDiscounts}
+            after={(specialDiscounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.firstOrderDiscounts}
+            after={(firstOrderDiscounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.invitationsDiscounts}
+            after={(invitationsDiscounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.priceAlarmsDiscounts}
+            after={(priceAlarmsDiscounts / 1000).toFixed(3)}
+          />
+        </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

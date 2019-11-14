@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -8,8 +8,8 @@ import { StoreContext } from '../data/Store';
 
 const PackTrans = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs, props.id])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products, pack])
   const packTrans = useMemo(() => {
     const stockTrans = state.stockTrans.filter(trans => trans.basket.find(rec => rec.id === pack.id))
     const packTrans = stockTrans.map(trans => {
@@ -23,7 +23,7 @@ const PackTrans = props => {
       }
     })
     return packTrans.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
-  }, [state.packTrans])
+  }, [state.stockTrans, pack])
   return(
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />

@@ -12,7 +12,6 @@ const AddStore = props => {
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
-  const [error, setError] = useState('')
 
   useEffect(() => {
     const patterns = {
@@ -27,7 +26,7 @@ const AddStore = props => {
     }
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
-  }, [mobile])
+  }, [mobile, state.labels])
 
   const handleSubmit = () => {
     addStore({

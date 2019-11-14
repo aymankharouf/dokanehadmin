@@ -7,14 +7,15 @@ import BottomToolbar from './BottomToolbar';
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
-  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id), [state.users])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
+  , [state.stores, props.id])
+  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id)
+  , [state.customers, props.id])
   const [type, setType] = useState(store.type)
   const [name, setName] = useState(store.name)
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     const patterns = {
@@ -29,7 +30,7 @@ const EditStore = props => {
     }
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
-  }, [mobile])
+  }, [mobile, state.labels])
 
   const handleSubmit = () => {
     editStore({

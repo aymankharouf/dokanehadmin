@@ -8,7 +8,7 @@ import { StoreContext } from '../data/Store';
 
 const CustomersList = props => {
   const { state } = useContext(StoreContext)
-  const typeName = useMemo(() => props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(rec => rec.id === props.id).name, [state.customerTypes])
+  const typeName = useMemo(() => props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(rec => rec.id === props.id).name, [state.customerTypes, state.labels, props.id])
   const customers = useMemo(() => {
     let customers = state.customers.filter(rec => props.id === 'a' ? true : rec.type === props.id)
     customers = customers.map(customer => {
@@ -21,7 +21,7 @@ const CustomersList = props => {
       }
     })
     return customers.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
-  }, [state.customers, state.users]) 
+  }, [state.customers, state.users, props.id]) 
   return(
     <Page>
       <Navbar title={`${state.labels.customers} - ${typeName}`} backLink={state.labels.back} >

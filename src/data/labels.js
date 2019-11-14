@@ -135,7 +135,7 @@ const labels = {
   rejectSuccess: 'تم الرفض بنجاح',
   spendings: 'المصاريف',
   invalidSpendingDate: 'الرجاء التأكد من التاريخ المدخل',
-  invalidSpendingAmount: 'الرجاء التأكد من القيمة المدخلة',
+  invalidValue: 'الرجاء التأكد من القيمة المدخلة',
   newSpending: 'اضافة مصروف',
   spendingAmount: 'القيمة',
   spendingDate: 'التاريخ',
@@ -149,7 +149,23 @@ const labels = {
   isOldAge: 'كبير في السن',
   multipleStores: 'من أكثر من محل',
   alreadyInBasket: 'هذا المنتج موجود في سلة المشتريات',
-  editSpending: 'تعديل مصروف'
+  editSpending: 'تعديل مصروف',
+  priceHigherThanRequested: 'السعر الحالي اعلى من السعر في الطلب',
+  purchaseSuccess: 'تم الشراء بنجاح',
+  unavailable: 'غير متوفر',
+  executeSuccess: 'تم التنفيذ بنجاح',
+  unavailableInStock: 'غير متوفر في المستودع',
+  storePacks: 'موجودات المستودع',
+  sales: 'المبيعات',
+  ordersCount: 'عدد الطلبات',
+  fixedFeesTotal: 'الرسوم الثابتة',
+  deliveryFeesTotal: 'رسوم التوصيل',
+  netProfit: 'صافي الربح',
+  specialDiscounts: 'الخصم الخاص',
+  firstOrderDiscounts: 'خصم اول طلب',
+  invitationsDiscounts: 'خصم دعوة صديق',
+  priceAlarmsDiscounts: 'خصم اشعارات الاسعار'
+
 }
 
 export default labels

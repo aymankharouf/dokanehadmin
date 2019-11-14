@@ -1,13 +1,14 @@
 import React, { useState, useContext, useMemo } from 'react'
 import { editSection, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle} from 'framework7-react';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
 
 const EditSection = props => {
   const { state } = useContext(StoreContext)
-  const section = useMemo(() => state.sections.find(rec => rec.id === props.id), [state.sections])
+  const section = useMemo(() => state.sections.find(rec => rec.id === props.id)
+  , [state.sections, props.id])
   const [name, setName] = useState(section.name)
   const handleEdit = () => {
     editSection({

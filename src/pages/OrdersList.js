@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -8,11 +8,12 @@ import { StoreContext } from '../data/Store';
 
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
-  const status = useMemo(() => state.orderStatus.find(rec => rec.id === props.id), [state.orderStatus])
+  const status = useMemo(() => state.orderStatus.find(rec => rec.id === props.id)
+  , [state.orderStatus, props.id])
   const orders = useMemo(() => {
     const orders = state.orders.filter(rec => rec.status === props.id)
     return orders.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
-  }, [state.orders])
+  }, [state.orders, props.id])
   return(
     <Page>
       <Navbar title={`${state.labels.orders} - ${status.name}`} backLink={state.labels.back} />
@@ -29,7 +30,9 @@ const OrdersList = props => {
                   subtitle={moment(order.time.toDate()).fromNow()}
                   text={order.statusTime ? moment(order.statusTime.toDate()).fromNow() : ''}
                   key={order.id}
-                />
+                >
+                  {order.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.delivery}</Badge> : ''}
+                </ListItem>
               )
             }
             )}

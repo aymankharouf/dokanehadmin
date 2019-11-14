@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Badge, BlockTitle, Row, Col, Button, Toolbar } from 'framework7-react'
 import Rating from './Rating'
 import { StoreContext } from '../data/Store';
@@ -8,8 +8,8 @@ import BottomToolbar from './BottomToolbar'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(rec => rec.id === props.id), [state.products])
-  
+  const product = useMemo(() => state.products.find(rec => rec.id === props.id)
+  , [state.products, props.id])
   const packsTags = useMemo(() => {
     const packs = state.packs.filter(rec => rec.productId === props.id)
     return packs.map(rec => 
@@ -23,7 +23,7 @@ const ProductDetails = props => {
         {rec.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
       </ListItem>
     )
-  }, [state.packs]) 
+  }, [state.packs, props.id, state.labels]) 
   return (
     <Page>
       <Navbar title={product.name} backLink={state.labels.back} />

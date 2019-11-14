@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addSpending, showMessage } from '../data/Actions'
-import {Page, Navbar, List, ListItem, ListInput, Block, Fab, Icon} from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
@@ -9,7 +9,7 @@ const AddSpending = props => {
   const [type, setType] = useState('')
   const [spendingAmount, setSpendingAmount] = useState('')
   const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
-  const [spendingDate, setSpendingDate] = useState('')
+  const [spendingDate, setSpendingDate] = useState([new Date()])
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
 
@@ -18,12 +18,12 @@ const AddSpending = props => {
       if (value > 0){
         setSpendingAmountErrorMessage('')
       } else {
-        setSpendingAmountErrorMessage(state.labels.invalidSpendingAmount)
+        setSpendingAmountErrorMessage(state.labels.invalidValue)
       }
     }
     if (spendingAmount) validateAmount(spendingAmount)
     else setSpendingAmountErrorMessage('')
-  }, [spendingAmount])
+  }, [spendingAmount, state.labels])
 
   useEffect(() => {
     const validateDate = value => {
@@ -35,13 +35,13 @@ const AddSpending = props => {
     }
     if (spendingDate.length > 0) validateDate(spendingDate)
     else setSpendingDateErrorMessage('')
-  }, [spendingDate])
+  }, [spendingDate, state.labels])
 
   const handleSubmit = () => {
     const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
     addSpending({
       type,
-      spendingAmount,
+      spendingAmount: parseInt(spendingAmount * 1000),
       spendingDate: formatedDate,
       description
     }).then(() => {

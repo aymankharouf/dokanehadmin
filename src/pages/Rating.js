@@ -33,7 +33,7 @@ const Rating = props => {
       stars.unshift(<Icon key={i} material="star_border" color={color}></Icon>)
     }
     return stars
-  }, [])
+  }, [props.rating])
   return(
     <React.Fragment>
       {stars}

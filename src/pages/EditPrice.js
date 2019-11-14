@@ -6,15 +6,17 @@ import { editPrice, showMessage } from '../data/Actions'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId), [state.packs])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId)
+  , [state.packs, props.packId])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
   const store = useMemo(() => {
     const store = pack.stores.find(rec => rec.id === props.storeId)
     return {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
-  }, [pack])
-  const [purchasePrice, setPurchasePrice] = useState((store.purchasePrice / 1000).toFixed(3))
+  }, [pack, state.stores, props.storeId])
+  const [purchasePrice, setPurchasePrice] = useState('')
   const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
-  const [price, setPrice] = useState((store.price / 1000).toFixed(3))
+  const [price, setPrice] = useState('')
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
@@ -36,7 +38,7 @@ const EditPrice = props => {
       return true
     }
     return false
-  }, [price, purchasePrice, offerEnd])
+  }, [price, purchasePrice, offerEnd, store])
   useEffect(() => {
     const validatePrice = value => {
       if (value > 0 && (price ? price >= value : true)){
@@ -46,7 +48,7 @@ const EditPrice = props => {
       }
     }
     if (purchasePrice) validatePrice(purchasePrice)
-  }, [purchasePrice])
+  }, [purchasePrice, price, state.labels])
   useEffect(() => {
     const validatePrice = value => {
       if (value > 0 && (purchasePrice ? purchasePrice <= value : true)){
@@ -56,7 +58,7 @@ const EditPrice = props => {
       }
     }
     if (price) validatePrice(price)
-  }, [price])
+  }, [price, purchasePrice, state.labels])
 
   useEffect(() => {
     const validateDate = (value) => {
@@ -68,7 +70,7 @@ const EditPrice = props => {
     }
     if (offerEnd.length > 0) validateDate(offerEnd)
     else setOfferEndErrorMessage('')
-  }, [offerEnd])
+  }, [offerEnd, state.labels])
 
   const handleEdit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''

@@ -6,8 +6,10 @@ import { StoreContext } from '../data/Store';
 
 const StoreOwners = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
-  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id), [state.users])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
+  , [state.stores, props.id])
+  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id)
+  , [state.customers, props.id])
   return (
     <Page>
       <Navbar title={`${state.labels.storeOwners} - ${store.name}`} backLink={state.labels.back} />

@@ -1,12 +1,13 @@
 import React, {useState, useContext, useMemo } from 'react'
-import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Block, Toggle } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editProduct, showMessage } from '../data/Actions'
 
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(rec => rec.id === props.id), [state.products])
+  const product = useMemo(() => state.products.find(rec => rec.id === props.id)
+  , [state.products, props.id])
   const [name, setName] = useState(product.name)
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)

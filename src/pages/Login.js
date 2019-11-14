@@ -13,7 +13,7 @@ const Login = props => {
       showMessage(props, 'error', error)
       setError('')
     }
-  }, [error])
+  }, [error, props])
 
   const handleLogin = () => {
     login(email, password).then(() => {

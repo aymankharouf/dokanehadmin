@@ -12,9 +12,11 @@ const StorePackDetails = props => {
       ...pack,
       price: pack.stores.find(rec => rec.id === props.storeId).price
     }
-  }, [])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products])
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.storeId), [state.stores])
+  }, [state.packs, props.packId, props.storeId])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.storeId)
+  , [state.stores, props.storeId])
   const handleEditPrice = () => {
     props.f7router.navigate(`/editPrice/${props.storeId}/pack/${props.packId}`)
   }

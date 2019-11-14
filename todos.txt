@@ -71,4 +71,8 @@ withdrawals
 comments when rating
 show ratings count
 edit orders
-purchase discounts
+*purchase discounts
+*forEach instead of for loop
+navigation & performance
+realtime listeners on app store
+in pack detail page show a button if there is offers of the same product

@@ -6,8 +6,10 @@ import BottomToolbar from './BottomToolbar';
 
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
-  const forgetPasswordTrans = useMemo(() => state.forgetPassword.find(rec => rec.id === props.id), [state.forgetPassword])
-  const user = useMemo(() => state.users.find(rec => rec.mobile === forgetPasswordTrans.mobile), [state.users])
+  const forgetPasswordTrans = useMemo(() => state.forgetPassword.find(rec => rec.id === props.id)
+  , [state.forgetPassword, props.id])
+  const user = useMemo(() => state.users.find(rec => rec.mobile === forgetPasswordTrans.mobile)
+  , [state.users, forgetPasswordTrans])
   const password = useMemo(() => {
     const password = user.colors.map(color => state.randomColors.find(rec => rec.name === color).id)
     return password.join('')

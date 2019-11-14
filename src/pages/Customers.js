@@ -20,9 +20,10 @@ const Customers = props => {
       })
     })
     return sections
-  }, [state.customerTypes])
+  }, [state.customerTypes, state.labels])
   const forgetPassword = useMemo(() => state.forgetPassword.filter(rec => rec.resolved === false), [state.forgetPassword])
-  const newUsers = useMemo(() => state.users.filter(user => !state.customers.find(rec => rec.id === user.id)), [state.users])
+  const newUsers = useMemo(() => state.users.filter(user => !state.customers.find(rec => rec.id === user.id))
+  , [state.users, state.customers])
   let i = 0
   return (
     <Page>

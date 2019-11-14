@@ -7,7 +7,7 @@ import 'moment/locale/ar'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores])
+  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores, props.id])
   let storePacks = useMemo(() => {
     let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
     storePacks = storePacks.map(pack => {
@@ -24,7 +24,7 @@ const StorePacks = props => {
       }
     })
     return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
-  }, [state.packs, state.products])
+  }, [state.packs, state.products, props.id])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>
