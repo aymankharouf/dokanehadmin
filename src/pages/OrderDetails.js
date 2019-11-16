@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { updateOrderStatus, showMessage } from '../data/Actions'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
@@ -7,34 +7,34 @@ import { StoreContext } from '../data/Store';
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(rec => rec.id === props.id), [state.orders, props.id])
   const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
   const netProfit = useMemo(() => order.profit + order.fixedFees + order.deliveryFees - order.discount.value, [order])
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', title: 'اعتماد', status: ['n', 's']},
-      {id: 'e', title: 'تعديل', status: ['f']},
+      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f']},
       {id: 's', title: 'تعليق', status: ['n', 'a']},
       {id: 'r', title: 'رفض', status: ['n', 's']},
-      {id: 'c', title: 'الغاء', status: ['n', 'a']},
+      {id: 'c', title: 'الغاء', status: ['n', 's', 'a']},
       {id: 'd', title: 'تسليم', status: ['f']},
       {id: 'i', title: 'استيداع', status: ['f']}
     ]
     return statusActions.filter(rec => rec.status.find(status => status === order.status))
   }, [order.status])
+  useEffect(() => {
+    if (error) {
+      showMessage(props, 'error', error)
+      setError('')
+    }
+  }, [error, props])
+
   const handleAction = type => {
     if (type === 'e') {
-      props.f7router.navigate(`/editOrder/${props.id}`)
+      props.f7router.navigate(`/editOrder/${order.id}`)
     } else {
-      updateOrderStatus(
-        {...order, 
-          status: type, 
-          oldStatus: order.status
-        }, 
-        state.users, 
-        state.invitations,
-        state.discountTypes
-      ).then(() => {
+      updateOrderStatus(order, type, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
         showMessage(props, 'success', state.labels.editSuccess)
         props.f7router.back()
       })  
@@ -45,7 +45,7 @@ const OrderDetails = props => {
     <Page>
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
       <Block>
-        <List>
+        <List mediaList>
           {order.basket && order.basket.map(pack => {
             const packInfo = state.packs.find(rec => rec.id === pack.id)
             const productInfo = state.products.find(rec => rec.id === packInfo.productId)

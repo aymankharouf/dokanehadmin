@@ -76,3 +76,4 @@ edit orders
 navigation & performance
 realtime listeners on app store
 in pack detail page show a button if there is offers of the same product
+change admin password

@@ -6,7 +6,7 @@ import Store from './data/Store';
 const app = props => {
   const f7params = {
     id: 'io.framework7.dokaneh',
-    name: 'DokanehNet',
+    name: 'دكانة نت',
     theme: 'ios', 
     routes,
   };

@@ -34,7 +34,7 @@ const RequestedPackDetails = props => {
       if (store.id === 's' && store.quantity === 0){
         throw new Error(state.labels.unavailableInStock)
       }
-      dispatch({type: 'ADD_TO_BASKET', basket: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
+      dispatch({type: 'ADD_TO_BASKET', params: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
       showMessage(props, 'success', state.labels.addToBasketSuccess)
 			props.f7router.back()
 		} catch(err) {
@@ -48,7 +48,7 @@ const RequestedPackDetails = props => {
 			props.f7router.back()
     })
   }
-  const storesTag = useMemo(() => {
+  const packStores = useMemo(() => {
     let packStores = pack.stores
     packStores.sort((rec1, rec2) => {
       if (rec1.purchasePrice === rec2.purchasePrice) {
@@ -66,19 +66,8 @@ const RequestedPackDetails = props => {
       const storeName = currentStore.name
       return {...packStore, name: storeName}
     })
-    return packStores.map(rec => 
-      <ListItem 
-        link="#"
-        title={rec.name} 
-        footer={moment(rec.time.toDate()).fromNow()} 
-        after={(rec.price / 1000).toFixed(3)} 
-        key={rec.id}
-        onClick={() => handlePurchase(rec)}
-      >
-        {rec.quantity ? <Badge slot='title' color='red'>{rec.quantity}</Badge> : ''}
-      </ListItem>
-    )
-  }, [pack, state.stores]) 
+    return packStores
+  }, [pack, state.stores])
 
   return (
     <Page>
@@ -102,7 +91,18 @@ const RequestedPackDetails = props => {
             />
             : ''
           }
-          {storesTag}
+          {packStores.map(rec => 
+            <ListItem 
+              link="#"
+              title={rec.name} 
+              footer={moment(rec.time.toDate()).fromNow()} 
+              after={(rec.price / 1000).toFixed(3)} 
+              key={rec.id}
+              onClick={() => handlePurchase(rec)}
+            >
+              {rec.quantity ? <Badge slot='title' color='red'>{rec.quantity}</Badge> : ''}
+            </ListItem>
+          )}
         </List>
       </Block>
       <Toolbar bottom>

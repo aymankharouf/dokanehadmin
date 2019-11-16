@@ -1,46 +1,74 @@
-import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge, Link } from 'framework7-react'
-import ReLogin from './ReLogin'
+import React, { useContext, useMemo, useEffect } from 'react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-
+import { updateOrderStatus, editOrder, showMessage } from '../data/Actions';
 
 const EditOrder = props => {
-  const { state, user } = useContext(StoreContext)
-  const order = useMemo(() => state.orders.find(order => order.id === props.id)
+  const { state, dispatch } = useContext(StoreContext)
+  const order = useMemo(() => state.orders.find(rec => rec.id === props.id)
   , [state.orders, props.id])
-  const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
-  let totalPurchase = 0
-  if (!user) return <ReLogin callingPage="orders"/>
-  return(
+  const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((a, pack) => a + (pack.price * pack.quantity), 0) : 0
+  , [state.orderBasket])
+  const handleChangePack = (pack, value) => {
+    if (pack.quantity === 0 && value === -1) return 
+    dispatch({type: 'CHANGE_ORDER_PACK', params: {pack, value}})
+  }
+  const handleDelete = () => {
+    props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
+      const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
+      updateOrderStatus(order, type, state.packs).then(() => {
+        showMessage(props, 'success', state.labels.deleteSuccess)
+        dispatch({type: 'CLEAR_ORDER_BASKET'})
+        props.f7router.back()
+      })
+    })
+  }
+  const handleSubmit = () => {
+    editOrder(order, state.orderBasket, state.packs).then(() => {
+      showMessage(props, 'success', state.labels.editSuccess)
+      dispatch({type: 'CLEAR_ORDER_BASKET'})
+      props.f7router.back()
+    })
+  }
+  useEffect(() => {
+    dispatch({type: 'LOAD_ORDER_BASKET', order})
+  }, [dispatch, order])
+  return (
     <Page>
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(pack => {
+          {state.orderBasket && state.orderBasket.map(pack => {
             const packInfo = state.packs.find(rec => rec.id === pack.id)
             const productInfo = state.products.find(rec => rec.id === packInfo.productId)
             return (
-              <ListItem 
-                key={pack.id} 
+              <ListItem
                 title={productInfo.name}
-                footer={pack.name}
-                after={(pack.price * pack.quantity / 1000).toFixed(3)}>
-                <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
+                footer={((pack.price * pack.quantity) / 1000).toFixed(3)}
+                subtitle={packInfo.name}
+                key={pack.id}
+              >
+                <img slot="media" src={productInfo.imageUrl} width="80" alt="" />
+                <Stepper
+                  slot="after"
+                  fill
+                  buttonsOnly
+                  onStepperPlusClick={() => handleChangePack(pack, 1)}
+                  onStepperMinusClick={() => handleChangePack(pack, -1)}
+                />
+                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.unavailableQuantity ? '(' + pack.unavailableQuantity + ')' : ''} ${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
               </ListItem>
             )
           })}
-          {order.withDelivery ? <ListItem title={state.labels.delivery}></ListItem> : null}
-          <ListItem title={state.labels.total} after={(order.total / 1000).toFixed(3)} />
-          <ListItem title={state.labels.feesTitle} className="red" after={(order.fixedFees / 1000).toFixed(3)} />
-          {order.deliveryFees > 0 ? <ListItem title={state.labels.deliveryFees} className="red" after={(order.deliveryFees / 1000).toFixed(3)} /> : null}
-          {order.specialDiscount + order.customerDiscount > 0 ? <ListItem title={state.labels.discount} className="discount" after={((order.specialDiscount + order.customerDiscount) / 1000).toFixed(3)} /> : null}
-          <ListItem title={state.labels.net} className="blue" after={(netPrice / 1000).toFixed(3)} />
-          {totalPurchase > 0 ? <ListItem title={state.labels.cost} className="blue" after={(totalPurchase / 1000).toFixed(3)} /> : null}
-          {totalPurchase > 0 ? <ListItem title={state.labels.profit} className={netPrice > totalPurchase ? 'green' : 'red'} after={((netPrice - totalPurchase) / 1000).toFixed(3)} /> : null}
         </List>
       </Block>
+      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+        <Icon material="done"></Icon>
+      </Fab>
+
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
+        <Link href='/home/' iconMaterial="home" />
+        <Link href='#' iconMaterial="delete" onClick={() => handleDelete()} />
       </Toolbar>
     </Page>
   )

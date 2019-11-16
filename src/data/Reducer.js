@@ -1,38 +1,35 @@
 const Reducer = (state, action) => {
-    let newQuantity
     let otherPacks
     let pack
     switch (action.type){
       case 'ADD_TO_BASKET':
         pack = {
-          ...action.basket.pack,
-          price: action.basket.price,
-          quantity: action.basket.quantity,
-          actualPrice: action.basket.store.price,
-          purchasePrice: action.basket.store.purchasePrice,
-          requestedQuantity: action.basket.requestedQuantity
+          ...action.params.pack,
+          price: action.params.price,
+          quantity: action.params.quantity,
+          actualPrice: action.params.store.price,
+          purchasePrice: action.params.store.purchasePrice,
+          requestedQuantity: action.params.requestedQuantity
         }
         if (!state.basket.storeId) {
-          return {...state, basket: {storeId: action.basket.store.id, packs: [pack]}}
+          return {...state, basket: {storeId: action.params.store.id, packs: [pack]}}
         } else {
-          if (state.basket.storeId !== action.basket.store.id) return state
-          if (state.basket.packs && state.basket.packs.find(rec => rec.id === action.basket.pack.id)) return state
+          if (state.basket.storeId !== action.params.store.id) return state
+          if (state.basket.packs && state.basket.packs.find(rec => rec.id === action.params.pack.id)) return state
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'ADD_QUANTITY':
         pack = state.basket.packs.find(rec => rec.id === action.pack.id)
-        newQuantity = pack.quantity
         otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
         pack = {
           ...pack,
-          quantity: ++newQuantity,
+          quantity: pack.quantity + 1,
         }
         return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
       case 'REMOVE_QUANTITY':
         pack = state.basket.packs.find(rec => rec.id === action.pack.id)
-        newQuantity = pack.quantity
         otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
-        if (--newQuantity === 0) {
+        if (pack.quantity - 1 === 0) {
           if (otherPacks.length > 0){
             return {...state, basket: {...state.basket, packs: otherPacks}}
           } else {
@@ -41,7 +38,7 @@ const Reducer = (state, action) => {
         } else {
           pack = {
             ...pack,
-            quantity: newQuantity,
+            quantity: pack.quantity - 1,
           }  
           return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
         }
@@ -50,6 +47,25 @@ const Reducer = (state, action) => {
           ...state,
           basket: ''
         }
+      case 'LOAD_ORDER_BASKET':
+        return {
+          ...state,
+          orderBasket: action.order.basket
+        }
+      case 'CLEAR_ORDER_BASKET':
+        return {
+          ...state,
+          orderBasket: []
+        }
+      case 'CHANGE_ORDER_PACK':
+        pack = state.orderBasket.find(rec => rec.id === action.params.pack.id)
+        otherPacks = state.orderBasket.filter(rec => rec.id !== action.params.pack.id)
+        pack = {
+          ...pack,
+          quantity: pack.quantity + action.params.value,
+          changes: (pack.changes ? pack.changes : 0) + action.params.value
+        }
+        return {...state, orderBasket: [...otherPacks, pack]}
       case 'SET_COUNTRIES':
         return {
           ...state,
@@ -129,6 +145,11 @@ const Reducer = (state, action) => {
         return {
           ...state,
           spendings: action.spendings
+        }
+      case 'SET_MONTHLY_TRANS':
+        return {
+          ...state,
+          monthlyTrans: action.monthlyTrans
         }
       default:
         return state

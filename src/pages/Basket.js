@@ -4,8 +4,8 @@ import { StoreContext } from '../data/Store';
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const store = useMemo(() => state.basket.storeId ? state.stores.find(rec => rec.id === state.basket.storeId) : '', [state.basket, state.stores])
-  const totalPrice = useMemo(() => state.basket.packs ? (state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0)) : '', [state.basket])
+  const store = useMemo(() => state.stores.find(rec => rec.id === state.basket.storeId), [state.basket, state.stores])
+  const totalPrice = useMemo(() => state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0), [state.basket])
   const handleAdd = pack => {
     const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
     if (!storeQuantity || pack.quantity < Math.min(storeQuantity, pack.requestedQuantity)) {
@@ -13,13 +13,13 @@ const Basket = props => {
     }
   }
   useEffect(() => {
-    if (!state.basket.storeId) {
+    if (!state.basket.packs) {
       props.f7router.navigate('/home/', {reloadAll: true})
     }
   }, [state.basket, props])
   return (
     <Page>
-      <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.basket_from} ${store.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {state.basket.packs && state.basket.packs.map(pack => {

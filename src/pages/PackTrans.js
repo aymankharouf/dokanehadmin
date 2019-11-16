@@ -8,8 +8,10 @@ import { StoreContext } from '../data/Store';
 
 const PackTrans = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id), [state.packs, props.id])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId), [state.products, pack])
+  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  , [state.packs, props.id])
+  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  , [state.products, pack])
   const packTrans = useMemo(() => {
     const stockTrans = state.stockTrans.filter(trans => trans.basket.find(rec => rec.id === pack.id))
     const packTrans = stockTrans.map(trans => {
@@ -31,7 +33,7 @@ const PackTrans = props => {
         <List mediaList>
           {packTrans && packTrans.map(trans => 
             <ListItem
-              title={trans.type === 's' ? state.stockTransTypes.find(rec => rec.id === trans.type).name : state.stores.find(rec => rec.id === trans.storeId).name}
+              title={trans.type === 's' || trans.type === 'i' ? state.stockTransTypes.find(rec => rec.id === trans.type).name : state.stores.find(rec => rec.id === trans.storeId).name}
               subtitle={moment(trans.time.toDate()).fromNow()}
               after={(trans.purchasePrice / 1000).toFixed(3)}
               key={trans.id}

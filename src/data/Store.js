@@ -50,7 +50,7 @@ const Store = props => {
   const stockTransTypes = [
     {id: 'p', name: 'شراء'},
     {id: 's', name: 'بيع'},
-    {id: 'r', name: 'ارجاع'}
+    {id: 'i', name: 'استيداع'}
   ]
   const customerTypes = [
     {id: 'n', name: 'عميل عادي'},
@@ -100,7 +100,8 @@ const Store = props => {
     customers: [],
     discountTypes,
     spendingTypes,
-    spendings: []
+    spendings: [],
+    monthlyTrans: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -196,6 +197,15 @@ const Store = props => {
           dispatch({type: 'SET_SPENDINGS', spendings})
         }, err => {
           unsubscribeSpendings()
+        })  
+        const unsubscribeMonthlyTrans = firebase.firestore().collection('monthlyTrans').onSnapshot(docs => {
+          let monthlyTrans = []
+          docs.forEach(doc => {
+            monthlyTrans.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_MONTHLY_TRANS', monthlyTrans})
+        }, err => {
+          unsubscribeMonthlyTrans()
         })  
       }
     })

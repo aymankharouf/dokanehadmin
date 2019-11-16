@@ -34,7 +34,6 @@ import Stock from './pages/Stock';
 import PackTrans from './pages/PackTrans';
 import StockTrans from './pages/StockTrans';
 import StockTransDetails from './pages/StockTransDetails';
-import EditOrder from './pages/EditOrder';
 import Customers from './pages/Customers';
 import ForgetPassword from './pages/ForgetPassword';
 import AddPack from './pages/AddPack';
@@ -57,9 +56,10 @@ import Spendings from './pages/Spendings';
 import AddSpending from './pages/AddSpending';
 import EditSpending from './pages/EditSpending';
 import Profits from './pages/Profits';
-import MonthlyProfits from './pages/MonthlyProfits';
+import MonthlyTrans from './pages/MonthlyTrans';
 import RetreivePassword from './pages/RetreivePassword';
 import StoreOwners from './pages/StoreOwners';
+import EditOrder from './pages/EditOrder';
 
 
 export default [
@@ -268,12 +268,12 @@ export default [
     component: OrderDetails
   },
   {
-    path: '/requestedPacks/',
-    component: RequestedPacks
-  },
-  {
     path: '/editOrder/:id',
     component: EditOrder
+  },
+  {
+    path: '/requestedPacks/',
+    component: RequestedPacks
   },
   {
     path: '/requestedPack/:packId/quantity/:quantity/price/:price',
@@ -308,8 +308,8 @@ export default [
     component: Profits,
   },
   {
-    path: '/monthlyProfits/:id',
-    component: MonthlyProfits,
+    path: '/monthlyTrans/:id',
+    component: MonthlyTrans,
   },
   {
     path: '/retreivePassword/:id',
