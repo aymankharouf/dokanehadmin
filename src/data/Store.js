@@ -278,14 +278,14 @@ const Store = props => {
     const unsubscribePacks = firebase.firestore().collection('packs').onSnapshot(docs => {
       let packs = []
       docs.forEach(doc => {
-        let storesPrices = doc.data().stores.map(store => !store.offerEnd || today <= store.offerEnd.toDate() ? store.price : null)
-        storesPrices = storesPrices.filter(rec => rec !== null)
+        let storesPrices = doc.data().stores.map(s => !s.offerEnd || today <= s.offerEnd.toDate() ? s.price : null)
+        storesPrices = storesPrices.filter(p => p !== null)
         let minPrice = Math.min(...storesPrices)
         minPrice = minPrice === Infinity ? 0 : minPrice
         const value = doc.data().unitsCount ? minPrice / doc.data().unitsCount : 0
         let isOffer = doc.data().isOffer
         if (isOffer === false) {
-          const store = doc.data().stores.find(rec => rec.price === minPrice && rec.offerEnd && today <= rec.offerEnd.toDate())
+          const store = doc.data().stores.find(s => s.price === minPrice && s.offerEnd && today <= s.offerEnd.toDate())
           if (store) {
             isOffer = true
           }

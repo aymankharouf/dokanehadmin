@@ -7,29 +7,27 @@ import { addStock, showMessage } from '../data/Actions'
 
 const Stores = props => {
   const { state } = useContext(StoreContext)
-  const stores = useMemo(() => {
-    const stores = state.stores
-    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-  }, [state.stores])
-  const stock = useMemo(() => state.stores.find(rec => rec.id === 's'), [state.stores])
-  const handleAddStock = (name) => {
+  const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  , [state.stores])
+  const stock = useMemo(() => state.stores.find(s => s.id === 's')
+  , [state.stores])
+  const handleAddStock = name => {
     addStock(name).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })
-
-}
+  }
   return (
     <Page>
       <Navbar title={state.labels.stores} backLink={state.labels.back} />
       <Block>
         <List>
-          {stores && stores.map(rec =>
+          {stores && stores.map(s =>
             <ListItem 
-              link={`/store/${rec.id}`} 
-              title={rec.name} 
-              footer={`${rec.address || ''} ${rec.mobile || ''}`}
-              key={rec.id} 
+              link={`/store/${s.id}`} 
+              title={s.name} 
+              footer={`${s.address || ''} ${s.mobile || ''}`}
+              key={s.id} 
             />
           )}
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

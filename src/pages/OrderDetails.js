@@ -8,9 +8,12 @@ import { StoreContext } from '../data/Store';
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const order = useMemo(() => state.orders.find(rec => rec.id === props.id), [state.orders, props.id])
-  const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value, [order])
-  const netProfit = useMemo(() => order.profit + order.fixedFees + order.deliveryFees - order.discount.value, [order])
+  const order = useMemo(() => state.orders.find(o => o.id === props.id)
+  , [state.orders, props.id])
+  const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value
+  , [order])
+  const netProfit = useMemo(() => order.profit + order.fixedFees + order.deliveryFees - order.discount.value
+  , [order])
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', title: 'اعتماد', status: ['n', 's']},
@@ -21,7 +24,7 @@ const OrderDetails = props => {
       {id: 'd', title: 'تسليم', status: ['f']},
       {id: 'i', title: 'استيداع', status: ['f']}
     ]
-    return statusActions.filter(rec => rec.status.find(status => status === order.status))
+    return statusActions.filter(a => a.status.find(s => s === order.status))
   }, [order.status])
   useEffect(() => {
     if (error) {
@@ -46,31 +49,31 @@ const OrderDetails = props => {
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(pack => {
-            const packInfo = state.packs.find(rec => rec.id === pack.id)
-            const productInfo = state.products.find(rec => rec.id === packInfo.productId)
+          {order.basket && order.basket.map(p => {
+            const packInfo = state.packs.find(pa => pa.id === p.id)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             if (order.status === 'f' || order.status === 'd') {
-              const storeName = pack.storeId ? (pack.storeId === 'm' ? state.labels.multipleStores : state.stores.find(rec => rec.id === pack.storeId).name) : ''
+              const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
               return (
                 <ListItem 
-                  key={pack.id} 
+                  key={p.id} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={storeName}
-                  after={((pack.actualPrice ? pack.actualPrice : pack.price) * (pack.quantity - (pack.unavailableQuantity ? pack.unavailableQuantity : 0)) / 1000).toFixed(3)}
+                  after={((p.actualPrice ? p.actualPrice : p.price) * (p.quantity - (p.unavailableQuantity ? p.unavailableQuantity : 0)) / 1000).toFixed(3)}
                 >
-                  {pack.quantity > 1 ? <Badge slot="title" color="red">{`${pack.unavailableQuantity ? '(' + pack.unavailableQuantity + ')' : ''} ${pack.purchasedQuantity}`}</Badge> : ''}
+                  {p.quantity > 1 ? <Badge slot="title" color="red">{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity}`}</Badge> : ''}
                 </ListItem>
               )
             } else {
               return (
                 <ListItem 
-                  key={pack.id} 
+                  key={p.id} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  after={(pack.price * pack.quantity / 1000).toFixed(3)}
+                  after={(p.price * p.quantity / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.unavailableQuantity ? '(' + pack.unavailableQuantity + ')' : ''} ${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
+                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
                 </ListItem>
               )
             }
@@ -104,7 +107,7 @@ const OrderDetails = props => {
           : ''}
           {order.discount.value > 0 ? 
             <ListItem 
-              title={state.discountTypes.find(rec => rec.id === order.discount.type).name} 
+              title={state.discountTypes.find(t => t.id === order.discount.type).name} 
               className="discount" 
               after={(order.discount.value / 1000).toFixed(3)} 
             /> 
@@ -124,8 +127,8 @@ const OrderDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
-          {statusActions && statusActions.map(action => 
-            <ListItem link="#" key={action.id} popoverClose title={action.title} onClick={() => handleAction(action.id)}/>
+          {statusActions && statusActions.map(a => 
+            <ListItem link="#" key={a.id} popoverClose title={a.title} onClick={() => handleAction(a.id)}/>
           )}
         </List>
       </Popover>

@@ -7,24 +7,21 @@ import 'moment/locale/ar'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id), [state.stores, props.id])
+  const store = useMemo(() => state.stores.find(s => s.id === props.id)
+  , [state.stores, props.id])
   let storePacks = useMemo(() => {
-    let storePacks = state.packs.filter(pack => pack.stores.find(store => store.id === props.id))
-    storePacks = storePacks.map(pack => {
-      const productInfo = state.products.find(rec => rec.id === pack.productId)
+    let storePacks = state.packs.filter(p => p.stores.find(s => s.id === props.id))
+    storePacks = storePacks.map(p => {
       return {
-        id: pack.id,
-        productName: productInfo.name,
-        name: pack.name,
-        isNew: productInfo.isNew,
-        isOffer: pack.isOffer,
-        price: pack.stores.find(rec => rec.id === props.id).price,
-        time: pack.stores.find(rec => rec.id === props.id).time,
-        imageUrl: productInfo.imageUrl
+        id: p.id,
+        name: p.name,
+        isOffer: p.isOffer,
+        price: p.stores.find(s => s.id === props.id).price,
+        time: p.stores.find(s => s.id === props.id).time
       }
     })
-    return storePacks.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
-  }, [state.packs, state.products, props.id])
+    return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
+  }, [state.packs, props.id])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>
@@ -45,20 +42,23 @@ const StorePacks = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {storePacks.map(pack => 
-            <ListItem
-              link={`/storePack/${store.id}/pack/${pack.id}`}
-              title={pack.productName}
-              after={(pack.price / 1000).toFixed(3)}
-              subtitle={pack.name}
-              text={moment(pack.time.toDate()).fromNow()}
-              key={pack.id}
-            >
-              <img slot="media" src={pack.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
-              {pack.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : null}
-              {pack.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : null}
-            </ListItem>
-          )}
+          {storePacks.map(p => {
+            const productInfo = state.products.find(pr => pr.id === p.productId)
+            return (
+              <ListItem
+                link={`/storePack/${store.id}/pack/${p.id}`}
+                title={productInfo.name}
+                after={(p.price / 1000).toFixed(3)}
+                subtitle={p.name}
+                text={moment(p.time.toDate()).fromNow()}
+                key={p.id}
+              >
+                <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
+                {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
+                {p.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+              </ListItem>
+            )
+          })}
           {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
         </List>
       </Block>

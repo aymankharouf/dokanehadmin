@@ -8,27 +8,27 @@ import { StoreContext } from '../data/Store';
 const PriceAlarms = props => {
   const { state } = useContext(StoreContext)
   const priceAlarms = useMemo(() => {
-    const priceAlarms = state.priceAlarms.filter(rec => rec.status === 'n')
-    return priceAlarms.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+    const priceAlarms = state.priceAlarms.filter(a => a.status === 'n')
+    return priceAlarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
   }, [state.priceAlarms])
   return(
     <Page>
       <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} />
       <Block>
           <List mediaList>
-            {priceAlarms && priceAlarms.map(alarm => {
-              const pack = state.packs.find(rec => rec.id === alarm.packId)
-              const product = state.products.find(rec => rec.id === pack.productId)
+            {priceAlarms && priceAlarms.map(a => {
+              const pack = state.packs.find(p => p.id === a.packId)
+              const product = state.products.find(p => p.id === pack.productId)
               return (
                 <ListItem
-                  link={`/priceAlarmDetails/${alarm.id}`}
+                  link={`/priceAlarmDetails/${a.id}`}
                   title={product.name}
-                  after={(alarm.price / 1000).toFixed(3)}
+                  after={(a.price / 1000).toFixed(3)}
                   subtitle={pack.name}
-                  text={moment(alarm.time.toDate()).fromNow()}
-                  key={alarm.id}
+                  text={moment(a.time.toDate()).fromNow()}
+                  key={a.id}
                 >
-                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn" alt=""/>
+                  <img slot="media" src={product.imageUrl} width="80" className="lazy lazy-fadeIn" alt={product.name} />
                 </ListItem>
               )
             })}

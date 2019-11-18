@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditSection = props => {
   const { state } = useContext(StoreContext)
-  const section = useMemo(() => state.sections.find(rec => rec.id === props.id)
+  const section = useMemo(() => state.sections.find(s => s.id === props.id)
   , [state.sections, props.id])
   const [name, setName] = useState(section.name)
   const handleEdit = () => {

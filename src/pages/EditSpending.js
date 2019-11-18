@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditSpending = props => {
   const { state } = useContext(StoreContext)
-  const spending = useMemo(() => state.spendings.find(rec => rec.id === props.id)
+  const spending = useMemo(() => state.spendings.find(s => s.id === props.id)
   , [state.spendings, props.id])
   const [type, setType] = useState(spending.type)
   const [spendingAmount, setSpendingAmount] = useState((spending.spendingAmount / 1000).toFixed(3))
@@ -75,9 +75,6 @@ const EditSpending = props => {
     return false
   }, [spending, spendingAmount, spendingDate, type, description])
 
-  const spendingTypesTags = useMemo(() => state.spendingTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.spendingTypes])
   return (
     <Page>
       <Navbar title={state.labels.editSpending} backLink={state.labels.back} />
@@ -105,7 +102,9 @@ const EditSpending = props => {
         >
           <select name='type' defaultValue={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {spendingTypesTags}
+            {state.spendingTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
         <ListInput 

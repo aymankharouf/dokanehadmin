@@ -11,17 +11,16 @@ const Settings = props => {
     {id: '2', name: 'اﻻقسام', path: 'sections'},
     {id: '3', name: 'العلامات التجارية', path: 'trademarks'},
     {id: '4', name: 'المواقع', path: 'locations'},
-
   ], [])
   let i = 0
   return(
     <Page>
       <Navbar title={state.labels.settings} backLink={state.labels.back} />
       <Block>
-        {sections.map(section => {
+        {sections.map(s => {
             return (
-            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${section.path}/`} key={section.id}>
-                {section.name}
+            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${s.path}/`} key={s.id}>
+                {s.name}
             </Button>
             )
         })}

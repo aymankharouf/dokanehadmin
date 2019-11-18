@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const Trademarks = props => {
   const { state } = useContext(StoreContext)
-  const trademarks = useMemo(() => [...state.trademarks].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.trademarks])
+  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1), [state.trademarks])
 
   return (
     <Page>
@@ -16,11 +16,11 @@ const Trademarks = props => {
       </Fab>
       <Block>
         <List>
-          {trademarks && trademarks.map(rec =>
+          {trademarks && trademarks.map(t =>
             <ListItem 
-              link={`/editTrademark/${rec.id}`}
-              title={rec.name} 
-              key={rec.id} 
+              link={`/editTrademark/${t.id}`}
+              title={t.name} 
+              key={t.id} 
             />
           )}
           {trademarks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

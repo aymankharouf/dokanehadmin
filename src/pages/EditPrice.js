@@ -6,13 +6,13 @@ import { editPrice, showMessage } from '../data/Actions'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId)
+  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const store = useMemo(() => {
-    const store = pack.stores.find(rec => rec.id === props.storeId)
-    return {...store, name: state.stores.find(rec => rec.id === props.storeId).name}
+    const store = pack.stores.find(s => s.id === props.storeId)
+    return {...store, name: state.stores.find(s => s.id === props.storeId).name}
   }, [pack, state.stores, props.storeId])
   const [purchasePrice, setPurchasePrice] = useState('')
   const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
@@ -94,7 +94,7 @@ const EditPrice = props => {
           <p>{pack.name}</p>
         </CardHeader>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt=""/>
+          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
         </CardContent>
       </Card>
       <List form>

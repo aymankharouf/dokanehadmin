@@ -23,14 +23,14 @@ const HomePage = props => {
         <NavLeft>
           <Link iconMaterial="menu" panelOpen="right"></Link>
         </NavLeft>
-        <NavTitle sliding><img src="/dokaneh_logo.png" alt="" className="logo" /></NavTitle>
-        <NavTitleLarge><img src="/dokaneh_logo.png" alt="" className="logo" /></NavTitleLarge>
+        <NavTitle sliding><img src="/dokaneh_logo.png" alt="logo" className="logo" /></NavTitle>
+        <NavTitleLarge><img src="/dokaneh_logo.png" alt="logo" className="logo" /></NavTitleLarge>
       </Navbar>
       <Block>
-        {mainPages.map(page => {
+        {mainPages.map(p => {
           return (
-            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${page.path}/`} key={page.id}>
-              <span className="section-label">{page.name}</span>
+            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${p.path}/`} key={p.id}>
+              <span className="section-label">{p.name}</span>
             </Button>
           )
         })}

@@ -8,19 +8,20 @@ import { StoreContext } from '../data/Store';
 
 const CustomersList = props => {
   const { state } = useContext(StoreContext)
-  const typeName = useMemo(() => props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(rec => rec.id === props.id).name, [state.customerTypes, state.labels, props.id])
+  const typeName = useMemo(() => props.id === 'a' ? state.labels.allCustomers : state.customerTypes.find(t => t.id === props.id).name
+  , [state.customerTypes, state.labels, props.id])
   const customers = useMemo(() => {
-    let customers = state.customers.filter(rec => props.id === 'a' ? true : rec.type === props.id)
-    customers = customers.map(customer => {
-      const userInfo = state.users.find(rec => rec.id === customer.id)
+    let customers = state.customers.filter(c => props.id === 'a' ? true : c.type === props.id)
+    customers = customers.map(c => {
+      const userInfo = state.users.find(u => u.id === c.id)
       return {
-        ...customer,
+        ...c,
         name: userInfo.name,
         mobile: userInfo.mobile,
         time: userInfo.time
       }
     })
-    return customers.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
+    return customers.sort((c1, c2) => c2.time.seconds - c1.time.seconds)
   }, [state.customers, state.users, props.id]) 
   return(
     <Page>
@@ -42,12 +43,12 @@ const CustomersList = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {customers && customers.map(customer => 
+          {customers && customers.map(c => 
             <ListItem
-              link={`/customer/${customer.id}`}
-              title={`${customer.name} - ${customer.mobile}`}
-              subtitle={moment(customer.time.toDate()).fromNow()}
-              key={customer.id}
+              link={`/customer/${c.id}`}
+              title={`${c.name} - ${c.mobile}`}
+              subtitle={moment(c.time.toDate()).fromNow()}
+              key={c.id}
             />
           )}
           {customers.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

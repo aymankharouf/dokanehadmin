@@ -12,6 +12,8 @@ const AddSpending = props => {
   const [spendingDate, setSpendingDate] = useState([new Date()])
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
+  const spendingTypes = useMemo(() => [...state.spendingTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.spendingTypes])
 
   useEffect(() => {
     const validateAmount = value => {
@@ -49,9 +51,6 @@ const AddSpending = props => {
       props.f7router.back()
     })
   }
-  const spendingTypesTags = useMemo(() => state.spendingTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.spendingTypes])
   return (
     <Page>
       <Navbar title={state.labels.newSpending} backLink={state.labels.back} />
@@ -81,7 +80,9 @@ const AddSpending = props => {
         >
           <select name='type' defaultValue="" onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {spendingTypesTags}
+            {spendingTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
         <ListInput 

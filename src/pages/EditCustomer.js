@@ -7,9 +7,9 @@ import { editCustomer, showMessage } from '../data/Actions'
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
-  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id)
+  const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
@@ -19,12 +19,12 @@ const EditCustomer = props => {
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [position, setPosition] = useState(customer.position)
   const stores = useMemo(() => {
-    const stores = state.stores.filter(rec => rec.id !== 's')
-    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    const stores = state.stores.filter(s => s.id !== 's')
+    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
-  const customerTypes = useMemo(() => [...state.customerTypes].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  const customerTypes = useMemo(() => [...state.customerTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.customerTypes])
-  const locations = useMemo(() => [...state.locations].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1)
   , [state.locations])
   const handleSubmit = () => {
     const customer = {
@@ -76,9 +76,9 @@ const EditCustomer = props => {
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {customerTypes.map(rec => 
-              <option key={rec.id} value={rec.id}>
-                {rec.name}
+            {customerTypes.map(t => 
+              <option key={t.id} value={t.id}>
+                {t.name}
               </option>
             )}
           </select>
@@ -96,9 +96,9 @@ const EditCustomer = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {stores.map(rec => 
-              <option key={rec.id} value={rec.id}>
-                {rec.name}
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>
+                {s.name}
               </option>
             )}
           </select>
@@ -116,9 +116,9 @@ const EditCustomer = props => {
         >
           <select name="location" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {locations.map(rec => 
-              <option key={rec.id} value={rec.id}>
-                {rec.name}
+            {locations.map(l => 
+              <option key={l.id} value={l.id}>
+                {l.name}
               </option>
             )}
           </select>

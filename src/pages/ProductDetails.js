@@ -8,31 +8,19 @@ import BottomToolbar from './BottomToolbar'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(rec => rec.id === props.id)
+  const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
-  const packsTags = useMemo(() => {
-    const packs = state.packs.filter(rec => rec.productId === props.id)
-    return packs.map(rec => 
-      <ListItem 
-        title={rec.name} 
-        footer={moment(rec.time.toDate()).fromNow()} 
-        after={rec.price ? (rec.price / 1000).toFixed(3) : ''} 
-        key={rec.id} 
-        link={`/packDetails/${rec.id}`}
-      >
-        {rec.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
-      </ListItem>
-    )
-  }, [state.packs, props.id, state.labels]) 
+  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id)
+  , [state.packs, props.id]) 
   return (
     <Page>
       <Navbar title={product.name} backLink={state.labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt=""/>
+          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
         </CardContent>
         <CardFooter>
-          <p>{`${state.labels.productOf} ${state.countries.find(rec => rec.id === product.country).name}`}</p>
+          <p>{`${state.labels.productOf} ${state.countries.find(c => c.id === product.country).name}`}</p>
           <p><Rating rating={product.rating} /></p>
         </CardFooter>
       </Card>
@@ -47,7 +35,17 @@ const ProductDetails = props => {
       </Row>
       </BlockTitle>
       <List>
-        {packsTags}
+        {packs.map(p => 
+          <ListItem 
+            title={p.name} 
+            footer={moment(p.time.toDate()).fromNow()} 
+            after={p.price ? (p.price / 1000).toFixed(3) : ''} 
+            key={p.id} 
+            link={`/packDetails/${p.id}`}
+          >
+            {p.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
+          </ListItem>
+        )}
       </List>
       <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editProduct/${props.id}`)}>
         <Icon material="edit"></Icon>

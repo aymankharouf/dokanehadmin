@@ -6,18 +6,19 @@ import { StoreContext } from '../data/Store';
 
 const Countries = props => {
   const { state } = useContext(StoreContext)
-  const countries = useMemo(() => [...state.countries].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.countries])
+  const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  , [state.countries])
 
   return (
     <Page>
       <Navbar title={state.labels.countries} backLink={state.labels.back} />
       <Block>
         <List>
-          {countries && countries.map(rec =>
+          {countries && countries.map(c =>
             <ListItem
-              link={`/editCountry/${rec.id}`}
-              title={rec.name} 
-              key={rec.id}
+              link={`/editCountry/${c.id}`}
+              title={c.name} 
+              key={c.id}
             />
           )}
           {countries.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

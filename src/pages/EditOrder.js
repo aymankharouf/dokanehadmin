@@ -5,9 +5,9 @@ import { updateOrderStatus, editOrder, showMessage } from '../data/Actions';
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const order = useMemo(() => state.orders.find(rec => rec.id === props.id)
+  const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
-  const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((a, pack) => a + (pack.price * pack.quantity), 0) : 0
+  const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((sum, p) => sum + (p.price * p.quantity), 0) : 0
   , [state.orderBasket])
   const handleChangePack = (pack, value) => {
     if (pack.quantity === 0 && value === -1) return 
@@ -38,25 +38,25 @@ const EditOrder = props => {
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {state.orderBasket && state.orderBasket.map(pack => {
-            const packInfo = state.packs.find(rec => rec.id === pack.id)
-            const productInfo = state.products.find(rec => rec.id === packInfo.productId)
+          {state.orderBasket && state.orderBasket.map(p => {
+            const packInfo = state.packs.find(pa => pa.id === p.id)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
                 title={productInfo.name}
-                footer={((pack.price * pack.quantity) / 1000).toFixed(3)}
+                footer={((p.price * p.quantity) / 1000).toFixed(3)}
                 subtitle={packInfo.name}
-                key={pack.id}
+                key={p.id}
               >
-                <img slot="media" src={productInfo.imageUrl} width="80" alt="" />
+                <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
                 <Stepper
                   slot="after"
                   fill
                   buttonsOnly
-                  onStepperPlusClick={() => handleChangePack(pack, 1)}
-                  onStepperMinusClick={() => handleChangePack(pack, -1)}
+                  onStepperPlusClick={() => handleChangePack(p, 1)}
+                  onStepperMinusClick={() => handleChangePack(p, -1)}
                 />
-                  <Badge slot="title" color={pack.purchasedQuantity === pack.quantity ? 'green' : 'red'}>{`${pack.unavailableQuantity ? '(' + pack.unavailableQuantity + ')' : ''} ${pack.purchasedQuantity} - ${pack.quantity}`}</Badge>
+                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
               </ListItem>
             )
           })}

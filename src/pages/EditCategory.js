@@ -7,10 +7,12 @@ import BottomToolbar from './BottomToolbar';
 
 const EditCategory = props => {
   const { state } = useContext(StoreContext)
-  const category = useMemo(() => state.categories.find(rec => rec.id === props.id)
+  const category = useMemo(() => state.categories.find(c => c.id === props.id)
   , [state.categories, props.id])
   const [name, setName] = useState(category.name)
   const [unitType, setUnitType] = useState(category.unitType || '')
+  const unitTypes = useMemo(() => [...state.unitTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.unitTypes])
   const handleEdit = () => {
     editCategory({
       id: category.id,
@@ -21,9 +23,7 @@ const EditCategory = props => {
       props.f7router.back()
     })
   }
-  const unitTypesTags = useMemo(() => state.unitTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.unitTypes])
+  
   return (
     <Page>
       <Navbar title={state.labels.editCategory} backLink={state.labels.back} />
@@ -49,7 +49,9 @@ const EditCategory = props => {
         >
           <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
             <option value=""></option>
-            {unitTypesTags}
+            {unitTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
       </List>

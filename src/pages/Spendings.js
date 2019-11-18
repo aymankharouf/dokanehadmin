@@ -8,20 +8,21 @@ import { StoreContext } from '../data/Store';
 
 const Spendings = props => {
   const { state } = useContext(StoreContext)
-  const spendings = useMemo(() => [...state.spendings].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.spendings])
+  const spendings = useMemo(() => [...state.spendings].sort((s1, s2) => s2.time.seconds - s1.time.seconds)
+  , [state.spendings])
   return(
     <Page>
       <Navbar title={state.labels.spendings} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {spendings && spendings.map(spending => {
+          {spendings && spendings.map(s => {
             return (
               <ListItem
-                link={`/editSpending/${spending.id}`}
-                title={state.spendingTypes.find(rec => rec.id === spending.type).name}
-                after={(spending.spendingAmount / 1000).toFixed(3)}
-                subtitle={moment(spending.time.toDate()).fromNow()}
-                key={spending.id}
+                link={`/editSpending/${s.id}`}
+                title={state.spendingTypes.find(t => t.id === s.type).name}
+                after={(s.spendingAmount / 1000).toFixed(3)}
+                subtitle={moment(s.time.toDate()).fromNow()}
+                key={s.id}
               />
             )
           }

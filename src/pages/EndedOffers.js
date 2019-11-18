@@ -6,27 +6,27 @@ import moment from 'moment'
 
 const EndedOffers = props => {
   const { state } = useContext(StoreContext)
-  const packs = useMemo(() => state.packs.filter(rec => rec.stores.find(store => store.offerEnd && new Date() > store.offerEnd.toDate()))
+  const packs = useMemo(() => state.packs.filter(p => p.stores.find(s => s.offerEnd && new Date() > s.offerEnd.toDate()))
   , [state.packs])
   const packStores = useMemo(() => {
     let stores = []
     let i = 0
-    packs.forEach(pack => {
-      pack.stores.forEach(store => {
-        if (store.offerEnd && new Date() > store.offerEnd.toDate()){
+    packs.forEach(p => {
+      p.stores.forEach(s => {
+        if (s.offerEnd && new Date() > s.offerEnd.toDate()){
           stores.push({
-            packId: pack.id,
-            productId: pack.productId,
-            name: pack.name,
-            storeId: store.id,
-            price: store.price,
-            offerEnd: store.offerEnd,
+            packId: p.id,
+            productId: p.productId,
+            name: p.name,
+            storeId: s.id,
+            price: s.price,
+            offerEnd: s.offerEnd,
             id: i++
           })
         }
       })
     })
-    stores.sort((rec1, rec2) => rec1.offerEnd.seconds - rec2.offerEnd.seconds)
+    stores.sort((s1, s2) => s1.offerEnd.seconds - s2.offerEnd.seconds)
     return stores
   }, [packs])
   return(
@@ -34,20 +34,20 @@ const EndedOffers = props => {
       <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} />
         <Block>
           <List mediaList>
-            {packStores && packStores.map(packStore => {
-              const productInfo = state.products.find(rec => rec.id === packStore.productId)
+            {packStores && packStores.map(p => {
+              const productInfo = state.products.find(pr => pr.id === p.productId)
               return (
                 <ListItem
-                  link={`/editPrice/${packStore.storeId}/pack/${packStore.packId}`}
+                  link={`/editPrice/${p.storeId}/pack/${p.packId}`}
                   title={productInfo.name}
-                  after={(packStore.price / 1000).toFixed(3)}
-                  subtitle={packStore.name}
-                  text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === productInfo.country).name}`}
-                  footer={state.stores.find(rec => rec.id === packStore.storeId).name}
-                  key={packStore.id}
+                  after={(p.price / 1000).toFixed(3)}
+                  subtitle={p.name}
+                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
+                  footer={state.stores.find(s => s.id === p.storeId).name}
+                  key={p.id}
                 >
-                  <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt=""/>
-                  <Badge slot="footer" color="red">{moment(packStore.offerEnd.toDate()).format('DD/MM/YYYY')}</Badge>
+                  <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
+                  <Badge slot="footer" color="red">{moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}</Badge>
                 </ListItem>
               )
             })}

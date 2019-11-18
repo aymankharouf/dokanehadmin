@@ -7,7 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditTrademark = props => {
   const { state } = useContext(StoreContext)
-  const trademark = useMemo(() => state.trademarks.find(rec => rec.id === props.id)
+  const trademark = useMemo(() => state.trademarks.find(t => t.id === props.id)
   , [state.trademarks, props.id])
   const [name, setName] = useState(trademark.name)
   const handleEdit = () => {

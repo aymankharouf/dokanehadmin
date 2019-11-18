@@ -7,15 +7,15 @@ import { deleteStorePack, confirmPrice, showMessage } from '../data/Actions'
 const StorePackDetails = props => {
   const { state } = useContext(StoreContext)
   const pack = useMemo(() => {
-    let pack = state.packs.find(rec => rec.id === props.packId)
+    let pack = state.packs.find(p => p.id === props.packId)
     return {
       ...pack,
-      price: pack.stores.find(rec => rec.id === props.storeId).price
+      price: pack.stores.find(s => s.id === props.storeId).price
     }
   }, [state.packs, props.packId, props.storeId])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.storeId)
+  const store = useMemo(() => state.stores.find(s => s.id === props.storeId)
   , [state.stores, props.storeId])
   const handleEditPrice = () => {
     props.f7router.navigate(`/editPrice/${props.storeId}/pack/${props.packId}`)
@@ -39,7 +39,7 @@ const StorePackDetails = props => {
       <Block>
         <Card>
           <CardContent>
-            <img src={product.imageUrl} width="100%" height="250" alt=""/>
+            <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
           </CardContent>
           <CardFooter>
             <p>{pack.name}</p>

@@ -6,9 +6,9 @@ import { StoreContext } from '../data/Store';
 
 const EditPack = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
@@ -20,9 +20,13 @@ const EditPack = props => {
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [isBonusFree, setIsBonusFree] = useState(pack.isBonusFree)
+  const offerPacks = useMemo(() => state.packs.filter(p => p.productId === props.id && p.isOffer === false)
+  , [state.packs, props.id])
+  const bonusProducts = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  , [state.products]) 
   useEffect(() => {
     if (bonusProductId) {
-      setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
+      setBonusProductPacks(state.packs.filter(p => p.productId === bonusProductId && p.isOffer === false))
     } else {
       setBonusProductPacks([])
     }
@@ -56,28 +60,6 @@ const EditPack = props => {
       props.f7router.back()
     })
   }
-  const offerPacksTags = useMemo(() => {
-    const offerProductPacks = state.packs.filter(rec => rec.productId === props.id && rec.isOffer === false)
-    return offerProductPacks.map(rec => 
-      <option key={rec.id} value={rec.id}>
-        {rec.name}
-      </option>
-    )
-  }, [state.packs, props.id])
-  const bonusProductsTags = useMemo(() => {
-    const products = state.products
-    products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return products.map(rec => 
-      <option key={rec.id} value={rec.id}>
-        {rec.name}
-      </option>
-    )
-  }, [state.products]) 
-  const bonusPacksTags = useMemo(() => bonusProductPacks.map(rec => 
-    <option key={rec.id} value={rec.id}>
-      {rec.name}
-    </option>
-  ), [bonusProductPacks])
   return (
     <Page>
       <Navbar title={`${state.labels.editPack} - ${product.name} ${pack.name}`} backLink={state.labels.back} />
@@ -128,7 +110,9 @@ const EditPack = props => {
             >
               <select name="packId" defaultValue={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
                 <option value=""></option>
-                {offerPacksTags}
+                {offerPacks.map(p => 
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                )}
               </select>
             </ListItem>
             <ListInput 
@@ -148,7 +132,12 @@ const EditPack = props => {
           <List>
             <ListItem>
               <span>{state.labels.isBonusFree}</span>
-              <Toggle name="isBonusFree" color="green" checked={isBonusFree} onToggleChange={() => setIsBonusFree(!isBonusFree)}/>
+              <Toggle 
+              name="isBonusFree" 
+              color="green" 
+              checked={isBonusFree} 
+              onToggleChange={() => setIsBonusFree(!isBonusFree)}
+            />
             </ListItem>
             <ListItem
               title={state.labels.product}
@@ -161,9 +150,11 @@ const EditPack = props => {
                 popupCloseLinkText: state.labels.close
               }}
             >
-              <select name="bonusProductId" defaultValue={bonusProductId} onChange={(e) => setBonusProductId(e.target.value)}>
+              <select name="bonusProductId" defaultValue={bonusProductId} onChange={e => setBonusProductId(e.target.value)}>
                 <option value=""></option>
-                {bonusProductsTags}
+                {bonusProducts.map(p => 
+                  <option key={p.id} value={p.id}>{parseInt.name}</option>
+                )}
               </select>
             </ListItem>
             <ListItem
@@ -179,7 +170,9 @@ const EditPack = props => {
             >
               <select name="bonusPackId" defaultValue={bonusPackId} onChange={(e) => setBonusPackId(e.target.value)}>
                 <option value=""></option>
-                {bonusPacksTags}
+                {bonusProductPacks.map(p => 
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                )}
               </select>
             </ListItem>
             <ListInput 

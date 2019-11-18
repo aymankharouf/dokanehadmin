@@ -7,17 +7,17 @@ import { approveUser, showMessage } from '../data/Actions'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState('')
   const [address, setAddress] = useState('')
   const [storeId, setStoreId] = useState('')
   const stores = useMemo(() => {
-    const stores = state.stores.filter(rec => rec.id !== 's')
-    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    const stores = state.stores.filter(s => s.id !== 's')
+    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
-  const locations = useMemo(() => [...state.locations].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1)
   , [state.locations]) 
   const handleSubmit = () => {
     approveUser({
@@ -72,10 +72,8 @@ const ApproveUser = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {stores.map(rec => 
-              <option key={rec.id} value={rec.id}>
-                {rec.name}
-              </option>
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>
         </ListItem>
@@ -92,10 +90,8 @@ const ApproveUser = props => {
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {locations.map(rec => 
-              <option key={rec.id} value={rec.id}>
-                {rec.name}
-              </option>
+            {locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
         </ListItem>

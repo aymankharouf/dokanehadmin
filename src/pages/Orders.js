@@ -12,15 +12,15 @@ const Orders = props => {
       <Navbar sliding title={state.labels.orders} backLink={state.labels.back} />
       <Block>
 				<List>
-          {state.orderStatus.map(status => {
-            const count = state.orders.filter(rec => rec.status === status.id).length
+          {state.orderStatus.map(s => {
+            const count = state.orders.filter(o => o.status === s.id).length
             return (
               <ListItem 
-                title={status.name} 
+                title={s.name} 
                 badge={count} 
                 badgeColor={state.randomColors[i++ % 10].name} 
-                link={`/ordersList/${status.id}/`} 
-                key={status.id}
+                link={`/ordersList/${s.id}/`} 
+                key={s.id}
               />
             )
           })}

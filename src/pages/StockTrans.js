@@ -8,21 +8,22 @@ import BottomToolbar from './BottomToolbar';
 
 const StockTrans = props => {
   const { state } = useContext(StoreContext)
-  const stockTrans = useMemo(() => [...state.stockTrans].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.stockTrans])
+  const stockTrans = useMemo(() => [...state.stockTrans].sort((t1, t2) => t2.time.seconds - t1.time.seconds)
+  , [state.stockTrans])
   return(
     <Page>
       <Navbar title={state.labels.stockTrans} backLink={state.labels.back} />
       <Block>
           <List mediaList>
-            {stockTrans && stockTrans.map(trans => 
+            {stockTrans && stockTrans.map(t => 
               <ListItem
-                link={`/stockTrans/${trans.id}`}
-                title={state.stockTransTypes.find(rec => rec.id === trans.type).name}
-                text={moment(trans.time.toDate()).fromNow()}
-                key={trans.id}
+                link={`/stockTrans/${t.id}`}
+                title={state.stockTransTypes.find(ty => ty.id === t.type).name}
+                text={moment(t.time.toDate()).fromNow()}
+                key={t.id}
               />
             )}
-            { stockTrans.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+            {stockTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Toolbar bottom>

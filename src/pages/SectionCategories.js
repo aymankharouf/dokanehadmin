@@ -6,11 +6,11 @@ import { StoreContext } from '../data/Store';
 
 const SectionCategories = props => {
   const { state } = useContext(StoreContext)
-  const section = useMemo(() => state.sections.find(rec => rec.id === props.id)
+  const section = useMemo(() => state.sections.find(s => s.id === props.id)
   , [state.sections, props.id])
   const categories = useMemo(() => {
-    const categories = state.categories.filter(rec => rec.sectionId === props.id)
-    return categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+    const categories = state.categories.filter(c => c.sectionId === props.id)
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   }, [state.categories, props.id])
 
   return (
@@ -18,11 +18,11 @@ const SectionCategories = props => {
       <Navbar title={`${state.labels.categories} - ${section.name}`} backLink={state.labels.back} />
       <Block>
         <List>
-          {categories && categories.map(rec =>
+          {categories && categories.map(c =>
             <ListItem 
-              link={`/editCategory/${rec.id}`}
-              title={rec.name} 
-              key={rec.id} 
+              link={`/editCategory/${c.id}`}
+              title={c.name} 
+              key={c.id} 
             />
           )}
           {categories.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

@@ -9,20 +9,20 @@ import { StoreContext } from '../data/Store';
 const NewUsers = props => {
   const { state } = useContext(StoreContext)
   const newUsers = useMemo(() => {
-    const newUsers = state.users.filter(user => !state.customers.find(rec => rec.id === user.id))
-    return newUsers.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+    const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id))
+    return newUsers.sort((u1, u2) => u1.time.seconds - u2.time.seconds)
   }, [state.users, state.customers])
   return(
     <Page>
       <Navbar title={state.labels.newUsers} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {newUsers && newUsers.map(user => 
+          {newUsers && newUsers.map(u => 
             <ListItem
-              link={`/approveUser/${user.id}`}
-              title={`${user.name} - ${user.mobile}`}
-              subtitle={moment(user.time.toDate()).fromNow()}
-              key={user.id}
+              link={`/approveUser/${u.id}`}
+              title={`${u.name} - ${u.mobile}`}
+              subtitle={moment(u.time.toDate()).fromNow()}
+              key={u.id}
             />
           )}
           {newUsers.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

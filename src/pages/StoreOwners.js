@@ -6,23 +6,23 @@ import { StoreContext } from '../data/Store';
 
 const StoreOwners = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
+  const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
-  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id)
+  const storeOwners = useMemo(() => state.customers.filter(c => c.storeId === props.id)
   , [state.customers, props.id])
   return (
     <Page>
       <Navbar title={`${state.labels.storeOwners} - ${store.name}`} backLink={state.labels.back} />
       <Block>
         <List>
-          {storeOwners && storeOwners.map(rec => {
-            const userInfo = state.users.find(user => user.id === rec.id)
+          {storeOwners && storeOwners.map(o => {
+            const userInfo = state.users.find(u => u.id === o.id)
             return (
               <ListItem 
                 link="#"
                 title={userInfo.name} 
                 footer={userInfo.mobile}
-                key={rec.id} 
+                key={o.id} 
               />
             )
           })}

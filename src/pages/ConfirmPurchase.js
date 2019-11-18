@@ -8,8 +8,10 @@ import { confirmPurchase, stockOut, showMessage } from '../data/Actions'
 
 const ConfirmPurchase = props => {
   const { state, user, dispatch } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === state.basket.storeId), [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0), [state.basket])
+  const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
+  , [state.basket, state.stores])
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
+  , [state.basket])
   const [discount, setDiscount] = useState('')
   const [discountErrorMessage, setDiscountErrorMessage] = useState('')
   useEffect(() => {
@@ -24,17 +26,17 @@ const ConfirmPurchase = props => {
   }, [discount, state.labels, total])
 
   const handlePurchase = () => {
-    const basket = state.basket.packs.map(pack => {
+    const basket = state.basket.packs.map(p => {
       return ({
-        id: pack.id,
-        quantity: pack.quantity,
-        price: pack.price,
-        actualPrice: pack.actualPrice,
-        purchasePrice: pack.purchasePrice,
-        stores: pack.stores
+        id: p.id,
+        quantity: p.quantity,
+        price: p.price,
+        actualPrice: p.actualPrice,
+        purchasePrice: p.purchasePrice,
+        stores: p.stores
       })
     })
-    const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
     if (store.id === 's') {
       stockOut(approvedOrders, basket).then(() => {
         showMessage(props, 'success', state.labels.purchaseSuccess)
@@ -55,14 +57,14 @@ const ConfirmPurchase = props => {
     <Navbar title={`${state.labels.confirmPurchase} - ${store.name}`} backLink={state.labels.back} />
     <Block>
         <List>
-          {state.basket.packs && state.basket.packs.map(pack => 
+          {state.basket.packs && state.basket.packs.map(p => 
             <ListItem 
-              key={pack.id} 
-              title={state.products.find(rec => rec.id === pack.productId).name}
-              footer={pack.name} 
-              after={((pack.purchasePrice * pack.quantity) / 1000).toFixed(3)}
+              key={p.id} 
+              title={state.products.find(pr => pr.id === p.productId).name}
+              footer={p.name} 
+              after={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
             >
-              {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
+              {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : null}
             </ListItem>
           )}
           <ListItem 

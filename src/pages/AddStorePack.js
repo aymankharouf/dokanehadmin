@@ -6,8 +6,6 @@ import { StoreContext } from '../data/Store';
 
 const AddStorePack = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
-  , [state.stores, props.id])
   const [productId, setProductId] = useState('')
   const [packId, setPackId] = useState('')
   const [productPacks, setProductPacks] = useState([])
@@ -18,6 +16,10 @@ const AddStorePack = props => {
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
   const [offerEnd, setOfferEnd] = useState('')
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
+  const store = useMemo(() => state.stores.find(s => s.id === props.id)
+  , [state.stores, props.id])
+  const products = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  , [state.products])
   useEffect(() => {
     const validatePrice = value => {
       if (value > 0 && (price ? price >= value : true)){
@@ -40,8 +42,8 @@ const AddStorePack = props => {
   }, [price, purchasePrice, state.labels])
   useEffect(() => {
     if (productId) {
-      setProduct(state.products.find(rec => rec.id === productId))
-      setProductPacks(state.packs.filter(rec => rec.productId === productId))
+      setProduct(state.products.find(p => p.id === productId))
+      setProductPacks(state.packs.filter(p => p.productId === productId))
     } else {
       setProduct('')
       setProductPacks([])
@@ -61,7 +63,7 @@ const AddStorePack = props => {
   const handleSubmit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
     addStorePack(
-      state.packs.find(rec => rec.id === packId),
+      state.packs.find(p => p.id === packId),
       store,
       parseInt(purchasePrice * 1000),
       parseInt(price * 1000),
@@ -72,16 +74,6 @@ const AddStorePack = props => {
     })
   }
 
-  const productsTags = useMemo(() => {
-    const products = state.products
-    products.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return products.map(rec => 
-      <option key={rec.id} value={rec.id}>{rec.name}</option>
-    )
-  }, [state.products])
-  const packsTags = useMemo(() => productPacks.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [productPacks])
   return (
     <Page>
       <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink={state.labels.back} />
@@ -97,9 +89,11 @@ const AddStorePack = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="productId" defaultValue="" onChange={(e) => setProductId(e.target.value)}>
+          <select name="productId" defaultValue="" onChange={e => setProductId(e.target.value)}>
             <option value=""></option>
-            {productsTags}
+            {products.map(p => 
+              <option key={p.id} value={p.id}>{p.name}</option>
+            )}
           </select>
         </ListItem>
         <ListItem
@@ -113,9 +107,11 @@ const AddStorePack = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="packId" defaultValue="" onChange={(e) => setPackId(e.target.value)}>
+          <select name="packId" defaultValue="" onChange={e => setPackId(e.target.value)}>
             <option value=""></option>
-            {packsTags}
+            {productPacks.map(p => 
+              <option key={p.id} value={p.id}>{p.name}</option>
+            )}
           </select>
         </ListItem>
         <ListInput 
@@ -153,7 +149,7 @@ const AddStorePack = props => {
           onCalendarChange={value => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
-        <img src={product.imageUrl} alt=""/>
+        <img src={product.imageUrl} alt={product.name} />
       </List>
       {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
       ? '' 

@@ -9,20 +9,24 @@ import { approvePriceAlarm, rejectPriceAlarm, showMessage } from '../data/Action
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
   const [store, setStore] = useState('')
-  const priceAlarm = useMemo(() => state.priceAlarms.find(rec => rec.id === props.id)
+  const priceAlarm = useMemo(() => state.priceAlarms.find(a => a.id === props.id)
   , [state.priceAlarms, props.id])
-  const pack = useMemo(() => state.packs.find(rec => rec.id === priceAlarm.packId)
+  const pack = useMemo(() => state.packs.find(p => p.id === priceAlarm.packId)
   , [state.packs, priceAlarm])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === priceAlarm.user)
+  const userInfo = useMemo(() => state.users.find(u => u.id === priceAlarm.user)
   , [state.users, priceAlarm])
-  const customer = useMemo(() => state.customers.find(rec => rec.id === priceAlarm.user)
+  const customer = useMemo(() => state.customers.find(c => c.id === priceAlarm.user)
   , [state.customers, priceAlarm])
-  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).name : priceAlarm.storeName
+  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(s => s.id === customer.storeId).name : priceAlarm.storeName
   , [customer, state.stores, priceAlarm])
-  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(rec => rec.id === customer.storeId).address : priceAlarm.storePlace
+  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(s => s.id === customer.storeId).address : priceAlarm.storePlace
   , [customer, state.stores, priceAlarm])
+  const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  , [state.stores])
+  const prices = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
+  , [pack])
   const handleApprove = () => {
     approvePriceAlarm(priceAlarm, pack, store, customer).then(() => {
       showMessage(props, 'success', state.labels.approveSuccess)
@@ -35,32 +39,7 @@ const PriceAlarmDetails = props => {
       props.f7router.back()
     })
   }
-  const storesTags = useMemo(() => {
-    const stores = state.stores
-    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return stores.map(rec => 
-      <option key={rec.id} value={rec.id}>{rec.name}</option>
-    )
-  }, [state.stores])
 
-  const pricesTags = useMemo(() => {
-    let packStores = pack.stores
-    packStores.sort((rec1, rec2) => rec1.price - rec2.price)
-    packStores = packStores.map(packStore => {
-      const currentStore = state.stores.find(rec => rec.id === packStore.id)
-      return {...packStore, name: currentStore.name}
-    })
-    return packStores.map(rec => 
-      <ListItem 
-        title={rec.name} 
-        footer={moment(rec.time.toDate()).fromNow()} 
-        after={(rec.price / 1000).toFixed(3)} 
-        key={rec.id} 
-      >
-        {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : null}
-      </ListItem>
-    )
-  }, [pack, state.stores])
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
@@ -81,8 +60,8 @@ const PriceAlarmDetails = props => {
       </Fab>
       <Card>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt=""/>
-          <p>{`${userInfo.name} ${userInfo.mobile} (${state.customerTypes.find(rec => rec.id === customer.type).name})`}</p>
+          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
+          <p>{`${userInfo.name} ${userInfo.mobile} (${state.customerTypes.find(t => t.id === customer.type).name})`}</p>
           <p>{`${storeName} ${storeAddress}`}</p>
         </CardContent>
         <CardFooter>
@@ -103,15 +82,29 @@ const PriceAlarmDetails = props => {
               popupCloseLinkText: state.labels.close
             }}
           >
-            <select name='store' value={store} onChange={(e) => setStore(e.target.value)}>
+            <select name='store' value={store} onChange={e => setStore(e.target.value)}>
               <option value=""></option>
-              {storesTags}
+              {stores.map(s => 
+                <option key={s.id} value={s.id}>{s.name}</option>
+              )}
             </select>
           </ListItem>
         </List>
       }
       <List>
-        {pricesTags}
+        {prices.map(s => {
+          const currentStore = state.stores.find(st => st.id === s.id)
+          return (
+            <ListItem 
+              title={currentStore.name} 
+              footer={moment(s.time.toDate()).fromNow()} 
+              after={(s.price / 1000).toFixed(3)} 
+              key={s.id} 
+            >
+              {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : null}
+            </ListItem>
+          )
+        })}
       </List>
       <Toolbar bottom>
         <BottomToolbar/>

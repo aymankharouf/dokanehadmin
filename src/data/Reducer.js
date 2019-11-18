@@ -15,20 +15,20 @@ const Reducer = (state, action) => {
           return {...state, basket: {storeId: action.params.store.id, packs: [pack]}}
         } else {
           if (state.basket.storeId !== action.params.store.id) return state
-          if (state.basket.packs && state.basket.packs.find(rec => rec.id === action.params.pack.id)) return state
+          if (state.basket.packs && state.basket.packs.find(p => p.id === action.params.pack.id)) return state
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'ADD_QUANTITY':
-        pack = state.basket.packs.find(rec => rec.id === action.pack.id)
-        otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
+        pack = state.basket.packs.find(p => p.id === action.pack.id)
+        otherPacks = state.basket.packs.filter(p => p.id !== action.pack.id)
         pack = {
           ...pack,
           quantity: pack.quantity + 1,
         }
         return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
       case 'REMOVE_QUANTITY':
-        pack = state.basket.packs.find(rec => rec.id === action.pack.id)
-        otherPacks = state.basket.packs.filter(rec => rec.id !== action.pack.id)
+        pack = state.basket.packs.find(p => p.id === action.pack.id)
+        otherPacks = state.basket.packs.filter(p => p.id !== action.pack.id)
         if (pack.quantity - 1 === 0) {
           if (otherPacks.length > 0){
             return {...state, basket: {...state.basket, packs: otherPacks}}
@@ -58,8 +58,8 @@ const Reducer = (state, action) => {
           orderBasket: []
         }
       case 'CHANGE_ORDER_PACK':
-        pack = state.orderBasket.find(rec => rec.id === action.params.pack.id)
-        otherPacks = state.orderBasket.filter(rec => rec.id !== action.params.pack.id)
+        pack = state.orderBasket.find(p => p.id === action.params.pack.id)
+        otherPacks = state.orderBasket.filter(p => p.id !== action.params.pack.id)
         pack = {
           ...pack,
           quantity: pack.quantity + action.params.value

@@ -4,10 +4,12 @@ import { StoreContext } from '../data/Store';
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === state.basket.storeId), [state.basket, state.stores])
-  const totalPrice = useMemo(() => state.basket.packs.reduce((a, pack) => a + (pack.purchasePrice * pack.quantity), 0), [state.basket])
+  const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
+  , [state.basket, state.stores])
+  const totalPrice = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
+  , [state.basket])
   const handleAdd = pack => {
-    const storeQuantity = pack.stores.find(rec => rec.id === store.id).quantity
+    const storeQuantity = pack.stores.find(s => s.id === store.id).quantity
     if (!storeQuantity || pack.quantity < Math.min(storeQuantity, pack.requestedQuantity)) {
       dispatch({type: 'ADD_QUANTITY', pack})
     }
@@ -22,24 +24,24 @@ const Basket = props => {
       <Navbar title={`${state.labels.basket_from} ${store.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {state.basket.packs && state.basket.packs.map(pack => {
-            const productInfo = state.products.find(rec => rec.id === pack.productId)
+          {state.basket.packs && state.basket.packs.map(p => {
+            const productInfo = state.products.find(pr => pr.id === p.productId)
             return (
               <ListItem
                 title={productInfo.name}
-                footer={((pack.purchasePrice * pack.quantity) / 1000).toFixed(3)}
-                subtitle={pack.name}
-                key={pack.id}
+                footer={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
+                subtitle={p.name}
+                key={p.id}
               >
-                <img slot="media" src={productInfo.imageUrl} width="80" alt="" />
+                <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
                 <Stepper
                   slot="after"
                   fill
                   buttonsOnly
-                  onStepperPlusClick={() => handleAdd(pack)}
-                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', pack})}
+                  onStepperPlusClick={() => handleAdd(p)}
+                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', p})}
                 />
-                {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : ''}
+                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
               </ListItem>
             )
           })}

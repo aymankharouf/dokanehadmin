@@ -7,9 +7,9 @@ import BottomToolbar from './BottomToolbar';
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(rec => rec.id === props.id)
+  const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
-  const storeOwners = useMemo(() => state.customers.filter(rec => rec.storeId === props.id)
+  const storeOwners = useMemo(() => state.customers.filter(c => c.storeId === props.id)
   , [state.customers, props.id])
   const [type, setType] = useState(store.type)
   const [name, setName] = useState(store.name)
@@ -44,9 +44,6 @@ const EditStore = props => {
       props.f7router.back()
     })
   }
-  const storeTypesTags = useMemo(() => state.storeTypes.map(rec => 
-    rec.id === '1' ? '' : <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.storeTypes])
   return (
     <Page>
       <Navbar title={state.labels.editStore} backLink={state.labels.back} />
@@ -86,7 +83,9 @@ const EditStore = props => {
         >
           <select name='type' value={type} onChange={(e) => setType(e.target.value)}>
             <option value=""></option>
-            {storeTypesTags}
+            {state.storeTypes.map(t => t.id === '1' ? '' : 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
         <ListInput 

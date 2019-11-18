@@ -6,7 +6,8 @@ import { StoreContext } from '../data/Store';
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
-  const sections = useMemo(() => [...state.sections].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1), [state.sections])
+  const sections = useMemo(() => [...state.sections].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  , [state.sections])
 
   return (
     <Page>
@@ -16,11 +17,11 @@ const Sections = props => {
       </Fab>
       <Block>
         <List>
-          {sections && sections.map(rec =>
+          {sections && sections.map(s =>
             <ListItem 
-              link={`/section/${rec.id}`} 
-              title={rec.name} 
-              key={rec.id} 
+              link={`/section/${s.id}`} 
+              title={s.name} 
+              key={s.id} 
             />
           )}
           {sections.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

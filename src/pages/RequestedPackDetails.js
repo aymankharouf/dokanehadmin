@@ -9,9 +9,9 @@ import 'moment/locale/ar'
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
 	const [error, setError] = useState('')
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.packId)
+  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   useEffect(() => {
     if (error) {
@@ -25,7 +25,7 @@ const RequestedPackDetails = props => {
 			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }
-      if (state.basket.packs && state.basket.packs.find(rec => rec.id === pack.id)) {
+      if (state.basket.packs && state.basket.packs.find(p => p.id === pack.id)) {
         throw new Error(state.labels.alreadyInBasket)
       }
       if (store.price > Number(props.price)){
@@ -42,7 +42,7 @@ const RequestedPackDetails = props => {
 		}
   }
   const handleUnavailable = () => {
-    const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
+    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
     packUnavailable(pack, Number(props.price), approvedOrders).then(() => {
       showMessage(props, 'success', state.labels.executeSuccess)
 			props.f7router.back()
@@ -50,21 +50,20 @@ const RequestedPackDetails = props => {
   }
   const packStores = useMemo(() => {
     let packStores = pack.stores
-    packStores.sort((rec1, rec2) => {
-      if (rec1.purchasePrice === rec2.purchasePrice) {
-        if (Number(state.stores.find(rec => rec.id === rec2.id).type) === Number(state.stores.find(rec => rec.id === rec1.id).type)){
-          return rec1.time.seconds - rec2.time.seconds
+    packStores.sort((s1, s2) => {
+      if (s1.purchasePrice === s2.purchasePrice) {
+        if (Number(state.stores.find(s => s.id === s2.id).type) === Number(state.stores.find(s => s.id === s1.id).type)){
+          return s1.time.seconds - s2.time.seconds
         } else {
-          return Number(state.stores.find(rec => rec.id === rec1.id).type) - Number(state.stores.find(rec => rec.id === rec2.id).type)
+          return Number(state.stores.find(s => s.id === s1.id).type) - Number(state.stores.find(s => s.id === s2.id).type)
         }
       } else {
-        return rec1.purchasePrice - rec2.purchasePrice
+        return s1.purchasePrice - s2.purchasePrice
       }
     })
-    packStores = packStores.map(packStore => {
-      const currentStore = state.stores.find(store => store.id === packStore.id)
-      const storeName = currentStore.name
-      return {...packStore, name: storeName}
+    packStores = packStores.map(s => {
+      const currentStore = state.stores.find(st => st.id === s.id)
+      return {...s, name: currentStore.name}
     })
     return packStores
   }, [pack, state.stores])
@@ -75,7 +74,7 @@ const RequestedPackDetails = props => {
       <Block>
         <Card>
           <CardContent>
-            <img src={product.imageUrl} width="100%" height="250" alt=""/>
+            <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
           </CardContent>
           <CardFooter>
             <p>{(props.price / 1000).toFixed(3)}</p>
@@ -91,16 +90,16 @@ const RequestedPackDetails = props => {
             />
             : ''
           }
-          {packStores.map(rec => 
+          {packStores.map(s => 
             <ListItem 
               link="#"
-              title={rec.name} 
-              footer={moment(rec.time.toDate()).fromNow()} 
-              after={(rec.price / 1000).toFixed(3)} 
-              key={rec.id}
-              onClick={() => handlePurchase(rec)}
+              title={s.name} 
+              footer={moment(s.time.toDate()).fromNow()} 
+              after={(s.price / 1000).toFixed(3)} 
+              key={s.id}
+              onClick={() => handlePurchase(s)}
             >
-              {rec.quantity ? <Badge slot='title' color='red'>{rec.quantity}</Badge> : ''}
+              {s.quantity ? <Badge slot='title' color='red'>{s.quantity}</Badge> : ''}
             </ListItem>
           )}
         </List>

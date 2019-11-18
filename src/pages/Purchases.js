@@ -8,22 +8,23 @@ import { StoreContext } from '../data/Store';
 
 const Purchases = props => {
   const { state } = useContext(StoreContext)
-  const purchases = useMemo(() => [...state.purchases].sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds), [state.purchases])
+  const purchases = useMemo(() => [...state.purchases].sort((p1, p2) => p2.time.seconds - p1.time.seconds)
+  , [state.purchases])
   return(
     <Page>
       <Navbar title={state.labels.purchases} backLink={state.labels.back} />
       <Block>
           <List mediaList>
-            {purchases && purchases.map(purchase => 
+            {purchases && purchases.map(p => 
               <ListItem
-                link={`/purchase/${purchase.id}`}
-                title={state.stores.find(rec => rec.id === purchase.storeId).name}
-                after={(purchase.total / 1000).toFixed(3)}
-                text={moment(purchase.time.toDate()).fromNow()}
-                key={purchase.id}
+                link={`/purchase/${p.id}`}
+                title={state.stores.find(s => s.id === p.storeId).name}
+                after={(p.total / 1000).toFixed(3)}
+                text={moment(p.time.toDate()).fromNow()}
+                key={p.id}
               />
             )}
-            { purchases.length === 0 ? <ListItem title={state.labels.noData} /> : null }
+            {purchases.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Toolbar bottom>

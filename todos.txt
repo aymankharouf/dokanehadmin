@@ -81,4 +81,4 @@ contact info in home page
 *delivery fees by region not customer
 product describtion
 products with weight
-
+edit delivery type for orders

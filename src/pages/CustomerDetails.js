@@ -6,15 +6,15 @@ import BottomToolbar from './BottomToolbar';
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
-  const customer = useMemo(() => state.customers.find(rec => rec.id === props.id)
+  const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
-  const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
+  const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
-  const storeName = useMemo(() => customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : ''
+  const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
-  const locationName = useMemo(() => customer.locationId ? state.locations.find(rec => rec.id === customer.locationId).name : ''
+  const locationName = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId).name : ''
   , [customer, state.locations])
-  const typeName = useMemo(() => state.customerTypes.find(rec => rec.id === customer.type).name
+  const typeName = useMemo(() => state.customerTypes.find(t => t.id === customer.type).name
   , [state.customerTypes, customer])
 
   return (

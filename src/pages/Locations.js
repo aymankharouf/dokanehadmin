@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const Locations = props => {
   const { state } = useContext(StoreContext)
-  const locations = useMemo(() => [...state.locations].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1)
   , [state.locations])
 
   return (
@@ -14,12 +14,12 @@ const Locations = props => {
       <Navbar title={state.labels.locations} backLink={state.labels.back} />
       <Block>
         <List>
-          {locations && locations.map(rec =>
+          {locations && locations.map(l =>
             <ListItem
-              link={`/editLocation/${rec.id}`}
-              title={rec.name}
-              after={(rec.deliveryFees / 1000).toFixed(3)}
-              key={rec.id}
+              link={`/editLocation/${l.id}`}
+              title={l.name}
+              after={(l.deliveryFees / 1000).toFixed(3)}
+              key={l.id}
             />
           )}
           {locations.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

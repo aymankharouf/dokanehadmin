@@ -12,6 +12,8 @@ const AddStore = props => {
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
+  const storeTypes = useMemo(() => [...state.storeTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.storeTypes])
 
   useEffect(() => {
     const patterns = {
@@ -39,9 +41,6 @@ const AddStore = props => {
       props.f7router.back()
     })
   }
-  const storeTypesOptionsTags = useMemo(() => state.storeTypes.map(rec => 
-    rec.id === '1' ? '' : <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.storeTypes])
   return (
     <Page>
       <Navbar title={state.labels.newStore} backLink={state.labels.back} />
@@ -81,7 +80,9 @@ const AddStore = props => {
         >
           <select name='type' defaultValue="" onChange={(e) => setType(e.target.value)}>
             <option value=""></option>
-            {storeTypesOptionsTags}
+            {storeTypes.map(t => 
+              t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
         <ListInput 

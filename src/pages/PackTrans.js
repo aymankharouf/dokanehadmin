@@ -8,37 +8,37 @@ import { StoreContext } from '../data/Store';
 
 const PackTrans = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const packTrans = useMemo(() => {
-    const stockTrans = state.stockTrans.filter(trans => trans.basket.find(rec => rec.id === pack.id))
-    const packTrans = stockTrans.map(trans => {
-      const transPack = trans.basket.find(rec => rec.id === pack.id)
+    const stockTrans = state.stockTrans.filter(t => t.basket.find(p => p.id === pack.id))
+    const packTrans = stockTrans.map(t => {
+      const transPack = t.basket.find(p => p.id === pack.id)
       return {
         ...transPack,
-        id: trans.id,
-        storeId: trans.storeId,
-        type: trans.type,
-        time: trans.time
+        id: t.id,
+        storeId: t.storeId,
+        type: t.type,
+        time: t.time
       }
     })
-    return packTrans.sort((rec1, rec2) => rec2.time.seconds - rec1.time.seconds)
+    return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
   }, [state.stockTrans, pack])
   return(
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {packTrans && packTrans.map(trans => 
+          {packTrans && packTrans.map(t => 
             <ListItem
-              title={trans.type === 's' || trans.type === 'i' ? state.stockTransTypes.find(rec => rec.id === trans.type).name : state.stores.find(rec => rec.id === trans.storeId).name}
-              subtitle={moment(trans.time.toDate()).fromNow()}
-              after={(trans.purchasePrice / 1000).toFixed(3)}
-              key={trans.id}
+              title={t.type === 's' || t.type === 'i' ? state.stockTransTypes.find(ty => ty.id === t.type).name : state.stores.find(s => s.id === t.storeId).name}
+              subtitle={moment(t.time.toDate()).fromNow()}
+              after={(t.purchasePrice / 1000).toFixed(3)}
+              key={t.id}
             >
-              <Badge slot="title" color="red">{trans.quantity}</Badge>
+              <Badge slot="title" color="red">{t.quantity}</Badge>
             </ListItem>
           )}
           {packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

@@ -6,7 +6,7 @@ import { editProduct, showMessage } from '../data/Actions'
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(rec => rec.id === props.id)
+  const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
   const [category, setCategory] = useState(product.category)
@@ -17,6 +17,12 @@ const EditProduct = props => {
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
+  const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  , [state.categories]) 
+  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.trademarks]) 
+  const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  , [state.countries]) 
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -47,27 +53,6 @@ const EditProduct = props => {
       props.f7router.back()
     })  
   }
-  const categoriesTags = useMemo(() => {
-    const categories = state.categories
-    categories.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return categories.map(rec => 
-      <option key={rec.id} value={rec.id}>{rec.name}</option>
-    )
-  }, [state.categories]) 
-  const trademarksTags = useMemo(() => {
-    const trademarks = state.trademarks
-    trademarks.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return trademarks.map(rec => 
-      <option key={rec.id} value={rec.id}>{rec.name}</option>
-    )
-  }, [state.trademarks]) 
-  const countriesTags = useMemo(() => {
-    const countries = state.countries
-    countries.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return countries.map(rec => 
-      <option key={rec.id} value={rec.id}>{rec.name}</option>
-    )
-  }, [state.countries]) 
   return (
     <Page>
       <Navbar title={state.labels.editProduct} backLink={state.labels.back} />
@@ -93,9 +78,11 @@ const EditProduct = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+          <select name="category" value={category} onChange={e => setCategory(e.target.value)}>
             <option value=""></option>
-            {categoriesTags}
+            {categories.map(c => 
+              <option key={c.id} value={c.id}>{c.name}</option>
+            )}
           </select>
         </ListItem>
         <ListItem
@@ -111,7 +98,9 @@ const EditProduct = props => {
         >
           <select name="trademark" value={trademark} onChange={(e) => setTrademark(e.target.value)}>
             <option value=""></option>
-            {trademarksTags}
+            {trademarks.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
         <ListItem
@@ -127,7 +116,9 @@ const EditProduct = props => {
         >
           <select name="country" value={country} onChange={(e) => setCountry(e.target.value)}>
             <option value=""></option>
-            {countriesTags}
+            {countries.map(c => 
+              <option key={c.id} value={c.id}>{c.name}</option>
+            )}
           </select>
         </ListItem>
         <ListItem>
@@ -157,7 +148,7 @@ const EditProduct = props => {
           errorMessageForce
           onChange={e => handleFileChange(e)}
         />
-        <img src={imageUrl} alt=""/>
+        <img src={imageUrl} alt={name} />
       </List>
       {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && trademark === product.trademark && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>

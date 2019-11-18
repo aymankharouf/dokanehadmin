@@ -7,24 +7,25 @@ import { StoreContext } from '../data/Store';
 
 const PurchaseDetails = props => {
   const { state, user } = useContext(StoreContext)
-  const purchase = useMemo(() => state.purchases.find(rec => rec.id === props.id), [state.purchases, props.id])
+  const purchase = useMemo(() => state.purchases.find(p => p.id === props.id)
+  , [state.purchases, props.id])
   if (!user) return <ReLogin callingPage="purchase"/>
   return(
     <Page>
       <Navbar title={state.labels.purchaseDetails} backLink={state.labels.back} />
       <Block>
           <List>
-            {purchase.basket && purchase.basket.map(pack => {
-              const packInfo = state.packs.find(rec => rec.id === pack.id)
-              const productInfo = state.products.find(rec => rec.id === packInfo.productId)
+            {purchase.basket && purchase.basket.map(p => {
+              const packInfo = state.packs.find(pa => pa.id === p.id)
+              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(pack.purchasePrice * pack.quantity / 1000).toFixed(3)}
-                  key={pack.id} 
+                  after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
+                  key={p.id} 
                 >
-                  {pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
+                  {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
                 </ListItem>
               )}
             )}

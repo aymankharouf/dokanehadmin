@@ -6,45 +6,45 @@ import { StoreContext } from '../data/Store';
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
 	const approvedOrders = useMemo(() => {
-		const approvedOrders = state.orders.filter(rec => rec.status === 'a' || rec.status === 'e')
-		return approvedOrders.sort((rec1, rec2) => rec1.time.seconds - rec2.time.seconds)
+		const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
+		return approvedOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
 	}, [state.orders])
 	
 	const [requiredPacks, setRequiredPacks] = useState([])
 	let i = 0
 	useEffect(() => {
 		let packsArray = []
-		approvedOrders.forEach(order => {
-			order.basket.forEach(pack => {
-				if (pack.quantity - pack.purchasedQuantity - (pack.unavailableQuantity ? pack.unavailableQuantity : 0)> 0) {
-					const found = packsArray.find(rec => rec.id === pack.id && rec.price === pack.price)
-					const packInfo = state.packs.find(rec => rec.id === pack.id)
+		approvedOrders.forEach(o => {
+			o.basket.forEach(p => {
+				if (p.quantity - p.purchasedQuantity - (p.unavailableQuantity ? p.unavailableQuantity : 0)> 0) {
+					const found = packsArray.find(pa => pa.id === p.id && pa.price === p.price)
+					const packInfo = state.packs.find(pa => pa.id === p.id)
 					if (found) {
-						packsArray = packsArray.filter(rec => rec.id !== found.id)
+						packsArray = packsArray.filter(pa => pa.id !== found.id)
 						packsArray.push({
 							...packInfo, 
-							price: pack.price, 
-							quantity: pack.quantity - pack.purchasedQuantity + found.quantity
+							price: p.price, 
+							quantity: p.quantity - p.purchasedQuantity + found.quantity
 						})
 					} else {
 						packsArray.push({
 							...packInfo, 
-							price: pack.price, 
-							quantity: pack.quantity - pack.purchasedQuantity
+							price: p.price, 
+							quantity: p.quantity - p.purchasedQuantity
 						})
 					}
 				}
 			})
 		})
-		packsArray = packsArray.map(pack => {
-			const inBasket = state.basket.packs ? state.basket.packs.find(rec => rec.id === pack.id && rec.price === pack.price) : false
+		packsArray = packsArray.map(p => {
+			const inBasket = state.basket.packs ? state.basket.packs.find(pa => pa.id === p.id && pa.price === p.price) : false
 			const inBasketQuantity = inBasket ? inBasket.quantity : 0
 			return {
-				...pack,
-				quantity: pack.quantity - inBasketQuantity
+				...p,
+				quantity: p.quantity - inBasketQuantity
 			}
 		})
-		setRequiredPacks(packsArray.filter(rec => rec.quantity > 0))
+		setRequiredPacks(packsArray.filter(p => p.quantity > 0))
 	}, [state.basket, approvedOrders, state.packs])
   return(
     <Page>
@@ -52,20 +52,20 @@ const RequestedPacks = props => {
       </Navbar>
       <Block>
 				<List mediaList>
-					{requiredPacks && requiredPacks.map(pack => {
-						const productInfo = state.products.find(rec => rec.id === pack.productId)
+					{requiredPacks && requiredPacks.map(p => {
+						const productInfo = state.products.find(pr => pr.id === p.productId)
 						return (
 							<ListItem
-								link={`/requestedPack/${pack.id}/quantity/${pack.quantity}/price/${pack.price}`}
+								link={`/requestedPack/${p.id}/quantity/${p.quantity}/price/${p.price}`}
 								title={productInfo.name}
-								after={(pack.price / 1000).toFixed(3)}
-								subtitle={pack.name}
-								text={`${state.labels.productOf} ${state.countries.find(rec => rec.id === productInfo.country).name}`}
+								after={(p.price / 1000).toFixed(3)}
+								subtitle={p.name}
+								text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
 								key={i++}
 								className={productInfo.status === 'd' ? 'disable-product' : ''}
 							>
-								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn" alt=""/>
-								{pack.quantity > 1 ? <Badge slot="title" color="red">{pack.quantity}</Badge> : null}
+								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn" alt={productInfo.name} />
+								{p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
 							</ListItem>
 						)
 					})}

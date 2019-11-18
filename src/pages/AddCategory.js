@@ -6,10 +6,12 @@ import { StoreContext } from '../data/Store';
 
 const AddCategory = props => {
   const { state } = useContext(StoreContext)
-  const section = useMemo(() => state.sections.find(rec => rec.id === props.id)
-  , [state.sections, props.id]) 
   const [name, setName] = useState('')
   const [unitType, setUnitType] = useState('')
+  const section = useMemo(() => state.sections.find(s => s.id === props.id)
+  , [state.sections, props.id]) 
+  const unitTypesOptions = useMemo(() => [...state.unitTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.unitTypes])
   const handleSubmit = () => {
     addCategory({
       sectionId: props.id,
@@ -20,9 +22,7 @@ const AddCategory = props => {
       props.f7router.back()
     })
   }
-  const unitTypesOptionsTags = useMemo(() => state.unitTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>{rec.name}</option>
-  ), [state.unitTypes])
+  
   return (
     <Page>
       <Navbar title={`${state.labels.addCategory} - ${section.name}`} backLink={state.labels.back} />
@@ -47,7 +47,9 @@ const AddCategory = props => {
         >
           <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
             <option value=""></option>
-            {unitTypesOptionsTags}
+            {unitTypesOptions.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
           </select>
         </ListItem>
       </List>

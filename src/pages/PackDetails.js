@@ -10,19 +10,12 @@ const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const today = (new Date()).setHours(0, 0, 0, 0)
-  const pack = useMemo(() => state.packs.find(rec => rec.id === props.id)
+  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(rec => rec.id === pack.productId)
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const packStores = useMemo(() => {
-    let packStores = pack.stores
-    packStores.sort((rec1, rec2) => rec1.price - rec2.price)
-    packStores = packStores.map(packStore => {
-      const currentStore = state.stores.find(rec => rec.id === packStore.id)
-      return {...packStore, name: currentStore.name}
-    })
-    return packStores
-  }, [pack, state.stores])
+  const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
+  , [pack])
   useEffect(() => {
     if (error) {
       showMessage(props, 'error', error)
@@ -49,26 +42,29 @@ const PackDetails = props => {
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt=""/>
+          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
         </CardFooter>
       </Card>
       <List>
-      {packStores.map(rec => 
-        <ListItem 
-          link="#"
-          title={rec.name} 
-          footer={moment(rec.time.toDate()).fromNow()} 
-          after={(rec.price / 1000).toFixed(3)} 
-          key={rec.id} 
-          onClick={() => handlePurchase(rec)}
-        >
-          {rec.quantity ? <Badge slot="title" color='red'>{rec.quantity}</Badge> : ''}
-          {rec.offerEnd && today > rec.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
-        </ListItem>
-      )}
+      {packStores.map(s => {
+        const currentStore = state.stores.find(st => st.id === s.id)
+        return (
+          <ListItem 
+            link="#"
+            title={currentStore.name} 
+            footer={moment(s.time.toDate()).fromNow()} 
+            after={(s.price / 1000).toFixed(3)} 
+            key={s.id} 
+            onClick={() => handlePurchase(s)}
+          >
+            {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : ''}
+            {s.offerEnd && today > s.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
+          </ListItem>
+        )
+      })}
       </List>
       <Fab position="left-top" slot="fixed" color="orange">
         <Icon material="keyboard_arrow_down"></Icon>
