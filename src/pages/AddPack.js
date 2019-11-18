@@ -17,7 +17,7 @@ const AddPack = props => {
   const [bonusPackId, setBonusPackId] = useState('')
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState('')
-  const [isBonusFree, setIsBonusFree] = useState('')
+  const [isBonusFree, setIsBonusFree] = useState(false)
   useEffect(() => {
     if (bonusProductId) {
       setBonusProductPacks(state.packs.filter(rec => rec.productId === bonusProductId && rec.isOffer === false))
@@ -32,7 +32,7 @@ const AddPack = props => {
       setBonusProductId('')
       setBonusPackId('')
       setBonusQuantity('')
-      setIsBonusFree('')
+      setIsBonusFree(false)
     }
   }, [isOffer])
 
@@ -83,7 +83,7 @@ const AddPack = props => {
           clearButton
           type="text" 
           value={name} 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
         <ListInput 
@@ -93,7 +93,7 @@ const AddPack = props => {
           clearButton
           type="number" 
           value={unitsCount} 
-          onChange={(e) => setUnitsCount(e.target.value)}
+          onChange={e => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
         />
         <ListItem>

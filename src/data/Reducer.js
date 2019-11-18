@@ -62,8 +62,7 @@ const Reducer = (state, action) => {
         otherPacks = state.orderBasket.filter(rec => rec.id !== action.params.pack.id)
         pack = {
           ...pack,
-          quantity: pack.quantity + action.params.value,
-          changes: (pack.changes ? pack.changes : 0) + action.params.value
+          quantity: pack.quantity + action.params.value
         }
         return {...state, orderBasket: [...otherPacks, pack]}
       case 'SET_COUNTRIES':
@@ -150,6 +149,16 @@ const Reducer = (state, action) => {
         return {
           ...state,
           monthlyTrans: action.monthlyTrans
+        }
+      case 'SET_COMMENTS':
+        return {
+          ...state,
+          comments: action.comments
+        }
+      case 'SET_LOCATIONS':
+        return {
+          ...state,
+          locations: action.locations
         }
       default:
         return state

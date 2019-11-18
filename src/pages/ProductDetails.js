@@ -42,7 +42,7 @@ const ProductDetails = props => {
           {state.labels.packs}
         </Col>
         <Col>
-          <Button small fill round iconMaterial="add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)}></Button>
+          <Button small fill round iconMaterial="add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)} />
         </Col>
       </Row>
       </BlockTitle>

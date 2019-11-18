@@ -10,22 +10,21 @@ const ApproveUser = props => {
   const userInfo = useMemo(() => state.users.find(rec => rec.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
-  const [address, setAddress] = useState(userInfo.address || '')
+  const [locationId, setLocationId] = useState('')
+  const [address, setAddress] = useState('')
   const [storeId, setStoreId] = useState('')
-  const storesTags = useMemo(() => {
+  const stores = useMemo(() => {
     const stores = state.stores.filter(rec => rec.id !== 's')
-    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return stores.map(rec => 
-      <option key={rec.id} value={rec.id}>
-        {rec.name}
-      </option>
-    )
+    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.stores]) 
+  const locations = useMemo(() => [...state.locations].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  , [state.locations]) 
   const handleSubmit = () => {
     approveUser({
       id: props.id,
       name,
       storeId,
+      locationId,
       address,
     }).then(() => {
       showMessage(props, 'success', state.labels.approveSuccess)
@@ -73,7 +72,31 @@ const ApproveUser = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {storesTags}
+            {stores.map(rec => 
+              <option key={rec.id} value={rec.id}>
+                {rec.name}
+              </option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={state.labels.location}
+          smartSelect
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {locations.map(rec => 
+              <option key={rec.id} value={rec.id}>
+                {rec.name}
+              </option>
+            )}
           </select>
         </ListItem>
         <ListInput 
@@ -82,7 +105,7 @@ const ApproveUser = props => {
           floatingLabel 
           type="text" 
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={e => setAddress(e.target.value)}
         />
       </List>
       <Toolbar bottom>

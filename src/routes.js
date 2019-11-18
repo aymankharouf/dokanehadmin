@@ -60,6 +60,10 @@ import MonthlyTrans from './pages/MonthlyTrans';
 import RetreivePassword from './pages/RetreivePassword';
 import StoreOwners from './pages/StoreOwners';
 import EditOrder from './pages/EditOrder';
+import ChangePassword from './pages/ChangePassword';
+import Locations from './pages/Locations';
+import AddLocation from './pages/AddLocation';
+import EditLocation from './pages/EditLocation';
 
 
 export default [
@@ -78,6 +82,10 @@ export default [
   {
     path: '/login/:callingPage',
     component: Login
+  },
+  {
+    path: '/changePassword/',
+    component: ChangePassword
   },
   {
     path: '/search/',
@@ -318,6 +326,18 @@ export default [
   {
     path: '/storeOwners/:id',
     component: StoreOwners,
+  },
+  {
+    path: '/locations/',
+    component: Locations
+  },
+  {
+    path: '/addLocation/',
+    component: AddLocation
+  },
+  {
+    path: '/editLocation/:id',
+    component: EditLocation
   },
   {
     path: '(.*)',

@@ -170,6 +170,14 @@ const labels = {
   withdrawals: 'السحوبات',
   expenses: 'المصاريف',
   confirmationText: 'هل انت متأكد من تنفيذ العملية؟',
+  changePassword: 'تغيير كلمة السر',
+  oldPassword: 'كلمة السر الحالية',
+  newPassword: 'كلمة السر الجديدة',
+  changePasswordSuccess: 'تم تغيير كلمة السر بنجاح',
+  locations: 'المواقع',
+  addLocation: 'اضافة موقع',
+  hasDelivery: 'خدمة التوصيل؟',
+  editLocation: 'تعديل موقع'
 }
 
 export default labels

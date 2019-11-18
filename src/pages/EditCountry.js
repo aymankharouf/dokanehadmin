@@ -28,8 +28,10 @@ const EditCountry = props => {
           label={state.labels.name}
           value={name}
           floatingLabel 
+          clearButton
           type="text" 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
       {!name || (name === country.name)

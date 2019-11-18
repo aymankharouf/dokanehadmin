@@ -12,6 +12,8 @@ const CustomerDetails = props => {
   , [state.users, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(rec => rec.id === customer.storeId).name : ''
   , [customer, state.stores])
+  const locationName = useMemo(() => customer.locationId ? state.locations.find(rec => rec.id === customer.locationId).name : ''
+  , [customer, state.locations])
   const typeName = useMemo(() => state.customerTypes.find(rec => rec.id === customer.type).name
   , [state.customerTypes, customer])
 
@@ -71,11 +73,11 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="deliveryFees" 
-          label={state.labels.deliveryFees}
-          value={(customer.deliveryFees / 1000).toFixed(3)}
+          name="locationName" 
+          label={state.labels.location}
+          value={locationName}
           floatingLabel 
-          type="number"
+          type="text"
           readonly
         />
         <ListInput 
@@ -87,7 +89,7 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="lessPriceDiscount" 
+          name="priceAlarmsDiscount" 
           label={state.labels.priceAlarmsDiscount}
           value={(customer.priceAlarmsDiscount / 1000).toFixed(3)}
           floatingLabel 

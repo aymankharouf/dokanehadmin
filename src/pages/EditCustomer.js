@@ -15,30 +15,24 @@ const EditCustomer = props => {
   const [address, setAddress] = useState(customer.address)
   const [type, setType] = useState(customer.type)
   const [storeId, setStoreId] = useState(customer.storeId)
-  const [deliveryFees, setDeliveryFees] = useState(customer.deliveryFees)
+  const [locationId, setLocationId] = useState(customer.locationId)
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [position, setPosition] = useState(customer.position)
-  const storesTags = useMemo(() => {
+  const stores = useMemo(() => {
     const stores = state.stores.filter(rec => rec.id !== 's')
-    stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
-    return stores.map(rec => 
-      <option key={rec.id} value={rec.id}>
-        {rec.name}
-      </option>
-    )
+    return stores.sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
   }, [state.stores]) 
-  const customerTypesTags = useMemo(() => state.customerTypes.map(rec => 
-    <option key={rec.id} value={rec.id}>
-      {rec.name}
-    </option>
-  ), [state.customerTypes])
+  const customerTypes = useMemo(() => [...state.customerTypes].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  , [state.customerTypes])
+  const locations = useMemo(() => [...state.locations].sort((rec1, rec2) => rec1.name > rec2.name ? 1 : -1)
+  , [state.locations])
   const handleSubmit = () => {
     const customer = {
       id: props.id,
       storeId,
       type,
       address,
-      deliveryFees: deliveryFees * 1000,
+      locationId,
       isOldAge,
       position
     }
@@ -82,7 +76,11 @@ const EditCustomer = props => {
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {customerTypesTags}
+            {customerTypes.map(rec => 
+              <option key={rec.id} value={rec.id}>
+                {rec.name}
+              </option>
+            )}
           </select>
         </ListItem>
         <ListItem
@@ -98,19 +96,33 @@ const EditCustomer = props => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {storesTags}
+            {stores.map(rec => 
+              <option key={rec.id} value={rec.id}>
+                {rec.name}
+              </option>
+            )}
           </select>
         </ListItem>
-        <ListInput 
-          name="deliveryFees" 
-          label={state.labels.deliveryFees}
-          value={(deliveryFees / 1000).toFixed(3)}
-          floatingLabel 
-          type="number"
-          clearButton
-          onChange={e => setDeliveryFees(e.target.value)}
-          onInputClear={() => setDeliveryFees('')}
-        />
+        <ListItem
+          title={state.labels.location}
+          smartSelect
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="location" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {locations.map(rec => 
+              <option key={rec.id} value={rec.id}>
+                {rec.name}
+              </option>
+            )}
+          </select>
+        </ListItem>
         <ListItem>
           <span>{state.labels.isOldAge}</span>
           <Toggle color="blue" checked={isOldAge} onToggleChange={() => setIsOldAge(!isOldAge)} />
@@ -132,14 +144,14 @@ const EditCustomer = props => {
           floatingLabel 
           clearButton
           type="text" 
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={e => setAddress(e.target.value)}
           onInputClear={() => setAddress('')}
         />
       </List>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && deliveryFees === customer.deliveryFees && isOldAge === customer.isOldAge && position === customer.position)
+      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && locationId === customer.locationId && isOldAge === customer.isOldAge && position === customer.position)
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>

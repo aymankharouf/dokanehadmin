@@ -31,7 +31,7 @@ const OrdersList = props => {
                   text={order.statusTime ? moment(order.statusTime.toDate()).fromNow() : ''}
                   key={order.id}
                 >
-                  {order.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.delivery}</Badge> : ''}
+                  {order.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
                 </ListItem>
               )
             }

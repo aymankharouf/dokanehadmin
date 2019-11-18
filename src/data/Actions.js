@@ -4,8 +4,8 @@ export const showMessage = (props, type, messageText) => {
   const message = props.f7router.app.toast.create({
     text: `<span class=${type}>${messageText}<span>`,
     closeTimeout: 3000,
-  });
-  message.open();
+  })
+  message.open()
 }
 
 export const login = (email, password) => {
@@ -44,7 +44,7 @@ export const updateOrders = (batch, storeId, orders, pack) => {
         actualPrice: avgActualPrice
       }
     ]
-    const profit = basket.reduce((a, pack) => a + ((pack.actualPrice - pack.purchasePrice) * pack.purchasedQuantity), 0)
+    const profit = basket.reduce((a, pack) => a + pack.purchasedQuantity ? ((pack.actualPrice - pack.purchasePrice) * pack.purchasedQuantity) : 0, 0)
     const total = basket.reduce((a, pack) => a + ((pack.actualPrice ? pack.actualPrice : pack.price) * pack.quantity), 0)
     const fraction = total - Math.floor(total / 50) * 50
     const orderRef = firebase.firestore().collection('orders').doc(order.id)
@@ -361,6 +361,14 @@ export const editCountry = country => {
   return firebase.firestore().collection('countries').doc(country.id).update(country)
 }
 
+export const addLocation = location => {
+  return firebase.firestore().collection('locations').add(location)
+}
+
+export const editLocation = location => {
+  return firebase.firestore().collection('locations').doc(location.id).update(location)
+}
+
 export const addSection = section => {
   return firebase.firestore().collection('sections').add(section)
 }
@@ -422,7 +430,7 @@ export const approveUser = user => {
     totalPayments: 0,
     debit: 0,
     withDelivery: false,
-    deliveryFees: 0,
+    locationId: user.locationId,
     invitationsDiscount: 0,
     priceAlarmsDiscount: 0,
     isOldAge: false,
@@ -524,52 +532,57 @@ export const addMonthlyTrans = trans => {
 
 export const editOrder = (order, basket, packs) => {
   const batch = firebase.firestore().batch()
-  let packBasket = basket
-  let returnBasket = []
-  let orderStatus = order.status
-  if (order.status === 'n' || order.status === 'a') {
-    packBasket = packBasket.filter(rec => rec.quantity === 0)
-    packBasket = packBasket.map(pack => {
-      const { changes, ...others } = pack //omit changes from packs
-      return others
-    })
-  } else if (['e', 'f', 'd'].includes(order.status)) {
-    returnBasket = packBasket.filter(rec => rec.quantity < rec.purchasedQuantity)
-    returnBasket = returnBasket.map(rec => {
+  let returnBasket = basket.filter(rec => rec.quantity < rec.purchasedQuantity)
+  if (returnBasket.length > 0){
+    returnBasket = returnBasket.map(pack => {
       return {
-        id: rec.id,
-        price: rec.price,
-        actualPrice: rec.actualPrice,
-        purchasePrice: rec.purchasePrice,
-        quantity: rec.purchasedQuantity - rec.quantity,
-        stores: packs.find(pack => pack.id === rec.id).stores
+        ...pack,
+        quantity: pack.purchasedQuantity - pack.quantity,
+        stores: packs.find(rec => rec.id === pack.id).stores
       }
     })
     stockIn(batch, 'i', returnBasket)
-    packBasket = packBasket.filter(rec => rec.quantity === 0)
-    packBasket = packBasket.map(pack => {
-      return ({
-        id: pack.id,
-        price: pack.price,
-        actualPrice: pack.actualPrice,
-        purchasePrice: pack.purchasePrice,
-        purchasedQuantity: Math.min(pack.quantity, pack.purchasedQuantity),
-      })
-    })
-    const finishedPacks = packBasket.filter(rec => rec.quantity === rec.purchasedQuantity).length
-    if (finishedPacks === packBasket.length) {
-      orderStatus = 'f'
-    }
   }
+  let packBasket = basket.filter(rec => rec.quantity > 0)
+  packBasket = packBasket.map(pack => {
+    return ({
+      ...pack,
+      purchasedQuantity: Math.min(pack.quantity, pack.purchasedQuantity),
+    })
+  })
+  const finishedPacks = packBasket.filter(rec => rec.quantity === rec.purchasedQuantity).length
+  const purchasedPacks = packBasket.filter(rec => rec.purchasedQuantity > 0).length
   const total = packBasket.reduce((a, pack) => a + ((pack.actualPrice ? pack.actualPrice : pack.price) * (pack.quantity - (pack.unavailableQuantity ? pack.unavailableQuantity : 0))), 0)
   const fraction = total - Math.floor(total / 50) * 50
-  const profit = packBasket.reduce((a, pack) => a + ((pack.actualPrice - pack.purchasePrice) * pack.purchasedQuantity), 0)
+  const profit = packBasket.reduce((a, pack) => a + pack.purchasedQuantity ? ((pack.actualPrice - pack.purchasePrice) * pack.purchasedQuantity) : 0, 0)
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
+  let orderStatus = order.status
+  if (packBasket.length === 0){
+    if (returnBasket.length === 0){
+      orderStatus = 'c'
+    } else {
+      orderStatus = 'i'
+    }
+  } else if (packBasket.length === finishedPacks){
+    orderStatus = 'f'
+  } else if (packBasket.length > finishedPacks && purchasedPacks > 0) {
+    orderStatus = 'e'
+  }
+  const statusTime = orderStatus === order.status ? (order.statusTime ? order.statusTime : order.time) : new Date()
   batch.update(orderRef, {
     status: orderStatus,
     basket: packBasket,
     total: total - fraction,
-    profit: profit - fraction
+    profit: profit - fraction,
+    statusTime
   })
   return batch.commit()
+}
+
+export const changePassword = async (oldPassword, newPassword) => {
+  let user = firebase.auth().currentUser
+  const email = user.email
+  await firebase.auth().signInWithEmailAndPassword(email, oldPassword)
+  user = firebase.auth().currentUser
+  return user.updatePassword(newPassword)
 }

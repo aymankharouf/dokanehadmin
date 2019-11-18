@@ -77,7 +77,7 @@ const OrderDetails = props => {
           })}
           {order.withDelivery ? 
             <ListItem>
-              <span>{state.labels.delivery}</span>
+              <span>{state.labels.withDelivery}</span>
               <Toggle 
                 name="withDelivery" 
                 color="green" 

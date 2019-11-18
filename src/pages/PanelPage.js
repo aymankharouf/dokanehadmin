@@ -16,6 +16,7 @@ const PanelPage = props => {
         {login_logout}
       </List>
       <List>
+        {user ? <ListItem link="/changePassword/" title={state.labels.changePassword} /> : ''}
         {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requestedPacks/" title={state.labels.newPurchase} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/priceAlarms/" title={state.labels.priceAlarms} view="#main-view" panelClose /> : ''}
