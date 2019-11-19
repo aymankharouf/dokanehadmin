@@ -20,34 +20,6 @@ const RequestedPackDetails = props => {
     }
   }, [error, props])
 
-	const handlePurchase = store => {
-		try{
-			if (state.basket.storeId && state.basket.storeId !== store.id){
-				throw new Error(state.labels.twoDiffStores)
-      }
-      if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
-        throw new Error(state.labels.alreadyInBasket)
-      }
-      if (store.price > Number(props.price)){
-        throw new Error(state.labels.priceHigherThanRequested)
-      }
-      if (store.id === 's' && store.quantity === 0){
-        throw new Error(state.labels.unavailableInStock)
-      }
-      dispatch({type: 'ADD_TO_BASKET', params: {pack, store, quantity: store.quantity ? Math.min(props.quantity, store.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
-      showMessage(props, 'success', state.labels.addToBasketSuccess)
-			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-		}
-  }
-  const handleUnavailable = () => {
-    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-    packUnavailable(pack, Number(props.price), approvedOrders).then(() => {
-      showMessage(props, 'success', state.labels.executeSuccess)
-			props.f7router.back()
-    })
-  }
   const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => 
     {
       if (s1.purchasePrice === s2.purchasePrice) {
@@ -61,6 +33,34 @@ const RequestedPackDetails = props => {
       }
     })
   , [pack, state.stores])
+	const handlePurchase = packStore => {
+		try{
+			if (state.basket.storeId && state.basket.storeId !== packStore.id){
+				throw new Error(state.labels.twoDiffStores)
+      }
+      if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
+        throw new Error(state.labels.alreadyInBasket)
+      }
+      if (packStore.price > Number(props.price)){
+        throw new Error(state.labels.priceHigherThanRequested)
+      }
+      if (packStore.storeId === 's' && packStore.quantity === 0){
+        throw new Error(state.labels.unavailableInStock)
+      }
+      dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
+      showMessage(props, 'success', state.labels.addToBasketSuccess)
+			props.f7router.back()
+		} catch(err) {
+			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+		}
+  }
+  const handleUnavailable = () => {
+    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
+    packUnavailable(pack, Number(props.price), approvedOrders).then(() => {
+      showMessage(props, 'success', state.labels.executeSuccess)
+			props.f7router.back()
+    })
+  }
 
   return (
     <Page>
@@ -85,14 +85,14 @@ const RequestedPackDetails = props => {
             : ''
           }
           {packStores.map(s => {
-            const storeInfo = state.stores.find(st => st.id === s.id)
+            const storeInfo = state.stores.find(st => st.id === s.storeId)
             return (
               <ListItem 
                 link="#"
                 title={storeInfo.name} 
                 footer={moment(s.time.toDate()).fromNow()} 
                 after={(s.price / 1000).toFixed(3)} 
-                key={s.id}
+                key={s.storeId}
                 onClick={() => handlePurchase(s)}
               >
                 {s.quantity ? <Badge slot='title' color='red'>{s.quantity}</Badge> : ''}

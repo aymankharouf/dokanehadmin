@@ -15,9 +15,9 @@ const PriceAlarmDetails = props => {
   , [state.packs, priceAlarm])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const userInfo = useMemo(() => state.users.find(u => u.id === priceAlarm.user)
+  const userInfo = useMemo(() => state.users.find(u => u.id === priceAlarm.userId)
   , [state.users, priceAlarm])
-  const customer = useMemo(() => state.customers.find(c => c.id === priceAlarm.user)
+  const customer = useMemo(() => state.customers.find(c => c.id === priceAlarm.userId)
   , [state.customers, priceAlarm])
   const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(s => s.id === customer.storeId).name : priceAlarm.storeName
   , [customer, state.stores, priceAlarm])

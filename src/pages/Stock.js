@@ -6,10 +6,10 @@ import ReLogin from './ReLogin'
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
   const storePacks = useMemo(() => {
-    let storePacks = state.packs.filter(p => p.stores.find(s => s.id === 's'))
+    let storePacks = state.packs.filter(p => p.stores.find(s => s.storeId === 's'))
     storePacks = storePacks.map(p => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
-      const stockInfo = p.stores.find(s => s.id === 's')
+      const stockInfo = p.stores.find(s => s.storeId === 's')
       return {
         id: p.id,
         productName: productInfo.name,

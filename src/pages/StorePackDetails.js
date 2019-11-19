@@ -10,7 +10,7 @@ const StorePackDetails = props => {
     let pack = state.packs.find(p => p.id === props.packId)
     return {
       ...pack,
-      price: pack.stores.find(s => s.id === props.storeId).price
+      price: pack.stores.find(s => s.storeId === props.storeId).price
     }
   }, [state.packs, props.packId, props.storeId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)

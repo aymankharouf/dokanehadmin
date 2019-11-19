@@ -18,7 +18,7 @@ const EndedOffers = props => {
             packId: p.id,
             productId: p.productId,
             name: p.name,
-            storeId: s.id,
+            storeId: s.storeId,
             price: s.price,
             offerEnd: s.offerEnd,
             id: i++

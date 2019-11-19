@@ -7,14 +7,14 @@ const Reducer = (state, action) => {
           packId: action.params.pack.id,
           price: action.params.price,
           quantity: action.params.quantity,
-          actualPrice: action.params.store.price,
-          purchasePrice: action.params.store.purchasePrice,
+          actualPrice: action.params.packStore.price,
+          purchasePrice: action.params.packStore.purchasePrice,
           requestedQuantity: action.params.requestedQuantity
         }
         if (!state.basket.storeId) {
-          return {...state, basket: {storeId: action.params.store.id, packs: [pack]}}
+          return {...state, basket: {storeId: action.params.packStore.storeId, packs: [pack]}}
         } else {
-          if (state.basket.storeId !== action.params.store.id) return state
+          if (state.basket.storeId !== action.params.packStore.storeId) return state
           if (state.basket.packs && state.basket.packs.find(p => p.id === action.params.pack.id)) return state
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }

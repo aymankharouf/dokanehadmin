@@ -10,14 +10,12 @@ const StorePacks = props => {
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   let storePacks = useMemo(() => {
-    let storePacks = state.packs.filter(p => p.stores.find(s => s.id === props.id))
+    let storePacks = state.packs.filter(p => p.stores.find(s => s.storeId === props.id))
     storePacks = storePacks.map(p => {
       return {
-        id: p.id,
-        name: p.name,
-        isOffer: p.isOffer,
-        price: p.stores.find(s => s.id === props.id).price,
-        time: p.stores.find(s => s.id === props.id).time
+        ...p,
+        price: p.stores.find(s => s.storeId === props.id).price,
+        time: p.stores.find(s => s.storeId === props.id).time
       }
     })
     return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)

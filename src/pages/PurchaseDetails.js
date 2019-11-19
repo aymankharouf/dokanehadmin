@@ -16,14 +16,14 @@ const PurchaseDetails = props => {
       <Block>
           <List>
             {purchase.basket && purchase.basket.map(p => {
-              const packInfo = state.packs.find(pa => pa.id === p.id)
+              const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
                   after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
-                  key={p.id} 
+                  key={p.packId} 
                 >
                   {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
                 </ListItem>

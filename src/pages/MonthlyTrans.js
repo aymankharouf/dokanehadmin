@@ -29,7 +29,7 @@ const MonthlyTrans = props => {
   const storePacks = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.storePacks
     let storePacks = state.packs.map(p => {
-      return p.stores.find(s => s.id === 's' && s.quantity > 0)
+      return p.stores.find(s => s.storeId === 's' && s.quantity > 0)
     })
     storePacks = storePacks.filter(p => p)
     const storeValue = storePacks.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)

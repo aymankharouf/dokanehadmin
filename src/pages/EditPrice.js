@@ -11,7 +11,7 @@ const EditPrice = props => {
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const store = useMemo(() => {
-    const store = pack.stores.find(s => s.id === props.storeId)
+    const store = pack.stores.find(s => s.storeId === props.storeId)
     return {...store, name: state.stores.find(s => s.id === props.storeId).name}
   }, [pack, state.stores, props.storeId])
   const [purchasePrice, setPurchasePrice] = useState('')
