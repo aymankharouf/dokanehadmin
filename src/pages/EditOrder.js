@@ -39,14 +39,14 @@ const EditOrder = props => {
       <Block>
         <List mediaList>
           {state.orderBasket && state.orderBasket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.id)
+            const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
                 title={productInfo.name}
                 footer={((p.price * p.quantity) / 1000).toFixed(3)}
                 subtitle={packInfo.name}
-                key={p.id}
+                key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
                 <Stepper

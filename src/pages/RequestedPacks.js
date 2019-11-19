@@ -17,18 +17,17 @@ const RequestedPacks = props => {
 		approvedOrders.forEach(o => {
 			o.basket.forEach(p => {
 				if (p.quantity - p.purchasedQuantity - (p.unavailableQuantity ? p.unavailableQuantity : 0)> 0) {
-					const found = packsArray.find(pa => pa.id === p.id && pa.price === p.price)
-					const packInfo = state.packs.find(pa => pa.id === p.id)
+					const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
 					if (found) {
-						packsArray = packsArray.filter(pa => pa.id !== found.id)
+						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
 						packsArray.push({
-							...packInfo, 
+							packId: p.packId,
 							price: p.price, 
 							quantity: p.quantity - p.purchasedQuantity + found.quantity
 						})
 					} else {
 						packsArray.push({
-							...packInfo, 
+							packId: p.packId,
 							price: p.price, 
 							quantity: p.quantity - p.purchasedQuantity
 						})
@@ -37,7 +36,7 @@ const RequestedPacks = props => {
 			})
 		})
 		packsArray = packsArray.map(p => {
-			const inBasket = state.basket.packs ? state.basket.packs.find(pa => pa.id === p.id && pa.price === p.price) : false
+			const inBasket = state.basket.packs ? state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price) : false
 			const inBasketQuantity = inBasket ? inBasket.quantity : 0
 			return {
 				...p,
@@ -53,16 +52,16 @@ const RequestedPacks = props => {
       <Block>
 				<List mediaList>
 					{requiredPacks && requiredPacks.map(p => {
-						const productInfo = state.products.find(pr => pr.id === p.productId)
+						const packInfo = state.packs.find(pa => pa.id === p.packId)
+						const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 						return (
 							<ListItem
-								link={`/requestedPack/${p.id}/quantity/${p.quantity}/price/${p.price}`}
+								link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}`}
 								title={productInfo.name}
 								after={(p.price / 1000).toFixed(3)}
-								subtitle={p.name}
+								subtitle={packInfo.name}
 								text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
 								key={i++}
-								className={productInfo.status === 'd' ? 'disable-product' : ''}
 							>
 								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn" alt={productInfo.name} />
 								{p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}

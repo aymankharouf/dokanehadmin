@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 
@@ -9,29 +9,32 @@ const Basket = props => {
   const totalPrice = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
   , [state.basket])
   const handleAdd = pack => {
-    const storeQuantity = pack.stores.find(s => s.id === store.id).quantity
-    if (!storeQuantity || pack.quantity < Math.min(storeQuantity, pack.requestedQuantity)) {
-      dispatch({type: 'ADD_QUANTITY', pack})
+    if (store === 's') {
+      const packInfo = state.packs.find(p => p.id === pack.packId)
+      const quantityInStock = packInfo.stores.find(s => s.id === 's').quantity
+      if (pack.quantity === pack.requestedQuantity) return
+      if (pack.quantity === quantityInStock) return
     }
+    dispatch({type: 'ADD_QUANTITY', pack})
   }
-  useEffect(() => {
-    if (!state.basket.packs) {
-      props.f7router.navigate('/home/', {reloadAll: true})
-    }
-  }, [state.basket, props])
+  const handleDelete = () => {
+    props.f7router.navigate('/home/', {reloadAll: true})
+    dispatch({type: 'CLEAR_BASKET'})
+  }
   return (
     <Page>
       <Navbar title={`${state.labels.basket_from} ${store.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {state.basket.packs && state.basket.packs.map(p => {
-            const productInfo = state.products.find(pr => pr.id === p.productId)
+            const packInfo = state.packs.find(pa => pa.id === p.packId)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
                 title={productInfo.name}
                 footer={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
-                subtitle={p.name}
-                key={p.id}
+                subtitle={packInfo.name}
+                key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
                 <Stepper
@@ -39,7 +42,7 @@ const Basket = props => {
                   fill
                   buttonsOnly
                   onStepperPlusClick={() => handleAdd(p)}
-                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', p})}
+                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', pack: p})}
                 />
                 {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
               </ListItem>
@@ -53,7 +56,7 @@ const Basket = props => {
 
       <Toolbar bottom>
         <Link href='/home/' iconMaterial="home" />
-        <Link href='#' iconMaterial="delete" onClick={() => dispatch({type: 'CLEAR_BASKET'})} />
+        <Link href='#' iconMaterial="delete" onClick={() => handleDelete()} />
       </Toolbar>
     </Page>
   )

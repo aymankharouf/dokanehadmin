@@ -50,13 +50,13 @@ const OrderDetails = props => {
       <Block>
         <List mediaList>
           {order.basket && order.basket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.id)
+            const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             if (order.status === 'f' || order.status === 'd') {
               const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
               return (
                 <ListItem 
-                  key={p.id} 
+                  key={p.packId} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={storeName}
@@ -68,7 +68,7 @@ const OrderDetails = props => {
             } else {
               return (
                 <ListItem 
-                  key={p.id} 
+                  key={p.packId} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   after={(p.price * p.quantity / 1000).toFixed(3)}

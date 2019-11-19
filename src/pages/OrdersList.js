@@ -20,7 +20,7 @@ const OrdersList = props => {
       <Block>
           <List mediaList>
             {orders && orders.map(o => {
-              const userInfo = state.users.find(u => u.id === o.user)
+              const userInfo = state.users.find(u => u.id === o.userId)
               const orderNet = o.total + o.fixedFees + o.deliveryFees - o.discount.value
               return (
                 <ListItem

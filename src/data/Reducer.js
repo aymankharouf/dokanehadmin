@@ -4,7 +4,7 @@ const Reducer = (state, action) => {
     switch (action.type){
       case 'ADD_TO_BASKET':
         pack = {
-          ...action.params.pack,
+          packId: action.params.pack.id,
           price: action.params.price,
           quantity: action.params.quantity,
           actualPrice: action.params.store.price,
@@ -19,16 +19,16 @@ const Reducer = (state, action) => {
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'ADD_QUANTITY':
-        pack = state.basket.packs.find(p => p.id === action.pack.id)
-        otherPacks = state.basket.packs.filter(p => p.id !== action.pack.id)
+        pack = state.basket.packs.find(p => p.packId === action.pack.packId)
+        otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
         pack = {
           ...pack,
           quantity: pack.quantity + 1,
         }
         return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
       case 'REMOVE_QUANTITY':
-        pack = state.basket.packs.find(p => p.id === action.pack.id)
-        otherPacks = state.basket.packs.filter(p => p.id !== action.pack.id)
+        pack = state.basket.packs.find(p => p.packId === action.pack.packId)
+        otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
         if (pack.quantity - 1 === 0) {
           if (otherPacks.length > 0){
             return {...state, basket: {...state.basket, packs: otherPacks}}
@@ -58,8 +58,8 @@ const Reducer = (state, action) => {
           orderBasket: []
         }
       case 'CHANGE_ORDER_PACK':
-        pack = state.orderBasket.find(p => p.id === action.params.pack.id)
-        otherPacks = state.orderBasket.filter(p => p.id !== action.params.pack.id)
+        pack = state.orderBasket.find(p => p.packId === action.params.pack.packId)
+        otherPacks = state.orderBasket.filter(p => p.packId !== action.params.pack.packId)
         pack = {
           ...pack,
           quantity: pack.quantity + action.params.value

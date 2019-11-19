@@ -16,14 +16,14 @@ const StockTransDetails = props => {
       <Block>
           <List mediaList>
             {stockTrans.basket && stockTrans.basket.map(p => {
-              const packInfo = state.packs.find(pa => pa.id === p.id)
+              const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
                   after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
-                  key={p.id} 
+                  key={p.packId} 
                 >
                   <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
                   {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}

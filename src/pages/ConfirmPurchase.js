@@ -28,12 +28,8 @@ const ConfirmPurchase = props => {
   const handlePurchase = () => {
     const basket = state.basket.packs.map(p => {
       return ({
-        id: p.id,
-        quantity: p.quantity,
-        price: p.price,
-        actualPrice: p.actualPrice,
-        purchasePrice: p.purchasePrice,
-        stores: p.stores
+        ...p,
+        stores: state.packs.find(pa => pa.id === p.packId).stores
       })
     })
     const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
@@ -57,15 +53,20 @@ const ConfirmPurchase = props => {
     <Navbar title={`${state.labels.confirmPurchase} - ${store.name}`} backLink={state.labels.back} />
     <Block>
         <List>
-          {state.basket.packs && state.basket.packs.map(p => 
-            <ListItem 
-              key={p.id} 
-              title={state.products.find(pr => pr.id === p.productId).name}
-              footer={p.name} 
-              after={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
-            >
-              {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : null}
-            </ListItem>
+          {state.basket.packs && state.basket.packs.map(p => {
+            const packInfo = state.packs.find(pa => pa.id === p.packId)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+            return (
+              <ListItem 
+                key={p.packId} 
+                title={productInfo.name}
+                footer={packInfo.name} 
+                after={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
+              >
+                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : null}
+              </ListItem>
+            )
+          }
           )}
           <ListItem 
             title={state.labels.total} 

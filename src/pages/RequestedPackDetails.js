@@ -25,7 +25,7 @@ const RequestedPackDetails = props => {
 			if (state.basket.storeId && state.basket.storeId !== store.id){
 				throw new Error(state.labels.twoDiffStores)
       }
-      if (state.basket.packs && state.basket.packs.find(p => p.id === pack.id)) {
+      if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
         throw new Error(state.labels.alreadyInBasket)
       }
       if (store.price > Number(props.price)){
@@ -48,9 +48,8 @@ const RequestedPackDetails = props => {
 			props.f7router.back()
     })
   }
-  const packStores = useMemo(() => {
-    let packStores = pack.stores
-    packStores.sort((s1, s2) => {
+  const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => 
+    {
       if (s1.purchasePrice === s2.purchasePrice) {
         if (Number(state.stores.find(s => s.id === s2.id).type) === Number(state.stores.find(s => s.id === s1.id).type)){
           return s1.time.seconds - s2.time.seconds
@@ -61,12 +60,7 @@ const RequestedPackDetails = props => {
         return s1.purchasePrice - s2.purchasePrice
       }
     })
-    packStores = packStores.map(s => {
-      const currentStore = state.stores.find(st => st.id === s.id)
-      return {...s, name: currentStore.name}
-    })
-    return packStores
-  }, [pack, state.stores])
+  , [pack, state.stores])
 
   return (
     <Page>
@@ -90,18 +84,21 @@ const RequestedPackDetails = props => {
             />
             : ''
           }
-          {packStores.map(s => 
-            <ListItem 
-              link="#"
-              title={s.name} 
-              footer={moment(s.time.toDate()).fromNow()} 
-              after={(s.price / 1000).toFixed(3)} 
-              key={s.id}
-              onClick={() => handlePurchase(s)}
-            >
-              {s.quantity ? <Badge slot='title' color='red'>{s.quantity}</Badge> : ''}
-            </ListItem>
-          )}
+          {packStores.map(s => {
+            const storeInfo = state.stores.find(st => st.id === s.id)
+            return (
+              <ListItem 
+                link="#"
+                title={storeInfo.name} 
+                footer={moment(s.time.toDate()).fromNow()} 
+                after={(s.price / 1000).toFixed(3)} 
+                key={s.id}
+                onClick={() => handlePurchase(s)}
+              >
+                {s.quantity ? <Badge slot='title' color='red'>{s.quantity}</Badge> : ''}
+              </ListItem>
+            )
+          })}
         </List>
       </Block>
       <Toolbar bottom>

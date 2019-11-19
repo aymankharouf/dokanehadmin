@@ -20,8 +20,8 @@ export const updateOrders = (batch, storeId, orders, pack) => {
   let remainingQuantity = pack.quantity
   for (const o of orders){
     if (remainingQuantity <= 0) break
-    const orderPack = o.basket.find(p => p.id === pack.id)
-    const otherPacks = o.basket.filter(p => p.id !== pack.id)
+    const orderPack = o.basket.find(p => p.packId === pack.packId)
+    const otherPacks = o.basket.filter(p => p.packId !== pack.packId)
     let purchasedQuantity
     let orderStatus = 'e'
     if (remainingQuantity >= orderPack.quantity - orderPack.purchasedQuantity) {
@@ -151,7 +151,7 @@ const updateStock = (batch, pack) => {
   const avgPrice = (grossPrice + (pack.quantity * pack.actualPrice)) / (pack.quantity + quantityInStock)
   const grossPurchasePrice = found ? found.quantity * found.purchasePrice : 0
   const avgPurchasePrice = (grossPurchasePrice + (pack.quantity * pack.purchasePrice)) / (pack.quantity + quantityInStock)
-  const packRef = firebase.firestore().collection('packs').doc(pack.id)
+  const packRef = firebase.firestore().collection('packs').doc(pack.packId)
   batch.update(packRef, {
     stores: [
       ...otherStores, 
@@ -182,7 +182,7 @@ export const confirmPurchase = (orders, storeId, basket, total, discount) => {
   let remainingQuantity
   let packsIn = []
   basket.forEach(p => {
-    packOrders = orders.filter(o => o.basket.find(op => op.id === p.id && op.price === p.price))
+    packOrders = orders.filter(o => o.basket.find(op => op.packId === p.packId && op.price === p.price))
     packOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
     remainingQuantity = updateOrders(batch, storeId, packOrders, p)
     if (remainingQuantity > 0) {
