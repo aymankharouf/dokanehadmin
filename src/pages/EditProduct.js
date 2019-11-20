@@ -148,7 +148,7 @@ const EditProduct = props => {
           errorMessageForce
           onChange={e => handleFileChange(e)}
         />
-        <img src={imageUrl} alt={name} />
+        <img src={imageUrl} className="img-card" alt={name} />
       </List>
       {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && trademark === product.trademark && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>

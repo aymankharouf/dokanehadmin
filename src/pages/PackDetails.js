@@ -22,14 +22,14 @@ const PackDetails = props => {
       setError('')
     }
   }, [error, props])
-  const handlePurchase = store => {
+  const handlePurchase = packStore => {
 		try{
-      if (store.id === 's') return
-      if (store.offerEnd && new Date() > store.offerEnd.toDate()) return
-			if (state.basket.storeId && state.basket.storeId !== store.id){
+      if (packStore.storeId === 's') return
+      if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) return
+			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
 				throw new Error(state.labels.twoDiffStores)
       }
-      dispatch({type: 'ADD_TO_BASKET', params: {pack, store, quantity: 1, price: store.price}})
+      dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: 1, price: packStore.price}})
       showMessage(props, 'success', state.labels.addToBasketSuccess)
 			props.f7router.back()
 		} catch(err) {
@@ -42,7 +42,7 @@ const PackDetails = props => {
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
+          <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
@@ -50,14 +50,14 @@ const PackDetails = props => {
       </Card>
       <List>
       {packStores.map(s => {
-        const currentStore = state.stores.find(st => st.id === s.id)
+        const currentStore = state.stores.find(st => st.id === s.storeId)
         return (
           <ListItem 
             link="#"
             title={currentStore.name} 
             footer={moment(s.time.toDate()).fromNow()} 
             after={(s.price / 1000).toFixed(3)} 
-            key={s.id} 
+            key={s.storeId} 
             onClick={() => handlePurchase(s)}
           >
             {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : ''}

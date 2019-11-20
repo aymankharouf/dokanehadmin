@@ -149,7 +149,7 @@ const AddStorePack = props => {
           onCalendarChange={value => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
-        <img src={product.imageUrl} alt={product.name} />
+        <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
       {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
       ? '' 

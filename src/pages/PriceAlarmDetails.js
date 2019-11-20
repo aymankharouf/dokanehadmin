@@ -60,7 +60,7 @@ const PriceAlarmDetails = props => {
       </Fab>
       <Card>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
+          <img src={product.imageUrl} className="img-card" alt={product.name} />
           <p>{`${userInfo.name} ${userInfo.mobile} (${state.customerTypes.find(t => t.id === customer.type).name})`}</p>
           <p>{`${storeName} ${storeAddress}`}</p>
         </CardContent>

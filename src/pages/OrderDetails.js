@@ -48,7 +48,7 @@ const OrderDetails = props => {
     <Page>
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
       <Block>
-        <List mediaList>
+        <List>
           {order.basket && order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -85,7 +85,7 @@ const OrderDetails = props => {
                 name="withDelivery" 
                 color="green" 
                 checked={order.withDelivery} 
-                readonly
+                disabled
               />
             </ListItem> 
           : ''}

@@ -177,7 +177,9 @@ const labels = {
   locations: 'المواقع',
   addLocation: 'اضافة موقع',
   hasDelivery: 'خدمة التوصيل؟',
-  editLocation: 'تعديل موقع'
+  editLocation: 'تعديل موقع',
+  withDelivery: 'خدمة التوصيل',
+
 }
 
 export default labels

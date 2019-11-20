@@ -36,7 +36,7 @@ const Products = props => {
                   text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.country).name}`}
                   key={p.id}
                 >
-                  <img slot="media" src={p.imageUrl} className="lazy lazy-fadeIn avatar" alt={p.name} />
+                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                   {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
                 </ListItem>
               )

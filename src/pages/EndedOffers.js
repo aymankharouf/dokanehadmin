@@ -46,7 +46,7 @@ const EndedOffers = props => {
                   footer={state.stores.find(s => s.id === p.storeId).name}
                   key={p.id}
                 >
-                  <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
+                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                   <Badge slot="footer" color="red">{moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}</Badge>
                 </ListItem>
               )

@@ -63,7 +63,7 @@ const RequestedPacks = props => {
 								text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
 								key={i++}
 							>
-								<img slot="media" src={productInfo.imageUrl} width="80" className="lazy lazy-fadeIn" alt={productInfo.name} />
+								<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
 								{p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
 							</ListItem>
 						)

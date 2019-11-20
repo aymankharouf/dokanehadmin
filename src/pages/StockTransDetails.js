@@ -25,7 +25,7 @@ const StockTransDetails = props => {
                   after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
                   key={p.packId} 
                 >
-                  <img slot="media" src={productInfo.imageUrl} className="lazy lazy-fadeIn avatar" alt={productInfo.name} />
+                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                   {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
                 </ListItem>
               )}

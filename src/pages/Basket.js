@@ -36,7 +36,7 @@ const Basket = props => {
                 subtitle={packInfo.name}
                 key={p.packId}
               >
-                <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
+                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 <Stepper
                   slot="after"
                   fill

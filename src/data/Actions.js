@@ -125,13 +125,19 @@ export const updateOrderStatus = (order, type, packs, users, invitations, discou
 const stockIn = (batch, type, basket, storeId) => {
   const transRef = firebase.firestore().collection('stockTrans').doc()
   const packBasket = basket.map(p => {
-    const { stores, ...others } = p //omit stores from packs
-    return others
+    return {
+      packId: p.packId,
+      price: p.actualPrice,
+      quantity: p.quantity,
+      purchasePrice: p.purchasePrice
+    }
   })
+  const total = packBasket.reduce((sum, p) => sum + ((type === 's' ? p.price : p.purchasePrice) * p.quantity), 0)
   batch.set(transRef, {
     basket: packBasket,
     storeId: storeId ? storeId : '',
     type,
+    total,
     time: new Date()
   })
   basket.forEach(p => {
@@ -164,8 +170,12 @@ export const confirmPurchase = (orders, storeId, basket, total, discount) => {
   const batch = firebase.firestore().batch()
   const purchaseRef = firebase.firestore().collection('purchases').doc()
   const packBasket = basket.map(p => {
-    const { stores, ...others } = p //omit stores from packs
-    return others
+    return {
+      packId: p.packId,
+      price: p.actualPrice,
+      quantity: p.quantity,
+      purchasePrice: p.purchasePrice
+    }
   })
   batch.set(purchaseRef, {
     storeId,
@@ -195,8 +205,12 @@ export const stockOut = (orders, basket) => {
   const batch = firebase.firestore().batch()
   const transRef = firebase.firestore().collection('stockTrans').doc()
   const packBasket = basket.map(p => {
-    const { stores, ...others } = p //omit stores from packs
-    return others
+    return {
+      packId: p.packId,
+      price: p.actualPrice,
+      quantity: p.quantity,
+      purchasePrice: p.purchasePrice
+    }
   })
   batch.set(transRef, {
     basket: packBasket,
@@ -218,7 +232,6 @@ const packStockOut = (batch, basketPack) => {
   const found = basketPack.stores.find(s => s.storeId === 's')
   let avgPrice
   let avgPurchasePrice
-  const packRef = firebase.firestore().collection('packs').doc(basketPack.packId)
   if (found.quantity - basketPack.quantity > 0){
     avgPrice = ((found.quantity * found.price) - (basketPack.quantity * basketPack.actualPrice)) / (found.quantity - basketPack.quantity)
     avgPurchasePrice = ((found.quantity * found.purchasePrice) - (basketPack.quantity * basketPack.purchasePrice)) / (found.quantity - basketPack.quantity)
@@ -226,6 +239,7 @@ const packStockOut = (batch, basketPack) => {
     avgPrice = null
     avgPurchasePrice = null
   }
+  const packRef = firebase.firestore().collection('packs').doc(basketPack.packId)
   batch.update(packRef, {
     stores: [...otherStores, 
       {storeId: 's', 
@@ -567,9 +581,11 @@ export const editOrder = (order, basket, packs) => {
   batch.update(orderRef, {
     status: orderStatus,
     basket: packBasket,
+    withDelivery: order.withDelivery,
     total: total - fraction,
     profit: profit - fraction,
-    statusTime
+    statusTime,
+    editTime: new Date()
   })
   return batch.commit()
 }

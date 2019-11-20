@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useEffect } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
+import React, { useContext, useMemo, useEffect, useState } from 'react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { updateOrderStatus, editOrder, showMessage } from '../data/Actions';
 
@@ -7,6 +7,11 @@ const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
+  const [withDelivery, setWithDelivery] = useState(order.withDelivery)
+  const customerLocation = useMemo(() => {
+    const customerInfo = state.customers.find(c => c.id === order.userId)
+    return customerInfo.locationId ? state.locations.find(l => l.id === customerInfo.locationId) : ''
+  }, [state.locations, state.customers, order])
   const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((sum, p) => sum + (p.price * p.quantity), 0) : 0
   , [state.orderBasket])
   const handleChangePack = (pack, value) => {
@@ -24,7 +29,7 @@ const EditOrder = props => {
     })
   }
   const handleSubmit = () => {
-    editOrder(order, state.orderBasket, state.packs).then(() => {
+    editOrder({...order, withDelivery}, state.orderBasket, state.packs).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
@@ -37,7 +42,17 @@ const EditOrder = props => {
     <Page>
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
-        <List mediaList>
+        <List>
+          <ListItem>
+            <span>{state.labels.withDelivery}</span>
+            <Toggle 
+              name="withDelivery" 
+              color="green" 
+              checked={withDelivery} 
+              onToggleChange={() => setWithDelivery(!withDelivery)}
+              disabled={customerLocation ? !customerLocation.hasDelivery : false}
+            />
+          </ListItem>
           {state.orderBasket && state.orderBasket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -48,7 +63,7 @@ const EditOrder = props => {
                 subtitle={packInfo.name}
                 key={p.packId}
               >
-                <img slot="media" src={productInfo.imageUrl} width="80" alt={productInfo.name} />
+                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 <Stepper
                   slot="after"
                   fill

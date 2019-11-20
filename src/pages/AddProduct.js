@@ -142,7 +142,7 @@ const AddProduct = props => {
           onToggleChange={() => setIsNew(!isNew)}/>
         </ListItem>
         <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
-        <img src={imageUrl} alt={name} />
+        <img src={imageUrl} className="img-card" alt={name} />
       </List>
       {!name || !country || !category || !imageUrl ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>

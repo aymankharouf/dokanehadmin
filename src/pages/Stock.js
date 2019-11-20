@@ -54,7 +54,7 @@ const Stock = props => {
               text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.country).name}`}
               key={p.id}
             >
-              <img slot="media" src={p.imageUrl} className="lazy lazy-fadeIn avatar" alt={p.productName} />
+              <img slot="media" src={p.imageUrl} className="img-list" alt={p.productName} />
               {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
             </ListItem>
           )}

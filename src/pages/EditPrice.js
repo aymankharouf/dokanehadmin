@@ -94,7 +94,7 @@ const EditPrice = props => {
           <p>{pack.name}</p>
         </CardHeader>
         <CardContent>
-          <img src={product.imageUrl} width="100%" height="250" alt={product.name} />
+          <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
       </Card>
       <List form>
