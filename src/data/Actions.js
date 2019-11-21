@@ -219,7 +219,7 @@ export const stockOut = (orders, basket) => {
   })
   let packOrders
   basket.forEach(p => {
-    packOrders = orders.filter(o => o.basket.find(op => op.id === p.packId && op.price === p.price))
+    packOrders = orders.filter(o => o.basket.find(op => op.packId === p.packId && op.price === p.price))
     packOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
     updateOrders(batch, 's', packOrders, p)
     packStockOut(batch, p)
@@ -275,7 +275,6 @@ export const addProduct = async product => {
     byWeight: product.byWeight,
     isNew: product.isNew,
     sales: 0,
-    rating: null,
     time: new Date()
   })
   const filename = product.image.name
@@ -432,13 +431,13 @@ export const approveUser = user => {
   const batch = firebase.firestore().batch()
   const customerRef = firebase.firestore().collection('customers').doc(user.id)
   batch.set(customerRef, {
+    name: user.name,
     type: user.storeId ? 'o' : 'n',
     storeId: user.storeId,
     address: user.address,
     limit: 10000,
     totalOrders: 0,
     totalPayments: 0,
-    debit: 0,
     withDelivery: false,
     locationId: user.locationId,
     invitationsDiscount: 0,
@@ -476,9 +475,9 @@ export const approvePriceAlarm = (priceAlarm, pack, store, customer) => {
       { storeId: storeId,
         purchasePrice: priceAlarm.price,
         price: priceAlarm.price,
-        time: new Date(),
         userId: priceAlarm.userId,
-        offerEnd: priceAlarm.offerEnd
+        offerEnd: priceAlarm.offerEnd,
+        time: new Date(),
       }
     ]  
   }
@@ -596,4 +595,26 @@ export const changePassword = async (oldPassword, newPassword) => {
   await firebase.auth().signInWithEmailAndPassword(email, oldPassword)
   user = firebase.auth().currentUser
   return user.updatePassword(newPassword)
+}
+
+export const approveRating = (rating, product, customerInfo) => {
+  const batch = firebase.firestore().batch()
+  const ratingRef = firebase.firestore().collection('ratings').doc(rating.id)
+  batch.update(ratingRef, {
+    status: 'a',
+    userName: customerInfo.name
+  })
+  const oldRating = product.rating ? product.rating : 0
+  const ratingCount = product.ratingCount ? product.ratingCount : 0
+  const newRating = ((oldRating * ratingCount) + (rating.value * 5)) / (ratingCount + 1)
+  const productRef = firebase.firestore().collection("products").doc(rating.productId)
+  batch.update(productRef, {
+    rating: newRating,
+    ratingCount: ratingCount + 1
+  })
+  const customerRef = firebase.firestore().collection('customers').doc(rating.userId)
+  batch.update(customerRef, {
+    ratingsDiscount: firebase.firestore.FieldValue.increment(250)
+  })
+  return batch.commit()
 }

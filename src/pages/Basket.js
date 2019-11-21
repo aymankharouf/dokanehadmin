@@ -9,9 +9,9 @@ const Basket = props => {
   const totalPrice = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
   , [state.basket])
   const handleAdd = pack => {
-    if (store === 's') {
+    if (store.id === 's') {
       const packInfo = state.packs.find(p => p.id === pack.packId)
-      const quantityInStock = packInfo.stores.find(s => s.id === 's').quantity
+      const quantityInStock = packInfo.stores.find(s => s.storeId === 's').quantity
       if (pack.quantity === pack.requestedQuantity) return
       if (pack.quantity === quantityInStock) return
     }

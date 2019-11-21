@@ -8,8 +8,6 @@ const Customers = props => {
   const { state } = useContext(StoreContext)
   const sections = useMemo(() => {
     let sections = [
-      {id: 'p', name: state.labels.forgetPasswords, path: '/forgetPassword/'},
-      {id: 'u', name: state.labels.newUsers, path: '/newUsers/'},
       {id: 'a', name: state.labels.allCustomers, path: '/customersList/a'},
     ]
     state.customerTypes.forEach(t => {
@@ -21,10 +19,6 @@ const Customers = props => {
     })
     return sections
   }, [state.customerTypes, state.labels])
-  const forgetPassword = useMemo(() => state.forgetPassword.filter(f => f.resolved === false)
-  , [state.forgetPassword])
-  const newUsers = useMemo(() => state.users.filter(u => !state.customers.find(c => c.id === u.id))
-  , [state.users, state.customers])
   let i = 0
   return (
     <Page>
@@ -36,7 +30,7 @@ const Customers = props => {
             return (
               <ListItem 
                 title={s.name} 
-                badge={s.id === 'p' ? forgetPassword.length : s.id === 'u' ? newUsers.length : customers.length} 
+                badge={customers.length} 
                 badgeColor={state.randomColors[i++ % 10].name} 
                 link={s.path}
                 key={s.id}

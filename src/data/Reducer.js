@@ -160,6 +160,11 @@ const Reducer = (state, action) => {
           ...state,
           locations: action.locations
         }
+      case 'SET_RATINGS':
+        return {
+          ...state,
+          ratings: action.ratings
+        }
       default:
         return state
     }

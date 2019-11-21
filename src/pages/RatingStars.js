@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Icon } from 'framework7-react'
 
 
-const Rating = props => {
+const RatingStars = props => {
   const stars = useMemo(() => {
     const rating_round = Math.round(props.rating / .5 ) * .5
     const rating_int = parseInt(rating_round)
@@ -41,4 +41,4 @@ const Rating = props => {
   )
 }
 
-export default Rating
+export default RatingStars

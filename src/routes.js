@@ -64,6 +64,9 @@ import ChangePassword from './pages/ChangePassword';
 import Locations from './pages/Locations';
 import AddLocation from './pages/AddLocation';
 import EditLocation from './pages/EditLocation';
+import Ratings from './pages/Ratings';
+import Approvals from './pages/Approvals';
+import RatingDetails from './pages/RatingDetails';
 
 
 export default [
@@ -338,6 +341,18 @@ export default [
   {
     path: '/editLocation/:id',
     component: EditLocation
+  },
+  {
+    path: '/ratings/',
+    component: Ratings
+  },
+  {
+    path: '/approvals/',
+    component: Approvals
+  },
+  {
+    path: '/rating/:id',
+    component: RatingDetails
   },
   {
     path: '(.*)',

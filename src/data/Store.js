@@ -70,6 +70,10 @@ const Store = props => {
     {id: 'f', name: 'بنزين'},
     {id: 'm', name: 'صيانة'},
   ]
+  const ratingValues = [
+    {id: -1, name: 'ﻻ أنصح به'},
+    {id: 1, name: 'أنصح به'}
+  ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
@@ -103,7 +107,9 @@ const Store = props => {
     spendings: [],
     monthlyTrans: [],
     comments: [],
-    locations: []
+    locations: [],
+    ratings: [],
+    ratingValues
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -217,6 +223,15 @@ const Store = props => {
           dispatch({type: 'SET_LOCATIONS', locations})
         }, err => {
           unsubscribeLocations()
+        })  
+        const unsubscribeRatings = firebase.firestore().collection('ratings').onSnapshot(docs => {
+          let ratings = []
+          docs.forEach(doc => {
+            ratings.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_RATINGS', ratings})
+        }, err => {
+          unsubscribeRatings()
         })  
       }
     })

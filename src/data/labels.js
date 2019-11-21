@@ -179,7 +179,13 @@ const labels = {
   hasDelivery: 'خدمة التوصيل؟',
   editLocation: 'تعديل موقع',
   withDelivery: 'خدمة التوصيل',
-
+  approveRatings: 'اعتماد التقييمات',
+  approvals: 'الموافقات',
+  ratingDetails: 'تفاصيل التقييم',
+  user: 'المستخدم',
+  ratingValue: 'التقييم',
+  comment: 'التعليق',
+  notApprovedUser: 'يجب اعتماد صاحب الطلب اوﻻ'
 }
 
 export default labels

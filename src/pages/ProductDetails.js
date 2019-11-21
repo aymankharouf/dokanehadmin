@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Badge, BlockTitle, Row, Col, Button, Toolbar } from 'framework7-react'
-import Rating from './Rating'
+import RatingStars from './RatingStars'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -21,7 +21,7 @@ const ProductDetails = props => {
         </CardContent>
         <CardFooter>
           <p>{`${state.labels.productOf} ${state.countries.find(c => c.id === product.country).name}`}</p>
-          <p><Rating rating={product.rating} /></p>
+          <p><RatingStars rating={product.rating} /></p>
         </CardFooter>
       </Card>
       <BlockTitle>

@@ -48,7 +48,7 @@ advertisements & request for advert from store owner
 *stock trans (in & out)
 *prevent purchase with price above requested price
 *purchase from the lowest price always
-average price for purchase pack in order
+*average price for purchase pack in order
 purchase with best price flag for each customer
 *change password
 *resolve forget password from the system
@@ -61,12 +61,12 @@ blacklist customer who did not pick his order
 return to a store except type 5
 store trans --purchases & returns
 *image size
-rate product discounts
+*rate product discounts
 hints & help
 alert & notifications
 *withdrawals
-comments when rating
-show ratings count
+*comments when rating
+*show ratings count
 *edit orders
 *purchase discounts
 *forEach instead of for loop
@@ -74,7 +74,8 @@ navigation & performance
 *realtime listeners on app store
 *in pack detail page show a button if there is offers of the same product
 *change admin password
-contact info in home page
+*contact info in home page
 *delivery fees by region not customer
 product describtion
 products with weight
+unavailable after last updates

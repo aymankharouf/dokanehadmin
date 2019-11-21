@@ -32,7 +32,7 @@ const AddCategory = props => {
           label={state.labels.name}
           floatingLabel 
           type="text" 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
         <ListItem
           title={state.labels.unitType}

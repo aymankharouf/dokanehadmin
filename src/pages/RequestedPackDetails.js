@@ -23,10 +23,10 @@ const RequestedPackDetails = props => {
   const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => 
     {
       if (s1.purchasePrice === s2.purchasePrice) {
-        if (Number(state.stores.find(s => s.id === s2.id).type) === Number(state.stores.find(s => s.id === s1.id).type)){
+        if (Number(state.stores.find(s => s.id === s2.storeId).type) === Number(state.stores.find(s => s.id === s1.storeId).type)){
           return s1.time.seconds - s2.time.seconds
         } else {
-          return Number(state.stores.find(s => s.id === s1.id).type) - Number(state.stores.find(s => s.id === s2.id).type)
+          return Number(state.stores.find(s => s.id === s1.storeId).type) - Number(state.stores.find(s => s.id === s2.storeId).type)
         }
       } else {
         return s1.purchasePrice - s2.purchasePrice

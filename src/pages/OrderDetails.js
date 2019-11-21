@@ -34,13 +34,20 @@ const OrderDetails = props => {
   }, [error, props])
 
   const handleAction = type => {
-    if (type === 'e') {
-      props.f7router.navigate(`/editOrder/${order.id}`)
-    } else {
-      updateOrderStatus(order, type, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
-        showMessage(props, 'success', state.labels.editSuccess)
-        props.f7router.back()
-      })  
+    try{
+      if (type === 'e') {
+        props.f7router.navigate(`/editOrder/${order.id}`)
+      } else {
+        if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
+          throw new Error(state.labels.notApprovedUser)
+        }
+        updateOrderStatus(order, type, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
+          showMessage(props, 'success', state.labels.editSuccess)
+          props.f7router.back()
+        })  
+      }  
+    } catch (err) {
+			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
     }
   }
   if (!user) return <ReLogin callingPage="orders"/>
