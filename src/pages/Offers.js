@@ -4,16 +4,16 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 
-const EndedOffers = props => {
+const Offers = props => {
   const { state } = useContext(StoreContext)
-  const packs = useMemo(() => state.packs.filter(p => p.stores.find(s => s.offerEnd && new Date() > s.offerEnd.toDate()))
+  const packs = useMemo(() => state.packs.filter(p => p.stores.find(s => s.offerEnd))
   , [state.packs])
   const packStores = useMemo(() => {
     let stores = []
     let i = 0
     packs.forEach(p => {
       p.stores.forEach(s => {
-        if (s.offerEnd && new Date() > s.offerEnd.toDate()){
+        if (s.offerEnd){
           stores.push({
             packId: p.id,
             productId: p.productId,
@@ -61,4 +61,4 @@ const EndedOffers = props => {
   )
 }
 
-export default EndedOffers
+export default Offers

@@ -13,6 +13,7 @@ const EditProduct = props => {
   const [trademark, setTrademark] = useState(product.trademark)
   const [byWeight, setByWeight] = useState(product.byWeight)
   const [isNew, setIsNew] = useState(product.isNew)
+  const [isActive, setIsActive] = useState(product.isActive)
   const [country, setCountry] = useState(product.country)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
@@ -37,6 +38,17 @@ const EditProduct = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
+  const hasChanged = useMemo(() => {
+    if (name !== product.name) return true
+    if (country !== product.country) return true
+    if (category !== product.category) return true
+    if (trademark !== product.trademark) return true
+    if (byWeight !== product.byWeight) return true
+    if (isNew !== product.isNew) return true
+    if (imageUrl !== product.imageUrl) return true
+    if (isActive !== product.isActive) return true
+    return false
+  }, [product, name, country, category, trademark, byWeight, isNew, imageUrl, isActive])
   const handleSubmit = () => {
     editProduct({
       id: props.id,
@@ -45,6 +57,7 @@ const EditProduct = props => {
       trademark,
       byWeight,
       isNew,
+      isActive,
       country,
       imageUrl,
       image
@@ -139,6 +152,15 @@ const EditProduct = props => {
             onToggleChange={() => setIsNew(!isNew)}
           />
         </ListItem>
+        <ListItem>
+          <span>{state.labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(!isActive)}
+          />
+        </ListItem>
         <ListInput 
           name="image" 
           label="Image" 
@@ -150,7 +172,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !country || !category || !imageUrl || (name === product.name && country === product.country && category === product.category && trademark === product.trademark && byWeight === product.byWeight && isNew === product.isNew && imageUrl === product.imageUrl) ? ''
+      {!name || !country || !category || !imageUrl || !hasChanged ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -18,8 +18,10 @@ const AddStorePack = props => {
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
-  const products = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  , [state.products])
+  const products = useMemo(() => {
+    const products = state.products.filter(p => p.isActive)
+    return products.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  }, [state.products])
   useEffect(() => {
     const validatePrice = value => {
       if (value > 0 && (price ? price >= value : true)){

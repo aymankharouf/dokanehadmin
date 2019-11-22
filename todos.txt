@@ -49,7 +49,6 @@ advertisements & request for advert from store owner
 *prevent purchase with price above requested price
 *purchase from the lowest price always
 *average price for purchase pack in order
-purchase with best price flag for each customer
 *change password
 *resolve forget password from the system
 merge between not approved orders for the same customer
@@ -79,3 +78,13 @@ navigation & performance
 product describtion
 products with weight
 unavailable after last updates
+request for new products
+resolve page freeze when relogin
+update minprice after each purchase to stock
+update minprice when reserved quantity equals quantity in stock (when approving orders reserve quantity in stock if the request price is equal or higher than stock price)
+update minprice for offers expired tonight
+update minprice after each update to price
+delete customer types and add flags
+before confirm order check if there is new prices or not
+over price limit for each customer (default 0)
+seperate store prices in different table

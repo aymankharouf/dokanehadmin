@@ -113,6 +113,79 @@ const Store = props => {
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
+    const unsubscribeSections = firebase.firestore().collection('sections').onSnapshot(docs => {
+      let sections = []
+      docs.forEach(doc => {
+        sections.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_SECTIONS', sections})
+    }, err => {
+      unsubscribeSections()
+    })  
+    const unsubscribeCategories = firebase.firestore().collection('categories').onSnapshot(docs => {
+      let categories = []
+      docs.forEach(doc => {
+        categories.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_CATEGORIES', categories})
+    }, err => {
+      unsubscribeCategories()
+    })
+    const unsubscribeTrademarks = firebase.firestore().collection('trademarks').onSnapshot(docs => {
+      let trademarks = []
+      docs.forEach(doc => {
+        trademarks.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_TRADEMARKS', trademarks})
+    }, err => {
+      unsubscribeTrademarks()
+    })  
+    const unsubscribeCountries = firebase.firestore().collection('countries').onSnapshot(docs => {
+      let countries = []
+      docs.forEach(doc => {
+        countries.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_COUNTRIES', countries})
+    }, err => {
+      unsubscribeCountries()
+    })  
+    const unsubscribeComments = firebase.firestore().collection('comments').onSnapshot(docs => {
+      let comments = []
+      docs.forEach(doc => {
+        comments.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_COMMENTS', comments})
+    }, err => {
+      unsubscribeComments()
+    })  
+    const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
+      let products = []
+      docs.forEach(doc => {
+        products.push({...doc.data(), id: doc.id})
+      })
+      dispatch({type: 'SET_PRODUCTS', products})
+    }, err => {
+      unsubscribeProducts()
+    })
+    const unsubscribePacks = firebase.firestore().collection('packs').onSnapshot(docs => {
+      let packs = []
+      docs.forEach(doc => {
+        packs.push({...doc.data(), id: doc.id})
+      })
+      dispatch({type: 'SET_PACKS', packs})
+    }, err => {
+      unsubscribePacks()
+    })
+    const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
+      let locations = []
+      docs.forEach(doc => {
+        locations.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_LOCATIONS', locations})
+    }, err => {
+      unsubscribeLocations()
+    })  
+
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
@@ -215,15 +288,6 @@ const Store = props => {
         }, err => {
           unsubscribeMonthlyTrans()
         })  
-        const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
-          let locations = []
-          docs.forEach(doc => {
-            locations.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_LOCATIONS', locations})
-        }, err => {
-          unsubscribeLocations()
-        })  
         const unsubscribeRatings = firebase.firestore().collection('ratings').onSnapshot(docs => {
           let ratings = []
           docs.forEach(doc => {
@@ -234,82 +298,6 @@ const Store = props => {
           unsubscribeRatings()
         })  
       }
-    })
-    const unsubscribeSections = firebase.firestore().collection('sections').onSnapshot(docs => {
-      let sections = []
-      docs.forEach(doc => {
-        sections.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_SECTIONS', sections})
-    }, err => {
-      unsubscribeSections()
-    })  
-    const unsubscribeCategories = firebase.firestore().collection('categories').onSnapshot(docs => {
-      let categories = []
-      docs.forEach(doc => {
-        categories.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_CATEGORIES', categories})
-    }, err => {
-      unsubscribeCategories()
-    })
-    const unsubscribeTrademarks = firebase.firestore().collection('trademarks').onSnapshot(docs => {
-      let trademarks = []
-      docs.forEach(doc => {
-        trademarks.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_TRADEMARKS', trademarks})
-    }, err => {
-      unsubscribeTrademarks()
-    })  
-    const unsubscribeCountries = firebase.firestore().collection('countries').onSnapshot(docs => {
-      let countries = []
-      docs.forEach(doc => {
-        countries.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_COUNTRIES', countries})
-    }, err => {
-      unsubscribeCountries()
-    })  
-    const unsubscribeComments = firebase.firestore().collection('comments').onSnapshot(docs => {
-      let comments = []
-      docs.forEach(doc => {
-        comments.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_COMMENTS', comments})
-    }, err => {
-      unsubscribeComments()
-    })  
-    const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
-      let products = []
-      docs.forEach(doc => {
-        products.push({...doc.data(), id: doc.id})
-      })
-      dispatch({type: 'SET_PRODUCTS', products})
-    }, err => {
-      unsubscribeProducts()
-    })
-    const today = (new Date()).setHours(0, 0, 0, 0)
-    const unsubscribePacks = firebase.firestore().collection('packs').onSnapshot(docs => {
-      let packs = []
-      docs.forEach(doc => {
-        let storesPrices = doc.data().stores.map(s => !s.offerEnd || today <= s.offerEnd.toDate() ? s.price : null)
-        storesPrices = storesPrices.filter(p => p !== null)
-        let minPrice = Math.min(...storesPrices)
-        minPrice = minPrice === Infinity ? 0 : minPrice
-        const value = doc.data().unitsCount ? minPrice / doc.data().unitsCount : 0
-        let isOffer = doc.data().isOffer
-        if (isOffer === false) {
-          const store = doc.data().stores.find(s => s.price === minPrice && s.offerEnd && today <= s.offerEnd.toDate())
-          if (store) {
-            isOffer = true
-          }
-        }
-        packs.push({...doc.data(), id: doc.id, isOffer, value, price: minPrice})
-      })
-      dispatch({type: 'SET_PACKS', packs})
-    }, err => {
-      unsubscribePacks()
     })
   }, []);
   return (

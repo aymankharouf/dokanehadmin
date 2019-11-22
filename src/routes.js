@@ -51,7 +51,7 @@ import NewUsers from './pages/NewUsers';
 import ApproveUser from './pages/ApproveUser';
 import PriceAlarms from './pages/PriceAlarms';
 import PriceAlarmDetails from './pages/PriceAlarmDetails';
-import EndedOffers from './pages/EndedOffers';
+import Offers from './pages/Offers';
 import Spendings from './pages/Spendings';
 import AddSpending from './pages/AddSpending';
 import EditSpending from './pages/EditSpending';
@@ -167,8 +167,8 @@ export default [
     component: PriceAlarmDetails
   },
   {
-    path: '/endedOffers/',
-    component: EndedOffers
+    path: '/offers/',
+    component: Offers
   },
   {
     path: '/countries/',

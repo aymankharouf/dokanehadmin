@@ -97,9 +97,7 @@ const EditCustomer = props => {
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
             {stores.map(s => 
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
+              <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>
         </ListItem>

@@ -38,6 +38,7 @@ const Products = props => {
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                   {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
+                  {p.isActive ? '' : <Badge slot="after" color='red'>{state.labels.inActive}</Badge>}
                 </ListItem>
               )
             }

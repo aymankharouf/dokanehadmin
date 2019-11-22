@@ -11,7 +11,7 @@ const labels = {
   error: 'خطأ',
   noData: 'ﻻ يوجد بيانات',
   search: 'بحث',
-  auth_user_not_found: 'الرجاء التأكد من رقم الموبايل وكلمة المرور',
+  auth_user_not_found: 'الرجاء التأكد من معلومات الدخول',
   auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
   auth_wrong_password: 'كلمة السر غير صحيحة',
   orderDetails: 'تفاصيل الطلب',
@@ -129,7 +129,6 @@ const labels = {
   back: 'رجوع',
   reloginTitle: 'طلب تسجيل دخول',
   endOffer: 'انتهى العرض',
-  endedOffers: 'العروض المنتهية',
   rejectSuccess: 'تم الرفض بنجاح',
   spendings: 'المصاريف',
   invalidSpendingDate: 'الرجاء التأكد من التاريخ المدخل',
@@ -185,7 +184,11 @@ const labels = {
   user: 'المستخدم',
   ratingValue: 'التقييم',
   comment: 'التعليق',
-  notApprovedUser: 'يجب اعتماد صاحب الطلب اوﻻ'
+  notApprovedUser: 'يجب اعتماد صاحب الطلب اوﻻ',
+  isActive: 'فعال',
+  inActive: 'غير فعال',
+  haltSuccess: 'تم تعليق العرض بنجاح',
+  noOffers: 'لا يوجد عرض ليتم تعليقه'
 }
 
 export default labels

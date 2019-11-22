@@ -54,24 +54,12 @@ const EditSpending = props => {
     })
   }
   const hasChanged = useMemo(() => {
-    if (spendingAmount * 1000 !== spending.spendingAmount) {
-      return true
-    }
-    if (type !== spending.type) {
-      return true
-    }
-    if (description !== spending.description) {
-      return true
-    }
-    if (!spending.spendingDate && spendingDate.length > 0) {
-      return true
-    }
-    if (spending.spendingDate && spendingDate.length === 0){
-      return true
-    }
-    if ((spending.spendingDate.toDate()).toString() !== (new Date(spendingDate)).toString()) {
-      return true
-    }
+    if (spendingAmount * 1000 !== spending.spendingAmount) return true
+    if (type !== spending.type) return true
+    if (description !== spending.description) return true
+    if (!spending.spendingDate && spendingDate.length > 0) return true
+    if (spending.spendingDate && spendingDate.length === 0) return true
+    if ((spending.spendingDate.toDate()).toString() !== (new Date(spendingDate)).toString()) return true
     return false
   }, [spending, spendingAmount, spendingDate, type, description])
 

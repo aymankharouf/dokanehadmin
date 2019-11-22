@@ -1,7 +1,7 @@
-import React, {useState, useContext, useEffect, useMemo } from 'react'
-import {Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon} from 'framework7-react';
+import React, { useState, useContext, useEffect, useMemo } from 'react'
+import {Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon, FabButton, FabButtons } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editPrice, showMessage } from '../data/Actions'
+import { editPrice, haltOffer, showMessage } from '../data/Actions'
 
 
 const EditPrice = props => {
@@ -21,22 +21,13 @@ const EditPrice = props => {
   const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
+  const [error, setError] = useState('')
   const hasChanged = useMemo(() => {
-    if (price * 1000 !== store.price) {
-      return true
-    }
-    if (purchasePrice * 1000 !== store.purchasePrice) {
-      return true
-    }
-    if (!store.offerEnd && offerEnd.length > 0) {
-      return true
-    }
-    if (store.offerEnd && offerEnd.length === 0){
-      return true
-    }
-    if (store.offer && (store.offerEnd.toDate()).toString() === (new Date(offerEnd)).toString()) {
-      return true
-    }
+    if (price * 1000 !== store.price) return true
+    if (purchasePrice * 1000 !== store.purchasePrice) return true
+    if (!store.offerEnd && offerEnd.length > 0) return true
+    if (store.offerEnd && offerEnd.length === 0) return true
+    if (store.offer && (store.offerEnd.toDate()).toString() === (new Date(offerEnd)).toString()) return true
     return false
   }, [price, purchasePrice, offerEnd, store])
   useEffect(() => {
@@ -61,7 +52,7 @@ const EditPrice = props => {
   }, [price, purchasePrice, state.labels])
 
   useEffect(() => {
-    const validateDate = (value) => {
+    const validateDate = value => {
       if (new Date(value) > new Date()){
         setOfferEndErrorMessage('')
       } else {
@@ -71,19 +62,43 @@ const EditPrice = props => {
     if (offerEnd.length > 0) validateDate(offerEnd)
     else setOfferEndErrorMessage('')
   }, [offerEnd, state.labels])
+  useEffect(() => {
+    if (error) {
+      showMessage(props, 'error', error)
+      setError('')
+    }
+  }, [error, props])
 
   const handleEdit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-    editPrice(
-      store,
-      pack,
-      parseInt(purchasePrice * 1000),
-      parseInt(price * 1000),
-      offerEndDate 
-    ).then(() => {
+    editPrice(pack, store, parseInt(purchasePrice * 1000), parseInt(price * 1000), offerEndDate).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })  
+  }
+  const handleHalt = () => {
+    try{
+      if (offerEnd.length === 0) {
+        throw new Error(state.labels.noOffers)
+      }
+      const offerEndDate = new Date(offerEnd)
+      const today = (new Date()).setHours(0, 0, 0, 0)
+      let confirmation
+      if (offerEndDate > today) {
+        props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
+          confirmation = true
+        })
+      } else {
+        confirmation = true
+      }
+      if (!confirmation) return
+      haltOffer(pack, store).then(() => {
+        showMessage(props, 'success', state.labels.haltSuccess)
+        props.f7router.back()
+      })
+    } catch (err) {
+      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+    }
   }
   return (
     <Page>
@@ -131,15 +146,25 @@ const EditPrice = props => {
           value={offerEnd} 
           errorMessage={offerEndErrorMessage}
           errorMessageForce
-          onCalendarChange={(value) => setOfferEnd(value)}
+          onCalendarChange={value => setOfferEnd(value)}
           onInputClear={() => setOfferEnd([])}
         />
       </List>
-      {!purchasePrice || !price || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage || !hasChanged ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
+      <Fab position="left-top" slot="fixed" color="orange">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
+          {!purchasePrice || !price || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage || !hasChanged ? ''
+          :  <FabButton color="green" onClick={() => handleEdit()}>
+              <Icon material="done"></Icon>
+            </FabButton>
+          }
+          <FabButton color="red" onClick={() => handleHalt()}>
+            <Icon material="report_problem"></Icon>
+          </FabButton>
+        </FabButtons>
+      </Fab>
+      
     </Page>
   )
 }

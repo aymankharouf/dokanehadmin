@@ -229,23 +229,14 @@ export const stockOut = (orders, basket) => {
 
 const packStockOut = (batch, basketPack) => {
   const otherStores = basketPack.stores.filter(s => s.storeId !== 's')
-  const found = basketPack.stores.find(s => s.storeId === 's')
-  let avgPrice
-  let avgPurchasePrice
-  if (found.quantity - basketPack.quantity > 0){
-    avgPrice = ((found.quantity * found.price) - (basketPack.quantity * basketPack.actualPrice)) / (found.quantity - basketPack.quantity)
-    avgPurchasePrice = ((found.quantity * found.purchasePrice) - (basketPack.quantity * basketPack.purchasePrice)) / (found.quantity - basketPack.quantity)
-  } else {
-    avgPrice = null
-    avgPurchasePrice = null
-  }
+  const stock = basketPack.stores.find(s => s.storeId === 's')
   const packRef = firebase.firestore().collection('packs').doc(basketPack.packId)
   batch.update(packRef, {
     stores: [...otherStores, 
       {storeId: 's', 
-      price: avgPrice ? parseInt(avgPrice) : avgPrice, 
-      purchasePrice: avgPurchasePrice ? parseInt(avgPurchasePrice) : avgPurchasePrice, 
-      quantity: found.quantity - basketPack.quantity, 
+      price: stock.quantity - basketPack.quantity === 0 ? 0 : stock.price,
+      purchasePrice: stock.quantity - basketPack.quantity === 0 ? 0 : stock.purchasePrice,
+      quantity: stock.quantity - basketPack.quantity, 
       time: new Date()}
     ]
   })
@@ -274,6 +265,7 @@ export const addProduct = async product => {
     country: product.country,
     byWeight: product.byWeight,
     isNew: product.isNew,
+    isActive: true,
     sales: 0,
     time: new Date()
   })
@@ -300,24 +292,61 @@ export const editProduct = async product => {
     trademark: product.trademark,
     byWeight: product.byWeight,
     isNew: product.isNew,
+    isActive: product.isActive,
     country: product.country,
     imageUrl: url,
   })
 }
 
 export const editPrice = (store, pack, purchasePrice, price, offerEnd) => {
-  let stores = pack.stores.filter(s => s.storeId !== store.id)
-  stores = [
-    ...stores, 
+  let packStores = pack.stores.filter(s => s.storeId !== store.id)
+  packStores = [
+    ...packStores, 
     { storeId: store.id, 
       purchasePrice,
       price,
       offerEnd, 
       time: new Date()
-    }]
+    }
+  ]
+  const {minPrice, weightedPrice, isOffer} = getMinPrice(pack, packStores)
   return firebase.firestore().collection('packs').doc(pack.id).update({
-    stores
+    stores: packStores,
+    price: minPrice,
+    weightedPrice,
+    isOffer
   })
+}
+
+export const haltOffer = (pack, store) => {
+  let packStores = pack.stores.filter(s => s.storeId !== store.id)
+  packStores = [
+    ...packStores, 
+    { storeId: store.id, 
+      purchasePrice: 0,
+      price: 0,
+      offerEnd: pack.offerEnd, 
+      time: new Date()
+    }
+  ]
+  const {minPrice, weightedPrice, isOffer} = getMinPrice(pack, packStores)
+  return firebase.firestore().collection('packs').doc(pack.id).update({
+    stores: packStores,
+    price: minPrice,
+    weightedPrice,
+    isOffer
+  })
+}
+
+const getMinPrice = (pack, packStores) => {
+  const today = (new Date()).setHours(0, 0, 0, 0)
+  let storesPrices = packStores.map(s => s.price)
+  storesPrices = storesPrices.filter(p => p > 0)
+  let minPrice = Math.min(...storesPrices)
+  minPrice = minPrice === Infinity ? 0 : minPrice
+  const weightedPrice = pack.unitsCount ? minPrice / pack.unitsCount : 0
+  const isOffer = pack.isOffer || packStores.find(s => s.price > 0 && s.price === minPrice && s.offerEnd && today <= s.offerEnd.toDate())
+  return {minPrice, weightedPrice, isOffer}
 }
 
 export const deleteStorePack = (store, pack) => {
@@ -553,10 +582,10 @@ export const editOrder = (order, basket, packs) => {
   }
   let packBasket = basket.filter(p => p.quantity > 0)
   packBasket = packBasket.map(p => {
-    return ({
+    return {
       ...p,
       purchasedQuantity: Math.min(p.quantity, p.purchasedQuantity),
-    })
+    }
   })
   const finishedPacks = packBasket.filter(p => p.quantity === p.purchasedQuantity).length
   const purchasedPacks = packBasket.filter(p => p.purchasedQuantity > 0).length
