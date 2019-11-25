@@ -64,13 +64,16 @@ const AddStorePack = props => {
   }, [offerEnd, state.labels])
   const handleSubmit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-    addStorePack(
-      state.packs.find(p => p.id === packId),
-      store,
-      parseInt(purchasePrice * 1000),
-      parseInt(price * 1000),
-      offerEndDate
-    ).then(() => {
+    const storePack = {
+      packId, 
+      storeId: store.id,
+      purchasePrice: parseInt(purchasePrice * 1000),
+      price: parseInt(price * 1000),
+      offerEnd: offerEndDate,
+      time: new Date()
+    }
+    const pack = state.packs.find(p => p.id === packId)
+    addStorePack(storePack, pack, state.storePacks).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })

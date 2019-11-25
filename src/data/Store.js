@@ -52,13 +52,6 @@ const Store = props => {
     {id: 's', name: 'بيع'},
     {id: 'i', name: 'استيداع'}
   ]
-  const customerTypes = [
-    {id: 'n', name: 'عميل عادي'},
-    {id: 'o', name: 'صاحب محل'},
-    {id: 'b', name: 'قائمة سوداء'},
-    {id: 'v', name: 'عميل مميز'},
-    {id: 's', name: 'عميل خاص'}
-  ]
   const discountTypes = [
     {id: 'f', name: 'خصم اول طلب', value: 500},
     {id: 's', name: 'خصم خاص', value: 500},
@@ -73,6 +66,14 @@ const Store = props => {
   const ratingValues = [
     {id: -1, name: 'ﻻ أنصح به'},
     {id: 1, name: 'أنصح به'}
+  ]
+  const otherMobileHolders = [
+    {id: '1', name: 'نفسه'},
+    {id: '2', name: 'زوج/زوجة'},
+    {id: '3', name: 'احد اﻻبناء'},
+    {id: '4', name: 'احد الوالدين'},
+    {id: '5', name: 'صديق'},
+    {id: '6', name: 'جار'}
   ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -100,16 +101,16 @@ const Store = props => {
     forgetPassword: [],
     invitations: [],
     unitTypes,
-    customerTypes,
     customers: [],
     discountTypes,
     spendingTypes,
     spendings: [],
     monthlyTrans: [],
-    comments: [],
     locations: [],
     ratings: [],
-    ratingValues
+    ratingValues,
+    storePacks: [],
+    otherMobileHolders
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -149,15 +150,6 @@ const Store = props => {
     }, err => {
       unsubscribeCountries()
     })  
-    const unsubscribeComments = firebase.firestore().collection('comments').onSnapshot(docs => {
-      let comments = []
-      docs.forEach(doc => {
-        comments.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_COMMENTS', comments})
-    }, err => {
-      unsubscribeComments()
-    })  
     const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
       let products = []
       docs.forEach(doc => {
@@ -176,15 +168,15 @@ const Store = props => {
     }, err => {
       unsubscribePacks()
     })
-    const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
-      let locations = []
+    const unsubscribeForgetPassword = firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
+      let forgetPassword = []
       docs.forEach(doc => {
-        locations.push({...doc.data(), id:doc.id})
+        forgetPassword.push({...doc.data(), id:doc.id})
       })
-      dispatch({type: 'SET_LOCATIONS', locations})
+      dispatch({type: 'SET_FORGET_PASSWORD', forgetPassword})
     }, err => {
-      unsubscribeLocations()
-    })  
+      unsubscribeForgetPassword()
+    })
 
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
@@ -252,15 +244,6 @@ const Store = props => {
         }, err => {
           unsubscribePriceAlarms()
         })  
-        const unsubscribeForgetPassword = firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
-          let forgetPassword = []
-          docs.forEach(doc => {
-            forgetPassword.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_FORGET_PASSWORD', forgetPassword})
-        }, err => {
-          unsubscribeForgetPassword()
-        })
         const unsubscribeInvitations = firebase.firestore().collection('invitations').onSnapshot(docs => {
           let invitations = []
           docs.forEach(doc => {
@@ -297,6 +280,25 @@ const Store = props => {
         }, err => {
           unsubscribeRatings()
         })  
+        const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
+          let locations = []
+          docs.forEach(doc => {
+            locations.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_LOCATIONS', locations})
+        }, err => {
+          unsubscribeLocations()
+        })  
+        const unsubscribeStorePacks = firebase.firestore().collection('storePacks').onSnapshot(docs => {
+          let storePacks = []
+          docs.forEach(doc => {
+            storePacks.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_STORE_PACKS', storePacks})
+        }, err => {
+          unsubscribeStorePacks()
+        })  
+
       }
     })
   }, []);

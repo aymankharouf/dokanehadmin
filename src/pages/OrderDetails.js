@@ -41,7 +41,7 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error(state.labels.notApprovedUser)
         }
-        updateOrderStatus(order, type, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
+        updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
           showMessage(props, 'success', state.labels.editSuccess)
           props.f7router.back()
         })  

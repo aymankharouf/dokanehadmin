@@ -6,42 +6,24 @@ import moment from 'moment'
 
 const Offers = props => {
   const { state } = useContext(StoreContext)
-  const packs = useMemo(() => state.packs.filter(p => p.stores.find(s => s.offerEnd))
-  , [state.packs])
-  const packStores = useMemo(() => {
-    let stores = []
-    let i = 0
-    packs.forEach(p => {
-      p.stores.forEach(s => {
-        if (s.offerEnd){
-          stores.push({
-            packId: p.id,
-            productId: p.productId,
-            name: p.name,
-            storeId: s.storeId,
-            price: s.price,
-            offerEnd: s.offerEnd,
-            id: i++
-          })
-        }
-      })
-    })
-    stores.sort((s1, s2) => s1.offerEnd.seconds - s2.offerEnd.seconds)
-    return stores
-  }, [packs])
+  const storePacks = useMemo(() => {
+    const storePacks = state.storePacks.filter(p => p.offerEnd)
+    return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
+  }, [state.storePacks])
   return(
     <Page>
       <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} />
         <Block>
           <List mediaList>
-            {packStores && packStores.map(p => {
-              const productInfo = state.products.find(pr => pr.id === p.productId)
+            {storePacks && storePacks.map(p => {
+              const packInfo = state.packs.find(pa => pa.id === p.packId)
+              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem
-                  link={`/editPrice/${p.storeId}/pack/${p.packId}`}
+                  link={`/storePack/${p.id}`}
                   title={productInfo.name}
                   after={(p.price / 1000).toFixed(3)}
-                  subtitle={p.name}
+                  subtitle={packInfo.name}
                   text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
                   footer={state.stores.find(s => s.id === p.storeId).name}
                   key={p.id}
@@ -51,7 +33,7 @@ const Offers = props => {
                 </ListItem>
               )
             })}
-            {packStores.length === 0 ? <ListItem title={state.labels.noData} /> : null}
+            {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
           </List>
       </Block>
       <Toolbar bottom>

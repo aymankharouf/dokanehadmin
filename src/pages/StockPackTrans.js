@@ -6,25 +6,26 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
 
 
-const PackTrans = props => {
+const StockPackTrans = props => {
   const { state } = useContext(StoreContext)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const packTrans = useMemo(() => {
-    const purchases = state.purchases.filter(p => p.basket.find(p => p.packId === pack.id))
-    const packTrans = purchases.map(p => {
-      const transPack = p.basket.find(pa => pa.packId === pack.id)
+    const stockTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
+    const packTrans = stockTrans.map(t => {
+      const transPack = t.basket.find(p => p.packId === pack.id)
       return {
         ...transPack,
-        id: p.id,
-        storeId: p.storeId,
-        time: p.time
+        id: t.id,
+        storeId: t.storeId,
+        type: t.type,
+        time: t.time
       }
     })
     return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
-  }, [state.purchases, pack])
+  }, [state.stockTrans, pack])
   return(
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
@@ -32,7 +33,7 @@ const PackTrans = props => {
         <List mediaList>
           {packTrans && packTrans.map(t => 
             <ListItem
-              title={state.stores.find(s => s.id === t.storeId).name}
+              title={t.type === 's' || t.type === 'i' ? state.stockTransTypes.find(ty => ty.id === t.type).name : state.stores.find(s => s.id === t.storeId).name}
               subtitle={moment(t.time.toDate()).fromNow()}
               after={(t.purchasePrice / 1000).toFixed(3)}
               key={t.id}
@@ -50,4 +51,4 @@ const PackTrans = props => {
   )
 }
 
-export default PackTrans
+export default StockPackTrans

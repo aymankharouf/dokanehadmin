@@ -4,8 +4,16 @@ import { StoreContext } from '../data/Store';
 import { logout } from '../data/Actions'
 
 const PanelPage = props => {
-  const { state, user } = useContext(StoreContext)
-  const login_logout = user ? <ListItem link="#" onClick={() => logout()} title={state.labels.logout} /> : <ListItem link="/login/panel" title={state.labels.login} />
+  const { state, user, dispatch } = useContext(StoreContext)
+  const handleLogout = () => {
+    logout().then(() => {
+      props.f7router.app.views.main.router.navigate('/home/', {reloadAll: true})
+      props.f7router.app.panel.close('right') 
+      dispatch({type: 'CLEAR_BASKET'})
+    })
+  }
+
+  const login_logout = user ? <ListItem link="#" onClick={() => handleLogout()} title={state.labels.logout} /> : <ListItem link="/panelLogin/" title={state.labels.login} />
   return(
     <Page>
       <Navbar title={state.labels.mainPanelTitle} />

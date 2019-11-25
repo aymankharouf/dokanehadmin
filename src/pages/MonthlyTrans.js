@@ -145,22 +145,22 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={state.labels.specialDiscounts}
+            title={state.labels.specialDiscount}
             after={(specialDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.firstOrderDiscounts}
+            title={state.labels.firstOrderDiscount}
             after={(firstOrderDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.invitationsDiscounts}
+            title={state.labels.invitationsDiscount}
             after={(invitationsDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.priceAlarmsDiscounts}
+            title={state.labels.priceAlarmsDiscount}
             after={(priceAlarmsDiscounts / 1000).toFixed(3)}
           />
           <ListItem

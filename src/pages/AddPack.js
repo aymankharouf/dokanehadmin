@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, BlockTitle } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-
+import { StoreContext } from '../data/Store'
+import ReLogin from './ReLogin'
 
 const AddPack = props => {
-  const { state } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [isOffer, setIsOffer] = useState(false)
@@ -52,14 +52,14 @@ const AddPack = props => {
       bonusPackId,
       bonusQuantity,
       isBonusFree,
-      stores: [],
+      price: 0,
       time: new Date()
     }).then(() => {
       showMessage(props, 'success', state.labels.addSuccess)
       props.f7router.back()
     })
   }
-  
+  if (!user) return <ReLogin />
   return (
     <Page>
       <Navbar title={`${state.labels.addPack} - ${product.name}`} backLink={state.labels.back} />

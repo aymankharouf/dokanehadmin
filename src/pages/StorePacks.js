@@ -10,16 +10,9 @@ const StorePacks = props => {
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   let storePacks = useMemo(() => {
-    let storePacks = state.packs.filter(p => p.stores.find(s => s.storeId === props.id))
-    storePacks = storePacks.map(p => {
-      return {
-        ...p,
-        price: p.stores.find(s => s.storeId === props.id).price,
-        time: p.stores.find(s => s.storeId === props.id).time
-      }
-    })
+    let storePacks = state.storePacks.filter(p => p.storeId === props.id)
     return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
-  }, [state.packs, props.id])
+  }, [state.storePacks, props.id])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={state.labels.back}>
@@ -41,19 +34,20 @@ const StorePacks = props => {
         </List>
         <List mediaList className="search-list searchbar-found">
           {storePacks.map(p => {
-            const productInfo = state.products.find(pr => pr.id === p.productId)
+            const packInfo = state.packs.find(pa => pa.id === p.packId)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
-                link={`/storePack/${store.id}/pack/${p.id}`}
+                link={`/storePack/${p.id}`}
                 title={productInfo.name}
                 after={(p.price / 1000).toFixed(3)}
-                subtitle={p.name}
+                subtitle={packInfo.name}
                 text={moment(p.time.toDate()).fromNow()}
                 key={p.id}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                {p.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+                {packInfo.isOffer || packInfo.hasOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
               </ListItem>
             )
           })}

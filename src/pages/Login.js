@@ -18,7 +18,7 @@ const Login = props => {
   const handleLogin = () => {
     login(email, password).then(() => {
       showMessage(props, 'success', state.labels.loginSuccess)
-      props.f7router.navigate(`/${props.f7route.params.callingPage}/`)
+      props.f7router.back()
       props.f7router.app.panel.close('right')  
     }).catch (err => {
       setError(state.labels[err.code.replace(/-|\//g, '_')])

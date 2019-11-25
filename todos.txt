@@ -8,9 +8,9 @@
 news
 *order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
 *pick an order
-cancel an order
-finished orders
-not picked orders
+*cancel an order
+*finished orders
+*not picked orders
 delay in picking a finished order
 postpond an order
 most wanted products
@@ -51,7 +51,7 @@ advertisements & request for advert from store owner
 *average price for purchase pack in order
 *change password
 *resolve forget password from the system
-merge between not approved orders for the same customer
+merge between not approved orders from the same customer
 request to cancel an order
 *old age flag for customers
 *position info into customers table
@@ -79,12 +79,28 @@ product describtion
 products with weight
 unavailable after last updates
 request for new products
-resolve page freeze when relogin
-update minprice after each purchase to stock
-update minprice when reserved quantity equals quantity in stock (when approving orders reserve quantity in stock if the request price is equal or higher than stock price)
-update minprice for offers expired tonight
-update minprice after each update to price
-delete customer types and add flags
+*resolve page freeze when relogin
+*update minprice after each purchase to stock
+*update minprice when reserved quantity equals quantity in stock (when approving orders reserve quantity in stock if the request price is equal or higher than stock price)
+*update minprice for offers expired tonight
+*update minprice after edit price
+*delete customer types and add flags
 before confirm order check if there is new prices or not
 over price limit for each customer (default 0)
-seperate store prices in different table
+*seperate store prices in different table
+edit stock price
+prevent multi input in forget password
+check for page permissions (admin & app)
+rounding ratings
+adjust other offers and comments buttons in pack details page
+*add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
+add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
+*add alternative mobile for customer
+add link to customer info in order details page and others
+add units and unit types
+add rating count to rating component
+*add discount value to customer info
+remove weight from product and add it to packs
+modify store page (requested packs, ended offers, last request from owner, packs count)
+modify owner page to categorize his products
+force purchase with price above requested price (loss)

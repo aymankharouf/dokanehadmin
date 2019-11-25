@@ -26,21 +26,14 @@ const ConfirmPurchase = props => {
   }, [discount, state.labels, total])
 
   const handlePurchase = () => {
-    const basket = state.basket.packs.map(p => {
-      return ({
-        ...p,
-        stores: state.packs.find(pa => pa.id === p.packId).stores
-      })
-    })
-    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
     if (store.id === 's') {
-      stockOut(approvedOrders, basket).then(() => {
+      stockOut(state.basket.packs, state.orders, state.storePacks, state.packs).then(() => {
         showMessage(props, 'success', state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       })
     } else { 
-      confirmPurchase(approvedOrders, store.id, basket, total, discount).then(() => {
+      confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount).then(() => {
         showMessage(props, 'success', state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    

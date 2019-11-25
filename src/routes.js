@@ -31,7 +31,7 @@ import ConfirmPurchase from './pages/ConfirmPurchase';
 import Purchases from './pages/Purchases';
 import PurchaseDetails from './pages/PurchaseDetails';
 import Stock from './pages/Stock';
-import PackTrans from './pages/PackTrans';
+import StockPackTrans from './pages/StockPackTrans';
 import StockTrans from './pages/StockTrans';
 import StockTransDetails from './pages/StockTransDetails';
 import Customers from './pages/Customers';
@@ -44,7 +44,6 @@ import EditSection from './pages/EditSection';
 import EditCategory from './pages/EditCategory';
 import EditTrademark from './pages/EditTrademark';
 import EditStore from './pages/EditStore';
-import CustomersList from './pages/CustomersList';
 import CustomerDetails from './pages/CustomerDetails';
 import EditCustomer from './pages/EditCustomer';
 import NewUsers from './pages/NewUsers';
@@ -67,6 +66,7 @@ import EditLocation from './pages/EditLocation';
 import Ratings from './pages/Ratings';
 import Approvals from './pages/Approvals';
 import RatingDetails from './pages/RatingDetails';
+import PackTrans from './pages/PackTrans';
 
 
 export default [
@@ -83,8 +83,15 @@ export default [
     component: PanelPage
   },
   {
-    path: '/login/:callingPage',
-    component: Login
+    path: '/login/',
+    component: Login,
+    options: {
+      reloadCurrent: true,
+    },
+  },
+  {
+    path: '/panelLogin/',
+    component: Login,
   },
   {
     path: '/changePassword/',
@@ -129,10 +136,6 @@ export default [
   {
     path: '/customers/',
     component: Customers,
-  },
-  {
-    path: '/customersList/:id',
-    component: CustomersList
   },
   {
     path: '/newUsers/',
@@ -259,11 +262,11 @@ export default [
     component: EditPack
   },
   {
-    path: '/storePack/:storeId/pack/:packId',
+    path: '/storePack/:id',
     component: StorePackDetails
   },
   {
-    path: '/editPrice/:storeId/pack/:packId',
+    path: '/editPrice/:id',
     component: EditPrice
   },
   {
@@ -303,8 +306,8 @@ export default [
     component: Stock,
   },
   {
-    path: '/packTrans/:id',
-    component: PackTrans
+    path: '/stockPackTrans/:id',
+    component: StockPackTrans
   },
   {
     path: '/stockTrans/',
@@ -353,6 +356,10 @@ export default [
   {
     path: '/rating/:id',
     component: RatingDetails
+  },
+  {
+    path: '/packTrans/:id',
+    component: PackTrans
   },
   {
     path: '(.*)',

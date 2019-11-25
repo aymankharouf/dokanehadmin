@@ -9,8 +9,8 @@ const ReLogin = props => {
       <Navbar title={state.labels.reloginTitle} backLink={state.labels.back} />
       <Block>
         <h3 className="center">
-          You have to login first <br/>
-          <Link className="center" href={`/login/${props.callingPage}`}>{state.labels.login}</Link>
+          {state.labels.relogin} <br/>
+          <Link className="center" href="/login/">{state.labels.login}</Link>
         </h3>
       </Block>
     </Page>

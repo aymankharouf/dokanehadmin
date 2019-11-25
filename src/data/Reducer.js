@@ -165,6 +165,11 @@ const Reducer = (state, action) => {
           ...state,
           ratings: action.ratings
         }
+      case 'SET_STORE_PACKS':
+        return {
+          ...state,
+          storePacks: action.storePacks
+        }
       default:
         return state
     }

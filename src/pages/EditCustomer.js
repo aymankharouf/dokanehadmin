@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react'
+import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -12,29 +12,65 @@ const EditCustomer = props => {
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
+  const [nickName, setNickName] = useState(customer.name)
   const [address, setAddress] = useState(customer.address)
-  const [type, setType] = useState(customer.type)
   const [storeId, setStoreId] = useState(customer.storeId)
   const [locationId, setLocationId] = useState(customer.locationId)
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [position, setPosition] = useState(customer.position)
+  const [specialDiscount, setSpecialDiscount] = useState(customer.specialDiscount)
+  const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
+  const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
+  const [otherMobileHolder, setOtherMobileHolder] = useState(customer.otherMobileHolder)
+  const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
+  const [overPriceLimit, setOverPriceLimit] = useState(customer.overPriceLimit)
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
-  const customerTypes = useMemo(() => [...state.customerTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.customerTypes])
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1)
-  , [state.locations])
+  const hasChanged = useMemo(() => {
+    if (name !== userInfo.name) return true
+    if (nickName !== customer.name) return true
+    if (address !== customer.address) return true
+    if (storeId !== customer.storeId) return true
+    if (locationId !== customer.locationId) return true
+    if (isOldAge !== customer.isOldAge) return true
+    if (position !== customer.position) return true
+    if (isBlocked !== customer.isBlocked) return true
+    if (specialDiscount !== customer.specialDiscount) return true
+    if (otherMobile !== customer.otherMobile) return true
+    if (otherMobileHolder !== customer.otherMobileHolder) return true
+    if (overPriceLimit !== customer.overPriceLimit) return true
+    return false
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, specialDiscount, otherMobile, otherMobileHolder, overPriceLimit])
+  useEffect(() => {
+    const patterns = {
+      mobile: /^07[7-9][0-9]{7}$/
+    }
+    const validateMobile = value => {
+      if (patterns.mobile.test(value)){
+        setOtherMobileErrorMessage('')
+      } else {
+        setOtherMobileErrorMessage(state.labels.invalidMobile)
+      }
+    }
+    if (otherMobile) validateMobile(otherMobile)
+  }, [otherMobile, state.labels])
+
   const handleSubmit = () => {
     const customer = {
       id: props.id,
+      name: nickName,
       storeId,
-      type,
       address,
       locationId,
       isOldAge,
-      position
+      position,
+      isBlocked,
+      specialDiscount: parseInt(specialDiscount * 1000),
+      otherMobile,
+      otherMobileHolder,
+      overPriceLimit: parseInt(overPriceLimit * 1000)
     }
     editCustomer(customer, name).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
@@ -56,6 +92,16 @@ const EditCustomer = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
+          name="nickName" 
+          label={state.labels.nickName}
+          value={nickName}
+          floatingLabel 
+          clearButton
+          type="text" 
+          onChange={e => setNickName(e.target.value)}
+          onInputClear={() => setNickName('')}
+        />
+        <ListInput 
           name="mobile" 
           label={state.labels.mobile}
           value={userInfo.mobile}
@@ -63,26 +109,6 @@ const EditCustomer = props => {
           type="number"
           readonly
         />
-        <ListItem
-          title={state.labels.type}
-          smartSelect
-          smartSelectParams={{
-            openIn: 'popup', 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
-          }}
-        >
-          <select name="type" value={type} onChange={e => setType(e.target.value)}>
-            <option value=""></option>
-            {customerTypes.map(t => 
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            )}
-          </select>
-        </ListItem>
         <ListItem
           title={state.labels.store}
           smartSelect
@@ -114,10 +140,8 @@ const EditCustomer = props => {
         >
           <select name="location" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {locations.map(l => 
-              <option key={l.id} value={l.id}>
-                {l.name}
-              </option>
+            {state.locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
         </ListItem>
@@ -125,6 +149,63 @@ const EditCustomer = props => {
           <span>{state.labels.isOldAge}</span>
           <Toggle color="blue" checked={isOldAge} onToggleChange={() => setIsOldAge(!isOldAge)} />
         </ListItem>
+        <ListItem>
+          <span>{state.labels.isBlocked}</span>
+          <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
+        </ListItem>
+        <ListInput 
+          name="specialDiscount" 
+          label={state.labels.specialDiscount}
+          value={specialDiscount}
+          floatingLabel 
+          clearButton
+          type="number" 
+          onChange={e => setSpecialDiscount(e.target.value)}
+          onInputClear={() => setSpecialDiscount('')}
+        />
+        <ListInput 
+          name="overPriceLimit" 
+          label={state.labels.overPriceLimit}
+          value={overPriceLimit}
+          floatingLabel 
+          clearButton
+          type="number" 
+          onChange={e => setOverPriceLimit(e.target.value)}
+          onInputClear={() => setOverPriceLimit('')}
+        />
+        <ListInput
+          label={state.labels.otherMobile}
+          floatingLabel
+          type="number"
+          name="otherMobile"
+          clearButton
+          value={otherMobile}
+          errorMessage={otherMobileErrorMessage}
+          errorMessageForce
+          onChange={e => setOtherMobile(e.target.value)}
+          onInputClear={() => setOtherMobile('')}
+        />
+        {otherMobile ? 
+          <ListItem
+            title={state.labels.otherMobileHolder}
+            smartSelect
+            smartSelectParams={{
+              openIn: 'popup', 
+              closeOnSelect: true, 
+              searchbar: true, 
+              searchbarPlaceholder: state.labels.search,
+              popupCloseLinkText: state.labels.close
+            }}
+          >
+            <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
+              <option value=""></option>
+              {state.otherMobileHolders.map(h => 
+                <option key={h.id} value={h.id}>{h.name}</option>
+              )}
+            </select>
+          </ListItem>
+        : ''
+        }
         <ListInput 
           name="position" 
           label={state.labels.position}
@@ -149,7 +230,7 @@ const EditCustomer = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || (type === 'o' && !storeId) || (name === userInfo.name && address === customer.address && type === customer.type && storeId === customer.storeId && locationId === customer.locationId && isOldAge === customer.isOldAge && position === customer.position)
+      {!name || !locationId || !hasChanged
       ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>

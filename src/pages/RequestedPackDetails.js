@@ -20,7 +20,9 @@ const RequestedPackDetails = props => {
     }
   }, [error, props])
 
-  const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => 
+  const packStores = useMemo(() => {
+    const packStores = state.storePacks.filter(p => p.packId === props.packId)
+    return packStores.sort((s1, s2) => 
     {
       if (s1.purchasePrice === s2.purchasePrice) {
         if (Number(state.stores.find(s => s.id === s2.storeId).type) === Number(state.stores.find(s => s.id === s1.storeId).type)){
@@ -32,7 +34,7 @@ const RequestedPackDetails = props => {
         return s1.purchasePrice - s2.purchasePrice
       }
     })
-  , [pack, state.stores])
+  }, [props.packId, state.stores, state.storePacks])
 	const handlePurchase = packStore => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== packStore.id){

@@ -1,35 +1,33 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import {Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon, FabButton, FabButtons } from 'framework7-react';
+import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editPrice, haltOffer, showMessage } from '../data/Actions'
+import { editPrice, showMessage } from '../data/Actions'
 
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
-  , [state.packs, props.packId])
+  const storePack = useMemo(() => state.storePacks.find(p => p.id === props.id)
+  , [state.storePacks, props.id])
+  const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
+  , [state.packs, storePack])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const store = useMemo(() => {
-    const store = pack.stores.find(s => s.storeId === props.storeId)
-    return {...store, name: state.stores.find(s => s.id === props.storeId).name}
-  }, [pack, state.stores, props.storeId])
   const [purchasePrice, setPurchasePrice] = useState('')
   const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
   const [price, setPrice] = useState('')
   const [priceErrorMessage, setPriceErrorMessage] = useState('')
-  const initOfferEnd = store.offerEnd ? [store.offerEnd.toDate()] : ''
+  const initOfferEnd = storePack.offerEnd ? [storePack.offerEnd.toDate()] : ''
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
   const [error, setError] = useState('')
   const hasChanged = useMemo(() => {
-    if (price * 1000 !== store.price) return true
-    if (purchasePrice * 1000 !== store.purchasePrice) return true
-    if (!store.offerEnd && offerEnd.length > 0) return true
-    if (store.offerEnd && offerEnd.length === 0) return true
-    if (store.offer && (store.offerEnd.toDate()).toString() === (new Date(offerEnd)).toString()) return true
+    if (price * 1000 !== storePack.price) return true
+    if (purchasePrice * 1000 !== storePack.purchasePrice) return true
+    if (!storePack.offerEnd && offerEnd.length > 0) return true
+    if (storePack.offerEnd && offerEnd.length === 0) return true
+    if (storePack.offerEnd && (storePack.offerEnd.toDate()).toString() === (new Date(offerEnd)).toString()) return true
     return false
-  }, [price, purchasePrice, offerEnd, store])
+  }, [price, purchasePrice, offerEnd, storePack])
   useEffect(() => {
     const validatePrice = value => {
       if (value > 0 && (price ? price >= value : true)){
@@ -71,38 +69,21 @@ const EditPrice = props => {
 
   const handleEdit = () => {
     const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-    editPrice(pack, store, parseInt(purchasePrice * 1000), parseInt(price * 1000), offerEndDate).then(() => {
+    const newStorePack = {
+      ...storePack,
+      price: parseInt(price * 1000),
+      purchasePrice: parseInt(purchasePrice * 1000),
+      offerEnd: offerEndDate,
+      time: new Date()
+    }
+    editPrice(newStorePack, storePack.price, pack, state.storePacks).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       props.f7router.back()
     })  
   }
-  const handleHalt = () => {
-    try{
-      if (offerEnd.length === 0) {
-        throw new Error(state.labels.noOffers)
-      }
-      const offerEndDate = new Date(offerEnd)
-      const today = (new Date()).setHours(0, 0, 0, 0)
-      let confirmation
-      if (offerEndDate > today) {
-        props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
-          confirmation = true
-        })
-      } else {
-        confirmation = true
-      }
-      if (!confirmation) return
-      haltOffer(pack, store).then(() => {
-        showMessage(props, 'success', state.labels.haltSuccess)
-        props.f7router.back()
-      })
-    } catch (err) {
-      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-    }
-  }
   return (
     <Page>
-      <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.editPrice} - ${state.stores.find(s => s.id === storePack.storeId).name}`} backLink={state.labels.back} />
       <Card>
         <CardHeader>
           <p>{product.name}</p>
@@ -124,7 +105,7 @@ const EditPrice = props => {
           errorMessageForce
           onChange={e => setPurchasePrice(e.target.value)}
           onInputClear={() => setPurchasePrice('')}
-          readonly={store.id === 's'}
+          readonly={storePack.storeId === 's'}
         />
         <ListInput 
           name="price" 
@@ -150,21 +131,11 @@ const EditPrice = props => {
           onInputClear={() => setOfferEnd([])}
         />
       </List>
-      <Fab position="left-top" slot="fixed" color="orange">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          {!purchasePrice || !price || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage || !hasChanged ? ''
-          :  <FabButton color="green" onClick={() => handleEdit()}>
-              <Icon material="done"></Icon>
-            </FabButton>
-          }
-          <FabButton color="red" onClick={() => handleHalt()}>
-            <Icon material="report_problem"></Icon>
-          </FabButton>
-        </FabButtons>
-      </Fab>
-      
+      {!purchasePrice || !price || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage || !hasChanged ? ''
+      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+          <Icon material="done"></Icon>
+        </Fab>
+      }
     </Page>
   )
 }

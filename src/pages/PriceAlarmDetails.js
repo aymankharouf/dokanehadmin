@@ -19,16 +19,16 @@ const PriceAlarmDetails = props => {
   , [state.users, priceAlarm])
   const customer = useMemo(() => state.customers.find(c => c.id === priceAlarm.userId)
   , [state.customers, priceAlarm])
-  const storeName = useMemo(() => customer.type === 'o' ? state.stores.find(s => s.id === customer.storeId).name : priceAlarm.storeName
+  const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : priceAlarm.storeName
   , [customer, state.stores, priceAlarm])
-  const storeAddress = useMemo(() => customer.type === 'o' ? state.stores.find(s => s.id === customer.storeId).address : priceAlarm.storePlace
+  const storeAddress = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).address : priceAlarm.storePlace
   , [customer, state.stores, priceAlarm])
   const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   , [state.stores])
   const prices = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
   , [pack])
   const handleApprove = () => {
-    approvePriceAlarm(priceAlarm, pack, store, customer).then(() => {
+    approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks).then(() => {
       showMessage(props, 'success', state.labels.approveSuccess)
 			props.f7router.back()
     })

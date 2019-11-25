@@ -9,13 +9,14 @@ import 'moment/locale/ar'
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const today = (new Date()).setHours(0, 0, 0, 0)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const packStores = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
-  , [pack])
+  const packStores = useMemo(() => {
+    const packStores = state.storePacks.filter(p => p.packId === pack.id)
+    return packStores.sort((s1, s2) => s1.price - s2.price)
+  }, [pack, state.storePacks])
   useEffect(() => {
     if (error) {
       showMessage(props, 'error', error)
@@ -24,10 +25,17 @@ const PackDetails = props => {
   }, [error, props])
   const handlePurchase = packStore => {
 		try{
-      if (packStore.storeId === 's') return
-      if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) return
+      if (packStore.storeId === 's') {
+        throw new Error(state.labels.noPurchaseFromStore)
+      }
+      if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
+        throw new Error(state.labels.offerEnded)
+      }
 			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
 				throw new Error(state.labels.twoDiffStores)
+      }
+      if (state.basket.packs && state.basket.packs.find(p => p.packId === packStore.packId)) {
+        throw new Error(state.labels.duplicatePacKInBasket)
       }
       dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: 1, price: packStore.price}})
       showMessage(props, 'success', state.labels.addToBasketSuccess)
@@ -50,18 +58,18 @@ const PackDetails = props => {
       </Card>
       <List>
       {packStores.map(s => {
-        const currentStore = state.stores.find(st => st.id === s.storeId)
+        const storeInfo = state.stores.find(st => st.id === s.storeId)
         return (
           <ListItem 
             link="#"
-            title={currentStore.name} 
+            title={storeInfo.name} 
             footer={moment(s.time.toDate()).fromNow()} 
             after={(s.price / 1000).toFixed(3)} 
             key={s.storeId} 
             onClick={() => handlePurchase(s)}
           >
             {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : ''}
-            {s.offerEnd && today > s.offerEnd.toDate() ? <Badge slot="after" color='red'>{state.labels.endOffer}</Badge> : ''}
+            {s.offerEnd ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
           </ListItem>
         )
       })}

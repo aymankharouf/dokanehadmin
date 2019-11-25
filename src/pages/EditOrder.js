@@ -21,7 +21,7 @@ const EditOrder = props => {
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
       const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
-      updateOrderStatus(order, type, state.packs).then(() => {
+      updateOrderStatus(order, type, state.storePacks, state.packs).then(() => {
         showMessage(props, 'success', state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
@@ -29,7 +29,7 @@ const EditOrder = props => {
     })
   }
   const handleSubmit = () => {
-    editOrder({...order, withDelivery}, state.orderBasket, state.packs).then(() => {
+    editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs).then(() => {
       showMessage(props, 'success', state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()

@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
@@ -12,10 +12,8 @@ const CustomerDetails = props => {
   , [state.users, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
-  const locationName = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId).name : ''
-  , [customer, state.locations])
-  const typeName = useMemo(() => state.customerTypes.find(t => t.id === customer.type).name
-  , [state.customerTypes, customer])
+  const otherMobileHolderName = useMemo(() => customer.otherMobileHolder ? state.otherMobileHolders.find(h => h.id === customer.otherMobileHolder).name : ''
+  , [customer, state.otherMobileHolders])
 
   return (
     <Page>
@@ -28,7 +26,6 @@ const CustomerDetails = props => {
           name="name" 
           label={state.labels.name}
           value={userInfo.name}
-          floatingLabel 
           type="text" 
           readonly
         />
@@ -36,26 +33,25 @@ const CustomerDetails = props => {
           name="mobile" 
           label={state.labels.mobile}
           value={userInfo.mobile}
-          floatingLabel 
           type="number"
           readonly
         />
         <ListInput 
-          name="type" 
-          label={state.labels.type}
-          value={typeName}
-          floatingLabel 
-          type="text"
-          readonly
-        />
-        <ListInput 
-          name="limit" 
-          label={state.labels.limit}
-          value={(customer.limit / 1000).toFixed(3)}
+          name="orderLimit" 
+          label={state.labels.orderLimit}
+          value={(customer.orderLimit / 1000).toFixed(3)}
           floatingLabel 
           type="number"
           readonly
         />
+        <ListItem>
+          <span>{state.labels.isOldAge}</span>
+          <Toggle color="blue" checked={customer.isOldAge} disabled />
+        </ListItem>
+        <ListItem>
+          <span>{state.labels.isBlocked}</span>
+          <Toggle color="blue" checked={customer.isBlocked} disabled />
+        </ListItem>
         <ListInput 
           name="totalOrders" 
           label={state.labels.totalOrders}
@@ -75,7 +71,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="locationName" 
           label={state.labels.location}
-          value={locationName}
+          value={state.locations.find(l => l.id === customer.locationId).name}
           floatingLabel 
           type="text"
           readonly
@@ -97,9 +93,40 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
+          name="specialDiscount" 
+          label={state.labels.specialDiscount}
+          value={(customer.specialDiscount / 1000).toFixed(3)}
+          floatingLabel 
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="overPriceLimit" 
+          label={state.labels.overPriceLimit}
+          value={(customer.overPriceLimit / 1000).toFixed(3)}
+          floatingLabel 
+          type="number"
+          readonly
+        />
+        <ListInput 
           name="storeName" 
           label={state.labels.store}
           value={storeName}
+          floatingLabel 
+          type="text"
+          readonly
+        />
+        <ListInput 
+          name="otherMobile" 
+          label={state.labels.otherMobile}
+          value={customer.otherMobile}
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="otherMobileHolder" 
+          label={state.labels.otherMobileHolder}
+          value={otherMobileHolderName}
           floatingLabel 
           type="text"
           readonly
