@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { updateOrderStatus, showMessage } from '../data/Actions'
+import { updateOrderStatus, showMessage, showError, getMessage } from '../data/Actions'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -28,12 +28,12 @@ const OrderDetails = props => {
   }, [order.status])
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
 
-  const handleAction = type => {
+  const handleAction = async type => {
     try{
       if (type === 'e') {
         props.f7router.navigate(`/editOrder/${order.id}`)
@@ -41,16 +41,15 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error(state.labels.notApprovedUser)
         }
-        updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes).then(() => {
-          showMessage(props, 'success', state.labels.editSuccess)
-          props.f7router.back()
-        })  
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes)
+        showMessage(props, state.labels.editSuccess)
+        props.f7router.back()
       }  
-    } catch (err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-    }
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  if (!user) return <ReLogin callingPage="orders"/>
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />

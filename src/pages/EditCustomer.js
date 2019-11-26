@@ -2,11 +2,12 @@ import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
-import { editCustomer, showMessage } from '../data/Actions'
+import { editCustomer, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
@@ -56,26 +57,35 @@ const EditCustomer = props => {
     }
     if (otherMobile) validateMobile(otherMobile)
   }, [otherMobile, state.labels])
-
-  const handleSubmit = () => {
-    const customer = {
-      id: props.id,
-      name: nickName,
-      storeId,
-      address,
-      locationId,
-      isOldAge,
-      position,
-      isBlocked,
-      specialDiscount: parseInt(specialDiscount * 1000),
-      otherMobile,
-      otherMobileHolder,
-      overPriceLimit: parseInt(overPriceLimit * 1000)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
     }
-    editCustomer(customer, name).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
-      props.f7router.back()  
-    })
+  }, [error, props])
+
+  const handleSubmit = async () => {
+    try{
+      const customer = {
+        id: props.id,
+        name: nickName,
+        storeId,
+        address,
+        locationId,
+        isOldAge,
+        position,
+        isBlocked,
+        specialDiscount: parseInt(specialDiscount * 1000),
+        otherMobile,
+        otherMobileHolder,
+        overPriceLimit: parseInt(overPriceLimit * 1000)
+      }
+      await editCustomer(customer, name)
+      showMessage(props, state.labels.editSuccess)
+      props.f7router.back()    
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

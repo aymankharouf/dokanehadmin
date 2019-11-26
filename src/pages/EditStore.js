@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { editStore, showMessage } from '../data/Actions'
+import { editStore, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,6 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   const storeOwners = useMemo(() => state.customers.filter(c => c.storeId === props.id)
@@ -31,18 +32,27 @@ const EditStore = props => {
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
   }, [mobile, state.labels])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
-  const handleSubmit = () => {
-    editStore({
-      id: store.id,
-      name,
-      type,
-      mobile,
-      address
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  const handleSubmit = async () => {
+    try{
+      await editStore({
+        id: store.id,
+        name,
+        type,
+        mobile,
+        address
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

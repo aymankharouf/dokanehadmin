@@ -18,26 +18,26 @@ const OrdersList = props => {
     <Page>
       <Navbar title={`${state.labels.orders} - ${status.name}`} backLink={state.labels.back} />
       <Block>
-          <List mediaList>
-            {orders && orders.map(o => {
-              const userInfo = state.users.find(u => u.id === o.userId)
-              const orderNet = o.total + o.fixedFees + o.deliveryFees - o.discount.value
-              return (
-                <ListItem
-                  link={`/order/${o.id}`}
-                  title={`${userInfo.name} - ${userInfo.mobile}`}
-                  after={(orderNet / 1000).toFixed(3)}
-                  subtitle={moment(o.time.toDate()).fromNow()}
-                  text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
-                  key={o.id}
-                >
-                  {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
-                </ListItem>
-              )
-            }
-            )}
-            {orders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
-          </List>
+        <List mediaList>
+          {orders && orders.map(o => {
+            const userInfo = state.users.find(u => u.id === o.userId)
+            const orderNet = o.total + o.fixedFees + o.deliveryFees - o.discount.value
+            return (
+              <ListItem
+                link={`/order/${o.id}`}
+                title={`${userInfo.name} - ${userInfo.mobile}`}
+                after={(orderNet / 1000).toFixed(3)}
+                subtitle={moment(o.time.toDate()).fromNow()}
+                text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
+                key={o.id}
+              >
+                {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
+              </ListItem>
+            )
+          }
+          )}
+          {orders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+        </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

@@ -196,7 +196,12 @@ const labels = {
   otherMobile: 'رقم موبايل بديل',
   sameMobile: 'رقم الموبايل البديل هو نفس رقم الموبايل',
   isBlocked: 'محظور',
-  overPriceLimit: 'سقف الزيادة في قيمة الطلب'
+  overPriceLimit: 'سقف الزيادة في قيمة الطلب',
+  permission_denied: 'ليس لك صلاحية لاتمام هذه العملية',
+  unknownError: 'خدث خطأ، يرجى المحاولة مرة أخرى',
+  invalidPeriod: 'الرجاء التأكد من مدة العرض',
+  offerDays: 'عرض لمدة',
+  duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل'
 }
 
 export default labels

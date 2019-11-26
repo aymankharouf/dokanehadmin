@@ -2,7 +2,7 @@ import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
-import { packUnavailable, showMessage } from '../data/Actions'
+import { packUnavailable, showMessage, showError, getMessage } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
 
@@ -13,13 +13,6 @@ const RequestedPackDetails = props => {
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  useEffect(() => {
-    if (error) {
-      showMessage(props, 'error', error)
-      setError('')
-    }
-  }, [error, props])
-
   const packStores = useMemo(() => {
     const packStores = state.storePacks.filter(p => p.packId === props.packId)
     return packStores.sort((s1, s2) => 
@@ -35,6 +28,12 @@ const RequestedPackDetails = props => {
       }
     })
   }, [props.packId, state.stores, state.storePacks])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 	const handlePurchase = packStore => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== packStore.id){
@@ -50,10 +49,10 @@ const RequestedPackDetails = props => {
         throw new Error(state.labels.unavailableInStock)
       }
       dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
-      showMessage(props, 'success', state.labels.addToBasketSuccess)
+      showMessage(props, state.labels.addToBasketSuccess)
 			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
 		}
   }
   const handleUnavailable = () => {

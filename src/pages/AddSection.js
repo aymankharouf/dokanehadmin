@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { addSection, showMessage } from '../data/Actions'
+import React, { useState, useContext, useEffect } from 'react'
+import { addSection, showMessage, showError, getMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,14 +7,23 @@ import BottomToolbar from './BottomToolbar';
 
 const AddSection = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const handleSubmit = () => {
-    addSection({
-      name
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleSubmit = async () => {
+    try{
+      await addSection({name})
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -31,11 +40,10 @@ const AddSection = props => {
           onInputClear={() => setName('')}
         />
       </List>
-      {name ?
+      {!name ? '' : 
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
-        : ''
       }
       <Toolbar bottom>
         <BottomToolbar/>

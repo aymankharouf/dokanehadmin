@@ -1,17 +1,17 @@
-import React, {useState, useContext, useMemo } from 'react'
+import React, {useState, useContext, useMemo, useEffect } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editProduct, showMessage } from '../data/Actions'
+import { editProduct, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
   const [category, setCategory] = useState(product.category)
   const [trademark, setTrademark] = useState(product.trademark)
-  const [byWeight, setByWeight] = useState(product.byWeight)
   const [isNew, setIsNew] = useState(product.isNew)
   const [isActive, setIsActive] = useState(product.isActive)
   const [country, setCountry] = useState(product.country)
@@ -43,28 +43,36 @@ const EditProduct = props => {
     if (country !== product.country) return true
     if (category !== product.category) return true
     if (trademark !== product.trademark) return true
-    if (byWeight !== product.byWeight) return true
     if (isNew !== product.isNew) return true
     if (imageUrl !== product.imageUrl) return true
     if (isActive !== product.isActive) return true
     return false
-  }, [product, name, country, category, trademark, byWeight, isNew, imageUrl, isActive])
-  const handleSubmit = () => {
-    editProduct({
-      id: props.id,
-      category,
-      name,
-      trademark,
-      byWeight,
-      isNew,
-      isActive,
-      country,
-      imageUrl,
-      image
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  }, [product, name, country, category, trademark, isNew, imageUrl, isActive])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleSubmit = async () => {
+    try{
+      await editProduct({
+        id: props.id,
+        category,
+        name,
+        trademark,
+        isNew,
+        isActive,
+        country,
+        imageUrl,
+        image
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -133,15 +141,6 @@ const EditProduct = props => {
               <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>
-        </ListItem>
-        <ListItem>
-          <span>{state.labels.byWeight}</span>
-          <Toggle 
-            name="byWeight" 
-            color="green" 
-            checked={byWeight} 
-            onToggleChange={() => setByWeight(!byWeight)}
-          />
         </ListItem>
         <ListItem>
           <span>{state.labels.isNew}</span>

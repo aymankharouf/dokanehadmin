@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addSpending, showMessage } from '../data/Actions'
+import { addSpending, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const AddSpending = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [type, setType] = useState('')
   const [spendingAmount, setSpendingAmount] = useState('')
   const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
@@ -38,18 +39,27 @@ const AddSpending = props => {
     if (spendingDate.length > 0) validateDate(spendingDate)
     else setSpendingDateErrorMessage('')
   }, [spendingDate, state.labels])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
-  const handleSubmit = () => {
-    const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
-    addSpending({
-      type,
-      spendingAmount: parseInt(spendingAmount * 1000),
-      spendingDate: formatedDate,
-      description
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  const handleSubmit = async () => {
+    try{
+      const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
+      await addSpending({
+        type,
+        spendingAmount: parseInt(spendingAmount * 1000),
+        spendingDate: formatedDate,
+        description
+      })
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -108,8 +118,8 @@ const AddSpending = props => {
         />
 
       </List>
-      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

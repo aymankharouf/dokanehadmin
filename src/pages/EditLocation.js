@@ -1,12 +1,12 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { editLocation, showMessage } from '../data/Actions'
+import { editLocation, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
-
 const EditLocation = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const location = useMemo(() => state.locations.find(l => l.id === props.id)
   , [state.locations, props.id])
   const [name, setName] = useState(location.name)
@@ -15,16 +15,26 @@ const EditLocation = props => {
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
-  const handleEdit = () => {
-    editLocation({
-      id: location.id,
-      name,
-      hasDelivery,
-      deliveryFees: parseInt(deliveryFees * 1000)
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
-      props.f7router.back()
-    })
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleEdit = async () => {
+    try{
+      await editLocation({
+        id: location.id,
+        name,
+        hasDelivery,
+        deliveryFees: parseInt(deliveryFees * 1000)
+      })
+      showMessage(props, state.labels.editSuccess)
+      props.f7router.back()  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

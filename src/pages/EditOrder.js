@@ -1,10 +1,11 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, editOrder, showMessage } from '../data/Actions';
+import { updateOrderStatus, editOrder, showMessage, showError, getMessage } from '../data/Actions';
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
@@ -14,30 +15,43 @@ const EditOrder = props => {
   }, [state.locations, state.customers, order])
   const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((sum, p) => sum + (p.price * p.quantity), 0) : 0
   , [state.orderBasket])
+  useEffect(() => {
+    dispatch({type: 'LOAD_ORDER_BASKET', order})
+  }, [dispatch, order])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
   const handleChangePack = (pack, value) => {
     if (pack.quantity === 0 && value === -1) return 
     dispatch({type: 'CHANGE_ORDER_PACK', params: {pack, value}})
   }
   const handleDelete = () => {
-    props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
-      const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
-      updateOrderStatus(order, type, state.storePacks, state.packs).then(() => {
-        showMessage(props, 'success', state.labels.deleteSuccess)
+    try{
+      props.f7router.app.dialog.confirm(state.labels.confirmationText, async () => {
+        const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
+        await updateOrderStatus(order, type, state.storePacks, state.packs)
+        showMessage(props, state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
-      })
-    })
+      })  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  const handleSubmit = () => {
-    editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  const handleSubmit = async () => {
+    try{
+      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs)
+      showMessage(props, state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  useEffect(() => {
-    dispatch({type: 'LOAD_ORDER_BASKET', order})
-  }, [dispatch, order])
   return (
     <Page>
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />

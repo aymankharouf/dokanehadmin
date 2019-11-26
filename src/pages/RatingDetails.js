@@ -1,28 +1,39 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
-import { approveRating, showMessage } from '../data/Actions'
+import { approveRating, showMessage, showError, getMessage } from '../data/Actions'
 
 const RatingDetails = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const rating = useMemo(() => state.ratings.find(r => r.id === props.id)
   , [state.ratings, props.id])
   const product = useMemo(() => state.products.find(p => p.id === rating.productId)
   , [state.products, rating])
   const customerInfo = useMemo(() => state.customers.find(c => c.id === rating.userId)
   , [state.customers, rating])
-  const handleApproving = () => {
-    approveRating(rating, product, customerInfo).then(() => {
-      showMessage(props, 'success', state.labels.approveSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleApprove = async () => {
+    try{
+      await approveRating(rating, product, customerInfo)
+      showMessage(props, state.labels.approveSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
 
   return (
     <Page>
       <Navbar title={state.labels.ratingDetails} backLink={state.labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleApproving()}>
+      <Fab position="left-top" slot="fixed" color="green" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>
       <List form>

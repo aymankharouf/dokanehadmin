@@ -1,11 +1,12 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store'
-import { addMonthlyTrans, showMessage } from '../data/Actions'
+import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/Actions'
 
 const MonthlyTrans = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const month = (Number(props.id) % 100) - 1
   const year = parseInt(Number(props.id) / 100)
   const monthlyTrans = useMemo(() => state.monthlyTrans.find(t => t.id === props.id)
@@ -70,28 +71,38 @@ const MonthlyTrans = props => {
     }
     return false
   }, [year, month, monthlyTrans])
-  const handleMonthlyTrans = () => {
-    const trans = {
-      id: props.id,
-      ordersCount,
-      finishedOrdersCount,
-      deliveredOrdersCount,
-      storePacks,
-      sales,
-      profit,
-      fixedFees,
-      deliveryFees,
-      specialDiscounts,
-      firstOrderDiscounts,
-      invitationsDiscounts,
-      priceAlarmsDiscounts,
-      withdrawals,
-      expenses
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
     }
-    addMonthlyTrans(trans).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  }, [error, props])
+
+  const handleMonthlyTrans = async () => {
+    try{
+      const trans = {
+        id: props.id,
+        ordersCount,
+        finishedOrdersCount,
+        deliveredOrdersCount,
+        storePacks,
+        sales,
+        profit,
+        fixedFees,
+        deliveryFees,
+        specialDiscounts,
+        firstOrderDiscounts,
+        invitationsDiscounts,
+        priceAlarmsDiscounts,
+        withdrawals,
+        expenses
+      }
+      await addMonthlyTrans(trans)
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return(
     <Page>

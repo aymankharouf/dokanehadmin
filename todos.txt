@@ -16,7 +16,7 @@ postpond an order
 most wanted products
 *net profit & sales (daily, weekly, monthly, yearly)
 *cancel part of an order(prices changing or not avaliable)
-dokaneh stores - purshasing & not picked orders
+*dokaneh stores - purshasing & not picked orders
 *in stoke (quantity & net value)
 *offers: packages, discounts for group, extra
 *cost types & costs
@@ -104,3 +104,7 @@ remove weight from product and add it to packs
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
 force purchase with price above requested price (loss)
+prevent adding price alarms before approving previous one
+smart basket when confirm order
+delivery plan by locations
+modify edit price as add store pack

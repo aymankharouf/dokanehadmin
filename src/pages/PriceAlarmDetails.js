@@ -1,13 +1,14 @@
-import React, { useContext, useState, useMemo } from 'react'
+import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
-import { approvePriceAlarm, rejectPriceAlarm, showMessage } from '../data/Actions'
+import { approvePriceAlarm, rejectPriceAlarm, showMessage, showError, getMessage } from '../data/Actions'
 
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [store, setStore] = useState('')
   const priceAlarm = useMemo(() => state.priceAlarms.find(a => a.id === props.id)
   , [state.priceAlarms, props.id])
@@ -27,17 +28,30 @@ const PriceAlarmDetails = props => {
   , [state.stores])
   const prices = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
   , [pack])
-  const handleApprove = () => {
-    approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks).then(() => {
-      showMessage(props, 'success', state.labels.approveSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleApprove = async () => {
+    try{
+      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks)
+      showMessage(props, state.labels.approveSuccess)
 			props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  const handleReject = () => {
-    rejectPriceAlarm(priceAlarm).then(() => {
-      showMessage(props, 'success', state.labels.rejectSuccess)
+  const handleReject = async () => {
+    try{
+      await rejectPriceAlarm(priceAlarm)
+      showMessage(props, state.labels.rejectSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
 
   return (
@@ -47,7 +61,7 @@ const PriceAlarmDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-        {customer.type === 'o' || store ? 
+        {customer.storeId || store ? 
           <FabButton color="green" onClick={() => handleApprove()}>
             <Icon material="done"></Icon>
           </FabButton>
@@ -61,7 +75,7 @@ const PriceAlarmDetails = props => {
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
-          <p>{`${userInfo.name} ${userInfo.mobile} (${state.customerTypes.find(t => t.id === customer.type).name})`}</p>
+          <p>{`${userInfo.name} ${userInfo.mobile}`}</p>
           <p>{`${storeName} ${storeAddress}`}</p>
         </CardContent>
         <CardFooter>
@@ -69,7 +83,7 @@ const PriceAlarmDetails = props => {
           <p className='price'>{(pack.price / 1000).toFixed(3)}</p>
         </CardFooter>
       </Card>
-      {customer.type === 'o' ? '' :
+      {customer.storeId ? '' :
         <List form>
           <ListItem
             title={state.labels.store}

@@ -9,7 +9,7 @@ const PurchaseDetails = props => {
   const { state, user } = useContext(StoreContext)
   const purchase = useMemo(() => state.purchases.find(p => p.id === props.id)
   , [state.purchases, props.id])
-  if (!user) return <ReLogin callingPage="purchase"/>
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={state.labels.purchaseDetails} backLink={state.labels.back} />

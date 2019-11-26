@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addPack, showMessage } from '../data/Actions'
+import { addPack, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, BlockTitle } from 'framework7-react';
 import { StoreContext } from '../data/Store'
 import ReLogin from './ReLogin'
 
 const AddPack = props => {
   const { state, user } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [isOffer, setIsOffer] = useState(false)
@@ -39,25 +40,34 @@ const AddPack = props => {
       setIsBonusFree(false)
     }
   }, [isOffer])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
-  const handleSubmit = () => {
-    addPack({
-      productId: product.id,
-      name,
-      unitsCount,
-      isOffer,
-      offerPackId,
-      offerQuantity,
-      bonusProductId,
-      bonusPackId,
-      bonusQuantity,
-      isBonusFree,
-      price: 0,
-      time: new Date()
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  const handleSubmit = async () => {
+    try{
+      await addPack({
+        productId: product.id,
+        name,
+        unitsCount,
+        isOffer,
+        offerPackId,
+        offerQuantity,
+        bonusProductId,
+        bonusPackId,
+        bonusQuantity,
+        isBonusFree,
+        price: 0,
+        time: new Date()
+      })
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   if (!user) return <ReLogin />
   return (
@@ -188,8 +198,8 @@ const AddPack = props => {
           </List>
         </React.Fragment>
       : ''}
-      {!name || !unitsCount ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !unitsCount ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

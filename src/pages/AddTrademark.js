@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { addTrademark, showMessage } from '../data/Actions'
+import React, { useState, useContext, useEffect } from 'react'
+import { addTrademark, showMessage, showError, getMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,14 +7,22 @@ import BottomToolbar from './BottomToolbar';
 
 const AddTrademark = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const handleSubmit = () => {
-    addTrademark({
-      name
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+  const handleSubmit = async () => {
+    try{
+      await addTrademark({name})
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -25,14 +33,13 @@ const AddTrademark = props => {
           label={state.labels.name}
           floatingLabel 
           type="text" 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
       </List>
-      {name ? 
+      {!name ? '' : 
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
-        : ''
       }
       <Toolbar bottom>
         <BottomToolbar/>

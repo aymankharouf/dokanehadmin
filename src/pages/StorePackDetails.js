@@ -1,49 +1,65 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Card, CardContent, Icon, Fab, Toolbar, FabButtons, FabButton, CardFooter} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
-import { deleteStorePack, confirmPrice, haltOffer, showMessage } from '../data/Actions'
+import { deleteStorePack, confirmPrice, haltOffer, showMessage, showError, getMessage } from '../data/Actions'
 
 const StorePackDetails = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const storePack = useMemo(() => state.storePacks.find(p => p.id === props.id)
   , [state.storePacks, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
   , [state.packs, storePack])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
   const handleEditPrice = () => {
     props.f7router.navigate(`/editPrice/${storePack.id}`)
   }
-  const handleDelete = () => {
-    deleteStorePack(storePack, pack, state.storePacks).then(() => {
-      showMessage(props, 'success', state.labels.deleteSuccess)
+  const handleDelete = async () => {
+    try{
+      await deleteStorePack(storePack, pack, state.storePacks)
+      showMessage(props, state.labels.deleteSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  const handleConfirmPrice = () => {
-    confirmPrice(storePack).then(() => {
-      showMessage(props, 'success', state.labels.approveSuccess)
+  const handleConfirmPrice = async () => {
+    try{
+      await confirmPrice(storePack)
+      showMessage(props, state.labels.approveSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  const handleHaltOffer = () => {
-    const offerEndDate = new Date(storePack.offerEnd)
-    const today = (new Date()).setHours(0, 0, 0, 0)
-    let confirmation
-    if (offerEndDate > today) {
-      props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
+  const handleHaltOffer = async () => {
+    try{
+      const offerEndDate = new Date(storePack.offerEnd)
+      const today = (new Date()).setHours(0, 0, 0, 0)
+      let confirmation
+      if (offerEndDate > today) {
+        props.f7router.app.dialog.confirm(state.labels.confirmationText, () => {
+          confirmation = true
+        })
+      } else {
         confirmation = true
-      })
-    } else {
-      confirmation = true
-    }
-    if (!confirmation) return
-    haltOffer(storePack, pack, state.storePacks).then(() => {
-      showMessage(props, 'success', state.labels.haltSuccess)
-      props.f7router.back()
-    })
+      }
+      if (!confirmation) return
+      await haltOffer(storePack, pack, state.storePacks)
+      showMessage(props, state.labels.haltSuccess)
+      props.f7router.back()  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
 
   return (

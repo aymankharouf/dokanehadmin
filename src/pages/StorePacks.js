@@ -55,7 +55,7 @@ const StorePacks = props => {
         </List>
       </Block>
       {store.id === 's' ? '' : 
-        <Fab position="left-top" slot="fixed" color="orange">
+        <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
           <Icon material="keyboard_arrow_down"></Icon>
           <Icon material="close"></Icon>
           <FabButtons position="bottom">

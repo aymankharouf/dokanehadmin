@@ -14,18 +14,18 @@ const Purchases = props => {
     <Page>
       <Navbar title={state.labels.purchases} backLink={state.labels.back} />
       <Block>
-          <List mediaList>
-            {purchases && purchases.map(p => 
-              <ListItem
-                link={`/purchase/${p.id}`}
-                title={state.stores.find(s => s.id === p.storeId).name}
-                after={((p.total - p.discount) / 1000).toFixed(3)}
-                text={moment(p.time.toDate()).fromNow()}
-                key={p.id}
-              />
-            )}
-            {purchases.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
-          </List>
+        <List mediaList>
+          {purchases && purchases.map(p => 
+            <ListItem
+              link={`/purchase/${p.id}`}
+              title={state.stores.find(s => s.id === p.storeId).name}
+              after={((p.total - p.discount) / 1000).toFixed(3)}
+              text={moment(p.time.toDate()).fromNow()}
+              key={p.id}
+            />
+          )}
+          {purchases.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+        </List>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addLocation, showMessage } from '../data/Actions'
+import { addLocation, showMessage, showError, getMessage } from '../data/Actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,21 +7,32 @@ import BottomToolbar from './BottomToolbar';
 
 const AddLocation = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [hasDelivery, setHasDelivery] = useState(false)
   const [deliveryFees, setDeliveryFees] = useState('')
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
-  const handleSubmit = () => {
-    addLocation({
-      name,
-      hasDelivery,
-      deliveryFees: parseInt(deliveryFees * 1000)
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleSubmit = async () => {
+    try{
+      await addLocation({
+        name,
+        hasDelivery,
+        deliveryFees: parseInt(deliveryFees * 1000)
+      })
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

@@ -1,5 +1,5 @@
-import React, { useState, useContext, useMemo } from 'react'
-import { editCategory, showMessage } from '../data/Actions'
+import React, { useState, useContext, useMemo, useEffect } from 'react'
+import { editCategory, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,21 +7,32 @@ import BottomToolbar from './BottomToolbar';
 
 const EditCategory = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const category = useMemo(() => state.categories.find(c => c.id === props.id)
   , [state.categories, props.id])
   const [name, setName] = useState(category.name)
   const [unitType, setUnitType] = useState(category.unitType || '')
   const unitTypes = useMemo(() => [...state.unitTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.unitTypes])
-  const handleEdit = () => {
-    editCategory({
-      id: category.id,
-      name,
-      unitType
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleEdit = async () => {
+    try{
+      await editCategory({
+        id: category.id,
+        name,
+        unitType
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   
   return (

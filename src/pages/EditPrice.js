@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { editPrice, showMessage } from '../data/Actions'
+import { editPrice, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const storePack = useMemo(() => state.storePacks.find(p => p.id === props.id)
   , [state.storePacks, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
@@ -19,7 +20,6 @@ const EditPrice = props => {
   const initOfferEnd = storePack.offerEnd ? [storePack.offerEnd.toDate()] : ''
   const [offerEnd, setOfferEnd] = useState(initOfferEnd)
   const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
-  const [error, setError] = useState('')
   const hasChanged = useMemo(() => {
     if (price * 1000 !== storePack.price) return true
     if (purchasePrice * 1000 !== storePack.purchasePrice) return true
@@ -62,24 +62,27 @@ const EditPrice = props => {
   }, [offerEnd, state.labels])
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
 
-  const handleEdit = () => {
-    const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-    const newStorePack = {
-      ...storePack,
-      price: parseInt(price * 1000),
-      purchasePrice: parseInt(purchasePrice * 1000),
-      offerEnd: offerEndDate,
-      time: new Date()
-    }
-    editPrice(newStorePack, storePack.price, pack, state.storePacks).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  const handleEdit = async () => {
+    try{
+      const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
+      const newStorePack = {
+        ...storePack,
+        price: parseInt(price * 1000),
+        purchasePrice: parseInt(purchasePrice * 1000),
+        offerEnd: offerEndDate,
+        time: new Date()
+      }
+      await editPrice(newStorePack, storePack.price, pack, state.storePacks)
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

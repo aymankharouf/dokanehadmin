@@ -2,7 +2,7 @@ import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store'
-import { showMessage } from '../data/Actions'
+import { showMessage, showError, getMessage } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
 
@@ -19,7 +19,7 @@ const PackDetails = props => {
   }, [pack, state.storePacks])
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
@@ -29,19 +29,19 @@ const PackDetails = props => {
         throw new Error(state.labels.noPurchaseFromStore)
       }
       if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
-        throw new Error(state.labels.offerEnded)
+        throw new Error('offerEnded')
       }
 			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
-				throw new Error(state.labels.twoDiffStores)
+				throw new Error('twoDiffStores')
       }
       if (state.basket.packs && state.basket.packs.find(p => p.packId === packStore.packId)) {
-        throw new Error(state.labels.duplicatePacKInBasket)
+        throw new Error('duplicatePacKInBasket')
       }
       dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: 1, price: packStore.price}})
-      showMessage(props, 'success', state.labels.addToBasketSuccess)
+      showMessage(props, state.labels.addToBasketSuccess)
 			props.f7router.back()
-		} catch(err) {
-			err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
 		}
 	}
 

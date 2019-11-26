@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { editPack, showMessage } from '../data/Actions'
+import { editPack, showMessage, showError, getMessage } from '../data/Actions'
 import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, BlockTitle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
 
 const EditPack = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
@@ -41,24 +42,32 @@ const EditPack = props => {
       setIsBonusFree('')
     }
   }, [isOffer])
-
-  const handleSubmit = () => {
-    const newPack = {
-      ...pack,
-      name,
-      unitsCount,
-      isOffer,
-      offerPackId,
-      offerQuantity,
-      bonusProductId,
-      bonusPackId,
-      bonusQuantity,
-      isBonusFree
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
     }
-    editPack(newPack).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  }, [error, props])
+  const handleSubmit = async () => {
+    try{
+      const newPack = {
+        ...pack,
+        name,
+        unitsCount,
+        isOffer,
+        offerPackId,
+        offerQuantity,
+        bonusProductId,
+        bonusPackId,
+        bonusQuantity,
+        isBonusFree
+      }
+      await editPack(newPack)
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

@@ -9,7 +9,7 @@ const Stock = props => {
     let storePacks = state.storePacks.filter(p => p.storeId === 's')
     return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     }, [state.storePacks])
-  if (!user) return <ReLogin callingPage="stock"/>
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={state.labels.stock} backLink={state.labels.back}>

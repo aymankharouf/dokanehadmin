@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-import { changePassword, showMessage } from '../data/Actions'
+import { changePassword, showMessage, showError, getMessage } from '../data/Actions'
 
 const ChangePassword = props => {
   const { state } = useContext(StoreContext)
@@ -10,18 +10,19 @@ const ChangePassword = props => {
   const [error, setError] = useState('')
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
 
-  const handleSubmit = () => {
-    changePassword(oldPassword, newPassword).then(() => {
-      showMessage(props, 'success', state.labels.changePasswordSuccess)
+  const handleSubmit = async () => {
+    try{
+      await changePassword(oldPassword, newPassword)
+      showMessage(props, state.labels.changePasswordSuccess)
       props.f7router.back()
-    }).catch (err => {
-      setError(state.labels[err.code.replace(/-|\//g, '_')])
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
 
   return (

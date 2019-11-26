@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addStore, showMessage } from '../data/Actions'
+import { addStore, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,6 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const AddStore = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [type, setType] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
@@ -29,17 +30,26 @@ const AddStore = props => {
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
   }, [mobile, state.labels])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
-  const handleSubmit = () => {
-    addStore({
-      name,
-      type,
-      mobile,
-      address
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  const handleSubmit = async () => {
+    try{
+      await addStore({
+        name,
+        type,
+        mobile,
+        address
+      })
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -96,8 +106,8 @@ const AddStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !type || mobileErrorMessage ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

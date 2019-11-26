@@ -2,11 +2,12 @@ import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
-import { approveUser, showMessage } from '../data/Actions'
+import { approveUser, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
@@ -16,7 +17,6 @@ const ApproveUser = props => {
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [otherMobileHolder, setOtherMobileHolder] = useState('')
-  const [error, setError] = useState('')
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -36,18 +36,18 @@ const ApproveUser = props => {
   }, [otherMobile, state.labels])
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       if (otherMobile === userInfo.mobile) {
         throw new Error(state.labels.sameMobile)
       }
       if (!otherMobile) setOtherMobileHolder('')
-      approveUser({
+      await approveUser({
         id: props.id,
         name,
         storeId,
@@ -55,13 +55,12 @@ const ApproveUser = props => {
         otherMobile,
         otherMobileHolder,
         address,
-      }).then(() => {
-        showMessage(props, 'success', state.labels.approveSuccess)
-        props.f7router.back()  
       })
-    } catch (err) {
-      err.code ? setError(state.labels[err.code.replace(/-|\//g, '_')]) : setError(err.message)
-    }
+      showMessage(props, state.labels.approveSuccess)
+      props.f7router.back()  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

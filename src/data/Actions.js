@@ -1,11 +1,32 @@
 import firebase from './firebase'
 
-export const showMessage = (props, type, messageText) => {
+export const getMessage = (error, labels, page) => {
+  const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
+  if (!labels[errorCode]) {
+    firebase.firestore().collection('logs').add({
+      userId: firebase.auth().currentUser.uid,
+      error: error.code,
+      page,
+      time: new Date()
+    })
+  }
+  return labels[errorCode] ? labels[errorCode] : labels['unknownError']
+}
+
+export const showMessage = (props, messageText) => {
   const message = props.f7router.app.toast.create({
-    text: `<span class=${type}>${messageText}<span>`,
+    text: `<span class="success">${messageText}<span>`,
     closeTimeout: 3000,
-  })
-  message.open()
+  });
+  message.open();
+}
+
+export const showError = (props, messageText) => {
+  const message = props.f7router.app.toast.create({
+    text: `<span class="error">${messageText}<span>`,
+    closeTimeout: 3000,
+  });
+  message.open();
 }
 
 export const login = (email, password) => {
@@ -301,7 +322,7 @@ export const addStorePack = (storePack, pack, storePacks) => {
   const batch = firebase.firestore().batch()
   const storePackRef = firebase.firestore().collection('storePacks').doc()
   batch.set(storePackRef, storePack)
-  if (storePack.price > 0 && (storePack.price < pack.price || pack.price === 0)) {
+  if (storePack.price < pack.price || pack.price === 0) {
     const {minPrice, weightedPrice, hasOffer} = getMinPrice(storePack, pack, storePacks, false)
     const packRef = firebase.firestore().collection('packs').doc(storePack.packId)
     batch.update(packRef, {
@@ -319,7 +340,6 @@ export const addProduct = async product => {
     category: product.category,
     trademark: product.trademark,
     country: product.country,
-    byWeight: product.byWeight,
     isNew: product.isNew,
     isActive: true,
     sales: 0,
@@ -346,7 +366,6 @@ export const editProduct = async product => {
     name: product.name,
     category: product.category,
     trademark: product.trademark,
-    byWeight: product.byWeight,
     isNew: product.isNew,
     isActive: product.isActive,
     country: product.country,

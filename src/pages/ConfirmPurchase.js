@@ -3,11 +3,12 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge, ListInp
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { confirmPurchase, stockOut, showMessage } from '../data/Actions'
+import { confirmPurchase, stockOut, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const ConfirmPurchase = props => {
   const { state, user, dispatch } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
@@ -24,23 +25,31 @@ const ConfirmPurchase = props => {
     }
     if (discount) validateDiscount(discount)
   }, [discount, state.labels, total])
-
-  const handlePurchase = () => {
-    if (store.id === 's') {
-      stockOut(state.basket.packs, state.orders, state.storePacks, state.packs).then(() => {
-        showMessage(props, 'success', state.labels.purchaseSuccess)
-        props.f7router.navigate('/home/', {reloadAll: true})
-        dispatch({type: 'CLEAR_BASKET'})    
-      })
-    } else { 
-      confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount).then(() => {
-        showMessage(props, 'success', state.labels.purchaseSuccess)
-        props.f7router.navigate('/home/', {reloadAll: true})
-        dispatch({type: 'CLEAR_BASKET'})    
-      })
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
     }
+  }, [error, props])
+
+  const handlePurchase = async () => {
+    try{
+      if (store.id === 's') {
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs)
+        showMessage(props, state.labels.purchaseSuccess)
+        props.f7router.navigate('/home/', {reloadAll: true})
+        dispatch({type: 'CLEAR_BASKET'})    
+      } else { 
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount)
+        showMessage(props, state.labels.purchaseSuccess)
+        props.f7router.navigate('/home/', {reloadAll: true})
+        dispatch({type: 'CLEAR_BASKET'})    
+      }  
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
-  if (!user) return <ReLogin callingPage="confirmPurchase"/>
+  if (!user) return <ReLogin />
   return(
     <Page>
     <Navbar title={`${state.labels.confirmPurchase} - ${store.name}`} backLink={state.labels.back} />

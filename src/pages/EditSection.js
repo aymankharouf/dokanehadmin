@@ -1,5 +1,5 @@
-import React, { useState, useContext, useMemo } from 'react'
-import { editSection, showMessage } from '../data/Actions'
+import React, { useState, useContext, useMemo, useEffect } from 'react'
+import { editSection, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,17 +7,28 @@ import BottomToolbar from './BottomToolbar';
 
 const EditSection = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const section = useMemo(() => state.sections.find(s => s.id === props.id)
   , [state.sections, props.id])
   const [name, setName] = useState(section.name)
-  const handleEdit = () => {
-    editSection({
-      id: section.id,
-      name
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleEdit = async () => {
+    try{
+      await editSection({
+        id: section.id,
+        name
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

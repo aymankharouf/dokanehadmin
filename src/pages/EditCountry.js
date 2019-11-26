@@ -1,5 +1,5 @@
-import React, { useState, useContext, useMemo } from 'react'
-import { editCountry, showMessage } from '../data/Actions'
+import React, { useState, useContext, useMemo, useEffect } from 'react'
+import { editCountry, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,17 +7,28 @@ import BottomToolbar from './BottomToolbar';
 
 const EditCountry = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const country = useMemo(() => state.countries.find(c => c.id === props.id)
   , [state.countries, props.id])
   const [name, setName] = useState(country.name)
-  const handleEdit = () => {
-    editCountry({
-      id: country.id,
-      name
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleEdit = async () => {
+    try{
+      await editCountry({
+        id: country.id,
+        name
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>

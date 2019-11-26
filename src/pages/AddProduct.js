@@ -1,20 +1,19 @@
 import React, {useState, useContext, useEffect, useMemo } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Toggle, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import { addProduct, showMessage } from '../data/Actions'
+import { addProduct, showMessage, showError, getMessage } from '../data/Actions'
 
 
 const AddProduct = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [trademark, setTrademark] = useState('')
-  const [byWeight, setByWeight] = useState(false)
   const [isNew, setIsNew] = useState(false)
   const [country, setCountry] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [error, setError] = useState('')
   const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.categories])
   const trademarks = useMemo(() => [...state.trademarks].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -37,25 +36,27 @@ const AddProduct = props => {
   }
   useEffect(() => {
     if (error) {
-      showMessage(props, 'error', error)
+      showError(props, error)
       setError('')
     }
   }, [error, props])
 
-  const handleSubmit = () => {
-    addProduct({
-      category,
-      name,
-      trademark,
-      byWeight,
-      isNew,
-      country,
-      imageUrl,
-      image
-    }).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+  const handleSubmit = async () => {
+    try{
+      await addProduct({
+        category,
+        name,
+        trademark,
+        isNew,
+        country,
+        imageUrl,
+        image
+      })
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    }) 
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
   return (
     <Page>
@@ -126,14 +127,6 @@ const AddProduct = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>{state.labels.byWeight}</span>
-          <Toggle 
-            name="byWeight" 
-            color="green" 
-            checked={byWeight} 
-            onToggleChange={() => setByWeight(!byWeight)}/>
-        </ListItem>
-        <ListItem>
           <span>{state.labels.isNew}</span>
           <Toggle 
           name="isNew" 
@@ -144,8 +137,8 @@ const AddProduct = props => {
         <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !country || !category || !imageUrl ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !country || !category || !imageUrl ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

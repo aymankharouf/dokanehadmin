@@ -1,47 +1,24 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addStorePack, showMessage } from '../data/Actions'
+import { addStorePack, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
-
 const AddStorePack = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const [productId, setProductId] = useState('')
   const [packId, setPackId] = useState('')
   const [productPacks, setProductPacks] = useState([])
   const [product, setProduct] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
-  const [purchasePriceErrorMessage, setPurchasePriceErrorMessage] = useState('')
   const [price, setPrice] = useState('')
-  const [priceErrorMessage, setPriceErrorMessage] = useState('')
-  const [offerEnd, setOfferEnd] = useState('')
-  const [offerEndErrorMessage, setOfferEndErrorMessage] = useState('')
+  const [offerDays, setOfferDays] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   const products = useMemo(() => {
     const products = state.products.filter(p => p.isActive)
     return products.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.products])
-  useEffect(() => {
-    const validatePrice = value => {
-      if (value > 0 && (price ? price >= value : true)){
-        setPurchasePriceErrorMessage('')
-      } else {
-        setPurchasePriceErrorMessage(state.labels.invalidPrice)
-      }
-    }
-    if (purchasePrice) validatePrice(purchasePrice)
-  }, [purchasePrice, price, state.labels])
-  useEffect(() => {
-    const validatePrice = value => {
-      if (value > 0 && (purchasePrice ? purchasePrice <= value : true)){
-        setPriceErrorMessage('')
-      } else {
-        setPriceErrorMessage(state.labels.invalidPrice)
-      }
-    }
-    if (price) validatePrice(price)
-  }, [price, purchasePrice, state.labels])
   useEffect(() => {
     if (productId) {
       setProduct(state.products.find(p => p.id === productId))
@@ -52,31 +29,46 @@ const AddStorePack = props => {
     }
   }, [state.packs, state.products, productId])
   useEffect(() => {
-    const validateDate = (value) => {
-      if (new Date(value) > new Date()){
-        setOfferEndErrorMessage('')
-      } else {
-        setOfferEndErrorMessage(state.labels.invalidOfferEnd)
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
+
+  const handleSubmit = async () => {
+    try{
+      if (state.storePacks.find(p => p.packId === packId && p.storeId === store.id)) {
+        throw new Error('duplicatePackInStore')
       }
-    }
-    if (offerEnd.length > 0) validateDate(offerEnd)
-    else setOfferEndErrorMessage('')
-  }, [offerEnd, state.labels])
-  const handleSubmit = () => {
-    const offerEndDate = offerEnd.length > 0 ? new Date(offerEnd) : ''
-    const storePack = {
-      packId, 
-      storeId: store.id,
-      purchasePrice: parseInt(purchasePrice * 1000),
-      price: parseInt(price * 1000),
-      offerEnd: offerEndDate,
-      time: new Date()
-    }
-    const pack = state.packs.find(p => p.id === packId)
-    addStorePack(storePack, pack, state.storePacks).then(() => {
-      showMessage(props, 'success', state.labels.addSuccess)
+      if (Number(price) <= 0) {
+        throw new Error('invalidPrice')
+      }
+      if (store.type === '5' && Number(price) <= Number(purchasePrice)) {
+        throw new Error('invalidPrice')
+      }
+      if (offerDays && Number(offerDays) <= 0) {
+        throw new Error('invalidPeriod')
+      }
+      let offerEnd = ''
+      if (offerDays) {
+        offerEnd = new Date()
+        offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
+      }
+      const storePack = {
+        packId, 
+        storeId: store.id,
+        purchasePrice: store.type === '5' ? parseInt(purchasePrice * 1000) : parseInt(price * 1000),
+        price: parseInt(price * 1000),
+        offerEnd,
+        time: new Date()
+      }
+      const pack = state.packs.find(p => p.id === packId)
+      await addStorePack(storePack, pack, state.storePacks)
+      showMessage(props, state.labels.addSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}
   }
 
   return (
@@ -119,18 +111,19 @@ const AddStorePack = props => {
             )}
           </select>
         </ListItem>
-        <ListInput 
-          name="puchasePrice" 
-          label={state.labels.purchasePrice}
-          value={purchasePrice}
-          clearButton
-          floatingLabel 
-          type="number" 
-          errorMessage={purchasePriceErrorMessage}
-          errorMessageForce
-          onChange={e => setPurchasePrice(e.target.value)}
-          onInputClear={() => setPurchasePrice('')}
-        />
+        {store.type === '5' ? 
+          <ListInput 
+            name="puchasePrice" 
+            label={state.labels.purchasePrice}
+            value={purchasePrice}
+            clearButton
+            floatingLabel 
+            type="number" 
+            onChange={e => setPurchasePrice(e.target.value)}
+            onInputClear={() => setPurchasePrice('')}
+          />
+          : ''
+        }
         <ListInput 
           name="price" 
           label={state.labels.price}
@@ -138,27 +131,23 @@ const AddStorePack = props => {
           clearButton 
           floatingLabel 
           type="number" 
-          errorMessage={priceErrorMessage}
-          errorMessageForce
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
-        <ListInput
-          name="offerEnd"
-          label={state.labels.offerEnd}
-          type="datepicker"
-          value={offerEnd} 
-          clearButton
-          errorMessage={offerEndErrorMessage}
-          errorMessageForce
-          onCalendarChange={value => setOfferEnd(value)}
-          onInputClear={() => setOfferEnd([])}
+        <ListInput 
+          name="offerDays" 
+          label={state.labels.offerDays}
+          value={offerDays}
+          clearButton 
+          floatingLabel 
+          type="number" 
+          onChange={e => setOfferDays(e.target.value)}
+          onInputClear={() => setOfferDays('')}
         />
         <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
-      {!productId || !packId || !price || !purchasePrice || priceErrorMessage || purchasePriceErrorMessage || offerEndErrorMessage
-      ? '' 
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!productId || !packId || !price ? '' :
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

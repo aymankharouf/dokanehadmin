@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { editSpending, showMessage } from '../data/Actions'
+import { editSpending, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
@@ -7,6 +7,7 @@ import BottomToolbar from './BottomToolbar';
 
 const EditSpending = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const spending = useMemo(() => state.spendings.find(s => s.id === props.id)
   , [state.spendings, props.id])
   const [type, setType] = useState(spending.type)
@@ -39,19 +40,28 @@ const EditSpending = props => {
     if (spendingDate.length > 0) validateDate(spendingDate)
     else setSpendingDateErrorMessage('')
   }, [spendingDate, state.labels])
+  useEffect(() => {
+    if (error) {
+      showError(props, error)
+      setError('')
+    }
+  }, [error, props])
 
-  const handleEdit = () => {
-    const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
-    editSpending({
-      id: spending.id,
-      type,
-      spendingAmount: parseInt(spendingAmount * 1000),
-      spendingDate: formatedDate,
-      description
-    }).then(() => {
-      showMessage(props, 'success', state.labels.editSuccess)
+  const handleEdit = async () => {
+    try{
+      const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
+      await editSpending({
+        id: spending.id,
+        type,
+        spendingAmount: parseInt(spendingAmount * 1000),
+        spendingDate: formatedDate,
+        description
+      })
+      showMessage(props, state.labels.editSuccess)
       props.f7router.back()
-    })
+    } catch(err) {
+			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+		}    
   }
   const hasChanged = useMemo(() => {
     if (spendingAmount * 1000 !== spending.spendingAmount) return true

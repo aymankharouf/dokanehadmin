@@ -10,10 +10,9 @@ const Basket = props => {
   , [state.basket])
   const handleAdd = pack => {
     if (store.id === 's') {
-      const packInfo = state.packs.find(p => p.id === pack.packId)
-      const quantityInStock = packInfo.stores.find(s => s.storeId === 's').quantity
+      const stock = state.storePacks.find(p => p.packId === pack.packId && p.storeId === 's')
       if (pack.quantity === pack.requestedQuantity) return
-      if (pack.quantity === quantityInStock) return
+      if (pack.quantity === stock.quantity) return
     }
     dispatch({type: 'ADD_QUANTITY', pack})
   }

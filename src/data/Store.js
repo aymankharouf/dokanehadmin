@@ -110,7 +110,8 @@ const Store = props => {
     ratings: [],
     ratingValues,
     storePacks: [],
-    otherMobileHolders
+    otherMobileHolders,
+    logs: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -298,7 +299,15 @@ const Store = props => {
         }, err => {
           unsubscribeStorePacks()
         })  
-
+        const unsubscribeLogs = firebase.firestore().collection('logs').onSnapshot(docs => {
+          let logs = []
+          docs.forEach(doc => {
+            logs.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_LOGS', logs})
+        }, err => {
+          unsubscribeLogs()
+        })  
       }
     })
   }, []);
