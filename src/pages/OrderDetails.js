@@ -39,7 +39,7 @@ const OrderDetails = props => {
         props.f7router.navigate(`/editOrder/${order.id}`)
       } else {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
-          throw new Error(state.labels.notApprovedUser)
+          throw new Error('notApprovedUser')
         }
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes)
         showMessage(props, state.labels.editSuccess)

@@ -40,7 +40,7 @@ const labels = {
   new: 'جديد',
   offer: 'عرض',
   editProduct: 'تعديل منتج',
-  editPrice: 'تعديل سعر',
+  editPrice: 'تعديل السعر',
   orders: 'الطلبات',
   confirmPurchase: 'اعتماد الشراء',
   total: 'المجموع',
@@ -201,7 +201,12 @@ const labels = {
   unknownError: 'خدث خطأ، يرجى المحاولة مرة أخرى',
   invalidPeriod: 'الرجاء التأكد من مدة العرض',
   offerDays: 'عرض لمدة',
-  duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل'
+  duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
+  nickName: 'الاسم المختصر',
+  confirmationTitle: 'تأكيد العملية',
+  confirmPrice: 'تثبيت السعر',
+  haltOffer: 'تعليق العرض',
+  extendOffer: 'تمديد العرض'
 }
 
 export default labels

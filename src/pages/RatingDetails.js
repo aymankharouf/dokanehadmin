@@ -22,7 +22,7 @@ const RatingDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approveRating(rating, product, customerInfo)
+      await approveRating(rating, product, customerInfo, state.discountTypes)
       showMessage(props, state.labels.approveSuccess)
       props.f7router.back()
     } catch(err) {

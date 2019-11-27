@@ -31,7 +31,7 @@ const Customers = props => {
         </List>
         <List mediaList className="search-list searchbar-found">
           {customers && customers.map(c => {
-            const userInfo = state.users.find(u => u.id === c.id) 
+            const userInfo = state.users.find(u => u.id === c.id)
             return (
               <ListItem
                 link={`/customer/${c.id}`}

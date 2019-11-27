@@ -26,7 +26,7 @@ const PackDetails = props => {
   const handlePurchase = packStore => {
 		try{
       if (packStore.storeId === 's') {
-        throw new Error(state.labels.noPurchaseFromStore)
+        throw new Error('noPurchaseFromStore')
       }
       if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
         throw new Error('offerEnded')

@@ -30,17 +30,17 @@ const EditOrder = props => {
     dispatch({type: 'CHANGE_ORDER_PACK', params: {pack, value}})
   }
   const handleDelete = () => {
-    try{
-      props.f7router.app.dialog.confirm(state.labels.confirmationText, async () => {
+    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+      try{
         const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
         await updateOrderStatus(order, type, state.storePacks, state.packs)
         showMessage(props, state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
-      })  
-    } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
-		}
+      } catch(err) {
+        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+      }
+    })  
   }
   const handleSubmit = async () => {
     try{

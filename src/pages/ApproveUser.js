@@ -44,7 +44,7 @@ const ApproveUser = props => {
   const handleSubmit = async () => {
     try {
       if (otherMobile === userInfo.mobile) {
-        throw new Error(state.labels.sameMobile)
+        throw new Error('sameMobile')
       }
       if (!otherMobile) setOtherMobileHolder('')
       await approveUser({

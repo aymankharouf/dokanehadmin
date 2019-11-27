@@ -26,8 +26,10 @@ const PriceAlarmDetails = props => {
   , [customer, state.stores, priceAlarm])
   const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   , [state.stores])
-  const prices = useMemo(() => [...pack.stores].sort((s1, s2) => s1.price - s2.price)
-  , [pack])
+  const prices = useMemo(() => {
+    const storePacks = state.storePacks.filter(p => p.packId === pack.id)
+    return storePacks.sort((p1, p2) => p1.price - p2.price)
+  }, [state.storePacks, pack])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -37,7 +39,7 @@ const PriceAlarmDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks)
+      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.discountTypes)
       showMessage(props, state.labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
@@ -106,16 +108,16 @@ const PriceAlarmDetails = props => {
         </List>
       }
       <List>
-        {prices.map(s => {
-          const currentStore = state.stores.find(st => st.id === s.id)
+        {prices.map(p => {
+          const currentStore = state.stores.find(st => st.id === p.storeId)
           return (
             <ListItem 
               title={currentStore.name} 
-              footer={moment(s.time.toDate()).fromNow()} 
-              after={(s.price / 1000).toFixed(3)} 
-              key={s.id} 
+              footer={moment(p.time.toDate()).fromNow()} 
+              after={(p.price / 1000).toFixed(3)} 
+              key={p.id} 
             >
-              {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : null}
+              {p.quantity ? <Badge slot="title" color='red'>{p.quantity}</Badge> : null}
             </ListItem>
           )
         })}

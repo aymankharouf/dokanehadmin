@@ -108,3 +108,4 @@ prevent adding price alarms before approving previous one
 smart basket when confirm order
 delivery plan by locations
 modify edit price as add store pack
+handle security for storePack in app application

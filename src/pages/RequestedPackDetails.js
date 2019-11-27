@@ -37,16 +37,16 @@ const RequestedPackDetails = props => {
 	const handlePurchase = packStore => {
 		try{
 			if (state.basket.storeId && state.basket.storeId !== packStore.id){
-				throw new Error(state.labels.twoDiffStores)
+				throw new Error('twoDiffStores')
       }
       if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
-        throw new Error(state.labels.alreadyInBasket)
+        throw new Error('alreadyInBasket')
       }
       if (packStore.price > Number(props.price)){
-        throw new Error(state.labels.priceHigherThanRequested)
+        throw new Error('priceHigherThanRequested')
       }
       if (packStore.storeId === 's' && packStore.quantity === 0){
-        throw new Error(state.labels.unavailableInStock)
+        throw new Error('unavailableInStock')
       }
       dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
       showMessage(props, state.labels.addToBasketSuccess)

@@ -407,6 +407,10 @@ export const haltOffer = (storePack, pack, storePacks) => {
   return batch.commit()
 }
 
+export const extendOffer = storePack => {
+  return firebase.firestore().collection('storePacks').doc(storePack.id).update(storePack)
+}
+
 const getMinPrice = (storePack, pack, storePacks, isDeletion) => {
   let packStores = storePacks.filter(p => p.packId === pack.id)
   packStores = packStores.filter(s => s.storeId !== storePack.storeId)
@@ -566,7 +570,7 @@ export const approveUser = user => {
   return batch.commit()
 }
 
-export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks) => {
+export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks, discountTypes) => {
   const batch = firebase.firestore().batch()
   const storeId = customer.storeId ? customer.storeId : store.id
   const priceAlarmRef = firebase.firestore().collection('priceAlarms').doc(priceAlarm.id)
@@ -619,7 +623,7 @@ export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks)
   if (!customer.storeId){
     const customerRef = firebase.firestore().collection('customers').doc(customer.id)
     batch.update(customerRef, {
-      priceAlarmsDiscount: firebase.firestore.FieldValue.increment(500)
+      priceAlarmsDiscount: firebase.firestore.FieldValue.increment(discountTypes.find(t => t.id === 'p').value)
     })
   }
   return batch.commit()
@@ -727,7 +731,7 @@ export const changePassword = async (oldPassword, newPassword) => {
   return user.updatePassword(newPassword)
 }
 
-export const approveRating = (rating, product, customerInfo) => {
+export const approveRating = (rating, product, customerInfo, discountTypes) => {
   const batch = firebase.firestore().batch()
   const ratingRef = firebase.firestore().collection('ratings').doc(rating.id)
   batch.update(ratingRef, {
@@ -744,7 +748,7 @@ export const approveRating = (rating, product, customerInfo) => {
   })
   const customerRef = firebase.firestore().collection('customers').doc(rating.userId)
   batch.update(customerRef, {
-    ratingsDiscount: firebase.firestore.FieldValue.increment(250)
+    ratingsDiscount: firebase.firestore.FieldValue.increment(discountTypes.find(t => t.id === 'r').value)
   })
   return batch.commit()
 }

@@ -56,7 +56,8 @@ const Store = props => {
     {id: 'f', name: 'خصم اول طلب', value: 500},
     {id: 's', name: 'خصم خاص', value: 500},
     {id: 'i', name: 'خصم دعوة صديق', value: 500},
-    {id: 'p', name: 'خصم ابلاغ عن سعر اقل', value: 500}
+    {id: 'p', name: 'خصم ابلاغ عن سعر اقل', value: 500},
+    {id: 'r', name: 'خصم تقييم منتج', value: 250}
   ]
   const spendingTypes = [
     {id: 'w', name: 'سحب'},
@@ -64,7 +65,7 @@ const Store = props => {
     {id: 'm', name: 'صيانة'},
   ]
   const ratingValues = [
-    {id: -1, name: 'ﻻ أنصح به'},
+    {id: 0, name: 'ﻻ أنصح به'},
     {id: 1, name: 'أنصح به'}
   ]
   const otherMobileHolders = [
