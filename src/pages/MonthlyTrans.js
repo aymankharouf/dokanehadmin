@@ -37,7 +37,7 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const profit = useMemo(() => monthlyTrans ? monthlyTrans.profit : deliveredOrders.reduce((sum, o) => sum + o.profit, 0)
   , [deliveredOrders, monthlyTrans])
-  const fixedFees = monthlyTrans ? monthlyTrans.fixedFees : deliveredOrdersCount * state.labels.fixedFeesValue
+  const fixedFees = monthlyTrans ? monthlyTrans.fixedFees : deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
   const deliveryFees = useMemo(() => monthlyTrans ? monthlyTrans.deliveryFees : deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
   const specialDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.specialDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 's' ? o.discount.value : 0) , 0)
@@ -48,9 +48,12 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const priceAlarmsDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.priceAlarmsDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 'p' ? o.discount.value : 0) , 0)
   , [deliveredOrders, monthlyTrans])
-  const spendings = useMemo(() => {
-    return state.spendings.filter(s => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month)
-  }, [state.spendings, month, year])
+  const purchaseDiscounts = useMemo(() => {
+    const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
+    return monthlyTrans ? monthlyTrans.purchasesDiscounts : purchases.reduce((sum, p) => sum + p.discount, 0)
+  }, [state.purchases, month, year, monthlyTrans])
+  const spendings = useMemo(() => state.spendings.filter(s => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month)
+  , [state.spendings, month, year])
   const withdrawals = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals
     const withdrawals = spendings.filter(s => s.type === 'w')
@@ -87,6 +90,7 @@ const MonthlyTrans = props => {
         profit,
         fixedFees,
         deliveryFees,
+        purchaseDiscounts,
         specialDiscounts,
         firstOrderDiscounts,
         invitationsDiscounts,
@@ -148,8 +152,13 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
+            title={state.labels.purchaseDiscounts}
+            after={(purchaseDiscounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
             title={state.labels.netProfit}
-            after={((profit + fixedFees + deliveryFees) / 1000).toFixed(3)}
+            after={((profit + fixedFees + deliveryFees + purchaseDiscounts) / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

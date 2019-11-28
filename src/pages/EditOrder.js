@@ -44,7 +44,7 @@ const EditOrder = props => {
   }
   const handleSubmit = async () => {
     try{
-      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs)
+      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, state.labels.fixedFeesPercent)
       showMessage(props, state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()

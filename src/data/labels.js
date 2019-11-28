@@ -48,7 +48,7 @@ const labels = {
   newStore: 'محل جديد',
   address: 'العنوان',
   confirm: 'اعتماد',
-  fixedFeesValue: 500,
+  fixedFeesPercent: 3,
   feesTitle: 'الرسوم',
   discount: 'الخصم',
   net: 'الصافي',
@@ -57,7 +57,6 @@ const labels = {
   cost: 'التكلفة',
   profit: 'الربح',
   invalidPrice: 'الرجاء التأكد من السعر',
-  invalidOfferEnd: 'الرجاء التأكد من تاريخ انتهاء العرض',
   invalidMobile: 'رقم الموبايل غير صحيح',
   twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
   invalidFile: 'الرجاء التأكد من ملف الصورة',
@@ -155,7 +154,7 @@ const labels = {
   ordersCount: 'الطلبات',
   fixedFees: 'الرسوم الثابتة',
   netProfit: 'صافي الربح',
-  specialDiscount: 'الخصم الخاص',
+  specialDiscountPercent: 'نسبة الخصم الخاص',
   firstOrderDiscount: 'خصم اول طلب',
   invitationsDiscount: 'خصم دعوة صديق',
   priceAlarmsDiscount: 'خصم اشعارات الاسعار',
@@ -206,7 +205,8 @@ const labels = {
   confirmationTitle: 'تأكيد العملية',
   confirmPrice: 'تثبيت السعر',
   haltOffer: 'تعليق العرض',
-  extendOffer: 'تمديد العرض'
+  extendOffer: 'تمديد العرض',
+  purchaseDiscounts: 'خصومات المشتريات'
 }
 
 export default labels

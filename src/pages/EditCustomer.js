@@ -19,7 +19,7 @@ const EditCustomer = props => {
   const [locationId, setLocationId] = useState(customer.locationId)
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [position, setPosition] = useState(customer.position)
-  const [specialDiscount, setSpecialDiscount] = useState(customer.specialDiscount)
+  const [specialDiscountPercent, setSpecialDiscountPercent] = useState(customer.specialDiscountPercent)
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [otherMobileHolder, setOtherMobileHolder] = useState(customer.otherMobileHolder)
@@ -38,12 +38,12 @@ const EditCustomer = props => {
     if (isOldAge !== customer.isOldAge) return true
     if (position !== customer.position) return true
     if (isBlocked !== customer.isBlocked) return true
-    if (specialDiscount !== customer.specialDiscount) return true
+    if (specialDiscountPercent !== customer.specialDiscountPercent) return true
     if (otherMobile !== customer.otherMobile) return true
     if (otherMobileHolder !== customer.otherMobileHolder) return true
     if (overPriceLimit !== customer.overPriceLimit) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, specialDiscount, otherMobile, otherMobileHolder, overPriceLimit])
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, specialDiscountPercent, otherMobile, otherMobileHolder, overPriceLimit])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -75,7 +75,7 @@ const EditCustomer = props => {
         isOldAge,
         position,
         isBlocked,
-        specialDiscount: parseInt(specialDiscount * 1000),
+        specialDiscountPercent: parseInt(specialDiscountPercent),
         otherMobile,
         otherMobileHolder,
         overPriceLimit: parseInt(overPriceLimit * 1000)
@@ -165,13 +165,13 @@ const EditCustomer = props => {
         </ListItem>
         <ListInput 
           name="specialDiscount" 
-          label={state.labels.specialDiscount}
-          value={specialDiscount}
+          label={state.labels.specialDiscountPercent}
+          value={specialDiscountPercent}
           floatingLabel 
           clearButton
           type="number" 
-          onChange={e => setSpecialDiscount(e.target.value)}
-          onInputClear={() => setSpecialDiscount('')}
+          onChange={e => setSpecialDiscountPercent(e.target.value)}
+          onInputClear={() => setSpecialDiscountPercent('')}
         />
         <ListInput 
           name="overPriceLimit" 

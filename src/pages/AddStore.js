@@ -13,6 +13,8 @@ const AddStore = props => {
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
+  const [discount, setDiscount] = useState('')
+  const [locationId, setLocationId] = useState('')
   const storeTypes = useMemo(() => [...state.storeTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.storeTypes])
 
@@ -38,11 +40,16 @@ const AddStore = props => {
   }, [error, props])
 
   const handleSubmit = async () => {
+    if (discount && discount <= 0) {
+      throw new Error('invalidValue')
+    }
     try{
       await addStore({
         name,
         type,
+        discount,
         mobile,
+        locationId,
         address
       })
       showMessage(props, state.labels.addSuccess)
@@ -92,6 +99,34 @@ const AddStore = props => {
             <option value=""></option>
             {storeTypes.map(t => 
               t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListInput
+          name="discount"
+          label={state.labels.discount}
+          value={discount}
+          floatingLabel
+          clearButton
+          type="number"
+          onChange={e => setDiscount(e.target.value)}
+          onInputClear={() => setDiscount('')}
+        />
+        <ListItem
+          title={state.labels.location}
+          smartSelect
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {state.locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
         </ListItem>

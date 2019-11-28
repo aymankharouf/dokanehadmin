@@ -13,7 +13,7 @@ const ConfirmPurchase = props => {
   , [state.basket, state.stores])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
   , [state.basket])
-  const [discount, setDiscount] = useState('')
+  const [discount, setDiscount] = useState(store.discount ? (total * (store.discount / 100)).toFixed(3) : '')
   const [discountErrorMessage, setDiscountErrorMessage] = useState('')
   useEffect(() => {
     const validateDiscount = value => {
@@ -35,12 +35,13 @@ const ConfirmPurchase = props => {
   const handlePurchase = async () => {
     try{
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
-      } else { 
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount)
+      } else {
+
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    

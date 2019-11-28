@@ -98,7 +98,7 @@ add stock pack details page which handle pack trans (destroy, return to specific
 *add alternative mobile for customer
 add link to customer info in order details page and others
 add units and unit types
-add rating count to rating component
+*add rating count to rating component
 *add discount value to customer info
 remove weight from product and add it to packs
 modify store page (requested packs, ended offers, last request from owner, packs count)
@@ -109,4 +109,6 @@ smart basket when confirm order
 delivery plan by locations
 modify edit price as add store pack
 handle security for storePack in app application
-fixed fees percent range
+*fixed fees percent
+*add store discount & location
+add order limit for each pack 

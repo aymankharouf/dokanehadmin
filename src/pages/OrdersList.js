@@ -21,12 +21,11 @@ const OrdersList = props => {
         <List mediaList>
           {orders && orders.map(o => {
             const userInfo = state.users.find(u => u.id === o.userId)
-            const orderNet = o.total + o.fixedFees + o.deliveryFees - o.discount.value
             return (
               <ListItem
                 link={`/order/${o.id}`}
                 title={`${userInfo.name} - ${userInfo.mobile}`}
-                after={(orderNet / 1000).toFixed(3)}
+                after={(o.total / 1000).toFixed(3)}
                 subtitle={moment(o.time.toDate()).fromNow()}
                 text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                 key={o.id}

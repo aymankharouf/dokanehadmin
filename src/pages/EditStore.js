@@ -17,6 +17,8 @@ const EditStore = props => {
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
+  const [discount, setDiscount] = useState('')
+  const [locationId, setLocationId] = useState('')
 
   useEffect(() => {
     const patterns = {
@@ -41,13 +43,18 @@ const EditStore = props => {
 
   const handleSubmit = async () => {
     try{
-      await editStore({
-        id: store.id,
-        name,
-        type,
-        mobile,
-        address
-      })
+      if (discount && discount <= 0) {
+        throw new Error('invalidValue')
+      }
+        await editStore({
+          id: store.id,
+          name,
+          type,
+          discount,
+          mobile,
+          locationId,
+            address
+        })
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -97,6 +104,34 @@ const EditStore = props => {
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
+          <ListInput
+          name="discount"
+          label={state.labels.discount}
+          value={discount}
+          floatingLabel
+          clearButton
+          type="number"
+          onChange={e => setDiscount(e.target.value)}
+          onInputClear={() => setDiscount('')}
+        />
+        <ListItem
+          title={state.labels.location}
+          smartSelect
+          smartSelectParams={{
+            openIn: 'popup', 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {state.locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
+            )}
+          </select>
+        </ListItem>
         </ListItem>
         <ListInput 
           name="address" 

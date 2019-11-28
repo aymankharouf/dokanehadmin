@@ -10,8 +10,10 @@ const OrderDetails = props => {
   const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
-  const netPrice = useMemo(() => order.total + order.fixedFees + order.deliveryFees - order.discount.value
-  , [order])
+  const netPrice = useMemo(() => {
+    const net = order.total + order.fixedFees + order.deliveryFees - order.discount.value
+    return Math.floor(net / 50) * 50
+  }, [order])
   const netProfit = useMemo(() => order.profit + order.fixedFees + order.deliveryFees - order.discount.value
   , [order])
   const statusActions = useMemo(() => {

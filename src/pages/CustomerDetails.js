@@ -94,10 +94,10 @@ const CustomerDetails = props => {
         />
         <ListInput 
           name="specialDiscount" 
-          label={state.labels.specialDiscount}
-          value={(customer.specialDiscount / 1000).toFixed(3)}
+          label={state.labels.specialDiscountPercent}
+          value={`${customer.specialDiscountPercent} %`}
           floatingLabel 
-          type="number"
+          type="text"
           readonly
         />
         <ListInput 
