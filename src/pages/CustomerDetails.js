@@ -10,6 +10,8 @@ const CustomerDetails = props => {
   , [state.customers, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
+  const customerOrders = useMemo(() => state.orders.filter(o => o.userId === props.id && o.status === 'd')
+  , [state.orders, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
   const otherMobileHolderName = useMemo(() => customer.otherMobileHolder ? state.otherMobileHolders.find(h => h.id === customer.otherMobileHolder).name : ''
@@ -55,15 +57,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="totalOrders" 
           label={state.labels.totalOrders}
-          value={customer.totalOrders}
-          floatingLabel 
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="totalPayments" 
-          label={state.labels.totalPayments}
-          value={(customer.totalPayments / 1000).toFixed(3)}
+          value={customerOrders.length}
           floatingLabel 
           type="number"
           readonly
@@ -77,17 +71,9 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="invitationsDiscount" 
-          label={state.labels.invitationsDiscount}
-          value={(customer.invitationsDiscount / 1000).toFixed(3)}
-          floatingLabel 
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="priceAlarmsDiscount" 
-          label={state.labels.priceAlarmsDiscount}
-          value={(customer.priceAlarmsDiscount / 1000).toFixed(3)}
+          name="discounts" 
+          label={state.labels.discountBalance}
+          value={(customer.discounts / 1000).toFixed(3)}
           floatingLabel 
           type="number"
           readonly

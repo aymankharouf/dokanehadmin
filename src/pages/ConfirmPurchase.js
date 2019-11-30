@@ -13,18 +13,7 @@ const ConfirmPurchase = props => {
   , [state.basket, state.stores])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
   , [state.basket])
-  const [discount, setDiscount] = useState(store.discount ? (total * (store.discount / 100)).toFixed(3) : '')
-  const [discountErrorMessage, setDiscountErrorMessage] = useState('')
-  useEffect(() => {
-    const validateDiscount = value => {
-      if (value > 0 && value < total){
-        setDiscountErrorMessage('')
-      } else {
-        setDiscountErrorMessage(state.labels.invalidValue)
-      }
-    }
-    if (discount) validateDiscount(discount)
-  }, [discount, state.labels, total])
+  const [discount, setDiscount] = useState(store.discount ? (total * store.discount / 100000).toFixed(3) : 0)
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -34,14 +23,16 @@ const ConfirmPurchase = props => {
 
   const handlePurchase = async () => {
     try{
+      if (discount < 0) {
+        throw new Error('invalidValue')
+      }
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
@@ -84,12 +75,15 @@ const ConfirmPurchase = props => {
               clearButton
               floatingLabel 
               type="number" 
-              errorMessage={discountErrorMessage}
-              errorMessageForce
               onChange={e => setDiscount(e.target.value)}
               onInputClear={() => setDiscount('')}
             />
           }
+          <ListItem 
+            title={state.labels.net} 
+            className="net" 
+            after={((total - (discount * 1000)) / 1000).toFixed(3)} 
+          />
         </List>
     </Block>
     <Fab position="center-bottom" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>

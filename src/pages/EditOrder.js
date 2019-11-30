@@ -9,10 +9,10 @@ const EditOrder = props => {
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
-  const customerLocation = useMemo(() => {
-    const customerInfo = state.customers.find(c => c.id === order.userId)
-    return customerInfo.locationId ? state.locations.find(l => l.id === customerInfo.locationId) : ''
-  }, [state.locations, state.customers, order])
+  const customer = useMemo(() => state.customers.find(c => c.id === order.userId)
+  , [state.customers, order])
+  const customerLocation = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId) : ''
+  , [state.locations, customer])
   const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((sum, p) => sum + (p.price * p.quantity), 0) : 0
   , [state.orderBasket])
   useEffect(() => {
@@ -32,7 +32,7 @@ const EditOrder = props => {
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
-        const type = ['f', 'd', 'e'].includes(order.status) ? 'i' : 'c'
+        const type = ['f', 'e'].includes(order.status) ? 'i' : 'c'
         await updateOrderStatus(order, type, state.storePacks, state.packs)
         showMessage(props, state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -44,7 +44,7 @@ const EditOrder = props => {
   }
   const handleSubmit = async () => {
     try{
-      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, state.labels.fixedFeesPercent)
+      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, state.labels.fixedFeesPercent, customer, state.labels.maxDiscount)
       showMessage(props, state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()

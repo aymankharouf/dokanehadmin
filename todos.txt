@@ -32,7 +32,8 @@ cancel a purchase or part of it
 customer follow-up
 *first time discount
 *friends discount
-direct delivery
+urgent flag in order (urgent fixed fees percent)
+urgent delivery fees for each customer
 *offers first (ordering products)
 *ordering products by type (product)
 suggestions
@@ -51,7 +52,6 @@ advertisements & request for advert from store owner
 *average price for purchase pack in order
 *change password
 *resolve forget password from the system
-merge between not approved orders from the same customer
 request to cancel an order
 *old age flag for customers
 *position info into customers table
@@ -112,3 +112,6 @@ handle security for storePack in app application
 *fixed fees percent
 *add store discount & location
 add order limit for each pack 
+add button to refresh price for pack
+add page for logs
+ending offers & chance to feed stock by comparing the next price other than the offer

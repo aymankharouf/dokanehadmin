@@ -42,11 +42,7 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const specialDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.specialDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 's' ? o.discount.value : 0) , 0)
   , [deliveredOrders, monthlyTrans])
-  const firstOrderDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.firstOrderDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 'f' ? o.discount.value : 0) , 0)
-  , [deliveredOrders, monthlyTrans])
-  const invitationsDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.invitationsDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 'i' ? o.discount.value : 0) , 0)
-  , [deliveredOrders, monthlyTrans])
-  const priceAlarmsDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.priceAlarmsDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 'p' ? o.discount.value : 0) , 0)
+  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type !== 's' ? o.discount.value : 0) , 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -92,9 +88,7 @@ const MonthlyTrans = props => {
         deliveryFees,
         purchaseDiscounts,
         specialDiscounts,
-        firstOrderDiscounts,
-        invitationsDiscounts,
-        priceAlarmsDiscounts,
+        discounts,
         withdrawals,
         expenses
       }
@@ -167,18 +161,8 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={state.labels.firstOrderDiscount}
-            after={(firstOrderDiscounts / 1000).toFixed(3)}
-          />
-          <ListItem
-            link="#"
-            title={state.labels.invitationsDiscount}
-            after={(invitationsDiscounts / 1000).toFixed(3)}
-          />
-          <ListItem
-            link="#"
-            title={state.labels.priceAlarmsDiscount}
-            after={(priceAlarmsDiscounts / 1000).toFixed(3)}
+            title={state.labels.discounts}
+            after={(discounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

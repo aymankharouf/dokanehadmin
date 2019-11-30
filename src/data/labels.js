@@ -206,7 +206,10 @@ const labels = {
   confirmPrice: 'تثبيت السعر',
   haltOffer: 'تعليق العرض',
   extendOffer: 'تمديد العرض',
-  purchaseDiscounts: 'خصومات المشتريات'
+  purchaseDiscounts: 'خصومات المشتريات',
+  discountBalance: 'رصيد الخصومات',
+  specialDiscount: 'خصم خاص',
+  discounts: 'الخصومات'
 }
 
 export default labels

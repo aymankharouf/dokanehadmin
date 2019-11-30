@@ -19,6 +19,7 @@ const EditStore = props => {
   const [address, setAddress] = useState(store.address)
   const [discount, setDiscount] = useState('')
   const [locationId, setLocationId] = useState('')
+  const [position, setPosition] = useState('')
 
   useEffect(() => {
     const patterns = {
@@ -34,6 +35,15 @@ const EditStore = props => {
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
   }, [mobile, state.labels])
+  const hasChanged = useMemo(() => {
+    if (name !== store.name) return true
+    if (mobile !== store.mobile) return true
+    if (discount !== store.discount) return true
+    if (address !== store.address) return true
+    if (locationId !== store.locationId) return true
+    if (position !== store.position) return true
+    return false
+  }, [store, name, mobile, discount, address, locationId, position])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -46,15 +56,16 @@ const EditStore = props => {
       if (discount && discount <= 0) {
         throw new Error('invalidValue')
       }
-        await editStore({
-          id: store.id,
-          name,
-          type,
-          discount,
-          mobile,
-          locationId,
-            address
-        })
+      await editStore({
+        id: store.id,
+        name,
+        type,
+        discount,
+        mobile,
+        locationId,
+        address,
+        position
+      })
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -104,7 +115,8 @@ const EditStore = props => {
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
-          <ListInput
+        </ListItem>
+        <ListInput
           name="discount"
           label={state.labels.discount}
           value={discount}
@@ -132,7 +144,16 @@ const EditStore = props => {
             )}
           </select>
         </ListItem>
-        </ListItem>
+        <ListInput
+          name="position"
+          label={state.labels.position}
+          value={position}
+          floatingLabel
+          clearButton
+          type="text"
+          onChange={e => setPosition(e.target.value)}
+          onInputClear={() => setPosition('')}
+        />
         <ListInput 
           name="address" 
           label={state.labels.address}
@@ -149,7 +170,7 @@ const EditStore = props => {
           after={storeOwners.length}
         />
       </List>
-      {!name || !type || mobileErrorMessage || (name === store.name && type === store.type && mobile === store.mobile && address === store.address) ? ''
+      {!name || !type || mobileErrorMessage || !hasChanged ? ''
       : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -57,7 +57,7 @@ const RequestedPackDetails = props => {
   }
   const handleUnavailable = () => {
     const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-    packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent).then(() => {
+    packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount).then(() => {
       showMessage(props, 'success', state.labels.executeSuccess)
 			props.f7router.back()
     })
