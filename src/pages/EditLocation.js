@@ -70,12 +70,10 @@ const EditLocation = props => {
             onChange={e => setDeliveryFees(e.target.value)}
             onInputClear={() => setDeliveryFees('')}
           />
-          : ''
-        }
+        : ''}
       </List>
-      {!name || (hasDelivery && deliveryFees === '') || (name === location.name && hasDelivery === location.hasDelivery && parseInt(deliveryFees * 1000) === location.deliveryFees)
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!name || (hasDelivery && deliveryFees === '') || (name === location.name && hasDelivery === location.hasDelivery && parseInt(deliveryFees * 1000) === location.deliveryFees) ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

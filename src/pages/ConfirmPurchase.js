@@ -57,7 +57,7 @@ const ConfirmPurchase = props => {
                 footer={packInfo.name} 
                 after={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
               >
-                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : null}
+                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
               </ListItem>
             )
           }

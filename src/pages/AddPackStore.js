@@ -3,41 +3,35 @@ import { addStorePack, showMessage, showError, getMessage } from '../data/Action
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 
-const AddStorePack = props => {
+const AddPackStore = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [productId, setProductId] = useState('')
-  const [packId, setPackId] = useState('')
-  const [productPacks, setProductPacks] = useState([])
-  const [product, setProduct] = useState('')
   const [purchasePrice, setPurchasePrice] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
-  const store = useMemo(() => state.stores.find(s => s.id === props.id)
-  , [state.stores, props.id])
-  const products = useMemo(() => {
-    const products = state.products.filter(p => p.isActive)
-    return products.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.products])
-  useEffect(() => {
-    if (productId) {
-      setProduct(state.products.find(p => p.id === productId))
-      setProductPacks(state.packs.filter(p => p.productId === productId))
-    } else {
-      setProduct('')
-      setProductPacks([])
-    }
-  }, [state.packs, state.products, productId])
+  const [storeId, setStoreId] = useState('')
+  const [store, setStore] = useState('')
+  const stores = useMemo(() => state.stores.filter(s => s.id !== 's')
+  , [state.stores])
+  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
+  , [state.packs, props.id])
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
+  , [state.products, pack])
   useEffect(() => {
     if (error) {
       showError(props, error)
       setError('')
     }
   }, [error, props])
+  useEffect(() => {
+    if (storeId) {
+      setStore(state.stores.find(s => s.id === storeId))
+    }
+  }, [state.stores, storeId])
 
   const handleSubmit = async () => {
     try{
-      if (state.storePacks.find(p => p.packId === packId && p.storeId === store.id)) {
+      if (state.storePacks.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(price) <= 0) {
@@ -55,28 +49,27 @@ const AddStorePack = props => {
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
       const storePack = {
-        packId, 
-        storeId: store.id,
+        packId: pack.id, 
+        storeId,
         purchasePrice: store.type === '5' ? parseInt(purchasePrice * 1000) : parseInt(price * 1000),
         price: parseInt(price * 1000),
         offerEnd,
         time: new Date()
       }
-      const pack = state.packs.find(p => p.id === packId)
       await addStorePack(storePack, pack, state.storePacks)
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
-		}
+    	setError(getMessage(err, state.labels, props.f7route.route.component.name))
+    }
   }
 
   return (
     <Page>
-      <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.addPrice} ${product.name}-${pack.name}`} backLink={state.labels.back} />
       <List form>
         <ListItem
-          title={state.labels.product}
+          title={state.labels.store}
           smartSelect
           smartSelectParams={{
             openIn: 'popup', 
@@ -86,28 +79,10 @@ const AddStorePack = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="productId" defaultValue="" onChange={e => setProductId(e.target.value)}>
+          <select name="storeId" defaultValue="" onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {products.map(p => 
-              <option key={p.id} value={p.id}>{p.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={state.labels.pack}
-          smartSelect
-          smartSelectParams={{
-            openIn: 'popup', 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
-          }}
-        >
-          <select name="packId" defaultValue="" onChange={e => setPackId(e.target.value)}>
-            <option value=""></option>
-            {productPacks.map(p => 
-              <option key={p.id} value={p.id}>{p.name}</option>
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>
         </ListItem>
@@ -143,9 +118,8 @@ const AddStorePack = props => {
           onChange={e => setOfferDays(e.target.value)}
           onInputClear={() => setOfferDays('')}
         />
-        <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
-      {!productId || !packId || !price ? '' :
+      {!storeId || !price ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
@@ -154,4 +128,4 @@ const AddStorePack = props => {
     </Page>
   )
 }
-export default AddStorePack
+export default AddPackStore

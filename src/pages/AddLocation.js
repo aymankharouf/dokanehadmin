@@ -68,8 +68,7 @@ const AddLocation = props => {
             onChange={e => setDeliveryFees(e.target.value)}
             onInputClear={() => setDeliveryFees('')}
           />
-          : ''
-        }
+        : ''}
       </List>
       {!name || (hasDelivery && deliveryFees === '') ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>

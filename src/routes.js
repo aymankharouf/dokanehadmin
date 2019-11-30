@@ -67,7 +67,7 @@ import Ratings from './pages/Ratings';
 import Approvals from './pages/Approvals';
 import RatingDetails from './pages/RatingDetails';
 import PackTrans from './pages/PackTrans';
-
+import AddPackStore from './pages/AddPackStore';
 
 export default [
   {
@@ -244,6 +244,10 @@ export default [
   {
     path: '/addStorePack/:id',
     component: AddStorePack
+  },
+  {
+    path: '/addPackStore/:id',
+    component: AddPackStore
   },
   {
     path: '/addProduct/',

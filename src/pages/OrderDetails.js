@@ -4,7 +4,6 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Tog
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
 
-
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
@@ -56,7 +55,7 @@ const OrderDetails = props => {
     <Page>
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
       <Block>
-        <List>
+        <List mediaList>
           {order.basket && order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -68,9 +67,11 @@ const OrderDetails = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={storeName}
-                  after={((p.actualPrice ? p.actualPrice : p.price) * (p.quantity - (p.unavailableQuantity ? p.unavailableQuantity : 0)) / 1000).toFixed(3)}
+                  footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
+                  after={((p.actualPrice * p.purchasedQuantity) / 1000).toFixed(3)}
                 >
-                  {p.quantity > 1 ? <Badge slot="title" color="red">{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity}`}</Badge> : ''}
+                  {p.quantity > 1 ? <Badge slot="title" color="green">{p.purchasedQuantity}</Badge> : ''}
+                  {p.unavailableQuantity ? <Badge slot="title" color="red">{`${state.labels.unavailable}: ${p.unavailableQuantity}`}</Badge> : ''}
                 </ListItem>
               )
             } else {
@@ -79,9 +80,11 @@ const OrderDetails = props => {
                   key={p.packId} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  after={(p.price * p.quantity / 1000).toFixed(3)}
+                  footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
+                  after={((p.actualPrice ? p.actualPrice : p.price) * p.quantity / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
+                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.purchasedQuantity} - ${p.quantity}`}</Badge>
+                  {p.unavailableQuantity ? <Badge slot="title" color="red">{`${state.labels.unavailable}: ${p.unavailableQuantity}`}</Badge> : ''}
                 </ListItem>
               )
             }
@@ -99,17 +102,18 @@ const OrderDetails = props => {
           : ''}
           <ListItem 
             title={state.labels.total} 
+            className="total"
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={state.labels.feesTitle} 
-            className="red" 
+            title={state.labels.fixedFees} 
+            className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />
           {order.deliveryFees > 0 ? 
             <ListItem 
               title={state.labels.deliveryFees} 
-              className="red" 
+              className="fees" 
               after={(order.deliveryFees / 1000).toFixed(3)} 
             /> 
           : ''}
@@ -122,7 +126,7 @@ const OrderDetails = props => {
           : ''}
           <ListItem 
             title={state.labels.net} 
-            className="blue" 
+            className="net" 
             after={(netPrice / 1000).toFixed(3)} 
           />
           {order.profit ? 

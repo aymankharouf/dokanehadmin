@@ -171,8 +171,8 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !country || !category || !imageUrl || !hasChanged ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !country || !category || !imageUrl || !hasChanged ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

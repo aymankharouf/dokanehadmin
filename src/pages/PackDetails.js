@@ -78,10 +78,13 @@ const PackDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
+          <FabButton color="green" onClick={() => props.f7router.navigate(`/addPackStore/${props.id}`)}>
+            <Icon material="add"></Icon>
+          </FabButton>
           <FabButton color="blue" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
-          <FabButton color="green" onClick={() => props.f7router.navigate(`/packTrans/${props.id}`)}>
+          <FabButton color="red" onClick={() => props.f7router.navigate(`/packTrans/${props.id}`)}>
             <Icon material="import_export"></Icon>
           </FabButton>
         </FabButtons>

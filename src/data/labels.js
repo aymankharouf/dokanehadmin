@@ -148,7 +148,6 @@ const labels = {
   purchaseSuccess: 'تم الشراء بنجاح',
   unavailable: 'غير متوفر',
   executeSuccess: 'تم التنفيذ بنجاح',
-  unavailableInStock: 'غير متوفر في المستودع',
   storePacks: 'موجودات المستودع',
   sales: 'المبيعات',
   ordersCount: 'الطلبات',
@@ -209,7 +208,9 @@ const labels = {
   purchaseDiscounts: 'خصومات المشتريات',
   discountBalance: 'رصيد الخصومات',
   specialDiscount: 'خصم خاص',
-  discounts: 'الخصومات'
+  discounts: 'الخصومات',
+  orderPrice: 'السعر عند الطلب',
+  addPrice: 'اضافة سعر'
 }
 
 export default labels

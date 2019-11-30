@@ -79,8 +79,7 @@ const EditPrice = props => {
             onChange={e => setPurchasePrice(e.target.value)}
             onInputClear={() => setPurchasePrice('')}
           />
-        : ''
-        }
+        : ''}
         <ListInput 
           name="price" 
           label={state.labels.price}
@@ -102,8 +101,8 @@ const EditPrice = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!price || (store.type === '5' && !purchasePrice) ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!price || (store.type === '5' && !purchasePrice) ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

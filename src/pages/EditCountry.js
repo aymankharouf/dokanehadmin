@@ -45,9 +45,8 @@ const EditCountry = props => {
           onInputClear={() => setName('')}
         />
       </List>
-      {!name || (name === country.name)
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!name || (name === country.name) ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

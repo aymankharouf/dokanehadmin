@@ -43,9 +43,8 @@ const EditSection = props => {
           onChange={(e) => setName(e.target.value)}
         />
       </List>
-      {!name || (name === section.name)
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!name || (name === section.name) ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

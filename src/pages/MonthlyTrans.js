@@ -180,8 +180,7 @@ const MonthlyTrans = props => {
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleMonthlyTrans()}>
           <Icon material="done"></Icon>
         </Fab>
-        : ''
-      }
+      : ''}
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

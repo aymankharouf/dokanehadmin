@@ -51,7 +51,7 @@ const StorePacks = props => {
               </ListItem>
             )
           })}
-          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : null}
+          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       {store.id === 's' ? '' : 

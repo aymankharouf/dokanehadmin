@@ -157,8 +157,7 @@ const ApproveUser = props => {
               )}
             </select>
           </ListItem>
-        : ''
-        }
+        : ''}
         <ListInput 
           name="address" 
           label={state.labels.address}
@@ -171,9 +170,8 @@ const ApproveUser = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || (userInfo.storeName && !storeId) || !locationId
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || (userInfo.storeName && !storeId) || !locationId ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

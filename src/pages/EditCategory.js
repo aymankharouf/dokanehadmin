@@ -66,9 +66,8 @@ const EditCategory = props => {
           </select>
         </ListItem>
       </List>
-      {!name || !unitType || (name === category.name && unitType === category.unitType)
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!name || !unitType || (name === category.name && unitType === category.unitType) ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

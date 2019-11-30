@@ -214,8 +214,7 @@ const EditCustomer = props => {
               )}
             </select>
           </ListItem>
-        : ''
-        }
+        : ''}
         <ListInput 
           name="position" 
           label={state.labels.position}
@@ -240,9 +239,8 @@ const EditCustomer = props => {
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
-      {!name || !locationId || !hasChanged
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !locationId || !hasChanged ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

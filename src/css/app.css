@@ -97,3 +97,19 @@
 .top-fab{
   top: 0px !important;
 }
+
+.total {
+  color: purple;
+}
+
+.fees {
+  color: red;
+}
+
+.discount {
+  color: green;
+}
+
+.net {
+  color: blue;
+}

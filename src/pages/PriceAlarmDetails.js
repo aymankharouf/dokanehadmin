@@ -67,8 +67,7 @@ const PriceAlarmDetails = props => {
           <FabButton color="green" onClick={() => handleApprove()}>
             <Icon material="done"></Icon>
           </FabButton>
-          : '' 
-        }
+        : ''}
           <FabButton color="red" onClick={() => handleReject()}>
           <Icon material="close"></Icon>
           </FabButton>
@@ -117,7 +116,7 @@ const PriceAlarmDetails = props => {
               after={(p.price / 1000).toFixed(3)} 
               key={p.id} 
             >
-              {p.quantity ? <Badge slot="title" color='red'>{p.quantity}</Badge> : null}
+              {p.quantity ? <Badge slot="title" color='red'>{p.quantity}</Badge> : ''}
             </ListItem>
           )
         })}

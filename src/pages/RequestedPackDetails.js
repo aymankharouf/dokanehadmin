@@ -13,21 +13,25 @@ const RequestedPackDetails = props => {
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
+  const basketStockQuantity = useMemo(() => state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId) ? state.basket.packs.find(p => p.packId === props.packId).quantity : 0
+  , [state.basket, props.packId])
   const packStores = useMemo(() => {
-    const packStores = state.storePacks.filter(p => p.packId === props.packId)
+    const packStores = state.storePacks.filter(p => p.packId === props.packId && (p.storeId !== 's' || (p.quantity - basketStockQuantity) > 0))
     return packStores.sort((s1, s2) => 
     {
       if (s1.purchasePrice === s2.purchasePrice) {
-        if (Number(state.stores.find(s => s.id === s2.storeId).type) === Number(state.stores.find(s => s.id === s1.storeId).type)){
-          return s1.time.seconds - s2.time.seconds
+        const store1 = state.stores.find(s => s.id === s1.storeId)
+        const store2 = state.stores.find(s => s.id === s2.storeId)
+        if (store1.type === store2.type){
+          return Number(store2.discount) - Number(store1.discount)
         } else {
-          return Number(state.stores.find(s => s.id === s1.storeId).type) - Number(state.stores.find(s => s.id === s2.storeId).type)
+          return Number(store1.type) - Number(store2.type)
         }
       } else {
         return s1.purchasePrice - s2.purchasePrice
       }
     })
-  }, [props.packId, state.stores, state.storePacks])
+  }, [props.packId, state.stores, state.storePacks, basketStockQuantity])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -36,7 +40,7 @@ const RequestedPackDetails = props => {
   }, [error, props])
 	const handlePurchase = packStore => {
 		try{
-			if (state.basket.storeId && state.basket.storeId !== packStore.id){
+			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
 				throw new Error('twoDiffStores')
       }
       if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
@@ -44,9 +48,6 @@ const RequestedPackDetails = props => {
       }
       if (packStore.price > Number(props.price)){
         throw new Error('priceHigherThanRequested')
-      }
-      if (packStore.storeId === 's' && packStore.quantity === 0){
-        throw new Error('unavailableInStock')
       }
       dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
       showMessage(props, state.labels.addToBasketSuccess)
@@ -58,7 +59,7 @@ const RequestedPackDetails = props => {
   const handleUnavailable = () => {
     const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
     packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount).then(() => {
-      showMessage(props, 'success', state.labels.executeSuccess)
+      showMessage(props, state.labels.executeSuccess)
 			props.f7router.back()
     })
   }
@@ -83,8 +84,7 @@ const RequestedPackDetails = props => {
               title={state.labels.unavailable}
               onClick={() => handleUnavailable()}
             />
-            : ''
-          }
+          : ''}
           {packStores.map(s => {
             const storeInfo = state.stores.find(st => st.id === s.storeId)
             return (
@@ -96,7 +96,7 @@ const RequestedPackDetails = props => {
                 key={s.storeId}
                 onClick={() => handlePurchase(s)}
               >
-                {s.quantity ? <Badge slot='title' color='red'>{s.quantity}</Badge> : ''}
+                {s.quantity - basketStockQuantity > 0 ? <Badge slot='title' color='red'>{s.quantity - basketStockQuantity}</Badge> : ''}
               </ListItem>
             )
           })}

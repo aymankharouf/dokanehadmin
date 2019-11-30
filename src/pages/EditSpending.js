@@ -127,9 +127,8 @@ const EditSpending = props => {
           onInputClear={() => setSpendingDate([])}
         />
       </List>
-      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage || !hasChanged
-      ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage || !hasChanged ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

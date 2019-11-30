@@ -170,8 +170,8 @@ const EditStore = props => {
           after={storeOwners.length}
         />
       </List>
-      {!name || !type || mobileErrorMessage || !hasChanged ? ''
-      : <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !type || mobileErrorMessage || !hasChanged ? '' :
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
