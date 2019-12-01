@@ -52,7 +52,7 @@ advertisements & request for advert from store owner
 *average price for purchase pack in order
 *change password
 *resolve forget password from the system
-request to cancel an order
+*request to cancel an order
 *old age flag for customers
 *position info into customers table
 destroy patch in stock
@@ -77,7 +77,6 @@ navigation & performance
 *delivery fees by region not customer
 product describtion
 products with weight
-unavailable after last updates
 request for new products
 *resolve page freeze when relogin
 *update minprice after each purchase to stock
@@ -103,10 +102,10 @@ remove weight from product and add it to packs
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
 force purchase with price above requested price (loss)
-prevent adding price alarms before approving previous one
+*prevent adding price alarms before approving previous one
 smart basket when confirm order
 delivery plan by locations
-modify edit price as add store pack
+*modify edit price as add store pack
 handle security for storePack in app application
 *fixed fees percent
 *add store discount & location
@@ -115,3 +114,4 @@ add button to refresh price for pack
 add page for logs
 ending offers & chance to feed stock by comparing the next price other than the offer
 debit
+offer end date to user

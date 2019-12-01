@@ -8,6 +8,8 @@ const Approvals = props => {
   const { state } = useContext(StoreContext)
   const newOrders = useMemo(() => state.orders.filter(o => o.status === 'n')
   , [state.orders])
+  const cancelOrders = useMemo(() => state.cancelOrders.filter(o => o.status === 'n')
+  , [state.cancelOrders])
   const newUsers = useMemo(() => state.users.filter(u => !state.customers.find(c => c.id === u.id))
   , [state.users, state.customers])
   const priceAlarms = useMemo(() => state.priceAlarms.filter(a => a.status === 'n')
@@ -18,11 +20,12 @@ const Approvals = props => {
   , [state.ratings])
   const sections = useMemo(() => [
     {id: '1', name: 'الطلبات', path: '/ordersList/n', count: newOrders.length},
-    {id: '2', name: 'المستخدمين', path: '/newUsers/', count: newUsers.length},
-    {id: '3', name: 'اشعارات الاسعار', path: '/priceAlarms/', count: priceAlarms.length},
-    {id: '4', name: 'نسيان كلمة السر', path: '/forgetPassword/', count: forgetPassword.length},
-    {id: '5', name: 'التقييمات', path: '/ratings/', count: ratings.length},
-  ], [newOrders, newUsers, priceAlarms, forgetPassword, ratings])
+    {id: '2', name: 'الغاء الطلبات', path: '/cancelOrders/', count: cancelOrders.length},
+    {id: '3', name: 'المستخدمين', path: '/newUsers/', count: newUsers.length},
+    {id: '4', name: 'اشعارات الاسعار', path: '/priceAlarms/', count: priceAlarms.length},
+    {id: '5', name: 'نسيان كلمة السر', path: '/forgetPassword/', count: forgetPassword.length},
+    {id: '6', name: 'التقييمات', path: '/ratings/', count: ratings.length},
+  ], [newOrders, newUsers, priceAlarms, forgetPassword, ratings, cancelOrders])
   let i = 0
   return(
     <Page>

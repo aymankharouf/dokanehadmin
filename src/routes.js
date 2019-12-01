@@ -68,6 +68,7 @@ import Approvals from './pages/Approvals';
 import RatingDetails from './pages/RatingDetails';
 import PackTrans from './pages/PackTrans';
 import AddPackStore from './pages/AddPackStore';
+import CancelOrders from './pages/CancelOrders';
 
 export default [
   {
@@ -286,6 +287,10 @@ export default [
     component: OrderDetails
   },
   {
+    path: '/cancelOrder/:id/cancelOrder/:cancelOrderId',
+    component: OrderDetails
+  },
+  {
     path: '/editOrder/:id',
     component: EditOrder
   },
@@ -364,6 +369,10 @@ export default [
   {
     path: '/packTrans/:id',
     component: PackTrans
+  },
+  {
+    path: '/cancelOrders/',
+    component: CancelOrders
   },
   {
     path: '(.*)',

@@ -210,7 +210,8 @@ const labels = {
   specialDiscount: 'خصم خاص',
   discounts: 'الخصومات',
   orderPrice: 'السعر عند الطلب',
-  addPrice: 'اضافة سعر'
+  addPrice: 'اضافة سعر',
+  cancelOrders: 'الغاء الطلبات'
 }
 
 export default labels

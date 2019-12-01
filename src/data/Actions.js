@@ -99,13 +99,19 @@ export const updateOrders = (batch, storeId, orders, basketPack, fixedFeesPercen
   return remainingQuantity
 }
 
-export const updateOrderStatus = (order, type, storePacks, packs, users, invitations, discountTypes) => {
+export const updateOrderStatus = (order, type, storePacks, packs, users, invitations, discountTypes, cancelOrderId) => {
   const batch = firebase.firestore().batch()
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
     status: type,
     statusTime: new Date()
   })
+  if (cancelOrderId) {
+    const cancelOrderRef = firebase.firestore().collection('cancelOrders').doc(cancelOrderId)
+    batch.update(cancelOrderRef, {
+      status: 'a'
+    })  
+  }
   if (type === 'i') {
     const basket = order.basket.filter(p => p.purchasedQuantity > 0)
     stockIn(batch, 'i', basket, storePacks, packs)

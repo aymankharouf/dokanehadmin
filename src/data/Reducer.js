@@ -170,9 +170,14 @@ const Reducer = (state, action) => {
           ...state,
           storePacks: action.storePacks
         }
+      case 'SET_CANCEL_ORDERS':
+        return {
+          ...state,
+          cancelOrders: action.cancelOrders
+        }
       default:
         return state
     }
   }
-
+  
   export default Reducer

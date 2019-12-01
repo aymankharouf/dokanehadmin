@@ -17,16 +17,16 @@ const OrderDetails = props => {
   , [order])
   const statusActions = useMemo(() => {
     const statusActions = [
-      {id: 'a', title: 'اعتماد', status: ['n', 's']},
-      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f']},
-      {id: 's', title: 'تعليق', status: ['n', 'a']},
-      {id: 'r', title: 'رفض', status: ['n', 's']},
-      {id: 'c', title: 'الغاء', status: ['n', 's', 'a']},
-      {id: 'd', title: 'تسليم', status: ['f']},
-      {id: 'i', title: 'استيداع', status: ['f']}
+      {id: 'a', title: 'اعتماد', status: ['n', 's'], cancelOrder: false},
+      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], cancelOrder: false},
+      {id: 's', title: 'تعليق', status: ['n', 'a'], cancelOrder: false},
+      {id: 'r', title: 'رفض', status: ['n', 's'], cancelOrder: false},
+      {id: 'c', title: 'الغاء', status: ['n', 's', 'a'], cancelOrder: true},
+      {id: 'd', title: 'تسليم', status: ['f'], cancelOrder: false},
+      {id: 'i', title: 'استيداع', status: ['f', 'e'], cancelOrder: true}
     ]
-    return statusActions.filter(a => a.status.find(s => s === order.status))
-  }, [order.status])
+    return statusActions.filter(a => a.status.find(s => s === order.status) && (props.cancelOrderId ? a.cancelOrder : true))
+  }, [order.status, props.cancelOrderId])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -42,7 +42,7 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
         }
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes, props.cancelOrderId)
         showMessage(props, state.labels.editSuccess)
         props.f7router.back()
       }  
