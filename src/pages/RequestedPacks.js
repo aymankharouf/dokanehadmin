@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
+import { quantityText } from '../data/Actions';
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
@@ -16,9 +17,10 @@ const RequestedPacks = props => {
 		let packsArray = []
 		approvedOrders.forEach(o => {
 			o.basket.forEach(p => {
-				if (p.quantity - p.purchasedQuantity - (p.unavailableQuantity ? p.unavailableQuantity : 0)> 0) {
+				if (!p.isFinished) {
+					const packInfo = state.packs.find(pa => pa.id === p.packId)
 					const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
-					if (found) {
+					if (!packInfo.byWeight && found) {
 						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
 						packsArray.push({
 							packId: p.packId,
@@ -29,15 +31,17 @@ const RequestedPacks = props => {
 						packsArray.push({
 							packId: p.packId,
 							price: p.price, 
-							quantity: p.quantity - p.purchasedQuantity
+							quantity: p.quantity - p.purchasedQuantity,
+							byWeight: packInfo.byWeight,
+							orderId: o.id
 						})
 					}
 				}
 			})
 		})
 		packsArray = packsArray.map(p => {
-			const inBasket = state.basket.packs ? state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price) : false
-			const inBasketQuantity = inBasket ? inBasket.quantity : 0
+			const inBasket = state.basket.packs ? (p.byWeight ? state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId) : state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)) : false
+			const inBasketQuantity = inBasket ? (p.byWeight ? inBasket.weight : inBasket.quantity) : 0
 			return {
 				...p,
 				quantity: p.quantity - inBasketQuantity
@@ -56,15 +60,14 @@ const RequestedPacks = props => {
 						const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 						return (
 							<ListItem
-								link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}`}
+								link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
 								title={productInfo.name}
 								after={(p.price / 1000).toFixed(3)}
 								subtitle={packInfo.name}
-								text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
 								key={i++}
 							>
 								<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-								{p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
+								<Badge slot="title" color="green">{quantityText(p.quantity, state.labels)}</Badge>
 							</ListItem>
 						)
 					})}

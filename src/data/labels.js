@@ -153,10 +153,6 @@ const labels = {
   ordersCount: 'الطلبات',
   fixedFees: 'الرسوم الثابتة',
   netProfit: 'صافي الربح',
-  specialDiscountPercent: 'نسبة الخصم الخاص',
-  firstOrderDiscount: 'خصم اول طلب',
-  invitationsDiscount: 'خصم دعوة صديق',
-  priceAlarmsDiscount: 'خصم اشعارات الاسعار',
   month: 'الشهر',
   year: 'السنة',
   deliveredOrdersCount: 'الطلبات المستلمة',
@@ -207,11 +203,21 @@ const labels = {
   extendOffer: 'تمديد العرض',
   purchaseDiscounts: 'خصومات المشتريات',
   discountBalance: 'رصيد الخصومات',
-  specialDiscount: 'خصم خاص',
   discounts: 'الخصومات',
   orderPrice: 'السعر عند الطلب',
   addPrice: 'اضافة سعر',
-  cancelOrders: 'الغاء الطلبات'
+  cancelOrders: 'الغاء الطلبات',
+  logs: 'الاخطاء',
+  refreshSuccess: 'تم التحديث بنجاح',
+  customerInfo: 'معلومات العميل',
+  isDivided: 'يجزأ؟',
+  gram: 'غ',
+  quantityNotAvaliable: 'الكمية غير متوفرة',
+  enterWeight: 'ادخل الوزن الفعلي',
+  actualWeight: 'الوزن الفعلي',
+  remain: 'المتبقي',
+  margin: 10,
+  discountValue: 250
 }
 
 export default labels

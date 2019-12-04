@@ -12,7 +12,6 @@ const StorePackDetails = props => {
   , [state.packs, storePack])
   const product = useMemo(() => pack ? state.products.find(p => p.id === pack.productId) : ''
   , [state.products, pack])
-
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -102,9 +101,9 @@ const StorePackDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
-          <ListItem link="#" popoverClose title={state.labels.editPrice} onClick={() => handleEditPrice()}/>
-          <ListItem link="#" popoverClose title={state.labels.delete} onClick={() => handleDelete()}/>
-          <ListItem link="#" popoverClose title={state.labels.confirmPrice} onClick={() => handleConfirmPrice()}/>
+          {storePack.storeId === 's' && storePack.quantity === 0 ? '' : <ListItem link="#" popoverClose title={state.labels.editPrice} onClick={() => handleEditPrice()}/>}
+          {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.delete} onClick={() => handleDelete()}/>}
+          {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.confirmPrice} onClick={() => handleConfirmPrice()}/>}
           {storePack.offerEnd ? <ListItem link="#" popoverClose title={state.labels.haltOffer} onClick={() => handleHaltOffer()}/> : ''}
           {storePack.offerEnd ? <ListItem link="#" popoverClose title={state.labels.extendOffer} onClick={() => handleExtendOffer()}/> : ''}
         </List>

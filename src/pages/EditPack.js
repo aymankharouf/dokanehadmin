@@ -13,6 +13,8 @@ const EditPack = props => {
   , [state.products, pack])
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
+  const [isDivided, setIsDivided] = useState(pack.isDivided)
+  const [byWeight, setByWeight] = useState(pack.byWeight)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
   const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
   const [offerQuantity, setOfferQuantity] = useState(pack.offerQuantity)
@@ -21,13 +23,13 @@ const EditPack = props => {
   const [bonusProductPacks, setBonusProductPacks] = useState([])
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [isBonusFree, setIsBonusFree] = useState(pack.isBonusFree)
-  const offerPacks = useMemo(() => state.packs.filter(p => p.productId === props.id && p.isOffer === false)
+  const offerPacks = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight)
   , [state.packs, props.id])
   const bonusProducts = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   , [state.products]) 
   useEffect(() => {
     if (bonusProductId) {
-      setBonusProductPacks(state.packs.filter(p => p.productId === bonusProductId && p.isOffer === false))
+      setBonusProductPacks(state.packs.filter(p => p.productId === bonusProductId && !p.isOffer && !p.byWeight))
     } else {
       setBonusProductPacks([])
     }
@@ -43,6 +45,13 @@ const EditPack = props => {
     }
   }, [isOffer])
   useEffect(() => {
+    if (isDivided) {
+      setIsOffer(false)
+      setByWeight(true)
+    }
+  }, [isDivided])
+
+  useEffect(() => {
     if (error) {
       showError(props, error)
       setError('')
@@ -55,6 +64,8 @@ const EditPack = props => {
         name,
         unitsCount,
         isOffer,
+        isDivided,
+        byWeight,
         offerPackId,
         offerQuantity,
         bonusProductId,
@@ -94,14 +105,34 @@ const EditPack = props => {
           onInputClear={() => setUnitsCount('')}
         />
         <ListItem>
-          <span>{state.labels.isOffer}</span>
+          <span>{state.labels.isDivided}</span>
           <Toggle 
-            name="isOffer" 
+            name="isDivived" 
             color="green" 
-            checked={isOffer} 
-            onToggleChange={() => setIsOffer(!isOffer)}
+            checked={isDivided} 
+            onToggleChange={() => setIsDivided(!isDivided)}
           />
         </ListItem>
+        <ListItem>
+          <span>{state.labels.byWeight}</span>
+          <Toggle 
+            name="byWeight" 
+            color="green" 
+            checked={byWeight} 
+            onToggleChange={() => setByWeight(!byWeight)}
+          />
+        </ListItem>
+        {isDivided || byWeight ? '' :
+          <ListItem>
+            <span>{state.labels.isOffer}</span>
+            <Toggle 
+              name="isOffer" 
+              color="green" 
+              checked={isOffer} 
+              onToggleChange={() => setIsOffer(!isOffer)}
+            />
+          </ListItem>
+        }
       </List>
       {isOffer ?
         <React.Fragment>

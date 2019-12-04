@@ -79,14 +79,6 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="specialDiscount" 
-          label={state.labels.specialDiscountPercent}
-          value={`${customer.specialDiscountPercent} %`}
-          floatingLabel 
-          type="text"
-          readonly
-        />
-        <ListInput 
           name="overPriceLimit" 
           label={state.labels.overPriceLimit}
           value={(customer.overPriceLimit / 1000).toFixed(3)}

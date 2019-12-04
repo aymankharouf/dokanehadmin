@@ -1,25 +1,27 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/Store';
+import { quantityText } from '../data/Actions'
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const totalPrice = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
+  const totalPrice = useMemo(() => state.basket.packs ? state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0) : 0
   , [state.basket])
+  let i = 0
+  useEffect(() => {
+    if (!state.basket) props.f7router.navigate('/home/', {reloadAll: true})
+  }, [state.basket, props])
   const handleAdd = pack => {
     if (store.id === 's') {
       const stock = state.storePacks.find(p => p.packId === pack.packId && p.storeId === 's')
       if (pack.quantity === pack.requestedQuantity) return
       if (pack.quantity === stock.quantity) return
     }
-    dispatch({type: 'ADD_QUANTITY', pack})
+    dispatch({type: 'INCREASE_QUANTITY', pack})
   }
-  const handleDelete = () => {
-    props.f7router.navigate('/home/', {reloadAll: true})
-    dispatch({type: 'CLEAR_BASKET'})
-  }
+  if (!state.basket) return null
   return (
     <Page>
       <Navbar title={`${state.labels.basket_from} ${store.name}`} backLink={state.labels.back} />
@@ -31,19 +33,19 @@ const Basket = props => {
             return (
               <ListItem
                 title={productInfo.name}
-                footer={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
                 subtitle={packInfo.name}
-                key={p.packId}
+                footer={`${state.labels.price}: ${((p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)} (${(p.purchasePrice / 1000).toFixed(3)})`}
+                key={i++}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge>
                 <Stepper
                   slot="after"
                   fill
                   buttonsOnly
                   onStepperPlusClick={() => handleAdd(p)}
-                  onStepperMinusClick={() => dispatch({type: 'REMOVE_QUANTITY', pack: p})}
+                  onStepperMinusClick={() => dispatch({type: 'DECREASE_QUANTITY', pack: p})}
                 />
-                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
               </ListItem>
             )
           })}
@@ -55,7 +57,7 @@ const Basket = props => {
 
       <Toolbar bottom>
         <Link href='/home/' iconMaterial="home" />
-        <Link href='#' iconMaterial="delete" onClick={() => handleDelete()} />
+        <Link href='#' iconMaterial="delete" onClick={() => dispatch({type: 'CLEAR_BASKET'})} />
       </Toolbar>
     </Page>
   )

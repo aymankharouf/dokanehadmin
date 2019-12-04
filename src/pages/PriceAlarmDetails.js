@@ -39,7 +39,7 @@ const PriceAlarmDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.discountTypes)
+      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.labels.discountValue)
       showMessage(props, state.labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {

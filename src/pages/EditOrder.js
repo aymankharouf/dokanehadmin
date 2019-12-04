@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, editOrder, showMessage, showError, getMessage } from '../data/Actions';
+import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityText } from '../data/Actions';
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -25,10 +25,6 @@ const EditOrder = props => {
     }
   }, [error, props])
 
-  const handleChangePack = (pack, value) => {
-    if (pack.quantity === 0 && value === -1) return 
-    dispatch({type: 'CHANGE_ORDER_PACK', params: {pack, value}})
-  }
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
@@ -73,8 +69,9 @@ const EditOrder = props => {
             return (
               <ListItem
                 title={productInfo.name}
-                footer={((p.price * p.quantity) / 1000).toFixed(3)}
                 subtitle={packInfo.name}
+                footer={`${state.labels.price}: ${(p.price * p.quantity / 1000).toFixed(3)}`}
+                text={quantityText(p.quantity, state.labels)}
                 key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
@@ -82,8 +79,8 @@ const EditOrder = props => {
                   slot="after"
                   fill
                   buttonsOnly
-                  onStepperPlusClick={() => handleChangePack(p, 1)}
-                  onStepperMinusClick={() => handleChangePack(p, -1)}
+                  onStepperPlusClick={() => dispatch({type: 'INCREASE_ORDER_QUANTITY', pack: p})}
+                  onStepperMinusClick={() => dispatch({type: 'DECREASE_ORDER_QUANTITY', pack: p})}
                 />
                   <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
               </ListItem>

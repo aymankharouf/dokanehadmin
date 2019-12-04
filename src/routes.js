@@ -69,6 +69,7 @@ import RatingDetails from './pages/RatingDetails';
 import PackTrans from './pages/PackTrans';
 import AddPackStore from './pages/AddPackStore';
 import CancelOrders from './pages/CancelOrders';
+import Logs from './pages/Logs';
 
 export default [
   {
@@ -299,7 +300,7 @@ export default [
     component: RequestedPacks
   },
   {
-    path: '/requestedPack/:packId/quantity/:quantity/price/:price',
+    path: '/requestedPack/:packId/quantity/:quantity/price/:price/order/:orderId',
     component: RequestedPackDetails
   },
   {
@@ -373,6 +374,10 @@ export default [
   {
     path: '/cancelOrders/',
     component: CancelOrders
+  },
+  {
+    path: '/logs/',
+    component: Logs
   },
   {
     path: '(.*)',

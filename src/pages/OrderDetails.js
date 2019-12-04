@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { updateOrderStatus, showMessage, showError, getMessage } from '../data/Actions'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
+import { updateOrderStatus, showMessage, showError, getMessage, quantityText, getPrice } from '../data/Actions'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -42,7 +42,7 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
         }
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.discountTypes, props.cancelOrderId)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.labels.discountValue, props.cancelOrderId)
         showMessage(props, state.labels.editSuccess)
         props.f7router.back()
       }  
@@ -59,6 +59,7 @@ const OrderDetails = props => {
           {order.basket && order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+            const remainQuantity = p.isFinished ? 0 : p.quantity - p.purchasedQuantity
             if (order.status === 'f' || order.status === 'd') {
               const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
               return (
@@ -68,10 +69,9 @@ const OrderDetails = props => {
                   subtitle={packInfo.name}
                   text={storeName}
                   footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
-                  after={((p.actualPrice * p.purchasedQuantity) / 1000).toFixed(3)}
+                  after={((p.actualPrice * (p.weight ? p.weight : p.purchasedQuantity)) / 1000).toFixed(3)}
                 >
-                  {p.quantity > 1 ? <Badge slot="title" color="green">{p.purchasedQuantity}</Badge> : ''}
-                  {p.unavailableQuantity ? <Badge slot="title" color="red">{`${state.labels.unavailable}: ${p.unavailableQuantity}`}</Badge> : ''}
+                  <Badge slot="title" color="green">{quantityText(p.purchasedQuantity, state.labels, p.weight)}</Badge>
                 </ListItem>
               )
             } else {
@@ -81,10 +81,10 @@ const OrderDetails = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
-                  after={((p.actualPrice ? p.actualPrice : p.price) * p.quantity / 1000).toFixed(3)}
+                  text={`${remainQuantity > 0 ? state.labels.remain + ': ' + String(remainQuantity) : ''}`}
+                  after={(getPrice(p) / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.purchasedQuantity} - ${p.quantity}`}</Badge>
-                  {p.unavailableQuantity ? <Badge slot="title" color="red">{`${state.labels.unavailable}: ${p.unavailableQuantity}`}</Badge> : ''}
+                  <Badge slot="title" color={p.isFinished ? 'green' : 'red'}>{quantityText(p.quantity, state.labels, p.weight)}</Badge>
                 </ListItem>
               )
             }
@@ -119,7 +119,7 @@ const OrderDetails = props => {
           : ''}
           {order.discount.value > 0 ? 
             <ListItem 
-              title={state.discountTypes.find(t => t.id === order.discount.type).name} 
+              title={state.labels.discount} 
               className="discount" 
               after={(order.discount.value / 1000).toFixed(3)} 
             /> 
@@ -139,6 +139,7 @@ const OrderDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
+          <ListItem link="#" popoverClose title={state.labels.customerInfo} onClick={() => props.f7router.navigate(`/customer/${order.userId}`)}/>
           {statusActions && statusActions.map(a => 
             <ListItem link="#" key={a.id} popoverClose title={a.title} onClick={() => handleAction(a.id)}/>
           )}

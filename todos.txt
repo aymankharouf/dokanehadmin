@@ -86,19 +86,17 @@ request for new products
 before confirm order check if there is new prices or not
 over price limit for each customer (default 0)
 *seperate store prices in different table
-edit stock price
-prevent multi input in forget password
+*edit stock price
+*prevent multi input in forget password
 check for page permissions (admin & app)
-rounding ratings
-adjust other offers and comments buttons in pack details page
+*rounding ratings
+*adjust other offers and comments buttons in pack details page
 *add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
 add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 *add alternative mobile for customer
-add link to customer info in order details page and others
-add units and unit types
+*add link to customer info in order details page and others
 *add rating count to rating component
 *add discount value to customer info
-remove weight from product and add it to packs
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
 force purchase with price above requested price (loss)
@@ -110,8 +108,10 @@ handle security for storePack in app application
 *fixed fees percent
 *add store discount & location
 add order limit for each pack 
-add button to refresh price for pack
-add page for logs
+*add button to refresh price for pack
+*add page for logs
 ending offers & chance to feed stock by comparing the next price other than the offer
 debit
 offer end date to user
+loading indicator
+request for edit order partially 

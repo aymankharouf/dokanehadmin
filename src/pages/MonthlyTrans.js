@@ -40,9 +40,7 @@ const MonthlyTrans = props => {
   const fixedFees = monthlyTrans ? monthlyTrans.fixedFees : deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
   const deliveryFees = useMemo(() => monthlyTrans ? monthlyTrans.deliveryFees : deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
-  const specialDiscounts = useMemo(() => monthlyTrans ? monthlyTrans.specialDiscounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type === 's' ? o.discount.value : 0) , 0)
-  , [deliveredOrders, monthlyTrans])
-  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount && o.discount.type !== 's' ? o.discount.value : 0) , 0)
+  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0) , 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -87,7 +85,6 @@ const MonthlyTrans = props => {
         fixedFees,
         deliveryFees,
         purchaseDiscounts,
-        specialDiscounts,
         discounts,
         withdrawals,
         expenses
@@ -153,11 +150,6 @@ const MonthlyTrans = props => {
             link="#"
             title={state.labels.netProfit}
             after={((profit + fixedFees + deliveryFees + purchaseDiscounts) / 1000).toFixed(3)}
-          />
-          <ListItem
-            link="#"
-            title={state.labels.specialDiscount}
-            after={(specialDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

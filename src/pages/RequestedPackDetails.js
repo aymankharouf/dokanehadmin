@@ -39,31 +39,52 @@ const RequestedPackDetails = props => {
     }
   }, [error, props])
 	const handlePurchase = packStore => {
-		try{
-			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
-				throw new Error('twoDiffStores')
+    try{
+      if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
+        throw new Error('twoDiffStores')
       }
-      if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
-        throw new Error('alreadyInBasket')
+      if (pack.byWeight){
+        if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id && p.orderId === props.orderId)) {
+          throw new Error('alreadyInBasket')
+        }
+      } else {
+        if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
+          throw new Error('alreadyInBasket')
+        }
       }
       if (packStore.price > Number(props.price)){
         throw new Error('priceHigherThanRequested')
       }
-      dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
-      showMessage(props, state.labels.addToBasketSuccess)
-			props.f7router.back()
+      if (pack.isDivided && packStore.quantity < Number(props.quantity)) {
+        throw new Error('quantityNotAvaliable')
+      }
+      if (pack.byWeight) {
+        props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
+          dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity), orderId: props.orderId, weight: Number(weight)}})
+          showMessage(props, state.labels.addToBasketSuccess)
+          props.f7router.back()
+        })
+      } else {
+        dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
+        showMessage(props, state.labels.addToBasketSuccess)
+        props.f7router.back()  
+      }
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
-		}
+      setError(getMessage(err, state.labels, props.f7route.route.component.name))
+    }
   }
   const handleUnavailable = () => {
-    const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-    packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount).then(() => {
-      showMessage(props, state.labels.executeSuccess)
-			props.f7router.back()
+    props.f7router.app.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+      try{
+        const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
+        await packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount)
+        showMessage(props, state.labels.executeSuccess)
+        props.f7router.back()
+      } catch(err) {
+        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+      }
     })
   }
-
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />

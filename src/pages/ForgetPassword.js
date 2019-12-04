@@ -8,7 +8,7 @@ import { StoreContext } from '../data/Store';
 const ForgetPassword = props => {
   const { state } = useContext(StoreContext)
   const forgetPassword = useMemo(() => {
-    const forgetpassword = state.forgetPassword.filter(f => f.resolved === false)
+    const forgetpassword = state.forgetPassword.filter(f => f.status === 'n')
     return forgetpassword.sort((f1, f2) => f1.time.seconds - f2.time.seconds)
   } , [state.forgetPassword])
   return(

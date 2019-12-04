@@ -40,6 +40,14 @@ const Store = props => {
     {id: 'c', name: 'ملغي'},
     {id: 'i', name: 'استيداع'}
   ]  
+  const orderPackStatus = [
+    {id: 'n', name: 'لم يبدأ الشراء'},
+    {id: 's', name: 'بدء الشراء'},
+    {id: 'f', name: 'شراء كامل'},
+    {id: 'u', name: 'غير متوفر'},
+    {id: 'p', name: 'شراء جزئي'}
+  ]
+
   const storeTypes = [
     {id: '1', name: 'المستودع'},
     {id: '2', name: 'دكانة'},
@@ -51,11 +59,6 @@ const Store = props => {
     {id: 'p', name: 'شراء'},
     {id: 's', name: 'بيع'},
     {id: 'i', name: 'استيداع'}
-  ]
-  const discountTypes = [
-    {id: 'f', name: 'خصم اول طلب', value: 0},
-    {id: 'p', name: 'خصم تشجيعي', value: 250},
-    {id: 's', name: 'خصم خاص', value: 0}
   ]
   const spendingTypes = [
     {id: 'w', name: 'سحب'},
@@ -101,7 +104,6 @@ const Store = props => {
     invitations: [],
     unitTypes,
     customers: [],
-    discountTypes,
     spendingTypes,
     spendings: [],
     monthlyTrans: [],
@@ -111,7 +113,8 @@ const Store = props => {
     storePacks: [],
     otherMobileHolders,
     logs: [],
-    cancelOrders: []
+    cancelOrders: [],
+    orderPackStatus
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {

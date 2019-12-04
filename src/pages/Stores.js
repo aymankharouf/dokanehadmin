@@ -36,7 +36,6 @@ const Stores = props => {
             <ListItem 
               link={`/store/${s.id}`} 
               title={s.name} 
-              footer={`${s.address || ''} ${s.mobile || ''}`}
               key={s.id} 
             />
           )}

@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-r
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
+import { quantityText } from '../data/Actions'
 
 
 const PurchaseDetails = props => {
@@ -22,10 +23,10 @@ const PurchaseDetails = props => {
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
+                  after={(p.purchasePrice * (p.weight ? p.weight : p.quantity) / 1000).toFixed(3)}
                   key={p.packId} 
                 >
-                  {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
+                  {p.quantity > 1 ? <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge> : ''}
                 </ListItem>
               )}
             )}

@@ -3,7 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge, ListInp
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { confirmPurchase, stockOut, showMessage, showError, getMessage } from '../data/Actions'
+import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/Actions'
 
 
 const ConfirmPurchase = props => {
@@ -11,9 +11,10 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0)
   , [state.basket])
   const [discount, setDiscount] = useState(store.discount ? (total * store.discount / 100000).toFixed(3) : 0)
+  let i = 0
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -32,7 +33,7 @@ const ConfirmPurchase = props => {
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount, state.labels.margin)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
@@ -52,12 +53,12 @@ const ConfirmPurchase = props => {
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem 
-                key={p.packId} 
+                key={i++} 
                 title={productInfo.name}
                 footer={packInfo.name} 
-                after={((p.purchasePrice * p.quantity) / 1000).toFixed(3)}
+                after={((p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
               >
-                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
+                <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge>
               </ListItem>
             )
           }

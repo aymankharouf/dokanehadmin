@@ -30,6 +30,7 @@ const PanelPage = props => {
         {user ? <ListItem link="/approvals/" title={state.labels.approvals} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/offers/" title={state.labels.offers} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/profits/" title={state.labels.profits} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/logs/" title={state.labels.logs} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )
