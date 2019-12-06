@@ -9,8 +9,10 @@ const AddLocation = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
+  const [sorting, setSorting] = useState('')
   const [hasDelivery, setHasDelivery] = useState(false)
   const [deliveryFees, setDeliveryFees] = useState('')
+  const [urgentDeliveryFees, setUrgentDeliveryFees] = useState('')
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
@@ -25,8 +27,10 @@ const AddLocation = props => {
     try{
       await addLocation({
         name,
+        sorting,
         hasDelivery,
-        deliveryFees: parseInt(deliveryFees * 1000)
+        deliveryFees: parseInt(deliveryFees * 1000),
+        urgentDeliveryFees: parseInt(urgentDeliveryFees * 1000)
       })
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
@@ -48,6 +52,16 @@ const AddLocation = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListInput 
+          name="sorting" 
+          label={state.labels.sorting}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={sorting} 
+          onChange={e => setSorting(e.target.value)}
+          onInputClear={() => setSorting('')}
+        />
         <ListItem>
           <span>{state.labels.hasDelivery}</span>
           <Toggle 
@@ -57,7 +71,7 @@ const AddLocation = props => {
             onToggleChange={() => setHasDelivery(!hasDelivery)}
           />
         </ListItem>
-        {hasDelivery ? 
+        {hasDelivery ?
           <ListInput 
             name="deliveryFees" 
             label={state.labels.deliveryFees}
@@ -68,9 +82,21 @@ const AddLocation = props => {
             onChange={e => setDeliveryFees(e.target.value)}
             onInputClear={() => setDeliveryFees('')}
           />
+          : ''}
+        {hasDelivery ?
+          <ListInput 
+            name="urgentDeliveryFees" 
+            label={state.labels.urgentDeliveryFees}
+            floatingLabel 
+            clearButton
+            type="number" 
+            value={urgentDeliveryFees} 
+            onChange={e => setUrgentDeliveryFees(e.target.value)}
+            onInputClear={() => setUrgentDeliveryFees('')}
+          />
         : ''}
       </List>
-      {!name || (hasDelivery && deliveryFees === '') ? '' :
+      {!name || !sorting || (hasDelivery && (!deliveryFees || !urgentDeliveryFees)) ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

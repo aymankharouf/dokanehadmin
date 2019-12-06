@@ -28,6 +28,8 @@ const EditCustomer = props => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  , [state.locations])
   const hasChanged = useMemo(() => {
     if (name !== userInfo.name) return true
     if (nickName !== customer.name) return true
@@ -147,7 +149,7 @@ const EditCustomer = props => {
         >
           <select name="location" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {state.locations.map(l => 
+            {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>

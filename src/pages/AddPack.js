@@ -9,6 +9,7 @@ const AddPack = props => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
+  const [orderLimit, setOrderLimit] = useState('')
   const [isOffer, setIsOffer] = useState(false)
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
@@ -59,17 +60,18 @@ const AddPack = props => {
       await addPack({
         productId: product.id,
         name,
-        unitsCount,
+        unitsCount: parseInt(unitsCount),
         isDivided,
         byWeight,
         isOffer,
         offerPackId,
-        offerQuantity,
+        offerQuantity: parseInt(offerQuantity),
         bonusProductId,
         bonusPackId,
-        bonusQuantity,
+        bonusQuantity: parseInt(bonusQuantity),
         isBonusFree,
         price: 0,
+        orderLimit: parseInt(orderLimit),
         time: new Date()
       })
       showMessage(props, state.labels.addSuccess)
@@ -102,6 +104,16 @@ const AddPack = props => {
           value={unitsCount} 
           onChange={e => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
+        />
+        <ListInput 
+          name="orderLimit" 
+          label={state.labels.packLimit}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={orderLimit} 
+          onChange={e => setOrderLimit(e.target.value)}
+          onInputClear={() => setOrderLimit('')}
         />
         <ListItem>
           <span>{state.labels.isDivided}</span>

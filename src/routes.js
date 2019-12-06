@@ -70,6 +70,8 @@ import PackTrans from './pages/PackTrans';
 import AddPackStore from './pages/AddPackStore';
 import CancelOrders from './pages/CancelOrders';
 import Logs from './pages/Logs';
+import Prices from './pages/Prices';
+import StoreDetails from './pages/StoreDetails';
 
 export default [
   {
@@ -140,6 +142,10 @@ export default [
     component: Customers,
   },
   {
+    path: '/prices/',
+    component: Prices,
+  },
+  {
     path: '/newUsers/',
     component: NewUsers
   },
@@ -157,7 +163,7 @@ export default [
   },
   {
     path: '/store/:id',
-    component: StorePacks
+    component: StoreDetails
   },
   {
     path: '/forgetPassword/',
@@ -236,7 +242,7 @@ export default [
     component: EditTrademark,
   },
   {
-    path: '/store/:id',
+    path: '/storePacks/:id',
     component: StorePacks
   },
   {

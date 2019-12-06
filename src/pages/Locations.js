@@ -6,7 +6,7 @@ import { StoreContext } from '../data/Store';
 
 const Locations = props => {
   const { state } = useContext(StoreContext)
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
   , [state.locations])
 
   return (

@@ -17,9 +17,15 @@ const EditStore = props => {
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
-  const [discount, setDiscount] = useState('')
-  const [locationId, setLocationId] = useState('')
-  const [position, setPosition] = useState('')
+  const [discount, setDiscount] = useState(store.discount)
+  const [locationId, setLocationId] = useState(store.locationId)
+  const [position, setPosition] = useState(store.position)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  , [state.locations])
+  const storeTypes = useMemo(() => {
+    const storeTypes = state.storeTypes.filter(t => t.id !== '1')
+    return storeTypes.sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  }, [state.storeTypes])
 
   useEffect(() => {
     const patterns = {
@@ -111,7 +117,7 @@ const EditStore = props => {
         >
           <select name='type' value={type} onChange={(e) => setType(e.target.value)}>
             <option value=""></option>
-            {state.storeTypes.map(t => t.id === '1' ? '' : 
+            {storeTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
@@ -139,7 +145,7 @@ const EditStore = props => {
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {state.locations.map(l => 
+            {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
@@ -170,7 +176,7 @@ const EditStore = props => {
           after={storeOwners.length}
         />
       </List>
-      {!name || !type || mobileErrorMessage || !hasChanged ? '' :
+      {!name || !type || !locationId || mobileErrorMessage || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

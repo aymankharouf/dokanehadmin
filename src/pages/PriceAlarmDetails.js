@@ -22,8 +22,10 @@ const PriceAlarmDetails = props => {
   , [state.customers, priceAlarm])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : priceAlarm.storeName
   , [customer, state.stores, priceAlarm])
-  const storeAddress = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).address : priceAlarm.storePlace
-  , [customer, state.stores, priceAlarm])
+  const storeLocation = useMemo(() => {
+    const location = customer.storeId ? state.stores.find(s => s.id === customer.storeId).locationId : priceAlarm.locationId
+    return state.locations.find(l => l.id === location).name
+  }, [customer, state.stores, state.locations, priceAlarm])
   const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   , [state.stores])
   const prices = useMemo(() => {
@@ -63,11 +65,11 @@ const PriceAlarmDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-        {customer.storeId || store ? 
-          <FabButton color="green" onClick={() => handleApprove()}>
-            <Icon material="done"></Icon>
-          </FabButton>
-        : ''}
+          {customer.storeId || store ? 
+            <FabButton color="green" onClick={() => handleApprove()}>
+              <Icon material="done"></Icon>
+            </FabButton>
+          : ''}
           <FabButton color="red" onClick={() => handleReject()}>
           <Icon material="close"></Icon>
           </FabButton>
@@ -77,7 +79,8 @@ const PriceAlarmDetails = props => {
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
           <p>{`${userInfo.name} ${userInfo.mobile}`}</p>
-          <p>{`${storeName} ${storeAddress}`}</p>
+          <p>{`${state.labels.storeName}: ${storeName}`}</p>
+          <p>{`${state.labels.location}: ${storeLocation}`}</p>
         </CardContent>
         <CardFooter>
           <p>{(priceAlarm.price / 1000).toFixed(3)}</p>

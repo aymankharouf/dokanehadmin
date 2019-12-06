@@ -8,7 +8,7 @@ const HomePage = props => {
   const { state } = useContext(StoreContext)
   const mainPages = useMemo(() => [
     {id: '1', name: 'الطلبات', path: 'orders'},
-    {id: '2', name: 'اﻻسعار', path: 'stores'},
+    {id: '2', name: 'اﻻسعار', path: 'prices'},
     {id: '3', name: 'المنتجات', path: 'products'},
     {id: '4', name: 'المشتريات', path: 'purchases'},
     {id: '5', name: 'العملاء', path: 'customers'},

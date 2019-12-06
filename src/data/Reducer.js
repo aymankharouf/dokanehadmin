@@ -227,6 +227,11 @@ const Reducer = (state, action) => {
           ...state,
           cancelOrders: action.cancelOrders
         }
+      case 'SET_LOGS':
+        return {
+          ...state,
+          logs: action.logs
+        }
       default:
         return state
     }

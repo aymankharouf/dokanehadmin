@@ -11,7 +11,7 @@ const ApproveUser = props => {
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
-  const [locationId, setLocationId] = useState('')
+  const [locationId, setLocationId] = useState(userInfo.locationId)
   const [address, setAddress] = useState('')
   const [storeId, setStoreId] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
@@ -21,6 +21,9 @@ const ApproveUser = props => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  , [state.locations])
+
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -121,7 +124,7 @@ const ApproveUser = props => {
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {state.locations.map(l => 
+            {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>

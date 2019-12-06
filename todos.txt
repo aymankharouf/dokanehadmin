@@ -5,41 +5,30 @@
 *add quantity in a store & offers
 *customer status => active, blacklist, vip, special
 *customer limit
-news
 *order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
 *pick an order
 *cancel an order
 *finished orders
 *not picked orders
-delay in picking a finished order
-postpond an order
-most wanted products
 *net profit & sales (daily, weekly, monthly, yearly)
 *cancel part of an order(prices changing or not avaliable)
 *dokaneh stores - purshasing & not picked orders
 *in stoke (quantity & net value)
 *offers: packages, discounts for group, extra
 *cost types & costs
-product details (in stoke, sales, stores, in order)
-last ordered product by the user in the same category & its price & quantity
-purchase history by category for the user
 *localstorage for basket
 *moving functions to admin
 *edit product : name, section
 *order unit
-cancel a purchase or part of it
 *lazy loading
-customer follow-up
 *first time discount
 *friends discount
-urgent flag in order (urgent fixed fees percent)
-urgent delivery fees per location
+*urgent flag in order (urgent fixed fees percent)
+*urgent delivery fees per location
 *offers first (ordering products)
 *ordering products by type (product)
-suggestions
 *invitations
 *user as store admin
-advertisements & request for advert from store owner
 *categorize stores, ordering stores for equity : oldest trans, less purchase, most active
 *outdated offers
 *rounding
@@ -55,63 +44,78 @@ advertisements & request for advert from store owner
 *request to cancel an order
 *old age flag for customers
 *position info into customers table
-destroy patch in stock
-blacklist customer who did not pick his order
-return to a store except type 5
-store trans --purchases & returns
 *image size
 *rate product discounts
-hints & help
-alert & notifications
 *withdrawals
 *comments when rating
 *show ratings count
 *edit orders
 *purchase discounts
 *forEach instead of for loop
-navigation & performance
 *realtime listeners on app store
 *in pack detail page show a button if there is offers of the same product
 *change admin password
 *contact info in home page
 *delivery fees by region not customer
-product describtion
-products with weight
-request for new products
+*products with weight
 *resolve page freeze when relogin
 *update minprice after each purchase to stock
 *update minprice for offers expired tonight
 *update minprice after edit price
 *delete customer types and add flags
-before confirm order check if there is new prices or not
-over price limit for each customer (default 0)
 *seperate store prices in different table
 *edit stock price
 *prevent multi input in forget password
-check for page permissions (admin & app)
 *rounding ratings
 *adjust other offers and comments buttons in pack details page
 *add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
-add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 *add alternative mobile for customer
 *add link to customer info in order details page and others
 *add rating count to rating component
 *add discount value to customer info
-modify store page (requested packs, ended offers, last request from owner, packs count)
-modify owner page to categorize his products
-force purchase with price above requested price (loss)
 *prevent adding price alarms before approving previous one
-smart basket when confirm order
-delivery plan by locations
 *modify edit price as add store pack
-handle security for storePack in app application
 *fixed fees percent
 *add store discount & location
-add order limit for each pack 
+*add order limit for each pack 
 *add button to refresh price for pack
 *add page for logs
-ending offers & chance to feed stock by comparing the next price other than the offer
+*last month sales in store ordering
+*warning order limit earlier when adding to basket
+news
 debit
+ending offers & chance to feed stock by comparing the next price other than the offer
+data types in firebase
+send to delivery center trans and get back
 offer end date to user
 loading indicator
 request for edit order partially 
+finished orders calling & feed back (if with delivery which time to deliver)
+handle security for storePack in app application
+smart basket when confirm order
+delivery plan by locations
+modify store page (requested packs, ended offers, last request from owner, packs count)
+modify owner page to categorize his products
+force purchase with price above requested price (loss)
+add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
+check for page permissions (admin & app)
+before confirm order check if there is new prices or not
+over price limit for each customer (default 0)
+request for new products
+product describtion
+navigation & performance
+hints & help
+alert & notifications
+most wanted products
+product details (in stoke, sales, stores, in order)
+last ordered product by the user in the same category & its price & quantity
+purchase history by category for the user
+cancel a purchase or part of it
+customer follow-up
+suggestions
+advertisements & request for advert from store owner
+destroy patch in stock
+blacklist customer who did not pick his order
+return to a store except type 5
+store trans --purchases & returns
+delivery intervals

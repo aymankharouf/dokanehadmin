@@ -217,7 +217,12 @@ const labels = {
   actualWeight: 'الوزن الفعلي',
   remain: 'المتبقي',
   margin: 10,
-  discountValue: 250
+  discountValue: 250,
+  packLimit: 'السقف في الطلب',
+  urgentDeliveryFees: 'التوصيل المستعجل',
+  sorting: 'الترتيب',
+  prices: 'الاسعار',
+  storeDetails: 'تفاصيل المحل'
 }
 
 export default labels

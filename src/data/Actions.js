@@ -623,7 +623,7 @@ export const approveUser = user => {
   batch.update(userRef, {
     name: user.name,
     storeName: firebase.firestore.FieldValue.delete(),
-    address: firebase.firestore.FieldValue.delete()
+    locationId: firebase.firestore.FieldValue.delete()
   })
   return batch.commit()
 }

@@ -13,6 +13,7 @@ const EditPack = props => {
   , [state.products, pack])
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
+  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [isOffer, setIsOffer] = useState(pack.isOffer)
@@ -26,7 +27,22 @@ const EditPack = props => {
   const offerPacks = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight)
   , [state.packs, props.id])
   const bonusProducts = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  , [state.products]) 
+  , [state.products])
+  const hasChanged = useMemo(() => {
+    if (name !== pack.name) return true
+    if (unitsCount !== pack.unitsCount) return true
+    if (orderLimit !== pack.orderLimit) return true
+    if (isDivided !== pack.isDivided) return true
+    if (byWeight !== pack.byWeight) return true
+    if (isOffer !== pack.isOffer) return true
+    if (offerPackId !== pack.offerPackId) return true
+    if (offerQuantity !== pack.offerQuantity) return true
+    if (bonusProductId !== pack.bonusProductId) return true
+    if (bonusPackId !== pack.bonusPackId) return true
+    if (bonusQuantity !== pack.bonusQuantity) return true
+    if (isBonusFree !== pack.isBonusFree) return true
+    return false
+  }, [pack, name, unitsCount, orderLimit, isDivided, byWeight, isOffer, offerPackId, offerQuantity, bonusProductId, bonusPackId, bonusQuantity, isBonusFree])
   useEffect(() => {
     if (bonusProductId) {
       setBonusProductPacks(state.packs.filter(p => p.productId === bonusProductId && !p.isOffer && !p.byWeight))
@@ -62,15 +78,16 @@ const EditPack = props => {
       const newPack = {
         ...pack,
         name,
-        unitsCount,
+        unitsCount: parseInt(unitsCount),
+        orderLimit: parseInt(orderLimit),
         isOffer,
         isDivided,
         byWeight,
         offerPackId,
-        offerQuantity,
+        offerQuantity: parseInt(offerQuantity),
         bonusProductId,
         bonusPackId,
-        bonusQuantity,
+        bonusQuantity: parseInt(bonusQuantity),
         isBonusFree
       }
       await editPack(newPack)
@@ -103,6 +120,16 @@ const EditPack = props => {
           value={unitsCount} 
           onChange={(e) => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
+        />
+        <ListInput 
+          name="orderLimit" 
+          label={state.labels.packLimit}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={orderLimit} 
+          onChange={e => setOrderLimit(e.target.value)}
+          onInputClear={() => setOrderLimit('')}
         />
         <ListItem>
           <span>{state.labels.isDivided}</span>
@@ -228,7 +255,7 @@ const EditPack = props => {
           </List>
         </React.Fragment>
       : ''}
-      {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || (name === pack.name && unitsCount === pack.unitsCount && isOffer === pack.isOffer && offerPackId === pack.offerPackId && offerQuantity === pack.offerQuantity && bonusProductId === pack.bonusProductId && bonusPackId === pack.bonusPackId && bonusQuantity === pack.bonusQuantity && isBonusFree === pack.isBonusFree) ? '' :
+      {!name || !unitsCount || (isOffer && (!offerPackId || !offerQuantity)) || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

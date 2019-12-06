@@ -15,8 +15,12 @@ const AddStore = props => {
   const [address, setAddress] = useState('')
   const [discount, setDiscount] = useState('')
   const [locationId, setLocationId] = useState('')
-  const storeTypes = useMemo(() => [...state.storeTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.storeTypes])
+  const storeTypes = useMemo(() => {
+    const storeTypes = state.storeTypes.filter(t => t.id !== '1')
+    return storeTypes.sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  }, [state.storeTypes])
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  , [state.locations])
 
   useEffect(() => {
     const patterns = {
@@ -95,10 +99,10 @@ const AddStore = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='type' defaultValue="" onChange={(e) => setType(e.target.value)}>
+          <select name='type' defaultValue="" onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {storeTypes.map(t => 
-              t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
         </ListItem>
@@ -125,7 +129,7 @@ const AddStore = props => {
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
-            {state.locations.map(l => 
+            {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
@@ -141,7 +145,7 @@ const AddStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage ? '' :
+      {!name || !type || !locationId || mobileErrorMessage ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -7,10 +7,11 @@ import { StoreContext } from '../data/Store';
 const Settings = props => {
   const { state } = useContext(StoreContext)
   const sections = useMemo(() => [
-    {id: '1', name: 'الدول', path: 'countries'},
-    {id: '2', name: 'اﻻقسام', path: 'sections'},
-    {id: '3', name: 'العلامات التجارية', path: 'trademarks'},
-    {id: '4', name: 'المواقع', path: 'locations'},
+    {id: '1', name: 'المحال', path: 'stores'},
+    {id: '2', name: 'الدول', path: 'countries'},
+    {id: '3', name: 'اﻻقسام', path: 'sections'},
+    {id: '4', name: 'العلامات التجارية', path: 'trademarks'},
+    {id: '5', name: 'المواقع', path: 'locations'},
   ], [])
   let i = 0
   return(
@@ -20,7 +21,7 @@ const Settings = props => {
         {sections.map(s => {
             return (
             <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={`/${s.path}/`} key={s.id}>
-                {s.name}
+              {s.name}
             </Button>
             )
         })}

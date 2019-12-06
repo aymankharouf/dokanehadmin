@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, FabButton, FabButtons } from 'framework7-react'
+import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
@@ -55,17 +55,8 @@ const StorePacks = props => {
         </List>
       </Block>
       {store.id === 's' ? '' : 
-        <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-          <Icon material="keyboard_arrow_down"></Icon>
-          <Icon material="close"></Icon>
-          <FabButtons position="bottom">
-            <FabButton color="blue" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
-              <Icon material="edit"></Icon>
-            </FabButton>
-            <FabButton color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
-              <Icon material="add"></Icon>
-            </FabButton>
-          </FabButtons>
+        <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
+          <Icon material="add"></Icon>
         </Fab>
       }
       <Toolbar bottom>

@@ -17,13 +17,23 @@ const RequestedPackDetails = props => {
   , [state.basket, props.packId])
   const packStores = useMemo(() => {
     const packStores = state.storePacks.filter(p => p.packId === props.packId && (p.storeId !== 's' || (p.quantity - basketStockQuantity) > 0))
+    const today = new Date()
+    today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
     {
       if (s1.purchasePrice === s2.purchasePrice) {
         const store1 = state.stores.find(s => s.id === s1.storeId)
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
-          return Number(store2.discount) - Number(store1.discount)
+          if (store2.discount === store1.discount) {
+            const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() < today)
+            const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() < today)
+            const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
+            const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
+            return store1Sales - store2Sales
+          } else {
+            return Number(store2.discount) - Number(store1.discount)
+          }
         } else {
           return Number(store1.type) - Number(store2.type)
         }
@@ -31,7 +41,7 @@ const RequestedPackDetails = props => {
         return s1.purchasePrice - s2.purchasePrice
       }
     })
-  }, [props.packId, state.stores, state.storePacks, basketStockQuantity])
+  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity])
   useEffect(() => {
     if (error) {
       showError(props, error)

@@ -23,7 +23,7 @@ const OrderDetails = props => {
       {id: 'r', title: 'رفض', status: ['n', 's'], cancelOrder: false},
       {id: 'c', title: 'الغاء', status: ['n', 's', 'a'], cancelOrder: true},
       {id: 'd', title: 'تسليم', status: ['f'], cancelOrder: false},
-      {id: 'i', title: 'استيداع', status: ['f', 'e'], cancelOrder: true}
+      {id: 'i', title: 'استيداع', status: ['f', 'e'], cancelOrder: true},
     ]
     return statusActions.filter(a => a.status.find(s => s === order.status) && (props.cancelOrderId ? a.cancelOrder : true))
   }, [order.status, props.cancelOrderId])
@@ -139,9 +139,20 @@ const OrderDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
-          <ListItem link="#" popoverClose title={state.labels.customerInfo} onClick={() => props.f7router.navigate(`/customer/${order.userId}`)}/>
+          <ListItem 
+            link="#" 
+            popoverClose 
+            title={state.labels.customerInfo} 
+            onClick={() => props.f7router.navigate(`/customer/${order.userId}`)}
+          />
           {statusActions && statusActions.map(a => 
-            <ListItem link="#" key={a.id} popoverClose title={a.title} onClick={() => handleAction(a.id)}/>
+            <ListItem 
+              link="#" 
+              key={a.id} 
+              popoverClose 
+              title={a.title} 
+              onClick={() => handleAction(a.id)}
+            />
           )}
         </List>
       </Popover>
