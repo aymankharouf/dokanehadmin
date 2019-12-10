@@ -72,6 +72,13 @@ import CancelOrders from './pages/CancelOrders';
 import Logs from './pages/Logs';
 import Prices from './pages/Prices';
 import StoreDetails from './pages/StoreDetails';
+import PrepareOrders from './pages/PrepareOrders';
+import PrepareOrdersList from './pages/PrepareOrdersList';
+import ReturnOrder from './pages/ReturnOrder';
+import ReturnOrderPack from './pages/ReturnOrderPack';
+import FollowupOrders from './pages/FollowupOrders';
+import FollowupOrdersList from './pages/FollowupOrdersList';
+import FollowupOrderDetails from './pages/FollowupOrderDetails';
 
 export default [
   {
@@ -119,7 +126,7 @@ export default [
   },
   {
     path: '/basket/',
-    component: Basket
+    component: Basket,
   },
   {
     path: '/confirmPurchase/',
@@ -154,7 +161,7 @@ export default [
     component: ApproveUser
   },
   {
-    path: '/customer/:id',
+    path: '/customer/:id/full/:full',
     component: CustomerDetails
   },
   {
@@ -384,6 +391,34 @@ export default [
   {
     path: '/logs/',
     component: Logs
+  },
+  {
+    path: '/prepareOrders/',
+    component: PrepareOrders
+  },
+  {
+    path: '/prepareOrders/:packId/order/:orderId',
+    component: PrepareOrdersList
+  },
+  {
+    path: '/returnOrder/:id',
+    component: ReturnOrder
+  },
+  {
+    path: '/returnOrder/:orderId/pack/:packId',
+    component: ReturnOrderPack
+  },
+  {
+    path: '/followupOrders/',
+    component: FollowupOrders
+  },
+  {
+    path: '/followupOrdersList/:id',
+    component: FollowupOrdersList
+  },
+  {
+    path: '/followupOrderDetails/:id',
+    component: FollowupOrderDetails
   },
   {
     path: '(.*)',

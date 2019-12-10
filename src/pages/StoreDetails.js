@@ -69,7 +69,7 @@ const StoreDetails = props => {
         />
       </List>
       {store.id === 's' ? '' :
-        <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editStore/${props.id}`)}>
+        <Fab position="left-top" slot="fixed" color="red" href={`/editStore/${props.id}`}>
           <Icon material="edit"></Icon>
         </Fab>    
       }

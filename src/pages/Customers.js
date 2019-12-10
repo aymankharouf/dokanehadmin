@@ -34,7 +34,7 @@ const Customers = props => {
             const userInfo = state.users.find(u => u.id === c.id)
             return (
               <ListItem
-                link={`/customer/${c.id}`}
+                link={`/customer/${c.id}/full/1`}
                 title={`${userInfo.name} - ${userInfo.mobile}`}
                 subtitle={moment(c.time.toDate()).fromNow()}
                 key={c.id}

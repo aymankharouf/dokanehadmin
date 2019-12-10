@@ -46,7 +46,7 @@ const Products = props => {
             {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addProduct/`)}>
+      <Fab position="left-top" slot="fixed" color="green" href="/addProduct/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

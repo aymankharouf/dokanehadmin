@@ -31,13 +31,18 @@ const Approvals = props => {
     <Page>
       <Navbar title={state.labels.approvals} backLink={state.labels.back} />
       <Block>
-        {sections.map(s => {
-            return (
-            <Button large fill className="sections" color={state.randomColors[i++ % 10].name} href={s.path} key={s.id}>
-                {`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}
-            </Button>
-            )
-        })}
+        {sections.map(s => 
+          <Button 
+            large 
+            fill 
+            className="sections" 
+            color={state.randomColors[i++ % 10].name} 
+            href={s.path} 
+            key={s.id}
+          >
+            {`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}
+          </Button>
+        )}
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

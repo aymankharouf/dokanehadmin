@@ -6,18 +6,16 @@ import { quantityText } from '../data/Actions';
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
-	const approvedOrders = useMemo(() => {
-		const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-		return approvedOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
-	}, [state.orders])
-	
 	const [requiredPacks, setRequiredPacks] = useState([])
+	const approvedOrders = useMemo(() => state.orders.filter(o => o.status === 'a' || o.status === 'e')
+	, [state.orders])
+	
 	let i = 0
 	useEffect(() => {
 		let packsArray = []
 		approvedOrders.forEach(o => {
 			o.basket.forEach(p => {
-				if (!p.isFinished) {
+				if (p.status === 'n' || p.status === 'p') {
 					const packInfo = state.packs.find(pa => pa.id === p.packId)
 					const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
 					if (!packInfo.byWeight && found) {
@@ -41,7 +39,7 @@ const RequestedPacks = props => {
 		})
 		packsArray = packsArray.map(p => {
 			const inBasket = state.basket.packs ? (p.byWeight ? state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId) : state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)) : false
-			const inBasketQuantity = inBasket ? (p.byWeight ? inBasket.weight : inBasket.quantity) : 0
+			const inBasketQuantity = inBasket ? (p.isDivided ? inBasket.weight : inBasket.quantity) : 0
 			return {
 				...p,
 				quantity: p.quantity - inBasketQuantity
@@ -51,8 +49,7 @@ const RequestedPacks = props => {
 	}, [state.basket, approvedOrders, state.packs])
   return(
     <Page>
-      <Navbar title={state.labels.RequestedProducts} backLink={state.labels.back}>
-      </Navbar>
+      <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} />
       <Block>
 				<List mediaList>
 					{requiredPacks && requiredPacks.map(p => {
@@ -71,6 +68,7 @@ const RequestedPacks = props => {
 							</ListItem>
 						)
 					})}
+					{requiredPacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
 				</List>
       </Block>
       <Toolbar bottom>

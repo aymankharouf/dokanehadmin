@@ -21,11 +21,10 @@ const ForgetPassword = props => {
               if (!userInfo) return ''
               return (
                 <ListItem
-                  link='#'
+                  link={`/retreivePassword/${f.id}`}
                   title={`${userInfo.name} - ${userInfo.mobile}`}
                   subtitle={moment(f.time.toDate()).fromNow()}
                   key={f.id}
-                  onClick={() => props.f7router.navigate(`/retreivePassword/${f.id}`)}
                 />
               )
             }

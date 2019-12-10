@@ -7,7 +7,9 @@ const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const totalPrice = useMemo(() => state.basket.packs ? state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0) : 0
+  const basket = useMemo(() => state.basket ? [...state.basket.packs].sort((p1, p2) => p1.time - p2.time) : []
+  , [state.basket])
+  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0) : 0
   , [state.basket])
   let i = 0
   useEffect(() => {
@@ -21,13 +23,13 @@ const Basket = props => {
     }
     dispatch({type: 'INCREASE_QUANTITY', pack})
   }
-  if (!state.basket) return null
+  
   return (
     <Page>
-      <Navbar title={`${state.labels.basket_from} ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {state.basket.packs && state.basket.packs.map(p => {
+          {basket && basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
@@ -51,7 +53,7 @@ const Basket = props => {
           })}
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => props.f7router.navigate('/confirmPurchase/')}>
+      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" href="/confirmPurchase/">
         <Icon material="done"></Icon>
       </Fab>
 

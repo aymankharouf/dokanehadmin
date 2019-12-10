@@ -18,9 +18,6 @@ const StorePackDetails = props => {
       setError('')
     }
   }, [error, props])
-  const handleEditPrice = () => {
-    props.f7router.navigate(`/editPrice/${storePack.id}`)
-  }
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
@@ -101,7 +98,7 @@ const StorePackDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
-          {storePack.storeId === 's' && storePack.quantity === 0 ? '' : <ListItem link="#" popoverClose title={state.labels.editPrice} onClick={() => handleEditPrice()}/>}
+          {storePack.storeId === 's' && storePack.quantity === 0 ? '' : <ListItem link={`/editPrice/${storePack.id}`} popoverClose title={state.labels.editPrice} />}
           {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.delete} onClick={() => handleDelete()}/>}
           {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.confirmPrice} onClick={() => handleConfirmPrice()}/>}
           {storePack.offerEnd ? <ListItem link="#" popoverClose title={state.labels.haltOffer} onClick={() => handleHaltOffer()}/> : ''}

@@ -42,7 +42,7 @@ const Stores = props => {
           {stores.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addStore/')}>
+      <Fab position="left-top" slot="fixed" color="green" href="/addStore/">
         <Icon material="add"></Icon>
       </Fab>
       {stock ? '' : 

@@ -35,19 +35,13 @@ const Store = props => {
     {id: 's', name: 'معلق'},
     {id: 'r', name: 'مرفوض'},
     {id: 'e', name: 'قيد التجهيز'},
-    {id: 'f', name: 'جاهز'},
+    {id: 'f', name: 'مكتمل'},
+    {id: 'p', name: 'جاهز'},
     {id: 'd', name: 'تم اﻻستلام'},
     {id: 'c', name: 'ملغي'},
+    {id: 'u', name: 'غير متوفر'},
     {id: 'i', name: 'استيداع'}
   ]  
-  const orderPackStatus = [
-    {id: 'n', name: 'لم يبدأ الشراء'},
-    {id: 's', name: 'بدء الشراء'},
-    {id: 'f', name: 'شراء كامل'},
-    {id: 'u', name: 'غير متوفر'},
-    {id: 'p', name: 'شراء جزئي'}
-  ]
-
   const storeTypes = [
     {id: '1', name: 'المستودع'},
     {id: '2', name: 'دكانة'},
@@ -76,6 +70,20 @@ const Store = props => {
     {id: '4', name: 'احد الوالدين'},
     {id: '5', name: 'صديق'},
     {id: '6', name: 'جار'}
+  ]
+  const orderPositions = [
+    {id: 's', name: 'المستودع'},
+    {id: 'c', name: 'مركز التوزيع'},
+    {id: 'd', name: 'سيارة التوزيع'},
+  ]
+  const orderPackStatus = [
+    {id: 'n', name: 'جديد'},
+    {id: 'p', name: 'شراء جزئي'},
+    {id: 'f', name: 'تم الشراء'},
+    {id: 'u', name: 'غير متوفر'},
+    {id: 'pu', name: 'شراء جزئي والباقي غير متوفر'},
+    {id: 'r', name: 'مرتجع'},
+    {id: 'pr', name: 'مرتجع جزئي'}
   ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
@@ -114,6 +122,7 @@ const Store = props => {
     otherMobileHolders,
     logs: [],
     cancelOrders: [],
+    orderPositions,
     orderPackStatus
   }
   const [state, dispatch] = useReducer(Reducer, initState)

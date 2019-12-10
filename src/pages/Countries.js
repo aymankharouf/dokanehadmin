@@ -8,7 +8,6 @@ const Countries = props => {
   const { state } = useContext(StoreContext)
   const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.countries])
-
   return (
     <Page>
       <Navbar title={state.labels.countries} backLink={state.labels.back} />
@@ -24,7 +23,7 @@ const Countries = props => {
           {countries.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addCountry/')}>
+      <Fab position="left-top" slot="fixed" color="green" href="/addCountry/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

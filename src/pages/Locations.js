@@ -25,7 +25,7 @@ const Locations = props => {
           {locations.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate('/addLocation/')}>
+      <Fab position="left-top" slot="fixed" color="green" href="/addLocation/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

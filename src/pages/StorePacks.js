@@ -55,7 +55,7 @@ const StorePacks = props => {
         </List>
       </Block>
       {store.id === 's' ? '' : 
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/addStorePack/${props.id}`)}>
+        <Fab position="left-top" slot="fixed" color="green" href={`/addStorePack/${props.id}`}>
           <Icon material="add"></Icon>
         </Fab>
       }

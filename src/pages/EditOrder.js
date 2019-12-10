@@ -13,8 +13,10 @@ const EditOrder = props => {
   , [state.customers, order])
   const customerLocation = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId) : ''
   , [state.locations, customer])
-  const total = useMemo(() => state.orderBasket ? state.orderBasket.reduce((sum, p) => sum + (p.price * p.quantity), 0) : 0
+  const orderBasket = useMemo(() => state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
   , [state.orderBasket])
+  const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.grossPrice, 0)
+  , [orderBasket])
   useEffect(() => {
     dispatch({type: 'LOAD_ORDER_BASKET', order})
   }, [dispatch, order])
@@ -28,7 +30,7 @@ const EditOrder = props => {
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
-        const type = ['f', 'e'].includes(order.status) ? 'i' : 'c'
+        const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         await updateOrderStatus(order, type, state.storePacks, state.packs)
         showMessage(props, state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -52,18 +54,8 @@ const EditOrder = props => {
     <Page>
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
-        <List>
-          <ListItem>
-            <span>{state.labels.withDelivery}</span>
-            <Toggle 
-              name="withDelivery" 
-              color="green" 
-              checked={withDelivery} 
-              onToggleChange={() => setWithDelivery(!withDelivery)}
-              disabled={customerLocation ? !customerLocation.hasDelivery : false}
-            />
-          </ListItem>
-          {state.orderBasket && state.orderBasket.map(p => {
+        <List mediaList>
+          {orderBasket && orderBasket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
@@ -75,6 +67,7 @@ const EditOrder = props => {
                 key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
                 <Stepper
                   slot="after"
                   fill
@@ -82,10 +75,21 @@ const EditOrder = props => {
                   onStepperPlusClick={() => dispatch({type: 'INCREASE_ORDER_QUANTITY', pack: p})}
                   onStepperMinusClick={() => dispatch({type: 'DECREASE_ORDER_QUANTITY', pack: p})}
                 />
-                  <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.unavailableQuantity ? '(' + p.unavailableQuantity + ')' : ''} ${p.purchasedQuantity} - ${p.quantity}`}</Badge>
               </ListItem>
             )
           })}
+        </List>
+        <List>
+          <ListItem>
+            <span>{state.labels.withDelivery}</span>
+            <Toggle 
+              name="withDelivery" 
+              color="green" 
+              checked={withDelivery} 
+              onToggleChange={() => setWithDelivery(!withDelivery)}
+              disabled={customerLocation ? !customerLocation.hasDelivery : false}
+            />
+          </ListItem>
         </List>
       </Block>
       <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>

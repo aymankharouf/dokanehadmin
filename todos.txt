@@ -82,6 +82,8 @@
 *add page for logs
 *last month sales in store ordering
 *warning order limit earlier when adding to basket
+*distribute purchases packs to prepared orders
+*deduction for returned quantity which get from any discount
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -101,7 +103,7 @@ add stock pack details page which handle pack trans (destroy, return to specific
 check for page permissions (admin & app)
 before confirm order check if there is new prices or not
 over price limit for each customer (default 0)
-request for new products
+request for new products or packs
 product describtion
 navigation & performance
 hints & help
@@ -119,3 +121,11 @@ blacklist customer who did not pick his order
 return to a store except type 5
 store trans --purchases & returns
 delivery intervals
+sell stock packs to another store
+test & load test
+donate from stock
+detict device size note
+button to add shortcut PWA
+note for stop the service
+add user friendly pages for delivery center & delivery car
+overpriced text

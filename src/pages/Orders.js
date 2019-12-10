@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Block, Page, Navbar, Toolbar, List, ListItem} from 'framework7-react'
+import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 

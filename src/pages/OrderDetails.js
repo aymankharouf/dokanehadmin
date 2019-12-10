@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, showMessage, showError, getMessage, quantityText, getPrice } from '../data/Actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityText } from '../data/Actions'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -18,12 +18,12 @@ const OrderDetails = props => {
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', title: 'اعتماد', status: ['n', 's'], cancelOrder: false},
-      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], cancelOrder: false},
+      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f', 'p'], cancelOrder: false},
       {id: 's', title: 'تعليق', status: ['n', 'a'], cancelOrder: false},
       {id: 'r', title: 'رفض', status: ['n', 's'], cancelOrder: false},
       {id: 'c', title: 'الغاء', status: ['n', 's', 'a'], cancelOrder: true},
-      {id: 'd', title: 'تسليم', status: ['f'], cancelOrder: false},
-      {id: 'i', title: 'استيداع', status: ['f', 'e'], cancelOrder: true},
+      {id: 'i', title: 'استيداع', status: ['f', 'e', 'p'], cancelOrder: true},
+      {id: 'p', title: 'تجهيز', status: ['f'], cancelOrder: false},
     ]
     return statusActions.filter(a => a.status.find(s => s === order.status) && (props.cancelOrderId ? a.cancelOrder : true))
   }, [order.status, props.cancelOrderId])
@@ -59,8 +59,7 @@ const OrderDetails = props => {
           {order.basket && order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const remainQuantity = p.isFinished ? 0 : p.quantity - p.purchasedQuantity
-            if (order.status === 'f' || order.status === 'd') {
+            if (['f', 'p', 'd'].includes(order.status)) {
               const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
               return (
                 <ListItem 
@@ -68,13 +67,14 @@ const OrderDetails = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={storeName}
-                  footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
-                  after={((p.actualPrice * (p.weight ? p.weight : p.purchasedQuantity)) / 1000).toFixed(3)}
+                  footer={state.orderPackStatus.find(s => s.id === p.status).name}
+                  after={(p.grossPrice / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color="green">{quantityText(p.purchasedQuantity, state.labels, p.weight)}</Badge>
+                  {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), state.labels, p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
                 </ListItem>
               )
             } else {
+              const remainQuantity = p.status === 'n' || p.status === 'p' ? p.quantity - p.purchasedQuantity : 0
               return (
                 <ListItem 
                   key={p.packId} 
@@ -82,9 +82,9 @@ const OrderDetails = props => {
                   subtitle={packInfo.name}
                   footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
                   text={`${remainQuantity > 0 ? state.labels.remain + ': ' + String(remainQuantity) : ''}`}
-                  after={(getPrice(p) / 1000).toFixed(3)}
+                  after={(p.grossPrice / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color={p.isFinished ? 'green' : 'red'}>{quantityText(p.quantity, state.labels, p.weight)}</Badge>
+                  <Badge slot="title" color={['f', 'u', 'pu'].includes(p.status) ? 'green' : 'red'}>{quantityText(p.quantity, state.labels, p.weight)}</Badge>
                 </ListItem>
               )
             }
@@ -140,10 +140,9 @@ const OrderDetails = props => {
       <Popover className="popover-menu">
         <List>
           <ListItem 
-            link="#" 
+            link={`/customer/${order.userId}/full/1`}
             popoverClose 
             title={state.labels.customerInfo} 
-            onClick={() => props.f7router.navigate(`/customer/${order.userId}`)}
           />
           {statusActions && statusActions.map(a => 
             <ListItem 

@@ -34,7 +34,7 @@ const Profits = props => {
         />
       </List>
       {!month || !year ? '' : 
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => props.f7router.navigate(`/monthlyTrans/${year * 100 + Number(month)}`)}>
+        <Fab position="left-top" slot="fixed" color="green" href={`/monthlyTrans/${year * 100 + Number(month)}`}>
           <Icon material="done"></Icon>
         </Fab>
       }

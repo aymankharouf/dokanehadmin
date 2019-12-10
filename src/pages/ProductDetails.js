@@ -30,7 +30,7 @@ const ProductDetails = props => {
           {state.labels.packs}
         </Col>
         <Col>
-          <Button small fill round iconMaterial="add" onClick={() => props.f7router.navigate(`/addPack/${props.id}`)} />
+          <Button small fill round iconMaterial="add" href={`/addPack/${props.id}`} />
         </Col>
       </Row>
       </BlockTitle>
@@ -47,7 +47,7 @@ const ProductDetails = props => {
           </ListItem>
         )}
       </List>
-      <Fab position="left-top" slot="fixed" color="red" onClick={() => props.f7router.navigate(`/editProduct/${props.id}`)}>
+      <Fab position="left-top" slot="fixed" color="red" href={`/editProduct/${props.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
       <Toolbar bottom>
