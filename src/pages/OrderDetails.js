@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, showMessage, showError, getMessage, quantityText } from '../data/Actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityText, addQuantity } from '../data/Actions'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -70,11 +70,11 @@ const OrderDetails = props => {
                   footer={state.orderPackStatus.find(s => s.id === p.status).name}
                   after={(p.grossPrice / 1000).toFixed(3)}
                 >
-                  {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), state.labels, p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
+                  {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), state.labels, addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
                 </ListItem>
               )
             } else {
-              const remainQuantity = p.status === 'n' || p.status === 'p' ? p.quantity - p.purchasedQuantity : 0
+              const remainQuantity = p.status === 'n' || p.status === 'p' ? addQuantity(p.quantity, -1 * p.purchasedQuantity) : 0
               return (
                 <ListItem 
                   key={p.packId} 

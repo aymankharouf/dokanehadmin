@@ -179,7 +179,6 @@ const labels = {
   inActive: 'غير فعال',
   haltSuccess: 'تم تعليق العرض بنجاح',
   noOffers: 'لا يوجد عرض ليتم تعليقه',
-  sellPrice: 'سعر البيع',
   relogin: 'عليك تسجيل الدخول أوﻻ',
   duplicatePacKInBasket: 'تم اضافة هذا المنتج في سلة المشتريات سابقا',
   noPurchaseFromStore: 'لا يمكن الشراء من المستودع',
@@ -239,7 +238,17 @@ const labels = {
   receive: 'استلام',
   toStock: 'استيداع',
   confirmeReceiveText: 'هل تم استلام قيمة الطلب، والمرتجع بشكل كامل؟',
-  receiveOrderAmount: 'استلام قيمة الطلب'
+  receiveOrderAmount: 'استلام قيمة الطلب',
+  donate: 'تبرع',
+  destroy: 'اتلاف',
+  donations: 'تبرعات',
+  damages: 'مواد متلفة',
+  withdraw: 'سحب',
+  withdraws: 'سحب مواد',
+  canReturn: 'ارجاع',
+  storeNotReturn: 'هذا المحل لا يقبل اﻻرجاع',
+  sell: 'بيع',
+  cashing: 'بيع المواد'
 }
 
 export default labels

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
@@ -15,6 +15,8 @@ const AddStore = props => {
   const [address, setAddress] = useState('')
   const [discount, setDiscount] = useState('')
   const [locationId, setLocationId] = useState('')
+  const [position, setPosition] = useState('')
+  const [canReturn, setCanReturn] = useState(false)
   const storeTypes = useMemo(() => {
     const storeTypes = state.storeTypes.filter(t => t.id !== '1')
     return storeTypes.sort((t1, t2) => t1.name > t2.name ? 1 : -1)
@@ -54,6 +56,8 @@ const AddStore = props => {
         discount,
         mobile,
         locationId,
+        position,
+        canReturn,
         address
       })
       showMessage(props, state.labels.addSuccess)
@@ -116,6 +120,15 @@ const AddStore = props => {
           onChange={e => setDiscount(e.target.value)}
           onInputClear={() => setDiscount('')}
         />
+        <ListItem>
+          <span>{state.labels.canReturn}</span>
+          <Toggle 
+            name="canReturn" 
+            color="green" 
+            checked={canReturn} 
+            onToggleChange={() => setCanReturn(!canReturn)}
+          />
+        </ListItem>
         <ListItem
           title={state.labels.location}
           smartSelect
@@ -134,6 +147,16 @@ const AddStore = props => {
             )}
           </select>
         </ListItem>
+        <ListInput
+          name="position"
+          label={state.labels.position}
+          value={position}
+          floatingLabel
+          clearButton
+          type="text"
+          onChange={e => setPosition(e.target.value)}
+          onInputClear={() => setPosition('')}
+        />
         <ListInput 
           name="address" 
           label={state.labels.address}

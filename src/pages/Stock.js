@@ -43,7 +43,7 @@ const Stock = props => {
                 key={p.id}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                {p.quantity > 0 ? <Badge slot="subtitle" color="red">{p.quantity}</Badge> : ''}
+                {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
               </ListItem>
             )
           }

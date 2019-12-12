@@ -79,6 +79,7 @@ import ReturnOrderPack from './pages/ReturnOrderPack';
 import FollowupOrders from './pages/FollowupOrders';
 import FollowupOrdersList from './pages/FollowupOrdersList';
 import FollowupOrderDetails from './pages/FollowupOrderDetails';
+import SellStore from './pages/SellStore';
 
 export default [
   {
@@ -419,6 +420,10 @@ export default [
   {
     path: '/followupOrderDetails/:id',
     component: FollowupOrderDetails
+  },
+  {
+    path: '/sellStore/:id',
+    component: SellStore
   },
   {
     path: '(.*)',

@@ -84,11 +84,17 @@
 *warning order limit earlier when adding to basket
 *distribute purchases packs to prepared orders
 *deduction for returned quantity which get from any discount
+*add user friendly pages for delivery center & delivery car
+*donate from stock
+*destroy patch in stock
+*return to a store except type 5
+*send to delivery center trans and get back
+*sell stock packs to another store
+*before confirm order check if there is new prices or not
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
 data types in firebase
-send to delivery center trans and get back
 offer end date to user
 loading indicator
 request for edit order partially 
@@ -101,7 +107,6 @@ modify owner page to categorize his products
 force purchase with price above requested price (loss)
 add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 check for page permissions (admin & app)
-before confirm order check if there is new prices or not
 over price limit for each customer (default 0)
 request for new products or packs
 product describtion
@@ -116,16 +121,11 @@ cancel a purchase or part of it
 customer follow-up
 suggestions
 advertisements & request for advert from store owner
-destroy patch in stock
 blacklist customer who did not pick his order
-return to a store except type 5
 store trans --purchases & returns
 delivery intervals
-sell stock packs to another store
 test & load test
-donate from stock
 detict device size note
 button to add shortcut PWA
 note for stop the service
-add user friendly pages for delivery center & delivery car
 overpriced text

@@ -11,7 +11,7 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0)
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0)
   , [state.basket])
   const [discount, setDiscount] = useState(store.discount ? (total * store.discount / 100000).toFixed(3) : 0)
   let i = 0
@@ -28,7 +28,7 @@ const ConfirmPurchase = props => {
         throw new Error('invalidValue')
       }
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount, state.labels.margin)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    

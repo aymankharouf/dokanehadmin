@@ -52,7 +52,12 @@ const Store = props => {
   const stockTransTypes = [
     {id: 'p', name: 'شراء'},
     {id: 's', name: 'بيع'},
-    {id: 'i', name: 'استيداع'}
+    {id: 'i', name: 'استيداع'},
+    {id: 'd', name: 'اتلاف'},
+    {id: 'g', name: 'تبرع'},
+    {id: 'r', name: 'ارجاع'},
+    {id: 'c', name: 'تصريف'},
+    {id: 'w', name: 'سحب'}
   ]
   const spendingTypes = [
     {id: 'w', name: 'سحب'},

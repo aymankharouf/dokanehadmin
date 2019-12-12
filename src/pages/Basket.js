@@ -9,7 +9,7 @@ const Basket = props => {
   , [state.basket, state.stores])
   const basket = useMemo(() => state.basket ? [...state.basket.packs].sort((p1, p2) => p1.time - p2.time) : []
   , [state.basket])
-  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + (p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0) : 0
+  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0) : 0
   , [state.basket])
   let i = 0
   useEffect(() => {
@@ -36,7 +36,7 @@ const Basket = props => {
               <ListItem
                 title={productInfo.name}
                 subtitle={packInfo.name}
-                footer={`${state.labels.price}: ${((p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)} (${(p.purchasePrice / 1000).toFixed(3)})`}
+                footer={`${state.labels.price}: ${(parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)} (${(p.purchasePrice / 1000).toFixed(3)})`}
                 key={i++}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />

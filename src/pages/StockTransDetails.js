@@ -22,11 +22,11 @@ const StockTransDetails = props => {
               <ListItem 
                 title={productInfo.name}
                 footer={packInfo.name}
-                after={(p.purchasePrice * p.quantity / 1000).toFixed(3)}
+                after={(parseInt(p.purchasePrice * p.quantity) / 1000).toFixed(3)}
                 key={p.packId} 
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                {p.quantity > 1 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
+                <Badge slot="title" color="red">{p.quantity}</Badge>
               </ListItem>
             )}
           )}

@@ -11,7 +11,7 @@ const AddCategory = props => {
   const [unitType, setUnitType] = useState('')
   const section = useMemo(() => state.sections.find(s => s.id === props.id)
   , [state.sections, props.id]) 
-  const unitTypesOptions = useMemo(() => [...state.unitTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  const unitTypes = useMemo(() => [...state.unitTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.unitTypes])
   useEffect(() => {
     if (error) {
@@ -56,9 +56,9 @@ const AddCategory = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
+          <select name='unitType' value={unitType} onChange={e => setUnitType(e.target.value)}>
             <option value=""></option>
-            {unitTypesOptions.map(t => 
+            {unitTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>

@@ -2,7 +2,7 @@ import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
-import { packUnavailable, showMessage, showError, getMessage } from '../data/Actions'
+import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
 
@@ -13,10 +13,12 @@ const RequestedPackDetails = props => {
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const basketStockQuantity = useMemo(() => state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId) ? state.basket.packs.find(p => p.packId === props.packId).quantity : 0
-  , [state.basket, props.packId])
+  const basketStockQuantity = useMemo(() => {
+    const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
+    return basketStock ? basketStock.quantity : 0
+  }, [state.basket, props.packId])
   const packStores = useMemo(() => {
-    const packStores = state.storePacks.filter(p => p.packId === props.packId && (p.storeId !== 's' || (p.quantity - basketStockQuantity) > 0))
+    const packStores = state.storePacks.filter(p => p.packId === props.packId && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
     const today = new Date()
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
@@ -71,7 +73,7 @@ const RequestedPackDetails = props => {
       if (pack.byWeight) {
         props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
           try{
-              if (pack.isDivided && parseInt(Math.abs(Number(props.quantity) - Number(weight)) / Number(props.quantity) * 100) > state.labels.margin) {
+              if (pack.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
               throw new Error('InvalidWeight')
             }
             dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(Number(props.quantity), packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity), orderId: props.orderId, weight: Number(weight)}})
@@ -141,7 +143,7 @@ const RequestedPackDetails = props => {
                 key={s.storeId}
                 onClick={() => handlePurchase(s)}
               >
-                {s.quantity - basketStockQuantity > 0 ? <Badge slot='title' color='red'>{s.quantity - basketStockQuantity}</Badge> : ''}
+                {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color='red'>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
               </ListItem>
             )
           })}

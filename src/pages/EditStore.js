@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editStore, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
@@ -20,6 +20,7 @@ const EditStore = props => {
   const [discount, setDiscount] = useState(store.discount)
   const [locationId, setLocationId] = useState(store.locationId)
   const [position, setPosition] = useState(store.position)
+  const [canReturn, setCanReturn] = useState(store.canReturn)
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
   , [state.locations])
   const storeTypes = useMemo(() => {
@@ -48,8 +49,9 @@ const EditStore = props => {
     if (address !== store.address) return true
     if (locationId !== store.locationId) return true
     if (position !== store.position) return true
+    if (canReturn !== store.canReturn) return true
     return false
-  }, [store, name, mobile, discount, address, locationId, position])
+  }, [store, name, mobile, discount, address, locationId, position, canReturn])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -132,6 +134,15 @@ const EditStore = props => {
           onChange={e => setDiscount(e.target.value)}
           onInputClear={() => setDiscount('')}
         />
+        <ListItem>
+          <span>{state.labels.canReturn}</span>
+          <Toggle 
+            name="canReturn" 
+            color="green" 
+            checked={canReturn} 
+            onToggleChange={() => setCanReturn(!canReturn)}
+          />
+        </ListItem>
         <ListItem
           title={state.labels.location}
           smartSelect

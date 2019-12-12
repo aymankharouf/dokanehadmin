@@ -23,7 +23,7 @@ const PurchaseDetails = props => {
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(p.purchasePrice * (p.weight ? p.weight : p.quantity) / 1000).toFixed(3)}
+                  after={(parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
                   key={p.packId} 
                 >
                   {p.quantity > 1 ? <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge> : ''}

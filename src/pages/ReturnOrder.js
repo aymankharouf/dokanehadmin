@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Badge, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { quantityText } from '../data/Actions'
+import { quantityText, addQuantity } from '../data/Actions'
 
 const ReturnOrder = props => {
   const { state, user } = useContext(StoreContext)
@@ -19,7 +19,7 @@ const ReturnOrder = props => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const price = p.status === 'r' ? 0 : p.status === 'pr' ? p.actualPrice * ((p.weight ? p.weight : p.purchasedQuantity) - p.returnedQuantity) : p.actualPrice * (p.weight ? p.weight : p.purchasedQuantity)
+            //const price = p.status === 'r' ? 0 : p.status === 'pr' ? p.actualPrice * ((p.weight ? p.weight : p.purchasedQuantity) - p.returnedQuantity) : p.actualPrice * (p.weight ? p.weight : p.purchasedQuantity)
             return (
               <ListItem 
                 link={`/returnOrder/${props.id}/pack/${p.packId}`}
@@ -28,9 +28,9 @@ const ReturnOrder = props => {
                 subtitle={packInfo.name}
                 text={storeName}
                 footer={state.orderPackStatus.find(s => s.id === p.status).name}
-                after={(price / 1000).toFixed(3)}
+                after={(p.grossPrice / 1000).toFixed(3)}
               >
-                {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), state.labels, p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
+                {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), state.labels, addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
               </ListItem>
             )
           })}

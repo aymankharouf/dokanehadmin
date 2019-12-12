@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
-import { quantityText } from '../data/Actions';
+import { quantityText, addQuantity } from '../data/Actions';
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
@@ -39,14 +39,25 @@ const RequestedPacks = props => {
 		})
 		packsArray = packsArray.map(p => {
 			const inBasket = state.basket.packs ? (p.byWeight ? state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId) : state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)) : false
-			const inBasketQuantity = inBasket ? (p.isDivided ? inBasket.weight : inBasket.quantity) : 0
-			return {
-				...p,
-				quantity: p.quantity - inBasketQuantity
+			const inBasketQuantity = inBasket ? inBasket.quantity : 0
+			if (inBasketQuantity > 0) {
+				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > state.labels.margin) {
+					return {
+						...p,
+						quantity: addQuantity(p.quantity, -1 * inBasketQuantity)
+					}
+				} else {
+					return {
+						...p,
+						quantity: 0
+					}
+				}
+			} else {
+				return p
 			}
 		})
 		setRequiredPacks(packsArray.filter(p => p.quantity > 0))
-	}, [state.basket, approvedOrders, state.packs])
+	}, [state.basket, approvedOrders, state.packs, state.labels])
   return(
     <Page>
       <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} />

@@ -8,7 +8,7 @@ const Reducer = (state, action) => {
         pack = {
           packId: action.params.pack.id,
           price: action.params.price,
-          quantity: action.params.quantity,
+          quantity: action.params.pack.isDivided ? action.params.weight : action.params.quantity,
           actualPrice: action.params.packStore.price,
           purchasePrice: action.params.packStore.purchasePrice,
           requestedQuantity: action.params.requestedQuantity,

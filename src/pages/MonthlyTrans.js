@@ -30,7 +30,7 @@ const MonthlyTrans = props => {
   const storePacks = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.storePacks
     const storePacks = state.storePacks.filter(p => p.storeId === 's' && p.quantity > 0)
-    const storeValue = storePacks.reduce((sum, p) => sum + (p.purchasePrice * p.quantity), 0)
+    const storeValue = storePacks.reduce((sum, p) => sum + parseInt(p.purchasePrice * p.quantity), 0)
     return storeValue
   }, [state.storePacks, monthlyTrans])
   const sales = useMemo(() => monthlyTrans ? monthlyTrans.sales : deliveredOrders.reduce((sum, o) => sum + o.total, 0)
@@ -40,7 +40,7 @@ const MonthlyTrans = props => {
   const fixedFees = monthlyTrans ? monthlyTrans.fixedFees : deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
   const deliveryFees = useMemo(() => monthlyTrans ? monthlyTrans.deliveryFees : deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
-  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0) , 0)
+  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -48,6 +48,16 @@ const MonthlyTrans = props => {
   }, [state.purchases, month, year, monthlyTrans])
   const spendings = useMemo(() => state.spendings.filter(s => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month)
   , [state.spendings, month, year])
+  const stockTrans = useMemo(() => state.stockTrans.filter(t => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month)
+  , [state.stockTrans, month, year])
+  const donations = useMemo(() => monthlyTrans ? monthlyTrans.donations : stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0)
+  , [stockTrans, monthlyTrans])
+  const damages = useMemo(() => monthlyTrans ? monthlyTrans.damages : stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0)
+  , [stockTrans, monthlyTrans])
+  const withdraws = useMemo(() => monthlyTrans ? monthlyTrans.withdraws : stockTrans.reduce((sum, t) => sum + (t.type === 'w' ? t.total : 0), 0)
+  , [stockTrans, monthlyTrans])
+  const cashing = useMemo(() => monthlyTrans ? monthlyTrans.cashing : stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].purchasePrice * t.basket[0].quantity): 0), 0)
+  , [stockTrans, monthlyTrans])
   const withdrawals = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals
     const withdrawals = spendings.filter(s => s.type === 'w')
@@ -87,7 +97,10 @@ const MonthlyTrans = props => {
         purchaseDiscounts,
         discounts,
         withdrawals,
-        expenses
+        expenses,
+        donations,
+        damages,
+        withdraws
       }
       await addMonthlyTrans(trans)
       showMessage(props, state.labels.addSuccess)
@@ -165,6 +178,26 @@ const MonthlyTrans = props => {
             link="#"
             title={state.labels.expenses}
             after={(expenses / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.donations}
+            after={(donations / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.damages}
+            after={(damages / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.withdraws}
+            after={(withdraws / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.cashing}
+            after={(cashing / 1000).toFixed(3)}
           />
         </List>
       </Block>
