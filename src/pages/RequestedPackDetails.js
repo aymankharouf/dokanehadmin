@@ -3,8 +3,6 @@ import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Too
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/Actions'
-import moment from 'moment'
-import 'moment/locale/ar'
 
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
@@ -18,12 +16,45 @@ const RequestedPackDetails = props => {
     return basketStock ? basketStock.quantity : 0
   }, [state.basket, props.packId])
   const packStores = useMemo(() => {
-    const packStores = state.storePacks.filter(p => p.packId === props.packId && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
+    let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
+    packStores = packStores.map(s => {
+      let packId, unitPrice, quantity, offerInfo, isOffer
+      if (s.packId === props.packId) {
+        packId = s.packId
+        unitPrice = s.storeId === 's' || !s.quantity ? s.purchasePrice : parseInt(s.purchasePrice / s.quantity) 
+        quantity = s.quantity
+        isOffer = false
+      } else {
+        offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === props.packId)
+        if (offerInfo) {
+          packId = offerInfo.id
+          unitPrice = parseInt((s.purchasePrice / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
+          quantity = offerInfo.offerQuantity
+          isOffer = true
+        } else {
+          offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)
+          if (offerInfo) {
+            packId = offerInfo.id
+            unitPrice = parseInt((s.purchasePrice / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            quantity = offerInfo.bonusQuantity
+            isOffer = true
+          }
+        }
+      }
+      return {
+        ...s,
+        packId,
+        quantity,
+        unitPrice,
+        isOffer
+      }
+    })
+    packStores = packStores.filter(s => s.packId)
     const today = new Date()
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
     {
-      if (s1.purchasePrice === s2.purchasePrice) {
+      if (s1.unitPrice === s2.unitPrice) {
         const store1 = state.stores.find(s => s.id === s1.storeId)
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
@@ -40,10 +71,10 @@ const RequestedPackDetails = props => {
           return Number(store1.type) - Number(store2.type)
         }
       } else {
-        return s1.purchasePrice - s2.purchasePrice
+        return s1.unitPrice - s2.unitPrice
       }
     })
-  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity])
+  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -55,28 +86,47 @@ const RequestedPackDetails = props => {
       if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
         throw new Error('twoDiffStores')
       }
-      if (pack.byWeight){
-        if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id && p.orderId === props.orderId)) {
+      const packInfo = state.packs.find(p => p.id === packStore.packId)
+      if (packInfo.byWeight){
+        if (state.basket.packs && state.basket.packs.find(p => p.packId === packInfo.id && p.orderId === props.orderId)) {
           throw new Error('alreadyInBasket')
         }
       } else {
-        if (state.basket.packs && state.basket.packs.find(p => p.packId === pack.id)) {
+        if (state.basket.packs && state.basket.packs.find(p => p.packId === packInfo.id)) {
           throw new Error('alreadyInBasket')
         }
       }
-      if (packStore.price > Number(props.price)){
+      if (!packStore.isOffer && packStore.price > Number(props.price)){
         throw new Error('priceHigherThanRequested')
       }
-      if (pack.isDivided && packStore.quantity < Number(props.quantity)) {
-        throw new Error('quantityNotAvaliable')
-      }
-      if (pack.byWeight) {
+      let quantity, params
+      if (packInfo.byWeight) {
         props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
           try{
-              if (pack.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
+            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
               throw new Error('InvalidWeight')
             }
-            dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(Number(props.quantity), packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity), orderId: props.orderId, weight: Number(weight)}})
+            if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
+              throw new Error('InvalidWeight')
+            }
+            if (packStore.storeId === 's') {
+              quantity = Math.min(Number(props.quantity), packStore.quantity)
+            } else if (packStore.quantity) {
+              quantity = Math.ceil(Number(props.quantity) / packStore.quantity)
+            } else {
+              quantity = Number(props.quantity)
+            }  
+            params = {
+              pack: packInfo,
+              packStore,
+              quantity: pack.isDivided ? Number(weight) : quantity,
+              price: Number(props.price),
+              requestedQuantity: Number(props.quantity),
+              orderId: props.orderId,
+              weight: Number(weight),
+              increment: packStore.isOffer || packStore.storeId === 's' || !packStore.quantity ? 1 : packStore.quantity
+            }
+            dispatch({type: 'ADD_TO_BASKET', params})
             showMessage(props, state.labels.addToBasketSuccess)
             props.f7router.back()
           } catch(err) {
@@ -84,7 +134,22 @@ const RequestedPackDetails = props => {
           }      
         })
       } else {
-        dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: packStore.quantity ? Math.min(props.quantity, packStore.quantity) : Number(props.quantity), price: Number(props.price), requestedQuantity: Number(props.quantity)}})
+        if (packStore.storeId === 's') {
+          quantity = Math.min(Number(props.quantity), packStore.quantity)
+        } else if (packStore.quantity) {
+          quantity = Math.ceil(Number(props.quantity) / packStore.quantity)
+        } else {
+          quantity = Number(props.quantity)
+        }
+        params = {
+          pack: packInfo,
+          packStore,
+          quantity,
+          price: Number(props.price),
+          requestedQuantity: Number(props.quantity),
+          increment: packStore.isOffer || packStore.storeId === 's' || !packStore.quantity ? 1 : packStore.quantity
+        }
+        dispatch({type: 'ADD_TO_BASKET', params})
         showMessage(props, state.labels.addToBasketSuccess)
         props.f7router.back()  
       }
@@ -134,16 +199,18 @@ const RequestedPackDetails = props => {
           : ''}
           {packStores.map(s => {
             const storeInfo = state.stores.find(st => st.id === s.storeId)
+            const packInfo = state.packs.find(p => p.id === s.packId)
+            const productInfo = state.products.find(p => p.id === packInfo.productId)
             return (
               <ListItem 
                 link="#"
                 title={storeInfo.name} 
-                footer={moment(s.time.toDate()).fromNow()} 
-                after={(s.price / 1000).toFixed(3)} 
-                key={s.storeId}
+                footer={`${productInfo.name} - ${packInfo.name}`} 
+                after={(s.unitPrice / 1000).toFixed(3)} 
+                key={s.id}
                 onClick={() => handlePurchase(s)}
               >
-                {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color='red'>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
+                {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color={s.isOffer ? 'red' : 'green'}>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
               </ListItem>
             )
           })}

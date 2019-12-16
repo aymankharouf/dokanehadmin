@@ -39,7 +39,7 @@ const Stock = props => {
                 title={productInfo.name}
                 after={(p.purchasePrice / 1000).toFixed(3)}
                 subtitle={packInfo.name}
-                text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
+                text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                 key={p.id}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />

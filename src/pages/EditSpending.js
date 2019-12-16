@@ -53,7 +53,7 @@ const EditSpending = props => {
       await editSpending({
         id: spending.id,
         type,
-        spendingAmount: parseInt(spendingAmount * 1000),
+        spendingAmount: spendingAmount,
         spendingDate: formatedDate,
         description
       })
@@ -91,14 +91,14 @@ const EditSpending = props => {
           title={state.labels.type}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='type' defaultValue={type} onChange={e => setType(e.target.value)}>
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {state.spendingTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>

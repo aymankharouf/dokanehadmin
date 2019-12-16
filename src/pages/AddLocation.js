@@ -29,8 +29,8 @@ const AddLocation = props => {
         name,
         sorting,
         hasDelivery,
-        deliveryFees: parseInt(deliveryFees * 1000),
-        urgentDeliveryFees: parseInt(urgentDeliveryFees * 1000)
+        deliveryFees: deliveryFees * 1000,
+        urgentDeliveryFees: urgentDeliveryFees * 1000
       })
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()

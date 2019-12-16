@@ -34,7 +34,7 @@ const SellStore = props => {
       if (Number(quantity) <= 0 || Number(quantity) > packStock.quantity) {
         throw new Error('invalidValue')
       }
-      await addStockTrans('c', pack.id, Number(quantity), packStock.purchasePrice, Number(price), storeId)
+      await addStockTrans('c', pack.id, Number(quantity), packStock.purchasePrice, Number(price), state.storePacks, state.packs, storeId)
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -50,14 +50,14 @@ const SellStore = props => {
           title={state.labels.store}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="storeId" defaultValue="" onChange={e => setStoreId(e.target.value)}>
+          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
             {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>

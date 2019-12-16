@@ -91,6 +91,7 @@
 *send to delivery center trans and get back
 *sell stock packs to another store
 *before confirm order check if there is new prices or not
+*two images for composite pack
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -129,3 +130,6 @@ detict device size note
 button to add shortcut PWA
 note for stop the service
 overpriced text
+related products
+expireation flag on pack
+merging orders

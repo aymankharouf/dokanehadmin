@@ -3,7 +3,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import PanelPage from './pages/PanelPage'
 import Login from './pages/Login'
 import Products from './pages/Products'
-import ProductDetails from './pages/ProductDetails'
+import ProductPacks from './pages/ProductPacks'
 import Basket from './pages/Basket'
 import Stores from './pages/Stores';
 import StorePacks from './pages/StorePacks';
@@ -80,6 +80,9 @@ import FollowupOrders from './pages/FollowupOrders';
 import FollowupOrdersList from './pages/FollowupOrdersList';
 import FollowupOrderDetails from './pages/FollowupOrderDetails';
 import SellStore from './pages/SellStore';
+import ProductDetails from './pages/ProductDetails';
+import AddOffer from './pages/AddOffer';
+import EditOffer from './pages/EditOffer';
 
 export default [
   {
@@ -119,6 +122,10 @@ export default [
   },
   {
     path: '/product/:id',
+    component: ProductPacks
+  },
+  {
+    path: '/productDetails/:id',
     component: ProductDetails
   },
   {
@@ -274,12 +281,20 @@ export default [
     component: AddPack
   },
   {
+    path: '/addOffer/:id',
+    component: AddOffer
+  },
+  {
     path: '/packDetails/:id',
     component: PackDetails
   },
   {
     path: '/editPack/:id',
     component: EditPack
+  },
+  {
+    path: '/editOffer/:id',
+    component: EditOffer
   },
   {
     path: '/storePack/:id',

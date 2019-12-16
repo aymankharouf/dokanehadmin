@@ -40,7 +40,7 @@ const EditSection = props => {
           value={name}
           floatingLabel 
           type="text" 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
       </List>
       {!name || (name === section.name) ? '' :

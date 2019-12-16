@@ -34,13 +34,13 @@ const Login = props => {
           label={state.labels.email}
           type="text"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
         <ListInput
           label={state.labels.password}
           type="text"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
       </List>
       {!email || !password ? '' : 

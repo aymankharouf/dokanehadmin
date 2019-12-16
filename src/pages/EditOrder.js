@@ -62,7 +62,7 @@ const EditOrder = props => {
               <ListItem
                 title={productInfo.name}
                 subtitle={packInfo.name}
-                footer={`${state.labels.price}: ${(parseInt(p.price * p.quantity) / 1000).toFixed(3)}`}
+                footer={`${state.labels.price}: ${(p.grossPrice / 1000).toFixed(3)}`}
                 text={quantityText(p.quantity, state.labels)}
                 key={p.packId}
               >

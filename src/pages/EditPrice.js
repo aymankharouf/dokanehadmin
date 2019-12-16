@@ -18,6 +18,7 @@ const EditPrice = props => {
   const [purchasePrice, setPurchasePrice] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
+  const [quantity, setQuantity] = useState('')
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -30,9 +31,6 @@ const EditPrice = props => {
       if (Number(price) <= 0) {
         throw new Error('invalidPrice')
       }
-      if (store.type === '5' && Number(price) <= Number(purchasePrice)) {
-        throw new Error('invalidPrice')
-      }
       if (offerDays && Number(offerDays) <= 0) {
         throw new Error('invalidPeriod')
       }
@@ -43,8 +41,9 @@ const EditPrice = props => {
       }
       const newStorePack = {
         ...storePack,
-        price: parseInt(price * 1000),
-        purchasePrice: store.type === '5' ? parseInt(purchasePrice * 1000) : parseInt(price * 1000),
+        price: price * 1000,
+        purchasePrice: store.type === '5' ? purchasePrice * 1000 : price * 1000,
+        quantity,
         offerEnd,
         time: new Date()
       }
@@ -80,6 +79,18 @@ const EditPrice = props => {
             onInputClear={() => setPurchasePrice('')}
           />
         : ''}
+        {store.type === '5' ? 
+          <ListInput 
+            name="quantity" 
+            label={state.labels.quantity}
+            value={quantity}
+            clearButton
+            floatingLabel 
+            type="number" 
+            onChange={e => setQuantity(e.target.value)}
+            onInputClear={() => setQuantity('')}
+          />
+        : ''}
         <ListInput 
           name="price" 
           label={state.labels.price}
@@ -101,7 +112,7 @@ const EditPrice = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!price || (store.type === '5' && !purchasePrice) ? '' :
+      {!price || (store.type === '5' && (!purchasePrice || !quantity)) ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

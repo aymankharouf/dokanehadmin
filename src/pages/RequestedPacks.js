@@ -38,8 +38,32 @@ const RequestedPacks = props => {
 			})
 		})
 		packsArray = packsArray.map(p => {
-			const inBasket = state.basket.packs ? (p.byWeight ? state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId) : state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)) : false
-			const inBasketQuantity = inBasket ? inBasket.quantity : 0
+			let inBasket, offerInfo
+			let inBasketQuantity = 0
+			if (state.basket.packs) {
+				if (p.byWeight) {
+					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId)
+					inBasketQuantity = inBasket ? inBasket.quantity : 0
+				} else {
+					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)
+					if (inBasket) {
+						inBasketQuantity = inBasket.quantity
+					} else {
+						inBasket = state.basket.packs.find(bp => state.packs.find(pa => pa.id === bp.packId && (pa.offerPackId === p.packId || pa.bonusPackId === p.packId)) && bp.price === p.price)
+						if (inBasket) {
+							offerInfo = state.packs.find(pa => pa.id === inBasket.packId && pa.offerPackId === p.packId)
+							if (offerInfo) {
+								inBasketQuantity = inBasket.quantity * offerInfo.offerQuantity
+							} else {
+								offerInfo = state.packs.find(pa => p.aid === inBasket.packId && pa.bonusPackId === p.packId)
+								if (offerInfo) {
+									inBasketQuantity = inBasket.quantity * offerInfo.bonusQuantity
+								}
+							}
+						}
+					}
+				}	
+			}
 			if (inBasketQuantity > 0) {
 				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > state.labels.margin) {
 					return {

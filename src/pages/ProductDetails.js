@@ -1,60 +1,63 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Badge, BlockTitle, Row, Col, Button, Toolbar } from 'framework7-react'
-import RatingStars from './RatingStars'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
-import moment from 'moment'
-import 'moment/locale/ar'
-import BottomToolbar from './BottomToolbar'
+
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
-  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id)
-  , [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
-      <Card>
-        <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
-        </CardContent>
-        <CardFooter>
-          <p>{`${state.labels.productOf} ${state.countries.find(c => c.id === product.country).name}`}</p>
-          <p><RatingStars rating={product.rating} /></p>
-        </CardFooter>
-      </Card>
-      <BlockTitle>
-      <Row>
-        <Col>
-          {state.labels.packs}
-        </Col>
-        <Col>
-          <Button small fill round iconMaterial="add" href={`/addPack/${props.id}`} />
-        </Col>
-      </Row>
-      </BlockTitle>
-      <List>
-        {packs.map(p => 
-          <ListItem 
-            title={p.name} 
-            footer={moment(p.time.toDate()).fromNow()} 
-            after={p.price ? (p.price / 1000).toFixed(3) : ''} 
-            key={p.id} 
-            link={`/packDetails/${p.id}`}
-          >
-            {p.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
-          </ListItem>
-        )}
+      <Navbar title={state.labels.productDetails} backLink={state.labels.back} />
+      <List form>
+        <ListInput 
+          name="name" 
+          label={state.labels.name}
+          floatingLabel 
+          type="text" 
+          value={product.name}
+          readonly
+        />
+        <ListInput 
+          name="categoryId" 
+          label={state.labels.category}
+          floatingLabel 
+          type="text" 
+          value={state.categories.find(c => c.id === product.categoryId).name}
+          readonly
+        />
+        <ListInput 
+          name="trademarkId" 
+          label={state.labels.trademark}
+          floatingLabel 
+          type="text" 
+          value={state.trademarks.find(c => c.id === product.trademarkId).name}
+          readonly
+        />
+        <ListInput 
+          name="countryId" 
+          label={state.labels.country}
+          floatingLabel 
+          type="text" 
+          value={state.countries.find(c => c.id === product.countryId).name}
+          readonly
+        />
+        <ListItem>
+          <span>{state.labels.isNew}</span>
+          <Toggle 
+            name="isNew" 
+            color="green" 
+            checked={product.isNew}
+            disabled
+          />
+        </ListItem>
+        <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
       <Fab position="left-top" slot="fixed" color="red" href={`/editProduct/${props.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
     </Page>
   )
 }
-
 export default ProductDetails

@@ -93,14 +93,14 @@ const PriceAlarmDetails = props => {
             title={state.labels.store}
             smartSelect
             smartSelectParams={{
-              openIn: 'popup', 
+              openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: state.labels.search,
               popupCloseLinkText: state.labels.close
             }}
           >
-            <select name='store' value={store} onChange={e => setStore(e.target.value)}>
+            <select name="store" value={store} onChange={e => setStore(e.target.value)}>
               <option value=""></option>
               {stores.map(s => 
                 <option key={s.id} value={s.id}>{s.name}</option>

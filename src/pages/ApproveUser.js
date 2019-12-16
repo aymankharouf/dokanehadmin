@@ -97,7 +97,7 @@ const ApproveUser = props => {
           title={state.labels.store}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
@@ -115,7 +115,7 @@ const ApproveUser = props => {
           title={state.labels.location}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
@@ -146,7 +146,7 @@ const ApproveUser = props => {
             title={state.labels.otherMobileHolder}
             smartSelect
             smartSelectParams={{
-              openIn: 'popup', 
+              openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: state.labels.search,

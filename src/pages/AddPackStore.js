@@ -11,6 +11,7 @@ const AddPackStore = props => {
   const [offerDays, setOfferDays] = useState('')
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState('')
+  const [quantity, setQuantity] = useState('')
   const stores = useMemo(() => state.stores.filter(s => s.id !== 's')
   , [state.stores])
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
@@ -28,16 +29,17 @@ const AddPackStore = props => {
       setStore(state.stores.find(s => s.id === storeId))
     }
   }, [state.stores, storeId])
-
+  const getDefaultPrice = () => {
+    if (purchasePrice && quantity) {
+      setPrice((purchasePrice / quantity * (100 + state.labels.profitPercent) / 100).toFixed(3))
+    }
+  }
   const handleSubmit = async () => {
     try{
       if (state.storePacks.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(price) <= 0) {
-        throw new Error('invalidPrice')
-      }
-      if (store.type === '5' && Number(price) <= Number(purchasePrice)) {
         throw new Error('invalidPrice')
       }
       if (offerDays && Number(offerDays) <= 0) {
@@ -51,8 +53,9 @@ const AddPackStore = props => {
       const storePack = {
         packId: pack.id, 
         storeId,
-        purchasePrice: store.type === '5' ? parseInt(purchasePrice * 1000) : parseInt(price * 1000),
-        price: parseInt(price * 1000),
+        purchasePrice: store.type === '5' ? purchasePrice * 1000 : price * 1000,
+        price: price * 1000,
+        quantity: Number(quantity),
         offerEnd,
         time: new Date()
       }
@@ -72,14 +75,14 @@ const AddPackStore = props => {
           title={state.labels.store}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="storeId" defaultValue="" onChange={e => setStoreId(e.target.value)}>
+          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
             {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
@@ -96,6 +99,20 @@ const AddPackStore = props => {
             type="number" 
             onChange={e => setPurchasePrice(e.target.value)}
             onInputClear={() => setPurchasePrice('')}
+            onBlur={() => getDefaultPrice()}
+          />
+        : ''}
+        {store.type === '5' ? 
+          <ListInput 
+            name="quantity" 
+            label={state.labels.quantity}
+            value={quantity}
+            clearButton
+            floatingLabel 
+            type="number" 
+            onChange={e => setQuantity(e.target.value)}
+            onInputClear={() => setQuantity('')}
+            onBlur={() => getDefaultPrice()}
           />
         : ''}
         <ListInput 
@@ -119,7 +136,7 @@ const AddPackStore = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!storeId || !price ? '' :
+      {!storeId || !price || (store.type === '5' && (!purchasePrice || !quantity)) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

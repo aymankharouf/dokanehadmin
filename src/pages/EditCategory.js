@@ -45,20 +45,20 @@ const EditCategory = props => {
           value={name}
           floatingLabel 
           type="text" 
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
         />
         <ListItem
           title={state.labels.unitType}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='unitType' value={unitType} onChange={(e) => setUnitType(e.target.value)}>
+          <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>
             <option value=""></option>
             {unitTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>

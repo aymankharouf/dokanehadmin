@@ -8,13 +8,15 @@ const Reducer = (state, action) => {
         pack = {
           packId: action.params.pack.id,
           price: action.params.price,
-          quantity: action.params.pack.isDivided ? action.params.weight : action.params.quantity,
+          quantity: action.params.quantity,
           actualPrice: action.params.packStore.price,
           purchasePrice: action.params.packStore.purchasePrice,
           requestedQuantity: action.params.requestedQuantity,
           isDivided: action.params.pack.isDivided,
           orderId: action.params.orderId,
           weight: action.params.weight,
+          increment: action.params.increment,
+          isOffer: action.params.packStore.isOffer,
           time: new Date()
         }
         if (!state.basket.storeId) {
@@ -32,10 +34,10 @@ const Reducer = (state, action) => {
           pack = state.basket.packs.find(p => p.packId === action.pack.packId)
           otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
         }
-        if (!pack.isDivided && (!action.pack.orderId || pack.quantity < pack.requestedQuantity)) {
+        if (!pack.isDivided && (!action.pack.orderId || !(pack.quantity + pack.increment > pack.requestedQuantity))) {
           pack = {
             ...pack,
-            quantity: pack.quantity + 1
+            quantity: pack.quantity + pack.increment
           }
         }
         return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
@@ -50,7 +52,7 @@ const Reducer = (state, action) => {
         if (pack.isDivided) {
           nextQuantity = 0
         } else {
-          nextQuantity = pack.quantity - 1
+          nextQuantity = pack.quantity - pack.increment
         }
         if (nextQuantity === 0) {
           if (otherPacks.length > 0){

@@ -77,7 +77,7 @@ const EditCustomer = props => {
         isBlocked,
         otherMobile,
         otherMobileHolder,
-        overPriceLimit: parseInt(overPriceLimit * 1000)
+        overPriceLimit: overPriceLimit * 1000
       }
       await editCustomer(customer, name)
       showMessage(props, state.labels.editSuccess)
@@ -122,7 +122,7 @@ const EditCustomer = props => {
           title={state.labels.store}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
@@ -140,14 +140,14 @@ const EditCustomer = props => {
           title={state.labels.location}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="location" value={locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
@@ -189,7 +189,7 @@ const EditCustomer = props => {
             title={state.labels.otherMobileHolder}
             smartSelect
             smartSelectParams={{
-              openIn: 'popup', 
+              openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: state.labels.search,

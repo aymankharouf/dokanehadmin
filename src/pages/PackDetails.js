@@ -1,10 +1,10 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
-import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store'
 import { refreshPackPrice, showMessage, showError, getMessage } from '../data/Actions'
 import moment from 'moment'
 import 'moment/locale/ar'
+import BottomToolbar from './BottomToolbar';
 
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -14,12 +14,45 @@ const PackDetails = props => {
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const packStores = useMemo(() => {
-    const packStores = state.storePacks.filter(p => p.packId === pack.id)
+    let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === pack.id || pa.bonusPackId === pack.id))))
+    packStores = packStores.map(s => {
+      let packId, unitPrice, quantity, offerInfo, isOffer
+      if (s.packId === pack.id) {
+        packId = s.packId
+        unitPrice = s.storeId === 's' || !s.quantity ? s.purchasePrice : parseInt(s.purchasePrice / s.quantity) 
+        quantity = s.quantity
+        isOffer = false
+      } else {
+        offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === pack.id)
+        if (offerInfo) {
+          packId = offerInfo.id
+          unitPrice = parseInt((s.purchasePrice / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
+          quantity = offerInfo.offerQuantity
+          isOffer = true
+        } else {
+          offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
+          if (offerInfo) {
+            packId = offerInfo.id
+            unitPrice = parseInt((s.purchasePrice / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            quantity = offerInfo.bonusQuantity
+            isOffer = true
+          }
+        }
+      }
+      return {
+        ...s,
+        packId,
+        quantity,
+        unitPrice,
+        isOffer
+      }
+    })
+    packStores = packStores.filter(s => s.packId)
     const today = new Date()
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
     {
-      if (s1.purchasePrice === s2.purchasePrice) {
+      if (s1.unitPrice === s2.unitPrice) {
         const store1 = state.stores.find(s => s.id === s1.storeId)
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
@@ -36,10 +69,10 @@ const PackDetails = props => {
           return Number(store1.type) - Number(store2.type)
         }
       } else {
-        return s1.purchasePrice - s2.purchasePrice
+        return s1.unitPrice - s2.unitPrice
       }
     })
-  }, [pack, state.storePacks, state.stores, state.purchases])
+  }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -60,15 +93,33 @@ const PackDetails = props => {
       if (state.basket.packs && state.basket.packs.find(p => p.packId === packStore.packId)) {
         throw new Error('duplicatePacKInBasket')
       }
-      if (pack.byWeight) {
+      const packInfo = state.packs.find(p => p.id === packStore.packId)
+      let params
+      if (packInfo.byWeight) {
         props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
-          const quantity = pack.isDivided ? Number(weight) : 1
-          dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity, price: packStore.price, orderId: props.orderId, weight: Number(weight)}})
+          params = {
+            pack: packInfo,
+            packStore,
+            quantity : packInfo.isDivided ? Number(weight) : (packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity),
+            price: packStore.price,
+            orderId: props.orderId,
+            weight: Number(weight),
+            increment: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity
+          }
+          dispatch({type: 'ADD_TO_BASKET', params})
           showMessage(props, state.labels.addToBasketSuccess)
           props.f7router.back()
         })
       } else {
-        dispatch({type: 'ADD_TO_BASKET', params: {pack, packStore, quantity: 1, price: packStore.price, orderId: props.orderId}})
+        params = {
+          pack: packInfo, 
+          packStore,
+          quantity: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity,
+          price: packStore.price,
+          orderId: props.orderId,
+          increment: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity,
+        }
+        dispatch({type: 'ADD_TO_BASKET', params})
         showMessage(props, state.labels.addToBasketSuccess)
         props.f7router.back()
       }
@@ -103,12 +154,12 @@ const PackDetails = props => {
             link="#"
             title={storeInfo.name} 
             footer={moment(s.time.toDate()).fromNow()} 
-            after={(s.price / 1000).toFixed(3)} 
-            key={s.storeId} 
+            after={(s.unitPrice / 1000).toFixed(3)} 
+            key={s.id} 
             onClick={() => handlePurchase(s)}
           >
             {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : ''}
-            {s.offerEnd ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+            {s.isOffer || s.offerEnd ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
           </ListItem>
         )
       })}
@@ -120,7 +171,7 @@ const PackDetails = props => {
           <FabButton color="green" onClick={() => props.f7router.navigate(`/addPackStore/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => props.f7router.navigate(`/editPack/${props.id}`)}>
+          <FabButton color="blue" onClick={() => props.f7router.navigate(`/${pack.isOffer ? 'editOffer' : 'editPack'}/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
           <FabButton color="yellow" onClick={() => handleRefreshPrice()}>

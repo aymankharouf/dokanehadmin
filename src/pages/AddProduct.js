@@ -8,10 +8,10 @@ const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
-  const [trademark, setTrademark] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+  const [trademarkId, setTrademarkId] = useState('')
   const [isNew, setIsNew] = useState(false)
-  const [country, setCountry] = useState('')
+  const [countryId, setCountryId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
   const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -43,15 +43,15 @@ const AddProduct = props => {
 
   const handleSubmit = async () => {
     try{
-      await addProduct({
-        category,
+      const product = {
         name,
-        trademark,
+        categoryId,
+        trademarkId,
         isNew,
-        country,
+        countryId,
         imageUrl,
-        image
-      })
+      }
+      await addProduct(product, image)
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -76,14 +76,14 @@ const AddProduct = props => {
           title={state.labels.category}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='category' value={category} onChange={e => setCategory(e.target.value)}>
+          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
             <option value=""></option>
             {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -94,14 +94,14 @@ const AddProduct = props => {
           title={state.labels.trademark}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='trademark' value={trademark} onChange={e => setTrademark(e.target.value)}>
+          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
@@ -112,14 +112,14 @@ const AddProduct = props => {
           title={state.labels.country}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name='country' defaultValue="" onChange={e => setCountry(e.target.value)}>
+          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -134,10 +134,10 @@ const AddProduct = props => {
           checked={isNew} 
           onToggleChange={() => setIsNew(!isNew)}/>
         </ListItem>
-        <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={(e) => handleFileChange(e)}/>
+        <ListInput name="image" label={state.labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !country || !category || !imageUrl ? '' :
+      {!name || !countryId || !categoryId || !imageUrl ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

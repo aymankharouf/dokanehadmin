@@ -32,13 +32,12 @@ const Products = props => {
                 <ListItem
                   link={`/product/${p.id}`}
                   title={p.name}
-                  subtitle={state.categories.find(c => c.id === p.category).name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.country).name}`}
+                  subtitle={state.categories.find(c => c.id === p.categoryId).name}
+                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                   {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                  {p.isActive ? '' : <Badge slot="after" color='red'>{state.labels.inActive}</Badge>}
                 </ListItem>
               )
             }

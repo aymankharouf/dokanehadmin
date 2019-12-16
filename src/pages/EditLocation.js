@@ -18,8 +18,8 @@ const EditLocation = props => {
     if (name !== location.name) return true
     if (sorting !== location.sorting) return true
     if (hasDelivery !== location.hasDelivery) return true
-    if (parseInt(deliveryFees * 1000) !== location.deliveryFees) return true
-    if (parseInt(urgentDeliveryFees * 1000) !== location.urgentDeliveryFees) return true
+    if (deliveryFees * 1000 !== location.deliveryFees) return true
+    if (urgentDeliveryFees * 1000 !== location.urgentDeliveryFees) return true
     return false
   }, [location, name, sorting, hasDelivery, deliveryFees, urgentDeliveryFees])
   useEffect(() => {
@@ -39,8 +39,8 @@ const EditLocation = props => {
         name,
         sorting,
         hasDelivery,
-        deliveryFees: parseInt(deliveryFees * 1000),
-        urgentDeliveryFees: parseInt(urgentDeliveryFees * 1000)
+        deliveryFees: deliveryFees * 1000,
+        urgentDeliveryFees: urgentDeliveryFees * 1000
       })
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()  

@@ -10,11 +10,10 @@ const EditProduct = props => {
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
-  const [category, setCategory] = useState(product.category)
-  const [trademark, setTrademark] = useState(product.trademark)
+  const [categoryId, setCategoryId] = useState(product.categoryId)
+  const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [isNew, setIsNew] = useState(product.isNew)
-  const [isActive, setIsActive] = useState(product.isActive)
-  const [country, setCountry] = useState(product.country)
+  const [countryId, setCountryId] = useState(product.countryId)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -40,14 +39,13 @@ const EditProduct = props => {
   }
   const hasChanged = useMemo(() => {
     if (name !== product.name) return true
-    if (country !== product.country) return true
-    if (category !== product.category) return true
-    if (trademark !== product.trademark) return true
+    if (countryId !== product.countryId) return true
+    if (categoryId !== product.categoryId) return true
+    if (trademarkId !== product.trademarkId) return true
     if (isNew !== product.isNew) return true
     if (imageUrl !== product.imageUrl) return true
-    if (isActive !== product.isActive) return true
     return false
-  }, [product, name, country, category, trademark, isNew, imageUrl, isActive])
+  }, [product, name, countryId, categoryId, trademarkId, isNew, imageUrl])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -57,17 +55,16 @@ const EditProduct = props => {
 
   const handleSubmit = async () => {
     try{
-      await editProduct({
+      const product = {
         id: props.id,
-        category,
+        categoryId,
         name,
-        trademark,
+        trademarkId,
         isNew,
-        isActive,
-        country,
-        imageUrl,
-        image
-      })
+        countryId,
+        imageUrl
+      }
+      await editProduct(product, image)
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -92,14 +89,14 @@ const EditProduct = props => {
           title={state.labels.category}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="category" value={category} onChange={e => setCategory(e.target.value)}>
+          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
             <option value=""></option>
             {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -110,14 +107,14 @@ const EditProduct = props => {
           title={state.labels.trademark}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="trademark" value={trademark} onChange={(e) => setTrademark(e.target.value)}>
+          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
@@ -128,14 +125,14 @@ const EditProduct = props => {
           title={state.labels.country}
           smartSelect
           smartSelectParams={{
-            openIn: 'popup', 
+            openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: state.labels.search,
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="country" value={country} onChange={(e) => setCountry(e.target.value)}>
+          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -151,15 +148,6 @@ const EditProduct = props => {
             onToggleChange={() => setIsNew(!isNew)}
           />
         </ListItem>
-        <ListItem>
-          <span>{state.labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(!isActive)}
-          />
-        </ListItem>
         <ListInput 
           name="image" 
           label="Image" 
@@ -171,7 +159,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !country || !category || !imageUrl || !hasChanged ? '' :
+      {!name || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

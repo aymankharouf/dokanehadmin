@@ -24,7 +24,7 @@ const Offers = props => {
                   title={productInfo.name}
                   after={(p.price / 1000).toFixed(3)}
                   subtitle={packInfo.name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.country).name}`}
+                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                   footer={state.stores.find(s => s.id === p.storeId).name}
                   key={p.id}
                 >

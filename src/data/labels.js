@@ -72,10 +72,7 @@ const labels = {
   edit: 'تعديل',
   delete: 'حذف',
   editPack: 'تعديل حزمة',
-  packs: 'الحزم والعروض',
-  isBonusFree: 'مجانا؟',
   quantity: 'الكمية',
-  bonusProduct: 'المنتج اﻻضافي',
   loginSuccess: 'اهلا وسهلا بك',
   email: 'البريد اﻻلكتروني',
   login: 'تسجيل دخول',
@@ -91,7 +88,7 @@ const labels = {
   countries: 'الدول',
   addCountry: 'اضافة دولة',
   addSection: 'اضافة قسم',
-  percent: 'نسبة الربح',
+  percent: 'النسبة',
   editCountry: 'تعديل دولة',
   editSuccess: 'تم التعديل بنجاح',
   deleteSuccess: 'تم الحذف بنجاح',
@@ -248,7 +245,16 @@ const labels = {
   canReturn: 'ارجاع',
   storeNotReturn: 'هذا المحل لا يقبل اﻻرجاع',
   sell: 'بيع',
-  cashing: 'بيع المواد'
+  cashing: 'بيع المواد',
+  withGift: 'مع هدية',
+  addOffer: 'اضافة عرض',
+  details: 'تفاصيل',
+  productDetails: 'تفاصيل المنتج',
+  bonusProduct: 'المنتج اﻻضافي',
+  bonusUnits: 'وحدات اضافية',
+  editOffer: 'تعديل عرض',
+  invalidPercents: 'الرجاء التأكد من النسب المدخلة',
+  profitPercent: 10
 }
 
 export default labels
