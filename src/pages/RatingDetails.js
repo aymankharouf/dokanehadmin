@@ -22,11 +22,11 @@ const RatingDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approveRating(rating, product, customerInfo, state.labels.discountValue)
+      await approveRating(rating, product, customerInfo)
       showMessage(props, state.labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
 

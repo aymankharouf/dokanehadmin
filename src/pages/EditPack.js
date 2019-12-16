@@ -53,7 +53,7 @@ const EditPack = props => {
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   return (

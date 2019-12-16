@@ -53,7 +53,7 @@ const PrepareOrders = props => {
 								key={i++}
 							>
 								<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-								<Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge>
+								<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
 							</ListItem>
 						)
 					})}

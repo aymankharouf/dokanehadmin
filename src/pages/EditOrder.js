@@ -36,18 +36,18 @@ const EditOrder = props => {
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
       } catch(err) {
-        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+        setError(getMessage(props, err))
       }
     })  
   }
   const handleSubmit = async () => {
     try{
-      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, state.labels.fixedFeesPercent, customer, state.labels.maxDiscount)
+      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, customer)
       showMessage(props, state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   return (
@@ -63,7 +63,7 @@ const EditOrder = props => {
                 title={productInfo.name}
                 subtitle={packInfo.name}
                 footer={`${state.labels.price}: ${(p.grossPrice / 1000).toFixed(3)}`}
-                text={quantityText(p.quantity, state.labels)}
+                text={quantityText(p.quantity)}
                 key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />

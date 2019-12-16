@@ -130,7 +130,7 @@ const RequestedPackDetails = props => {
             showMessage(props, state.labels.addToBasketSuccess)
             props.f7router.back()
           } catch(err) {
-            setError(getMessage(err, state.labels, props.f7route.route.component.name))
+            setError(getMessage(props, err))
           }      
         })
       } else {
@@ -154,18 +154,18 @@ const RequestedPackDetails = props => {
         props.f7router.back()  
       }
     } catch(err) {
-      setError(getMessage(err, state.labels, props.f7route.route.component.name))
+      setError(getMessage(props, err))
     }
   }
   const handleUnavailable = overPriced => {
     props.f7router.app.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-        await packUnavailable(pack, Number(props.price), approvedOrders, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount, overPriced)
+        await packUnavailable(pack, Number(props.price), approvedOrders, state.customers, overPriced)
         showMessage(props, state.labels.executeSuccess)
         props.f7router.back()
       } catch(err) {
-        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+        setError(getMessage(props, err))
       }
     })
   }

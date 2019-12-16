@@ -41,11 +41,11 @@ const PriceAlarmDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.labels.discountValue)
+      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks)
       showMessage(props, state.labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   const handleReject = async () => {
@@ -54,7 +54,7 @@ const PriceAlarmDetails = props => {
       showMessage(props, state.labels.rejectSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
 

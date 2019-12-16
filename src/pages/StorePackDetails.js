@@ -25,7 +25,7 @@ const StorePackDetails = props => {
         showMessage(props, state.labels.deleteSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
       } catch(err) {
-        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+        setError(getMessage(props, err))
       }
     })
   }
@@ -35,7 +35,7 @@ const StorePackDetails = props => {
       showMessage(props, state.labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   const handleHaltOffer = async () => {
@@ -49,7 +49,7 @@ const StorePackDetails = props => {
             showMessage(props, state.labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
-            setError(getMessage(err, state.labels, props.f7route.route.component.name))
+            setError(getMessage(props, err))
           }
         })
       } else {
@@ -58,7 +58,7 @@ const StorePackDetails = props => {
         props.f7router.back()    
       }
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   const handleExtendOffer = () => {
@@ -77,7 +77,7 @@ const StorePackDetails = props => {
         showMessage(props, state.labels.editSuccess)
         props.f7router.back() 
       } catch(err) {
-        setError(getMessage(err, state.labels, props.f7route.route.component.name))
+        setError(getMessage(props, err))
       }
     })
   }

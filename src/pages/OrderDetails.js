@@ -42,12 +42,12 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
         }
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, state.labels.discountValue, props.cancelOrderId)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.cancelOrderId)
         showMessage(props, state.labels.editSuccess)
         props.f7router.back()
       }  
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   if (!user) return <ReLogin />
@@ -70,7 +70,7 @@ const OrderDetails = props => {
                   footer={state.orderPackStatus.find(s => s.id === p.status).name}
                   after={(p.grossPrice / 1000).toFixed(3)}
                 >
-                  {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), state.labels, addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
+                  {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
                 </ListItem>
               )
             } else {
@@ -84,7 +84,7 @@ const OrderDetails = props => {
                   text={`${remainQuantity > 0 ? state.labels.remain + ': ' + String(remainQuantity) : ''}`}
                   after={(p.grossPrice / 1000).toFixed(3)}
                 >
-                  <Badge slot="title" color={['f', 'u', 'pu'].includes(p.status) ? 'green' : 'red'}>{quantityText(p.quantity, state.labels, p.weight)}</Badge>
+                  <Badge slot="title" color={['f', 'u', 'pu'].includes(p.status) ? 'green' : 'red'}>{quantityText(p.quantity, p.weight)}</Badge>
                 </ListItem>
               )
             }

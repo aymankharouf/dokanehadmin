@@ -30,7 +30,7 @@ const ReturnOrder = props => {
                 footer={state.orderPackStatus.find(s => s.id === p.status).name}
                 after={(p.grossPrice / 1000).toFixed(3)}
               >
-                {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), state.labels, addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
+                {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
               </ListItem>
             )
           })}

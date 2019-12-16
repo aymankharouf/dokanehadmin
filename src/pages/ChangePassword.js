@@ -21,7 +21,7 @@ const ChangePassword = props => {
       showMessage(props, state.labels.changePasswordSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
 

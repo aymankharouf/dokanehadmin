@@ -26,7 +26,7 @@ const PurchaseDetails = props => {
                   after={(parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
                   key={p.packId} 
                 >
-                  <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge>
+                  <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
                 </ListItem>
               )}
             )}

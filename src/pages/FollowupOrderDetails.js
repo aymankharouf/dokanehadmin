@@ -29,7 +29,7 @@ const FollowupOrderDetails = props => {
             showMessage(props, state.labels.sendSuccess)
             props.f7router.back()
           } catch(err) {
-            setError(getMessage(err, state.labels, props.f7route.route.component.name))
+            setError(getMessage(props, err))
           }
         })  
       } else {
@@ -38,16 +38,16 @@ const FollowupOrderDetails = props => {
         props.f7router.back()
       }
     } catch(err) {
-      setError(getMessage(err, state.labels, props.f7route.route.component.name))
+      setError(getMessage(props, err))
     }
   }
   const handleDelivery = async () => {
     try{
-      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.users, state.invitations, state.labels.discountValue, props.cancelOrderId)
+      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.users, state.invitations, props.cancelOrderId)
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   const handleReturn = async () => {
@@ -56,7 +56,7 @@ const FollowupOrderDetails = props => {
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   if (!user) return <ReLogin />
@@ -78,7 +78,7 @@ const FollowupOrderDetails = props => {
                 footer={`${state.orderPackStatus.find(s => s.id === p.status).name} ${['r', 'pr'].includes(p.status) ? p.returnedQuantity : ''}`}
                 after={(p.grossPrice / 1000).toFixed(3)}
               >
-                {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), state.labels, p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
+                {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
               </ListItem>
             )
           })}

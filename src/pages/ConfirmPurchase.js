@@ -28,18 +28,18 @@ const ConfirmPurchase = props => {
         throw new Error('invalidValue')
       }
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount, state.labels.margin)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.labels.fixedFeesPercent, state.customers, state.labels.maxDiscount, state.labels.margin)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.customers)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       }  
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   if (!user) return <ReLogin />
@@ -58,7 +58,7 @@ const ConfirmPurchase = props => {
                 footer={packInfo.name} 
                 after={((p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
               >
-                <Badge slot="title" color="green">{quantityText(p.quantity, state.labels, p.weight)}</Badge>
+                <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
               </ListItem>
             )
           }

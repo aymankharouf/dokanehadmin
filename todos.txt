@@ -133,3 +133,5 @@ overpriced text
 related products
 expireation flag on pack
 merging orders
+no rating for non trademarks products
+handle delete operation store pack

@@ -124,7 +124,7 @@ const PackDetails = props => {
         props.f7router.back()
       }
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
 	}
   const handleRefreshPrice = async () => {
@@ -132,7 +132,7 @@ const PackDetails = props => {
       await refreshPackPrice(pack, state.storePacks)
       showMessage(props, state.labels.refreshSuccess)
     } catch(err) {
-			setError(getMessage(err, state.labels, props.f7route.route.component.name))
+			setError(getMessage(props, err))
 		}
   }
   return (
