@@ -7,7 +7,7 @@ const AddStorePack = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
-  const [purchasePrice, setPurchasePrice] = useState('')
+  const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   const [quantity, setQuantity] = useState('')
@@ -31,8 +31,8 @@ const AddStorePack = props => {
     }
   }, [error, props])
   const getDefaultPrice = () => {
-    if (purchasePrice && quantity) {
-      setPrice((purchasePrice / quantity * (100 + state.labels.profitPercent) / 100).toFixed(3))
+    if (cost && quantity) {
+      setPrice((cost / quantity * (100 + state.labels.profit) / 100).toFixed(3))
     }
   }
 
@@ -55,7 +55,7 @@ const AddStorePack = props => {
       const storePack = {
         packId, 
         storeId: store.id,
-        purchasePrice: store.type === '5' ? purchasePrice * 1000 : price * 1000,
+        cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
         quantity: Number(quantity),
         offerEnd,
@@ -95,13 +95,13 @@ const AddStorePack = props => {
         {store.type === '5' ? 
           <ListInput 
             name="puchasePrice" 
-            label={state.labels.purchasePrice}
-            value={purchasePrice}
+            label={state.labels.cost}
+            value={cost}
             clearButton
             floatingLabel 
             type="number" 
-            onChange={e => setPurchasePrice(e.target.value)}
-            onInputClear={() => setPurchasePrice('')}
+            onChange={e => setCost(e.target.value)}
+            onInputClear={() => setCost('')}
             onBlur={() => getDefaultPrice()}
           />
         : ''}
@@ -139,7 +139,7 @@ const AddStorePack = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!packId || !price || (store.type === '5' && (!purchasePrice || !quantity)) ? '' :
+      {!packId || !price || (store.type === '5' && (!cost || !quantity)) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

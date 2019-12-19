@@ -15,7 +15,7 @@ const EditOrder = props => {
   , [state.locations, customer])
   const orderBasket = useMemo(() => state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
   , [state.orderBasket])
-  const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.grossPrice, 0)
+  const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.gross, 0)
   , [orderBasket])
   useEffect(() => {
     dispatch({type: 'LOAD_ORDER_BASKET', order})
@@ -62,12 +62,12 @@ const EditOrder = props => {
               <ListItem
                 title={productInfo.name}
                 subtitle={packInfo.name}
-                footer={`${state.labels.price}: ${(p.grossPrice / 1000).toFixed(3)}`}
+                footer={`${state.labels.price}: ${(p.gross / 1000).toFixed(3)}`}
                 text={quantityText(p.quantity)}
                 key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                <Badge slot="title" color={p.purchasedQuantity === p.quantity ? 'green' : 'red'}>{`${p.purchasedQuantity} - ${p.quantity}`}</Badge>
+                <Badge slot="title" color={p.purchased === p.quantity ? 'green' : 'red'}>{`${p.purchased} - ${p.quantity}`}</Badge>
                 <Stepper
                   slot="after"
                   fill

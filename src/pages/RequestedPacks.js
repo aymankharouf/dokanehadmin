@@ -23,13 +23,13 @@ const RequestedPacks = props => {
 						packsArray.push({
 							packId: p.packId,
 							price: p.price, 
-							quantity: p.quantity - p.purchasedQuantity + found.quantity
+							quantity: p.quantity - p.purchased + found.quantity
 						})
 					} else {
 						packsArray.push({
 							packId: p.packId,
 							price: p.price, 
-							quantity: p.quantity - p.purchasedQuantity,
+							quantity: p.quantity - p.purchased,
 							byWeight: packInfo.byWeight,
 							orderId: o.id
 						})
@@ -90,6 +90,7 @@ const RequestedPacks = props => {
 					{requiredPacks && requiredPacks.map(p => {
 						const packInfo = state.packs.find(pa => pa.id === p.packId)
 						const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+						const bonusProduct = p.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === p.bonusPackId).productId) : ''
 						return (
 							<ListItem
 								link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
@@ -98,7 +99,16 @@ const RequestedPacks = props => {
 								subtitle={packInfo.name}
 								key={i++}
 							>
-								<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <div slot="media" className="relative">
+                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                  {p.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${p.offerQuantity}`}</span> : ''}
+                  {p.bonusPackId ? 
+                    <div>
+                      <img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
+                      {p.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${p.bonusQuantity}`}</span> : ''}
+                    </div>
+                  : ''}
+                </div>
 								<Badge slot="title" color="green">{quantityText(p.quantity)}</Badge>
 							</ListItem>
 						)

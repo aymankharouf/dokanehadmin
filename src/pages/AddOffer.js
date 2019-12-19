@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store'
 import ReLogin from './ReLogin'
 
@@ -11,10 +11,11 @@ const AddOffer = props => {
   const [orderLimit, setOrderLimit] = useState('')
   const [offerPackId, setOfferPackId] = useState('')
   const [offerQuantity, setOfferQuantity] = useState('')
-  const [offerPercent, setOfferPercent] = useState('')
+  const [offerPercent, setOfferPercent] = useState(100)
   const [bonusPackId, setBonusPackId] = useState('')
   const [bonusQuantity, setBonusQuantity] = useState('')
   const [bonusPercent, setBonusPercent] = useState('')
+  const [closeExpired, setCloseExpired] = useState(false)
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const packs = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight)
@@ -25,12 +26,23 @@ const AddOffer = props => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} - ${p.name}`
+        name: `${productInfo.name} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.packs, state.products, props.id]) 
-
+  const generateName = () => {
+    let suggestedName
+    if (offerPackId && offerQuantity) {
+      suggestedName = `${offerQuantity > 1 ? '×' + offerQuantity : ''} ${state.packs.find(p => p.id === offerPackId).name}`
+      if (!name) setName(suggestedName)
+    }
+    if (name === suggestedName && bonusPackId && bonusQuantity) {
+      const bonusPackInfo = bonusPacks.find(p => p.id === bonusPackId)
+      suggestedName += ` + ${bonusQuantity > 1 ? '×' + bonusQuantity : ''} ${bonusPackInfo.name}`
+      setName(suggestedName)
+    }
+  }
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -47,6 +59,7 @@ const AddOffer = props => {
         productId: props.id,
         name,
         isOffer: true,
+        closeExpired,
         price: 0,
         offerPackId,
         offerQuantity: Number(offerQuantity),
@@ -93,7 +106,7 @@ const AddOffer = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="offerPackId" value={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
+          <select name="offerPackId" value={offerPackId} onChange={e => setOfferPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -109,6 +122,7 @@ const AddOffer = props => {
           type="number" 
           onChange={e => setOfferQuantity(e.target.value)}
           onInputClear={() => setOfferQuantity('')}
+          onBlur={() => generateName()}
         />
         <ListInput 
           name="offerPercent" 
@@ -120,6 +134,15 @@ const AddOffer = props => {
           onChange={e => setOfferPercent(e.target.value)}
           onInputClear={() => setOfferPercent('')}
         />
+        <ListItem>
+          <span>{state.labels.closeExpired}</span>
+          <Toggle 
+            name="closeExpired" 
+            color="green" 
+            checked={closeExpired} 
+            onToggleChange={() => setCloseExpired(!closeExpired)}
+          />
+        </ListItem>
         <ListInput 
           name="orderLimit" 
           label={state.labels.packLimit}
@@ -146,7 +169,7 @@ const AddOffer = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
+          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -162,6 +185,7 @@ const AddOffer = props => {
           type="number" 
           onChange={e => setBonusQuantity(e.target.value)}
           onInputClear={() => setBonusQuantity('')}
+          onBlur={() => generateName()}
         />
         <ListInput 
           name="bonusPercent" 

@@ -83,6 +83,10 @@ import SellStore from './pages/SellStore';
 import ProductDetails from './pages/ProductDetails';
 import AddOffer from './pages/AddOffer';
 import EditOffer from './pages/EditOffer';
+import Tags from './pages/Tags';
+import AddTag from './pages/AddTag';
+import EditTag from './pages/EditTag';
+import RelatedProducts from './pages/RelatedProducts';
 
 export default [
   {
@@ -439,6 +443,22 @@ export default [
   {
     path: '/sellStore/:id',
     component: SellStore
+  },
+  {
+    path: '/tags/',
+    component: Tags
+  },
+  {
+    path: '/addTag/',
+    component: AddTag
+  },
+  {
+    path: '/editTag/:id',
+    component: EditTag
+  },
+  {
+    path: '/relatedProducts/:id',
+    component: RelatedProducts
   },
   {
     path: '(.*)',

@@ -12,6 +12,8 @@ const StorePackDetails = props => {
   , [state.packs, storePack])
   const product = useMemo(() => pack ? state.products.find(p => p.id === pack.productId) : ''
   , [state.products, pack])
+  const bonusProduct = useMemo(() => pack.bonusPackId ? state.products.find(p => p.id === state.packs.find(pa => pa.id === pack.bonusPackId).productId) : ''
+  , [pack, state.products, state.packs])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -88,10 +90,19 @@ const StorePackDetails = props => {
       <Block>
         <Card>
           <CardContent>
-            <img src={product.imageUrl} className="img-card" alt={product.name} />
+            <div className="card-title">{pack.name}</div>
+            <div className="relative">
+              <img src={product.imageUrl} className="img-card" alt={product.name} />
+              {pack.offerQuantity > 1 ? <span className="offer-quantity-card">{`× ${pack.offerQuantity}`}</span> : ''}
+              {pack.bonusPackId ? 
+                <div>
+                  <img src={bonusProduct.imageUrl} className="bonus-img-card" alt={bonusProduct.name} />
+                  {pack.bonusQuantity > 1 ? <span className="bonus-quantity-card">{`× ${pack.bonusQuantity}`}</span> : ''}
+                </div>
+              : ''}
+            </div>
           </CardContent>
           <CardFooter>
-            <p>{pack.name}</p>
             <p>{(storePack.price / 1000).toFixed(3)}</p>
           </CardFooter>
         </Card>

@@ -19,7 +19,6 @@ const ReturnOrder = props => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            //const price = p.status === 'r' ? 0 : p.status === 'pr' ? p.actualPrice * ((p.weight ? p.weight : p.purchasedQuantity) - p.returnedQuantity) : p.actualPrice * (p.weight ? p.weight : p.purchasedQuantity)
             return (
               <ListItem 
                 link={`/returnOrder/${props.id}/pack/${p.packId}`}
@@ -28,9 +27,9 @@ const ReturnOrder = props => {
                 subtitle={packInfo.name}
                 text={storeName}
                 footer={state.orderPackStatus.find(s => s.id === p.status).name}
-                after={(p.grossPrice / 1000).toFixed(3)}
+                after={(p.gross / 1000).toFixed(3)}
               >
-                {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
+                {addQuantity(p.purchased, -1 * (p.returned ? p.returned : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchased, -1 * (p.returned ? p.returned : 0)), addQuantity(p.weight, -1 * (p.returned ? p.returned : 0)))}</Badge> : ''}
               </ListItem>
             )
           })}

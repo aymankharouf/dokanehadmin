@@ -22,7 +22,7 @@ const StockTransDetails = props => {
               <ListItem 
                 title={productInfo.name}
                 footer={packInfo.name}
-                after={(parseInt(p.purchasePrice * p.quantity) / 1000).toFixed(3)}
+                after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
                 key={p.packId} 
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />

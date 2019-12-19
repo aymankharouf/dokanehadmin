@@ -75,10 +75,10 @@ const FollowupOrderDetails = props => {
                 title={productInfo.name}
                 subtitle={packInfo.name}
                 text={storeName}
-                footer={`${state.orderPackStatus.find(s => s.id === p.status).name} ${['r', 'pr'].includes(p.status) ? p.returnedQuantity : ''}`}
-                after={(p.grossPrice / 1000).toFixed(3)}
+                footer={`${state.orderPackStatus.find(s => s.id === p.status).name} ${['r', 'pr'].includes(p.status) ? p.returned : ''}`}
+                after={(p.gross / 1000).toFixed(3)}
               >
-                {p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchasedQuantity - (p.returnedQuantity ? p.returnedQuantity : 0), p.weight - (p.returnedQuantity ? p.returnedQuantity : 0))}</Badge> : ''}
+                {p.purchased - (p.returned ? p.returned : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchased - (p.returned ? p.returned : 0), p.weight - (p.returned ? p.returned : 0))}</Badge> : ''}
               </ListItem>
             )
           })}
@@ -99,7 +99,7 @@ const FollowupOrderDetails = props => {
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={state.labels.fixedFees} 
+            title={state.labels.fixedFeesTitle} 
             className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />
@@ -152,7 +152,7 @@ const FollowupOrderDetails = props => {
               onClick={() => handleDelivery()}
             />
           }
-          {order.position === 's' && order.basket.find(p => p.returnedQuantity > 0) ? 
+          {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
             <ListItem 
               link="#"
               popoverClose 

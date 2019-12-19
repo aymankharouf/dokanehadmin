@@ -11,7 +11,7 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.purchasePrice * (p.weight ? p.weight : p.quantity)), 0)
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ? p.weight : p.quantity)), 0)
   , [state.basket])
   const [discount, setDiscount] = useState(store.discount ? (total * store.discount / 100000).toFixed(3) : 0)
   let i = 0
@@ -24,9 +24,6 @@ const ConfirmPurchase = props => {
 
   const handlePurchase = async () => {
     try{
-      if (discount < 0) {
-        throw new Error('invalidValue')
-      }
       if (store.id === 's') {
         await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
         showMessage(props, state.labels.purchaseSuccess)
@@ -56,7 +53,7 @@ const ConfirmPurchase = props => {
                 key={i++} 
                 title={productInfo.name}
                 footer={packInfo.name} 
-                after={((p.purchasePrice * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
+                after={((p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
               >
                 <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
               </ListItem>

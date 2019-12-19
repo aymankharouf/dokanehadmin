@@ -32,7 +32,7 @@ const ProductDetails = props => {
           label={state.labels.trademark}
           floatingLabel 
           type="text" 
-          value={state.trademarks.find(c => c.id === product.trademarkId).name}
+          value={product.trademarkId ? state.trademarks.find(t => t.id === product.trademarkId).name : ''}
           readonly
         />
         <ListInput 
@@ -41,6 +41,22 @@ const ProductDetails = props => {
           floatingLabel 
           type="text" 
           value={state.countries.find(c => c.id === product.countryId).name}
+          readonly
+        />
+        <ListInput 
+          name="tagId" 
+          label={state.labels.tag}
+          floatingLabel 
+          type="text" 
+          value={product.tagId ? state.tags.find(t => t.id === product.tagId).name : ''}
+          readonly
+        />
+        <ListInput 
+          name="storageId" 
+          label={state.labels.storage}
+          floatingLabel 
+          type="text" 
+          value={product.storageId ? state.storageTypes.find(t => t.id === product.storageId).name : ''}
           readonly
         />
         <ListItem>

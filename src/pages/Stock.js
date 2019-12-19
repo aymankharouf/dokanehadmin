@@ -37,7 +37,7 @@ const Stock = props => {
               <ListItem
                 link={`/stockPackTrans/${p.packId}`}
                 title={productInfo.name}
-                after={(p.purchasePrice / 1000).toFixed(3)}
+                after={(p.cost / 1000).toFixed(3)}
                 subtitle={packInfo.name}
                 text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                 key={p.id}

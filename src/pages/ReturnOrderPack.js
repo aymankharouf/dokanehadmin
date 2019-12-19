@@ -15,7 +15,7 @@ const ReturnOrderPack = props => {
     const basket = state.orders.find(o => o.id === props.orderId).basket
     return basket.find(p => p.packId === props.packId)
   }, [state.orders, props.orderId, props.packId])
-  const [returnedQuantity, setReturnedQuantity] = useState(orderPack.returnedQuantity || 0)
+  const [returned, setReturned] = useState(orderPack.returned || 0)
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -26,7 +26,7 @@ const ReturnOrderPack = props => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const order = state.orders.find(o => o.id === props.orderId)
-        await returnOrderPacks(order, pack, returnedQuantity, state.customers)
+        await returnOrderPacks(order, pack, returned, state.customers)
         showMessage(props, state.labels.editSuccess)
         props.f7router.back()
       } catch(err) {
@@ -35,20 +35,20 @@ const ReturnOrderPack = props => {
     })
   }
   const handleDecrease = () => {
-    if (orderPack.purchasedQuantity > returnedQuantity) {
+    if (orderPack.purchased > returned) {
       if (orderPack.weight) {
-        setReturnedQuantity(orderPack.weight)
+        setReturned(orderPack.weight)
       } else {
-        setReturnedQuantity(returnedQuantity + 1)
+        setReturned(returned + 1)
       }
     }
   }
   const handleIncrease = () => {
-    if (returnedQuantity > 0) {
+    if (returned > 0) {
       if (orderPack.weight) {
-        setReturnedQuantity(orderPack.weight)
+        setReturned(orderPack.weight)
       } else {
-        setReturnedQuantity(returnedQuantity - 1)
+        setReturned(returned - 1)
       }
     }
   }
@@ -60,8 +60,8 @@ const ReturnOrderPack = props => {
           <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
         <CardFooter>
-          <p>{(orderPack.actualPrice / 1000).toFixed(3)}</p>
-          <p>{(orderPack.weight ? orderPack.weight : orderPack.purchasedQuantity) - returnedQuantity}</p>
+          <p>{(orderPack.actual / 1000).toFixed(3)}</p>
+          <p>{(orderPack.weight ? orderPack.weight : orderPack.purchased) - returned}</p>
         </CardFooter>
       </Card>
       <Fab position="left-top" slot="fixed" color="orange">
@@ -74,7 +74,7 @@ const ReturnOrderPack = props => {
           <FabButton color="red" onClick={() => handleDecrease()}>
             <Icon material="remove"></Icon>
           </FabButton>
-          {(orderPack.returnedQuantity ? orderPack.returnedQuantity : 0) === returnedQuantity ? '' :
+          {(orderPack.returned ? orderPack.returned : 0) === returned ? '' :
             <FabButton color="blue" onClick={() => handleSumit()}>
               <Icon material="done"></Icon>
             </FabButton>

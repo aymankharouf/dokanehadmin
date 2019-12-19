@@ -11,6 +11,8 @@ const RequestedPackDetails = props => {
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
+  const bonusProduct = useMemo(() => pack.bonusPackId ? state.products.find(p => p.id === state.packs.find(pa => pa.id === pack.bonusPackId).productId) : ''
+  , [pack, state.products, state.packs])
   const basketStockQuantity = useMemo(() => {
     const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
     return basketStock ? basketStock.quantity : 0
@@ -21,21 +23,21 @@ const RequestedPackDetails = props => {
       let packId, unitPrice, quantity, offerInfo, isOffer
       if (s.packId === props.packId) {
         packId = s.packId
-        unitPrice = s.storeId === 's' || !s.quantity ? s.purchasePrice : parseInt(s.purchasePrice / s.quantity) 
+        unitPrice = s.storeId === 's' || !s.quantity ? s.cost : parseInt(s.cost / s.quantity) 
         quantity = s.quantity
         isOffer = false
       } else {
         offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === props.packId)
         if (offerInfo) {
           packId = offerInfo.id
-          unitPrice = parseInt((s.purchasePrice / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
+          unitPrice = parseInt((s.cost / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
           quantity = offerInfo.offerQuantity
           isOffer = true
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)
           if (offerInfo) {
             packId = offerInfo.id
-            unitPrice = parseInt((s.purchasePrice / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            unitPrice = parseInt((s.cost / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
             quantity = offerInfo.bonusQuantity
             isOffer = true
           }
@@ -171,11 +173,21 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={state.labels.back} />
       <Block>
         <Card>
           <CardContent>
-            <img src={product.imageUrl} className="img-card" alt={product.name} />
+            <div className="card-title">{pack.name}</div>
+            <div className="relative">
+              <img src={product.imageUrl} className="img-card" alt={product.name} />
+              {pack.offerQuantity > 1 ? <span className="offer-quantity-card">{`× ${pack.offerQuantity}`}</span> : ''}
+              {pack.bonusPackId ? 
+                <div>
+                  <img src={bonusProduct.imageUrl} className="bonus-img-card" alt={bonusProduct.name} />
+                  {pack.bonusQuantity > 1 ? <span className="bonus-quantity-card">{`× ${pack.bonusQuantity}`}</span> : ''}
+                </div>
+              : ''}
+            </div>
           </CardContent>
           <CardFooter>
             <p>{(props.price / 1000).toFixed(3)}</p>

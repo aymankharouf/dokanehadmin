@@ -32,13 +32,13 @@ const ProductPacks = props => {
             key={p.id} 
             link={`/packDetails/${p.id}`}
           >
-            {p.isOffer ? <Badge slot="title" color='red'>{state.labels.offer}</Badge> : ''}
+            {p.isOffer ? <Badge slot="title" color='red'>{p.closeExpired ? state.labels.expireOffer : state.labels.offer}</Badge> : ''}
           </ListItem>
         )}
       </List>
       <Popover className="popover-menu">
         <List>
-        <ListItem 
+          <ListItem 
             link={`/productDetails/${props.id}`}
             popoverClose 
             title={state.labels.details}
@@ -53,6 +53,12 @@ const ProductPacks = props => {
             popoverClose 
             title={state.labels.addOffer}
           />
+          <ListItem 
+            link={`/relatedProducts/${props.id}`}
+            popoverClose 
+            title={state.labels.relatedProducts}
+          />
+
         </List>
       </Popover>
 

@@ -14,6 +14,8 @@ const EditProduct = props => {
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [isNew, setIsNew] = useState(product.isNew)
   const [countryId, setCountryId] = useState(product.countryId)
+  const [tagId, setTagId] = useState(product.tagId)
+  const [storageId, setStorageId] = useState(product.storageId)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -23,6 +25,10 @@ const EditProduct = props => {
   , [state.trademarks]) 
   const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.countries]) 
+  const tags = useMemo(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.tags]) 
+  const storageTypes = useMemo(() => [...state.storageTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.storageTypes]) 
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -42,10 +48,12 @@ const EditProduct = props => {
     if (countryId !== product.countryId) return true
     if (categoryId !== product.categoryId) return true
     if (trademarkId !== product.trademarkId) return true
+    if (tagId !== product.tagId) return true
+    if (storageId !== product.storageId) return true
     if (isNew !== product.isNew) return true
     if (imageUrl !== product.imageUrl) return true
     return false
-  }, [product, name, countryId, categoryId, trademarkId, isNew, imageUrl])
+  }, [product, name, countryId, categoryId, trademarkId, tagId, storageId, isNew, imageUrl])
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -62,6 +70,8 @@ const EditProduct = props => {
         trademarkId,
         isNew,
         countryId,
+        tagId,
+        storageId,
         imageUrl
       }
       await editProduct(product, image)
@@ -136,6 +146,42 @@ const EditProduct = props => {
             <option value=""></option>
             {countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={state.labels.tag}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="tagId" value={tagId} onChange={e => setTagId(e.target.value)}>
+            <option value=""></option>
+            {tags.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={state.labels.storage}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="storageId" value={storageId} onChange={e => setStorageId(e.target.value)}>
+            <option value=""></option>
+            {storageTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
         </ListItem>

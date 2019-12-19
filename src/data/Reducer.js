@@ -9,14 +9,13 @@ const Reducer = (state, action) => {
           packId: action.params.pack.id,
           price: action.params.price,
           quantity: action.params.quantity,
-          actualPrice: action.params.packStore.price,
-          purchasePrice: action.params.packStore.purchasePrice,
-          requestedQuantity: action.params.requestedQuantity,
+          actual: action.params.packStore.price,
+          cost: action.params.packStore.cost,
+          requested: action.params.requested,
           isDivided: action.params.pack.isDivided,
           orderId: action.params.orderId,
           weight: action.params.weight,
           increment: action.params.increment,
-          isOffer: action.params.packStore.isOffer,
           time: new Date()
         }
         if (!state.basket.storeId) {
@@ -34,7 +33,7 @@ const Reducer = (state, action) => {
           pack = state.basket.packs.find(p => p.packId === action.pack.packId)
           otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
         }
-        if (!pack.isDivided && (!action.pack.orderId || !(pack.quantity + pack.increment > pack.requestedQuantity))) {
+        if (!pack.isDivided && (!action.pack.orderId || !(pack.quantity + pack.increment > pack.requested))) {
           pack = {
             ...pack,
             quantity: pack.quantity + pack.increment
@@ -108,8 +107,8 @@ const Reducer = (state, action) => {
               nextQuantity = 0
             }  
           } else {
-            if (pack.quantity > pack.purchasedQuantity) {
-              nextQuantity = pack.purchasedQuantity
+            if (pack.quantity > pack.purchased) {
+              nextQuantity = pack.purchased
             } else {
               nextQuantity = 0
             }  
@@ -240,6 +239,11 @@ const Reducer = (state, action) => {
         return {
           ...state,
           logs: action.logs
+        }
+      case 'SET_TAGS':
+        return {
+          ...state,
+          tags: action.tags
         }
       default:
         return state

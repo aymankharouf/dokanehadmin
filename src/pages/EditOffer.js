@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store'
 import ReLogin from './ReLogin'
 
@@ -20,6 +20,7 @@ const EditOffer = props => {
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
+  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight)
   , [state.packs, pack])
   const bonusPacks = useMemo(() => {
@@ -28,7 +29,7 @@ const EditOffer = props => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} - ${p.name}`
+        name: `${productInfo.name} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -42,8 +43,9 @@ const EditOffer = props => {
     if (bonusPackId !== pack.bonusPackId) return true
     if (bonusQuantity !== pack.bonusQuantity) return true
     if (bonusPercent !== pack.bonusPercent) return true
+    if (closeExpired !== pack.closeExpired) return true
     return false
-  }, [pack, name, orderLimit, offerPackId, offerQuantity, offerPercent, bonusPackId, bonusQuantity, bonusPercent])
+  }, [pack, name, orderLimit, offerPackId, offerQuantity, offerPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
 
   useEffect(() => {
     if (error) {
@@ -67,7 +69,8 @@ const EditOffer = props => {
         offerPercent: Number(offerPercent),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
-        bonusPercent: Number(bonusPercent)
+        bonusPercent: Number(bonusPercent),
+        closeExpired
       }
       await editPack(newPack)
       showMessage(props, state.labels.addSuccess)
@@ -129,6 +132,15 @@ const EditOffer = props => {
           onChange={e => setOfferPercent(e.target.value)}
           onInputClear={() => setOfferPercent('')}
         />
+        <ListItem>
+          <span>{state.labels.closeExpired}</span>
+          <Toggle 
+            name="closeExpired" 
+            color="green" 
+            checked={closeExpired} 
+            onToggleChange={() => setCloseExpired(!closeExpired)}
+          />
+        </ListItem>
         <ListInput 
           name="orderLimit" 
           label={state.labels.packLimit}

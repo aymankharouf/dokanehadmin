@@ -9,12 +9,6 @@ const OrderDetails = props => {
   const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
-  const netPrice = useMemo(() => {
-    const net = order.total + order.fixedFees + order.deliveryFees - order.discount.value
-    return Math.floor(net / 50) * 50
-  }, [order])
-  const netProfit = useMemo(() => order.profit + order.fixedFees + order.deliveryFees - order.discount.value
-  , [order])
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', title: 'اعتماد', status: ['n', 's'], cancelOrder: false},
@@ -68,21 +62,21 @@ const OrderDetails = props => {
                   subtitle={packInfo.name}
                   text={storeName}
                   footer={state.orderPackStatus.find(s => s.id === p.status).name}
-                  after={(p.grossPrice / 1000).toFixed(3)}
+                  after={(p.gross / 1000).toFixed(3)}
                 >
-                  {addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchasedQuantity, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)), addQuantity(p.weight, -1 * (p.returnedQuantity ? p.returnedQuantity : 0)))}</Badge> : ''}
+                  {addQuantity(p.purchased, -1 * (p.returned ? p.returned : 0)) > 0 ? <Badge slot="title" color="green">{quantityText(addQuantity(p.purchased, -1 * (p.returned ? p.returned : 0)), addQuantity(p.weight, -1 * (p.returned ? p.returned : 0)))}</Badge> : ''}
                 </ListItem>
               )
             } else {
-              const remainQuantity = p.status === 'n' || p.status === 'p' ? addQuantity(p.quantity, -1 * p.purchasedQuantity) : 0
+              const remaining = p.status === 'n' || p.status === 'p' ? addQuantity(p.quantity, -1 * p.purchased) : 0
               return (
                 <ListItem 
                   key={p.packId} 
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  footer={p.actualPrice && p.actualPrice !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
-                  text={`${remainQuantity > 0 ? state.labels.remain + ': ' + String(remainQuantity) : ''}`}
-                  after={(p.grossPrice / 1000).toFixed(3)}
+                  footer={p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''}
+                  text={`${remaining > 0 ? state.labels.remain + ': ' + String(remaining) : ''}`}
+                  after={(p.gross / 1000).toFixed(3)}
                 >
                   <Badge slot="title" color={['f', 'u', 'pu'].includes(p.status) ? 'green' : 'red'}>{quantityText(p.quantity, p.weight)}</Badge>
                 </ListItem>
@@ -106,7 +100,7 @@ const OrderDetails = props => {
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={state.labels.fixedFees} 
+            title={state.labels.fixedFeesTitle} 
             className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />
@@ -117,22 +111,22 @@ const OrderDetails = props => {
               after={(order.deliveryFees / 1000).toFixed(3)} 
             /> 
           : ''}
-          {order.discount.value > 0 ? 
+          {order.discount.value + order.fraction > 0 ? 
             <ListItem 
               title={state.labels.discount} 
               className="discount" 
-              after={(order.discount.value / 1000).toFixed(3)} 
+              after={((order.discount.value + order.fraction) / 1000).toFixed(3)} 
             /> 
           : ''}
           <ListItem 
             title={state.labels.net} 
             className="net" 
-            after={(netPrice / 1000).toFixed(3)} 
+            after={((order.total + order.fixedFees + order.deliveryFees - order.fraction - order.discount.value) / 1000).toFixed(3)} 
           />
           {order.profit ? 
             <ListItem 
-              title={state.labels.profit} 
-              after={(netProfit / 1000).toFixed(3)} 
+              title={state.labels.profitTitle} 
+              after={(order.profit / 1000).toFixed(3)} 
             /> 
           : ''}
         </List>

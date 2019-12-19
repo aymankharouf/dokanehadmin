@@ -92,6 +92,9 @@
 *sell stock packs to another store
 *before confirm order check if there is new prices or not
 *two images for composite pack
+*expiration flag on pack
+*product flags: fresh, frozen, cold
+*related products
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -101,7 +104,7 @@ loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
 handle security for storePack in app application
-smart basket when confirm order
+smart basket when confirm order (packs with more value for the same product, alternative products with more rating, offers for other alternatives)
 delivery plan by locations
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
@@ -130,8 +133,6 @@ detict device size note
 button to add shortcut PWA
 note for stop the service
 overpriced text
-related products
-expireation flag on pack
 merging orders
 no rating for non trademarks products
 handle delete operation store pack

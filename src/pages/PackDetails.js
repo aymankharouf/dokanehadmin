@@ -1,9 +1,7 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
 import { StoreContext } from '../data/Store'
 import { refreshPackPrice, showMessage, showError, getMessage } from '../data/Actions'
-import moment from 'moment'
-import 'moment/locale/ar'
 import BottomToolbar from './BottomToolbar';
 
 const PackDetails = props => {
@@ -13,27 +11,29 @@ const PackDetails = props => {
   , [state.packs, props.id])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
+  const bonusProduct = useMemo(() => pack.bonusPackId ? state.products.find(p => p.id === state.packs.find(pa => pa.id === pack.bonusPackId).productId) : ''
+  , [pack, state.products, state.packs])
   const packStores = useMemo(() => {
     let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === pack.id || pa.bonusPackId === pack.id))))
     packStores = packStores.map(s => {
-      let packId, unitPrice, quantity, offerInfo, isOffer
+      let packId, unitCost, quantity, offerInfo, isOffer
       if (s.packId === pack.id) {
         packId = s.packId
-        unitPrice = s.storeId === 's' || !s.quantity ? s.purchasePrice : parseInt(s.purchasePrice / s.quantity) 
+        unitCost = s.storeId === 's' || !s.quantity ? s.cost : parseInt(s.cost / s.quantity) 
         quantity = s.quantity
         isOffer = false
       } else {
         offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === pack.id)
         if (offerInfo) {
           packId = offerInfo.id
-          unitPrice = parseInt((s.purchasePrice / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
+          unitCost = parseInt((s.cost / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
           quantity = offerInfo.offerQuantity
           isOffer = true
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
           if (offerInfo) {
             packId = offerInfo.id
-            unitPrice = parseInt((s.purchasePrice / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            unitCost = parseInt((s.cost / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
             quantity = offerInfo.bonusQuantity
             isOffer = true
           }
@@ -43,7 +43,7 @@ const PackDetails = props => {
         ...s,
         packId,
         quantity,
-        unitPrice,
+        unitCost,
         isOffer
       }
     })
@@ -52,7 +52,7 @@ const PackDetails = props => {
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
     {
-      if (s1.unitPrice === s2.unitPrice) {
+      if (s1.unitCost === s2.unitCost) {
         const store1 = state.stores.find(s => s.id === s1.storeId)
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
@@ -69,7 +69,7 @@ const PackDetails = props => {
           return Number(store1.type) - Number(store2.type)
         }
       } else {
-        return s1.unitPrice - s2.unitPrice
+        return s1.unitCost - s2.unitCost
       }
     })
   }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
@@ -81,9 +81,6 @@ const PackDetails = props => {
   }, [error, props])
   const handlePurchase = packStore => {
 		try{
-      if (packStore.storeId === 's') {
-        throw new Error('noPurchaseFromStore')
-      }
       if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
         throw new Error('offerEnded')
       }
@@ -137,10 +134,20 @@ const PackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={state.labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
+          <div className="card-title">{pack.name}</div>
+            <div className="relative">
+              <img src={product.imageUrl} className="img-card" alt={product.name} />
+              {pack.offerQuantity > 1 ? <span className="offer-quantity-card">{`× ${pack.offerQuantity}`}</span> : ''}
+              {pack.bonusPackId ? 
+                <div>
+                  <img src={bonusProduct.imageUrl} className="bonus-img-card" alt={bonusProduct.name} />
+                  {pack.bonusQuantity > 1 ? <span className="bonus-quantity-card">{`× ${pack.bonusQuantity}`}</span> : ''}
+                </div>
+              : ''}
+            </div>
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
@@ -151,15 +158,19 @@ const PackDetails = props => {
         const storeInfo = state.stores.find(st => st.id === s.storeId)
         return (
           <ListItem 
-            link="#"
             title={storeInfo.name} 
-            footer={moment(s.time.toDate()).fromNow()} 
-            after={(s.unitPrice / 1000).toFixed(3)} 
-            key={s.id} 
-            onClick={() => handlePurchase(s)}
+            footer={`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}, ${state.labels.price}: ${(s.price / 1000).toFixed(3)}`} 
+            key={s.id}
           >
-            {s.quantity ? <Badge slot="title" color='red'>{s.quantity}</Badge> : ''}
-            {s.isOffer || s.offerEnd ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+            {s.quantity ? 
+              <Badge slot="title" color='red'>{s.quantity}</Badge> 
+            : ''}
+            {s.isOffer || s.offerEnd ? 
+              <Badge slot="title" color='green'>{state.labels.offer}</Badge> 
+            : ''}
+            {s.storeId === 's' ? '' :
+              <Button slot="after" onClick={() => handlePurchase(s)}>{state.labels.purchase}</Button>
+            }
           </ListItem>
         )
       })}

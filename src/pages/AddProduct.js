@@ -12,6 +12,8 @@ const AddProduct = props => {
   const [trademarkId, setTrademarkId] = useState('')
   const [isNew, setIsNew] = useState(false)
   const [countryId, setCountryId] = useState('')
+  const [tagId, setTagId] = useState('')
+  const [storageId, setStorageId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
   const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -20,6 +22,10 @@ const AddProduct = props => {
   , [state.trademarks])
   const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.countries]) 
+  const tags = useMemo(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.tags]) 
+  const storageTypes = useMemo(() => [...state.storageTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
+  , [state.storageTypes]) 
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -49,6 +55,8 @@ const AddProduct = props => {
         trademarkId,
         isNew,
         countryId,
+        tagId,
+        storageId,
         imageUrl,
       }
       await addProduct(product, image)
@@ -123,6 +131,42 @@ const AddProduct = props => {
             <option value=""></option>
             {countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={state.labels.tag}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="tagId" value={tagId} onChange={e => setTagId(e.target.value)}>
+            <option value=""></option>
+            {tags.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={state.labels.storage}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: state.labels.search,
+            popupCloseLinkText: state.labels.close
+          }}
+        >
+          <select name="storageId" value={storageId} onChange={e => setStorageId(e.target.value)}>
+            <option value=""></option>
+            {storageTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
         </ListItem>

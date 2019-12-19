@@ -15,7 +15,7 @@ const EditPrice = props => {
   , [state.products, pack])
   const store = useMemo(() => state.stores.find(s => s.id === storePack.storeId)
   , [state.stores, storePack])
-  const [purchasePrice, setPurchasePrice] = useState('')
+  const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   const [quantity, setQuantity] = useState('')
@@ -42,7 +42,7 @@ const EditPrice = props => {
       const newStorePack = {
         ...storePack,
         price: price * 1000,
-        purchasePrice: store.type === '5' ? purchasePrice * 1000 : price * 1000,
+        cost: store.type === '5' ? cost * 1000 : price * 1000,
         quantity,
         offerEnd,
         time: new Date()
@@ -69,14 +69,14 @@ const EditPrice = props => {
       <List form>
         {store.type === '5' ? 
           <ListInput 
-            name="purchasePrice" 
-            label={state.labels.purchasePrice}
+            name="cost" 
+            label={state.labels.cost}
             clearButton 
             floatingLabel 
             type="number" 
-            value={purchasePrice}
-            onChange={e => setPurchasePrice(e.target.value)}
-            onInputClear={() => setPurchasePrice('')}
+            value={cost}
+            onChange={e => setCost(e.target.value)}
+            onInputClear={() => setCost('')}
           />
         : ''}
         {store.type === '5' ? 
@@ -112,7 +112,7 @@ const EditPrice = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!price || (store.type === '5' && (!purchasePrice || !quantity)) ? '' :
+      {!price || (store.type === '5' && (!cost || !quantity)) ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

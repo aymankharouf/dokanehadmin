@@ -1,16 +1,16 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { editCategory, showMessage, showError, getMessage } from '../data/Actions'
+import { editTag, showMessage, showError, getMessage } from '../data/Actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
 
-const EditCategory = props => {
+const EditTag = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const category = useMemo(() => state.categories.find(c => c.id === props.id)
-  , [state.categories, props.id])
-  const [name, setName] = useState(category.name)
+  const tag = useMemo(() => state.tags.find(t => t.id === props.id)
+  , [state.tags, props.id])
+  const [name, setName] = useState(tag.name)
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -20,8 +20,8 @@ const EditCategory = props => {
 
   const handleEdit = async () => {
     try{
-      await editCategory({
-        id: category.id,
+      await editTag({
+        id: tag.id,
         name
       })
       showMessage(props, state.labels.editSuccess)
@@ -30,21 +30,22 @@ const EditCategory = props => {
 			setError(getMessage(props, err))
 		}
   }
-  
   return (
     <Page>
-      <Navbar title={state.labels.editCategory} backLink={state.labels.back} />
+      <Navbar title={state.labels.editTag} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 
           label={state.labels.name}
           value={name}
           floatingLabel 
+          clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
-      {!name || name === category.name  ? '' :
+      {!name || (name === tag.name) ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
@@ -56,4 +57,4 @@ const EditCategory = props => {
     </Page>
   )
 }
-export default EditCategory
+export default EditTag

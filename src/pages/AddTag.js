@@ -1,15 +1,14 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { addCategory, showMessage, showError, getMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react';
+import React, { useState, useContext, useEffect } from 'react'
+import { addTag, showMessage, showError, getMessage } from '../data/Actions'
+import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar} from 'framework7-react';
 import { StoreContext } from '../data/Store';
+import BottomToolbar from './BottomToolbar';
 
 
-const AddCategory = props => {
+const AddTag = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const section = useMemo(() => state.sections.find(s => s.id === props.id)
-  , [state.sections, props.id]) 
   useEffect(() => {
     if (error) {
       showError(props, error)
@@ -19,27 +18,26 @@ const AddCategory = props => {
 
   const handleSubmit = async () => {
     try{
-      await addCategory({
-        sectionId: props.id,
-        name
-      })
+      await addTag({name})
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
 		}
   }
-  
   return (
     <Page>
-      <Navbar title={`${state.labels.addCategory} - ${section.name}`} backLink={state.labels.back} />
+      <Navbar title={state.labels.addTag} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
-          floatingLabel 
-          type="text" 
+          label={state.labels.name} 
+          floatingLabel
+          clearButton
+          type="text"
+          value={name}
           onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
       {!name ? '' :
@@ -47,7 +45,10 @@ const AddCategory = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
     </Page>
   )
 }
-export default AddCategory
+export default AddTag

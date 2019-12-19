@@ -40,6 +40,7 @@ const AddPack = props => {
         bonusUnits: Number(bonusUnits),
         orderLimit: Number(orderLimit),
         isDivided,
+        closeExpired: false,
         byWeight,
         isOffer: false,
         price: 0,

@@ -19,11 +19,6 @@ const Store = props => {
     {id: 8, name: 'lightblue'},
     {id: 9, name: 'teal'},
   ]
-  const unitTypes = [
-    {id: 'w', name: 'وزن'},
-    {id: 'v', name: 'حجم'},
-    {id: 'l', name: 'طول'}
-  ]
   const orderByList = [
     {id: 'p', name: 'السعر'},
     {id: 's', name: 'المبيعات'},
@@ -90,6 +85,12 @@ const Store = props => {
     {id: 'r', name: 'مرتجع'},
     {id: 'pr', name: 'مرتجع جزئي'}
   ]
+  const storageTypes = [
+    {id: 'd', name: 'جاف'},
+    {id: 'f', name: 'طازج'},
+    {id: 'c', name: 'مبرد'},
+    {id: 'i', name: 'مجمد'}
+  ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null);
@@ -115,7 +116,6 @@ const Store = props => {
     packs: [],
     forgetPassword: [],
     invitations: [],
-    unitTypes,
     customers: [],
     spendingTypes,
     spendings: [],
@@ -128,7 +128,9 @@ const Store = props => {
     logs: [],
     cancelOrders: [],
     orderPositions,
-    orderPackStatus
+    orderPackStatus,
+    tags: [],
+    storageTypes
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -325,14 +327,23 @@ const Store = props => {
         }, err => {
           unsubscribeLogs()
         })  
-        const unsubscribecancelOrders = firebase.firestore().collection('cancelOrders').onSnapshot(docs => {
+        const unsubscribeCancelOrders = firebase.firestore().collection('cancelOrders').onSnapshot(docs => {
           let cancelOrders = []
           docs.forEach(doc => {
             cancelOrders.push({...doc.data(), id:doc.id})
           })
           dispatch({type: 'SET_CANCEL_ORDERS', cancelOrders})
         }, err => {
-          unsubscribecancelOrders()
+          unsubscribeCancelOrders()
+        })  
+        const unsubscribeTags = firebase.firestore().collection('tags').onSnapshot(docs => {
+          let tags = []
+          docs.forEach(doc => {
+            tags.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_TAGS', tags})
+        }, err => {
+          unsubscribeTags()
         })  
       }
     })

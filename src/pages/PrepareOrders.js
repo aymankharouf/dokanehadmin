@@ -21,12 +21,12 @@ const PrepareOrders = props => {
 						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
 						packsArray.push({
 							packId: p.packId,
-							quantity: p.purchasedQuantity + found.quantity
+							quantity: p.purchased + found.quantity
 						})
 					} else {
 						packsArray.push({
 							packId: p.packId,
-							quantity: p.purchasedQuantity,
+							quantity: p.purchased,
 							weight: p.weight,
 							orderId: o.id
 						})

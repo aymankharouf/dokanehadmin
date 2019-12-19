@@ -15,22 +15,17 @@ const MonthlyTrans = props => {
     const orders = state.orders.filter(o => ['a', 'e', 'f', 'p', 'd'].includes(o.status) && (o.statusTime.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
     return orders
   }, [state.orders, month, year])
-  const finishedOrders = useMemo(() => {
-    const finishedOrders = orders.filter(o => o.status === 'f' || o.status === 'p')
-    return finishedOrders
-  }, [orders])
-  const deliveredOrders = useMemo(() => {
-    const deliveredOrders = orders.filter(o => o.status === 'd'
-    )
-    return deliveredOrders
-  }, [orders])
+  const finishedOrders = useMemo(() => orders.filter(o => o.status === 'f' || o.status === 'p')
+  , [orders])
+  const deliveredOrders = useMemo(() => orders.filter(o => o.status === 'd')
+  , [orders])
   const ordersCount = monthlyTrans ? monthlyTrans.ordersCount : orders.length
   const deliveredOrdersCount = monthlyTrans ? monthlyTrans.deliveredOrdersCount : deliveredOrders.length
   const finishedOrdersCount = monthlyTrans ? monthlyTrans.finishedOrdersCount : finishedOrders.length
   const storePacks = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.storePacks
     const storePacks = state.storePacks.filter(p => p.storeId === 's' && p.quantity > 0)
-    const storeValue = storePacks.reduce((sum, p) => sum + parseInt(p.purchasePrice * p.quantity), 0)
+    const storeValue = storePacks.reduce((sum, p) => sum + parseInt(p.cost * p.quantity), 0)
     return storeValue
   }, [state.storePacks, monthlyTrans])
   const sales = useMemo(() => monthlyTrans ? monthlyTrans.sales : deliveredOrders.reduce((sum, o) => sum + o.total, 0)
@@ -41,6 +36,8 @@ const MonthlyTrans = props => {
   const deliveryFees = useMemo(() => monthlyTrans ? monthlyTrans.deliveryFees : deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
   const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
+  , [deliveredOrders, monthlyTrans])
+  const fractions = useMemo(() => monthlyTrans ? monthlyTrans.fractions : deliveredOrders.reduce((sum, o) => sum + o.fraction, 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -56,7 +53,7 @@ const MonthlyTrans = props => {
   , [stockTrans, monthlyTrans])
   const withdraws = useMemo(() => monthlyTrans ? monthlyTrans.withdraws : stockTrans.reduce((sum, t) => sum + (t.type === 'w' ? t.total : 0), 0)
   , [stockTrans, monthlyTrans])
-  const cashing = useMemo(() => monthlyTrans ? monthlyTrans.cashing : stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].purchasePrice * t.basket[0].quantity): 0), 0)
+  const cashing = useMemo(() => monthlyTrans ? monthlyTrans.cashing : stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].cost * t.basket[0].quantity): 0), 0)
   , [stockTrans, monthlyTrans])
   const withdrawals = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals
@@ -100,7 +97,8 @@ const MonthlyTrans = props => {
         expenses,
         donations,
         damages,
-        withdraws
+        withdraws,
+        fractions
       }
       await addMonthlyTrans(trans)
       showMessage(props, state.labels.addSuccess)
@@ -141,12 +139,12 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={state.labels.profit}
+            title={state.labels.profitTitle}
             after={(profit / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.fixedFees}
+            title={state.labels.fixedFeesTitle}
             after={(fixedFees / 1000).toFixed(3)}
           />
           <ListItem
@@ -168,6 +166,11 @@ const MonthlyTrans = props => {
             link="#"
             title={state.labels.discounts}
             after={(discounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={state.labels.fractions}
+            after={(fractions / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

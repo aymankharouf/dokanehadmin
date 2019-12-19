@@ -17,7 +17,7 @@ const SellStore = props => {
   , [state.products, pack])
   const packStock = useMemo(() => state.storePacks.find(p => p.packId === props.id && p.storeId === 's')
   , [state.storePacks, props.id])
-  const profit = useMemo(() => parseInt(price * quantity * 1000) - parseInt(packStock.purchasePrice * quantity)
+  const profit = useMemo(() => parseInt(price * quantity * 1000) - parseInt(packStock.cost * quantity)
   , [packStock, price, quantity])
   useEffect(() => {
     if (error) {
@@ -34,7 +34,7 @@ const SellStore = props => {
       if (Number(quantity) <= 0 || Number(quantity) > packStock.quantity) {
         throw new Error('invalidValue')
       }
-      await addStockTrans('c', pack.id, Number(quantity), packStock.purchasePrice, Number(price), state.storePacks, state.packs, storeId)
+      await addStockTrans('c', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -87,7 +87,7 @@ const SellStore = props => {
         {!price || !quantity ? '' : 
           <ListInput 
             name="profit" 
-            label={state.labels.profit}
+            label={state.labels.profitTitle}
             value={(profit / 1000).toFixed(3)}
             floatingLabel 
             type="number" 
