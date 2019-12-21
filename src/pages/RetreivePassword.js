@@ -32,7 +32,7 @@ const RetreivePassword = props => {
   }
   return(
     <Page>
-      <Navbar title={state.labels.retreivePassword} backLink={state.labels.back} />
+      <Navbar title={state.labels.retreivePassword} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

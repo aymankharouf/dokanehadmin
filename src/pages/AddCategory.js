@@ -32,7 +32,7 @@ const AddCategory = props => {
   
   return (
     <Page>
-      <Navbar title={`${state.labels.addCategory} - ${section.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.addCategory} ${section.name}`} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

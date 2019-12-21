@@ -13,7 +13,7 @@ const ForgetPassword = props => {
   } , [state.forgetPassword])
   return(
     <Page>
-      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} />
+      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} className="page-title" />
       <Block>
           <List mediaList>
             {forgetPassword && forgetPassword.map(f => {
@@ -22,7 +22,7 @@ const ForgetPassword = props => {
               return (
                 <ListItem
                   link={`/retreivePassword/${f.id}`}
-                  title={`${userInfo.name} - ${userInfo.mobile}`}
+                  title={`${userInfo.name} ${userInfo.mobile}`}
                   subtitle={moment(f.time.toDate()).fromNow()}
                   key={f.id}
                 />

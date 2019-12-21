@@ -12,7 +12,7 @@ const Spendings = props => {
   , [state.spendings])
   return(
     <Page>
-      <Navbar title={state.labels.spendings} backLink={state.labels.back} />
+      <Navbar title={state.labels.spendings} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {spendings && spendings.map(s => {

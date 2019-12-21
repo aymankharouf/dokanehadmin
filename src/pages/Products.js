@@ -9,7 +9,7 @@ const Products = props => {
   , [state.products])
   return(
     <Page>
-      <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
+      <Navbar title={state.labels.allProducts} backLink={state.labels.back} className="page-title">
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -32,12 +32,12 @@ const Products = props => {
                 <ListItem
                   link={`/product/${p.id}`}
                   title={p.name}
-                  subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                   {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
+                  <span className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</span><br />
+                  <span className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}</span><br />
                 </ListItem>
               )
             }
@@ -45,7 +45,7 @@ const Products = props => {
             {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addProduct/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addProduct/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

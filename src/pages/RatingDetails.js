@@ -32,7 +32,7 @@ const RatingDetails = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.ratingDetails} backLink={state.labels.back} />
+      <Navbar title={state.labels.ratingDetails} backLink={state.labels.back} className="page-title" />
       <Fab position="left-top" slot="fixed" color="green" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>

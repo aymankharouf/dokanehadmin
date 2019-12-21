@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -14,7 +14,7 @@ const CancelOrders = props => {
   }, [state.cancelOrders])
   return(
     <Page>
-      <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} />
+      <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {cancelOrders && cancelOrders.map(o => {
@@ -22,13 +22,14 @@ const CancelOrders = props => {
             return (
               <ListItem
                 link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
-                title={`${userInfo.name} - ${userInfo.mobile}`}
+                title={`${state.labels.user}: ${userInfo.name}`}
                 after={(o.order.total / 1000).toFixed(3)}
-                subtitle={moment(o.time.toDate()).fromNow()}
-                text={state.orderStatus.find(s => s.id === o.order.status).name}
                 key={o.id}
+                className= "list-title"
               >
-                {o.order.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
+                <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
+                <div className="list-line2">{state.orderStatus.find(s => s.id === o.order.status).name}</div>
+                <div className="list-line3">{moment(o.time.toDate()).fromNow()}</div>
               </ListItem>
             )
           }

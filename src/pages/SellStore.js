@@ -44,7 +44,7 @@ const SellStore = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.sell} ${product.name}-${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.sell} ${product.name}-${pack.name}`} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListItem
           title={state.labels.store}

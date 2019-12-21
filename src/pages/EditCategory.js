@@ -33,7 +33,7 @@ const EditCategory = props => {
   
   return (
     <Page>
-      <Navbar title={state.labels.editCategory} backLink={state.labels.back} />
+      <Navbar title={state.labels.editCategory} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

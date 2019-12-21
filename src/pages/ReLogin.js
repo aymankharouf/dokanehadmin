@@ -6,7 +6,7 @@ const ReLogin = props => {
   const { state } = useContext(StoreContext)
   return(
     <Page>
-      <Navbar title={state.labels.reloginTitle} backLink={state.labels.back} />
+      <Navbar title={state.labels.reloginTitle} backLink={state.labels.back} className="page-title" />
       <Block>
         <h3 className="center">
           {state.labels.relogin} <br/>

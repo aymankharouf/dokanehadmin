@@ -14,13 +14,13 @@ const NewUsers = props => {
   }, [state.users, state.customers])
   return(
     <Page>
-      <Navbar title={state.labels.newUsers} backLink={state.labels.back} />
+      <Navbar title={state.labels.newUsers} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {newUsers && newUsers.map(u => 
             <ListItem
               link={`/approveUser/${u.id}`}
-              title={`${u.name} - ${u.mobile}`}
+              title={`${u.name} ${u.mobile}`}
               subtitle={moment(u.time.toDate()).fromNow()}
               key={u.id}
             />

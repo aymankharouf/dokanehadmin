@@ -13,7 +13,7 @@ const RelatedProducts = props => {
   }, [state.products, product, props.id])
   return(
     <Page>
-      <Navbar title={state.labels.relatedProducts} backLink={state.labels.back} />
+      <Navbar title={state.labels.relatedProducts} backLink={state.labels.back} className="page-title" />
         <Block>
           <List mediaList>
             {relatedProducts && relatedProducts.map(p => {

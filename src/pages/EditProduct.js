@@ -83,7 +83,7 @@ const EditProduct = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editProduct} backLink={state.labels.back} />
+      <Navbar title={state.labels.editProduct} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

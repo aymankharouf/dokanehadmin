@@ -63,7 +63,7 @@ const AddSpending = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.newSpending} backLink={state.labels.back} />
+      <Navbar title={state.labels.newSpending} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="spendingAmount" 

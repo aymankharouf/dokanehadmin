@@ -56,7 +56,7 @@ const EditPrice = props => {
   }
   return (
     <Page>
-      <Navbar title={`${state.labels.editPrice} - ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.editPrice} ${store.name}`} backLink={state.labels.back} className="page-title" />
       <Card>
         <CardHeader>
           <p>{product.name}</p>

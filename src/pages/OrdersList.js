@@ -16,7 +16,7 @@ const OrdersList = props => {
   }, [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${state.labels.orders} - ${status.name}`} backLink={state.labels.back} >
+      <Navbar title={`${state.labels.orders} ${status.name}`} backLink={state.labels.back} className="page-title">
       <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -39,7 +39,7 @@ const OrdersList = props => {
             return (
               <ListItem
                 link={`/order/${o.id}`}
-                title={`${userInfo.name} - ${userInfo.mobile}`}
+                title={`${userInfo.name} ${userInfo.mobile}`}
                 after={(o.total / 1000).toFixed(3)}
                 subtitle={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}
                 text={moment(o.time.toDate()).fromNow()}

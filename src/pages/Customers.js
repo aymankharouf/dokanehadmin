@@ -12,7 +12,7 @@ const Customers = props => {
   , [state.customers]) 
   return(
     <Page>
-      <Navbar title={state.labels.customers} backLink={state.labels.back} >
+      <Navbar title={state.labels.customers} backLink={state.labels.back} className="page-title">
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -35,10 +35,12 @@ const Customers = props => {
             return (
               <ListItem
                 link={`/customer/${c.id}/full/1`}
-                title={`${userInfo.name} - ${userInfo.mobile}`}
-                subtitle={moment(c.time.toDate()).fromNow()}
+                title={`${state.labels.user}: ${userInfo.name}`}
                 key={c.id}
+                className= "list-title"
               >
+                <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
+                <div className="list-line2">{moment(c.time.toDate()).fromNow()}</div>
                 {c.isBlocked ? <Badge slot="after" color='red'>{state.labels.isBlocked}</Badge> : ''}
               </ListItem>
             )

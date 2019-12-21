@@ -88,7 +88,7 @@ const EditCustomer = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editCustomer} backLink={state.labels.back} />
+      <Navbar title={state.labels.editCustomer} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

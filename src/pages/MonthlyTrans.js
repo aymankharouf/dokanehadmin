@@ -37,8 +37,6 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
   , [deliveredOrders, monthlyTrans])
-  const fractions = useMemo(() => monthlyTrans ? monthlyTrans.fractions : deliveredOrders.reduce((sum, o) => sum + o.fraction, 0)
-  , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
     return monthlyTrans ? monthlyTrans.purchasesDiscounts : purchases.reduce((sum, p) => sum + p.discount, 0)
@@ -97,8 +95,7 @@ const MonthlyTrans = props => {
         expenses,
         donations,
         damages,
-        withdraws,
-        fractions
+        withdraws
       }
       await addMonthlyTrans(trans)
       showMessage(props, state.labels.addSuccess)
@@ -109,7 +106,7 @@ const MonthlyTrans = props => {
   }
   return(
     <Page>
-      <Navbar title={`${state.labels.monthlyTrans} - ${props.id}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.monthlyTrans} ${props.id}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
           <ListItem
@@ -166,11 +163,6 @@ const MonthlyTrans = props => {
             link="#"
             title={state.labels.discounts}
             after={(discounts / 1000).toFixed(3)}
-          />
-          <ListItem
-            link="#"
-            title={state.labels.fractions}
-            after={(fractions / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

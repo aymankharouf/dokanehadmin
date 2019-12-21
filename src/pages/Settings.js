@@ -17,7 +17,7 @@ const Settings = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.settings} backLink={state.labels.back} />
+      <Navbar title={state.labels.settings} backLink={state.labels.back} className="page-title" />
       <Block>
         {sections.map(s => 
           <Button 

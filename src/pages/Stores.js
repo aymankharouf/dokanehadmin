@@ -29,7 +29,7 @@ const Stores = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.stores} backLink={state.labels.back} />
+      <Navbar title={state.labels.stores} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
           {stores && stores.map(s =>

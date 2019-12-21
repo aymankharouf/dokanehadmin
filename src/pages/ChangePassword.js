@@ -27,7 +27,7 @@ const ChangePassword = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.changePassword} backLink={state.labels.back} />
+      <Navbar title={state.labels.changePassword} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput
           label={state.labels.oldPassword}

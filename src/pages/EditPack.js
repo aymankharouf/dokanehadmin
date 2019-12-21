@@ -58,7 +58,7 @@ const EditPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${state.labels.editPack} - ${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.editPack} ${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

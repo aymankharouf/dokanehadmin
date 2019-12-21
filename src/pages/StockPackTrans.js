@@ -55,7 +55,7 @@ const StockPackTrans = props => {
   }
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {packTrans && packTrans.map(t => 

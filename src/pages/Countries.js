@@ -10,7 +10,7 @@ const Countries = props => {
   , [state.countries])
   return (
     <Page>
-      <Navbar title={state.labels.countries} backLink={state.labels.back} />
+      <Navbar title={state.labels.countries} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
           {countries && countries.map(c =>
@@ -18,6 +18,7 @@ const Countries = props => {
               link={`/editCountry/${c.id}`}
               title={c.name} 
               key={c.id}
+              className= "list-title"
             />
           )}
           {countries.length === 0 ? <ListItem title={state.labels.noData} /> : ''}

@@ -12,7 +12,7 @@ const Purchases = props => {
   , [state.purchases])
   return(
     <Page>
-      <Navbar title={state.labels.purchases} backLink={state.labels.back} />
+      <Navbar title={state.labels.purchases} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {purchases && purchases.map(p => 

@@ -27,7 +27,7 @@ const AddSection = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addSection} backLink={state.labels.back} />
+      <Navbar title={state.labels.addSection} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

@@ -94,6 +94,7 @@ const Reducer = (state, action) => {
         pack = {
           ...pack,
           quantity: nextQuantity,
+          gross: parseInt(pack.price * nextQuantity)
         }
         return {...state, orderBasket: [...otherPacks, pack]}
       case 'DECREASE_ORDER_QUANTITY':
@@ -122,7 +123,8 @@ const Reducer = (state, action) => {
         }
         pack = {
           ...pack,
-          quantity: nextQuantity
+          quantity: nextQuantity,
+          gross: parseInt(pack.price * nextQuantity)
         }  
         return {...state, orderBasket: [...otherPacks, pack]}
       case 'SET_COUNTRIES':

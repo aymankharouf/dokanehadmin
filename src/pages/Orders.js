@@ -9,7 +9,7 @@ const Orders = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.orders} backLink={state.labels.back} />
+      <Navbar title={state.labels.orders} backLink={state.labels.back} className="page-title" />
       <Block>
 				<List>
           {state.orderStatus.map(s => {

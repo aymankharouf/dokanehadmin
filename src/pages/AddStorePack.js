@@ -19,7 +19,7 @@ const AddStorePack = props => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} - ${p.name}`
+        name: `${productInfo.name} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -72,7 +72,7 @@ const AddStorePack = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.addProduct} - ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.addProduct} ${store.name}`} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListItem
           title={state.labels.pack}

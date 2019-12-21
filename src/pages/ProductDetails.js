@@ -9,7 +9,7 @@ const ProductDetails = props => {
   , [state.products, props.id])
   return (
     <Page>
-      <Navbar title={state.labels.productDetails} backLink={state.labels.back} />
+      <Navbar title={state.labels.productDetails} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

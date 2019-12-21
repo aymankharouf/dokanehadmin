@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useEffect } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { quantityText } from '../data/Actions'
 
@@ -26,7 +26,7 @@ const Basket = props => {
   
   return (
     <Page>
-      <Navbar title={`${state.labels.basket_from} ${store ? store.name : ''}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.basket_from} ${store?.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {basket && basket.map(p => {
@@ -35,12 +35,15 @@ const Basket = props => {
             return (
               <ListItem
                 title={productInfo.name}
-                subtitle={packInfo.name}
-                footer={`${state.labels.price}: ${(parseInt(p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)} (${(p.cost / 1000).toFixed(3)})`}
                 key={i++}
+                className= "list-title"
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
+                <div className="list-line1">{packInfo.name}</div>
+                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+                <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>
+                {p.weight ? <div className="list-line4">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
+                <div className="list-line5">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill

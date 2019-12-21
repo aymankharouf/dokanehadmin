@@ -10,7 +10,7 @@ const Prices = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.prices} backLink={state.labels.back} />
+      <Navbar title={state.labels.prices} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
           {stores && stores.map(s =>

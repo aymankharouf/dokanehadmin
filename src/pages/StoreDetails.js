@@ -13,7 +13,7 @@ const StoreDetails = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.storeDetails} backLink={state.labels.back} />
+      <Navbar title={state.labels.storeDetails} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

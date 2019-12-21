@@ -12,7 +12,6 @@ const AddLocation = props => {
   const [sorting, setSorting] = useState('')
   const [hasDelivery, setHasDelivery] = useState(false)
   const [deliveryFees, setDeliveryFees] = useState('')
-  const [urgentDeliveryFees, setUrgentDeliveryFees] = useState('')
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
@@ -29,8 +28,7 @@ const AddLocation = props => {
         name,
         sorting,
         hasDelivery,
-        deliveryFees: deliveryFees * 1000,
-        urgentDeliveryFees: urgentDeliveryFees * 1000
+        deliveryFees: deliveryFees * 1000
       })
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
@@ -40,7 +38,7 @@ const AddLocation = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addLocation} backLink={state.labels.back} />
+      <Navbar title={state.labels.addLocation} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 
@@ -83,20 +81,8 @@ const AddLocation = props => {
             onInputClear={() => setDeliveryFees('')}
           />
           : ''}
-        {hasDelivery ?
-          <ListInput 
-            name="urgentDeliveryFees" 
-            label={state.labels.urgentDeliveryFees}
-            floatingLabel 
-            clearButton
-            type="number" 
-            value={urgentDeliveryFees} 
-            onChange={e => setUrgentDeliveryFees(e.target.value)}
-            onInputClear={() => setUrgentDeliveryFees('')}
-          />
-        : ''}
       </List>
-      {!name || !sorting || (hasDelivery && (!deliveryFees || !urgentDeliveryFees)) ? '' :
+      {!name || !sorting || (hasDelivery && !deliveryFees) ? '' :
         <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

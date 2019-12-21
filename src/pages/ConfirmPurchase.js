@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge, ListInput } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -42,9 +42,9 @@ const ConfirmPurchase = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-    <Navbar title={`${state.labels.confirmPurchase} - ${store.name}`} backLink={state.labels.back} />
+    <Navbar title={`${state.labels.confirmPurchase} ${store.name}`} backLink={state.labels.back} className="page-title" />
     <Block>
-        <List>
+        <List mediaList>
           {state.basket.packs && state.basket.packs.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -52,10 +52,13 @@ const ConfirmPurchase = props => {
               <ListItem 
                 key={i++} 
                 title={productInfo.name}
-                footer={packInfo.name} 
                 after={((p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
+                className= "list-title"
               >
-                <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
+                <div className="list-line1">{packInfo.name}</div>
+                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+                <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>
+                {p.weight ? <div className="list-line4">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
               </ListItem>
             )
           }

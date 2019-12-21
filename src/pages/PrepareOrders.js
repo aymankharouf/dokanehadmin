@@ -38,8 +38,7 @@ const PrepareOrders = props => {
 	}, [finishedOrders])
   return(
     <Page>
-      <Navbar title={state.labels.PurchasedProducts} backLink={state.labels.back}>
-      </Navbar>
+      <Navbar title={state.labels.PurchasedProducts} backLink={state.labels.back} className="page-title" />
       <Block>
 				<List mediaList>
 					{packs && packs.map(p => {

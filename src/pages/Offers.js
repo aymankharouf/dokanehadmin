@@ -12,7 +12,7 @@ const Offers = props => {
   }, [state.storePacks])
   return(
     <Page>
-      <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} />
+      <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} className="page-title" />
         <Block>
           <List mediaList>
             {storePacks && storePacks.map(p => {

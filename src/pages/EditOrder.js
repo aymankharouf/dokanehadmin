@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge, Toggle } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityText } from '../data/Actions';
+import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/Actions';
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -9,6 +9,7 @@ const EditOrder = props => {
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
+  const [urgent, setUrgent] = useState(order.urgent)
   const customer = useMemo(() => state.customers.find(c => c.id === order.userId)
   , [state.customers, order])
   const customerLocation = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId) : ''
@@ -52,7 +53,7 @@ const EditOrder = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
+      <Navbar title={state.labels.editOrder} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {orderBasket && orderBasket.map(p => {
@@ -61,13 +62,14 @@ const EditOrder = props => {
             return (
               <ListItem
                 title={productInfo.name}
-                subtitle={packInfo.name}
-                footer={`${state.labels.price}: ${(p.gross / 1000).toFixed(3)}`}
-                text={quantityText(p.quantity)}
                 key={p.packId}
+                className= "list-title"
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                <Badge slot="title" color={p.purchased === p.quantity ? 'green' : 'red'}>{`${p.purchased} - ${p.quantity}`}</Badge>
+                <div className="list-line1">{packInfo.name}</div>
+                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}</div>
+                <div className="list-line3">{quantityDetails(p)}</div>
+                <div className="list-line4">{`${state.labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill
@@ -88,6 +90,15 @@ const EditOrder = props => {
               checked={withDelivery} 
               onToggleChange={() => setWithDelivery(!withDelivery)}
               disabled={customerLocation ? !customerLocation.hasDelivery : false}
+            />
+          </ListItem>
+          <ListItem>
+            <span>{state.labels.urgent}</span>
+            <Toggle 
+              name="urgent" 
+              color="green" 
+              checked={urgent} 
+              onToggleChange={() => setUrgent(!urgent)}
             />
           </ListItem>
         </List>

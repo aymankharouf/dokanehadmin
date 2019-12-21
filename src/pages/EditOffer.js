@@ -82,8 +82,8 @@ const EditOffer = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.editOffer} - ${product.name}`} backLink={state.labels.back} />
-      <List>
+      <Navbar title={`${state.labels.editOffer} ${product.name}`} backLink={state.labels.back} className="page-title" />
+      <List form>
         <ListInput 
           name="name" 
           label={state.labels.name}

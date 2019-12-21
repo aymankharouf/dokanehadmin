@@ -182,3 +182,37 @@
   font-size: 1rem;
   color: blue;
 }
+
+.list-line1 {
+  font-size: 0.8rem;
+  color: red;
+}
+
+.list-line2 {
+  font-size: 0.8rem;
+  color:blue;
+}
+
+.list-line3 {
+  font-size: 0.8rem;
+  color: green;
+}
+
+.list-line4 {
+  font-size: 0.8rem;
+  color:purple;
+}
+
+.list-line5 {
+  font-size: 0.8rem;
+  color:deeppink;
+}
+
+.list-title {
+  font-size: 1rem;
+}
+
+.page-title {
+  font-size: 1rem;
+  color: blue;
+}

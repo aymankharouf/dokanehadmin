@@ -13,7 +13,7 @@ const PriceAlarms = props => {
   }, [state.priceAlarms])
   return(
     <Page>
-      <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} />
+      <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} className="page-title" />
       <Block>
           <List mediaList>
             {priceAlarms && priceAlarms.map(a => {

@@ -32,7 +32,7 @@ const EditTag = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editTag} backLink={state.labels.back} />
+      <Navbar title={state.labels.editTag} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="name" 

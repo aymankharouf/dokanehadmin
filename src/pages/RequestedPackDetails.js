@@ -160,7 +160,7 @@ const RequestedPackDetails = props => {
     }
   }
   const handleUnavailable = overPriced => {
-    props.f7router.app.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
         await packUnavailable(pack, Number(props.price), approvedOrders, state.customers, overPriced)
@@ -173,7 +173,7 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={state.labels.back} className="page-title" />
       <Block>
         <Card>
           <CardContent>
@@ -217,7 +217,7 @@ const RequestedPackDetails = props => {
               <ListItem 
                 link="#"
                 title={storeInfo.name} 
-                footer={`${productInfo.name} - ${packInfo.name}`} 
+                footer={`${productInfo.name} ${packInfo.name}`} 
                 after={(s.unitPrice / 1000).toFixed(3)} 
                 key={s.id}
                 onClick={() => handlePurchase(s)}

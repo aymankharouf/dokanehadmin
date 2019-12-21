@@ -13,7 +13,7 @@ const ProductPacks = props => {
   , [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={state.labels.back} className="page-title" />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
@@ -32,7 +32,7 @@ const ProductPacks = props => {
             key={p.id} 
             link={`/packDetails/${p.id}`}
           >
-            {p.isOffer ? <Badge slot="title" color='red'>{p.closeExpired ? state.labels.expireOffer : state.labels.offer}</Badge> : ''}
+            {p.isOffer ? <Badge slot="title" color={p.closeExpired ? 'red' : 'green'}>{p.closeExpired ? state.labels.offerToExpire : state.labels.offer}</Badge> : ''}
           </ListItem>
         )}
       </List>

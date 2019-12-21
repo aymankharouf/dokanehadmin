@@ -10,7 +10,7 @@ const Profits = props => {
   const [year, setYear] = useState('')
   return (
     <Page>
-      <Navbar title={state.labels.profits} backLink={state.labels.back} />
+      <Navbar title={state.labels.profits} backLink={state.labels.back} className="page-title" />
       <List form>
         <ListInput 
           name="month" 

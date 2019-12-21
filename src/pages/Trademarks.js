@@ -10,7 +10,7 @@ const Trademarks = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.trademarks} backLink={state.labels.back} />
+      <Navbar title={state.labels.trademarks} backLink={state.labels.back} className="page-title" />
       <Fab position="left-top" slot="fixed" color="green" href="/addTrademark/">
         <Icon material="add"></Icon>
       </Fab>

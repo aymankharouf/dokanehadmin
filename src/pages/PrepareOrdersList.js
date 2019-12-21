@@ -14,14 +14,14 @@ const PrepareOrdersList = props => {
   }, [state.orders, props.orderId, props.packId])
   return(
     <Page>
-      <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} />
+      <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {orders && orders.map(o => {
             const userInfo = state.users.find(u => u.id === o.userId)
             return (
               <ListItem
-                title={`${userInfo.name} - ${userInfo.mobile}`}
+                title={`${userInfo.name} ${userInfo.mobile}`}
                 after={(o.total / 1000).toFixed(3)}
                 subtitle={moment(o.time.toDate()).fromNow()}
                 text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}

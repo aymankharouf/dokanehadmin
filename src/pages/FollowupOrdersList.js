@@ -12,7 +12,7 @@ const FollowupOrdersList = props => {
   , [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${state.labels.followupOrders} - ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={state.labels.back} />
+      <Navbar title={`${state.labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
           {orders && orders.map(o => {
@@ -20,7 +20,7 @@ const FollowupOrdersList = props => {
             return (
               <ListItem
                 link={`/followupOrderDetails/${o.id}`}
-                title={`${userInfo.name} - ${userInfo.mobile}`}
+                title={`${userInfo.name} ${userInfo.mobile}`}
                 after={(o.total / 1000).toFixed(3)}
                 subtitle={state.orderStatus.find(s => s.id === o.status).name}
                 text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}

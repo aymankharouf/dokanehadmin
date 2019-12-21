@@ -95,6 +95,9 @@
 *expiration flag on pack
 *product flags: fresh, frozen, cold
 *related products
+*no rating for non trademarks products
+*handle delete operation store pack
+*overpriced text
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -104,7 +107,7 @@ loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
 handle security for storePack in app application
-smart basket when confirm order (packs with more value for the same product, alternative products with more rating, offers for other alternatives)
+smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 delivery plan by locations
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
@@ -129,10 +132,9 @@ blacklist customer who did not pick his order
 store trans --purchases & returns
 delivery intervals
 test & load test
-detict device size note
+detect device size note
 button to add shortcut PWA
 note for stop the service
-overpriced text
 merging orders
-no rating for non trademarks products
-handle delete operation store pack
+add offer request
+stores last month trans & requested packs that can be purchased from

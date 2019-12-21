@@ -12,7 +12,7 @@ const Stock = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.stock} backLink={state.labels.back}>
+      <Navbar title={state.labels.stock} backLink={state.labels.back} className="page-title">
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search" />
         </NavRight>
