@@ -15,18 +15,20 @@ const StoreOwners = props => {
       <Navbar title={`${state.labels.storeOwners} ${store.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {storeOwners && storeOwners.map(o => {
-            const userInfo = state.users.find(u => u.id === o.id)
-            return (
-              <ListItem 
-                link="#"
-                title={userInfo.name} 
-                footer={userInfo.mobile}
-                key={o.id} 
-              />
-            )
-          })}
-          {storeOwners.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {storeOwners.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : storeOwners.map(o => {
+              const userInfo = state.users.find(u => u.id === o.id)
+              return (
+                <ListItem 
+                  link="#"
+                  title={userInfo.name} 
+                  footer={userInfo.mobile}
+                  key={o.id} 
+                />
+              )
+            })
+          }
         </List>
       </Block>
       <Toolbar bottom>

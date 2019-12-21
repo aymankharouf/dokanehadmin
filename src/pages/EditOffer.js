@@ -64,7 +64,7 @@ const EditOffer = props => {
         name,
         offerPackId,
         offerQuantity: Number(offerQuantity),
-        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits ? offerPackInfo.bonusUnits : 0)),
+        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits ?? 0)),
         orderLimit: Number(orderLimit),
         offerPercent: Number(offerPercent),
         bonusPackId,

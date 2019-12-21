@@ -14,15 +14,17 @@ const Locations = props => {
       <Navbar title={state.labels.locations} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {locations && locations.map(l =>
-            <ListItem
-              link={`/editLocation/${l.id}`}
-              title={l.name}
-              after={(l.deliveryFees / 1000).toFixed(3)}
-              key={l.id}
-            />
-          )}
-          {locations.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {locations.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : locations.map(l =>
+              <ListItem
+                link={`/editLocation/${l.id}`}
+                title={l.name}
+                after={(l.deliveryFees / 1000).toFixed(3)}
+                key={l.id}
+              />
+            )
+          }
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" href="/addLocation/">

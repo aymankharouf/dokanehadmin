@@ -16,22 +16,23 @@ const RelatedProducts = props => {
       <Navbar title={state.labels.relatedProducts} backLink={state.labels.back} className="page-title" />
         <Block>
           <List mediaList>
-            {relatedProducts && relatedProducts.map(p => {
-              return (
-                <ListItem
-                  link={`/product/${p.id}`}
-                  title={p.name}
-                  subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
-                  key={p.id}
-                >
-                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
-                  {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                </ListItem>
-              )
+            {relatedProducts.length === 0 ? 
+              <ListItem title={state.labels.noData} /> 
+            : relatedProducts.map(p => {
+                return (
+                  <ListItem
+                    link={`/product/${p.id}`}
+                    title={p.name}
+                    subtitle={state.categories.find(c => c.id === p.categoryId).name}
+                    text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
+                    key={p.id}
+                  >
+                    <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
+                    {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
+                  </ListItem>
+                )
+              })
             }
-            )}
-            {relatedProducts.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Toolbar bottom>

@@ -15,19 +15,20 @@ const Spendings = props => {
       <Navbar title={state.labels.spendings} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {spendings && spendings.map(s => {
-            return (
-              <ListItem
-                link={`/editSpending/${s.id}`}
-                title={state.spendingTypes.find(t => t.id === s.type).name}
-                after={(s.spendingAmount / 1000).toFixed(3)}
-                subtitle={moment(s.time.toDate()).fromNow()}
-                key={s.id}
-              />
-            )
+          {spendings.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : spendings.map(s => {
+              return (
+                <ListItem
+                  link={`/editSpending/${s.id}`}
+                  title={state.spendingTypes.find(t => t.id === s.type).name}
+                  after={(s.spendingAmount / 1000).toFixed(3)}
+                  subtitle={moment(s.time.toDate()).fromNow()}
+                  key={s.id}
+                />
+              )
+            })
           }
-          )}
-          {spendings.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" href="/addSpending/">

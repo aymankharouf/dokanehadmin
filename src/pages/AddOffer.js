@@ -64,7 +64,7 @@ const AddOffer = props => {
         offerPackId,
         offerQuantity: Number(offerQuantity),
         offerPercent: Number(offerPercent),
-        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits ? offerPackInfo.bonusUnits : 0)),
+        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits ?? 0)),
         isDivided: offerPackInfo.isDivided,
         byWeight: offerPackInfo.byWeight,
         orderLimit: Number(orderLimit),

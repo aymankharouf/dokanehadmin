@@ -9,7 +9,7 @@ const Basket = props => {
   , [state.basket, state.stores])
   const basket = useMemo(() => state.basket ? [...state.basket.packs].sort((p1, p2) => p1.time - p2.time) : []
   , [state.basket])
-  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ? p.weight : p.quantity)), 0) : 0
+  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ?? p.quantity)), 0) : 0
   , [state.basket])
   let i = 0
   useEffect(() => {
@@ -29,7 +29,7 @@ const Basket = props => {
       <Navbar title={`${state.labels.basket_from} ${store?.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {basket && basket.map(p => {
+          {basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
@@ -43,7 +43,7 @@ const Basket = props => {
                 <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
                 <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>
                 {p.weight ? <div className="list-line4">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
-                <div className="list-line5">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}`}</div>
+                <div className="list-line5">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill

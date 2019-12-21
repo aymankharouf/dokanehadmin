@@ -13,14 +13,16 @@ const Tags = props => {
       <Navbar title={state.labels.tags} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {tags && tags.map(t =>
-            <ListItem
-              link={`/editTag/${t.id}`}
-              title={t.name} 
-              key={t.id}
-            />
-          )}
-          {tags.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {tags.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : tags.map(t =>
+              <ListItem
+                link={`/editTag/${t.id}`}
+                title={t.name} 
+                key={t.id}
+              />
+            )
+          }
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" href="/addTag/">

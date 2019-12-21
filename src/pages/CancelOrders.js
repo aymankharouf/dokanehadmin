@@ -17,24 +17,25 @@ const CancelOrders = props => {
       <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {cancelOrders && cancelOrders.map(o => {
-            const userInfo = state.users.find(u => u.id === o.order.userId)
-            return (
-              <ListItem
-                link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
-                title={`${state.labels.user}: ${userInfo.name}`}
-                after={(o.order.total / 1000).toFixed(3)}
-                key={o.id}
-                className= "list-title"
-              >
-                <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                <div className="list-line2">{state.orderStatus.find(s => s.id === o.order.status).name}</div>
-                <div className="list-line3">{moment(o.time.toDate()).fromNow()}</div>
-              </ListItem>
-            )
+          {cancelOrders.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : cancelOrders.map(o => {
+              const userInfo = state.users.find(u => u.id === o.order.userId)
+              return (
+                <ListItem
+                  link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
+                  title={`${state.labels.user}: ${userInfo.name}`}
+                  after={(o.order.total / 1000).toFixed(3)}
+                  key={o.id}
+                  className= "list-title"
+                >
+                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
+                  <div className="list-line2">{state.orderStatus.find(s => s.id === o.order.status).name}</div>
+                  <div className="list-line3">{moment(o.time.toDate()).fromNow()}</div>
+                </ListItem>
+              )
+            })
           }
-          )}
-          {cancelOrders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

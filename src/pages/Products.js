@@ -27,22 +27,23 @@ const Products = props => {
             <ListItem title={state.labels.noData} />
           </List>
           <List mediaList className="search-list searchbar-found">
-            {products && products.map(p => {
-              return (
-                <ListItem
-                  link={`/product/${p.id}`}
-                  title={p.name}
-                  key={p.id}
-                >
-                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
-                  {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                  <span className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</span><br />
-                  <span className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}</span><br />
-                </ListItem>
-              )
+            {products.length === 0 ? 
+              <ListItem title={state.labels.noData} /> 
+            : products.map(p => {
+                return (
+                  <ListItem
+                    link={`/product/${p.id}`}
+                    title={p.name}
+                    key={p.id}
+                  >
+                    <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
+                    {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
+                    <span className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</span><br />
+                    <span className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}</span><br />
+                  </ListItem>
+                )
+              })
             }
-            )}
-            {state.products.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addProduct/">

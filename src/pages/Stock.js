@@ -30,25 +30,26 @@ const Stock = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {storePacks.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            return (
-              <ListItem
-                link={`/stockPackTrans/${p.packId}`}
-                title={productInfo.name}
-                after={(p.cost / 1000).toFixed(3)}
-                subtitle={packInfo.name}
-                text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
-                key={p.id}
-              >
-                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
-              </ListItem>
-            )
+          {storePacks.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : storePacks.map(p => {
+              const packInfo = state.packs.find(pa => pa.id === p.packId)
+              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+              return (
+                <ListItem
+                  link={`/stockPackTrans/${p.packId}`}
+                  title={productInfo.name}
+                  after={(p.cost / 1000).toFixed(3)}
+                  subtitle={packInfo.name}
+                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
+                  key={p.id}
+                >
+                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                  {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
+                </ListItem>
+              )
+            })
           }
-          )}
-          {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

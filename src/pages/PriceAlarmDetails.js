@@ -119,7 +119,9 @@ const PriceAlarmDetails = props => {
               after={(p.price / 1000).toFixed(3)} 
               key={p.id} 
             >
-              {p.quantity ? <Badge slot="title" color='red'>{p.quantity}</Badge> : ''}
+              {p.quantity ? 
+                <Badge slot="title" color='red'>{p.quantity}</Badge> 
+              : ''}
             </ListItem>
           )
         })}

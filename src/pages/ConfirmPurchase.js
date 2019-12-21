@@ -11,9 +11,9 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ? p.weight : p.quantity)), 0)
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ?? p.quantity)), 0)
   , [state.basket])
-  const [discount, setDiscount] = useState(store.discount ? (total * store.discount / 100000).toFixed(3) : 0)
+  const [discount, setDiscount] = useState((total * (store.discount ?? 0) / 100000).toFixed(3))
   let i = 0
   useEffect(() => {
     if (error) {
@@ -52,7 +52,7 @@ const ConfirmPurchase = props => {
               <ListItem 
                 key={i++} 
                 title={productInfo.name}
-                after={((p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
+                after={((p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
                 className= "list-title"
               >
                 <div className="list-line1">{packInfo.name}</div>

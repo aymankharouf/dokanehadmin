@@ -65,7 +65,7 @@ const FollowupOrderDetails = props => {
       <Navbar title={state.labels.orderDetails} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(p => {
+          {order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
@@ -78,7 +78,7 @@ const FollowupOrderDetails = props => {
                 footer={`${state.orderPackStatus.find(s => s.id === p.status).name} ${['r', 'pr'].includes(p.status) ? p.returned : ''}`}
                 after={(p.gross / 1000).toFixed(3)}
               >
-                {p.purchased - (p.returned ? p.returned : 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchased - (p.returned ? p.returned : 0), p.weight - (p.returned ? p.returned : 0))}</Badge> : ''}
+                {p.purchased - (p.returned ?? 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchased - (p.returned ?? 0), p.weight - (p.returned ?? 0))}</Badge> : ''}
               </ListItem>
             )
           })}

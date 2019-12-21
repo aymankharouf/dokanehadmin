@@ -15,20 +15,21 @@ const Logs = props => {
       <Navbar title={state.labels.logs} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {logs && logs.map(l => {
-            const userInfo = state.users.find(u => u.id === l.userId)
-            return (
-              <ListItem
-                title={`${userInfo ? userInfo.name + ' - ' + userInfo.mobile : l.userId}`}
-                after={moment(l.time.toDate()).fromNow()}
-                subtitle={l.page}
-                text={l.error}
-                key={l.id}
-              />
-            )
+          {logs.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : logs.map(l => {
+              const userInfo = state.users.find(u => u.id === l.userId)
+              return (
+                <ListItem
+                  title={`${userInfo ? userInfo.name + ' - ' + userInfo.mobile : l.userId}`}
+                  after={moment(l.time.toDate()).fromNow()}
+                  subtitle={l.page}
+                  text={l.error}
+                  key={l.id}
+                />
+              )
+            })
           }
-          )}
-          {logs.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

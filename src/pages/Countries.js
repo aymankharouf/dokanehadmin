@@ -13,15 +13,17 @@ const Countries = props => {
       <Navbar title={state.labels.countries} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {countries && countries.map(c =>
-            <ListItem
-              link={`/editCountry/${c.id}`}
-              title={c.name} 
-              key={c.id}
-              className= "list-title"
-            />
-          )}
-          {countries.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {countries.length === 0 ? 
+            <ListItem title={state.labels.noData} />
+          : countries.map(c =>
+              <ListItem
+                link={`/editCountry/${c.id}`}
+                title={c.name} 
+                key={c.id}
+                className= "list-title"
+              />
+            )
+          }
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" href="/addCountry/">

@@ -61,7 +61,7 @@ const ReturnOrderPack = props => {
         </CardContent>
         <CardFooter>
           <p>{(orderPack.actual / 1000).toFixed(3)}</p>
-          <p>{(orderPack.weight ? orderPack.weight : orderPack.purchased) - returned}</p>
+          <p>{(orderPack.weight ?? orderPack.purchased) - returned}</p>
         </CardFooter>
       </Card>
       <Fab position="left-top" slot="fixed" color="orange">
@@ -74,7 +74,7 @@ const ReturnOrderPack = props => {
           <FabButton color="red" onClick={() => handleDecrease()}>
             <Icon material="remove"></Icon>
           </FabButton>
-          {(orderPack.returned ? orderPack.returned : 0) === returned ? '' :
+          {(orderPack.returned ?? 0) === returned ? '' :
             <FabButton color="blue" onClick={() => handleSumit()}>
               <Icon material="done"></Icon>
             </FabButton>

@@ -17,22 +17,23 @@ const PrepareOrdersList = props => {
       <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {orders && orders.map(o => {
-            const userInfo = state.users.find(u => u.id === o.userId)
-            return (
-              <ListItem
-                title={`${userInfo.name} ${userInfo.mobile}`}
-                after={(o.total / 1000).toFixed(3)}
-                subtitle={moment(o.time.toDate()).fromNow()}
-                text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
-                key={o.id}
-              >
-                {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
-              </ListItem>
-            )
+          {orders.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : orders.map(o => {
+              const userInfo = state.users.find(u => u.id === o.userId)
+              return (
+                <ListItem
+                  title={`${userInfo.name} ${userInfo.mobile}`}
+                  after={(o.total / 1000).toFixed(3)}
+                  subtitle={moment(o.time.toDate()).fromNow()}
+                  text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
+                  key={o.id}
+                >
+                  {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
+                </ListItem>
+              )
+            })
           }
-          )}
-          {orders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

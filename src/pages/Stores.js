@@ -32,14 +32,16 @@ const Stores = props => {
       <Navbar title={state.labels.stores} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {stores && stores.map(s =>
-            <ListItem 
-              link={`/store/${s.id}`} 
-              title={s.name} 
-              key={s.id} 
-            />
-          )}
-          {stores.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {stores.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : stores.map(s =>
+              <ListItem 
+                link={`/store/${s.id}`} 
+                title={s.name} 
+                key={s.id} 
+              />
+            )
+          }
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="green" href="/addStore/">

@@ -16,20 +16,21 @@ const ForgetPassword = props => {
       <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} className="page-title" />
       <Block>
           <List mediaList>
-            {forgetPassword && forgetPassword.map(f => {
-              const userInfo = state.users.find(u => u.mobile === f.mobile)
-              if (!userInfo) return ''
-              return (
-                <ListItem
-                  link={`/retreivePassword/${f.id}`}
-                  title={`${userInfo.name} ${userInfo.mobile}`}
-                  subtitle={moment(f.time.toDate()).fromNow()}
-                  key={f.id}
-                />
-              )
+            {forgetPassword.length === 0 ? 
+              <ListItem title={state.labels.noData} /> 
+            : forgetPassword.map(f => {
+                const userInfo = state.users.find(u => u.mobile === f.mobile)
+                if (!userInfo) return ''
+                return (
+                  <ListItem
+                    link={`/retreivePassword/${f.id}`}
+                    title={`${userInfo.name} ${userInfo.mobile}`}
+                    subtitle={moment(f.time.toDate()).fromNow()}
+                    key={f.id}
+                  />
+                )
+              })
             }
-            )}
-            {forgetPassword.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
           </List>
       </Block>
       <Toolbar bottom>

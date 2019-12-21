@@ -32,7 +32,14 @@ const ProductPacks = props => {
             key={p.id} 
             link={`/packDetails/${p.id}`}
           >
-            {p.isOffer ? <Badge slot="title" color={p.closeExpired ? 'red' : 'green'}>{p.closeExpired ? state.labels.offerToExpire : state.labels.offer}</Badge> : ''}
+            {p.isOffer ? 
+              <Badge 
+                slot="title" 
+                color={p.closeExpired ? 'red' : 'green'}
+              >
+                {p.closeExpired ? state.labels.offerToExpire : state.labels.offer}
+              </Badge> 
+            : ''}
           </ListItem>
         )}
       </List>

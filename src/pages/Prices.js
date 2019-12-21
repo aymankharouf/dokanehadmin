@@ -13,14 +13,16 @@ const Prices = props => {
       <Navbar title={state.labels.prices} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {stores && stores.map(s =>
-            <ListItem 
-              link={`/storePacks/${s.id}`} 
-              title={s.name} 
-              key={s.id} 
-            />
-          )}
-          {stores.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {stores.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : stores.map(s =>
+              <ListItem 
+                link={`/storePacks/${s.id}`} 
+                title={s.name} 
+                key={s.id} 
+              />
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

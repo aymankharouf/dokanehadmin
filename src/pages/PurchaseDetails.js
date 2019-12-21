@@ -16,14 +16,14 @@ const PurchaseDetails = props => {
       <Navbar title={state.labels.purchaseDetails} backLink={state.labels.back} className="page-title" />
       <Block>
           <List>
-            {purchase.basket && purchase.basket.map(p => {
+            {purchase.basket.map(p => {
               const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem 
                   title={productInfo.name}
                   footer={packInfo.name}
-                  after={(parseInt(p.cost * (p.weight ? p.weight : p.quantity)) / 1000).toFixed(3)}
+                  after={(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
                   key={p.packId} 
                 >
                   <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>

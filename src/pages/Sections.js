@@ -17,14 +17,16 @@ const Sections = props => {
       </Fab>
       <Block>
         <List>
-          {sections && sections.map(s =>
-            <ListItem 
-              link={`/section/${s.id}`} 
-              title={s.name} 
-              key={s.id} 
-            />
-          )}
-          {sections.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {sections.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : sections.map(s =>
+              <ListItem 
+                link={`/section/${s.id}`} 
+                title={s.name} 
+                key={s.id} 
+              />
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

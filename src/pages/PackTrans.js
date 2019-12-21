@@ -30,17 +30,19 @@ const PackTrans = props => {
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {packTrans && packTrans.map(t => 
-            <ListItem
-              title={state.stores.find(s => s.id === t.storeId).name}
-              subtitle={moment(t.time.toDate()).fromNow()}
-              after={(t.cost / 1000).toFixed(3)}
-              key={t.id}
-            >
-              <Badge slot="title" color="red">{t.quantity}</Badge>
-            </ListItem>
-          )}
-          {packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {packTrans.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : packTrans.map(t => 
+              <ListItem
+                title={state.stores.find(s => s.id === t.storeId).name}
+                subtitle={moment(t.time.toDate()).fromNow()}
+                after={(t.cost / 1000).toFixed(3)}
+                key={t.id}
+              >
+                <Badge slot="title" color="red">{t.quantity}</Badge>
+              </ListItem>
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

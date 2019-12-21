@@ -18,14 +18,16 @@ const SectionCategories = props => {
       <Navbar title={`${state.labels.categories} ${section.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List>
-          {categories && categories.map(c =>
-            <ListItem 
-              link={`/editCategory/${c.id}`}
-              title={c.name} 
-              key={c.id} 
-            />
-          )}
-          {categories.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {categories.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : categories.map(c =>
+              <ListItem 
+                link={`/editCategory/${c.id}`}
+                title={c.name} 
+                key={c.id} 
+              />
+            )
+          }
         </List>
       </Block>
       <Fab position="left-top" slot="fixed" color="orange">

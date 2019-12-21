@@ -43,7 +43,7 @@ const RequestedPacks = props => {
 			if (state.basket.packs) {
 				if (p.byWeight) {
 					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId)
-					inBasketQuantity = inBasket ? inBasket.quantity : 0
+					inBasketQuantity = inBasket?.quantity ?? 0
 				} else {
 					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)
 					if (inBasket) {
@@ -87,33 +87,35 @@ const RequestedPacks = props => {
       <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} className="page-title" />
       <Block>
 				<List mediaList>
-					{requiredPacks && requiredPacks.map(p => {
-						const packInfo = state.packs.find(pa => pa.id === p.packId)
-						const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-						const bonusProduct = p.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === p.bonusPackId).productId) : ''
-						return (
-							<ListItem
-								link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
-								title={productInfo.name}
-								after={(p.price / 1000).toFixed(3)}
-								subtitle={packInfo.name}
-								key={i++}
-							>
-                <div slot="media" className="relative">
-                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                  {p.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${p.offerQuantity}`}</span> : ''}
-                  {p.bonusPackId ? 
-                    <div>
-                      <img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
-                      {p.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${p.bonusQuantity}`}</span> : ''}
-                    </div>
-                  : ''}
-                </div>
-								<Badge slot="title" color="green">{quantityText(p.quantity)}</Badge>
-							</ListItem>
-						)
-					})}
-					{requiredPacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+					{requiredPacks.length === 0 ? 
+						<ListItem title={state.labels.noData} /> 
+					: requiredPacks.map(p => {
+							const packInfo = state.packs.find(pa => pa.id === p.packId)
+							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+							const bonusProduct = p.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === p.bonusPackId).productId) : ''
+							return (
+								<ListItem
+									link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
+									title={productInfo.name}
+									after={(p.price / 1000).toFixed(3)}
+									subtitle={packInfo.name}
+									key={i++}
+								>
+									<div slot="media" className="relative">
+										<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+										{p.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${p.offerQuantity}`}</span> : ''}
+										{p.bonusPackId ? 
+											<div>
+												<img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
+												{p.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${p.bonusQuantity}`}</span> : ''}
+											</div>
+										: ''}
+									</div>
+									<Badge slot="title" color="green">{quantityText(p.quantity)}</Badge>
+								</ListItem>
+							)
+						})
+					}
 				</List>
       </Block>
       <Toolbar bottom>

@@ -19,39 +19,39 @@ const MonthlyTrans = props => {
   , [orders])
   const deliveredOrders = useMemo(() => orders.filter(o => o.status === 'd')
   , [orders])
-  const ordersCount = monthlyTrans ? monthlyTrans.ordersCount : orders.length
-  const deliveredOrdersCount = monthlyTrans ? monthlyTrans.deliveredOrdersCount : deliveredOrders.length
-  const finishedOrdersCount = monthlyTrans ? monthlyTrans.finishedOrdersCount : finishedOrders.length
+  const ordersCount = monthlyTrans?.ordersCount ?? orders.length
+  const deliveredOrdersCount = monthlyTrans?.deliveredOrdersCount ?? deliveredOrders.length
+  const finishedOrdersCount = monthlyTrans?.finishedOrdersCount ?? finishedOrders.length
   const storePacks = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.storePacks
     const storePacks = state.storePacks.filter(p => p.storeId === 's' && p.quantity > 0)
     const storeValue = storePacks.reduce((sum, p) => sum + parseInt(p.cost * p.quantity), 0)
     return storeValue
   }, [state.storePacks, monthlyTrans])
-  const sales = useMemo(() => monthlyTrans ? monthlyTrans.sales : deliveredOrders.reduce((sum, o) => sum + o.total, 0)
+  const sales = useMemo(() => monthlyTrans?.sales ?? deliveredOrders.reduce((sum, o) => sum + o.total, 0)
   , [deliveredOrders, monthlyTrans])
-  const profit = useMemo(() => monthlyTrans ? monthlyTrans.profit : deliveredOrders.reduce((sum, o) => sum + o.profit, 0)
+  const profit = useMemo(() => monthlyTrans?.profit ?? deliveredOrders.reduce((sum, o) => sum + o.profit, 0)
   , [deliveredOrders, monthlyTrans])
-  const fixedFees = monthlyTrans ? monthlyTrans.fixedFees : deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
-  const deliveryFees = useMemo(() => monthlyTrans ? monthlyTrans.deliveryFees : deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
+  const fixedFees = monthlyTrans?.fixedFees ?? deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
+  const deliveryFees = useMemo(() => monthlyTrans?.deliveryFees ?? deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
-  const discounts = useMemo(() => monthlyTrans ? monthlyTrans.discounts : deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
+  const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
-    return monthlyTrans ? monthlyTrans.purchasesDiscounts : purchases.reduce((sum, p) => sum + p.discount, 0)
+    return monthlyTrans?.purchasesDiscounts ?? purchases.reduce((sum, p) => sum + p.discount, 0)
   }, [state.purchases, month, year, monthlyTrans])
   const spendings = useMemo(() => state.spendings.filter(s => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month)
   , [state.spendings, month, year])
   const stockTrans = useMemo(() => state.stockTrans.filter(t => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month)
   , [state.stockTrans, month, year])
-  const donations = useMemo(() => monthlyTrans ? monthlyTrans.donations : stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0)
+  const donations = useMemo(() => monthlyTrans?.donations ?? stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0)
   , [stockTrans, monthlyTrans])
-  const damages = useMemo(() => monthlyTrans ? monthlyTrans.damages : stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0)
+  const damages = useMemo(() => monthlyTrans?.damages ?? stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0)
   , [stockTrans, monthlyTrans])
-  const withdraws = useMemo(() => monthlyTrans ? monthlyTrans.withdraws : stockTrans.reduce((sum, t) => sum + (t.type === 'w' ? t.total : 0), 0)
+  const withdraws = useMemo(() => monthlyTrans?.withdraws ?? stockTrans.reduce((sum, t) => sum + (t.type === 'w' ? t.total : 0), 0)
   , [stockTrans, monthlyTrans])
-  const cashing = useMemo(() => monthlyTrans ? monthlyTrans.cashing : stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].cost * t.basket[0].quantity): 0), 0)
+  const cashing = useMemo(() => monthlyTrans?.cashing ?? stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].cost * t.basket[0].quantity): 0), 0)
   , [stockTrans, monthlyTrans])
   const withdrawals = useMemo(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals

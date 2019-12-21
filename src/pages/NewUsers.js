@@ -17,15 +17,17 @@ const NewUsers = props => {
       <Navbar title={state.labels.newUsers} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {newUsers && newUsers.map(u => 
-            <ListItem
-              link={`/approveUser/${u.id}`}
-              title={`${u.name} ${u.mobile}`}
-              subtitle={moment(u.time.toDate()).fromNow()}
-              key={u.id}
-            />
-          )}
-          {newUsers.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {newUsers.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : newUsers.map(u => 
+              <ListItem
+                link={`/approveUser/${u.id}`}
+                title={`${u.name} ${u.mobile}`}
+                subtitle={moment(u.time.toDate()).fromNow()}
+                key={u.id}
+              />
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

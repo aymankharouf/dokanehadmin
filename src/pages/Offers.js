@@ -15,25 +15,27 @@ const Offers = props => {
       <Navbar title={state.labels.EndedOffers} backLink={state.labels.back} className="page-title" />
         <Block>
           <List mediaList>
-            {storePacks && storePacks.map(p => {
-              const packInfo = state.packs.find(pa => pa.id === p.packId)
-              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-              return (
-                <ListItem
-                  link={`/storePack/${p.id}`}
-                  title={productInfo.name}
-                  after={(p.price / 1000).toFixed(3)}
-                  subtitle={packInfo.name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
-                  footer={state.stores.find(s => s.id === p.storeId).name}
-                  key={p.id}
-                >
-                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                  <Badge slot="footer" color="red">{moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}</Badge>
-                </ListItem>
-              )
-            })}
-            {storePacks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+            {storePacks.length === 0 ? 
+              <ListItem title={state.labels.noData} /> 
+            : storePacks.map(p => {
+                const packInfo = state.packs.find(pa => pa.id === p.packId)
+                const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+                return (
+                  <ListItem
+                    link={`/storePack/${p.id}`}
+                    title={productInfo.name}
+                    after={(p.price / 1000).toFixed(3)}
+                    subtitle={packInfo.name}
+                    text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
+                    footer={state.stores.find(s => s.id === p.storeId).name}
+                    key={p.id}
+                  >
+                    <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                    <Badge slot="footer" color="red">{moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}</Badge>
+                  </ListItem>
+                )
+              })
+            }
           </List>
       </Block>
       <Toolbar bottom>

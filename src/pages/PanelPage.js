@@ -13,12 +13,22 @@ const PanelPage = props => {
     })
   }
 
-  const login_logout = user ? <ListItem link="#" onClick={() => handleLogout()} title={state.labels.logout} /> : <ListItem link="/panelLogin/" title={state.labels.login} />
   return(
     <Page>
       <Navbar title={state.labels.mainPanelTitle} />
       <List>
-        {login_logout}
+        {user ? 
+          <ListItem 
+            link="#" 
+            title={state.labels.logout} 
+            onClick={() => handleLogout()} 
+          />
+        :
+          <ListItem 
+            link="/panelLogin/"
+            title={state.labels.login}
+          />
+        }
         {user ? <ListItem link="/changePassword/" title={state.labels.changePassword} /> : ''}
         {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requestedPacks/" title={state.labels.requestedPacks} view="#main-view" panelClose /> : ''}

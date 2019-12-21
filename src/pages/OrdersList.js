@@ -34,24 +34,27 @@ const OrdersList = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {orders && orders.map(o => {
-            const userInfo = state.users.find(u => u.id === o.userId)
-            return (
-              <ListItem
-                link={`/order/${o.id}`}
-                title={`${userInfo.name} ${userInfo.mobile}`}
-                after={(o.total / 1000).toFixed(3)}
-                subtitle={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}
-                text={moment(o.time.toDate()).fromNow()}
-                footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
-                key={o.id}
-              >
-                {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
-              </ListItem>
-            )
+          {orders.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : orders.map(o => {
+              const userInfo = state.users.find(u => u.id === o.userId)
+              return (
+                <ListItem
+                  link={`/order/${o.id}`}
+                  title={`${userInfo.name} ${userInfo.mobile}`}
+                  after={(o.total / 1000).toFixed(3)}
+                  subtitle={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}
+                  text={moment(o.time.toDate()).fromNow()}
+                  footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
+                  key={o.id}
+                >
+                  {o.withDelivery ? 
+                    <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> 
+                  : ''}
+                </ListItem>
+              )
+            })
           }
-          )}
-          {orders.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
         </List>
       </Block>
       <Toolbar bottom>

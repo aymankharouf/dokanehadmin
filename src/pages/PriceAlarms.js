@@ -16,23 +16,25 @@ const PriceAlarms = props => {
       <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} className="page-title" />
       <Block>
           <List mediaList>
-            {priceAlarms && priceAlarms.map(a => {
-              const pack = state.packs.find(p => p.id === a.packId)
-              const product = state.products.find(p => p.id === pack.productId)
-              return (
-                <ListItem
-                  link={`/priceAlarmDetails/${a.id}`}
-                  title={product.name}
-                  after={(a.price / 1000).toFixed(3)}
-                  subtitle={pack.name}
-                  text={moment(a.time.toDate()).fromNow()}
-                  key={a.id}
-                >
-                  <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
-                </ListItem>
-              )
-            })}
-            {priceAlarms.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+            {priceAlarms.length === 0 ? 
+              <ListItem title={state.labels.noData} /> 
+            : priceAlarms && priceAlarms.map(a => {
+                const pack = state.packs.find(p => p.id === a.packId)
+                const product = state.products.find(p => p.id === pack.productId)
+                return (
+                  <ListItem
+                    link={`/priceAlarmDetails/${a.id}`}
+                    title={product.name}
+                    after={(a.price / 1000).toFixed(3)}
+                    subtitle={pack.name}
+                    text={moment(a.time.toDate()).fromNow()}
+                    key={a.id}
+                  >
+                    <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
+                  </ListItem>
+                )
+              })
+            }
           </List>
       </Block>
       <Toolbar bottom>

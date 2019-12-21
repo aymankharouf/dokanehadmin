@@ -15,16 +15,18 @@ const StockTrans = props => {
       <Navbar title={state.labels.stockTrans} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {stockTrans && stockTrans.map(t => 
-            <ListItem
-              link={`/stockTrans/${t.id}`}
-              title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
-              text={moment(t.time.toDate()).fromNow()}
-              after={(t.total / 1000).toFixed(3)}
-              key={t.id}
-            />
-          )}
-          {stockTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {stockTrans.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : stockTrans.map(t => 
+              <ListItem
+                link={`/stockTrans/${t.id}`}
+                title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                text={moment(t.time.toDate()).fromNow()}
+                after={(t.total / 1000).toFixed(3)}
+                key={t.id}
+              />
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

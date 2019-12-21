@@ -30,22 +30,24 @@ const Customers = props => {
           <ListItem title={state.labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {customers && customers.map(c => {
-            const userInfo = state.users.find(u => u.id === c.id)
-            return (
-              <ListItem
-                link={`/customer/${c.id}/full/1`}
-                title={`${state.labels.user}: ${userInfo.name}`}
-                key={c.id}
-                className= "list-title"
-              >
-                <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                <div className="list-line2">{moment(c.time.toDate()).fromNow()}</div>
-                {c.isBlocked ? <Badge slot="after" color='red'>{state.labels.isBlocked}</Badge> : ''}
-              </ListItem>
-            )
-          })}
-          {customers.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {customers.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : customers.map(c => {
+              const userInfo = state.users.find(u => u.id === c.id)
+              return (
+                <ListItem
+                  link={`/customer/${c.id}/full/1`}
+                  title={`${state.labels.user}: ${userInfo.name}`}
+                  key={c.id}
+                  className= "list-title"
+                >
+                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
+                  <div className="list-line2">{moment(c.time.toDate()).fromNow()}</div>
+                  {c.isBlocked ? <Badge slot="after" color='red'>{state.labels.isBlocked}</Badge> : ''}
+                </ListItem>
+              )
+            })
+          }
         </List>
       </Block>
       <Toolbar bottom>

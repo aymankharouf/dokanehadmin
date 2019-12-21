@@ -15,7 +15,7 @@ const RequestedPackDetails = props => {
   , [pack, state.products, state.packs])
   const basketStockQuantity = useMemo(() => {
     const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
-    return basketStock ? basketStock.quantity : 0
+    return basketStock?.quantity ?? 0
   }, [state.basket, props.packId])
   const packStores = useMemo(() => {
     let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))

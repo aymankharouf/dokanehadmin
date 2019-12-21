@@ -41,22 +41,24 @@ const PrepareOrders = props => {
       <Navbar title={state.labels.PurchasedProducts} backLink={state.labels.back} className="page-title" />
       <Block>
 				<List mediaList>
-					{packs && packs.map(p => {
-						const packInfo = state.packs.find(pa => pa.id === p.packId)
-						const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-						return (
-							<ListItem
-								link={`/prepareOrders/${p.packId}/order/${p.orderId}`}
-								title={productInfo.name}
-								subtitle={packInfo.name}
-								key={i++}
-							>
-								<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-								<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
-							</ListItem>
-						)
-					})}
-					{packs.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+					{packs.length === 0 ? 
+						<ListItem title={state.labels.noData} /> 
+					: packs.map(p => {
+							const packInfo = state.packs.find(pa => pa.id === p.packId)
+							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+							return (
+								<ListItem
+									link={`/prepareOrders/${p.packId}/order/${p.orderId}`}
+									title={productInfo.name}
+									subtitle={packInfo.name}
+									key={i++}
+								>
+									<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+									<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
+								</ListItem>
+							)
+						})
+					}
 				</List>
       </Block>
       <Toolbar bottom>

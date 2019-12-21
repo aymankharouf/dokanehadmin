@@ -16,22 +16,24 @@ const Ratings = props => {
       <Navbar title={state.labels.approveRatings} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {ratings && ratings.map(r => {
-            const product = state.products.find(p => p.id === r.productId)
-            const userInfo = state.users.find(u => u.id === r.userId)
-            return (
-              <ListItem
-                link={`/rating/${r.id}`}
-                title={product.name}
-                subtitle={userInfo.name}
-                text={moment(r.time.toDate()).fromNow()}
-                key={r.id}
-              >
-                <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
-              </ListItem>
-            )
-          })}
-          {ratings.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {ratings.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : ratings.map(r => {
+              const product = state.products.find(p => p.id === r.productId)
+              const userInfo = state.users.find(u => u.id === r.userId)
+              return (
+                <ListItem
+                  link={`/rating/${r.id}`}
+                  title={product.name}
+                  subtitle={userInfo.name}
+                  text={moment(r.time.toDate()).fromNow()}
+                  key={r.id}
+                >
+                  <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
+                </ListItem>
+              )
+            })
+          }
         </List>
       </Block>
       <Toolbar bottom>

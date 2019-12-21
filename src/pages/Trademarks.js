@@ -16,14 +16,16 @@ const Trademarks = props => {
       </Fab>
       <Block>
         <List>
-          {trademarks && trademarks.map(t =>
-            <ListItem 
-              link={`/editTrademark/${t.id}`}
-              title={t.name} 
-              key={t.id} 
-            />
-          )}
-          {trademarks.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {trademarks.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : trademarks.map(t =>
+              <ListItem 
+                link={`/editTrademark/${t.id}`}
+                title={t.name} 
+                key={t.id} 
+              />
+            )
+          }
         </List>
       </Block>
       <Toolbar bottom>

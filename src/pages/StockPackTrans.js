@@ -45,7 +45,7 @@ const StockPackTrans = props => {
         if (Number(quantity) === 0 || Number(quantity) > stockPackInfo.quantity) {
           throw new Error('invalidValue')
         }
-        await addStockTrans(type, pack.id, Number(quantity), cost ? cost : stockPackInfo.cost, price ? price : stockPackInfo.price, state.storePacks, state.packs, storeId)
+        await addStockTrans(type, pack.id, Number(quantity), cost ?? stockPackInfo.cost, price ?? stockPackInfo.price, state.storePacks, state.packs, storeId)
         showMessage(props, state.labels.addSuccess)
         props.f7router.back()
       } catch(err) {
@@ -58,19 +58,21 @@ const StockPackTrans = props => {
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {packTrans && packTrans.map(t => 
-            <ListItem
-              title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
-              subtitle={moment(t.time.toDate()).fromNow()}
-              after={(t.cost / 1000).toFixed(3)}
-              key={t.id}
-              link={t.storeId ? '#' : ''}
-              onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
-            >
-              <Badge slot="title" color="red">{t.quantity}</Badge>
-            </ListItem>
-          )}
-          {packTrans.length === 0 ? <ListItem title={state.labels.noData} /> : ''}
+          {packTrans.length === 0 ? 
+            <ListItem title={state.labels.noData} /> 
+          : packTrans.map(t => 
+              <ListItem
+                title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                subtitle={moment(t.time.toDate()).fromNow()}
+                after={(t.cost / 1000).toFixed(3)}
+                key={t.id}
+                link={t.storeId ? '#' : ''}
+                onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
+              >
+                <Badge slot="title" color="red">{t.quantity}</Badge>
+              </ListItem>
+            )
+          }
         </List>
       </Block>
       <Popover className="popover-menu">
