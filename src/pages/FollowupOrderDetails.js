@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Badge, Link, Toggle } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-import { updateOrderStatus, showMessage, showError, getMessage, quantityText, sendOrder, returnOrder } from '../data/Actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/Actions'
 
 const FollowupOrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -69,16 +69,20 @@ const FollowupOrderDetails = props => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''
+            const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
             return (
               <ListItem 
                 key={p.packId} 
                 title={productInfo.name}
-                subtitle={packInfo.name}
-                text={storeName}
-                footer={`${state.orderPackStatus.find(s => s.id === p.status).name} ${['r', 'pr'].includes(p.status) ? p.returned : ''}`}
                 after={(p.gross / 1000).toFixed(3)}
+                className= "list-title"
               >
-                {p.purchased - (p.returned ?? 0) > 0 ? <Badge slot="title" color="green">{quantityText(p.purchased - (p.returned ?? 0), p.weight - (p.returned ?? 0))}</Badge> : ''}
+                <div className="list-line1">{packInfo.name}</div>
+                {storeName ? <div className="list-line2">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
+                {changePriceNote ? <div className="list-line3">{changePriceNote}</div> : ''}
+                <div className="list-line4">{`${state.labels.status}: ${statusNote}`}</div>
+                <div className="list-line5">{quantityDetails(p)}</div>
               </ListItem>
             )
           })}

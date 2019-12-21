@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Toggle } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails } from '../data/Actions'
@@ -72,15 +72,10 @@ const OrderDetails = props => {
             )
           })}
           {order.withDelivery ? 
-            <ListItem>
-              <span>{state.labels.withDelivery}</span>
-              <Toggle 
-                name="withDelivery" 
-                color="green" 
-                checked={order.withDelivery} 
-                disabled
-              />
-            </ListItem> 
+            <ListItem
+              title={state.labels.withDeliveryNote}
+              className= "list-title"
+            />
           : ''}
           <ListItem 
             title={state.labels.total} 

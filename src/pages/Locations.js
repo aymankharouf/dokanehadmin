@@ -22,6 +22,7 @@ const Locations = props => {
                 title={l.name}
                 after={(l.deliveryFees / 1000).toFixed(3)}
                 key={l.id}
+                className= "list-title"
               />
             )
           }

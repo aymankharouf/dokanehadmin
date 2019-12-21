@@ -273,7 +273,8 @@ const labels = {
   status: 'الحالة',
   unitPrice: 'سعر الوحدة',
   grossPrice: 'السعر اﻻجمالي',
-  urgent: 'مستعجل'
+  urgent: 'مستعجل',
+  withDeliveryNote: 'مع خدمة التوصيل'
 }
 
 export default labels

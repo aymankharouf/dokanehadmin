@@ -21,12 +21,15 @@ const Logs = props => {
               const userInfo = state.users.find(u => u.id === l.userId)
               return (
                 <ListItem
-                  title={`${userInfo ? userInfo.name + ' - ' + userInfo.mobile : l.userId}`}
-                  after={moment(l.time.toDate()).fromNow()}
-                  subtitle={l.page}
-                  text={l.error}
+                  title={`${state.labels.user}: ${userInfo?.name ?? l.userId}`}
                   key={l.id}
-                />
+                  className= "list-title"
+                >
+                  {userInfo?.mobile ? <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div> : ''}
+                  <div className="list-line2">{moment(l.time.toDate()).fromNow()}</div>
+                  <div className="list-line3">{l.page}</div>
+                  <div className="list-line4">{l.error}</div>
+                </ListItem>
               )
             })
           }

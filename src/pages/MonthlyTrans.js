@@ -113,86 +113,103 @@ const MonthlyTrans = props => {
             link="#"
             title={state.labels.ordersCount}
             after={ordersCount}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.finishedOrdersCount}
             after={finishedOrdersCount}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.deliveredOrdersCount}
             after={deliveredOrdersCount}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.storePacks}
             after={(storePacks / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.sales}
             after={(sales / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.profitTitle}
             after={(profit / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.fixedFeesTitle}
             after={(fixedFees / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.deliveryFees}
             after={(deliveryFees / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.purchaseDiscounts}
             after={(purchaseDiscounts / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.netProfit}
             after={((profit + fixedFees + deliveryFees + purchaseDiscounts) / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.discounts}
             after={(discounts / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.withdrawals}
             after={(withdrawals / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.expenses}
             after={(expenses / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.donations}
             after={(donations / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.damages}
             after={(damages / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.withdraws}
             after={(withdraws / 1000).toFixed(3)}
+            className="list-title"
           />
           <ListItem
             link="#"
             title={state.labels.cashing}
             after={(cashing / 1000).toFixed(3)}
+            className="list-title"
           />
         </List>
       </Block>

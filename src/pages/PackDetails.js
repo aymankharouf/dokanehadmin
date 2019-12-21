@@ -153,15 +153,16 @@ const PackDetails = props => {
           <p>{(pack.price / 1000).toFixed(3)}</p>
         </CardFooter>
       </Card>
-      <List>
+      <List mediaList>
       {packStores.map(s => {
         const storeInfo = state.stores.find(st => st.id === s.storeId)
         return (
           <ListItem 
             title={storeInfo.name} 
-            footer={`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}, ${state.labels.price}: ${(s.price / 1000).toFixed(3)}`} 
             key={s.id}
+            className= "list-title"
           >
+            <div className="list-line1">{`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}, ${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}</div>
             {s.quantity ? 
               <Badge slot="title" color='red'>{s.quantity}</Badge> 
             : ''}

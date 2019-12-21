@@ -16,11 +16,12 @@ const Orders = props => {
             const count = state.orders.filter(o => o.status === s.id).length
             return (
               <ListItem 
+                link={`/ordersList/${s.id}/`} 
                 title={s.name} 
                 badge={count} 
                 badgeColor={state.randomColors[i++ % 10].name} 
-                link={`/ordersList/${s.id}/`} 
                 key={s.id}
+                className= "list-title"
               />
             )
           })}
