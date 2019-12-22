@@ -42,13 +42,13 @@ const OrdersList = props => {
                 <ListItem
                   link={`/order/${o.id}`}
                   title={`${state.labels.user}: ${userInfo.name}`}
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  text={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}
+                  footer={moment(o.time.toDate()).fromNow()}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}
                 >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                  {o.position ? <div className="list-line2">{state.orderPositions.find(p => p.id === o.position).name}</div> : ''}
-                  <div className="list-line3">{moment(o.time.toDate()).fromNow()}</div>
-                  {o.statusTime ? <div className="list-line4">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
+                  {o.statusTime ? <div className="list-subtext1">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
                   {o.withDelivery ? 
                     <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> 
                   : ''}

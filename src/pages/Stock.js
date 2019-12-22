@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 
@@ -39,13 +39,14 @@ const Stock = props => {
                 <ListItem
                   link={`/stockPackTrans/${p.packId}`}
                   title={productInfo.name}
+                  subtitle={packInfo.name}
+                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                   after={(p.cost / 1000).toFixed(3)}
+                  badge={p.quantity > 0 ? p.quantity : ''}
+                  badgeColor="red"
                   key={p.id}
                 >
                   <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                  <div className="list-line1">{packInfo.name}</div>
-                  <div className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}</div>
-                  {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
                 </ListItem>
               )
             })

@@ -23,10 +23,9 @@ const StoreOwners = props => {
                 <ListItem 
                   link="#"
                   title={`${state.labels.user}: ${userInfo.name}`} 
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
                   key={o.id} 
-                >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                </ListItem>
+                />
               )
             })
           }

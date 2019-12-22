@@ -25,13 +25,12 @@ const CancelOrders = props => {
                 <ListItem
                   link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
                   title={`${state.labels.user}: ${userInfo.name}`}
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  text={state.orderStatus.find(s => s.id === o.order.status).name}
+                  footer={moment(o.time.toDate()).fromNow()}
                   after={(o.order.total / 1000).toFixed(3)}
                   key={o.id}
-                >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                  <div className="list-line2">{state.orderStatus.find(s => s.id === o.order.status).name}</div>
-                  <div className="list-line3">{moment(o.time.toDate()).fromNow()}</div>
-                </ListItem>
+                />
               )
             })
           }

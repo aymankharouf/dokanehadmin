@@ -183,24 +183,13 @@
   color: blue;
 }
 
-.list-line1 {
-  font-size: 0.8rem;
-  color:blue;
+.navbar-inner {
+  font-size: 1rem;
+  color: blue;
 }
 
-.list-line2 {
-  font-size: 0.8rem;
-  color: green;
-}
-
-.list-line3 {
-  font-size: 0.8rem;
-  color:purple;
-}
-
-.list-line4 {
-  font-size: 0.8rem;
-  color:deeppink;
+.item-title-row {
+  font-size: 1rem;
 }
 
 .item-subtitle {
@@ -208,11 +197,23 @@
   color:red !important;
 }
 
-.item-title-row {
-  font-size: 1rem;
+.item-text {
+  font-size: 0.8rem !important;
+  color: blue !important;
 }
 
-.navbar-inner {
-  font-size: 1rem;
-  color: blue;
+.item-footer {
+  font-size: 0.8rem !important;
+  color: green !important;
 }
+
+.list-subtext1 {
+  font-size: 0.8rem;
+  color:purple;
+}
+
+.list-subtext2 {
+  font-size: 0.8rem;
+  color:deeppink;
+}
+

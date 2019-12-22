@@ -24,12 +24,12 @@ const PrepareOrdersList = props => {
               return (
                 <ListItem
                   title={`${state.labels.user}: ${userInfo.name}`}
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  text={moment(o.time.toDate()).fromNow()}
+                  footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}
                 >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                  <div className="list-line2">{moment(o.time.toDate()).fromNow()}</div>
-                  {o.statusTime ? <div className="list-line3">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
                   {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
                 </ListItem>
               )

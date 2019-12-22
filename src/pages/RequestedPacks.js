@@ -97,6 +97,8 @@ const RequestedPacks = props => {
 								<ListItem
 									link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
 									title={productInfo.name}
+									subtitle={packInfo.name}
+									text={`${state.labels.requested}: ${quantityText(p.quantity)}`}
 									after={(p.price / 1000).toFixed(3)}
 									key={i++}
 								>
@@ -110,8 +112,6 @@ const RequestedPacks = props => {
 											</div>
 										: ''}
 									</div>
-									<div className="list-line1">{packInfo.name}</div>
-									<div className="list-line2">{`${state.labels.requested}: ${quantityText(p.quantity)}`}</div>
 								</ListItem>
 							)
 						})

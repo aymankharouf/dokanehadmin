@@ -60,13 +60,13 @@ const OrderDetails = props => {
               <ListItem 
                 key={p.packId} 
                 title={productInfo.name}
+                subtitle={packInfo.name}
+                text={storeName ? `${state.labels.storeName}: ${storeName}` : ''}
+                footer={quantityDetails(p)}
                 after={(p.gross / 1000).toFixed(3)}
               >
-                <div className="list-line1">{packInfo.name}</div>
-                {storeName ? <div className="list-line2">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
-                {changePriceNote ? <div className="list-line3">{changePriceNote}</div> : ''}
-                <div className="list-line4">{`${state.labels.status}: ${statusNote}`}</div>
-                <div className="list-line5">{quantityDetails(p)}</div>
+                {changePriceNote ? <div className="list-subtext1">{changePriceNote}</div> : ''}
+                <div className="list-subtext2">{`${state.labels.status}: ${statusNote}`}</div>
               </ListItem>
             )
           })}

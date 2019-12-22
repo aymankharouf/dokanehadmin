@@ -21,11 +21,10 @@ const Purchases = props => {
               <ListItem
                 link={`/purchase/${p.id}`}
                 title={state.stores.find(s => s.id === p.storeId).name}
+                subtitle={moment(p.time.toDate()).fromNow()}
                 after={((p.total - p.discount) / 1000).toFixed(3)}
                 key={p.id}
-              >
-                <div className="list-line1">{moment(p.time.toDate()).fromNow()}</div>
-              </ListItem>
+              />
             )
           }
         </List>

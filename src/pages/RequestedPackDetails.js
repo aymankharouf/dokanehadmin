@@ -216,12 +216,12 @@ const RequestedPackDetails = props => {
             return (
               <ListItem 
                 link="#"
-                title={storeInfo.name} 
+                title={storeInfo.name}
+                subtitle={`${productInfo.name} ${packInfo.name}`}
                 after={(s.unitPrice / 1000).toFixed(3)} 
                 key={s.id}
                 onClick={() => handlePurchase(s)}
               >
-                <div className="list-line1">{`${productInfo.name} ${packInfo.name}`}</div>
                 {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color={s.isOffer ? 'red' : 'green'}>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
               </ListItem>
             )

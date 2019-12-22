@@ -41,6 +41,8 @@ const StorePacks = props => {
                 <ListItem
                   link={`/storePack/${p.id}`}
                   title={productInfo.name}
+                  subtitle={packInfo.name}
+                  text={(p.time.toDate()).fromNow()}
                   after={(p.price / 1000).toFixed(3)}
                   key={p.id}
                 >
@@ -56,8 +58,6 @@ const StorePacks = props => {
                   </div>
                   {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
                   {packInfo.isOffer || packInfo.hasOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
-                  <div className="list-line1">{packInfo.name}</div>
-                  <div className="list-line1">{(p.time.toDate()).fromNow()}</div>
                 </ListItem>
               )
             })

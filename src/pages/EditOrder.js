@@ -62,13 +62,13 @@ const EditOrder = props => {
             return (
               <ListItem
                 title={productInfo.name}
+                subtitle={packInfo.name}
+                text={`${state.labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
+                footer={quantityDetails(p)}
                 key={p.packId}
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                <div className="list-line1">{packInfo.name}</div>
-                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}</div>
-                <div className="list-line3">{quantityDetails(p)}</div>
-                <div className="list-line4">{`${state.labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
+                <div className="list-subtext1">{`${state.labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill

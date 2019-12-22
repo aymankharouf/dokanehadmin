@@ -25,14 +25,14 @@ const Offers = props => {
                   <ListItem
                     link={`/storePack/${p.id}`}
                     title={productInfo.name}
+                    subtitle={packInfo.name}
+                    text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
+                    footer={moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}
                     after={(p.price / 1000).toFixed(3)}
                     key={p.id}
                   >
                     <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                    <div className="list-line1">{packInfo.name}</div>
-                    <div className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}</div>
-                    {storeName ? <div className="list-line3">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
-                    <div className="list-line4">{moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}</div>
+                    {storeName ? <div className="list-subtext1">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
                   </ListItem>
                 )
               })

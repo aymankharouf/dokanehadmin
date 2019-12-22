@@ -2,6 +2,7 @@ import React, { useContext, useMemo, useEffect } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { quantityText } from '../data/Actions'
+import PackImage from './PackImage'
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -31,28 +32,17 @@ const Basket = props => {
         <List mediaList>
           {basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const bonusProduct = packInfo.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === packInfo.bonusPackId).productId) : ''
             return (
               <ListItem
-                title={productInfo.name}
+                title={state.products.find(pr => pr.id === packInfo.productId).name}
+                subtitle={packInfo.name}
+                text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+                footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
                 key={i++}
               >
-                <div slot="media" className="relative">
-                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                  {packInfo.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${packInfo.offerQuantity}`}</span> : ''}
-                  {packInfo.bonusPackId ? 
-                    <div>
-                      <img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
-                      {packInfo.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${packInfo.bonusQuantity}`}</span> : ''}
-                    </div>
-                  : ''}
-                </div>                
-                <div className="list-line1">{packInfo.name}</div>
-                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
-                <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>
-                {p.weight ? <div className="list-line4">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
-                <div className="list-line5">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}`}</div>
+                <PackImage slot="media" pack={packInfo} />
+                {p.weight ? <div className="list-subtext1">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
+                <div className="list-subtext2">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill

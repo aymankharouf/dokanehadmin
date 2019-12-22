@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
+import PackImage from './PackImage'
 
 const PriceAlarms = props => {
   const { state } = useContext(StoreContext)
@@ -20,17 +21,16 @@ const PriceAlarms = props => {
               <ListItem title={state.labels.noData} /> 
             : priceAlarms && priceAlarms.map(a => {
                 const pack = state.packs.find(p => p.id === a.packId)
-                const product = state.products.find(p => p.id === pack.productId)
                 return (
                   <ListItem
                     link={`/priceAlarmDetails/${a.id}`}
-                    title={product.name}
+                    title={state.products.find(p => p.id === pack.productId).name}
+                    subtitle={pack.name}
+                    text={moment(a.time.toDate()).fromNow()}
                     after={(a.price / 1000).toFixed(3)}
                     key={a.id}
                   >
-                    <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
-                    <div className="list-line1">{pack.name}</div>
-                    <div className="list-line2">{moment(a.time.toDate()).fromNow()}</div>
+                    <PackImage slot="media" pack={pack} />
                   </ListItem>
                 )
               })

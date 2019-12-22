@@ -21,11 +21,10 @@ const StockTrans = props => {
               <ListItem
                 link={`/stockTrans/${t.id}`}
                 title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.total / 1000).toFixed(3)}
                 key={t.id}
-              >
-                <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
-              </ListItem>
+              />
             )
           }
         </List>

@@ -50,10 +50,10 @@ const PrepareOrders = props => {
 								<ListItem
 									link={`/prepareOrders/${p.packId}/order/${p.orderId}`}
 									title={productInfo.name}
+									subtitle={packInfo.name}
 									key={i++}
 								>
 									<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-									<div className="list-line1">{packInfo.name}</div>
 									<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
 								</ListItem>
 							)

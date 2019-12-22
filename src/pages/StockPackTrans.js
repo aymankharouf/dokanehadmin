@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge, Popover, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
@@ -64,13 +64,13 @@ const StockPackTrans = props => {
               <ListItem
                 link={t.storeId ? '#' : ''}
                 title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.cost / 1000).toFixed(3)}
+                badge={t.quantity}
+                badgeColor="red"
                 key={t.id}
                 onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
-              >
-                <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
-                <Badge slot="title" color="red">{t.quantity}</Badge>
-              </ListItem>
+              />
             )
           }
         </List>

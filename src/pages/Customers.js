@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar, Badge } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -38,12 +38,12 @@ const Customers = props => {
                 <ListItem
                   link={`/customer/${c.id}/full/1`}
                   title={`${state.labels.user}: ${userInfo.name}`}
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  text={moment(c.time.toDate()).fromNow()}
+                  badge={c.isBlocked ? state.labels.isBlocked : ''}
+                  badgeColor="red"
                   key={c.id}
-                >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                  <div className="list-line2">{moment(c.time.toDate()).fromNow()}</div>
-                  {c.isBlocked ? <Badge slot="after" color='red'>{state.labels.isBlocked}</Badge> : ''}
-                </ListItem>
+                />
               )
             })
           }

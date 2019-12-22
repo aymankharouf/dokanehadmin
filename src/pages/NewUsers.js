@@ -23,11 +23,10 @@ const NewUsers = props => {
               <ListItem
                 link={`/approveUser/${u.id}`}
                 title={`${state.labels.user}: ${u.name}`}
+                subtitle={`${state.labels.mobile}: ${u.mobile}`}
+                text={moment(u.time.toDate()).fromNow()}
                 key={u.id}
-              >
-                <div className="list-line1">{`${state.labels.mobile}: ${u.mobile}`}</div>
-                <div className="list-line2">{moment(u.time.toDate()).fromNow()}</div>
-              </ListItem>
+              />
             )
           }
         </List>

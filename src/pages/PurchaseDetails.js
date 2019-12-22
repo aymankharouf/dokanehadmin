@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge} from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -22,12 +22,12 @@ const PurchaseDetails = props => {
               return (
                 <ListItem 
                   title={productInfo.name}
+                  subtitle={packInfo.name}
                   after={(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
+                  badge={quantityText(p.quantity, p.weight)}
+                  badgeColor="green"
                   key={p.packId} 
-                >
-                  <div className="list-line1">{packInfo.name}</div>
-                  <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
-                </ListItem>
+                />
               )}
             )}
           </List>

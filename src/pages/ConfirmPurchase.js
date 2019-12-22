@@ -52,12 +52,12 @@ const ConfirmPurchase = props => {
               <ListItem 
                 key={i++} 
                 title={productInfo.name}
+                subtitle={packInfo.name}
+                text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+                footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
                 after={((p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
               >
-                <div className="list-line1">{packInfo.name}</div>
-                <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
-                <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>
-                {p.weight ? <div className="list-line4">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
+                {p.weight ? <div className="list-subtext1">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
               </ListItem>
             )
           }

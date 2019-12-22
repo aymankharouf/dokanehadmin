@@ -24,13 +24,13 @@ const FollowupOrdersList = props => {
                 <ListItem
                   link={`/followupOrderDetails/${o.id}`}
                   title={`${state.labels.user}: ${userInfo.name}`}
+                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  text={`${state.labels.status}: ${state.orderStatus.find(s => s.id === o.status).name}`}
+                  footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}
                 >
-                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
-                  <div className="list-line2">{`${state.labels.status}: ${state.orderStatus.find(s => s.id === o.status).name}`}</div>
-                  <div className="list-line3">{o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}</div>
-                  {o.withDelivery ? <div className="list-line4">{state.labels.withDeliveryNote}</div> : ''}
+                  {o.withDelivery ? <div className="list-subtext1">{state.labels.withDeliveryNote}</div> : ''}
                 </ListItem>
               )
             })

@@ -22,12 +22,12 @@ const Logs = props => {
               return (
                 <ListItem
                   title={`${state.labels.user}: ${userInfo?.name ?? l.userId}`}
+                  subtitle={userInfo?.mobile ? `${state.labels.mobile}: ${userInfo.mobile}` : ''}
+                  text={l.page}
+                  footer={moment(l.time.toDate()).fromNow()}
                   key={l.id}
                 >
-                  {userInfo?.mobile ? <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div> : ''}
-                  <div className="list-line2">{moment(l.time.toDate()).fromNow()}</div>
-                  <div className="list-line3">{l.page}</div>
-                  <div className="list-line4">{l.error}</div>
+                  <div className="list-subtext1">{l.error}</div>
                 </ListItem>
               )
             })
