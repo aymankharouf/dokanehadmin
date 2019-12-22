@@ -39,6 +39,7 @@ const Stores = props => {
                 link={`/store/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
+                className= "list-title"
               />
             )
           }

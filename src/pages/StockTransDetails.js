@@ -15,18 +15,19 @@ const StockTransDetails = props => {
       <Navbar title={state.labels.stockTransDetails} backLink={state.labels.back} className="page-title" />
       <Block>
         <List mediaList>
-          {stockTrans.basket && stockTrans.basket.map(p => {
+          {stockTrans.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem 
                 title={productInfo.name}
-                footer={packInfo.name}
                 after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
-                key={p.packId} 
+                key={p.packId}
+                className= "list-title" 
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 <Badge slot="title" color="red">{p.quantity}</Badge>
+                <div className="list-line1">{packInfo.name}</div>
               </ListItem>
             )}
           )}

@@ -26,11 +26,12 @@ const PriceAlarms = props => {
                     link={`/priceAlarmDetails/${a.id}`}
                     title={product.name}
                     after={(a.price / 1000).toFixed(3)}
-                    subtitle={pack.name}
-                    text={moment(a.time.toDate()).fromNow()}
                     key={a.id}
+                    className= "list-title"
                   >
                     <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
+                    <div className="list-line1">{pack.name}</div>
+                    <div className="list-line2">{moment(a.time.toDate()).fromNow()}</div>
                   </ListItem>
                 )
               })

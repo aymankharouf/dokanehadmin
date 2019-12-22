@@ -109,11 +109,45 @@ const StorePackDetails = props => {
       </Block>
       <Popover className="popover-menu">
         <List>
-          {storePack.storeId === 's' && storePack.quantity === 0 ? '' : <ListItem link={`/editPrice/${storePack.id}`} popoverClose title={state.labels.editPrice} />}
-          {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.delete} onClick={() => handleDelete()}/>}
-          {storePack.storeId === 's' ? '' : <ListItem link="#" popoverClose title={state.labels.confirmPrice} onClick={() => handleConfirmPrice()}/>}
-          {storePack.offerEnd ? <ListItem link="#" popoverClose title={state.labels.haltOffer} onClick={() => handleHaltOffer()}/> : ''}
-          {storePack.offerEnd ? <ListItem link="#" popoverClose title={state.labels.extendOffer} onClick={() => handleExtendOffer()}/> : ''}
+          {storePack.storeId === 's' && storePack.quantity === 0 ? '' : 
+            <ListItem 
+              link={`/editPrice/${storePack.id}`} 
+              popoverClose 
+              title={state.labels.editPrice}
+            />
+          }
+          {storePack.storeId === 's' ? '' : 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={state.labels.delete} 
+              onClick={() => handleDelete()}
+            />
+          }
+          {storePack.storeId === 's' ? '' : 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={state.labels.confirmPrice} 
+              onClick={() => handleConfirmPrice()}
+            />
+          }
+          {storePack.offerEnd ? 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={state.labels.haltOffer} 
+              onClick={() => handleHaltOffer()}
+            /> 
+          : ''}
+          {storePack.offerEnd ? 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={state.labels.extendOffer} 
+              onClick={() => handleExtendOffer()}
+            /> 
+          : ''}
         </List>
       </Popover>
 

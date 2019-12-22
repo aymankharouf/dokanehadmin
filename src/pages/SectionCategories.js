@@ -25,6 +25,7 @@ const SectionCategories = props => {
                 link={`/editCategory/${c.id}`}
                 title={c.name} 
                 key={c.id} 
+                className= "list-title"
               />
             )
           }

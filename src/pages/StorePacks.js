@@ -2,8 +2,6 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
-import moment from 'moment'
-import 'moment/locale/ar'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
@@ -44,9 +42,8 @@ const StorePacks = props => {
                   link={`/storePack/${p.id}`}
                   title={productInfo.name}
                   after={(p.price / 1000).toFixed(3)}
-                  subtitle={packInfo.name}
-                  text={moment(p.time.toDate()).fromNow()}
                   key={p.id}
+                  className= "list-title"
                 >
                   <div slot="media" className="relative">
                     <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
@@ -60,6 +57,8 @@ const StorePacks = props => {
                   </div>
                   {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
                   {packInfo.isOffer || packInfo.hasOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+                  <div className="list-line1">{packInfo.name}</div>
+                  <div className="list-line1">{(p.time.toDate()).fromNow()}</div>
                 </ListItem>
               )
             })

@@ -62,13 +62,14 @@ const StockPackTrans = props => {
             <ListItem title={state.labels.noData} /> 
           : packTrans.map(t => 
               <ListItem
+                link={t.storeId ? '#' : ''}
                 title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
-                subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.cost / 1000).toFixed(3)}
                 key={t.id}
-                link={t.storeId ? '#' : ''}
                 onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
+                className= "list-title"
               >
+                <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
                 <Badge slot="title" color="red">{t.quantity}</Badge>
               </ListItem>
             )

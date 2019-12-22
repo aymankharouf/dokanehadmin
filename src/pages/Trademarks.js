@@ -23,6 +23,7 @@ const Trademarks = props => {
                 link={`/editTrademark/${t.id}`}
                 title={t.name} 
                 key={t.id} 
+                className= "list-title"
               />
             )
           }

@@ -40,11 +40,12 @@ const Stock = props => {
                   link={`/stockPackTrans/${p.packId}`}
                   title={productInfo.name}
                   after={(p.cost / 1000).toFixed(3)}
-                  subtitle={packInfo.name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                   key={p.id}
+                  className= "list-title"
                 >
                   <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                  <div className="list-line1">{packInfo.name}</div>
+                  <div className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}</div>
                   {p.quantity > 0 ? <Badge slot="title" color="red">{p.quantity}</Badge> : ''}
                 </ListItem>
               )

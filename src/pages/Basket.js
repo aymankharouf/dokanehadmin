@@ -32,13 +32,23 @@ const Basket = props => {
           {basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+            const bonusProduct = packInfo.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === packInfo.bonusPackId).productId) : ''
             return (
               <ListItem
                 title={productInfo.name}
                 key={i++}
                 className= "list-title"
               >
-                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <div slot="media" className="relative">
+                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                  {packInfo.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${packInfo.offerQuantity}`}</span> : ''}
+                  {packInfo.bonusPackId ? 
+                    <div>
+                      <img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
+                      {packInfo.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${packInfo.bonusQuantity}`}</span> : ''}
+                    </div>
+                  : ''}
+                </div>                
                 <div className="list-line1">{packInfo.name}</div>
                 <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
                 <div className="list-line3">{`${state.labels.quantity}: ${quantityText(p.quantity)}`}</div>

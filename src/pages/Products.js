@@ -35,11 +35,12 @@ const Products = props => {
                     link={`/product/${p.id}`}
                     title={p.name}
                     key={p.id}
+                    className= "list-title"
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                     {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                    <span className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</span><br />
-                    <span className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}</span><br />
+                    <div className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</div>
+                    <div className="list-line2">{`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}</div>
                   </ListItem>
                 )
               })

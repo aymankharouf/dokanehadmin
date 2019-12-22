@@ -25,11 +25,12 @@ const Ratings = props => {
                 <ListItem
                   link={`/rating/${r.id}`}
                   title={product.name}
-                  subtitle={userInfo.name}
-                  text={moment(r.time.toDate()).fromNow()}
                   key={r.id}
+                  className= "list-title"
                 >
                   <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
+                  <div className="list-line1">{userInfo.name}</div>
+                  <div className="list-line2">{moment(r.time.toDate()).fromNow()}</div>
                 </ListItem>
               )
             })

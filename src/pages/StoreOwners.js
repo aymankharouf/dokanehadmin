@@ -14,7 +14,7 @@ const StoreOwners = props => {
     <Page>
       <Navbar title={`${state.labels.storeOwners} ${store.name}`} backLink={state.labels.back} className="page-title" />
       <Block>
-        <List>
+        <List mediaList>
           {storeOwners.length === 0 ? 
             <ListItem title={state.labels.noData} /> 
           : storeOwners.map(o => {
@@ -22,10 +22,12 @@ const StoreOwners = props => {
               return (
                 <ListItem 
                   link="#"
-                  title={userInfo.name} 
-                  footer={userInfo.mobile}
+                  title={`${state.labels.user}: ${userInfo.name}`} 
                   key={o.id} 
-                />
+                  className= "list-title"
+                >
+                  <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
+                </ListItem>
               )
             })
           }

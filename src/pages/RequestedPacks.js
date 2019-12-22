@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import { quantityText, addQuantity } from '../data/Actions';
@@ -98,8 +98,8 @@ const RequestedPacks = props => {
 									link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
 									title={productInfo.name}
 									after={(p.price / 1000).toFixed(3)}
-									subtitle={packInfo.name}
 									key={i++}
+									className= "list-title"
 								>
 									<div slot="media" className="relative">
 										<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
@@ -111,7 +111,8 @@ const RequestedPacks = props => {
 											</div>
 										: ''}
 									</div>
-									<Badge slot="title" color="green">{quantityText(p.quantity)}</Badge>
+									<div className="list-line1">{packInfo.name}</div>
+									<div className="list-line2">{`${state.labels.requested}: ${quantityText(p.quantity)}`}</div>
 								</ListItem>
 							)
 						})

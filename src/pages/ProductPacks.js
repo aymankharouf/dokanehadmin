@@ -23,15 +23,16 @@ const ProductPacks = props => {
           <p><RatingStars rating={product.rating} /></p>
         </CardFooter>
       </Card>
-      <List>
+      <List mediaList>
         {packs.map(p => 
           <ListItem 
+            link={`/packDetails/${p.id}`}
             title={p.name} 
-            footer={moment(p.time.toDate()).fromNow()} 
             after={p.price ? (p.price / 1000).toFixed(3) : ''} 
             key={p.id} 
-            link={`/packDetails/${p.id}`}
+            className= "list-title"
           >
+            <div className="list-line1">{moment(p.time.toDate()).fromNow()}</div>
             {p.isOffer ? 
               <Badge 
                 slot="title" 

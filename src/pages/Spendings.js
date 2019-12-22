@@ -23,9 +23,11 @@ const Spendings = props => {
                   link={`/editSpending/${s.id}`}
                   title={state.spendingTypes.find(t => t.id === s.type).name}
                   after={(s.spendingAmount / 1000).toFixed(3)}
-                  subtitle={moment(s.time.toDate()).fromNow()}
                   key={s.id}
-                />
+                  className= "list-title"
+                >
+                  <div className="list-line1">{moment(s.time.toDate()).fromNow()}</div>
+                </ListItem>
               )
             })
           }

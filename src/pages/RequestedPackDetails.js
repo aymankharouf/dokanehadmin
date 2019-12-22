@@ -194,12 +194,13 @@ const RequestedPackDetails = props => {
             <p>{props.quantity}</p>
           </CardFooter>
         </Card>
-        <List>
+        <List mediaList>
           {packStores.length === 0 ? 
             <ListItem 
               link="#"
               title={state.labels.unavailable}
               onClick={() => handleUnavailable(false)}
+              className= "list-title"
             />
           : ''}
           {pack.price > Number(props.price) ? 
@@ -207,6 +208,7 @@ const RequestedPackDetails = props => {
               link="#"
               title={state.labels.overPriced}
               onClick={() => handleUnavailable(true)}
+              className= "list-title"
             />
           : ''}
           {packStores.map(s => {
@@ -217,11 +219,12 @@ const RequestedPackDetails = props => {
               <ListItem 
                 link="#"
                 title={storeInfo.name} 
-                footer={`${productInfo.name} ${packInfo.name}`} 
                 after={(s.unitPrice / 1000).toFixed(3)} 
                 key={s.id}
                 onClick={() => handlePurchase(s)}
+                className= "list-title"
               >
+                <div className="list-line1">{`${productInfo.name} ${packInfo.name}`}</div>
                 {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color={s.isOffer ? 'red' : 'green'}>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
               </ListItem>
             )

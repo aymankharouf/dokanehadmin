@@ -24,6 +24,7 @@ const Sections = props => {
                 link={`/section/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
+                className= "list-title"
               />
             )
           }
