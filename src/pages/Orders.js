@@ -21,7 +21,6 @@ const Orders = props => {
                 badge={count} 
                 badgeColor={state.randomColors[i++ % 10].name} 
                 key={s.id}
-                className= "list-title"
               />
             )
           })}

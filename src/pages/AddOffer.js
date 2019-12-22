@@ -84,7 +84,7 @@ const AddOffer = props => {
   return (
     <Page>
       <Navbar title={`${state.labels.addOffer} ${product.name}`} backLink={state.labels.back} className="page-title" />
-      <List>
+      <List form>
         <ListInput 
           name="name" 
           label={state.labels.name}
@@ -157,7 +157,7 @@ const AddOffer = props => {
       <BlockTitle>
         {state.labels.bonusProduct}
       </BlockTitle>
-      <List>
+      <List form>
         <ListItem
           title={state.labels.pack}
           smartSelect

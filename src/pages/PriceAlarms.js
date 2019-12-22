@@ -27,7 +27,6 @@ const PriceAlarms = props => {
                     title={product.name}
                     after={(a.price / 1000).toFixed(3)}
                     key={a.id}
-                    className= "list-title"
                   >
                     <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
                     <div className="list-line1">{pack.name}</div>

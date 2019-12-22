@@ -23,7 +23,6 @@ const StockTrans = props => {
                 title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
                 after={(t.total / 1000).toFixed(3)}
                 key={t.id}
-                className= "list-title"
               >
                 <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
               </ListItem>

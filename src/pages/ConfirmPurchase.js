@@ -53,7 +53,6 @@ const ConfirmPurchase = props => {
                 key={i++} 
                 title={productInfo.name}
                 after={((p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
-                className= "list-title"
               >
                 <div className="list-line1">{packInfo.name}</div>
                 <div className="list-line2">{`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>

@@ -61,7 +61,6 @@ const OrderDetails = props => {
                 key={p.packId} 
                 title={productInfo.name}
                 after={(p.gross / 1000).toFixed(3)}
-                className= "list-title"
               >
                 <div className="list-line1">{packInfo.name}</div>
                 {storeName ? <div className="list-line2">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
@@ -74,7 +73,6 @@ const OrderDetails = props => {
           {order.withDelivery ? 
             <ListItem
               title={state.labels.withDeliveryNote}
-              className= "list-title"
             />
           : ''}
           <ListItem 
@@ -121,7 +119,7 @@ const OrderDetails = props => {
             popoverClose 
             title={state.labels.customerInfo} 
           />
-          {statusActions && statusActions.map(a => 
+          {statusActions.map(a => 
             <ListItem 
               link="#" 
               key={a.id} 

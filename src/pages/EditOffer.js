@@ -155,7 +155,7 @@ const EditOffer = props => {
       <BlockTitle>
         {state.labels.bonusProduct}
       </BlockTitle>
-      <List>
+      <List form>
         <ListItem
           title={state.labels.pack}
           smartSelect

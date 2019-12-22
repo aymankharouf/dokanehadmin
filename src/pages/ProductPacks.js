@@ -30,7 +30,6 @@ const ProductPacks = props => {
             title={p.name} 
             after={p.price ? (p.price / 1000).toFixed(3) : ''} 
             key={p.id} 
-            className= "list-title"
           >
             <div className="list-line1">{moment(p.time.toDate()).fromNow()}</div>
             {p.isOffer ? 

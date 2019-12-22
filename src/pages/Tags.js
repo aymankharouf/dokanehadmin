@@ -20,7 +20,6 @@ const Tags = props => {
                 link={`/editTag/${t.id}`}
                 title={t.name} 
                 key={t.id}
-                className= "list-title"
               />
             )
           }

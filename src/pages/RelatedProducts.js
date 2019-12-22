@@ -24,7 +24,6 @@ const RelatedProducts = props => {
                     link={`/product/${p.id}`}
                     title={p.name}
                     key={p.id}
-                    className= "list-title"
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                     <div className="list-line1">{state.categories.find(c => c.id === p.categoryId).name}</div>

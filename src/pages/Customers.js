@@ -39,7 +39,6 @@ const Customers = props => {
                   link={`/customer/${c.id}/full/1`}
                   title={`${state.labels.user}: ${userInfo.name}`}
                   key={c.id}
-                  className= "list-title"
                 >
                   <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
                   <div className="list-line2">{moment(c.time.toDate()).fromNow()}</div>

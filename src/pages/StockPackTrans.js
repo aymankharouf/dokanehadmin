@@ -67,7 +67,6 @@ const StockPackTrans = props => {
                 after={(t.cost / 1000).toFixed(3)}
                 key={t.id}
                 onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
-                className= "list-title"
               >
                 <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
                 <Badge slot="title" color="red">{t.quantity}</Badge>

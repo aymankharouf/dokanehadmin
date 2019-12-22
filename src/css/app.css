@@ -185,34 +185,34 @@
 
 .list-line1 {
   font-size: 0.8rem;
-  color: red;
+  color:blue;
 }
 
 .list-line2 {
   font-size: 0.8rem;
-  color:blue;
+  color: green;
 }
 
 .list-line3 {
   font-size: 0.8rem;
-  color: green;
+  color:purple;
 }
 
 .list-line4 {
   font-size: 0.8rem;
-  color:purple;
-}
-
-.list-line5 {
-  font-size: 0.8rem;
   color:deeppink;
-}
-
-.list-title {
-  font-size: 1rem;
 }
 
 .page-title {
   font-size: 1rem;
   color: blue;
+}
+
+.item-subtitle {
+  font-size: 0.8rem !important;
+  color:red !important;
+}
+
+.item-title-row {
+  font-size: 1rem;
 }

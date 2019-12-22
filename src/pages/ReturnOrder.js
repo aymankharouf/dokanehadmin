@@ -27,7 +27,6 @@ const ReturnOrder = props => {
                 key={p.packId} 
                 title={productInfo.name}
                 after={(p.gross / 1000).toFixed(3)}
-                className= "list-title"
               >
                 <div className="list-line1">{packInfo.name}</div>
                 {storeName ? <div className="list-line2">{`${state.labels.storeName}: ${storeName}`}</div> : ''}

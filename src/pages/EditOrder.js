@@ -63,7 +63,6 @@ const EditOrder = props => {
               <ListItem
                 title={productInfo.name}
                 key={p.packId}
-                className= "list-title"
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 <div className="list-line1">{packInfo.name}</div>
@@ -81,7 +80,7 @@ const EditOrder = props => {
             )
           })}
         </List>
-        <List>
+        <List form>
           <ListItem>
             <span>{state.labels.withDelivery}</span>
             <Toggle 

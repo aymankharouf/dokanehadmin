@@ -35,7 +35,6 @@ const Products = props => {
                     link={`/product/${p.id}`}
                     title={p.name}
                     key={p.id}
-                    className= "list-title"
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                     {p.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}

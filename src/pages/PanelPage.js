@@ -22,24 +22,22 @@ const PanelPage = props => {
             link="#" 
             title={state.labels.logout} 
             onClick={() => handleLogout()} 
-            className= "list-title"
           />
         :
           <ListItem 
             link="/panelLogin/"
             title={state.labels.login}
-            className= "list-title"
           />
         }
-        {user ? <ListItem link="/changePassword/" title={state.labels.changePassword} className= "list-title" /> : ''}
-        {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/requestedPacks/" title={state.labels.requestedPacks} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/prepareOrders/" title={state.labels.prepareOrders} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/followupOrders/" title={state.labels.followupOrders} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/approvals/" title={state.labels.approvals} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/offers/" title={state.labels.offers} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/profits/" title={state.labels.profits} view="#main-view" panelClose className= "list-title" /> : ''}
-        {user ? <ListItem link="/logs/" title={state.labels.logs} view="#main-view" panelClose className= "list-title" /> : ''}
+        {user ? <ListItem link="/changePassword/" title={state.labels.changePassword} /> : ''}
+        {user ? <ListItem link="/settings/" title={state.labels.settings} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/requestedPacks/" title={state.labels.requestedPacks} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/prepareOrders/" title={state.labels.prepareOrders} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/followupOrders/" title={state.labels.followupOrders} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/approvals/" title={state.labels.approvals} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/offers/" title={state.labels.offers} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/profits/" title={state.labels.profits} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/logs/" title={state.labels.logs} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

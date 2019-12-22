@@ -23,7 +23,6 @@ const Purchases = props => {
                 title={state.stores.find(s => s.id === p.storeId).name}
                 after={((p.total - p.discount) / 1000).toFixed(3)}
                 key={p.id}
-                className= "list-title"
               >
                 <div className="list-line1">{moment(p.time.toDate()).fromNow()}</div>
               </ListItem>

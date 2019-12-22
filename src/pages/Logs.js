@@ -23,7 +23,6 @@ const Logs = props => {
                 <ListItem
                   title={`${state.labels.user}: ${userInfo?.name ?? l.userId}`}
                   key={l.id}
-                  className= "list-title"
                 >
                   {userInfo?.mobile ? <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div> : ''}
                   <div className="list-line2">{moment(l.time.toDate()).fromNow()}</div>

@@ -24,7 +24,6 @@ const PurchaseDetails = props => {
                   title={productInfo.name}
                   after={(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
                   key={p.packId} 
-                  className= "list-title"
                 >
                   <div className="list-line1">{packInfo.name}</div>
                   <Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>

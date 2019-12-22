@@ -37,7 +37,6 @@ const PackTrans = props => {
                 title={state.stores.find(s => s.id === t.storeId).name}
                 after={(t.cost / 1000).toFixed(3)}
                 key={t.id}
-                className= "list-title"
               >
                 <div className="list-line1">{moment(t.time.toDate()).fromNow()}</div>
                 <Badge slot="title" color="red">{t.quantity}</Badge>

@@ -23,7 +23,6 @@ const StockTransDetails = props => {
                 title={productInfo.name}
                 after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
                 key={p.packId}
-                className= "list-title" 
               >
                 <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                 <Badge slot="title" color="red">{p.quantity}</Badge>

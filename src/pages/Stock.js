@@ -41,7 +41,6 @@ const Stock = props => {
                   title={productInfo.name}
                   after={(p.cost / 1000).toFixed(3)}
                   key={p.id}
-                  className= "list-title"
                 >
                   <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
                   <div className="list-line1">{packInfo.name}</div>

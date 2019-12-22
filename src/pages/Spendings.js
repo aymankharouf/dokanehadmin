@@ -24,7 +24,6 @@ const Spendings = props => {
                   title={state.spendingTypes.find(t => t.id === s.type).name}
                   after={(s.spendingAmount / 1000).toFixed(3)}
                   key={s.id}
-                  className= "list-title"
                 >
                   <div className="list-line1">{moment(s.time.toDate()).fromNow()}</div>
                 </ListItem>

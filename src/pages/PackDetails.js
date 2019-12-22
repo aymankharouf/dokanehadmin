@@ -160,7 +160,6 @@ const PackDetails = props => {
           <ListItem 
             title={storeInfo.name} 
             key={s.id}
-            className= "list-title"
           >
             <div className="list-line1">{`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}, ${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}</div>
             {s.quantity ? 

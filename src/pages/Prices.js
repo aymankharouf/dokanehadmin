@@ -20,7 +20,6 @@ const Prices = props => {
                 link={`/storePacks/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
-                className= "list-title"
               />
             )
           }

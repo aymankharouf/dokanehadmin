@@ -20,7 +20,6 @@ const Countries = props => {
                 link={`/editCountry/${c.id}`}
                 title={c.name} 
                 key={c.id}
-                className= "list-title"
               />
             )
           }

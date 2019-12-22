@@ -26,7 +26,6 @@ const ForgetPassword = props => {
                     link={`/retreivePassword/${f.id}`}
                     title={`${state.labels.user}: ${userInfo.name}`}
                     key={f.id}
-                    className= "list-title"
                   >
                     <div className="list-line1">{`${state.labels.mobile}: ${userInfo.mobile}`}</div>
                     <div className="list-line2">{moment(f.time.toDate()).fromNow()}</div>
