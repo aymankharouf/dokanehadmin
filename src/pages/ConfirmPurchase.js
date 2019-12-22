@@ -42,7 +42,7 @@ const ConfirmPurchase = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-    <Navbar title={`${state.labels.confirmPurchase} ${store.name}`} backLink={state.labels.back} className="page-title" />
+    <Navbar title={`${state.labels.confirmPurchase} ${store.name}`} backLink={state.labels.back} />
     <Block>
         <List mediaList>
           {state.basket.packs && state.basket.packs.map(p => {

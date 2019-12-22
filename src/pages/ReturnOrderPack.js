@@ -54,7 +54,7 @@ const ReturnOrderPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />

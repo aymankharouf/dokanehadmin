@@ -16,7 +16,7 @@ const OrdersList = props => {
   }, [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${state.labels.orders} ${status.name}`} backLink={state.labels.back} className="page-title">
+      <Navbar title={`${state.labels.orders} ${status.name}`} backLink={state.labels.back}>
       <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

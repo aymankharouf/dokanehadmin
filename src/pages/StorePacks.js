@@ -13,7 +13,7 @@ const StorePacks = props => {
   }, [state.storePacks, props.id])
   return(
     <Page>
-      <Navbar title={`${store.name}`} backLink={state.labels.back} className="page-title">
+      <Navbar title={`${store.name}`} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

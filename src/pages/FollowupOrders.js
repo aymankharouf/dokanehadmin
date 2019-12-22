@@ -9,7 +9,7 @@ const FollowupOrders = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.followupOrders} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.followupOrders} backLink={state.labels.back} />
       <Block>
         {state.orderPositions.map(p => {
           const orders = state.orders.filter(o => o.position === p.id)

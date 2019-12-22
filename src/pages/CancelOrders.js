@@ -14,7 +14,7 @@ const CancelOrders = props => {
   }, [state.cancelOrders])
   return(
     <Page>
-      <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {cancelOrders.length === 0 ? 

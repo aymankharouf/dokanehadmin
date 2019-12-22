@@ -13,7 +13,7 @@ const ForgetPassword = props => {
   } , [state.forgetPassword])
   return(
     <Page>
-      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} />
       <Block>
           <List mediaList>
             {forgetPassword.length === 0 ? 

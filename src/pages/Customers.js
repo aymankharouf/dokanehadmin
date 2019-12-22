@@ -12,7 +12,7 @@ const Customers = props => {
   , [state.customers]) 
   return(
     <Page>
-      <Navbar title={state.labels.customers} backLink={state.labels.back} className="page-title">
+      <Navbar title={state.labels.customers} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

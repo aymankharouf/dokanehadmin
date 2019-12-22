@@ -82,7 +82,7 @@ const EditOffer = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.editOffer} ${product.name}`} backLink={state.labels.back} className="page-title" />
+      <Navbar title={`${state.labels.editOffer} ${product.name}`} backLink={state.labels.back} />
       <List form>
         <ListInput 
           name="name" 

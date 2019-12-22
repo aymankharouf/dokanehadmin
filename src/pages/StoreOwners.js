@@ -12,7 +12,7 @@ const StoreOwners = props => {
   , [state.customers, props.id])
   return (
     <Page>
-      <Navbar title={`${state.labels.storeOwners} ${store.name}`} backLink={state.labels.back} className="page-title" />
+      <Navbar title={`${state.labels.storeOwners} ${store.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {storeOwners.length === 0 ? 

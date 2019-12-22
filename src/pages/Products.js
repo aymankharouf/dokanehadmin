@@ -9,7 +9,7 @@ const Products = props => {
   , [state.products])
   return(
     <Page>
-      <Navbar title={state.labels.allProducts} backLink={state.labels.back} className="page-title">
+      <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

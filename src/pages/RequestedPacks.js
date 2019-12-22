@@ -84,7 +84,7 @@ const RequestedPacks = props => {
 	}, [state.basket, approvedOrders, state.packs, state.labels])
   return(
     <Page>
-      <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} />
       <Block>
 				<List mediaList>
 					{requiredPacks.length === 0 ? 

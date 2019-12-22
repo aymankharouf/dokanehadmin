@@ -14,7 +14,7 @@ const NewUsers = props => {
   }, [state.users, state.customers])
   return(
     <Page>
-      <Navbar title={state.labels.newUsers} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.newUsers} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {newUsers.length === 0 ? 

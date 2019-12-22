@@ -12,7 +12,7 @@ const FollowupOrdersList = props => {
   , [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${state.labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={state.labels.back} className="page-title" />
+      <Navbar title={`${state.labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 

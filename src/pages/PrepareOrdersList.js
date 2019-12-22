@@ -14,7 +14,7 @@ const PrepareOrdersList = props => {
   }, [state.orders, props.orderId, props.packId])
   return(
     <Page>
-      <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 

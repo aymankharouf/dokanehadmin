@@ -10,7 +10,7 @@ const Tags = props => {
   , [state.tags])
   return (
     <Page>
-      <Navbar title={state.labels.tags} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.tags} backLink={state.labels.back} />
       <Block>
         <List>
           {tags.length === 0 ? 

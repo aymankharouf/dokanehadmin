@@ -12,7 +12,7 @@ const StockTransDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.stockTransDetails} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.stockTransDetails} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {stockTrans.basket.map(p => {

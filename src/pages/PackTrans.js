@@ -27,7 +27,7 @@ const PackTrans = props => {
   }, [state.purchases, pack])
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} className="page-title" />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {packTrans.length === 0 ? 

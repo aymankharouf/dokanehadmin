@@ -47,7 +47,7 @@ const OrderDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.orderDetails} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {order.basket.map(p => {

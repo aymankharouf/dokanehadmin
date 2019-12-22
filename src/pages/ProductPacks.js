@@ -13,7 +13,7 @@ const ProductPacks = props => {
   , [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} className="page-title" />
+      <Navbar title={product.name} backLink={state.labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />

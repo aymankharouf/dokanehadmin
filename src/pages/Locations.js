@@ -11,7 +11,7 @@ const Locations = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.locations} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.locations} backLink={state.labels.back} />
       <Block>
         <List>
           {locations.length === 0 ? 

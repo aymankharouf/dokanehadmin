@@ -203,11 +203,6 @@
   color:deeppink;
 }
 
-.page-title {
-  font-size: 1rem;
-  color: blue;
-}
-
 .item-subtitle {
   font-size: 0.8rem !important;
   color:red !important;
@@ -215,4 +210,9 @@
 
 .item-title-row {
   font-size: 1rem;
+}
+
+.navbar-inner {
+  font-size: 1rem;
+  color: blue;
 }

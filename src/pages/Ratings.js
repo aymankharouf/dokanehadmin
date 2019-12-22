@@ -13,7 +13,7 @@ const Ratings = props => {
   }, [state.ratings])
   return(
     <Page>
-      <Navbar title={state.labels.approveRatings} backLink={state.labels.back} className="page-title" />
+      <Navbar title={state.labels.approveRatings} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {ratings.length === 0 ? 
