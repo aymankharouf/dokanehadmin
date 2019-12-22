@@ -2,6 +2,7 @@ import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/Actions';
+import PackImage from './PackImage'
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -58,16 +59,15 @@ const EditOrder = props => {
         <List mediaList>
           {orderBasket && orderBasket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
-                title={productInfo.name}
+                title={state.products.find(pr => pr.id === packInfo.productId).name}
                 subtitle={packInfo.name}
                 text={`${state.labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
                 footer={quantityDetails(p)}
                 key={p.packId}
               >
-                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <PackImage slot="media" pack={packInfo} type="list" />
                 <div className="list-subtext1">{`${state.labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"

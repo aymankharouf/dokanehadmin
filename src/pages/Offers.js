@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import moment from 'moment'
+import PackImage from './PackImage'
 
 const Offers = props => {
   const { state } = useContext(StoreContext)
@@ -31,7 +32,7 @@ const Offers = props => {
                     after={(p.price / 1000).toFixed(3)}
                     key={p.id}
                   >
-                    <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                    <PackImage slot="media" pack={packInfo} type="list" />
                     {storeName ? <div className="list-subtext1">{`${state.labels.storeName}: ${storeName}`}</div> : ''}
                   </ListItem>
                 )

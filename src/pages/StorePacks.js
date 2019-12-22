@@ -2,6 +2,9 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
+import moment from 'moment'
+import 'moment/locale/ar'
+import PackImage from './PackImage'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
@@ -36,26 +39,16 @@ const StorePacks = props => {
           : storePacks.map(p => {
               const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-              const bonusProduct = packInfo.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === packInfo.bonusPackId).productId) : ''
               return (
                 <ListItem
                   link={`/storePack/${p.id}`}
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  text={(p.time.toDate()).fromNow()}
+                  text={moment(p.time.toDate()).fromNow()}
                   after={(p.price / 1000).toFixed(3)}
                   key={p.id}
                 >
-                  <div slot="media" className="relative">
-                    <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-                    {packInfo.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${packInfo.offerQuantity}`}</span> : ''}
-                    {packInfo.bonusPackId ? 
-                      <div>
-                        <img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
-                        {packInfo.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${packInfo.bonusQuantity}`}</span> : ''}
-                      </div>
-                    : ''}
-                  </div>
+                  <PackImage slot="media" pack={packInfo} type="list" />
                   {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
                   {packInfo.isOffer || packInfo.hasOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
                 </ListItem>

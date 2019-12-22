@@ -3,7 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
-
+import PackImage from './PackImage'
 
 const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -17,17 +17,16 @@ const StockTransDetails = props => {
         <List mediaList>
           {stockTrans.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem 
-                title={productInfo.name}
+                title={state.products.find(pr => pr.id === packInfo.productId).name}
                 subtitle={packInfo.name}
                 after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
                 badge={p.quantity}
                 badgeColor="red"
                 key={p.packId}
               >
-                <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                <PackImage slot="media" pack={packInfo} type="list" />
               </ListItem>
             )}
           )}

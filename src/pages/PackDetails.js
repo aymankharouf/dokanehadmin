@@ -3,6 +3,7 @@ import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab,
 import { StoreContext } from '../data/Store'
 import { refreshPackPrice, showMessage, showError, getMessage } from '../data/Actions'
 import BottomToolbar from './BottomToolbar';
+import PackImage from './PackImage'
 
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -11,8 +12,6 @@ const PackDetails = props => {
   , [state.packs, props.id])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
-  const bonusProduct = useMemo(() => pack.bonusPackId ? state.products.find(p => p.id === state.packs.find(pa => pa.id === pack.bonusPackId).productId) : ''
-  , [pack, state.products, state.packs])
   const packStores = useMemo(() => {
     let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === pack.id || pa.bonusPackId === pack.id))))
     packStores = packStores.map(s => {
@@ -138,16 +137,7 @@ const PackDetails = props => {
       <Card>
         <CardContent>
           <div className="card-title">{pack.name}</div>
-            <div className="relative">
-              <img src={product.imageUrl} className="img-card" alt={product.name} />
-              {pack.offerQuantity > 1 ? <span className="offer-quantity-card">{`× ${pack.offerQuantity}`}</span> : ''}
-              {pack.bonusPackId ? 
-                <div>
-                  <img src={bonusProduct.imageUrl} className="bonus-img-card" alt={bonusProduct.name} />
-                  {pack.bonusQuantity > 1 ? <span className="bonus-quantity-card">{`× ${pack.bonusQuantity}`}</span> : ''}
-                </div>
-              : ''}
-            </div>
+          <PackImage pack={pack} type="card" />
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>

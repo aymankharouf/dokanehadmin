@@ -3,6 +3,7 @@ import { Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon, FabBut
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store'
 import { showError, returnOrderPacks, showMessage, getMessage } from '../data/Actions'
+import PackImage from './PackImage'
 
 const ReturnOrderPack = props => {
   const { state } = useContext(StoreContext)
@@ -57,7 +58,7 @@ const ReturnOrderPack = props => {
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
+          <PackImage pack={pack} type="card" />
         </CardContent>
         <CardFooter>
           <p>{(orderPack.actual / 1000).toFixed(3)}</p>

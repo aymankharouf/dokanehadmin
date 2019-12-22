@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
+import PackImage from './PackImage'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
@@ -46,7 +47,7 @@ const Stock = props => {
                   badgeColor="red"
                   key={p.id}
                 >
-                  <img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+                  <PackImage slot="media" pack={packInfo} type="list" />
                 </ListItem>
               )
             })

@@ -5,6 +5,7 @@ import { StoreContext } from '../data/Store';
 import moment from 'moment'
 import 'moment/locale/ar'
 import { approvePriceAlarm, rejectPriceAlarm, showMessage, showError, getMessage } from '../data/Actions'
+import PackImage from './PackImage'
 
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
@@ -77,7 +78,7 @@ const PriceAlarmDetails = props => {
       </Fab>
       <Card>
         <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
+          <PackImage pack={pack} type="card" />
           <p>{`${userInfo.name} ${userInfo.mobile}`}</p>
           <p>{`${state.labels.storeName}: ${storeName}`}</p>
           <p>{`${state.labels.location}: ${storeLocation}`}</p>

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { editPrice, showMessage, showError, getMessage } from '../data/Actions'
-
+import PackImage from './PackImage'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
@@ -11,8 +11,6 @@ const EditPrice = props => {
   , [state.storePacks, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
   , [state.packs, storePack])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const store = useMemo(() => state.stores.find(s => s.id === storePack.storeId)
   , [state.stores, storePack])
   const [cost, setCost] = useState('')
@@ -59,11 +57,11 @@ const EditPrice = props => {
       <Navbar title={`${state.labels.editPrice} ${store.name}`} backLink={state.labels.back} />
       <Card>
         <CardHeader>
-          <p>{product.name}</p>
+          <p>{state.products.find(p => p.id === pack.productId).name}</p>
           <p>{pack.name}</p>
         </CardHeader>
         <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
+          <PackImage pack={pack} type="card" />
         </CardContent>
       </Card>
       <List form>

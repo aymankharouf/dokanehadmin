@@ -3,6 +3,7 @@ import { Block, Page, Navbar, Toolbar, List, ListItem, Badge } from 'framework7-
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import { quantityText } from '../data/Actions'
+import PackImage from './PackImage'
 
 const PrepareOrders = props => {
   const { state } = useContext(StoreContext)
@@ -45,15 +46,14 @@ const PrepareOrders = props => {
 						<ListItem title={state.labels.noData} /> 
 					: packs.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
-							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 							return (
 								<ListItem
 									link={`/prepareOrders/${p.packId}/order/${p.orderId}`}
-									title={productInfo.name}
+									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									key={i++}
 								>
-									<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
+									<PackImage slot="media" pack={packInfo} type="list" />
 									<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
 								</ListItem>
 							)

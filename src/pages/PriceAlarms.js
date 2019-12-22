@@ -30,7 +30,7 @@ const PriceAlarms = props => {
                     after={(a.price / 1000).toFixed(3)}
                     key={a.id}
                   >
-                    <PackImage slot="media" pack={pack} />
+                    <PackImage slot="media" pack={pack} type="list" />
                   </ListItem>
                 )
               })

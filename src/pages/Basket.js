@@ -40,7 +40,7 @@ const Basket = props => {
                 footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
                 key={i++}
               >
-                <PackImage slot="media" pack={packInfo} />
+                <PackImage slot="media" pack={packInfo} type="list" />
                 {p.weight ? <div className="list-subtext1">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
                 <div className="list-subtext2">{`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}`}</div>
                 <Stepper

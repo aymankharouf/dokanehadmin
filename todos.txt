@@ -131,7 +131,7 @@ advertisements & request for advert from store owner
 blacklist customer who did not pick his order
 store trans --purchases & returns
 delivery intervals
-test & load test
+test & load test & code review
 detect device size note
 button to add shortcut PWA
 note for stop the service

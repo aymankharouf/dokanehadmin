@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import { quantityText, addQuantity } from '../data/Actions';
+import PackImage from './PackImage'
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
@@ -91,27 +92,16 @@ const RequestedPacks = props => {
 						<ListItem title={state.labels.noData} /> 
 					: requiredPacks.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
-							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-							const bonusProduct = p.bonusPackId ? state.products.find(pr => pr.id === state.packs.find(pa => pa.id === p.bonusPackId).productId) : ''
 							return (
 								<ListItem
 									link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
-									title={productInfo.name}
+									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									text={`${state.labels.requested}: ${quantityText(p.quantity)}`}
 									after={(p.price / 1000).toFixed(3)}
 									key={i++}
 								>
-									<div slot="media" className="relative">
-										<img slot="media" src={productInfo.imageUrl} className="img-list" alt={productInfo.name} />
-										{p.offerQuantity > 1 ? <span slot="media" className="offer-quantity-list">{`× ${p.offerQuantity}`}</span> : ''}
-										{p.bonusPackId ? 
-											<div>
-												<img slot="media" src={bonusProduct.imageUrl} className="bonus-img-list" alt={bonusProduct.name} />
-												{p.bonusQuantity > 1 ? <span slot="media" className="bonus-quantity-list">{`× ${p.bonusQuantity}`}</span> : ''}
-											</div>
-										: ''}
-									</div>
+									<PackImage slot="media" pack={packInfo} type="list" />
 								</ListItem>
 							)
 						})
