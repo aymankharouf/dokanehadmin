@@ -87,6 +87,8 @@ import Tags from './pages/Tags';
 import AddTag from './pages/AddTag';
 import EditTag from './pages/EditTag';
 import RelatedProducts from './pages/RelatedProducts';
+import AddBulk from './pages/AddBulk';
+import EditBulk from './pages/EditBulk';
 
 export default [
   {
@@ -459,6 +461,14 @@ export default [
   {
     path: '/relatedProducts/:id',
     component: RelatedProducts
+  },
+  {
+    path: '/addBulk/:id',
+    component: AddBulk
+  },
+  {
+    path: '/addBulk/:id',
+    component: EditBulk
   },
   {
     path: '(.*)',

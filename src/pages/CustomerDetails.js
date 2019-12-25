@@ -21,7 +21,7 @@ const CustomerDetails = props => {
     <Page>
       <Navbar title={state.labels.customerDetails} backLink={state.labels.back} />
       {props.full === '0' ? '' :
-        <Fab position="left-top" slot="fixed" color="red" href={`/editCustomer/${props.id}`}>
+        <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/editCustomer/${props.id}`}>
           <Icon material="edit"></Icon>
         </Fab>
       }

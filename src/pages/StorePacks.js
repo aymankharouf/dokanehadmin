@@ -58,7 +58,7 @@ const StorePacks = props => {
         </List>
       </Block>
       {store.id === 's' ? '' : 
-        <Fab position="left-top" slot="fixed" color="green" href={`/addStorePack/${props.id}`}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/addStorePack/${props.id}`}>
           <Icon material="add"></Icon>
         </Fab>
       }

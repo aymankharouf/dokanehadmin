@@ -14,17 +14,17 @@ const EditOffer = props => {
 
   const [name, setName] = useState(pack.name)
   const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
-  const [offerPackId, setOfferPackId] = useState(pack.offerPackId)
-  const [offerQuantity, setOfferQuantity] = useState(pack.offerQuantity)
-  const [offerPercent, setOfferPercent] = useState(pack.offerPercent)
+  const [subPackId, setSubPackId] = useState(pack.subPackId)
+  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
+  const [subPercent, setSubPercent] = useState(pack.subPercent)
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
   const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
-  const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight)
+  const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight)
   , [state.packs, pack])
   const bonusPacks = useMemo(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.isOffer && !p.byWeight)
+    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
     packs = packs.map(p => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
@@ -37,15 +37,15 @@ const EditOffer = props => {
   const hasChanged = useMemo(() => {
     if (name !== pack.name) return true
     if (orderLimit !== pack.orderLimit) return true
-    if (offerPackId !== pack.offerPackId) return true
-    if (offerQuantity !== pack.offerQuantity) return true
-    if (offerPercent !== pack.offerPercent) return true
+    if (subPackId !== pack.subPackId) return true
+    if (subQuantity !== pack.subQuantity) return true
+    if (subPercent !== pack.subPercent) return true
     if (bonusPackId !== pack.bonusPackId) return true
     if (bonusQuantity !== pack.bonusQuantity) return true
     if (bonusPercent !== pack.bonusPercent) return true
     if (closeExpired !== pack.closeExpired) return true
     return false
-  }, [pack, name, orderLimit, offerPackId, offerQuantity, offerPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
+  }, [pack, name, orderLimit, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
 
   useEffect(() => {
     if (error) {
@@ -55,18 +55,18 @@ const EditOffer = props => {
   }, [error, props])
   const handleSubmit = async () => {
     try{
-      if (Number(offerPercent) + Number(bonusPercent) !== 100) {
+      if (Number(subPercent) + Number(bonusPercent) !== 100) {
         throw new Error('invalidPercents')
       }
-      const offerPackInfo = state.packs.find(p => p.id === offerPackId)
+      const subPackInfo = state.packs.find(p => p.id === subPackId)
       const newPack = {
         ...pack,
         name,
-        offerPackId,
-        offerQuantity: Number(offerQuantity),
-        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits || 0)),
+        subPackId,
+        subQuantity: Number(subQuantity),
+        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         orderLimit: Number(orderLimit),
-        offerPercent: Number(offerPercent),
+        subPercent: Number(subPercent),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: Number(bonusPercent),
@@ -105,7 +105,7 @@ const EditOffer = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="offerPackId" value={offerPackId} onChange={e => setOfferPackId(e.target.value)}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -113,24 +113,24 @@ const EditOffer = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="offerQuantity" 
+          name="subQuantity" 
           label={state.labels.quantity}
-          value={offerQuantity}
+          value={subQuantity}
           clearButton
           floatingLabel 
           type="number" 
-          onChange={e => setOfferQuantity(e.target.value)}
-          onInputClear={() => setOfferQuantity('')}
+          onChange={e => setSubQuantity(e.target.value)}
+          onInputClear={() => setSubQuantity('')}
         />
         <ListInput 
-          name="offerPercent" 
+          name="subPercent" 
           label={state.labels.percent}
-          value={offerPercent}
+          value={subPercent}
           clearButton
           floatingLabel 
           type="number" 
-          onChange={e => setOfferPercent(e.target.value)}
-          onInputClear={() => setOfferPercent('')}
+          onChange={e => setSubPercent(e.target.value)}
+          onInputClear={() => setSubPercent('')}
         />
         <ListItem>
           <span>{state.labels.closeExpired}</span>
@@ -195,8 +195,8 @@ const EditOffer = props => {
           onInputClear={() => setBonusPercent('')}
         />
       </List>
-      {!name || !offerPackId || !offerQuantity || !offerPercent || !hasChanged ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !subPackId || !subQuantity || !subPercent || !hasChanged ? '' :
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

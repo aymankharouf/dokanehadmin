@@ -10,8 +10,8 @@ const PackImage = props => {
   return (
     <div className="relative">
       <img src={product.imageUrl} className={`img-${props.type}`} alt={product.name} />
-      {props.pack.offerQuantity > 1 ? 
-        <span className={`offer-quantity-${props.type}`}>{`× ${props.pack.offerQuantity}`}</span> 
+      {props.pack.subQuantity > 1 ? 
+        <span className={`offer-quantity-${props.type}`}>{`× ${props.pack.subQuantity}`}</span> 
       : ''}
       {props.pack.bonusPackId ? 
         <div>

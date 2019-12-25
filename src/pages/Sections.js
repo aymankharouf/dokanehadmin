@@ -12,7 +12,7 @@ const Sections = props => {
   return (
     <Page>
       <Navbar title={state.labels.sections} backLink={state.labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" href="/addSection/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addSection/">
         <Icon material="add"></Icon>
       </Fab>
       <Block>

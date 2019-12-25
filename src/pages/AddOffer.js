@@ -9,19 +9,19 @@ const AddOffer = props => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [orderLimit, setOrderLimit] = useState('')
-  const [offerPackId, setOfferPackId] = useState('')
-  const [offerQuantity, setOfferQuantity] = useState('')
-  const [offerPercent, setOfferPercent] = useState(100)
+  const [subPackId, setSubPackId] = useState('')
+  const [subQuantity, setSubQuantity] = useState('')
+  const [subPercent, setSubPercent] = useState(100)
   const [bonusPackId, setBonusPackId] = useState('')
   const [bonusQuantity, setBonusQuantity] = useState('')
   const [bonusPercent, setBonusPercent] = useState('')
   const [closeExpired, setCloseExpired] = useState(false)
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
-  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight)
+  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight)
   , [state.packs, props.id])
   const bonusPacks = useMemo(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.isOffer && !p.byWeight)
+    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
     packs = packs.map(p => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
@@ -33,13 +33,13 @@ const AddOffer = props => {
   }, [state.packs, state.products, props.id]) 
   const generateName = () => {
     let suggestedName
-    if (offerPackId && offerQuantity) {
-      suggestedName = `${offerQuantity > 1 ? '×' + offerQuantity : ''} ${state.packs.find(p => p.id === offerPackId).name}`
+    if (subPackId && subQuantity) {
+      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''} ${state.packs.find(p => p.id === subPackId).name}`
       if (!name) setName(suggestedName)
     }
     if (name === suggestedName && bonusPackId && bonusQuantity) {
       const bonusPackInfo = bonusPacks.find(p => p.id === bonusPackId)
-      suggestedName += ` + ${bonusQuantity > 1 ? '×' + bonusQuantity : ''} ${bonusPackInfo.name}`
+      suggestedName += ` + ${bonusQuantity > 1 ? bonusQuantity + '×' : ''} ${bonusPackInfo.name}`
       setName(suggestedName)
     }
   }
@@ -51,22 +51,22 @@ const AddOffer = props => {
   }, [error, props])
   const handleSubmit = async () => {
     try{
-      if (Number(offerPercent) + Number(bonusPercent) !== 100) {
+      if (Number(subPercent) + Number(bonusPercent) !== 100) {
         throw new Error('invalidPercents')
       }
-      const offerPackInfo = state.packs.find(p => p.id === offerPackId)
+      const subPackInfo = state.packs.find(p => p.id === subPackId)
       const pack = {
         productId: props.id,
         name,
         isOffer: true,
         closeExpired,
         price: 0,
-        offerPackId,
-        offerQuantity: Number(offerQuantity),
-        offerPercent: Number(offerPercent),
-        unitsCount: Number(offerQuantity) * (offerPackInfo.unitsCount + (offerPackInfo.bonusUnits || 0)),
-        isDivided: offerPackInfo.isDivided,
-        byWeight: offerPackInfo.byWeight,
+        subPackId,
+        subQuantity: Number(subQuantity),
+        subPercent: Number(subPercent),
+        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
+        isDivided: subPackInfo.isDivided,
+        byWeight: subPackInfo.byWeight,
         orderLimit: Number(orderLimit),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
@@ -106,7 +106,12 @@ const AddOffer = props => {
             popupCloseLinkText: state.labels.close
           }}
         >
-          <select name="offerPackId" value={offerPackId} onChange={e => setOfferPackId(e.target.value)} onBlur={() => generateName()}>
+          <select 
+            name="subPackId" 
+            value={subPackId} 
+            onChange={e => setSubPackId(e.target.value)} 
+            onBlur={() => generateName()}
+          >
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -114,25 +119,25 @@ const AddOffer = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="offerQuantity" 
+          name="subQuantity" 
           label={state.labels.quantity}
-          value={offerQuantity}
+          value={subQuantity}
           clearButton
           floatingLabel 
           type="number" 
-          onChange={e => setOfferQuantity(e.target.value)}
-          onInputClear={() => setOfferQuantity('')}
+          onChange={e => setSubQuantity(e.target.value)}
+          onInputClear={() => setSubQuantity('')}
           onBlur={() => generateName()}
         />
         <ListInput 
-          name="offerPercent" 
+          name="subPercent" 
           label={state.labels.percent}
-          value={offerPercent}
+          value={subPercent}
           clearButton
           floatingLabel 
           type="number" 
-          onChange={e => setOfferPercent(e.target.value)}
-          onInputClear={() => setOfferPercent('')}
+          onChange={e => setSubPercent(e.target.value)}
+          onInputClear={() => setSubPercent('')}
         />
         <ListItem>
           <span>{state.labels.closeExpired}</span>
@@ -198,8 +203,8 @@ const AddOffer = props => {
           onInputClear={() => setBonusPercent('')}
         />
       </List>
-      {!name || !offerPackId || !offerQuantity  || !offerPercent ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+      {!name || !subPackId || !subQuantity  || !subPercent ? '' :
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

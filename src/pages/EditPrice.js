@@ -49,7 +49,7 @@ const EditPrice = props => {
         offerEnd,
         time: new Date()
       }
-      await editPrice(newStorePack, storePack.price, pack, state.storePacks)
+      await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)
       showMessage(props, state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -117,7 +117,7 @@ const EditPrice = props => {
         />
       </List>
       {!price || (store.type === '5' && (!cost || !quantity)) ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

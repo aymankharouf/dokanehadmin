@@ -22,7 +22,7 @@ const StorePackDetails = props => {
   const handleDelete = () => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
-        await deleteStorePack(storePack, pack, state.storePacks)
+        await deleteStorePack(storePack, pack, state.storePacks, state.packs)
         showMessage(props, state.labels.deleteSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
       } catch(err) {
@@ -46,7 +46,7 @@ const StorePackDetails = props => {
       if (offerEndDate > today) {
         props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
           try{
-            await haltOffer(storePack, pack, state.storePacks)
+            await haltOffer(storePack, pack, state.storePacks, state.packs)
             showMessage(props, state.labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {

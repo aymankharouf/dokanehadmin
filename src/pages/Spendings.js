@@ -31,7 +31,7 @@ const Spendings = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addSpending/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addSpending/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

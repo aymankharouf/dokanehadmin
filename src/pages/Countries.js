@@ -25,7 +25,7 @@ const Countries = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addCountry/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addCountry/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

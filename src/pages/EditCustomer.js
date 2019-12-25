@@ -229,7 +229,7 @@ const EditCustomer = props => {
         <BottomToolbar/>
       </Toolbar>
       {!name || !locationId || !hasChanged ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

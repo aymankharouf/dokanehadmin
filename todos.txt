@@ -138,3 +138,4 @@ note for stop the service
 merging orders
 add offer request
 stores last month trans & requested packs that can be purchased from
+partial purchase from offer

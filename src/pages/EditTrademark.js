@@ -44,7 +44,7 @@ const EditTrademark = props => {
         />
       </List>
       {!name || (name === trademark.name) ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

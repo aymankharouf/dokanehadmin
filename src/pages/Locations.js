@@ -27,7 +27,7 @@ const Locations = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addLocation/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addLocation/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>

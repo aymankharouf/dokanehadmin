@@ -60,6 +60,11 @@ const ProductPacks = props => {
             title={state.labels.addOffer}
           />
           <ListItem 
+            link={`/addBulk/${props.id}`}
+            popoverClose 
+            title={state.labels.addBulk}
+          />
+          <ListItem 
             link={`/relatedProducts/${props.id}`}
             popoverClose 
             title={state.labels.relatedProducts}

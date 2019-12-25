@@ -17,7 +17,7 @@ const RequestedPackDetails = props => {
     return basketStock?.quantity || 0
   }, [state.basket, props.packId])
   const packStores = useMemo(() => {
-    let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
+    let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
     packStores = packStores.map(s => {
       let packId, unitPrice, quantity, offerInfo, isOffer
       if (s.packId === props.packId) {
@@ -26,11 +26,11 @@ const RequestedPackDetails = props => {
         quantity = s.quantity
         isOffer = false
       } else {
-        offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === props.packId)
+        offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === props.packId)
         if (offerInfo) {
           packId = offerInfo.id
-          unitPrice = parseInt((s.cost / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
-          quantity = offerInfo.offerQuantity
+          unitPrice = parseInt((s.cost / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+          quantity = offerInfo.subQuantity
           isOffer = true
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)

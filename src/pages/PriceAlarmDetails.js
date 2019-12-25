@@ -42,7 +42,7 @@ const PriceAlarmDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks)
+      await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.packs)
       showMessage(props, state.labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
@@ -62,7 +62,7 @@ const PriceAlarmDetails = props => {
   return (
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
-      <Fab position="left-top" slot="fixed" color="blue">
+      <Fab position="left-top" slot="fixed" color="blue" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">

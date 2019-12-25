@@ -70,7 +70,7 @@ const ProductDetails = props => {
         </ListItem>
         <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
-      <Fab position="left-top" slot="fixed" color="red" href={`/editProduct/${props.id}`}>
+      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/editProduct/${props.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
     </Page>

@@ -13,7 +13,7 @@ const PackDetails = props => {
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
   , [state.products, pack])
   const packStores = useMemo(() => {
-    let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.offerPackId === pack.id || pa.bonusPackId === pack.id))))
+    let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
     packStores = packStores.map(s => {
       let packId, unitCost, quantity, offerInfo, isOffer
       if (s.packId === pack.id) {
@@ -22,12 +22,12 @@ const PackDetails = props => {
         quantity = s.quantity
         isOffer = false
       } else {
-        offerInfo = state.packs.find(p => p.id === s.packId && p.offerPackId === pack.id)
+        offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id)
         if (offerInfo) {
           packId = offerInfo.id
-          unitCost = parseInt((s.cost / offerInfo.offerQuantity) * (offerInfo.offerPercent / 100))
-          quantity = offerInfo.offerQuantity
-          isOffer = true
+          unitCost = parseInt((s.cost / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+          quantity = offerInfo.subQuantity
+          isOffer = (s.cost === s.price) // false for type 5
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
           if (offerInfo) {
@@ -96,11 +96,11 @@ const PackDetails = props => {
           params = {
             pack: packInfo,
             packStore,
-            quantity : packInfo.isDivided ? Number(weight) : (packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity),
+            quantity : packInfo.isDivided ? Number(weight) : 1,
             price: packStore.price,
             orderId: props.orderId,
             weight: Number(weight),
-            increment: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity
+            increment: 1
           }
           dispatch({type: 'ADD_TO_BASKET', params})
           showMessage(props, state.labels.addToBasketSuccess)
@@ -110,10 +110,10 @@ const PackDetails = props => {
         params = {
           pack: packInfo, 
           packStore,
-          quantity: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity,
+          quantity: 1,
           price: packStore.price,
           orderId: props.orderId,
-          increment: packStore.isOffer || !packStore.quantity ? 1 : packStore.quantity,
+          increment: 1,
         }
         dispatch({type: 'ADD_TO_BASKET', params})
         showMessage(props, state.labels.addToBasketSuccess)
@@ -125,7 +125,7 @@ const PackDetails = props => {
 	}
   const handleRefreshPrice = async () => {
     try{
-      await refreshPackPrice(pack, state.storePacks)
+      await refreshPackPrice(pack, state.storePacks, state.packs)
       showMessage(props, state.labels.refreshSuccess)
     } catch(err) {
 			setError(getMessage(props, err))
@@ -164,14 +164,14 @@ const PackDetails = props => {
         )
       })}
       </List>
-      <Fab position="left-top" slot="fixed" color="orange">
+      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
           <FabButton color="green" onClick={() => props.f7router.navigate(`/addPackStore/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => props.f7router.navigate(`/${pack.isOffer ? 'editOffer' : 'editPack'}/${props.id}`)}>
+          <FabButton color="blue" onClick={() => props.f7router.navigate(`/${pack.isOffer ? 'editOffer' : (pack.subPackId ? 'editBulk' : 'editPack')}/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
           <FabButton color="yellow" onClick={() => handleRefreshPrice()}>

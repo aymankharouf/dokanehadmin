@@ -44,7 +44,7 @@ const Stores = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addStore/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addStore/">
         <Icon material="add"></Icon>
       </Fab>
       {stock ? '' : 

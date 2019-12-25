@@ -7,12 +7,12 @@ import { StoreContext } from '../data/Store';
 const Settings = props => {
   const { state } = useContext(StoreContext)
   const sections = useMemo(() => [
-    {id: '1', name: 'المحال', path: 'stores'},
+    {id: '1', name: 'المحلات', path: 'stores'},
     {id: '2', name: 'الدول', path: 'countries'},
     {id: '3', name: 'اﻻقسام', path: 'sections'},
     {id: '4', name: 'العلامات التجارية', path: 'trademarks'},
     {id: '5', name: 'المواقع', path: 'locations'},
-    {id: '6', name: 'المجموعات', path: 'tags'}
+    {id: '6', name: 'الفئات', path: 'tags'}
   ], [])
   let i = 0
   return(

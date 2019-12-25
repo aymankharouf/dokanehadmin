@@ -128,7 +128,7 @@ const EditSpending = props => {
         />
       </List>
       {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage || !hasChanged ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleEdit()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

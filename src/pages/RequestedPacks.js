@@ -50,11 +50,11 @@ const RequestedPacks = props => {
 					if (inBasket) {
 						inBasketQuantity = inBasket.quantity
 					} else {
-						inBasket = state.basket.packs.find(bp => state.packs.find(pa => pa.id === bp.packId && (pa.offerPackId === p.packId || pa.bonusPackId === p.packId)) && bp.price === p.price)
+						inBasket = state.basket.packs.find(bp => state.packs.find(pa => pa.id === bp.packId && (pa.subPackId === p.packId || pa.bonusPackId === p.packId)) && bp.price === p.price)
 						if (inBasket) {
-							offerInfo = state.packs.find(pa => pa.id === inBasket.packId && pa.offerPackId === p.packId)
+							offerInfo = state.packs.find(pa => pa.id === inBasket.packId && pa.subPackId === p.packId)
 							if (offerInfo) {
-								inBasketQuantity = inBasket.quantity * offerInfo.offerQuantity
+								inBasketQuantity = inBasket.quantity * offerInfo.subQuantity
 							} else {
 								offerInfo = state.packs.find(pa => p.aid === inBasket.packId && pa.bonusPackId === p.packId)
 								if (offerInfo) {

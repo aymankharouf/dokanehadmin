@@ -182,7 +182,7 @@ const AddProduct = props => {
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
       {!name || !countryId || !categoryId || !imageUrl ? '' :
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleSubmit()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

@@ -11,7 +11,6 @@ const AddPackStore = props => {
   const [offerDays, setOfferDays] = useState('')
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState('')
-  const [quantity, setQuantity] = useState('')
   const stores = useMemo(() => state.stores.filter(s => s.id !== 's')
   , [state.stores])
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
@@ -30,8 +29,12 @@ const AddPackStore = props => {
     }
   }, [state.stores, storeId])
   const getDefaultPrice = () => {
-    if (cost && quantity) {
-      setPrice((parseInt(cost * 1000 / quantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+    if (cost) {
+      if (pack.subQuantity) {
+        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+      } else {
+        setPrice((cost * (100 + state.labels.profit) / 100).toFixed(3))
+      }
     }
   }
   const handleSubmit = async () => {
@@ -55,11 +58,10 @@ const AddPackStore = props => {
         storeId,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
-        quantity: Number(quantity),
         offerEnd,
         time: new Date()
       }
-      await addStorePack(storePack, pack, state.storePacks)
+      await addStorePack(storePack, pack, state.storePacks, state.packs)
       showMessage(props, state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -102,19 +104,6 @@ const AddPackStore = props => {
             onBlur={() => getDefaultPrice()}
           />
         : ''}
-        {store.type === '5' ? 
-          <ListInput 
-            name="quantity" 
-            label={state.labels.quantity}
-            value={quantity}
-            clearButton
-            floatingLabel 
-            type="number" 
-            onChange={e => setQuantity(e.target.value)}
-            onInputClear={() => setQuantity('')}
-            onBlur={() => getDefaultPrice()}
-          />
-        : ''}
         <ListInput 
           name="price" 
           label={state.labels.price}
@@ -136,7 +125,7 @@ const AddPackStore = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!storeId || !price || (store.type === '5' && (!cost || !quantity)) ? '' :
+      {!storeId || !price || (store.type === '5' && !cost) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

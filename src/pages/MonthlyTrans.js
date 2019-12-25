@@ -197,7 +197,7 @@ const MonthlyTrans = props => {
         </List>
       </Block>
       {buttonVisisble ? 
-        <Fab position="left-top" slot="fixed" color="green" onClick={() => handleMonthlyTrans()}>
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleMonthlyTrans()}>
           <Icon material="done"></Icon>
         </Fab>
       : ''}

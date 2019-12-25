@@ -20,7 +20,7 @@ const labels = {
   stock:'المستودع',
   purchaseDetails: 'تفاصيل المشتريات',
   purchases: 'المشتريات',
-  category: 'التصنيف',
+  category: 'الصنف',
   trademark: 'العلامة التجارية',
   country: 'الدولة',
   description: 'الوصف',
@@ -254,10 +254,10 @@ const labels = {
   editOffer: 'تعديل عرض',
   invalidPercents: 'الرجاء التأكد من النسب المدخلة',
   profit: 10,
-  tags: 'المجموعات',
-  addTag: 'اضافة مجموعة',
-  editTag: 'تعديل مجموعة',
-  tag: 'المجموعة',
+  tags: 'الفئات',
+  addTag: 'اضافة فئة',
+  editTag: 'تعديل فئة',
+  tag: 'الفئة',
   relatedProducts: 'المنتجات ذات العلاقة',
   storage: 'طريقة الحفظ',
   closeExpired: 'صلاحية قصيرة',
@@ -274,7 +274,10 @@ const labels = {
   unitPrice: 'سعر الوحدة',
   grossPrice: 'السعر اﻻجمالي',
   urgent: 'مستعجل',
-  withDeliveryNote: 'مع خدمة التوصيل'
+  withDeliveryNote: 'مع خدمة التوصيل',
+  addBulk: 'اضافة حزمة تجميعية',
+  editBulk: 'تعديل حزمة تجميعية',
+  invalidQuantity: 'الرجاء التأكد من الكمية المدخلة'
 }
 
 export default labels

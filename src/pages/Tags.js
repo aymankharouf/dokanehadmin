@@ -25,7 +25,7 @@ const Tags = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" href="/addTag/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addTag/">
         <Icon material="add"></Icon>
       </Fab>
       <Toolbar bottom>
