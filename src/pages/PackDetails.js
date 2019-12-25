@@ -1,7 +1,7 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
 import { StoreContext } from '../data/Store'
-import { refreshPackPrice, showMessage, showError, getMessage } from '../data/Actions'
+import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/Actions'
 import BottomToolbar from './BottomToolbar';
 import PackImage from './PackImage'
 
@@ -149,12 +149,11 @@ const PackDetails = props => {
         return (
           <ListItem 
             title={storeInfo.name}
-            subtitle={`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}, ${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}
+            subtitle={`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}`}
+            text={`${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}
+            footer={s.quantity > 0 ? `${state.labels.quantity}: ${quantityText(s.quantity)}` : ''}
             key={s.id}
           >
-            {s.quantity ? 
-              <Badge slot="title" color='red'>{s.quantity}</Badge> 
-            : ''}
             {s.isOffer || s.offerEnd ? 
               <Badge slot="title" color='green'>{state.labels.offer}</Badge> 
             : ''}

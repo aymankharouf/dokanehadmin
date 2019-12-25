@@ -36,7 +36,7 @@ const Stores = props => {
             <ListItem title={state.labels.noData} /> 
           : stores.map(s =>
               <ListItem 
-                link={`/store/${s.id}`} 
+                link={`/storeDetails/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
               />

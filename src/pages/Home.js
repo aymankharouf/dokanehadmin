@@ -4,7 +4,7 @@ import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 
 
-const HomePage = props => {
+const Home = props => {
   const { state } = useContext(StoreContext)
   const mainPages = useMemo(() => [
     {id: '1', name: 'الطلبات', path: 'orders'},
@@ -43,4 +43,4 @@ const HomePage = props => {
   )
 }
 
-export default HomePage
+export default Home

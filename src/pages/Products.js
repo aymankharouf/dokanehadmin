@@ -32,7 +32,7 @@ const Products = props => {
             : products.map(p => {
                 return (
                   <ListItem
-                    link={`/product/${p.id}`}
+                    link={`/productPacks/${p.id}`}
                     title={p.name}
                     subtitle={state.categories.find(c => c.id === p.categoryId).name}
                     text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}

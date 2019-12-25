@@ -24,7 +24,7 @@ const Offers = props => {
                 const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
                 return (
                   <ListItem
-                    link={`/storePack/${p.id}`}
+                    link={`/storePackDetails/${p.id}`}
                     title={productInfo.name}
                     subtitle={packInfo.name}
                     text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}

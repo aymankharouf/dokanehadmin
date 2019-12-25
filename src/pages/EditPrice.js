@@ -23,7 +23,11 @@ const EditPrice = props => {
       setError('')
     }
   }, [error, props])
-
+  const getDefaultPrice = () => {
+    if (cost && quantity) {
+      setPrice((parseInt(cost * 1000 / quantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+    }
+  }
   const handleEdit = async () => {
     try{
       if (Number(price) <= 0) {
@@ -41,7 +45,7 @@ const EditPrice = props => {
         ...storePack,
         price: price * 1000,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
-        quantity,
+        quantity: Number(quantity),
         offerEnd,
         time: new Date()
       }
@@ -75,6 +79,7 @@ const EditPrice = props => {
             value={cost}
             onChange={e => setCost(e.target.value)}
             onInputClear={() => setCost('')}
+            onBlur={() => getDefaultPrice()}
           />
         : ''}
         {store.type === '5' ? 
@@ -87,6 +92,7 @@ const EditPrice = props => {
             type="number" 
             onChange={e => setQuantity(e.target.value)}
             onInputClear={() => setQuantity('')}
+            onBlur={() => getDefaultPrice()}
           />
         : ''}
         <ListInput 

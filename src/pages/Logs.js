@@ -21,7 +21,7 @@ const Logs = props => {
               const userInfo = state.users.find(u => u.id === l.userId)
               return (
                 <ListItem
-                  title={`${state.labels.user}: ${userInfo?.name ?? l.userId}`}
+                  title={`${state.labels.user}: ${userInfo?.name || l.userId}`}
                   subtitle={userInfo?.mobile ? `${state.labels.mobile}: ${userInfo.mobile}` : ''}
                   text={l.page}
                   footer={moment(l.time.toDate()).fromNow()}

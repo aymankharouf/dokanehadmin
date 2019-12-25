@@ -23,7 +23,7 @@ const ReturnOrder = props => {
             const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
             return (
               <ListItem 
-                link={`/returnOrder/${props.id}/pack/${p.packId}`}
+                link={`/returnOrderPack/${props.id}/pack/${p.packId}`}
                 key={p.packId} 
                 title={productInfo.name}
                 subtitle={packInfo.name}

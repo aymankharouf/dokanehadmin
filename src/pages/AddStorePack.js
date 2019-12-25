@@ -32,7 +32,7 @@ const AddStorePack = props => {
   }, [error, props])
   const getDefaultPrice = () => {
     if (cost && quantity) {
-      setPrice((cost / quantity * (100 + state.labels.profit) / 100).toFixed(3))
+      setPrice((parseInt(cost * 1000 / quantity) * (100 + state.labels.profit) / 100000).toFixed(3))
     }
   }
 
@@ -94,7 +94,7 @@ const AddStorePack = props => {
         </ListItem>
         {store.type === '5' ? 
           <ListInput 
-            name="puchasePrice" 
+            name="cost" 
             label={state.labels.cost}
             value={cost}
             clearButton

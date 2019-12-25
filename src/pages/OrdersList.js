@@ -40,7 +40,7 @@ const OrdersList = props => {
               const userInfo = state.users.find(u => u.id === o.userId)
               return (
                 <ListItem
-                  link={`/order/${o.id}`}
+                  link={`/orderDetails/${o.id}`}
                   title={`${state.labels.user}: ${userInfo.name}`}
                   subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
                   text={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}

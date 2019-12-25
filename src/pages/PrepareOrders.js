@@ -48,7 +48,7 @@ const PrepareOrders = props => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
 							return (
 								<ListItem
-									link={`/prepareOrders/${p.packId}/order/${p.orderId}`}
+									link={`/prepareOrdersList/${p.packId}/order/${p.orderId}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									key={i++}

@@ -69,6 +69,7 @@ const EditStore = props => {
         name,
         type,
         discount,
+        canReturn,
         mobile,
         locationId,
         address,

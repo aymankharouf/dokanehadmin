@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link
 import { StoreContext } from '../data/Store';
 import ReLogin from './ReLogin'
 import PackImage from './PackImage'
+import { quantityText } from '../data/Actions'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
@@ -42,9 +43,8 @@ const Stock = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
+                  footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
                   after={(p.cost / 1000).toFixed(3)}
-                  badge={p.quantity > 0 ? p.quantity : ''}
-                  badgeColor="red"
                   key={p.id}
                 >
                   <PackImage slot="media" pack={packInfo} type="list" />

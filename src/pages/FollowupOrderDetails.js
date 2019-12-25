@@ -130,7 +130,7 @@ const FollowupOrderDetails = props => {
       <Popover className="popover-menu">
         <List>
           <ListItem 
-            link={`/customer/${order.userId}/full/0`}
+            link={`/customerDetails/${order.userId}/full/0`}
             popoverClose 
             title={state.labels.customerInfo} 
           />

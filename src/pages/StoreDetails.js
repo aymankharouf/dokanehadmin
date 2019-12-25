@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import BottomToolbar from './BottomToolbar';
 
@@ -47,6 +47,15 @@ const StoreDetails = props => {
           type="number"
           readonly
         />
+        <ListItem>
+          <span>{state.labels.canReturn}</span>
+          <Toggle 
+            name="canReturn" 
+            color="green" 
+            checked={store.canReturn || false} 
+            disabled
+          />
+        </ListItem>
         <ListInput
           name="location"
           label={state.labels.location}

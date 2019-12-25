@@ -22,7 +22,7 @@ const Ratings = props => {
               const product = state.products.find(p => p.id === r.productId)
               return (
                 <ListItem
-                  link={`/rating/${r.id}`}
+                  link={`/ratingDetails/${r.id}`}
                   title={product.name}
                   subtitle={state.users.find(u => u.id === r.userId).name}
                   text={moment(r.time.toDate()).fromNow()}

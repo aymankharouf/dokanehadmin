@@ -9,8 +9,10 @@ const ProductPacks = props => {
   const { state } = useContext(StoreContext)
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
-  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id)
-  , [state.packs, props.id]) 
+  const packs = useMemo(() => {
+    const packs = state.packs.filter(p => p.productId === props.id)
+    return packs.sort((p1, p2) => p2.price - p1.price)
+  }, [state.packs, props.id]) 
   return (
     <Page>
       <Navbar title={product.name} backLink={state.labels.back} />
@@ -20,7 +22,7 @@ const ProductPacks = props => {
         </CardContent>
         <CardFooter>
           <p>{`${state.labels.productOf} ${state.countries.find(c => c.id === product.countryId).name}`}</p>
-          <p><RatingStars rating={product.rating} /></p>
+          {product.trademarkId ? <p><RatingStars rating={product.rating} /></p> : ''}
         </CardFooter>
       </Card>
       <List mediaList>
@@ -33,11 +35,8 @@ const ProductPacks = props => {
             key={p.id} 
           >
             {p.isOffer ? 
-              <Badge 
-                slot="title" 
-                color={p.closeExpired ? 'red' : 'green'}
-              >
-                {p.closeExpired ? state.labels.offerToExpire : state.labels.offer}
+              <Badge slot="title" color="green">
+                {state.labels.offer}
               </Badge> 
             : ''}
           </ListItem>

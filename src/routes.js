@@ -1,6 +1,6 @@
-import HomePage from './pages/HomePage';
+import Home from './pages/Home';
 import NotFoundPage from './pages/NotFoundPage';
-import PanelPage from './pages/PanelPage'
+import Panel from './pages/Panel'
 import Login from './pages/Login'
 import Products from './pages/Products'
 import ProductPacks from './pages/ProductPacks'
@@ -91,15 +91,15 @@ import RelatedProducts from './pages/RelatedProducts';
 export default [
   {
     path: '/',
-    component: HomePage,
+    component: Home,
   },
   {
     path: '/home/',
-    component: HomePage,
+    component: Home,
   },
   {
     path: '/panel/',
-    component: PanelPage
+    component: Panel
   },
   {
     path: '/login/',
@@ -125,7 +125,7 @@ export default [
     component: Products,
   },
   {
-    path: '/product/:id',
+    path: '/productPacks/:id',
     component: ProductPacks
   },
   {
@@ -173,7 +173,7 @@ export default [
     component: ApproveUser
   },
   {
-    path: '/customer/:id/full/:full',
+    path: '/customerDetails/:id/full/:full',
     component: CustomerDetails
   },
   {
@@ -181,7 +181,7 @@ export default [
     component: EditCustomer
   },
   {
-    path: '/store/:id',
+    path: '/storeDetails/:id',
     component: StoreDetails
   },
   {
@@ -233,7 +233,7 @@ export default [
     component: AddSection
   },
   {
-    path: '/section/:id',
+    path: '/sectionCategories/:id',
     component: SectionCategories
   },
   {
@@ -301,7 +301,7 @@ export default [
     component: EditOffer
   },
   {
-    path: '/storePack/:id',
+    path: '/storePackDetails/:id',
     component: StorePackDetails
   },
   {
@@ -317,7 +317,7 @@ export default [
     component: OrdersList,
   },
   {
-    path: '/order/:id',
+    path: '/orderDetails/:id',
     component: OrderDetails
   },
   {
@@ -333,7 +333,7 @@ export default [
     component: RequestedPacks
   },
   {
-    path: '/requestedPack/:packId/quantity/:quantity/price/:price/order/:orderId',
+    path: '/requestedPackDetails/:packId/quantity/:quantity/price/:price/order/:orderId',
     component: RequestedPackDetails
   },
   {
@@ -341,7 +341,7 @@ export default [
     component: Purchases,
   },
   {
-    path: '/purchase/:id',
+    path: '/purchaseDetails/:id',
     component: PurchaseDetails
   },
   {
@@ -357,7 +357,7 @@ export default [
     component: StockTrans
   },
   {
-    path: '/stockTrans/:id',
+    path: '/stockTransDetails/:id',
     component: StockTransDetails
   },
   {
@@ -397,7 +397,7 @@ export default [
     component: Approvals
   },
   {
-    path: '/rating/:id',
+    path: '/ratingDetails/:id',
     component: RatingDetails
   },
   {
@@ -417,7 +417,7 @@ export default [
     component: PrepareOrders
   },
   {
-    path: '/prepareOrders/:packId/order/:orderId',
+    path: '/prepareOrdersList/:packId/order/:orderId',
     component: PrepareOrdersList
   },
   {
@@ -425,7 +425,7 @@ export default [
     component: ReturnOrder
   },
   {
-    path: '/returnOrder/:orderId/pack/:packId',
+    path: '/returnOrderPack/:orderId/pack/:packId',
     component: ReturnOrderPack
   },
   {

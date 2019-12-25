@@ -41,7 +41,7 @@ const StorePacks = props => {
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
               return (
                 <ListItem
-                  link={`/storePack/${p.id}`}
+                  link={`/storePackDetails/${p.id}`}
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={moment(p.time.toDate()).fromNow()}

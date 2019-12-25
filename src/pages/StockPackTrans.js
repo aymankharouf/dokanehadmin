@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
-import { addStockTrans, showMessage, showError, getMessage } from '../data/Actions'
+import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/Actions'
 
 
 const StockPackTrans = props => {
@@ -60,18 +60,22 @@ const StockPackTrans = props => {
         <List mediaList>
           {packTrans.length === 0 ? 
             <ListItem title={state.labels.noData} /> 
-          : packTrans.map(t => 
-              <ListItem
-                link={t.storeId ? '#' : ''}
-                title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
-                subtitle={moment(t.time.toDate()).fromNow()}
-                after={(t.cost / 1000).toFixed(3)}
-                badge={t.quantity}
-                badgeColor="red"
-                key={t.id}
-                onClick={() => t.storeId ? handleAddTrans('c', t.storeId, t.cost, t.price) : ''}
-              />
-            )
+          : packTrans.map(t => {
+              const storeInfo = state.stores.find(s => s.id === t.storeId)
+              return (
+                <ListItem
+                  title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name}`}
+                  subtitle={moment(t.time.toDate()).fromNow()}
+                  text={`${state.labels.quantity}: ${quantityText(t.quantity)}`}
+                  footer={`${state.labels.price}: ${(t.cost / 1000).toFixed(3)}`}
+                  key={t.id}
+                >
+                  {storeInfo?.canReturn ?
+                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{state.labels.return}</Button>
+                  : ''}
+                </ListItem>
+              )
+            })
           }
         </List>
       </Block>

@@ -21,7 +21,7 @@ const Sections = props => {
             <ListItem title={state.labels.noData} /> 
           : sections.map(s =>
               <ListItem 
-                link={`/section/${s.id}`} 
+                link={`/sectionCategories/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
               />

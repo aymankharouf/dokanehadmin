@@ -11,9 +11,9 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight ?? p.quantity)), 0)
+  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0)
   , [state.basket])
-  const [discount, setDiscount] = useState((total * (store.discount ?? 0) / 100000).toFixed(3))
+  const [discount, setDiscount] = useState((total * (store.discount || 0) / 100000).toFixed(3))
   let i = 0
   useEffect(() => {
     if (error) {
@@ -48,17 +48,16 @@ const ConfirmPurchase = props => {
           {state.basket.packs && state.basket.packs.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+            const weightText = p.weight ? p.weight === p.quantity ? '' : `(${quantityText(p.weight)})` : '' 
             return (
               <ListItem 
                 key={i++} 
                 title={productInfo.name}
                 subtitle={packInfo.name}
                 text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
-                after={((p.cost * (p.weight ?? p.quantity)) / 1000).toFixed(3)}
-              >
-                {p.weight ? <div className="list-subtext1">{`${state.labels.weight}: ${quantityText(p.weight)}`}</div> : ''}
-              </ListItem>
+                footer={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
+                after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
+              />
             )
           }
           )}

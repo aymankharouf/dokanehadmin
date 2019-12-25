@@ -3,7 +3,7 @@ import { Page, Navbar, List, ListItem } from 'framework7-react';
 import { StoreContext } from '../data/Store';
 import { logout } from '../data/Actions'
 
-const PanelPage = props => {
+const Panel = props => {
   const { state, user, dispatch } = useContext(StoreContext)
   const handleLogout = () => {
     logout().then(() => {
@@ -42,4 +42,4 @@ const PanelPage = props => {
     </Page>
   )
 }
-export default PanelPage
+export default Panel

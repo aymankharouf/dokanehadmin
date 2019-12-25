@@ -19,7 +19,7 @@ const Purchases = props => {
             <ListItem title={state.labels.noData} /> 
           : purchases.map(p => 
               <ListItem
-                link={`/purchase/${p.id}`}
+                link={`/purchaseDetails/${p.id}`}
                 title={state.stores.find(s => s.id === p.storeId).name}
                 subtitle={moment(p.time.toDate()).fromNow()}
                 after={((p.total - p.discount) / 1000).toFixed(3)}

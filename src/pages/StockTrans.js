@@ -19,7 +19,7 @@ const StockTrans = props => {
             <ListItem title={state.labels.noData} /> 
           : stockTrans.map(t => 
               <ListItem
-                link={`/stockTrans/${t.id}`}
+                link={`/stockTransDetails/${t.id}`}
                 title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
                 subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.total / 1000).toFixed(3)}

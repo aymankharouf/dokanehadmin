@@ -44,7 +44,7 @@ const RequestedPacks = props => {
 			if (state.basket.packs) {
 				if (p.byWeight) {
 					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId)
-					inBasketQuantity = inBasket?.quantity ?? 0
+					inBasketQuantity = inBasket?.quantity || 0
 				} else {
 					inBasket = state.basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)
 					if (inBasket) {
@@ -94,7 +94,7 @@ const RequestedPacks = props => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
 							return (
 								<ListItem
-									link={`/requestedPack/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
+									link={`/requestedPackDetails/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									text={`${state.labels.requested}: ${quantityText(p.quantity)}`}
