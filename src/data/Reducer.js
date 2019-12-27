@@ -16,6 +16,7 @@ const Reducer = (state, action) => {
           orderId: action.params.orderId,
           weight: action.params.weight,
           increment: action.params.increment,
+          isOffer: action.params.packStore.isOffer,
           time: new Date()
         }
         if (!state.basket.storeId) {

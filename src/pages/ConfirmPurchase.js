@@ -25,12 +25,12 @@ const ConfirmPurchase = props => {
   const handlePurchase = async () => {
     try{
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount, state.customers)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount)
         showMessage(props, state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
@@ -45,10 +45,10 @@ const ConfirmPurchase = props => {
     <Navbar title={`${state.labels.confirmPurchase} ${store.name}`} backLink={state.labels.back} />
     <Block>
         <List mediaList>
-          {state.basket.packs && state.basket.packs.map(p => {
+          {state.basket.packs.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const weightText = p.weight ? p.weight === p.quantity ? '' : `(${quantityText(p.weight)})` : '' 
+            const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
             return (
               <ListItem 
                 key={i++} 

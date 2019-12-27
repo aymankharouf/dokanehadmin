@@ -19,7 +19,7 @@ const PriceAlarms = props => {
           <List mediaList>
             {priceAlarms.length === 0 ? 
               <ListItem title={state.labels.noData} /> 
-            : priceAlarms && priceAlarms.map(a => {
+            : priceAlarms.map(a => {
                 const pack = state.packs.find(p => p.id === a.packId)
                 return (
                   <ListItem

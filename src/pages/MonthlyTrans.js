@@ -35,7 +35,7 @@ const MonthlyTrans = props => {
   const fixedFees = monthlyTrans?.fixedFees ?? deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
   const deliveryFees = useMemo(() => monthlyTrans?.deliveryFees ?? deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
-  const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount.value : 0), 0)
+  const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount : 0), 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)

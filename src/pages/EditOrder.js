@@ -44,7 +44,7 @@ const EditOrder = props => {
   }
   const handleSubmit = async () => {
     try{
-      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs, customer)
+      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs)
       showMessage(props, state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
@@ -57,7 +57,7 @@ const EditOrder = props => {
       <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {orderBasket && orderBasket.map(p => {
+          {orderBasket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             return (
               <ListItem

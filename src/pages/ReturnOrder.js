@@ -15,11 +15,11 @@ const ReturnOrder = props => {
       <Navbar title={state.labels.returnOrder} backLink={state.labels.back} />
       <Block>
         <List mediaList>
-          {order.basket && order.basket.map(p => {
+          {order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''
+            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${state.labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
             const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
             return (
               <ListItem 

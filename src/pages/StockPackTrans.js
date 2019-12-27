@@ -64,14 +64,14 @@ const StockPackTrans = props => {
               const storeInfo = state.stores.find(s => s.id === t.storeId)
               return (
                 <ListItem
-                  title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name}`}
+                  title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name || ''}`}
                   subtitle={moment(t.time.toDate()).fromNow()}
                   text={`${state.labels.quantity}: ${quantityText(t.quantity)}`}
                   footer={`${state.labels.price}: ${(t.cost / 1000).toFixed(3)}`}
                   key={t.id}
                 >
                   {storeInfo?.canReturn ?
-                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{state.labels.return}</Button>
+                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{state.labels.returnPacks}</Button>
                   : ''}
                 </ListItem>
               )

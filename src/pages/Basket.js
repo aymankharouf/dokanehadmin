@@ -32,7 +32,7 @@ const Basket = props => {
         <List mediaList>
           {basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const weightText = p.weight ? p.weight === p.quantity ? '' : `(${quantityText(p.weight)})` : '' 
+            const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
             return (
               <ListItem
                 title={state.products.find(pr => pr.id === packInfo.productId).name}

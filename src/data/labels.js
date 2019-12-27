@@ -211,7 +211,9 @@ const labels = {
   margin: 10,
   invitationDiscount: 250,
   priceAlarmDiscount: 250,
+  firstOrderDiscount: 300,
   ratingDiscount: 100,
+  maxDiscount: 250,
   packLimit: 'السقف في الطلب',
   sorting: 'الترتيب',
   prices: 'الاسعار',
@@ -230,7 +232,7 @@ const labels = {
   requestedPacks: 'المنتجات المطلوبة',
   InvalidWeight: 'الوزن لا يتناسب مع المطلوب',
   followupOrders: 'متابعة الطلبات',
-  return: 'ارجاع',
+  returnPacks: 'ارجاع مواد',
   receive: 'استلام',
   toStock: 'استيداع',
   confirmeReceiveText: 'هل تم استلام قيمة الطلب، والمرتجع بشكل كامل؟',
@@ -277,7 +279,8 @@ const labels = {
   withDeliveryNote: 'مع خدمة التوصيل',
   addBulk: 'اضافة حزمة تجميعية',
   editBulk: 'تعديل حزمة تجميعية',
-  invalidQuantity: 'الرجاء التأكد من الكمية المدخلة'
+  invalidQuantity: 'الرجاء التأكد من الكمية المدخلة',
+  currentPrice: 'السعر الحالي'
 }
 
 export default labels

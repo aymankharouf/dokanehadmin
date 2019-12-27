@@ -19,7 +19,7 @@ const PurchaseDetails = props => {
             {purchase.basket.map(p => {
               const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-              const weightText = p.weight ? p.weight === p.quantity ? '' : `(${quantityText(p.weight)})` : '' 
+              const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
               return (
                 <ListItem 
                   title={productInfo.name}

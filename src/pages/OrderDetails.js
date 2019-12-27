@@ -54,7 +54,7 @@ const OrderDetails = props => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''
+            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${state.labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
             const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
             return (
               <ListItem 
@@ -92,17 +92,17 @@ const OrderDetails = props => {
               after={(order.deliveryFees / 1000).toFixed(3)} 
             /> 
           : ''}
-          {order.discount.value + order.fraction > 0 ? 
+          {order.discount > 0 ? 
             <ListItem 
               title={state.labels.discount} 
               className="discount" 
-              after={((order.discount.value + order.fraction) / 1000).toFixed(3)} 
+              after={(order.discount / 1000).toFixed(3)} 
             /> 
           : ''}
           <ListItem 
             title={state.labels.net} 
             className="net" 
-            after={((order.total + order.fixedFees + order.deliveryFees - order.discount.value) / 1000).toFixed(3)} 
+            after={((order.total + order.fixedFees + order.deliveryFees - order.discount) / 1000).toFixed(3)} 
           />
           {order.profit ? 
             <ListItem 

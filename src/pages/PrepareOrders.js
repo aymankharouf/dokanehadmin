@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { Block, Page, Navbar, Toolbar, List, ListItem, Badge } from 'framework7-react'
+import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import { StoreContext } from '../data/Store';
 import { quantityText } from '../data/Actions'
@@ -46,15 +46,16 @@ const PrepareOrders = props => {
 						<ListItem title={state.labels.noData} /> 
 					: packs.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
+							const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
 							return (
 								<ListItem
 									link={`/prepareOrdersList/${p.packId}/order/${p.orderId}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
+									text={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
 									key={i++}
 								>
 									<PackImage slot="media" pack={packInfo} type="list" />
-									<Badge slot="title" color="green">{quantityText(p.quantity, p.weight)}</Badge>
 								</ListItem>
 							)
 						})

@@ -30,7 +30,7 @@ const AddPackStore = props => {
   }, [state.stores, storeId])
   const getDefaultPrice = () => {
     if (cost) {
-      if (pack.subQuantity) {
+      if (pack.subQuantity > 1) {
         setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + state.labels.profit) / 100000).toFixed(3))
       } else {
         setPrice((cost * (100 + state.labels.profit) / 100).toFixed(3))

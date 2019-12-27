@@ -10,7 +10,7 @@ const FollowupOrderDetails = props => {
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
   const netPrice = useMemo(() => {
-    const net = order.total + order.fixedFees + order.deliveryFees - order.discount.value
+    const net = order.total + order.fixedFees + order.deliveryFees - order.discount
     return Math.floor(net / 50) * 50
   }, [order])
   useEffect(() => {
@@ -69,7 +69,7 @@ const FollowupOrderDetails = props => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}` : ''
+            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${state.labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
             const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
             return (
               <ListItem 
@@ -113,11 +113,11 @@ const FollowupOrderDetails = props => {
               after={(order.deliveryFees / 1000).toFixed(3)} 
             /> 
           : ''}
-          {order.discount.value > 0 ? 
+          {order.discount > 0 ? 
             <ListItem 
               title={state.labels.discount} 
               className="discount" 
-              after={(order.discount.value / 1000).toFixed(3)} 
+              after={(order.discount / 1000).toFixed(3)} 
             /> 
           : ''}
           <ListItem 
@@ -137,7 +137,7 @@ const FollowupOrderDetails = props => {
           <ListItem 
             link={`/returnOrder/${order.id}`}
             popoverClose 
-            title={state.labels.return} 
+            title={state.labels.returnPacks} 
           />
           {order.position === 's' && (order.total === 0 || order.status === 'd') ? '' :
             <ListItem 
@@ -151,7 +151,7 @@ const FollowupOrderDetails = props => {
             <ListItem 
               link="#"
               popoverClose 
-              title={state.labels.receive} 
+              title={state.labels.deliver} 
               onClick={() => handleDelivery()}
             />
           }

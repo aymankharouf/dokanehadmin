@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Badge } from 'framework7-react'
+import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
 import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/Actions'
@@ -20,6 +20,7 @@ const RequestedPackDetails = props => {
     let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
     packStores = packStores.map(s => {
       let packId, unitPrice, quantity, offerInfo, isOffer
+      let price = s.price
       if (s.packId === props.packId) {
         packId = s.packId
         unitPrice = s.storeId === 's' || !s.quantity ? s.cost : parseInt(s.cost / s.quantity) 
@@ -31,7 +32,10 @@ const RequestedPackDetails = props => {
           packId = offerInfo.id
           unitPrice = parseInt((s.cost / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
           quantity = offerInfo.subQuantity
-          isOffer = true
+          isOffer = (s.cost === s.price) // false for type 5
+          if (s.cost !== s.price) { // for type 5 get total price not unit price
+            price = price * offerInfo.subQuantity
+          } 
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)
           if (offerInfo) {
@@ -45,6 +49,7 @@ const RequestedPackDetails = props => {
       return {
         ...s,
         packId,
+        price,
         quantity,
         unitPrice,
         isOffer
@@ -97,7 +102,7 @@ const RequestedPackDetails = props => {
           throw new Error('alreadyInBasket')
         }
       }
-      if (!packStore.isOffer && packStore.price > Number(props.price)){
+      if (packStore.unitPrice > Number(props.price)){
         throw new Error('priceHigherThanRequested')
       }
       let quantity, params
@@ -162,7 +167,7 @@ const RequestedPackDetails = props => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
-        await packUnavailable(pack, Number(props.price), approvedOrders, state.customers, overPriced)
+        await packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
         showMessage(props, state.labels.executeSuccess)
         props.f7router.back()
       } catch(err) {
@@ -205,14 +210,13 @@ const RequestedPackDetails = props => {
             const productInfo = state.products.find(p => p.id === packInfo.productId)
             return (
               <ListItem 
-                link="#"
                 title={storeInfo.name}
                 subtitle={`${productInfo.name} ${packInfo.name}`}
-                after={(s.unitPrice / 1000).toFixed(3)} 
+                text={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${state.labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
+                footer={`${state.labels.unitCost}: ${(s.unitPrice / 1000).toFixed(3)}`}
                 key={s.id}
-                onClick={() => handlePurchase(s)}
               >
-                {addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? <Badge slot='title' color={s.isOffer ? 'red' : 'green'}>{addQuantity(s.quantity, -1 * basketStockQuantity)}</Badge> : ''}
+                <Button slot="after" onClick={() => handlePurchase(s)}>{state.labels.purchase}</Button>
               </ListItem>
             )
           })}

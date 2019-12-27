@@ -10,7 +10,6 @@ const AddStorePack = props => {
   const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
-  const [quantity, setQuantity] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   const packs = useMemo(() => {
@@ -31,8 +30,13 @@ const AddStorePack = props => {
     }
   }, [error, props])
   const getDefaultPrice = () => {
-    if (cost && quantity) {
-      setPrice((parseInt(cost * 1000 / quantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+    if (cost && packId) {
+      const pack = state.packs.find(p => p.id === packId)
+      if (pack.subQuantity > 1) {
+        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+      } else {
+        setPrice((cost * (100 + state.labels.profit) / 100).toFixed(3))
+      }
     }
   }
 
@@ -57,7 +61,6 @@ const AddStorePack = props => {
         storeId: store.id,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
-        quantity: Number(quantity),
         offerEnd,
         time: new Date()
       }
@@ -105,19 +108,6 @@ const AddStorePack = props => {
             onBlur={() => getDefaultPrice()}
           />
         : ''}
-        {store.type === '5' ? 
-          <ListInput 
-            name="quantity" 
-            label={state.labels.quantity}
-            value={quantity}
-            clearButton
-            floatingLabel 
-            type="number" 
-            onChange={e => setQuantity(e.target.value)}
-            onInputClear={() => setQuantity('')}
-            onBlur={() => getDefaultPrice()}
-          />
-        : ''}
         <ListInput 
           name="price" 
           label={state.labels.price}
@@ -139,7 +129,7 @@ const AddStorePack = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!packId || !price || (store.type === '5' && (!cost || !quantity)) ? '' :
+      {!packId || !price || (store.type === '5' && !cost) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

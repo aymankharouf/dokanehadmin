@@ -27,7 +27,7 @@ const ReturnOrderPack = props => {
     props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const order = state.orders.find(o => o.id === props.orderId)
-        await returnOrderPacks(order, pack, returned, state.customers)
+        await returnOrderPacks(order, pack, returned)
         showMessage(props, state.labels.editSuccess)
         props.f7router.back()
       } catch(err) {

@@ -32,7 +32,7 @@ const Store = props => {
     {id: 'e', name: 'قيد التجهيز'},
     {id: 'f', name: 'مكتمل'},
     {id: 'p', name: 'جاهز'},
-    {id: 'd', name: 'تم اﻻستلام'},
+    {id: 'd', name: 'مستلم'},
     {id: 'c', name: 'ملغي'},
     {id: 'u', name: 'غير متوفر'},
     {id: 'i', name: 'استيداع'}
@@ -87,9 +87,8 @@ const Store = props => {
   ]
   const storageTypes = [
     {id: 'd', name: 'جاف'},
-    {id: 'f', name: 'طازج'},
     {id: 'c', name: 'مبرد'},
-    {id: 'i', name: 'مجمد'}
+    {id: 'f', name: 'مجمد'}
   ]
   const localData = localStorage.getItem('basket');
   const basket = localData ? JSON.parse(localData) : ''

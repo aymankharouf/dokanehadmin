@@ -19,7 +19,6 @@ const FollowupOrdersList = props => {
             <ListItem title={state.labels.noData} /> 
           : orders.map(o => {
               const userInfo = state.users.find(u => u.id === o.userId)
-              console.log('o.withDelivery == ', o.withDelivery)
               return (
                 <ListItem
                   link={`/followupOrderDetails/${o.id}`}

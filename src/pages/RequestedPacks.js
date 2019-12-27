@@ -22,9 +22,8 @@ const RequestedPacks = props => {
 					if (!packInfo.byWeight && found) {
 						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
 						packsArray.push({
-							packId: p.packId,
-							price: p.price, 
-							quantity: p.quantity - p.purchased + found.quantity
+							...found, 
+							quantity: found.quantity + p.quantity - p.purchased
 						})
 					} else {
 						packsArray.push({
