@@ -56,10 +56,10 @@ const EditProduct = props => {
   }, [product, name, countryId, categoryId, trademarkId, tagId, storageId, isNew, imageUrl])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try{
@@ -75,7 +75,7 @@ const EditProduct = props => {
         imageUrl
       }
       await editProduct(product, image)
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

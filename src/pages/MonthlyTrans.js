@@ -72,10 +72,10 @@ const MonthlyTrans = props => {
   }, [year, month, monthlyTrans])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleMonthlyTrans = async () => {
     try{
@@ -98,7 +98,7 @@ const MonthlyTrans = props => {
         withdraws
       }
       await addMonthlyTrans(trans)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

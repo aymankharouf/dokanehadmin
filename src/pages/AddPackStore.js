@@ -19,10 +19,10 @@ const AddPackStore = props => {
   , [state.products, pack])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   useEffect(() => {
     if (storeId) {
       setStore(state.stores.find(s => s.id === storeId))
@@ -62,7 +62,7 @@ const AddPackStore = props => {
         time: new Date()
       }
       await addStorePack(storePack, pack, state.storePacks, state.packs)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
     	setError(getMessage(props, err))

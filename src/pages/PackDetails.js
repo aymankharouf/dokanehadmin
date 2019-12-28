@@ -1,9 +1,11 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
+import { f7 } from 'framework7-react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
 import { StoreContext } from '../data/Store'
 import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/Actions'
 import BottomToolbar from './BottomToolbar';
 import PackImage from './PackImage'
+import moment from 'moment'
 
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -15,24 +17,39 @@ const PackDetails = props => {
   const packStores = useMemo(() => {
     let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
     packStores = packStores.map(s => {
-      let packId, unitCost, quantity, offerInfo, isOffer
+      let packId, unitPrice, quantity, offerInfo, isOffer, price
       if (s.packId === pack.id) {
         packId = s.packId
-        unitCost = s.storeId === 's' || !s.quantity ? s.cost : parseInt(s.cost / s.quantity) 
+        if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
+          price = s.price
+          unitPrice = s.price
+        } else {
+          price = s.cost
+          unitPrice = s.price
+        }
+        unitPrice = s.price 
         quantity = s.quantity
         isOffer = false
       } else {
         offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id)
         if (offerInfo) {
           packId = offerInfo.id
-          unitCost = parseInt((s.cost / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+          if (s.cost === s.price || s.storeId === 's') { // for type 5 get cost as total price not unit price
+            unitPrice = parseInt((s.price / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+            price = s.price
+            isOffer = true
+          } else {
+            unitPrice = s.price
+            price = s.cost
+            isOffer = false
+          }
           quantity = offerInfo.subQuantity
-          isOffer = (s.cost === s.price) // false for type 5
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
           if (offerInfo) {
             packId = offerInfo.id
-            unitCost = parseInt((s.cost / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            price = s.price
+            unitPrice = parseInt((s.price / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
             quantity = offerInfo.bonusQuantity
             isOffer = true
           }
@@ -42,7 +59,8 @@ const PackDetails = props => {
         ...s,
         packId,
         quantity,
-        unitCost,
+        price,
+        unitPrice,
         isOffer
       }
     })
@@ -51,7 +69,7 @@ const PackDetails = props => {
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
     {
-      if (s1.unitCost === s2.unitCost) {
+      if (s1.unitPrice === s2.unitPrice) {
         const store1 = state.stores.find(s => s.id === s1.storeId)
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
@@ -68,16 +86,16 @@ const PackDetails = props => {
           return Number(store1.type) - Number(store2.type)
         }
       } else {
-        return s1.unitCost - s2.unitCost
+        return s1.unitPrice - s2.unitPrice
       }
     })
   }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handlePurchase = packStore => {
 		try{
       if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
@@ -92,7 +110,7 @@ const PackDetails = props => {
       const packInfo = state.packs.find(p => p.id === packStore.packId)
       let params
       if (packInfo.byWeight) {
-        props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
+        f7.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
           params = {
             pack: packInfo,
             packStore,
@@ -100,10 +118,9 @@ const PackDetails = props => {
             price: packStore.price,
             orderId: props.orderId,
             weight: Number(weight),
-            increment: 1
           }
           dispatch({type: 'ADD_TO_BASKET', params})
-          showMessage(props, state.labels.addToBasketSuccess)
+          showMessage(state.labels.addToBasketSuccess)
           props.f7router.back()
         })
       } else {
@@ -113,10 +130,9 @@ const PackDetails = props => {
           quantity: 1,
           price: packStore.price,
           orderId: props.orderId,
-          increment: 1,
         }
         dispatch({type: 'ADD_TO_BASKET', params})
-        showMessage(props, state.labels.addToBasketSuccess)
+        showMessage(state.labels.addToBasketSuccess)
         props.f7router.back()
       }
     } catch(err) {
@@ -126,7 +142,7 @@ const PackDetails = props => {
   const handleRefreshPrice = async () => {
     try{
       await refreshPackPrice(pack, state.storePacks, state.packs)
-      showMessage(props, state.labels.refreshSuccess)
+      showMessage(state.labels.refreshSuccess)
     } catch(err) {
 			setError(getMessage(props, err))
 		}
@@ -149,12 +165,13 @@ const PackDetails = props => {
         return (
           <ListItem 
             title={storeInfo.name}
-            subtitle={`${state.labels.unitCost}: ${(s.unitCost / 1000).toFixed(3)}`}
+            subtitle={`${state.labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
             text={`${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}
             footer={s.quantity > 0 ? `${state.labels.quantity}: ${quantityText(s.quantity)}` : ''}
             key={s.id}
           >
-            {s.isOffer || s.offerEnd ? 
+            {s.offerEnd ? <div className="list-subtext1">{state.labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
+            {s.isOffer ? 
               <Badge slot="title" color='green'>{state.labels.offer}</Badge> 
             : ''}
             {s.storeId === 's' ? '' :

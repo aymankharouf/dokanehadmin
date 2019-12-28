@@ -15,15 +15,15 @@ const RatingDetails = props => {
   , [state.customers, rating])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleApprove = async () => {
     try{
       await approveRating(rating, product, customerInfo)
-      showMessage(props, state.labels.approveSuccess)
+      showMessage(state.labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

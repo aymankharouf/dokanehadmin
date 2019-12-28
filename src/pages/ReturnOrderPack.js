@@ -1,4 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
+import { f7 } from 'framework7-react'
 import { Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store'
@@ -19,16 +20,16 @@ const ReturnOrderPack = props => {
   const [returned, setReturned] = useState(orderPack.returned || 0)
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleSumit = () => {
-    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const order = state.orders.find(o => o.id === props.orderId)
         await returnOrderPacks(order, pack, returned)
-        showMessage(props, state.labels.editSuccess)
+        showMessage(state.labels.editSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))
@@ -36,21 +37,17 @@ const ReturnOrderPack = props => {
     })
   }
   const handleDecrease = () => {
-    if (orderPack.purchased > returned) {
-      if (orderPack.weight) {
-        setReturned(orderPack.weight)
-      } else {
-        setReturned(returned + 1)
-      }
+    if (orderPack.weight) {
+      setReturned(orderPack.weight)
+    } else {
+      setReturned(returned + 1)
     }
   }
   const handleIncrease = () => {
-    if (returned > 0) {
-      if (orderPack.weight) {
-        setReturned(orderPack.weight)
-      } else {
-        setReturned(returned - 1)
-      }
+    if (orderPack.weight) {
+      setReturned(0)
+    } else {
+      setReturned(returned - 1)
     }
   }
   return (
@@ -69,12 +66,16 @@ const ReturnOrderPack = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => handleIncrease()}>
-            <Icon material="add"></Icon>
-          </FabButton>
-          <FabButton color="red" onClick={() => handleDecrease()}>
-            <Icon material="remove"></Icon>
-          </FabButton>
+          {returned > 0 ? 
+            <FabButton color="green" onClick={() => handleIncrease()}>
+              <Icon material="add"></Icon>
+            </FabButton>
+          : ''}
+          {orderPack.purchased > returned ? 
+            <FabButton color="red" onClick={() => handleDecrease()}>
+              <Icon material="remove"></Icon>
+            </FabButton>
+          : ''}
           {(orderPack.returned || 0) === returned ? '' :
             <FabButton color="blue" onClick={() => handleSumit()}>
               <Icon material="done"></Icon>

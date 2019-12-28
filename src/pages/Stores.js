@@ -5,6 +5,7 @@ import { StoreContext } from '../data/Store';
 import { addStock, showMessage, showError, getMessage } from '../data/Actions'
 
 const Stores = props => {
+  console.log('p == ', props)
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -13,15 +14,15 @@ const Stores = props => {
   , [state.stores])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleAddStock = async name => {
     try{
       await addStock(name)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))

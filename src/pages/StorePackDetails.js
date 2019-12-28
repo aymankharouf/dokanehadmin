@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, Card, CardContent, Toolbar, CardFooter, Popover, List, Link, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, showError, getMessage } from '../data/Actions'
@@ -15,15 +16,15 @@ const StorePackDetails = props => {
   , [state.products, pack])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleDelete = () => {
-    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         await deleteStorePack(storePack, pack, state.storePacks, state.packs)
-        showMessage(props, state.labels.deleteSuccess)
+        showMessage(state.labels.deleteSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
       } catch(err) {
         setError(getMessage(props, err))
@@ -33,7 +34,7 @@ const StorePackDetails = props => {
   const handleConfirmPrice = async () => {
     try{
       await confirmPrice(storePack)
-      showMessage(props, state.labels.approveSuccess)
+      showMessage(state.labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -44,10 +45,10 @@ const StorePackDetails = props => {
       const offerEndDate = new Date(storePack.offerEnd)
       const today = (new Date()).setHours(0, 0, 0, 0)
       if (offerEndDate > today) {
-        props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+        f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
           try{
             await haltOffer(storePack, pack, state.storePacks, state.packs)
-            showMessage(props, state.labels.haltSuccess)
+            showMessage(state.labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
             setError(getMessage(props, err))
@@ -55,7 +56,7 @@ const StorePackDetails = props => {
         })
       } else {
         await haltOffer(storePack, pack, state.storePacks)
-        showMessage(props, state.labels.haltSuccess)
+        showMessage(state.labels.haltSuccess)
         props.f7router.back()    
       }
     } catch(err) {
@@ -63,7 +64,7 @@ const StorePackDetails = props => {
 		}
   }
   const handleExtendOffer = () => {
-    props.f7router.app.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async days => {
+    f7.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async days => {
       try{
         if (!days || Number(days) <= 0) {
           throw new Error('invalidValue')
@@ -75,7 +76,7 @@ const StorePackDetails = props => {
           offerEnd
         }
         await extendOffer(newStorePack)
-        showMessage(props, state.labels.editSuccess)
+        showMessage(state.labels.editSuccess)
         props.f7router.back() 
       } catch(err) {
         setError(getMessage(props, err))

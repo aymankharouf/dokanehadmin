@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
+import { f7 } from 'framework7-react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/Store';
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/Actions';
@@ -24,17 +25,17 @@ const EditOrder = props => {
   }, [dispatch, order])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleDelete = () => {
-    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         await updateOrderStatus(order, type, state.storePacks, state.packs)
-        showMessage(props, state.labels.deleteSuccess)
+        showMessage(state.labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
       } catch(err) {
@@ -44,8 +45,8 @@ const EditOrder = props => {
   }
   const handleSubmit = async () => {
     try{
-      await editOrder({...order, withDelivery}, state.orderBasket, state.storePacks, state.packs)
-      showMessage(props, state.labels.editSuccess)
+      await editOrder({...order, withDelivery, urgent}, state.orderBasket, state.storePacks, state.packs, state.locations, state.customers.find(c => c.id === order.userId))
+      showMessage(state.labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
     } catch(err) {

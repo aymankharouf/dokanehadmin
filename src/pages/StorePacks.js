@@ -45,12 +45,13 @@ const StorePacks = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={moment(p.time.toDate()).fromNow()}
+                  footer={packInfo.offerEnd ? `${state.labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
                   after={(p.price / 1000).toFixed(3)}
                   key={p.id}
                 >
                   <PackImage slot="media" pack={packInfo} type="list" />
                   {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                  {packInfo.isOffer || packInfo.hasOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+                  {packInfo.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
                 </ListItem>
               )
             })

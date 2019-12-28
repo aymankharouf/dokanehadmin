@@ -42,10 +42,10 @@ const EditSpending = props => {
   }, [spendingDate, state.labels])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleEdit = async () => {
     try{
@@ -57,7 +57,7 @@ const EditSpending = props => {
         spendingDate: formatedDate,
         description
       })
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

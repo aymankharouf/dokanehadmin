@@ -18,10 +18,10 @@ const EditPrice = props => {
   const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const getDefaultPrice = () => {
     if (cost) {
       if (pack.subQuantity > 1) {
@@ -52,7 +52,7 @@ const EditPrice = props => {
         time: new Date()
       }
       await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

@@ -45,10 +45,10 @@ const AddOffer = props => {
   }
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleSubmit = async () => {
     try{
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
@@ -74,7 +74,7 @@ const AddOffer = props => {
         time: new Date()
       }
       await addPack(pack)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

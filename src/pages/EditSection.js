@@ -13,10 +13,10 @@ const EditSection = props => {
   const [name, setName] = useState(section.name)
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleEdit = async () => {
     try{
@@ -24,7 +24,7 @@ const EditSection = props => {
         id: section.id,
         name
       })
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

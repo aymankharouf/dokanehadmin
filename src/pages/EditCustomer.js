@@ -23,7 +23,8 @@ const EditCustomer = props => {
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [otherMobileHolder, setOtherMobileHolder] = useState(customer.otherMobileHolder)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [overPriceLimit, setOverPriceLimit] = useState(customer.overPriceLimit)
+  const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
+  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -41,9 +42,10 @@ const EditCustomer = props => {
     if (isBlocked !== customer.isBlocked) return true
     if (otherMobile !== customer.otherMobile) return true
     if (otherMobileHolder !== customer.otherMobileHolder) return true
-    if (overPriceLimit !== customer.overPriceLimit) return true
+    if (exceedPrice !== customer.exceedPrice) return true
+    if (deliveryFees * 1000 !== customer.deliveryFees) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, otherMobileHolder, overPriceLimit])
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, otherMobileHolder, exceedPrice, deliveryFees])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -59,10 +61,10 @@ const EditCustomer = props => {
   }, [otherMobile, state.labels])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try{
@@ -77,10 +79,11 @@ const EditCustomer = props => {
         isBlocked,
         otherMobile,
         otherMobileHolder,
-        overPriceLimit: overPriceLimit * 1000
+        exceedPrice,
+        deliveryFees: deliveryFees * 1000
       }
       await editCustomer(customer, name)
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
 			setError(getMessage(props, err))
@@ -162,15 +165,19 @@ const EditCustomer = props => {
           <span>{state.labels.isBlocked}</span>
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
+        <ListItem>
+          <span>{state.labels.exceedPrice}</span>
+          <Toggle color="blue" checked={exceedPrice} onToggleChange={() => setExceedPrice(!exceedPrice)} />
+        </ListItem>
         <ListInput 
-          name="overPriceLimit" 
-          label={state.labels.overPriceLimit}
-          value={overPriceLimit}
+          name="deliveryFees" 
+          label={state.labels.deliveryFees}
+          value={deliveryFees}
           floatingLabel 
           clearButton
           type="number" 
-          onChange={e => setOverPriceLimit(e.target.value)}
-          onInputClear={() => setOverPriceLimit('')}
+          onChange={e => setDeliveryFees(e.target.value)}
+          onInputClear={() => setDeliveryFees('')}
         />
         <ListInput
           label={state.labels.otherMobile}

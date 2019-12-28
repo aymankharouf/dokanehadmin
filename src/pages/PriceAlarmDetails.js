@@ -35,15 +35,15 @@ const PriceAlarmDetails = props => {
   }, [state.storePacks, pack])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleApprove = async () => {
     try{
       await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.packs)
-      showMessage(props, state.labels.approveSuccess)
+      showMessage(state.labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -52,7 +52,7 @@ const PriceAlarmDetails = props => {
   const handleReject = async () => {
     try{
       await rejectPriceAlarm(priceAlarm)
-      showMessage(props, state.labels.rejectSuccess)
+      showMessage(state.labels.rejectSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

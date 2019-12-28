@@ -10,15 +10,15 @@ const Login = props => {
   const [email, setEmail] = useState('')
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleLogin = async () => {
     try{
       await login(email, password)
-      showMessage(props, state.labels.loginSuccess)
+      showMessage(state.labels.loginSuccess)
       props.f7router.back()
       props.f7router.app.panel.close('right')  
     } catch(err) {

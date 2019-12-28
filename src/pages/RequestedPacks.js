@@ -15,21 +15,28 @@ const RequestedPacks = props => {
 	useEffect(() => {
 		let packsArray = []
 		approvedOrders.forEach(o => {
+			const customerInfo = state.customers.find(c => c.id === o.userId)
 			o.basket.forEach(p => {
+				let exceedPriceQuantity = 0
 				if (p.status === 'n' || p.status === 'p') {
 					const packInfo = state.packs.find(pa => pa.id === p.packId)
 					const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
+					if (p.price < packInfo.price && parseInt(p.price * (100 + state.labels.exceedPricePercent) / 100) >= packInfo.price && customerInfo.exceedPrice) {
+						exceedPriceQuantity = p.quantity - p.purchased
+					}
 					if (!packInfo.byWeight && found) {
 						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
 						packsArray.push({
 							...found, 
-							quantity: found.quantity + p.quantity - p.purchased
+							quantity: found.quantity + p.quantity - p.purchased,
+							exceedPriceQuantity: found.exceedPriceQuantity + exceedPriceQuantity
 						})
 					} else {
 						packsArray.push({
 							packId: p.packId,
 							price: p.price, 
 							quantity: p.quantity - p.purchased,
+							exceedPriceQuantity,
 							byWeight: packInfo.byWeight,
 							orderId: o.id
 						})
@@ -68,7 +75,8 @@ const RequestedPacks = props => {
 				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > state.labels.margin) {
 					return {
 						...p,
-						quantity: addQuantity(p.quantity, -1 * inBasketQuantity)
+						quantity: addQuantity(p.quantity, -1 * inBasketQuantity),
+						exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity)
 					}
 				} else {
 					return {
@@ -81,7 +89,7 @@ const RequestedPacks = props => {
 			}
 		})
 		setRequiredPacks(packsArray.filter(p => p.quantity > 0))
-	}, [state.basket, approvedOrders, state.packs, state.labels])
+	}, [state.basket, approvedOrders, state.packs, state.customers, state.labels])
   return(
     <Page>
       <Navbar title={state.labels.requestedPacks} backLink={state.labels.back} />
@@ -93,7 +101,7 @@ const RequestedPacks = props => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
 							return (
 								<ListItem
-									link={`/requestedPackDetails/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
+									link={`/requestedPackDetails/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceedPriceQuantity/${p.exceedPriceQuantity}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									text={`${state.labels.requested}: ${quantityText(p.quantity)}`}

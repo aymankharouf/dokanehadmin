@@ -39,10 +39,10 @@ const ApproveUser = props => {
   }, [otherMobile, state.labels])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try {
@@ -59,7 +59,7 @@ const ApproveUser = props => {
         otherMobileHolder,
         address,
       })
-      showMessage(props, state.labels.approveSuccess)
+      showMessage(state.labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))

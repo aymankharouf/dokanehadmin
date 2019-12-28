@@ -17,21 +17,21 @@ const ConfirmPurchase = props => {
   let i = 0
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handlePurchase = async () => {
     try{
       if (store.id === 's') {
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs)
-        showMessage(props, state.labels.purchaseSuccess)
+        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
+        showMessage(state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, total, discount)
-        showMessage(props, state.labels.purchaseSuccess)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount)
+        showMessage(state.labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       }  

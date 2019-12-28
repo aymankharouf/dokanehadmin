@@ -17,10 +17,10 @@ const AddPack = props => {
   , [state.products, props.id])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   useEffect(() => {
     if (isDivided) {
       setByWeight(true)
@@ -46,7 +46,7 @@ const AddPack = props => {
         price: 0,
         time: new Date()
       })
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

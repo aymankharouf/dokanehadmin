@@ -1,4 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
+import { f7 } from 'framework7-react';
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/Store';
@@ -19,28 +20,38 @@ const RequestedPackDetails = props => {
   const packStores = useMemo(() => {
     let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
     packStores = packStores.map(s => {
-      let packId, unitPrice, quantity, offerInfo, isOffer
-      let price = s.price
+      let packId, unitPrice, quantity, offerInfo, isOffer, price
       if (s.packId === props.packId) {
         packId = s.packId
-        unitPrice = s.storeId === 's' || !s.quantity ? s.cost : parseInt(s.cost / s.quantity) 
+        if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
+          price = s.price
+          unitPrice = s.price
+        } else {
+          price = s.cost
+          unitPrice = s.price
+        }
         quantity = s.quantity
         isOffer = false
       } else {
         offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === props.packId)
         if (offerInfo) {
           packId = offerInfo.id
-          unitPrice = parseInt((s.cost / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+          if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
+            unitPrice = parseInt((s.price / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+            price = s.price
+            isOffer = true
+          } else {
+            unitPrice = s.price
+            price = s.cost
+            isOffer = false
+          }
           quantity = offerInfo.subQuantity
-          isOffer = (s.cost === s.price) // false for type 5
-          if (s.cost !== s.price) { // for type 5 get total price not unit price
-            price = price * offerInfo.subQuantity
-          } 
         } else {
           offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)
           if (offerInfo) {
             packId = offerInfo.id
-            unitPrice = parseInt((s.cost / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            price = s.price
+            unitPrice = parseInt((s.price / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
             quantity = offerInfo.bonusQuantity
             isOffer = true
           }
@@ -83,10 +94,71 @@ const RequestedPackDetails = props => {
   }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
+  const addToBasket = (packStore, requested, exceedPriceType) => {
+    try {
+      const packInfo = state.packs.find(p => p.id === packStore.packId)
+      let quantity, params
+      if (packInfo.byWeight) {
+        f7.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, weight => {
+          try{
+            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
+              throw new Error('InvalidWeight')
+            }
+            if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
+              throw new Error('InvalidWeight')
+            }
+            if (packStore.storeId === 's') {
+              quantity = Math.min(Number(requested), packStore.quantity)
+            } else if (packStore.quantity) {
+              quantity = Math.ceil(Number(requested) / packStore.quantity)
+            } else {
+              quantity = Number(requested)
+            }  
+            params = {
+              pack: packInfo,
+              packStore,
+              quantity: pack.isDivided ? Number(weight) : quantity,
+              price: Number(props.price),
+              requested,
+              orderId: props.orderId,
+              weight: Number(weight),
+              exceedPriceType
+            }
+            dispatch({type: 'ADD_TO_BASKET', params})
+            showMessage(state.labels.addToBasketSuccess)
+            props.f7router.back()
+          } catch(err) {
+            setError(getMessage(props, err))
+          }      
+        })
+      } else {
+        if (packStore.storeId === 's') {
+          quantity = Math.min(Number(requested), packStore.quantity)
+        } else if (packStore.quantity) {
+          quantity = Math.ceil(Number(requested) / packStore.quantity)
+        } else {
+          quantity = Number(requested)
+        }
+        params = {
+          pack: packInfo,
+          packStore,
+          quantity,
+          price: Number(props.price),
+          requested,
+          exceedPriceType
+        }
+        dispatch({type: 'ADD_TO_BASKET', params})
+        showMessage(state.labels.addToBasketSuccess)
+        props.f7router.back()  
+      }
+    } catch(err) {
+      setError(getMessage(props, err))
+    }
+  }
 	const handlePurchase = packStore => {
     try{
       if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
@@ -103,72 +175,28 @@ const RequestedPackDetails = props => {
         }
       }
       if (packStore.unitPrice > Number(props.price)){
-        throw new Error('priceHigherThanRequested')
-      }
-      let quantity, params
-      if (packInfo.byWeight) {
-        props.f7router.app.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
-          try{
-            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
-              throw new Error('InvalidWeight')
-            }
-            if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
-              throw new Error('InvalidWeight')
-            }
-            if (packStore.storeId === 's') {
-              quantity = Math.min(Number(props.quantity), packStore.quantity)
-            } else if (packStore.quantity) {
-              quantity = Math.ceil(Number(props.quantity) / packStore.quantity)
-            } else {
-              quantity = Number(props.quantity)
-            }  
-            params = {
-              pack: packInfo,
-              packStore,
-              quantity: pack.isDivided ? Number(weight) : quantity,
-              price: Number(props.price),
-              requestedQuantity: Number(props.quantity),
-              orderId: props.orderId,
-              weight: Number(weight),
-              increment: packStore.isOffer || packStore.storeId === 's' || !packStore.quantity ? 1 : packStore.quantity
-            }
-            dispatch({type: 'ADD_TO_BASKET', params})
-            showMessage(props, state.labels.addToBasketSuccess)
-            props.f7router.back()
-          } catch(err) {
-            setError(getMessage(props, err))
-          }      
-        })
-      } else {
-        if (packStore.storeId === 's') {
-          quantity = Math.min(Number(props.quantity), packStore.quantity)
-        } else if (packStore.quantity) {
-          quantity = Math.ceil(Number(props.quantity) / packStore.quantity)
+        if (Number(props.price) < pack.price) { 
+          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + state.labels.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
+            f7.dialog.confirm(state.labels.exceedPricePurchase, state.labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceedPriceQuantity), 'p'))
+          } else {
+            throw new Error('noPurchase')
+          }
         } else {
-          quantity = Number(props.quantity)
+          f7.dialog.confirm(state.labels.priceHigherThanRequested, state.labels.confirmationTitle, () => addToBasket(packStore, Number(props.quantity), 'o'))
         }
-        params = {
-          pack: packInfo,
-          packStore,
-          quantity,
-          price: Number(props.price),
-          requestedQuantity: Number(props.quantity),
-          increment: packStore.isOffer || packStore.storeId === 's' || !packStore.quantity ? 1 : packStore.quantity
-        }
-        dispatch({type: 'ADD_TO_BASKET', params})
-        showMessage(props, state.labels.addToBasketSuccess)
-        props.f7router.back()  
+      } else {
+        addToBasket(packStore, Number(props.quantity), 'n')
       }
     } catch(err) {
       setError(getMessage(props, err))
     }
   }
   const handleUnavailable = overPriced => {
-    props.f7router.app.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
         await packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
-        showMessage(props, state.labels.executeSuccess)
+        showMessage(state.labels.executeSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))
@@ -185,8 +213,9 @@ const RequestedPackDetails = props => {
             <PackImage pack={pack} type="card" />
           </CardContent>
           <CardFooter>
-            <p>{(props.price / 1000).toFixed(3)}</p>
-            <p>{props.quantity}</p>
+            <p>{`${state.labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
+            {`${state.labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
+            {`${state.labels.quantity}: ${props.quantity}`}</p>
           </CardFooter>
         </Card>
         <List mediaList>
@@ -212,8 +241,8 @@ const RequestedPackDetails = props => {
               <ListItem 
                 title={storeInfo.name}
                 subtitle={`${productInfo.name} ${packInfo.name}`}
-                text={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${state.labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
-                footer={`${state.labels.unitCost}: ${(s.unitPrice / 1000).toFixed(3)}`}
+                text={`${state.labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+                footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${state.labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
                 key={s.id}
               >
                 <Button slot="after" onClick={() => handlePurchase(s)}>{state.labels.purchase}</Button>

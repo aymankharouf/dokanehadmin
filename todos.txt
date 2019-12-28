@@ -100,11 +100,16 @@
 *overpriced text
 *partial purchase from offer
 *max discount for first order
+*over price limit for each customer (default 0)
+*force purchase with price above requested price (loss)
+*add delivery fees for customer
+*test if firebase can handle max value for element (order limit an examlple)
+*offer end date to user
+*request for new products or packs
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
 data types in firebase
-offer end date to user
 loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
@@ -113,11 +118,8 @@ smart basket when confirm order (packs with more value from the same product, al
 delivery plan by locations
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
-force purchase with price above requested price (loss)
 add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 check for page permissions (admin & app)
-over price limit for each customer (default 0)
-request for new products or packs
 product describtion
 navigation & performance
 hints & help
@@ -128,7 +130,6 @@ last ordered product by the user in the same category & its price & quantity
 purchase history by category for the user
 cancel a purchase or part of it
 customer follow-up
-suggestions
 advertisements & request for advert from store owner
 blacklist customer who did not pick his order
 store trans --purchases & returns
@@ -138,5 +139,6 @@ detect device size note
 button to add shortcut PWA
 note for stop the service
 merging orders
-add offer request
 stores last month trans & requested packs that can be purchased from
+approve for invitations
+archive data

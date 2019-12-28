@@ -16,7 +16,7 @@ const PrepareOrders = props => {
 		let packsArray = []
 		finishedOrders.forEach(o => {
 			o.basket.forEach(p => {
-				if (['p', 'f', 'pu', 'pr'].includes(p.status)) {
+				if (p.purchased > 0 && !p.isAllocated) {
 					const found = packsArray.find(pa => pa.packId === p.packId)
 					if (!p.weight && found) {
 						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
@@ -49,7 +49,7 @@ const PrepareOrders = props => {
 							const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
 							return (
 								<ListItem
-									link={`/prepareOrdersList/${p.packId}/order/${p.orderId}`}
+									link={`/prepareOrdersList/${p.packId}/order/${p.orderId || 0}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
 									text={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}

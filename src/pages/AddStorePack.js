@@ -25,10 +25,10 @@ const AddStorePack = props => {
   }, [state.packs, state.products]) 
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const getDefaultPrice = () => {
     if (cost && packId) {
       const pack = state.packs.find(p => p.id === packId)
@@ -66,7 +66,7 @@ const AddStorePack = props => {
       }
       const pack = state.packs.find(p => p.id === packId)
       await addStorePack(storePack, pack, state.storePacks)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

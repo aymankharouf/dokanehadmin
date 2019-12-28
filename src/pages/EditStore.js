@@ -54,10 +54,10 @@ const EditStore = props => {
   }, [store, name, mobile, discount, address, locationId, position, canReturn])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try{
@@ -75,7 +75,7 @@ const EditStore = props => {
         address,
         position
       })
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

@@ -61,6 +61,12 @@ const CustomerDetails = props => {
           </ListItem>
         }
         {props.full === '0' ? '' :
+          <ListItem>
+            <span>{state.labels.exceedPrice}</span>
+            <Toggle color="blue" checked={customer.exceedPrice} disabled />
+          </ListItem>
+        }
+        {props.full === '0' ? '' :
           <ListInput 
             name="totalOrders" 
             label={state.labels.totalOrders}
@@ -90,9 +96,9 @@ const CustomerDetails = props => {
         }
         {props.full === '0' ? '' :
           <ListInput 
-            name="overPriceLimit" 
-            label={state.labels.overPriceLimit}
-            value={(customer.overPriceLimit / 1000).toFixed(3)}
+            name="deliveryFees" 
+            label={state.labels.deliveryFees}
+            value={(customer.deliveryFees / 1000).toFixed(3)}
             floatingLabel 
             type="number"
             readonly

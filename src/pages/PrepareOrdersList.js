@@ -1,20 +1,38 @@
-import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
-import moment from 'moment'
-import 'moment/locale/ar'
 import { StoreContext } from '../data/Store';
-
+import { allocateOrderPack, showMessage, getMessage, showError } from '../data/Actions'
 
 const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
   const orders = useMemo(() => {
-    const orders = state.orders.filter(o => props.orderId ? o.id === props.orderId : o.status === 'f' && o.basket.find(p => p.id === props.packId))
+    const orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
   }, [state.orders, props.orderId, props.packId])
+  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
+  , [state.packs, props.packId])
+  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
+  , [state.products, pack])
+  useEffect(() => {
+    if (error) {
+      showError(error)
+      setError('')
+    }
+  }, [error])
+  const handleAllocate = async order => {
+    try{
+      await allocateOrderPack(order, pack)
+      showMessage(state.labels.editSuccess)
+      props.f7router.back()
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+  }
   return(
     <Page>
-      <Navbar title={state.labels.prepareOrders} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 
@@ -25,12 +43,10 @@ const PrepareOrdersList = props => {
                 <ListItem
                   title={`${state.labels.user}: ${userInfo.name}`}
                   subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
-                  text={moment(o.time.toDate()).fromNow()}
-                  footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
-                  after={(o.total / 1000).toFixed(3)}
+                  text={`${state.labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                   key={o.id}
                 >
-                  {o.withDelivery ? <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> : ''}
+                  <Button slot="after" onClick={() => handleAllocate(o)}>{state.labels.allocate}</Button>
                 </ListItem>
               )
             })

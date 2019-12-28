@@ -28,7 +28,7 @@ const Offers = props => {
                     title={productInfo.name}
                     subtitle={packInfo.name}
                     text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
-                    footer={moment(p.offerEnd.toDate()).format('DD/MM/YYYY')}
+                    footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
                     after={(p.price / 1000).toFixed(3)}
                     key={p.id}
                   >

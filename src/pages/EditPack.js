@@ -34,10 +34,10 @@ const EditPack = props => {
 
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleSubmit = async () => {
     try{
       const newPack = {
@@ -50,7 +50,7 @@ const EditPack = props => {
         byWeight
       }
       await editPack(newPack)
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

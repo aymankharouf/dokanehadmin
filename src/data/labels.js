@@ -263,7 +263,6 @@ const labels = {
   relatedProducts: 'المنتجات ذات العلاقة',
   storage: 'طريقة الحفظ',
   closeExpired: 'صلاحية قصيرة',
-  unitCost: 'تكلفة الوحدة',
   purchase: 'شراء',
   offerToExpire: 'عرض لقرب الصلاحية',
   returnPenalty: 100,
@@ -280,7 +279,13 @@ const labels = {
   addBulk: 'اضافة حزمة تجميعية',
   editBulk: 'تعديل حزمة تجميعية',
   invalidQuantity: 'الرجاء التأكد من الكمية المدخلة',
-  currentPrice: 'السعر الحالي'
+  currentPrice: 'السعر الحالي',
+  allocate: 'وضع',
+  exceedPrice: 'تجاوز السعر',
+  exceedPricePercent: 5,
+  exceedPricePurchase: 'سيتم الشراء للعملاء الذين يسمحون بتجاوز السعر',
+  noPurchase: 'لا يوجد ما يتم شراؤه بسبب ارتفاع السعر',
+  offerUpTo: 'عرض حتى تاريخ'
 }
 
 export default labels

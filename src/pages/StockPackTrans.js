@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -31,13 +32,13 @@ const StockPackTrans = props => {
   }, [state.stockTrans, pack])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleAddTrans = (type, storeId, cost, price) => {
-    props.f7router.app.dialog.prompt(state.labels.enterQuantity, state.labels.quantity, async quantity => {
+    f7.dialog.prompt(state.labels.enterQuantity, state.labels.quantity, async quantity => {
       try{
         if (storeId && !state.stores.find(s => s.id === storeId).canReturn) {
           throw new Error('storeNotReturn')
@@ -45,8 +46,8 @@ const StockPackTrans = props => {
         if (Number(quantity) === 0 || Number(quantity) > stockPackInfo.quantity) {
           throw new Error('invalidValue')
         }
-        await addStockTrans(type, pack.id, Number(quantity), cost ?? stockPackInfo.cost, price ?? stockPackInfo.price, state.storePacks, state.packs, storeId)
-        showMessage(props, state.labels.addSuccess)
+        await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId)
+        showMessage(state.labels.addSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))

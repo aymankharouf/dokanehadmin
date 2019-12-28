@@ -25,10 +25,10 @@ const EditLocation = props => {
   }, [hasDelivery])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleEdit = async () => {
     try{
@@ -39,7 +39,7 @@ const EditLocation = props => {
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))

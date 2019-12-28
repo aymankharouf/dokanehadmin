@@ -1,4 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/Store';
@@ -9,24 +10,28 @@ const FollowupOrderDetails = props => {
   const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
-  const netPrice = useMemo(() => {
-    const net = order.total + order.fixedFees + order.deliveryFees - order.discount
-    return Math.floor(net / 50) * 50
+  const fractionFromProfit = useMemo(() => {
+    let fraction = 0
+    if (order.fixedFees === 0) {
+      const profit = order.basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
+      fraction = profit - order.profit
+    }
+    return fraction
   }, [order])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSend = async () => {
     try{
       if (order.position !== 's' && order.status === 'd') {
-        props.f7router.app.dialog.confirm(state.labels.confirmeReceiveText, state.labels.confirmationTitle, async () => {
+        f7.dialog.confirm(state.labels.confirmeReceiveText, state.labels.confirmationTitle, async () => {
           try{
             await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
-            showMessage(props, state.labels.sendSuccess)
+            showMessage(state.labels.sendSuccess)
             props.f7router.back()
           } catch(err) {
             setError(getMessage(props, err))
@@ -34,7 +39,7 @@ const FollowupOrderDetails = props => {
         })  
       } else {
         await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
-        showMessage(props, state.labels.sendSuccess)
+        showMessage(state.labels.sendSuccess)
         props.f7router.back()
       }
     } catch(err) {
@@ -43,8 +48,8 @@ const FollowupOrderDetails = props => {
   }
   const handleDelivery = async () => {
     try{
-      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.users, state.invitations, props.cancelOrderId)
-      showMessage(props, state.labels.editSuccess)
+      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.customers, state.users, state.invitations, props.cancelOrderId)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -53,7 +58,7 @@ const FollowupOrderDetails = props => {
   const handleReturn = async () => {
     try {
       await returnOrder(order, state.storePacks, state.packs)
-      showMessage(props, state.labels.editSuccess)
+      showMessage(state.labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -123,7 +128,7 @@ const FollowupOrderDetails = props => {
           <ListItem 
             title={state.labels.net} 
             className="net" 
-            after={(netPrice / 1000).toFixed(3)} 
+            after={((order.total + order.fixedFees + (order.deliveryFees || 0) - (order.discount || 0) - fractionFromProfit) / 1000).toFixed(3)} 
           />
         </List>
       </Block>

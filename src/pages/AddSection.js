@@ -11,15 +11,15 @@ const AddSection = props => {
   const [name, setName] = useState('')
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try{
       await addSection({name})
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

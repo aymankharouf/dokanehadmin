@@ -17,14 +17,14 @@ const RetreivePassword = props => {
   }, [user, state.randomColors])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleSend = async () => {
     try{
       await resolveForgetPassword(props.id)
-      showMessage(props, state.labels.sendSuccess)
+      showMessage(state.labels.sendSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))

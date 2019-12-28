@@ -335,7 +335,7 @@ export default [
     component: RequestedPacks
   },
   {
-    path: '/requestedPackDetails/:packId/quantity/:quantity/price/:price/order/:orderId',
+    path: '/requestedPackDetails/:packId/quantity/:quantity/price/:price/order/:orderId/exceedPriceQuantity/:exceedPriceQuantity',
     component: RequestedPackDetails
   },
   {

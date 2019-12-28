@@ -21,10 +21,10 @@ const SellStore = props => {
   , [packStock, price, quantity])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
 
   const handleSubmit = async () => {
     try{
@@ -35,7 +35,7 @@ const SellStore = props => {
         throw new Error('invalidValue')
       }
       await addStockTrans('c', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
     	setError(getMessage(props, err))

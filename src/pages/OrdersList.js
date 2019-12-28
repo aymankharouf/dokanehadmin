@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge, NavRight, Searchbar, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
 import BottomToolbar from './BottomToolbar';
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -49,9 +49,7 @@ const OrdersList = props => {
                   key={o.id}
                 >
                   {o.statusTime ? <div className="list-subtext1">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
-                  {o.withDelivery ? 
-                    <Badge slot="subtitle" color="red">{state.labels.withDelivery}</Badge> 
-                  : ''}
+                  {o.withDelivery || o.urgent ? <div className="list-subtext2">{o.withDelivery ? state.labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? state.labels.urgent : ''}</div> : ''}
                 </ListItem>
               )
             })

@@ -17,10 +17,10 @@ const AddBulk = props => {
   , [state.packs, props.id])
   useEffect(() => {
     if (error) {
-      showError(props, error)
+      showError(error)
       setError('')
     }
-  }, [error, props])
+  }, [error])
   const handleSubmit = async () => {
     try{
       if (Number(subQuantity) < 1) {
@@ -43,7 +43,7 @@ const AddBulk = props => {
         time: new Date()
       }
       await addPack(pack)
-      showMessage(props, state.labels.addSuccess)
+      showMessage(state.labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
