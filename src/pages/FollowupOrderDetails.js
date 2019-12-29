@@ -2,8 +2,8 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Toggle } from 'framework7-react'
 import ReLogin from './ReLogin'
-import { StoreContext } from '../data/Store';
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/actions'
 
 const FollowupOrderDetails = props => {
   const { state, user } = useContext(StoreContext)

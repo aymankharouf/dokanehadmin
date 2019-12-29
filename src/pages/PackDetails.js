@@ -1,9 +1,9 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { f7 } from 'framework7-react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
-import { StoreContext } from '../data/Store'
-import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/Actions'
-import BottomToolbar from './BottomToolbar';
+import { StoreContext } from '../data/store'
+import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import BottomToolbar from './BottomToolbar'
 import PackImage from './PackImage'
 import moment from 'moment'
 

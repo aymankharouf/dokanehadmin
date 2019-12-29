@@ -1,9 +1,9 @@
 import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/store'
 import ReLogin from './ReLogin'
 import PackImage from './PackImage'
-import { quantityText } from '../data/Actions'
+import { quantityText } from '../data/actions'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)

@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Link } from 'framework7-react'
 import ReLogin from './ReLogin'
-import { StoreContext } from '../data/Store';
-import { quantityDetails } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { quantityDetails } from '../data/actions'
 
 const ReturnOrder = props => {
   const { state, user } = useContext(StoreContext)

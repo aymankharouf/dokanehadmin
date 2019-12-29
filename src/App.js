@@ -1,7 +1,7 @@
-import React from 'react';
-import { App, Panel, View } from 'framework7-react';
-import routes from './routes';
-import Store from './data/Store';
+import React from 'react'
+import { App, Panel, View } from 'framework7-react'
+import routes from './routes'
+import Store from './data/store'
 
 const app = props => {
   const f7params = {
@@ -9,7 +9,7 @@ const app = props => {
     name: 'دكانة نت',
     theme: 'ios', 
     routes,
-  };
+  }
 
   return (
     <Store>
@@ -20,7 +20,7 @@ const app = props => {
           <View id="main-view" url="/" main className="safe-areas"/>
       </App>
     </Store>
-  );
+  )
 }
 
 export default app

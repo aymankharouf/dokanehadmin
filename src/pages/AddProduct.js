@@ -1,7 +1,8 @@
 import React, {useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Toggle, Fab, Icon } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import { addProduct, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListItem, ListInput, Toggle, Fab, Icon } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import { addProduct, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 
 const AddProduct = props => {

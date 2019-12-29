@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
-import { StoreContext } from '../data/Store'
-import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/Actions'
+import BottomToolbar from './BottomToolbar'
+import { StoreContext } from '../data/store'
+import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/actions'
 
 const MonthlyTrans = props => {
   const { state } = useContext(StoreContext)

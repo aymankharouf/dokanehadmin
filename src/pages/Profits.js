@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
 
 
 const Profits = props => {

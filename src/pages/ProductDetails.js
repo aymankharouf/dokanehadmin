@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
-import { StoreContext } from '../data/Store';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { StoreContext } from '../data/store'
 
 
 const ProductDetails = props => {

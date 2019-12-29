@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { Page, Navbar, Block } from 'framework7-react';
-import { StoreContext } from '../data/Store';
+import React, { useContext } from 'react'
+import { Page, Navbar, Block } from 'framework7-react'
+import { StoreContext } from '../data/store'
 
 const NotFoundPage = props => {
   const { state } = useContext(StoreContext)

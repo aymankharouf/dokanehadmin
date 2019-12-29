@@ -1,5 +1,5 @@
-import React, { createContext, useReducer, useEffect, useState } from 'react';
-import Reducer from './Reducer'
+import React, { createContext, useReducer, useEffect, useState } from 'react'
+import Reducer from './reducer'
 import firebase from './firebase'
 import labels from './labels'
 
@@ -90,9 +90,9 @@ const Store = props => {
     {id: 'c', name: 'مبرد'},
     {id: 'f', name: 'مجمد'}
   ]
-  const localData = localStorage.getItem('basket');
+  const localData = localStorage.getItem('basket')
   const basket = localData ? JSON.parse(localData) : ''
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
   const initState = {
     sections: [], 
     randomColors, 
@@ -346,13 +346,13 @@ const Store = props => {
         })  
       }
     })
-  }, []);
+  }, [])
   return (
     <StoreContext.Provider value={{state, user, dispatch}}>
       {props.children}
     </StoreContext.Provider>
-  );
+  )
 }
  
-export default Store;
+export default Store
 

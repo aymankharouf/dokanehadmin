@@ -1,11 +1,10 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
-import { StoreContext } from '../data/Store';
-import { addStock, showMessage, showError, getMessage } from '../data/Actions'
+import BottomToolbar from './BottomToolbar'
+import { StoreContext } from '../data/store'
+import { addStock, showMessage, showError, getMessage } from '../data/actions'
 
 const Stores = props => {
-  console.log('p == ', props)
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)

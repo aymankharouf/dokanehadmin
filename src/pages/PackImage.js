@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/store'
 
 const PackImage = props => {
   const { state } = useContext(StoreContext)

@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
-import { approveRating, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
+import { approveRating, showMessage, showError, getMessage } from '../data/actions'
 
 const RatingDetails = props => {
   const { state } = useContext(StoreContext)

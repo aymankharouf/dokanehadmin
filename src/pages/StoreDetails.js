@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
 
 
 const StoreDetails = props => {

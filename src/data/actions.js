@@ -19,16 +19,16 @@ export const showMessage = messageText => {
   const message = f7.toast.create({
     text: `<span class="success">${messageText}<span>`,
     closeTimeout: 3000,
-  });
-  message.open();
+  })
+  message.open()
 }
 
 export const showError = messageText => {
   const message = f7.toast.create({
     text: `<span class="error">${messageText}<span>`,
     closeTimeout: 3000,
-  });
-  message.open();
+  })
+  message.open()
 }
 
 export const quantityText = quantity => {

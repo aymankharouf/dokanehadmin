@@ -1,9 +1,9 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { f7 } from 'framework7-react';
+import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import { StoreContext } from '../data/Store';
-import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/actions'
 import PackImage from './PackImage'
 
 const RequestedPackDetails = props => {

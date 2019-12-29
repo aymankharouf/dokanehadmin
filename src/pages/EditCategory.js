@@ -1,8 +1,8 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { editCategory, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
+import { editCategory, showMessage, showError, getMessage } from '../data/actions'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
 
 
 const EditCategory = props => {

@@ -1,7 +1,8 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { addCategory, showMessage, showError, getMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react';
-import { StoreContext } from '../data/Store';
+import { addCategory, showMessage, showError, getMessage } from '../data/actions'
+import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const AddCategory = props => {

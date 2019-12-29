@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { addPack, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
-import { StoreContext } from '../data/Store'
+import { addPack, showMessage, showError, getMessage } from '../data/actions'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { StoreContext } from '../data/store'
 import ReLogin from './ReLogin'
+import labels from '../data/labels'
 
 const AddBulk = props => {
   const { state, user } = useContext(StoreContext)

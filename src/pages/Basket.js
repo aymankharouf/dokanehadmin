@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useEffect } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
-import { StoreContext } from '../data/Store';
-import { quantityText } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { quantityText } from '../data/actions'
 import PackImage from './PackImage'
 
 const Basket = props => {

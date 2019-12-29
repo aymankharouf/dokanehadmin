@@ -1,7 +1,7 @@
 import React, {useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import { editProduct, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 
 
 const EditProduct = props => {

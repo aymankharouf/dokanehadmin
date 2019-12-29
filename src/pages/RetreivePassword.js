@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Toolbar, Button } from 'framework7-react'
-import { StoreContext } from '../data/Store';
-import { resolveForgetPassword, showMessage, showError, getMessage } from '../data/Actions'
-import BottomToolbar from './BottomToolbar';
+import { StoreContext } from '../data/store'
+import { resolveForgetPassword, showMessage, showError, getMessage } from '../data/actions'
+import BottomToolbar from './BottomToolbar'
 
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)

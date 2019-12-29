@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Popover, Link } from 'framework7-react'
 import RatingStars from './RatingStars'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
 

@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
-import { StoreContext } from '../data/Store';
-import { allocateOrderPack, showMessage, getMessage, showError } from '../data/Actions'
+import BottomToolbar from './BottomToolbar'
+import { StoreContext } from '../data/store'
+import { allocateOrderPack, showMessage, getMessage, showError } from '../data/actions'
 
 const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)

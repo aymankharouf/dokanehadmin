@@ -3,8 +3,8 @@ import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StoreContext } from '../data/Store';
-import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/actions'
 
 
 const StockPackTrans = props => {

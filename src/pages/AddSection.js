@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addSection, showMessage, showError, getMessage } from '../data/Actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
+import { addSection, showMessage, showError, getMessage } from '../data/actions'
+import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const AddSection = props => {

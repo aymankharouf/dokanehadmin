@@ -1,8 +1,8 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import BottomToolbar from './BottomToolbar';
-import { approveUser, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import BottomToolbar from './BottomToolbar'
+import { approveUser, showMessage, showError, getMessage } from '../data/actions'
 
 
 const ApproveUser = props => {

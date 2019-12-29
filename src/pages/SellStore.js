@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import { addStockTrans, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import { addStockTrans, showMessage, showError, getMessage } from '../data/actions'
 
 const SellStore = props => {
   const { state } = useContext(StoreContext)

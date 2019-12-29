@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import { Page, Navbar, List, ListItem } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import { logout } from '../data/Actions'
+import React, { useContext } from 'react'
+import { Page, Navbar, List, ListItem } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import { logout } from '../data/actions'
 
 const Panel = props => {
   const { state, user, dispatch } = useContext(StoreContext)

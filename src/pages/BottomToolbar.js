@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Icon, Link, Badge} from 'framework7-react'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/store'
 
 const BottomToolbar = props => {
   const { state } = useContext(StoreContext)

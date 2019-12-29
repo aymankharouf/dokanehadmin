@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react';
-import { StoreContext } from '../data/Store';
-import { editPrice, showMessage, showError, getMessage } from '../data/Actions'
+import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react'
+import { StoreContext } from '../data/store'
+import { editPrice, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './PackImage'
 
 const EditPrice = props => {

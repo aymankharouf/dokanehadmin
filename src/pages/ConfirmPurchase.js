@@ -2,8 +2,8 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
-import { StoreContext } from '../data/Store';
-import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 
 
 const ConfirmPurchase = props => {

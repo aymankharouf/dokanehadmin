@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import BottomToolbar from './BottomToolbar';
-import { StoreContext } from '../data/Store';
-import { quantityText, addQuantity } from '../data/Actions';
+import BottomToolbar from './BottomToolbar'
+import { StoreContext } from '../data/store'
+import { quantityText, addQuantity } from '../data/actions'
 import PackImage from './PackImage'
 
 const RequestedPacks = props => {

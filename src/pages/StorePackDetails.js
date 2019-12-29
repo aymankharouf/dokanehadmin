@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7 } from 'framework7-react'
 import { Block, Page, Navbar, Card, CardContent, Toolbar, CardFooter, Popover, List, Link, ListItem } from 'framework7-react'
-import { StoreContext } from '../data/Store';
-import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, showError, getMessage } from '../data/Actions'
+import { StoreContext } from '../data/store'
+import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './PackImage'
 
 const StorePackDetails = props => {

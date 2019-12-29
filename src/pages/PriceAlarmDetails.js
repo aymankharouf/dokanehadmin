@@ -1,10 +1,10 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import { StoreContext } from '../data/Store';
+import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { approvePriceAlarm, rejectPriceAlarm, showMessage, showError, getMessage } from '../data/Actions'
+import { approvePriceAlarm, rejectPriceAlarm, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './PackImage'
 
 const PriceAlarmDetails = props => {

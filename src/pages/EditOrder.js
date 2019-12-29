@@ -1,8 +1,8 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { f7 } from 'framework7-react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
-import { StoreContext } from '../data/Store';
-import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/Actions';
+import { StoreContext } from '../data/store'
+import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
 import PackImage from './PackImage'
 
 const EditOrder = props => {

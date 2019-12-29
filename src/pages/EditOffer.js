@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { editPack, showMessage, showError, getMessage } from '../data/Actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react';
-import { StoreContext } from '../data/Store'
+import { editPack, showMessage, showError, getMessage } from '../data/actions'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
+import { StoreContext } from '../data/store'
 import ReLogin from './ReLogin'
 
 const EditOffer = props => {
