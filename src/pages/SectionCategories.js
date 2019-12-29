@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const SectionCategories = props => {
@@ -15,11 +16,11 @@ const SectionCategories = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.categories} ${section.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.categories} ${section.name}`} backLink={labels.back} />
       <Block>
         <List>
           {categories.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : categories.map(c =>
               <ListItem 
                 link={`/editCategory/${c.id}`}

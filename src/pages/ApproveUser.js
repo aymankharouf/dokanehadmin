@@ -3,6 +3,7 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'fra
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import { approveUser, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 
 const ApproveUser = props => {
@@ -32,11 +33,11 @@ const ApproveUser = props => {
       if (patterns.mobile.test(value)){
         setOtherMobileErrorMessage('')
       } else {
-        setOtherMobileErrorMessage(state.labels.invalidMobile)
+        setOtherMobileErrorMessage(labels.invalidMobile)
       }
     }
     if (otherMobile) validateMobile(otherMobile)
-  }, [otherMobile, state.labels])
+  }, [otherMobile])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -59,7 +60,7 @@ const ApproveUser = props => {
         otherMobileHolder,
         address,
       })
-      showMessage(state.labels.approveSuccess)
+      showMessage(labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))
@@ -67,11 +68,11 @@ const ApproveUser = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.approveUser} backLink={state.labels.back} />
+      <Navbar title={labels.approveUser} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           type="text"
           value={name}
@@ -79,7 +80,7 @@ const ApproveUser = props => {
         />
         <ListInput 
           name="mobile" 
-          label={state.labels.mobile}
+          label={labels.mobile}
           floatingLabel 
           type="number"
           value={userInfo.mobile}
@@ -87,21 +88,21 @@ const ApproveUser = props => {
         />
         <ListInput 
           name="storeName" 
-          label={state.labels.storeName}
+          label={labels.storeName}
           floatingLabel 
           type="text"
           value={userInfo.storeName || ''}
           readonly
         />
         <ListItem
-          title={state.labels.store}
+          title={labels.store}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
@@ -112,14 +113,14 @@ const ApproveUser = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.location}
+          title={labels.location}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
@@ -130,7 +131,7 @@ const ApproveUser = props => {
           </select>
         </ListItem>
         <ListInput
-          label={state.labels.otherMobile}
+          label={labels.otherMobile}
           floatingLabel
           type="number"
           name="otherMobile"
@@ -143,14 +144,14 @@ const ApproveUser = props => {
         />
         {otherMobile ? 
           <ListItem
-            title={state.labels.otherMobileHolder}
+            title={labels.otherMobileHolder}
             smartSelect
             smartSelectParams={{
               openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
-              searchbarPlaceholder: state.labels.search,
-              popupCloseLinkText: state.labels.close
+              searchbarPlaceholder: labels.search,
+              popupCloseLinkText: labels.close
             }}
           >
             <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
@@ -163,7 +164,7 @@ const ApproveUser = props => {
         : ''}
         <ListInput 
           name="address" 
-          label={state.labels.address}
+          label={labels.address}
           floatingLabel 
           type="text" 
           value={address}

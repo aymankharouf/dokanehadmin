@@ -24,7 +24,7 @@ const AddCategory = props => {
         sectionId: props.id,
         name
       })
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -33,11 +33,11 @@ const AddCategory = props => {
   
   return (
     <Page>
-      <Navbar title={`${state.labels.addCategory} ${section.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.addCategory} ${section.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           type="text" 
           onChange={e => setName(e.target.value)}

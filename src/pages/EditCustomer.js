@@ -3,6 +3,7 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 
 const EditCustomer = props => {
@@ -54,11 +55,11 @@ const EditCustomer = props => {
       if (patterns.mobile.test(value)){
         setOtherMobileErrorMessage('')
       } else {
-        setOtherMobileErrorMessage(state.labels.invalidMobile)
+        setOtherMobileErrorMessage(labels.invalidMobile)
       }
     }
     if (otherMobile) validateMobile(otherMobile)
-  }, [otherMobile, state.labels])
+  }, [otherMobile])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -83,7 +84,7 @@ const EditCustomer = props => {
         deliveryFees: deliveryFees * 1000
       }
       await editCustomer(customer, name)
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
 			setError(getMessage(props, err))
@@ -91,11 +92,11 @@ const EditCustomer = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editCustomer} backLink={state.labels.back} />
+      <Navbar title={labels.editCustomer} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={name}
           floatingLabel 
           clearButton
@@ -105,7 +106,7 @@ const EditCustomer = props => {
         />
         <ListInput 
           name="nickName" 
-          label={state.labels.nickName}
+          label={labels.nickName}
           value={nickName}
           floatingLabel 
           clearButton
@@ -115,21 +116,21 @@ const EditCustomer = props => {
         />
         <ListInput 
           name="mobile" 
-          label={state.labels.mobile}
+          label={labels.mobile}
           value={userInfo.mobile}
           floatingLabel 
           type="number"
           readonly
         />
         <ListItem
-          title={state.labels.store}
+          title={labels.store}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
@@ -140,14 +141,14 @@ const EditCustomer = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.location}
+          title={labels.location}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
@@ -158,20 +159,20 @@ const EditCustomer = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>{state.labels.isOldAge}</span>
+          <span>{labels.isOldAge}</span>
           <Toggle color="blue" checked={isOldAge} onToggleChange={() => setIsOldAge(!isOldAge)} />
         </ListItem>
         <ListItem>
-          <span>{state.labels.isBlocked}</span>
+          <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
         <ListItem>
-          <span>{state.labels.exceedPrice}</span>
+          <span>{labels.exceedPrice}</span>
           <Toggle color="blue" checked={exceedPrice} onToggleChange={() => setExceedPrice(!exceedPrice)} />
         </ListItem>
         <ListInput 
           name="deliveryFees" 
-          label={state.labels.deliveryFees}
+          label={labels.deliveryFees}
           value={deliveryFees}
           floatingLabel 
           clearButton
@@ -180,7 +181,7 @@ const EditCustomer = props => {
           onInputClear={() => setDeliveryFees('')}
         />
         <ListInput
-          label={state.labels.otherMobile}
+          label={labels.otherMobile}
           floatingLabel
           type="number"
           name="otherMobile"
@@ -193,14 +194,14 @@ const EditCustomer = props => {
         />
         {otherMobile ? 
           <ListItem
-            title={state.labels.otherMobileHolder}
+            title={labels.otherMobileHolder}
             smartSelect
             smartSelectParams={{
               openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
-              searchbarPlaceholder: state.labels.search,
-              popupCloseLinkText: state.labels.close
+              searchbarPlaceholder: labels.search,
+              popupCloseLinkText: labels.close
             }}
           >
             <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
@@ -213,7 +214,7 @@ const EditCustomer = props => {
         : ''}
         <ListInput 
           name="position" 
-          label={state.labels.position}
+          label={labels.position}
           value={position}
           floatingLabel 
           clearButton
@@ -223,7 +224,7 @@ const EditCustomer = props => {
         />
         <ListInput 
           name="address" 
-          label={state.labels.address}
+          label={labels.address}
           value={address}
           floatingLabel 
           clearButton

@@ -44,7 +44,7 @@ const AddBulk = props => {
         time: new Date()
       }
       await addPack(pack)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -53,11 +53,11 @@ const AddBulk = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.addBulk} ${product.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.addBulk} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -66,14 +66,14 @@ const AddBulk = props => {
           onInputClear={() => setName('')}
         />
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select 
@@ -89,7 +89,7 @@ const AddBulk = props => {
         </ListItem>
         <ListInput 
           name="subQuantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={subQuantity}
           clearButton
           floatingLabel 
@@ -99,7 +99,7 @@ const AddBulk = props => {
         />
         <ListInput 
           name="orderLimit" 
-          label={state.labels.packLimit}
+          label={labels.packLimit}
           floatingLabel 
           clearButton
           type="number" 

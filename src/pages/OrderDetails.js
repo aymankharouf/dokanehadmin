@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link } from 'fra
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
+import labels from '../data/labels'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -44,7 +45,7 @@ const OrderDetails = props => {
           throw new Error('notApprovedUser')
         }
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.customers, state.users, state.invitations, props.cancelOrderId)
-        showMessage(state.labels.editSuccess)
+        showMessage(labels.editSuccess)
         props.f7router.back()
       }  
     } catch(err) {
@@ -54,61 +55,61 @@ const OrderDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.orderDetails} backLink={state.labels.back} />
+      <Navbar title={labels.orderDetails} backLink={labels.back} />
       <Block>
         <List mediaList>
           {order.basket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const storeName = p.storeId ? (p.storeId === 'm' ? state.labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${state.labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${state.labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-            const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? state.labels.overPricedNote : ''}`
+            const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+            const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+            const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
             return (
               <ListItem 
                 key={p.packId} 
                 title={productInfo.name}
                 subtitle={packInfo.name}
-                text={storeName ? `${state.labels.storeName}: ${storeName}` : ''}
+                text={storeName ? `${labels.storeName}: ${storeName}` : ''}
                 footer={quantityDetails(p)}
                 after={(p.gross / 1000).toFixed(3)}
               >
                 {changePriceNote ? <div className="list-subtext1">{changePriceNote}</div> : ''}
-                <div className="list-subtext2">{`${state.labels.status}: ${statusNote}`}</div>
+                <div className="list-subtext2">{`${labels.status}: ${statusNote}`}</div>
               </ListItem>
             )
           })}
           <ListItem 
-            title={state.labels.total} 
+            title={labels.total} 
             className="total"
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={state.labels.fixedFeesTitle} 
+            title={labels.fixedFeesTitle} 
             className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />
           {order.deliveryFees > 0 ? 
             <ListItem 
-              title={state.labels.deliveryFees} 
+              title={labels.deliveryFees} 
               className="fees" 
               after={(order.deliveryFees / 1000).toFixed(3)} 
             /> 
           : ''}
           {order.discount > 0 ? 
             <ListItem 
-              title={state.labels.discount} 
+              title={labels.discount} 
               className="discount" 
               after={(order.discount / 1000).toFixed(3)} 
             /> 
           : ''}
           <ListItem 
-            title={state.labels.net} 
+            title={labels.net} 
             className="net" 
             after={((order.total + order.fixedFees + (order.deliveryFees || 0) - (order.discount || 0) - fractionFromProfit) / 1000).toFixed(3)} 
           />
           {order.profit ? 
             <ListItem 
-              title={state.labels.profitTitle} 
+              title={labels.profitTitle} 
               after={(order.profit / 1000).toFixed(3)} 
             /> 
           : ''}
@@ -119,7 +120,7 @@ const OrderDetails = props => {
           <ListItem 
             link={`/customerDetails/${order.userId}/full/1`}
             popoverClose 
-            title={state.labels.customerInfo} 
+            title={labels.customerInfo} 
           />
           {statusActions.map(a => 
             <ListItem 

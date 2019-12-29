@@ -3,6 +3,7 @@ import { editSection, showMessage, showError, getMessage } from '../data/actions
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const EditSection = props => {
@@ -24,7 +25,7 @@ const EditSection = props => {
         id: section.id,
         name
       })
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -32,11 +33,11 @@ const EditSection = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editSection} backLink={state.labels.back} />
+      <Navbar title={labels.editSection} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={name}
           floatingLabel 
           type="text" 

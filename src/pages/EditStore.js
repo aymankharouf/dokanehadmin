@@ -3,6 +3,7 @@ import { editStore, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const EditStore = props => {
@@ -36,12 +37,12 @@ const EditStore = props => {
       if (patterns.mobile.test(value)){
         setMobileErrorMessage('')
       } else {
-        setMobileErrorMessage(state.labels.invalidMobile)
+        setMobileErrorMessage(labels.invalidMobile)
       }
     }
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
-  }, [mobile, state.labels])
+  }, [mobile])
   const hasChanged = useMemo(() => {
     if (name !== store.name) return true
     if (mobile !== store.mobile) return true
@@ -75,7 +76,7 @@ const EditStore = props => {
         address,
         position
       })
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -83,11 +84,11 @@ const EditStore = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editStore} backLink={state.labels.back} />
+      <Navbar title={labels.editStore} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={name}
           floatingLabel
           clearButton 
@@ -97,7 +98,7 @@ const EditStore = props => {
         />
         <ListInput
           name="mobile"
-          label={state.labels.mobile}
+          label={labels.mobile}
           value={mobile}
           floatingLabel
           clearButton
@@ -108,14 +109,14 @@ const EditStore = props => {
           onInputClear={() => setMobile('')}
         />
         <ListItem
-          title={state.labels.type}
+          title={labels.type}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
@@ -127,7 +128,7 @@ const EditStore = props => {
         </ListItem>
         <ListInput
           name="discount"
-          label={state.labels.discount}
+          label={labels.discount}
           value={discount}
           floatingLabel
           clearButton
@@ -136,7 +137,7 @@ const EditStore = props => {
           onInputClear={() => setDiscount('')}
         />
         <ListItem>
-          <span>{state.labels.canReturn}</span>
+          <span>{labels.canReturn}</span>
           <Toggle 
             name="canReturn" 
             color="green" 
@@ -145,14 +146,14 @@ const EditStore = props => {
           />
         </ListItem>
         <ListItem
-          title={state.labels.location}
+          title={labels.location}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
@@ -164,7 +165,7 @@ const EditStore = props => {
         </ListItem>
         <ListInput
           name="position"
-          label={state.labels.position}
+          label={labels.position}
           value={position}
           floatingLabel
           clearButton
@@ -174,7 +175,7 @@ const EditStore = props => {
         />
         <ListInput 
           name="address" 
-          label={state.labels.address}
+          label={labels.address}
           value={address}
           floatingLabel
           clearButton 
@@ -184,7 +185,7 @@ const EditStore = props => {
         />
         <ListItem
           link={`/storeOwners/${store.id}`}
-          title={state.labels.storeOwners}
+          title={labels.storeOwners}
           after={storeOwners.length}
         />
       </List>

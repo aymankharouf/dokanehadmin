@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const FollowupOrdersList = props => {
@@ -12,24 +13,24 @@ const FollowupOrdersList = props => {
   , [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${state.labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : orders.map(o => {
               const userInfo = state.users.find(u => u.id === o.userId)
               return (
                 <ListItem
                   link={`/followupOrderDetails/${o.id}`}
-                  title={`${state.labels.user}: ${userInfo.name}`}
-                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
-                  text={`${state.labels.status}: ${state.orderStatus.find(s => s.id === o.status).name}`}
+                  title={`${labels.user}: ${userInfo.name}`}
+                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
+                  text={`${labels.status}: ${state.orderStatus.find(s => s.id === o.status).name}`}
                   footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}
                 >
-                  {o.withDelivery ? <div className="list-subtext1">{state.labels.withDeliveryNote}</div> : ''}
+                  {o.withDelivery ? <div className="list-subtext1">{labels.withDeliveryNote}</div> : ''}
                 </ListItem>
               )
             })

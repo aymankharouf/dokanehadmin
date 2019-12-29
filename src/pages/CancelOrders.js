@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const CancelOrders = props => {
@@ -14,18 +15,18 @@ const CancelOrders = props => {
   }, [state.cancelOrders])
   return(
     <Page>
-      <Navbar title={state.labels.cancelOrders} backLink={state.labels.back} />
+      <Navbar title={labels.cancelOrders} backLink={labels.back} />
       <Block>
         <List mediaList>
           {cancelOrders.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : cancelOrders.map(o => {
               const userInfo = state.users.find(u => u.id === o.order.userId)
               return (
                 <ListItem
                   link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
-                  title={`${state.labels.user}: ${userInfo.name}`}
-                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  title={`${labels.user}: ${userInfo.name}`}
+                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                   text={state.orderStatus.find(s => s.id === o.order.status).name}
                   footer={moment(o.time.toDate()).fromNow()}
                   after={(o.order.total / 1000).toFixed(3)}

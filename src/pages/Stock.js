@@ -4,6 +4,7 @@ import { StoreContext } from '../data/store'
 import ReLogin from './ReLogin'
 import PackImage from './PackImage'
 import { quantityText } from '../data/actions'
+import labels from '../data/labels'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
@@ -14,7 +15,7 @@ const Stock = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.stock} backLink={state.labels.back}>
+      <Navbar title={labels.stock} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search" />
         </NavRight>
@@ -24,16 +25,16 @@ const Stock = props => {
           searchIn=".item-title, .item-subtitle"
           clearButton
           expandable
-          placeholder={state.labels.search}
+          placeholder={labels.search}
         ></Searchbar>
       </Navbar>
       <Block>
         <List className="searchbar-not-found">
-          <ListItem title={state.labels.noData} />
+          <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
           {storePacks.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : storePacks.map(p => {
               const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -42,8 +43,8 @@ const Stock = props => {
                   link={`/stockPackTrans/${p.packId}`}
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  text={`${state.labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
-                  footer={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
+                  text={`${labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
+                  footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
                   after={(p.cost / 1000).toFixed(3)}
                   key={p.id}
                 >

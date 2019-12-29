@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const Products = props => {
   const { state } = useContext(StoreContext)
@@ -9,7 +10,7 @@ const Products = props => {
   , [state.products])
   return(
     <Page>
-      <Navbar title={state.labels.allProducts} backLink={state.labels.back}>
+      <Navbar title={labels.allProducts} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -19,24 +20,24 @@ const Products = props => {
           searchIn=".item-title, .item-subtitle"
           clearButton
           expandable
-          placeholder={state.labels.search}
+          placeholder={labels.search}
         />
       </Navbar>
         <Block>
           <List className="searchbar-not-found">
-            <ListItem title={state.labels.noData} />
+            <ListItem title={labels.noData} />
           </List>
           <List mediaList className="search-list searchbar-found">
             {products.length === 0 ? 
-              <ListItem title={state.labels.noData} /> 
+              <ListItem title={labels.noData} /> 
             : products.map(p => {
                 return (
                   <ListItem
                     link={`/productPacks/${p.id}`}
                     title={p.name}
                     subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                    text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
-                    badge={p.isNew ? state.labels.new : ''}
+                    text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
+                    badge={p.isNew ? labels.new : ''}
                     badgeColor="red"
                     key={p.id}
                   >

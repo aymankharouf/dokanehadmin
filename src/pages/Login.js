@@ -1,10 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import { login, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const Login = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
@@ -18,7 +17,7 @@ const Login = props => {
   const handleLogin = async () => {
     try{
       await login(email, password)
-      showMessage(state.labels.loginSuccess)
+      showMessage(labels.loginSuccess)
       props.f7router.back()
       props.f7router.app.panel.close('right')  
     } catch(err) {
@@ -28,23 +27,23 @@ const Login = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.login} backLink={state.labels.back} />
+      <Navbar title={labels.login} backLink={labels.back} />
       <List form>
         <ListInput
-          label={state.labels.email}
+          label={labels.email}
           type="text"
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
         <ListInput
-          label={state.labels.password}
+          label={labels.password}
           type="text"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
       </List>
       {!email || !password ? '' : 
-        <Button large onClick={() => handleLogin()}>{state.labels.loginSubmit}</Button>
+        <Button large onClick={() => handleLogin()}>{labels.loginSubmit}</Button>
       }
     </Page>
   )

@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7 } from 'framework7-react'
-import { Block, Page, Navbar, Card, CardContent, Toolbar, CardFooter, Popover, List, Link, ListItem } from 'framework7-react'
+import { f7, Block, Page, Navbar, Card, CardContent, Toolbar, CardFooter, Popover, List, Link, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const StorePackDetails = props => {
   const { state } = useContext(StoreContext)
@@ -21,10 +21,10 @@ const StorePackDetails = props => {
     }
   }, [error])
   const handleDelete = () => {
-    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         await deleteStorePack(storePack, pack, state.storePacks, state.packs)
-        showMessage(state.labels.deleteSuccess)
+        showMessage(labels.deleteSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
       } catch(err) {
         setError(getMessage(props, err))
@@ -34,7 +34,7 @@ const StorePackDetails = props => {
   const handleConfirmPrice = async () => {
     try{
       await confirmPrice(storePack)
-      showMessage(state.labels.approveSuccess)
+      showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -45,10 +45,10 @@ const StorePackDetails = props => {
       const offerEndDate = new Date(storePack.offerEnd)
       const today = (new Date()).setHours(0, 0, 0, 0)
       if (offerEndDate > today) {
-        f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
             await haltOffer(storePack, pack, state.storePacks, state.packs)
-            showMessage(state.labels.haltSuccess)
+            showMessage(labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
             setError(getMessage(props, err))
@@ -56,7 +56,7 @@ const StorePackDetails = props => {
         })
       } else {
         await haltOffer(storePack, pack, state.storePacks)
-        showMessage(state.labels.haltSuccess)
+        showMessage(labels.haltSuccess)
         props.f7router.back()    
       }
     } catch(err) {
@@ -64,7 +64,7 @@ const StorePackDetails = props => {
 		}
   }
   const handleExtendOffer = () => {
-    f7.dialog.prompt(state.labels.confirmationText, state.labels.confirmationTitle, async days => {
+    f7.dialog.prompt(labels.confirmationText, labels.confirmationTitle, async days => {
       try{
         if (!days || Number(days) <= 0) {
           throw new Error('invalidValue')
@@ -76,7 +76,7 @@ const StorePackDetails = props => {
           offerEnd
         }
         await extendOffer(newStorePack)
-        showMessage(state.labels.editSuccess)
+        showMessage(labels.editSuccess)
         props.f7router.back() 
       } catch(err) {
         setError(getMessage(props, err))
@@ -86,7 +86,7 @@ const StorePackDetails = props => {
   if (!storePack) return null //to handle delete operation
   return (
     <Page>
-      <Navbar title={`${product.name} ${state.stores.find(s => s.id === storePack.storeId).name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${state.stores.find(s => s.id === storePack.storeId).name}`} backLink={labels.back} />
       <Block>
         <Card>
           <CardContent>
@@ -104,14 +104,14 @@ const StorePackDetails = props => {
             <ListItem 
               link={`/editPrice/${storePack.id}`} 
               popoverClose 
-              title={state.labels.editPrice}
+              title={labels.editPrice}
             />
           }
           {storePack.storeId === 's' ? '' : 
             <ListItem 
               link="#" 
               popoverClose 
-              title={state.labels.delete} 
+              title={labels.delete} 
               onClick={() => handleDelete()}
             />
           }
@@ -119,7 +119,7 @@ const StorePackDetails = props => {
             <ListItem 
               link="#" 
               popoverClose 
-              title={state.labels.confirmPrice} 
+              title={labels.confirmPrice} 
               onClick={() => handleConfirmPrice()}
             />
           }
@@ -127,7 +127,7 @@ const StorePackDetails = props => {
             <ListItem 
               link="#" 
               popoverClose 
-              title={state.labels.haltOffer} 
+              title={labels.haltOffer} 
               onClick={() => handleHaltOffer()}
             /> 
           : ''}
@@ -135,7 +135,7 @@ const StorePackDetails = props => {
             <ListItem 
               link="#" 
               popoverClose 
-              title={state.labels.extendOffer} 
+              title={labels.extendOffer} 
               onClick={() => handleExtendOffer()}
             /> 
           : ''}

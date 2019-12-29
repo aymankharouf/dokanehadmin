@@ -34,9 +34,9 @@ const AddStorePack = props => {
     if (cost && packId) {
       const pack = state.packs.find(p => p.id === packId)
       if (pack.subQuantity > 1) {
-        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + state.labels.profit) / 100000).toFixed(3))
+        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + labels.profit) / 100000).toFixed(3))
       } else {
-        setPrice((cost * (100 + state.labels.profit) / 100).toFixed(3))
+        setPrice((cost * (100 + labels.profit) / 100).toFixed(3))
       }
     }
   }
@@ -67,7 +67,7 @@ const AddStorePack = props => {
       }
       const pack = state.packs.find(p => p.id === packId)
       await addStorePack(storePack, pack, state.storePacks)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -76,17 +76,17 @@ const AddStorePack = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.addProduct} ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.addProduct} ${store.name}`} backLink={labels.back} />
       <List form>
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="packId" value={packId} onChange={e => setPackId(e.target.value)}>
@@ -99,7 +99,7 @@ const AddStorePack = props => {
         {store.type === '5' ? 
           <ListInput 
             name="cost" 
-            label={state.labels.cost}
+            label={labels.cost}
             value={cost}
             clearButton
             floatingLabel 
@@ -111,7 +111,7 @@ const AddStorePack = props => {
         : ''}
         <ListInput 
           name="price" 
-          label={state.labels.price}
+          label={labels.price}
           value={price}
           clearButton 
           floatingLabel 
@@ -121,7 +121,7 @@ const AddStorePack = props => {
         />
         <ListInput 
           name="offerDays" 
-          label={state.labels.offerDays}
+          label={labels.offerDays}
           value={offerDays}
           clearButton 
           floatingLabel 

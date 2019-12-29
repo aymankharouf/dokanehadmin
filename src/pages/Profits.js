@@ -1,20 +1,19 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const Profits = props => {
-  const { state } = useContext(StoreContext)
   const [month, setMonth] = useState('')
   const [year, setYear] = useState('')
   return (
     <Page>
-      <Navbar title={state.labels.profits} backLink={state.labels.back} />
+      <Navbar title={labels.profits} backLink={labels.back} />
       <List form>
         <ListInput 
           name="month" 
-          label={state.labels.month} 
+          label={labels.month} 
           floatingLabel
           clearButton
           type="number"
@@ -24,7 +23,7 @@ const Profits = props => {
         />
         <ListInput 
           name="year" 
-          label={state.labels.year} 
+          label={labels.year} 
           floatingLabel
           clearButton
           type="number"

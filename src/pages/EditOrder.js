@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import { f7 } from 'framework7-react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
+import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -31,11 +31,11 @@ const EditOrder = props => {
   }, [error])
 
   const handleDelete = () => {
-    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         await updateOrderStatus(order, type, state.storePacks, state.packs)
-        showMessage(state.labels.deleteSuccess)
+        showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
       } catch(err) {
@@ -46,7 +46,7 @@ const EditOrder = props => {
   const handleSubmit = async () => {
     try{
       await editOrder({...order, withDelivery, urgent}, state.orderBasket, state.storePacks, state.packs, state.locations, state.customers.find(c => c.id === order.userId))
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
     } catch(err) {
@@ -55,7 +55,7 @@ const EditOrder = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editOrder} backLink={state.labels.back} />
+      <Navbar title={labels.editOrder} backLink={labels.back} />
       <Block>
         <List mediaList>
           {orderBasket.map(p => {
@@ -64,12 +64,12 @@ const EditOrder = props => {
               <ListItem
                 title={state.products.find(pr => pr.id === packInfo.productId).name}
                 subtitle={packInfo.name}
-                text={`${state.labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
+                text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
                 footer={quantityDetails(p)}
                 key={p.packId}
               >
                 <PackImage slot="media" pack={packInfo} type="list" />
-                <div className="list-subtext1">{`${state.labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
+                <div className="list-subtext1">{`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
                 <Stepper
                   slot="after"
                   fill
@@ -83,7 +83,7 @@ const EditOrder = props => {
         </List>
         <List form>
           <ListItem>
-            <span>{state.labels.withDelivery}</span>
+            <span>{labels.withDelivery}</span>
             <Toggle 
               name="withDelivery" 
               color="green" 
@@ -93,7 +93,7 @@ const EditOrder = props => {
             />
           </ListItem>
           <ListItem>
-            <span>{state.labels.urgent}</span>
+            <span>{labels.urgent}</span>
             <Toggle 
               name="urgent" 
               color="green" 
@@ -103,7 +103,7 @@ const EditOrder = props => {
           </ListItem>
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+      <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
         <Icon material="done"></Icon>
       </Fab>
 

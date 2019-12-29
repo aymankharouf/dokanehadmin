@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const PrepareOrders = props => {
   const { state } = useContext(StoreContext)
@@ -39,11 +40,11 @@ const PrepareOrders = props => {
 	}, [finishedOrders])
   return(
     <Page>
-      <Navbar title={state.labels.PurchasedProducts} backLink={state.labels.back} />
+      <Navbar title={labels.PurchasedProducts} backLink={labels.back} />
       <Block>
 				<List mediaList>
 					{packs.length === 0 ? 
-						<ListItem title={state.labels.noData} /> 
+						<ListItem title={labels.noData} /> 
 					: packs.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
 							const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
@@ -52,7 +53,7 @@ const PrepareOrders = props => {
 									link={`/prepareOrdersList/${p.packId}/order/${p.orderId || 0}`}
 									title={state.products.find(pr => pr.id === packInfo.productId).name}
 									subtitle={packInfo.name}
-									text={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
+									text={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
 									key={i++}
 								>
 									<PackImage slot="media" pack={packInfo} type="list" />

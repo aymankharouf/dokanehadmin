@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Countries = props => {
@@ -10,11 +11,11 @@ const Countries = props => {
   , [state.countries])
   return (
     <Page>
-      <Navbar title={state.labels.countries} backLink={state.labels.back} />
+      <Navbar title={labels.countries} backLink={labels.back} />
       <Block>
         <List>
           {countries.length === 0 ? 
-            <ListItem title={state.labels.noData} />
+            <ListItem title={labels.noData} />
           : countries.map(c =>
               <ListItem
                 link={`/editCountry/${c.id}`}

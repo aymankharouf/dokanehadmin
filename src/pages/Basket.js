@@ -3,6 +3,7 @@ import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper 
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -27,7 +28,7 @@ const Basket = props => {
   
   return (
     <Page>
-      <Navbar title={`${state.labels.basket_from} ${store?.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.basket_from} ${store?.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {basket.map(p => {
@@ -37,12 +38,12 @@ const Basket = props => {
               <ListItem
                 title={state.products.find(pr => pr.id === packInfo.productId).name}
                 subtitle={packInfo.name}
-                text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                footer={`${state.labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+                text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+                footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
                 key={i++}
               >
                 <PackImage slot="media" pack={packInfo} type="list" />
-                <div className="list-subtext1">{`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}</div>
+                <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}</div>
                 <Stepper
                   slot="after"
                   fill
@@ -55,7 +56,7 @@ const Basket = props => {
           })}
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${state.labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" href="/confirmPurchase/">
+      <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" href="/confirmPurchase/">
         <Icon material="done"></Icon>
       </Fab>
 

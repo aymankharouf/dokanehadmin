@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framewo
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const MonthlyTrans = props => {
   const { state } = useContext(StoreContext)
@@ -98,7 +99,7 @@ const MonthlyTrans = props => {
         withdraws
       }
       await addMonthlyTrans(trans)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -106,92 +107,92 @@ const MonthlyTrans = props => {
   }
   return(
     <Page>
-      <Navbar title={`${state.labels.monthlyTrans} ${props.id}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.monthlyTrans} ${props.id}`} backLink={labels.back} />
       <Block>
         <List>
           <ListItem
             link="#"
-            title={state.labels.ordersCount}
+            title={labels.ordersCount}
             after={ordersCount}
           />
           <ListItem
             link="#"
-            title={state.labels.finishedOrdersCount}
+            title={labels.finishedOrdersCount}
             after={finishedOrdersCount}
           />
           <ListItem
             link="#"
-            title={state.labels.deliveredOrdersCount}
+            title={labels.deliveredOrdersCount}
             after={deliveredOrdersCount}
           />
           <ListItem
             link="#"
-            title={state.labels.storePacks}
+            title={labels.storePacks}
             after={(storePacks / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.sales}
+            title={labels.sales}
             after={(sales / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.profitTitle}
+            title={labels.profitTitle}
             after={(profit / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.fixedFeesTitle}
+            title={labels.fixedFeesTitle}
             after={(fixedFees / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.deliveryFees}
+            title={labels.deliveryFees}
             after={(deliveryFees / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.purchaseDiscounts}
+            title={labels.purchaseDiscounts}
             after={(purchaseDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.netProfit}
+            title={labels.netProfit}
             after={((profit + fixedFees + deliveryFees + purchaseDiscounts) / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.discounts}
+            title={labels.discounts}
             after={(discounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.withdrawals}
+            title={labels.withdrawals}
             after={(withdrawals / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.expenses}
+            title={labels.expenses}
             after={(expenses / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.donations}
+            title={labels.donations}
             after={(donations / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.damages}
+            title={labels.damages}
             after={(damages / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.withdraws}
+            title={labels.withdraws}
             after={(withdraws / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={state.labels.cashing}
+            title={labels.cashing}
             after={(cashing / 1000).toFixed(3)}
           />
         </List>

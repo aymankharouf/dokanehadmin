@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Settings = props => {
@@ -17,7 +18,7 @@ const Settings = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.settings} backLink={state.labels.back} />
+      <Navbar title={labels.settings} backLink={labels.back} />
       <Block>
         {sections.map(s => 
           <Button 

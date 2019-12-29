@@ -4,6 +4,7 @@ import RatingStars from './RatingStars'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
+import labels from '../data/labels'
 
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
@@ -15,13 +16,13 @@ const ProductPacks = props => {
   }, [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
         <CardFooter>
-          <p>{`${state.labels.productOf} ${state.countries.find(c => c.id === product.countryId).name}`}</p>
+          <p>{`${labels.productOf} ${state.countries.find(c => c.id === product.countryId).name}`}</p>
           {product.trademarkId ? <p><RatingStars rating={product.rating} /></p> : ''}
         </CardFooter>
       </Card>
@@ -36,7 +37,7 @@ const ProductPacks = props => {
           >
             {p.isOffer ? 
               <Badge slot="title" color="green">
-                {state.labels.offer}
+                {labels.offer}
               </Badge> 
             : ''}
           </ListItem>
@@ -47,27 +48,27 @@ const ProductPacks = props => {
           <ListItem 
             link={`/productDetails/${props.id}`}
             popoverClose 
-            title={state.labels.details}
+            title={labels.details}
           />
           <ListItem 
             link={`/addPack/${props.id}`}
             popoverClose 
-            title={state.labels.addPack}
+            title={labels.addPack}
           />
           <ListItem 
             link={`/addOffer/${props.id}`}
             popoverClose 
-            title={state.labels.addOffer}
+            title={labels.addOffer}
           />
           <ListItem 
             link={`/addBulk/${props.id}`}
             popoverClose 
-            title={state.labels.addBulk}
+            title={labels.addBulk}
           />
           <ListItem 
             link={`/relatedProducts/${props.id}`}
             popoverClose 
-            title={state.labels.relatedProducts}
+            title={labels.relatedProducts}
           />
 
         </List>

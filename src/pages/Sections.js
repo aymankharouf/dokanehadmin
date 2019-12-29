@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
-
+import labels from '../data/labels'
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
@@ -11,14 +11,14 @@ const Sections = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.sections} backLink={state.labels.back} />
+      <Navbar title={labels.sections} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/addSection/">
         <Icon material="add"></Icon>
       </Fab>
       <Block>
         <List>
           {sections.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : sections.map(s =>
               <ListItem 
                 link={`/sectionCategories/${s.id}`} 

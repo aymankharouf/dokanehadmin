@@ -1,10 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import { changePassword, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const ChangePassword = props => {
-  const { state } = useContext(StoreContext)
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [error, setError] = useState('')
@@ -18,7 +17,7 @@ const ChangePassword = props => {
   const handleSubmit = async () => {
     try{
       await changePassword(oldPassword, newPassword)
-      showMessage(state.labels.changePasswordSuccess)
+      showMessage(labels.changePasswordSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -27,10 +26,10 @@ const ChangePassword = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.changePassword} backLink={state.labels.back} />
+      <Navbar title={labels.changePassword} backLink={labels.back} />
       <List form>
         <ListInput
-          label={state.labels.oldPassword}
+          label={labels.oldPassword}
           type="text"
           name="oldPassword"
           clearButton
@@ -38,7 +37,7 @@ const ChangePassword = props => {
           onInputClear={() => setOldPassword('')}
         />
         <ListInput
-          label={state.labels.newPassword}
+          label={labels.newPassword}
           type="text"
           name="newPassword"
           clearButton
@@ -47,7 +46,7 @@ const ChangePassword = props => {
         />
       </List>
       {!oldPassword || !newPassword || oldPassword === newPassword ? '' :
-        <Button large onClick={() => handleSubmit()}>{state.labels.submit}</Button>
+        <Button large onClick={() => handleSubmit()}>{labels.submit}</Button>
       }
     </Page>
   )

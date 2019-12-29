@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { allocateOrderPack, showMessage, getMessage, showError } from '../data/actions'
+import labels from '../data/labels'
 
 const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
@@ -24,7 +25,7 @@ const PrepareOrdersList = props => {
   const handleAllocate = async order => {
     try{
       await allocateOrderPack(order, pack)
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -32,21 +33,21 @@ const PrepareOrdersList = props => {
   }
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : orders.map(o => {
               const userInfo = state.users.find(u => u.id === o.userId)
               return (
                 <ListItem
-                  title={`${state.labels.user}: ${userInfo.name}`}
-                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
-                  text={`${state.labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
+                  title={`${labels.user}: ${userInfo.name}`}
+                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
+                  text={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                   key={o.id}
                 >
-                  <Button slot="after" onClick={() => handleAllocate(o)}>{state.labels.allocate}</Button>
+                  <Button slot="after" onClick={() => handleAllocate(o)}>{labels.allocate}</Button>
                 </ListItem>
               )
             })

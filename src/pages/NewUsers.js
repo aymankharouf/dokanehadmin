@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const NewUsers = props => {
@@ -14,16 +15,16 @@ const NewUsers = props => {
   }, [state.users, state.customers])
   return(
     <Page>
-      <Navbar title={state.labels.newUsers} backLink={state.labels.back} />
+      <Navbar title={labels.newUsers} backLink={labels.back} />
       <Block>
         <List mediaList>
           {newUsers.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : newUsers.map(u => 
               <ListItem
                 link={`/approveUser/${u.id}`}
-                title={`${state.labels.user}: ${u.name}`}
-                subtitle={`${state.labels.mobile}: ${u.mobile}`}
+                title={`${labels.user}: ${u.name}`}
+                subtitle={`${labels.mobile}: ${u.mobile}`}
                 text={moment(u.time.toDate()).fromNow()}
                 key={u.id}
               />

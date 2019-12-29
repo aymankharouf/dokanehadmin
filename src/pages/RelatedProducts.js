@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const RelatedProducts = props => {
   const { state } = useContext(StoreContext)
@@ -13,19 +14,19 @@ const RelatedProducts = props => {
   }, [state.products, product, props.id])
   return(
     <Page>
-      <Navbar title={state.labels.relatedProducts} backLink={state.labels.back} />
+      <Navbar title={labels.relatedProducts} backLink={labels.back} />
         <Block>
           <List mediaList>
             {relatedProducts.length === 0 ? 
-              <ListItem title={state.labels.noData} /> 
+              <ListItem title={labels.noData} /> 
             : relatedProducts.map(p => {
                 return (
                   <ListItem
                     link={`/productPacks/${p.id}`}
                     title={p.name}
                     subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                    text={`${state.labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
-                    badge={p.isNew ? state.labels.new : ''}
+                    text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
+                    badge={p.isNew ? labels.new : ''}
                     badgeColor="red"
                     key={p.id}
                   >

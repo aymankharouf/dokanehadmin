@@ -6,6 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { approvePriceAlarm, rejectPriceAlarm, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const PriceAlarmDetails = props => {
   const { state } = useContext(StoreContext)
@@ -43,7 +44,7 @@ const PriceAlarmDetails = props => {
   const handleApprove = async () => {
     try{
       await approvePriceAlarm(priceAlarm, pack, store, customer, state.storePacks, state.packs)
-      showMessage(state.labels.approveSuccess)
+      showMessage(labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -52,7 +53,7 @@ const PriceAlarmDetails = props => {
   const handleReject = async () => {
     try{
       await rejectPriceAlarm(priceAlarm)
-      showMessage(state.labels.rejectSuccess)
+      showMessage(labels.rejectSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -61,7 +62,7 @@ const PriceAlarmDetails = props => {
 
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="blue" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
@@ -80,8 +81,8 @@ const PriceAlarmDetails = props => {
         <CardContent>
           <PackImage pack={pack} type="card" />
           <p>{`${userInfo.name} ${userInfo.mobile}`}</p>
-          <p>{`${state.labels.storeName}: ${storeName}`}</p>
-          <p>{`${state.labels.location}: ${storeLocation}`}</p>
+          <p>{`${labels.storeName}: ${storeName}`}</p>
+          <p>{`${labels.location}: ${storeLocation}`}</p>
         </CardContent>
         <CardFooter>
           <p>{(priceAlarm.price / 1000).toFixed(3)}</p>
@@ -91,14 +92,14 @@ const PriceAlarmDetails = props => {
       {customer.storeId ? '' :
         <List form>
           <ListItem
-            title={state.labels.store}
+            title={labels.store}
             smartSelect
             smartSelectParams={{
               openIn: "popup", 
               closeOnSelect: true, 
               searchbar: true, 
-              searchbarPlaceholder: state.labels.search,
-              popupCloseLinkText: state.labels.close
+              searchbarPlaceholder: labels.search,
+              popupCloseLinkText: labels.close
             }}
           >
             <select name="store" value={store} onChange={e => setStore(e.target.value)}>

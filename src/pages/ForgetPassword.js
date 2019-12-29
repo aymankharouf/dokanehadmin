@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const ForgetPassword = props => {
   const { state } = useContext(StoreContext)
@@ -13,19 +14,19 @@ const ForgetPassword = props => {
   } , [state.forgetPassword])
   return(
     <Page>
-      <Navbar title={state.labels.forgetPassword} backLink={state.labels.back} />
+      <Navbar title={labels.forgetPassword} backLink={labels.back} />
       <Block>
           <List mediaList>
             {forgetPassword.length === 0 ? 
-              <ListItem title={state.labels.noData} /> 
+              <ListItem title={labels.noData} /> 
             : forgetPassword.map(f => {
                 const userInfo = state.users.find(u => u.mobile === f.mobile)
                 if (!userInfo) return ''
                 return (
                   <ListItem
                     link={`/retreivePassword/${f.id}`}
-                    title={`${state.labels.user}: ${userInfo.name}`}
-                    subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                    title={`${labels.user}: ${userInfo.name}`}
+                    subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                     text={moment(f.time.toDate()).fromNow()}
                     key={f.id}
                   />

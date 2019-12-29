@@ -5,6 +5,7 @@ import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
@@ -16,7 +17,7 @@ const StorePacks = props => {
   }, [state.storePacks, props.id])
   return(
     <Page>
-      <Navbar title={`${store.name}`} backLink={state.labels.back}>
+      <Navbar title={`${store.name}`} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -26,16 +27,16 @@ const StorePacks = props => {
           searchIn=".item-title, .item-subtitle"
           clearButton
           expandable
-          placeholder={state.labels.search}
+          placeholder={labels.search}
         ></Searchbar>
       </Navbar>
       <Block>
         <List className="searchbar-not-found">
-          <ListItem title={state.labels.noData} />
+          <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
           {storePacks.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : storePacks.map(p => {
               const packInfo = state.packs.find(pa => pa.id === p.packId)
               const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -45,13 +46,13 @@ const StorePacks = props => {
                   title={productInfo.name}
                   subtitle={packInfo.name}
                   text={moment(p.time.toDate()).fromNow()}
-                  footer={packInfo.offerEnd ? `${state.labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
+                  footer={packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
                   after={(p.price / 1000).toFixed(3)}
                   key={p.id}
                 >
                   <PackImage slot="media" pack={packInfo} type="list" />
-                  {productInfo.isNew ? <Badge slot="title" color='red'>{state.labels.new}</Badge> : ''}
-                  {packInfo.isOffer ? <Badge slot="title" color='green'>{state.labels.offer}</Badge> : ''}
+                  {productInfo.isNew ? <Badge slot="title" color='red'>{labels.new}</Badge> : ''}
+                  {packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
                 </ListItem>
               )
             })

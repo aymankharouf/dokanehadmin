@@ -1,10 +1,10 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7 } from 'framework7-react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import labels from '../data/labels'
 
 
 const StockPackTrans = props => {
@@ -38,7 +38,7 @@ const StockPackTrans = props => {
   }, [error])
 
   const handleAddTrans = (type, storeId, cost, price) => {
-    f7.dialog.prompt(state.labels.enterQuantity, state.labels.quantity, async quantity => {
+    f7.dialog.prompt(labels.enterQuantity, labels.quantity, async quantity => {
       try{
         if (storeId && !state.stores.find(s => s.id === storeId).canReturn) {
           throw new Error('storeNotReturn')
@@ -47,7 +47,7 @@ const StockPackTrans = props => {
           throw new Error('invalidValue')
         }
         await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId)
-        showMessage(state.labels.addSuccess)
+        showMessage(labels.addSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))
@@ -56,23 +56,23 @@ const StockPackTrans = props => {
   }
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {packTrans.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : packTrans.map(t => {
               const storeInfo = state.stores.find(s => s.id === t.storeId)
               return (
                 <ListItem
                   title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name || ''}`}
                   subtitle={moment(t.time.toDate()).fromNow()}
-                  text={`${state.labels.quantity}: ${quantityText(t.quantity)}`}
-                  footer={`${state.labels.price}: ${(t.cost / 1000).toFixed(3)}`}
+                  text={`${labels.quantity}: ${quantityText(t.quantity)}`}
+                  footer={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
                   key={t.id}
                 >
                   {storeInfo?.canReturn ?
-                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{state.labels.returnPacks}</Button>
+                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{labels.returnPacks}</Button>
                   : ''}
                 </ListItem>
               )
@@ -86,7 +86,7 @@ const StockPackTrans = props => {
             <ListItem 
               link="#"
               popoverClose 
-              title={state.labels.donate} 
+              title={labels.donate} 
               onClick={() => handleAddTrans('g')}
             />
           }
@@ -94,7 +94,7 @@ const StockPackTrans = props => {
             <ListItem 
               link="#"
               popoverClose 
-              title={state.labels.destroy} 
+              title={labels.destroy} 
               onClick={() => handleAddTrans('d')}
             />
           }
@@ -102,7 +102,7 @@ const StockPackTrans = props => {
             <ListItem 
               link="#"
               popoverClose 
-              title={state.labels.withdraw} 
+              title={labels.withdraw} 
               onClick={() => handleAddTrans('w')}
             />
           }
@@ -110,7 +110,7 @@ const StockPackTrans = props => {
             <ListItem 
               link={`/sellStore/${props.id}`}
               popoverClose 
-              title={state.labels.sell} 
+              title={labels.sell} 
             />
           }
         </List>

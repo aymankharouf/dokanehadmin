@@ -3,6 +3,7 @@ import { editLocation, showMessage, showError, getMessage } from '../data/action
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 const EditLocation = props => {
   const { state } = useContext(StoreContext)
@@ -39,7 +40,7 @@ const EditLocation = props => {
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))
@@ -47,11 +48,11 @@ const EditLocation = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editLocation} backLink={state.labels.back} />
+      <Navbar title={labels.editLocation} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={name}
           floatingLabel 
           clearButton
@@ -61,7 +62,7 @@ const EditLocation = props => {
         />
         <ListInput 
           name="sorting" 
-          label={state.labels.sorting}
+          label={labels.sorting}
           floatingLabel 
           clearButton
           type="number" 
@@ -70,7 +71,7 @@ const EditLocation = props => {
           onInputClear={() => setSorting('')}
         />
         <ListItem>
-          <span>{state.labels.hasDelivery}</span>
+          <span>{labels.hasDelivery}</span>
           <Toggle 
             name="hasDelivery" 
             color="green" 
@@ -81,7 +82,7 @@ const EditLocation = props => {
         {hasDelivery ? 
           <ListInput 
             name="deliveryFees" 
-            label={state.labels.deliveryFees}
+            label={labels.deliveryFees}
             floatingLabel 
             clearButton
             type="number" 

@@ -3,6 +3,7 @@ import { editTrademark, showMessage, showError, getMessage } from '../data/actio
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const EditTrademark = props => {
@@ -24,7 +25,7 @@ const EditTrademark = props => {
         id: trademark.id,
         name
       })
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -32,11 +33,11 @@ const EditTrademark = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editTrademark} backLink={state.labels.back} />
+      <Navbar title={labels.editTrademark} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={name}
           floatingLabel 
           type="text" 

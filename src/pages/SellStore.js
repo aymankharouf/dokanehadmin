@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const SellStore = props => {
   const { state } = useContext(StoreContext)
@@ -35,7 +36,7 @@ const SellStore = props => {
         throw new Error('invalidValue')
       }
       await addStockTrans('c', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
     	setError(getMessage(props, err))
@@ -44,17 +45,17 @@ const SellStore = props => {
 
   return (
     <Page>
-      <Navbar title={`${state.labels.sell} ${product.name}-${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.sell} ${product.name}-${pack.name}`} backLink={labels.back} />
       <List form>
         <ListItem
-          title={state.labels.store}
+          title={labels.store}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
@@ -66,7 +67,7 @@ const SellStore = props => {
         </ListItem>
         <ListInput 
           name="price" 
-          label={state.labels.price}
+          label={labels.price}
           value={price}
           clearButton 
           floatingLabel 
@@ -76,7 +77,7 @@ const SellStore = props => {
         />
         <ListInput 
           name="quantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={quantity}
           clearButton 
           floatingLabel 
@@ -87,7 +88,7 @@ const SellStore = props => {
         {!price || !quantity ? '' : 
           <ListInput 
             name="profit" 
-            label={state.labels.profitTitle}
+            label={labels.profitTitle}
             value={(profit / 1000).toFixed(3)}
             floatingLabel 
             type="number" 

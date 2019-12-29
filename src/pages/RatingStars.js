@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { Icon } from 'framework7-react'
 
-
 const RatingStars = props => {
   const stars = useMemo(() => {
     const rating_round = Math.round(props.rating / .5 ) * .5

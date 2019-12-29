@@ -1,14 +1,13 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Page, Navbar, Block } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const NotFoundPage = props => {
-  const { state } = useContext(StoreContext)
   return (
     <Page>
-      <Navbar title={state.labels.notFoundPageTitle} backLink={state.labels.back} />
+      <Navbar title={labels.notFoundPageTitle} backLink={labels.back} />
       <Block strong>
-        <p>{state.labels.notFoundPageError}</p>
+        <p>{labels.notFoundPageError}</p>
       </Block>
     </Page>
   )

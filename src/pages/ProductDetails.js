@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const ProductDetails = props => {
@@ -9,11 +10,11 @@ const ProductDetails = props => {
   , [state.products, props.id])
   return (
     <Page>
-      <Navbar title={state.labels.productDetails} backLink={state.labels.back} />
+      <Navbar title={labels.productDetails} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           type="text" 
           value={product.name}
@@ -21,7 +22,7 @@ const ProductDetails = props => {
         />
         <ListInput 
           name="categoryId" 
-          label={state.labels.category}
+          label={labels.category}
           floatingLabel 
           type="text" 
           value={state.categories.find(c => c.id === product.categoryId).name}
@@ -29,7 +30,7 @@ const ProductDetails = props => {
         />
         <ListInput 
           name="trademarkId" 
-          label={state.labels.trademark}
+          label={labels.trademark}
           floatingLabel 
           type="text" 
           value={product.trademarkId ? state.trademarks.find(t => t.id === product.trademarkId).name : ''}
@@ -37,7 +38,7 @@ const ProductDetails = props => {
         />
         <ListInput 
           name="countryId" 
-          label={state.labels.country}
+          label={labels.country}
           floatingLabel 
           type="text" 
           value={state.countries.find(c => c.id === product.countryId).name}
@@ -45,7 +46,7 @@ const ProductDetails = props => {
         />
         <ListInput 
           name="tagId" 
-          label={state.labels.tag}
+          label={labels.tag}
           floatingLabel 
           type="text" 
           value={product.tagId ? state.tags.find(t => t.id === product.tagId).name : ''}
@@ -53,14 +54,14 @@ const ProductDetails = props => {
         />
         <ListInput 
           name="storageId" 
-          label={state.labels.storage}
+          label={labels.storage}
           floatingLabel 
           type="text" 
           value={product.storageId ? state.storageTypes.find(t => t.id === product.storageId).name : ''}
           readonly
         />
         <ListItem>
-          <span>{state.labels.isNew}</span>
+          <span>{labels.isNew}</span>
           <Toggle 
             name="isNew" 
             color="green" 

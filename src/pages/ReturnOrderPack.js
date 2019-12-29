@@ -1,10 +1,10 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { f7 } from 'framework7-react'
-import { Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { showError, returnOrderPacks, showMessage, getMessage } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const ReturnOrderPack = props => {
   const { state } = useContext(StoreContext)
@@ -25,11 +25,11 @@ const ReturnOrderPack = props => {
     }
   }, [error])
   const handleSumit = () => {
-    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const order = state.orders.find(o => o.id === props.orderId)
         await returnOrderPacks(order, pack, returned)
-        showMessage(state.labels.editSuccess)
+        showMessage(labels.editSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))
@@ -52,7 +52,7 @@ const ReturnOrderPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <PackImage pack={pack} type="card" />

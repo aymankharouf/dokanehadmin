@@ -2,6 +2,7 @@ import React, {useState, useContext, useMemo, useEffect } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 
 const EditProduct = props => {
@@ -33,7 +34,7 @@ const EditProduct = props => {
     const files = e.target.files
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
-      setFileErrorMessage(state.labels.invalidFile)
+      setFileErrorMessage(labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
@@ -75,7 +76,7 @@ const EditProduct = props => {
         imageUrl
       }
       await editProduct(product, image)
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -83,11 +84,11 @@ const EditProduct = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.editProduct} backLink={state.labels.back} />
+      <Navbar title={labels.editProduct} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -96,14 +97,14 @@ const EditProduct = props => {
           onInputClear={() => setName('')}
         />
         <ListItem
-          title={state.labels.category}
+          title={labels.category}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
@@ -114,14 +115,14 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.trademark}
+          title={labels.trademark}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
@@ -132,14 +133,14 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.country}
+          title={labels.country}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
@@ -150,14 +151,14 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.tag}
+          title={labels.tag}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="tagId" value={tagId} onChange={e => setTagId(e.target.value)}>
@@ -168,14 +169,14 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem
-          title={state.labels.storage}
+          title={labels.storage}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="storageId" value={storageId} onChange={e => setStorageId(e.target.value)}>
@@ -186,7 +187,7 @@ const EditProduct = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>{state.labels.isNew}</span>
+          <span>{labels.isNew}</span>
           <Toggle 
             name="isNew" 
             color="green" 

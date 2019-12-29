@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
+import labels from '../data/labels'
 
 
 const PurchaseDetails = props => {
@@ -13,7 +14,7 @@ const PurchaseDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={state.labels.purchaseDetails} backLink={state.labels.back} />
+      <Navbar title={labels.purchaseDetails} backLink={labels.back} />
       <Block>
           <List mediaList>
             {purchase.basket.map(p => {
@@ -24,8 +25,8 @@ const PurchaseDetails = props => {
                 <ListItem 
                   title={productInfo.name}
                   subtitle={packInfo.name}
-                  text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                  footer={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
+                  text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+                  footer={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
                   after={(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
                   key={p.packId} 
                 />

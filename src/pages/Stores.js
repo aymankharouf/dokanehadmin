@@ -3,6 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framewo
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { addStock, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const Stores = props => {
   const { state } = useContext(StoreContext)
@@ -21,7 +22,7 @@ const Stores = props => {
   const handleAddStock = async name => {
     try{
       await addStock(name)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))
@@ -29,11 +30,11 @@ const Stores = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.stores} backLink={state.labels.back} />
+      <Navbar title={labels.stores} backLink={labels.back} />
       <Block>
         <List>
           {stores.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : stores.map(s =>
               <ListItem 
                 link={`/storeDetails/${s.id}`} 
@@ -48,7 +49,7 @@ const Stores = props => {
         <Icon material="add"></Icon>
       </Fab>
       {stock ? '' : 
-        <Fab position="center-bottom" slot="fixed" color="red" text={state.labels.stockName} onClick={() => handleAddStock(state.labels.stockName)}>
+        <Fab position="center-bottom" slot="fixed" color="red" text={labels.stockName} onClick={() => handleAddStock(labels.stockName)}>
           <Icon material="add"></Icon>
         </Fab>
       }

@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 
 const StoreDetails = props => {
@@ -13,11 +14,11 @@ const StoreDetails = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.storeDetails} backLink={state.labels.back} />
+      <Navbar title={labels.storeDetails} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={store.name}
           floatingLabel
           type="text" 
@@ -25,7 +26,7 @@ const StoreDetails = props => {
         />
         <ListInput
           name="mobile"
-          label={state.labels.mobile}
+          label={labels.mobile}
           value={store.mobile || ''}
           floatingLabel
           type="number"
@@ -33,7 +34,7 @@ const StoreDetails = props => {
         />
         <ListInput
           name="type"
-          label={state.labels.type}
+          label={labels.type}
           value={state.storeTypes.find(t => t.id === store.type).name}
           floatingLabel
           type="text"
@@ -41,14 +42,14 @@ const StoreDetails = props => {
         />
         <ListInput
           name="discount"
-          label={state.labels.discount}
+          label={labels.discount}
           value={store.discount || ''}
           floatingLabel
           type="number"
           readonly
         />
         <ListItem>
-          <span>{state.labels.canReturn}</span>
+          <span>{labels.canReturn}</span>
           <Toggle 
             name="canReturn" 
             color="green" 
@@ -58,7 +59,7 @@ const StoreDetails = props => {
         </ListItem>
         <ListInput
           name="location"
-          label={state.labels.location}
+          label={labels.location}
           value={store.locationId ? state.locations.find(l => l.id === store.locationId).name : ''}
           floatingLabel
           type="text"
@@ -66,14 +67,14 @@ const StoreDetails = props => {
         />
         <ListInput 
           name="address" 
-          label={state.labels.address}
+          label={labels.address}
           value={store.address || ''}
           floatingLabel
           type="text"
         />
         <ListItem
           link={`/storeOwners/${store.id}`}
-          title={state.labels.storeOwners}
+          title={labels.storeOwners}
           after={storeOwners.length}
         />
       </List>

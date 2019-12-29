@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Page, Block, Link, Navbar} from 'framework7-react'
-import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const ReLogin = props => {
-  const { state } = useContext(StoreContext)
   return(
     <Page>
-      <Navbar title={state.labels.reloginTitle} backLink={state.labels.back} />
+      <Navbar title={labels.reloginTitle} backLink={labels.back} />
       <Block>
         <h3 className="center">
-          {state.labels.relogin} <br/>
-          <Link className="center" href="/login/">{state.labels.login}</Link>
+          {labels.relogin} <br/>
+          <Link className="center" href="/login/">{labels.login}</Link>
         </h3>
       </Block>
     </Page>

@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const FollowupOrders = props => {
@@ -9,7 +10,7 @@ const FollowupOrders = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.followupOrders} backLink={state.labels.back} />
+      <Navbar title={labels.followupOrders} backLink={labels.back} />
       <Block>
         {state.orderPositions.map(p => {
           const orders = state.orders.filter(o => o.position === p.id)

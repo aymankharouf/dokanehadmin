@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 const Prices = props => {
   const { state } = useContext(StoreContext)
@@ -10,11 +11,11 @@ const Prices = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.prices} backLink={state.labels.back} />
+      <Navbar title={labels.prices} backLink={labels.back} />
       <Block>
         <List>
           {stores.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : stores.map(s =>
               <ListItem 
                 link={`/storePacks/${s.id}`} 

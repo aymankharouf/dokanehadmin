@@ -1,10 +1,10 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { f7 } from 'framework7-react'
-import { Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/actions'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
@@ -103,9 +103,9 @@ const RequestedPackDetails = props => {
       const packInfo = state.packs.find(p => p.id === packStore.packId)
       let quantity, params
       if (packInfo.byWeight) {
-        f7.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, weight => {
+        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, weight => {
           try{
-            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > state.labels.margin) {
+            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > labels.margin) {
               throw new Error('InvalidWeight')
             }
             if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
@@ -129,7 +129,7 @@ const RequestedPackDetails = props => {
               exceedPriceType
             }
             dispatch({type: 'ADD_TO_BASKET', params})
-            showMessage(state.labels.addToBasketSuccess)
+            showMessage(labels.addToBasketSuccess)
             props.f7router.back()
           } catch(err) {
             setError(getMessage(props, err))
@@ -152,7 +152,7 @@ const RequestedPackDetails = props => {
           exceedPriceType
         }
         dispatch({type: 'ADD_TO_BASKET', params})
-        showMessage(state.labels.addToBasketSuccess)
+        showMessage(labels.addToBasketSuccess)
         props.f7router.back()  
       }
     } catch(err) {
@@ -176,13 +176,13 @@ const RequestedPackDetails = props => {
       }
       if (packStore.unitPrice > Number(props.price)){
         if (Number(props.price) < pack.price) { 
-          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + state.labels.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
-            f7.dialog.confirm(state.labels.exceedPricePurchase, state.labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceedPriceQuantity), 'p'))
+          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + labels.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
+            f7.dialog.confirm(labels.exceedPricePurchase, labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceedPriceQuantity), 'p'))
           } else {
             throw new Error('noPurchase')
           }
         } else {
-          f7.dialog.confirm(state.labels.priceHigherThanRequested, state.labels.confirmationTitle, () => addToBasket(packStore, Number(props.quantity), 'o'))
+          f7.dialog.confirm(labels.priceHigherThanRequested, labels.confirmationTitle, () => addToBasket(packStore, Number(props.quantity), 'o'))
         }
       } else {
         addToBasket(packStore, Number(props.quantity), 'n')
@@ -192,11 +192,11 @@ const RequestedPackDetails = props => {
     }
   }
   const handleUnavailable = overPriced => {
-    f7.dialog.confirm(state.labels.confirmationText, state.labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
         await packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
-        showMessage(state.labels.executeSuccess)
+        showMessage(labels.executeSuccess)
         props.f7router.back()
       } catch(err) {
         setError(getMessage(props, err))
@@ -205,7 +205,7 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={labels.back} />
       <Block>
         <Card>
           <CardContent>
@@ -213,23 +213,23 @@ const RequestedPackDetails = props => {
             <PackImage pack={pack} type="card" />
           </CardContent>
           <CardFooter>
-            <p>{`${state.labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
-            {`${state.labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
-            {`${state.labels.quantity}: ${props.quantity}`}</p>
+            <p>{`${labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
+            {`${labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
+            {`${labels.quantity}: ${props.quantity}`}</p>
           </CardFooter>
         </Card>
         <List mediaList>
           {packStores.length === 0 ? 
             <ListItem 
               link="#"
-              title={state.labels.unavailable}
+              title={labels.unavailable}
               onClick={() => handleUnavailable(false)}
             />
           : ''}
           {pack.price > Number(props.price) ? 
             <ListItem 
               link="#"
-              title={state.labels.overPriced}
+              title={labels.overPriced}
               onClick={() => handleUnavailable(true)}
             />
           : ''}
@@ -241,11 +241,11 @@ const RequestedPackDetails = props => {
               <ListItem 
                 title={storeInfo.name}
                 subtitle={`${productInfo.name} ${packInfo.name}`}
-                text={`${state.labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-                footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${state.labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
+                text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+                footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
                 key={s.id}
               >
-                <Button slot="after" onClick={() => handlePurchase(s)}>{state.labels.purchase}</Button>
+                <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
               </ListItem>
             )
           })}

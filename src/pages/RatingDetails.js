@@ -3,6 +3,7 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-re
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import { approveRating, showMessage, showError, getMessage } from '../data/actions'
+import labels from '../data/labels'
 
 const RatingDetails = props => {
   const { state } = useContext(StoreContext)
@@ -23,7 +24,7 @@ const RatingDetails = props => {
   const handleApprove = async () => {
     try{
       await approveRating(rating, product, customerInfo)
-      showMessage(state.labels.approveSuccess)
+      showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -32,14 +33,14 @@ const RatingDetails = props => {
 
   return (
     <Page>
-      <Navbar title={state.labels.ratingDetails} backLink={state.labels.back} />
+      <Navbar title={labels.ratingDetails} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>
       <List form>
         <ListInput 
           name="product" 
-          label={state.labels.product}
+          label={labels.product}
           value={product.name}
           floatingLabel 
           type="text" 
@@ -47,7 +48,7 @@ const RatingDetails = props => {
         />
         <ListInput 
           name="user" 
-          label={state.labels.user}
+          label={labels.user}
           value={customerInfo.name}
           floatingLabel 
           type="text"
@@ -55,7 +56,7 @@ const RatingDetails = props => {
         />
         <ListInput 
           name="value" 
-          label={state.labels.ratingValue}
+          label={labels.ratingValue}
           value={state.ratingValues.find(v => v.id === rating.value).name}
           floatingLabel 
           type="text"
@@ -63,7 +64,7 @@ const RatingDetails = props => {
         />
         <ListInput 
           name="comment" 
-          label={state.labels.comment}
+          label={labels.comment}
           value={rating.comment}
           floatingLabel 
           type="text"

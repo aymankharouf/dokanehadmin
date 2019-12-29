@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Customers = props => {
@@ -12,7 +13,7 @@ const Customers = props => {
   , [state.customers]) 
   return(
     <Page>
-      <Navbar title={state.labels.customers} backLink={state.labels.back}>
+      <Navbar title={labels.customers} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -22,25 +23,25 @@ const Customers = props => {
           searchIn=".item-title, .item-subtitle"
           clearButton
           expandable
-          placeholder={state.labels.search}
+          placeholder={labels.search}
         />
       </Navbar>
       <Block>
         <List className="searchbar-not-found">
-          <ListItem title={state.labels.noData} />
+          <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
           {customers.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : customers.map(c => {
               const userInfo = state.users.find(u => u.id === c.id)
               return (
                 <ListItem
                   link={`/customerDetails/${c.id}/full/1`}
-                  title={`${state.labels.user}: ${userInfo.name}`}
-                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  title={`${labels.user}: ${userInfo.name}`}
+                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                   text={moment(c.time.toDate()).fromNow()}
-                  badge={c.isBlocked ? state.labels.isBlocked : ''}
+                  badge={c.isBlocked ? labels.isBlocked : ''}
                   badgeColor="red"
                   key={c.id}
                 />

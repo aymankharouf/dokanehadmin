@@ -5,6 +5,7 @@ import ReLogin from './ReLogin'
 import { StoreContext } from '../data/store'
 import PackImage from './PackImage'
 import { quantityText } from '../data/actions'
+import labels from '../data/labels'
 
 const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -13,7 +14,7 @@ const StockTransDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={`${state.stockTransTypes.find(ty => ty.id === stockTrans.type).name} ${stockTrans.storeId ? state.stores.find(s => s.id === stockTrans.storeId).name : ''}`} backLink={state.labels.back} />
+      <Navbar title={`${state.stockTransTypes.find(ty => ty.id === stockTrans.type).name} ${stockTrans.storeId ? state.stores.find(s => s.id === stockTrans.storeId).name : ''}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {stockTrans.basket.map(p => {
@@ -22,7 +23,7 @@ const StockTransDetails = props => {
               <ListItem 
                 title={state.products.find(pr => pr.id === packInfo.productId).name}
                 subtitle={packInfo.name}
-                text={`${state.labels.quantity}: ${quantityText(p.quantity)}`}
+                text={`${labels.quantity}: ${quantityText(p.quantity)}`}
                 after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
                 key={p.packId}
               >

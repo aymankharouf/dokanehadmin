@@ -1,11 +1,11 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { f7 } from 'framework7-react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './BottomToolbar'
 import PackImage from './PackImage'
 import moment from 'moment'
+import labels from '../data/labels'
 
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -110,7 +110,7 @@ const PackDetails = props => {
       const packInfo = state.packs.find(p => p.id === packStore.packId)
       let params
       if (packInfo.byWeight) {
-        f7.dialog.prompt(state.labels.enterWeight, state.labels.actualWeight, async weight => {
+        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, async weight => {
           params = {
             pack: packInfo,
             packStore,
@@ -120,7 +120,7 @@ const PackDetails = props => {
             weight: Number(weight),
           }
           dispatch({type: 'ADD_TO_BASKET', params})
-          showMessage(state.labels.addToBasketSuccess)
+          showMessage(labels.addToBasketSuccess)
           props.f7router.back()
         })
       } else {
@@ -132,7 +132,7 @@ const PackDetails = props => {
           orderId: props.orderId,
         }
         dispatch({type: 'ADD_TO_BASKET', params})
-        showMessage(state.labels.addToBasketSuccess)
+        showMessage(labels.addToBasketSuccess)
         props.f7router.back()
       }
     } catch(err) {
@@ -142,14 +142,14 @@ const PackDetails = props => {
   const handleRefreshPrice = async () => {
     try{
       await refreshPackPrice(pack, state.storePacks, state.packs)
-      showMessage(state.labels.refreshSuccess)
+      showMessage(labels.refreshSuccess)
     } catch(err) {
 			setError(getMessage(props, err))
 		}
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={state.labels.back} />
+      <Navbar title={product.name} backLink={labels.back} />
       <Card>
         <CardContent>
           <div className="card-title">{pack.name}</div>
@@ -165,17 +165,17 @@ const PackDetails = props => {
         return (
           <ListItem 
             title={storeInfo.name}
-            subtitle={`${state.labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-            text={`${state.labels.price}: ${(s.price / 1000).toFixed(3)}`}
-            footer={s.quantity > 0 ? `${state.labels.quantity}: ${quantityText(s.quantity)}` : ''}
+            subtitle={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}`}
+            footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
             key={s.id}
           >
-            {s.offerEnd ? <div className="list-subtext1">{state.labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
+            {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isOffer ? 
-              <Badge slot="title" color='green'>{state.labels.offer}</Badge> 
+              <Badge slot="title" color='green'>{labels.offer}</Badge> 
             : ''}
             {s.storeId === 's' ? '' :
-              <Button slot="after" onClick={() => handlePurchase(s)}>{state.labels.purchase}</Button>
+              <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
             }
           </ListItem>
         )

@@ -75,7 +75,7 @@ const AddOffer = props => {
         time: new Date()
       }
       await addPack(pack)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -84,11 +84,11 @@ const AddOffer = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.addOffer} ${product.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.addOffer} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -97,14 +97,14 @@ const AddOffer = props => {
           onInputClear={() => setName('')}
         />
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select 
@@ -121,7 +121,7 @@ const AddOffer = props => {
         </ListItem>
         <ListInput 
           name="subQuantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={subQuantity}
           clearButton
           floatingLabel 
@@ -132,7 +132,7 @@ const AddOffer = props => {
         />
         <ListInput 
           name="subPercent" 
-          label={state.labels.percent}
+          label={labels.percent}
           value={subPercent}
           clearButton
           floatingLabel 
@@ -141,7 +141,7 @@ const AddOffer = props => {
           onInputClear={() => setSubPercent('')}
         />
         <ListItem>
-          <span>{state.labels.closeExpired}</span>
+          <span>{labels.closeExpired}</span>
           <Toggle 
             name="closeExpired" 
             color="green" 
@@ -151,7 +151,7 @@ const AddOffer = props => {
         </ListItem>
         <ListInput 
           name="orderLimit" 
-          label={state.labels.packLimit}
+          label={labels.packLimit}
           floatingLabel 
           clearButton
           type="number" 
@@ -161,18 +161,18 @@ const AddOffer = props => {
         />
       </List>
       <BlockTitle>
-        {state.labels.bonusProduct}
+        {labels.bonusProduct}
       </BlockTitle>
       <List form>
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: 'popup', 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
@@ -184,7 +184,7 @@ const AddOffer = props => {
         </ListItem>
         <ListInput 
           name="bonusQuantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={bonusQuantity}
           clearButton
           floatingLabel 
@@ -195,7 +195,7 @@ const AddOffer = props => {
         />
         <ListInput 
           name="bonusPercent" 
-          label={state.labels.percent}
+          label={labels.percent}
           value={bonusPercent}
           clearButton
           floatingLabel 

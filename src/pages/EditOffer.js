@@ -3,6 +3,7 @@ import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import ReLogin from './ReLogin'
+import labels from '../data/labels'
 
 const EditOffer = props => {
   const { state, user } = useContext(StoreContext)
@@ -73,7 +74,7 @@ const EditOffer = props => {
         closeExpired
       }
       await editPack(newPack)
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -82,11 +83,11 @@ const EditOffer = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.editOffer} ${product.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.editOffer} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -95,14 +96,14 @@ const EditOffer = props => {
           onInputClear={() => setName('')}
         />
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
@@ -114,7 +115,7 @@ const EditOffer = props => {
         </ListItem>
         <ListInput 
           name="subQuantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={subQuantity}
           clearButton
           floatingLabel 
@@ -124,7 +125,7 @@ const EditOffer = props => {
         />
         <ListInput 
           name="subPercent" 
-          label={state.labels.percent}
+          label={labels.percent}
           value={subPercent}
           clearButton
           floatingLabel 
@@ -133,7 +134,7 @@ const EditOffer = props => {
           onInputClear={() => setSubPercent('')}
         />
         <ListItem>
-          <span>{state.labels.closeExpired}</span>
+          <span>{labels.closeExpired}</span>
           <Toggle 
             name="closeExpired" 
             color="green" 
@@ -143,7 +144,7 @@ const EditOffer = props => {
         </ListItem>
         <ListInput 
           name="orderLimit" 
-          label={state.labels.packLimit}
+          label={labels.packLimit}
           floatingLabel 
           clearButton
           type="number" 
@@ -153,18 +154,18 @@ const EditOffer = props => {
         />
       </List>
       <BlockTitle>
-        {state.labels.bonusProduct}
+        {labels.bonusProduct}
       </BlockTitle>
       <List form>
         <ListItem
-          title={state.labels.pack}
+          title={labels.pack}
           smartSelect
           smartSelectParams={{
             openIn: 'popup', 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
@@ -176,7 +177,7 @@ const EditOffer = props => {
         </ListItem>
         <ListInput 
           name="bonusQuantity" 
-          label={state.labels.quantity}
+          label={labels.quantity}
           value={bonusQuantity}
           clearButton
           floatingLabel 
@@ -186,7 +187,7 @@ const EditOffer = props => {
         />
         <ListInput 
           name="bonusPercent" 
-          label={state.labels.percent}
+          label={labels.percent}
           value={bonusPercent}
           clearButton
           floatingLabel 

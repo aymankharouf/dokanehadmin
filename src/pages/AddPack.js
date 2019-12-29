@@ -47,7 +47,7 @@ const AddPack = props => {
         price: 0,
         time: new Date()
       })
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -56,11 +56,11 @@ const AddPack = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${state.labels.addPack} ${product.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.addPack} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -70,7 +70,7 @@ const AddPack = props => {
         />
         <ListInput 
           name="unitsCount" 
-          label={state.labels.unitsCount}
+          label={labels.unitsCount}
           floatingLabel 
           clearButton
           type="number" 
@@ -81,7 +81,7 @@ const AddPack = props => {
         {byWeight ? '' : 
           <ListInput 
             name="bonusUnits" 
-            label={state.labels.bonusUnits}
+            label={labels.bonusUnits}
             floatingLabel 
             clearButton
             type="number" 
@@ -92,7 +92,7 @@ const AddPack = props => {
         }
         <ListInput 
           name="orderLimit" 
-          label={state.labels.packLimit}
+          label={labels.packLimit}
           floatingLabel 
           clearButton
           type="number" 
@@ -101,7 +101,7 @@ const AddPack = props => {
           onInputClear={() => setOrderLimit('')}
         />
         <ListItem>
-          <span>{state.labels.isDivided}</span>
+          <span>{labels.isDivided}</span>
           <Toggle 
             name="isDivived" 
             color="green" 
@@ -110,7 +110,7 @@ const AddPack = props => {
           />
         </ListItem>
         <ListItem>
-          <span>{state.labels.byWeight}</span>
+          <span>{labels.byWeight}</span>
           <Toggle 
             name="byWeight" 
             color="green" 

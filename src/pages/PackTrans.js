@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const PackTrans = props => {
@@ -27,11 +28,11 @@ const PackTrans = props => {
   }, [state.purchases, pack])
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {packTrans.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : packTrans.map(t => 
               <ListItem
                 title={state.stores.find(s => s.id === t.storeId).name}

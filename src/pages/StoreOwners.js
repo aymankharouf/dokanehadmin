@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const StoreOwners = props => {
@@ -12,18 +13,18 @@ const StoreOwners = props => {
   , [state.customers, props.id])
   return (
     <Page>
-      <Navbar title={`${state.labels.storeOwners} ${store.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.storeOwners} ${store.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {storeOwners.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : storeOwners.map(o => {
               const userInfo = state.users.find(u => u.id === o.id)
               return (
                 <ListItem 
                   link="#"
-                  title={`${state.labels.user}: ${userInfo.name}`} 
-                  subtitle={`${state.labels.mobile}: ${userInfo.mobile}`}
+                  title={`${labels.user}: ${userInfo.name}`} 
+                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                   key={o.id} 
                 />
               )

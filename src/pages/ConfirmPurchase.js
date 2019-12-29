@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import ReLogin from './ReLogin'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import labels from '../data/labels'
 
 
 const ConfirmPurchase = props => {
@@ -26,12 +27,12 @@ const ConfirmPurchase = props => {
     try{
       if (store.id === 's') {
         await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
-        showMessage(state.labels.purchaseSuccess)
+        showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
         await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount)
-        showMessage(state.labels.purchaseSuccess)
+        showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       }  
@@ -42,7 +43,7 @@ const ConfirmPurchase = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-    <Navbar title={`${state.labels.confirmPurchase} ${store.name}`} backLink={state.labels.back} />
+    <Navbar title={`${labels.confirmPurchase} ${store.name}`} backLink={labels.back} />
     <Block>
         <List mediaList>
           {state.basket.packs.map(p => {
@@ -54,22 +55,22 @@ const ConfirmPurchase = props => {
                 key={i++} 
                 title={productInfo.name}
                 subtitle={packInfo.name}
-                text={`${state.labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                footer={`${state.labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
+                text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+                footer={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
                 after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
               />
             )
           }
           )}
           <ListItem 
-            title={state.labels.total} 
+            title={labels.total} 
             className="total" 
             after={(total / 1000).toFixed(3)} 
           />
           {store.id === 's' ? '' :
             <ListInput 
               name="discount" 
-              label={state.labels.discount}
+              label={labels.discount}
               value={discount}
               clearButton
               floatingLabel 
@@ -79,13 +80,13 @@ const ConfirmPurchase = props => {
             />
           }
           <ListItem 
-            title={state.labels.net} 
+            title={labels.net} 
             className="net" 
             after={((total - (discount * 1000)) / 1000).toFixed(3)} 
           />
         </List>
     </Block>
-    <Fab position="center-bottom" slot="fixed" text={state.labels.confirm} color="green" onClick={() => handlePurchase()}>
+    <Fab position="center-bottom" slot="fixed" text={labels.confirm} color="green" onClick={() => handlePurchase()}>
       <Icon material="done"></Icon>
     </Fab>
     <Toolbar bottom>

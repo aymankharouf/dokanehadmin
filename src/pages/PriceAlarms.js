@@ -5,6 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import PackImage from './PackImage'
+import labels from '../data/labels'
 
 const PriceAlarms = props => {
   const { state } = useContext(StoreContext)
@@ -14,11 +15,11 @@ const PriceAlarms = props => {
   }, [state.priceAlarms])
   return(
     <Page>
-      <Navbar title={state.labels.priceAlarms} backLink={state.labels.back} />
+      <Navbar title={labels.priceAlarms} backLink={labels.back} />
       <Block>
           <List mediaList>
             {priceAlarms.length === 0 ? 
-              <ListItem title={state.labels.noData} /> 
+              <ListItem title={labels.noData} /> 
             : priceAlarms.map(a => {
                 const pack = state.packs.find(p => p.id === a.packId)
                 return (

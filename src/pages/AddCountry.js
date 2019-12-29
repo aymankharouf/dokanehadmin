@@ -1,13 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addCountry, showMessage, showError, getMessage } from '../data/actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar} from 'framework7-react'
-import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
 
 
 const AddCountry = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   useEffect(() => {
@@ -20,7 +18,7 @@ const AddCountry = props => {
   const handleSubmit = async () => {
     try{
       await addCountry({name})
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -28,11 +26,11 @@ const AddCountry = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addCountry} backLink={state.labels.back} />
+      <Navbar title={labels.addCountry} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name} 
+          label={labels.name} 
           floatingLabel
           clearButton
           type="text"

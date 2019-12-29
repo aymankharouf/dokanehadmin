@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Orders = props => {
@@ -9,7 +10,7 @@ const Orders = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={state.labels.orders} backLink={state.labels.back} />
+      <Navbar title={labels.orders} backLink={labels.back} />
       <Block>
 				<List>
           {state.orderStatus.map(s => {

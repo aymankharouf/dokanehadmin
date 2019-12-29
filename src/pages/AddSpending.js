@@ -22,24 +22,24 @@ const AddSpending = props => {
       if (value > 0){
         setSpendingAmountErrorMessage('')
       } else {
-        setSpendingAmountErrorMessage(state.labels.invalidValue)
+        setSpendingAmountErrorMessage(labels.invalidValue)
       }
     }
     if (spendingAmount) validateAmount(spendingAmount)
     else setSpendingAmountErrorMessage('')
-  }, [spendingAmount, state.labels])
+  }, [spendingAmount])
 
   useEffect(() => {
     const validateDate = value => {
       if (new Date(value) > new Date()){
-        setSpendingDateErrorMessage(state.labels.invalidSpendingDate)
+        setSpendingDateErrorMessage(labels.invalidSpendingDate)
       } else {
         setSpendingDateErrorMessage('')
       }
     }
     if (spendingDate.length > 0) validateDate(spendingDate)
     else setSpendingDateErrorMessage('')
-  }, [spendingDate, state.labels])
+  }, [spendingDate])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -56,7 +56,7 @@ const AddSpending = props => {
         spendingDate: formatedDate,
         description
       })
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -64,11 +64,11 @@ const AddSpending = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.newSpending} backLink={state.labels.back} />
+      <Navbar title={labels.newSpending} backLink={labels.back} />
       <List form>
         <ListInput 
           name="spendingAmount" 
-          label={state.labels.spendingAmount}
+          label={labels.spendingAmount}
           value={spendingAmount}
           floatingLabel
           clearButton 
@@ -79,14 +79,14 @@ const AddSpending = props => {
           onInputClear={() => setSpendingAmount('')}
         />
         <ListItem
-          title={state.labels.type}
+          title={labels.type}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
-            searchbarPlaceholder: state.labels.search,
-            popupCloseLinkText: state.labels.close
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
           }}
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
@@ -98,7 +98,7 @@ const AddSpending = props => {
         </ListItem>
         <ListInput 
           name="description" 
-          label={state.labels.description}
+          label={labels.description}
           value={description}
           floatingLabel
           clearButton 
@@ -108,7 +108,7 @@ const AddSpending = props => {
         />
         <ListInput
           name="spendingDate"
-          label={state.labels.spendingDate}
+          label={labels.spendingDate}
           type="datepicker"
           value={spendingDate} 
           clearButton

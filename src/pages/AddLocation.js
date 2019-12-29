@@ -1,13 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addLocation, showMessage, showError, getMessage } from '../data/actions'
 import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
 
 
 const AddLocation = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [sorting, setSorting] = useState('')
@@ -31,7 +29,7 @@ const AddLocation = props => {
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
-      showMessage(state.labels.addSuccess)
+      showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -39,11 +37,11 @@ const AddLocation = props => {
   }
   return (
     <Page>
-      <Navbar title={state.labels.addLocation} backLink={state.labels.back} />
+      <Navbar title={labels.addLocation} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name} 
+          label={labels.name} 
           floatingLabel
           clearButton
           type="text"
@@ -53,7 +51,7 @@ const AddLocation = props => {
         />
         <ListInput 
           name="sorting" 
-          label={state.labels.sorting}
+          label={labels.sorting}
           floatingLabel 
           clearButton
           type="number" 
@@ -62,7 +60,7 @@ const AddLocation = props => {
           onInputClear={() => setSorting('')}
         />
         <ListItem>
-          <span>{state.labels.hasDelivery}</span>
+          <span>{labels.hasDelivery}</span>
           <Toggle 
             name="hasDelivery" 
             color="green" 
@@ -73,7 +71,7 @@ const AddLocation = props => {
         {hasDelivery ?
           <ListInput 
             name="deliveryFees" 
-            label={state.labels.deliveryFees}
+            label={labels.deliveryFees}
             floatingLabel 
             clearButton
             type="number" 

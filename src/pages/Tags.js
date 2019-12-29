@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Tags = props => {
@@ -10,11 +11,11 @@ const Tags = props => {
   , [state.tags])
   return (
     <Page>
-      <Navbar title={state.labels.tags} backLink={state.labels.back} />
+      <Navbar title={labels.tags} backLink={labels.back} />
       <Block>
         <List>
           {tags.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : tags.map(t =>
               <ListItem
                 link={`/editTag/${t.id}`}

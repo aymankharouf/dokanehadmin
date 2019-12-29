@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import {Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const EditPack = props => {
@@ -50,7 +51,7 @@ const EditPack = props => {
         byWeight
       }
       await editPack(newPack)
-      showMessage(state.labels.editSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -58,11 +59,11 @@ const EditPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${state.labels.editPack} ${product.name} ${pack.name}`} backLink={state.labels.back} />
+      <Navbar title={`${labels.editPack} ${product.name} ${pack.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           floatingLabel 
           clearButton
           type="text" 
@@ -72,7 +73,7 @@ const EditPack = props => {
         />
         <ListInput 
           name="unitsCount" 
-          label={state.labels.unitsCount}
+          label={labels.unitsCount}
           floatingLabel 
           clearButton
           type="number" 
@@ -83,7 +84,7 @@ const EditPack = props => {
         {byWeight ? '' : 
           <ListInput 
             name="bonusUnits" 
-            label={state.labels.bonusUnits}
+            label={labels.bonusUnits}
             floatingLabel 
             clearButton
             type="number" 
@@ -94,7 +95,7 @@ const EditPack = props => {
         }          
         <ListInput 
           name="orderLimit" 
-          label={state.labels.packLimit}
+          label={labels.packLimit}
           floatingLabel 
           clearButton
           type="number" 
@@ -103,7 +104,7 @@ const EditPack = props => {
           onInputClear={() => setOrderLimit('')}
         />
         <ListItem>
-          <span>{state.labels.isDivided}</span>
+          <span>{labels.isDivided}</span>
           <Toggle 
             name="isDivived" 
             color="green" 
@@ -112,7 +113,7 @@ const EditPack = props => {
           />
         </ListItem>
         <ListItem>
-          <span>{state.labels.byWeight}</span>
+          <span>{labels.byWeight}</span>
           <Toggle 
             name="byWeight" 
             color="green" 

@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useEffect, useState } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import labels from './labels'
 
 export const StoreContext = createContext()
 
@@ -99,7 +98,6 @@ const Store = props => {
     categories: [], 
     countries: [], 
     stores: [], 
-    labels, 
     orderStatus, 
     basket, 
     trademarks: [], 

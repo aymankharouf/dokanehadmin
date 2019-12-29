@@ -3,6 +3,7 @@ import { Page, Navbar, List, ListInput, Toolbar, Button } from 'framework7-react
 import { StoreContext } from '../data/store'
 import { resolveForgetPassword, showMessage, showError, getMessage } from '../data/actions'
 import BottomToolbar from './BottomToolbar'
+import labels from '../data/labels'
 
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
@@ -24,7 +25,7 @@ const RetreivePassword = props => {
   const handleSend = async () => {
     try{
       await resolveForgetPassword(props.id)
-      showMessage(state.labels.sendSuccess)
+      showMessage(labels.sendSuccess)
       props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
@@ -32,11 +33,11 @@ const RetreivePassword = props => {
   }
   return(
     <Page>
-      <Navbar title={state.labels.retreivePassword} backLink={state.labels.back} />
+      <Navbar title={labels.retreivePassword} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
-          label={state.labels.name}
+          label={labels.name}
           value={user.name}
           floatingLabel 
           type="text" 
@@ -44,7 +45,7 @@ const RetreivePassword = props => {
         />
         <ListInput 
           name="mobile" 
-          label={state.labels.mobile}
+          label={labels.mobile}
           value={user.mobile}
           floatingLabel 
           type="number"
@@ -52,14 +53,14 @@ const RetreivePassword = props => {
         />
         <ListInput 
           name="password" 
-          label={state.labels.password}
+          label={labels.password}
           value={password}
           floatingLabel 
           type="number"
           readonly
         />
       </List>
-      <Button large onClick={() => handleSend()}>{state.labels.send}</Button>
+      <Button large onClick={() => handleSend()}>{labels.send}</Button>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

@@ -4,6 +4,7 @@ import BottomToolbar from './BottomToolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
+import labels from '../data/labels'
 
 
 const Purchases = props => {
@@ -12,11 +13,11 @@ const Purchases = props => {
   , [state.purchases])
   return(
     <Page>
-      <Navbar title={state.labels.purchases} backLink={state.labels.back} />
+      <Navbar title={labels.purchases} backLink={labels.back} />
       <Block>
         <List mediaList>
           {purchases.length === 0 ? 
-            <ListItem title={state.labels.noData} /> 
+            <ListItem title={labels.noData} /> 
           : purchases.map(p => 
               <ListItem
                 link={`/purchaseDetails/${p.id}`}
