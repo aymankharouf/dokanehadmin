@@ -5,7 +5,7 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
-
+import { stockTransTypes } from '../data/config'
 
 const StockPackTrans = props => {
   const { state } = useContext(StoreContext)
@@ -65,7 +65,7 @@ const StockPackTrans = props => {
               const storeInfo = state.stores.find(s => s.id === t.storeId)
               return (
                 <ListItem
-                  title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name || ''}`}
+                  title={`${stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name || ''}`}
                   subtitle={moment(t.time.toDate()).fromNow()}
                   text={`${labels.quantity}: ${quantityText(t.quantity)}`}
                   footer={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}

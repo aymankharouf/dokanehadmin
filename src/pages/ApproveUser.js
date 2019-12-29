@@ -4,7 +4,7 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import { approveUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-
+import { otherMobileHolders } from '../data/config'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
@@ -156,7 +156,7 @@ const ApproveUser = props => {
           >
             <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
               <option value=""></option>
-              {state.otherMobileHolders.map(h => 
+              {otherMobileHolders.map(h => 
                 <option key={h.id} value={h.id}>{h.name}</option>
               )}
             </select>

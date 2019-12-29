@@ -4,7 +4,7 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'fra
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
-
+import { spendingTypes } from '../data/config'
 
 const EditSpending = props => {
   const { state } = useContext(StoreContext)
@@ -101,7 +101,7 @@ const EditSpending = props => {
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {state.spendingTypes.map(t => 
+            {spendingTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>

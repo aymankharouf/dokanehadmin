@@ -1,12 +1,11 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
-import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { randomColors } from '../data/config'
 
 
 const Settings = props => {
-  const { state } = useContext(StoreContext)
   const sections = useMemo(() => [
     {id: '1', name: 'المحلات', path: 'stores'},
     {id: '2', name: 'الدول', path: 'countries'},
@@ -25,7 +24,7 @@ const Settings = props => {
             large 
             fill 
             className="sections" 
-            color={state.randomColors[i++ % 10].name} 
+            color={randomColors[i++ % 10].name} 
             href={`/${s.path}/`} 
             key={s.id}
           >

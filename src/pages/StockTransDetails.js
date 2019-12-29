@@ -6,6 +6,7 @@ import { StoreContext } from '../data/store'
 import PackImage from './PackImage'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
+import { stockTransTypes } from '../data/config'
 
 const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -14,7 +15,7 @@ const StockTransDetails = props => {
   if (!user) return <ReLogin />
   return(
     <Page>
-      <Navbar title={`${state.stockTransTypes.find(ty => ty.id === stockTrans.type).name} ${stockTrans.storeId ? state.stores.find(s => s.id === stockTrans.storeId).name : ''}`} backLink={labels.back} />
+      <Navbar title={`${stockTransTypes.find(ty => ty.id === stockTrans.type).name} ${stockTrans.storeId ? state.stores.find(s => s.id === stockTrans.storeId).name : ''}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {stockTrans.basket.map(p => {

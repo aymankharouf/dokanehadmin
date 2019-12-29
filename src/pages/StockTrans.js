@@ -5,7 +5,7 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
-
+import { stockTransTypes } from '../data/config'
 
 const StockTrans = props => {
   const { state } = useContext(StoreContext)
@@ -21,7 +21,7 @@ const StockTrans = props => {
           : stockTrans.map(t => 
               <ListItem
                 link={`/stockTransDetails/${t.id}`}
-                title={`${state.stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                title={`${stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
                 subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.total / 1000).toFixed(3)}
                 key={t.id}

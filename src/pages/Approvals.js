@@ -3,7 +3,7 @@ import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { randomColors } from '../data/config'
 
 const Approvals = props => {
   const { state } = useContext(StoreContext)
@@ -37,7 +37,7 @@ const Approvals = props => {
             large 
             fill 
             className="sections" 
-            color={state.randomColors[i++ % 10].name} 
+            color={randomColors[i++ % 10].name} 
             href={s.path} 
             key={s.id}
           >

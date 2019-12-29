@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { orderStatus } from '../data/config'
 
 const CancelOrders = props => {
   const { state } = useContext(StoreContext)
@@ -27,7 +27,7 @@ const CancelOrders = props => {
                   link={`/cancelOrder/${o.order.id}/cancelOrder/${o.id}`}
                   title={`${labels.user}: ${userInfo.name}`}
                   subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={state.orderStatus.find(s => s.id === o.order.status).name}
+                  text={orderStatus.find(s => s.id === o.order.status).name}
                   footer={moment(o.time.toDate()).fromNow()}
                   after={(o.order.total / 1000).toFixed(3)}
                   key={o.id}

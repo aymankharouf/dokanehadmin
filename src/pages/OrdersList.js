@@ -5,12 +5,12 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { orderStatus, orderPositions } from '../data/config'
 
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
-  const status = useMemo(() => state.orderStatus.find(s => s.id === props.id)
-  , [state.orderStatus, props.id])
+  const status = useMemo(() => orderStatus.find(s => s.id === props.id)
+  , [props.id])
   const orders = useMemo(() => {
     const orders = state.orders.filter(o => o.status === props.id)
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
@@ -44,7 +44,7 @@ const OrdersList = props => {
                   link={`/orderDetails/${o.id}`}
                   title={`${labels.user}: ${userInfo.name}`}
                   subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={o.position ? state.orderPositions.find(p => p.id === o.position).name : ''}
+                  text={o.position ? orderPositions.find(p => p.id === o.position).name : ''}
                   footer={moment(o.time.toDate()).fromNow()}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}

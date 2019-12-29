@@ -3,7 +3,7 @@ import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
-
+import { storeTypes } from '../data/config'
 
 const StoreDetails = props => {
   const { state } = useContext(StoreContext)
@@ -35,7 +35,7 @@ const StoreDetails = props => {
         <ListInput
           name="type"
           label={labels.type}
-          value={state.storeTypes.find(t => t.id === store.type).name}
+          value={storeTypes.find(t => t.id === store.type).name}
           floatingLabel
           type="text"
           readonly

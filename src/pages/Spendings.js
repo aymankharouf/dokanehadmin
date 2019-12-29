@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { spendingTypes } from '../data/config'
 
 const Spendings = props => {
   const { state } = useContext(StoreContext)
@@ -22,7 +22,7 @@ const Spendings = props => {
               return (
                 <ListItem
                   link={`/editSpending/${s.id}`}
-                  title={state.spendingTypes.find(t => t.id === s.type).name}
+                  title={spendingTypes.find(t => t.id === s.type).name}
                   subtitle={moment(s.time.toDate()).fromNow()}
                   after={(s.spendingAmount / 1000).toFixed(3)}
                   key={s.id}

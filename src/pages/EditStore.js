@@ -4,7 +4,7 @@ import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
-
+import { storeTypes } from '../data/config'
 
 const EditStore = props => {
   const { state } = useContext(StoreContext)
@@ -24,10 +24,6 @@ const EditStore = props => {
   const [canReturn, setCanReturn] = useState(store.canReturn)
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
   , [state.locations])
-  const storeTypes = useMemo(() => {
-    const storeTypes = state.storeTypes.filter(t => t.id !== '1')
-    return storeTypes.sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  }, [state.storeTypes])
 
   useEffect(() => {
     const patterns = {
@@ -122,7 +118,7 @@ const EditStore = props => {
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {storeTypes.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
+              t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
         </ListItem>

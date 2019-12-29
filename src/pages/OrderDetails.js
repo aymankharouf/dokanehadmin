@@ -4,6 +4,7 @@ import ReLogin from './ReLogin'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
 import labels from '../data/labels'
+import { orderPackStatus } from '../data/config'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -63,7 +64,7 @@ const OrderDetails = props => {
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
             const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-            const statusNote = `${state.orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
+            const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
             return (
               <ListItem 
                 key={p.packId} 

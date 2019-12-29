@@ -4,6 +4,7 @@ import { StoreContext } from '../data/store'
 import { resolveForgetPassword, showMessage, showError, getMessage } from '../data/actions'
 import BottomToolbar from './BottomToolbar'
 import labels from '../data/labels'
+import { randomColors } from '../data/config'
 
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
@@ -13,9 +14,9 @@ const RetreivePassword = props => {
   const user = useMemo(() => state.users.find(u => u.mobile === forgetPasswordTrans.mobile)
   , [state.users, forgetPasswordTrans])
   const password = useMemo(() => {
-    const password = user.colors.map(c => state.randomColors.find(rc => rc.name === c).id)
+    const password = user.colors.map(c => randomColors.find(rc => rc.name === c).id)
     return password.join('')
-  }, [user, state.randomColors])
+  }, [user])
   useEffect(() => {
     if (error) {
       showError(error)

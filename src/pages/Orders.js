@@ -3,6 +3,7 @@ import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './BottomToolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { randomColors, orderStatus } from '../data/config'
 
 
 const Orders = props => {
@@ -13,14 +14,14 @@ const Orders = props => {
       <Navbar title={labels.orders} backLink={labels.back} />
       <Block>
 				<List>
-          {state.orderStatus.map(s => {
+          {orderStatus.map(s => {
             const count = state.orders.filter(o => o.status === s.id).length
             return (
               <ListItem 
                 link={`/ordersList/${s.id}/`} 
                 title={s.name} 
                 badge={count} 
-                badgeColor={state.randomColors[i++ % 10].name} 
+                badgeColor={randomColors[i++ % 10].name} 
                 key={s.id}
               />
             )

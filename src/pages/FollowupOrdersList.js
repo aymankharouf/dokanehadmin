@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { orderStatus, orderPositions } from '../data/config'
 
 const FollowupOrdersList = props => {
   const { state } = useContext(StoreContext)
@@ -13,7 +13,7 @@ const FollowupOrdersList = props => {
   , [state.orders, props.id])
   return(
     <Page>
-      <Navbar title={`${labels.followupOrders} ${state.orderPositions.find(p => p.id === props.id).name}`} backLink={labels.back} />
+      <Navbar title={`${labels.followupOrders} ${orderPositions.find(p => p.id === props.id).name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 
@@ -25,7 +25,7 @@ const FollowupOrdersList = props => {
                   link={`/followupOrderDetails/${o.id}`}
                   title={`${labels.user}: ${userInfo.name}`}
                   subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={`${labels.status}: ${state.orderStatus.find(s => s.id === o.status).name}`}
+                  text={`${labels.status}: ${orderStatus.find(s => s.id === o.status).name}`}
                   footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                   after={(o.total / 1000).toFixed(3)}
                   key={o.id}

@@ -4,6 +4,7 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './BottomToolbar'
 import { approveRating, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { ratingValues } from '../data/config'
 
 const RatingDetails = props => {
   const { state } = useContext(StoreContext)
@@ -57,7 +58,7 @@ const RatingDetails = props => {
         <ListInput 
           name="value" 
           label={labels.ratingValue}
-          value={state.ratingValues.find(v => v.id === rating.value).name}
+          value={ratingValues.find(v => v.id === rating.value).name}
           floatingLabel 
           type="text"
           readonly

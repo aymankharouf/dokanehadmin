@@ -5,105 +5,16 @@ import firebase from './firebase'
 export const StoreContext = createContext()
 
 const Store = props => {
-  
-  const randomColors = [
-    {id: 0, name: 'red'},
-    {id: 1, name: 'green'},
-    {id: 2, name: 'blue'},
-    {id: 3, name: 'pink'},
-    {id: 4, name: 'yellow'},
-    {id: 5, name: 'orange'},
-    {id: 6, name: 'purple'},
-    {id: 7, name: 'deeppurple'},
-    {id: 8, name: 'lightblue'},
-    {id: 9, name: 'teal'},
-  ]
-  const orderByList = [
-    {id: 'p', name: 'السعر'},
-    {id: 's', name: 'المبيعات'},
-    {id: 'r', name: 'التقييم'}
-  ]
-  const orderStatus = [
-    {id: 'n', name: 'جديد'},
-    {id: 'a', name: 'معتمد'},
-    {id: 's', name: 'معلق'},
-    {id: 'r', name: 'مرفوض'},
-    {id: 'e', name: 'قيد التجهيز'},
-    {id: 'f', name: 'مكتمل'},
-    {id: 'p', name: 'جاهز'},
-    {id: 'd', name: 'مستلم'},
-    {id: 'c', name: 'ملغي'},
-    {id: 'u', name: 'غير متوفر'},
-    {id: 'i', name: 'استيداع'}
-  ]  
-  const storeTypes = [
-    {id: '1', name: 'المستودع'},
-    {id: '2', name: 'دكانة'},
-    {id: '3', name: 'محل'},
-    {id: '4', name: 'سوبرماركت'},
-    {id: '5', name: 'محل جملة'}
-  ]
-  const stockTransTypes = [
-    {id: 'p', name: 'شراء'},
-    {id: 's', name: 'بيع'},
-    {id: 'i', name: 'استيداع'},
-    {id: 'd', name: 'اتلاف'},
-    {id: 'g', name: 'تبرع'},
-    {id: 'r', name: 'ارجاع'},
-    {id: 'c', name: 'تصريف'},
-    {id: 'w', name: 'سحب'}
-  ]
-  const spendingTypes = [
-    {id: 'w', name: 'سحب'},
-    {id: 'f', name: 'بنزين'},
-    {id: 'm', name: 'صيانة'},
-  ]
-  const ratingValues = [
-    {id: 0, name: 'ﻻ أنصح به'},
-    {id: 1, name: 'أنصح به'}
-  ]
-  const otherMobileHolders = [
-    {id: '1', name: 'نفسه'},
-    {id: '2', name: 'زوج/زوجة'},
-    {id: '3', name: 'احد اﻻبناء'},
-    {id: '4', name: 'احد الوالدين'},
-    {id: '5', name: 'صديق'},
-    {id: '6', name: 'جار'}
-  ]
-  const orderPositions = [
-    {id: 's', name: 'المستودع'},
-    {id: 'c', name: 'مركز التوزيع'},
-    {id: 'd', name: 'سيارة التوزيع'},
-  ]
-  const orderPackStatus = [
-    {id: 'n', name: 'جديد'},
-    {id: 'p', name: 'شراء جزئي'},
-    {id: 'f', name: 'تم الشراء'},
-    {id: 'u', name: 'غير متوفر'},
-    {id: 'pu', name: 'شراء جزئي والباقي غير متوفر'},
-    {id: 'r', name: 'مرتجع'},
-    {id: 'pr', name: 'مرتجع جزئي'}
-  ]
-  const storageTypes = [
-    {id: 'd', name: 'جاف'},
-    {id: 'c', name: 'مبرد'},
-    {id: 'f', name: 'مجمد'}
-  ]
   const localData = localStorage.getItem('basket')
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null)
   const initState = {
     sections: [], 
-    randomColors, 
     categories: [], 
     countries: [], 
     stores: [], 
-    orderStatus, 
     basket, 
     trademarks: [], 
-    orderByList, 
-    storeTypes,
-    stockTransTypes,
     users: [],
     purchases: [],
     orders: [],
@@ -114,20 +25,14 @@ const Store = props => {
     forgetPassword: [],
     invitations: [],
     customers: [],
-    spendingTypes,
     spendings: [],
     monthlyTrans: [],
     locations: [],
     ratings: [],
-    ratingValues,
     storePacks: [],
-    otherMobileHolders,
     logs: [],
     cancelOrders: [],
-    orderPositions,
-    orderPackStatus,
-    tags: [],
-    storageTypes
+    tags: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {

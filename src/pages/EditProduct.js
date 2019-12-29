@@ -3,7 +3,7 @@ import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'fram
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-
+import { storageTypes } from '../data/config'
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
@@ -28,8 +28,6 @@ const EditProduct = props => {
   , [state.countries]) 
   const tags = useMemo(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.tags]) 
-  const storageTypes = useMemo(() => [...state.storageTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.storageTypes]) 
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name

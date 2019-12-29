@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addSpending, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import { spendingTypes } from '../data/config'
 
 const AddSpending = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [type, setType] = useState('')
   const [spendingAmount, setSpendingAmount] = useState('')
@@ -14,8 +12,6 @@ const AddSpending = props => {
   const [spendingDate, setSpendingDate] = useState([new Date()])
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
-  const spendingTypes = useMemo(() => [...state.spendingTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.spendingTypes])
 
   useEffect(() => {
     const validateAmount = value => {
