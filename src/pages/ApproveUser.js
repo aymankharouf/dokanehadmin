@@ -22,7 +22,7 @@ const ApproveUser = props => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
 
   useEffect(() => {

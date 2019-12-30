@@ -22,7 +22,7 @@ const EditStore = props => {
   const [locationId, setLocationId] = useState(store.locationId)
   const [position, setPosition] = useState(store.position)
   const [canReturn, setCanReturn] = useState(store.canReturn)
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.sorting - l2.sorting)
+  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
 
   useEffect(() => {
