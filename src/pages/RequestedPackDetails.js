@@ -5,6 +5,7 @@ import { StoreContext } from '../data/store'
 import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/actions'
 import PackImage from './PackImage'
 import labels from '../data/labels'
+import { setup } from '../data/config'
 
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
@@ -105,7 +106,7 @@ const RequestedPackDetails = props => {
       if (packInfo.byWeight) {
         f7.dialog.prompt(labels.enterWeight, labels.actualWeight, weight => {
           try{
-            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > labels.margin) {
+            if (packInfo.isDivided && parseInt(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > setup.weightErrorMargin) {
               throw new Error('InvalidWeight')
             }
             if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
@@ -176,7 +177,7 @@ const RequestedPackDetails = props => {
       }
       if (packStore.unitPrice > Number(props.price)){
         if (Number(props.price) < pack.price) { 
-          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + labels.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
+          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + setup.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
             f7.dialog.confirm(labels.exceedPricePurchase, labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceedPriceQuantity), 'p'))
           } else {
             throw new Error('noPurchase')

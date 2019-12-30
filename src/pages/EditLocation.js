@@ -11,16 +11,16 @@ const EditLocation = props => {
   const location = useMemo(() => state.locations.find(l => l.id === props.id)
   , [state.locations, props.id])
   const [name, setName] = useState(location.name)
-  const [sorting, setSorting] = useState(location.sorting)
+  const [ordering, setOrdering] = useState(location.ordering)
   const [hasDelivery, setHasDelivery] = useState(location.hasDelivery)
   const [deliveryFees, setDeliveryFees] = useState((location.deliveryFees / 1000).toFixed(3))
   const hasChanged = useMemo(() => {
     if (name !== location.name) return true
-    if (sorting !== location.sorting) return true
+    if (ordering !== location.ordering) return true
     if (hasDelivery !== location.hasDelivery) return true
     if (deliveryFees * 1000 !== location.deliveryFees) return true
     return false
-  }, [location, name, sorting, hasDelivery, deliveryFees])
+  }, [location, name, ordering, hasDelivery, deliveryFees])
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
@@ -36,7 +36,7 @@ const EditLocation = props => {
       await editLocation({
         id: location.id,
         name,
-        sorting,
+        ordering,
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
@@ -61,14 +61,14 @@ const EditLocation = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="sorting" 
-          label={labels.sorting}
+          name="ordering" 
+          label={labels.ordering}
           floatingLabel 
           clearButton
           type="number" 
-          value={sorting} 
-          onChange={e => setSorting(e.target.value)}
-          onInputClear={() => setSorting('')}
+          value={ordering} 
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
         />
         <ListItem>
           <span>{labels.hasDelivery}</span>
@@ -92,7 +92,7 @@ const EditLocation = props => {
           />
         : ''}
       </List>
-      {!name || (hasDelivery && !deliveryFees) || !hasChanged ? '' :
+      {!name || !ordering || (hasDelivery && !deliveryFees) || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

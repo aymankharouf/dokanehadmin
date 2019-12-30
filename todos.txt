@@ -142,3 +142,4 @@ merging orders
 stores last month trans & requested packs that can be purchased from
 approve for invitations
 archive data
+add order for sections & categories

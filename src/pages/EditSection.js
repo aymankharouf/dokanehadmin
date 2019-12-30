@@ -12,6 +12,7 @@ const EditSection = props => {
   const section = useMemo(() => state.sections.find(s => s.id === props.id)
   , [state.sections, props.id])
   const [name, setName] = useState(section.name)
+  const [ordering, setOrdering] = useState(section.ordering || '')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -23,7 +24,8 @@ const EditSection = props => {
     try{
       await editSection({
         id: section.id,
-        name
+        name,
+        ordering
       })
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -43,8 +45,18 @@ const EditSection = props => {
           type="text" 
           onChange={e => setName(e.target.value)}
         />
+        <ListInput 
+          name="ordering" 
+          label={labels.ordering} 
+          floatingLabel
+          clearButton
+          type="number"
+          value={ordering}
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
+        />
       </List>
-      {!name || (name === section.name) ? '' :
+      {!name || !ordering || (name === section.name && ordering === section.ordering) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

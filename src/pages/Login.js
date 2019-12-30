@@ -43,7 +43,7 @@ const Login = props => {
         />
       </List>
       {!email || !password ? '' : 
-        <Button large onClick={() => handleLogin()}>{labels.loginSubmit}</Button>
+        <Button large onClick={() => handleLogin()}>{labels.logon}</Button>
       }
     </Page>
   )

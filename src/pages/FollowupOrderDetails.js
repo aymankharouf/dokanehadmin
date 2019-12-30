@@ -49,7 +49,7 @@ const FollowupOrderDetails = props => {
   }
   const handleDelivery = async () => {
     try{
-      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.customers, state.users, state.invitations, props.cancelOrderId)
+      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.users, state.invitations, props.cancelOrderId)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -108,7 +108,7 @@ const FollowupOrderDetails = props => {
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={labels.fixedFeesTitle} 
+            title={labels.fixedFees} 
             className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />

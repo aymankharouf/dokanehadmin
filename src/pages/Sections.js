@@ -6,7 +6,7 @@ import labels from '../data/labels'
 
 const Sections = props => {
   const { state } = useContext(StoreContext)
-  const sections = useMemo(() => [...state.sections].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  const sections = useMemo(() => [...state.sections].sort((s1, s2) => s1.ordering - s2.ordering)
   , [state.sections])
 
   return (

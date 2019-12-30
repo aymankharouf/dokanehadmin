@@ -5,6 +5,7 @@ import { StoreContext } from '../data/store'
 import { quantityText, addQuantity } from '../data/actions'
 import PackImage from './PackImage'
 import labels from '../data/labels'
+import { setup } from '../data/config'
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
@@ -22,7 +23,7 @@ const RequestedPacks = props => {
 				if (p.status === 'n' || p.status === 'p') {
 					const packInfo = state.packs.find(pa => pa.id === p.packId)
 					const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
-					if (p.price < packInfo.price && parseInt(p.price * (100 + labels.exceedPricePercent) / 100) >= packInfo.price && customerInfo.exceedPrice) {
+					if (p.price < packInfo.price && parseInt(p.price * (100 + setup.exceedPricePercent) / 100) >= packInfo.price && customerInfo.exceedPrice) {
 						exceedPriceQuantity = p.quantity - p.purchased
 					}
 					if (!packInfo.byWeight && found) {
@@ -73,7 +74,7 @@ const RequestedPacks = props => {
 				}	
 			}
 			if (inBasketQuantity > 0) {
-				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > labels.margin) {
+				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > setup.weightErrorMargin) {
 					return {
 						...p,
 						quantity: addQuantity(p.quantity, -1 * inBasketQuantity),

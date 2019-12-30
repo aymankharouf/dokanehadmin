@@ -45,7 +45,7 @@ const OrderDetails = props => {
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
         }
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.customers, state.users, state.invitations, props.cancelOrderId)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.cancelOrderId)
         showMessage(labels.editSuccess)
         props.f7router.back()
       }  
@@ -85,7 +85,7 @@ const OrderDetails = props => {
             after={(order.total / 1000).toFixed(3)} 
           />
           <ListItem 
-            title={labels.fixedFeesTitle} 
+            title={labels.fixedFees} 
             className="fees" 
             after={(order.fixedFees / 1000).toFixed(3)} 
           />
@@ -110,7 +110,7 @@ const OrderDetails = props => {
           />
           {order.profit ? 
             <ListItem 
-              title={labels.profitTitle} 
+              title={labels.profit} 
               after={(order.profit / 1000).toFixed(3)} 
             /> 
           : ''}

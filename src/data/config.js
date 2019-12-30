@@ -86,5 +86,19 @@ export const storageTypes = [
   {id: 'f', name: 'مجمد'}
 ]
 
+export const setup = {
+  fixedFees: 2.5,
+  maxDiscount: 250,
+  profit: 10,
+  weightErrorMargin: 10,
+  orderLimit: 50000,
+  exceedPricePercent: 5,
+  returnPenalty: 100,
+  invitationDiscount: 250,
+  priceAlarmDiscount: 250,
+  firstOrderDiscount: 300,
+  ratingDiscount: 100,
+
+}
 
 

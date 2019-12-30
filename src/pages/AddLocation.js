@@ -8,7 +8,7 @@ import labels from '../data/labels'
 const AddLocation = props => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [sorting, setSorting] = useState('')
+  const [ordering, setOrdering] = useState('')
   const [hasDelivery, setHasDelivery] = useState(false)
   const [deliveryFees, setDeliveryFees] = useState('')
   useEffect(() => {
@@ -25,7 +25,7 @@ const AddLocation = props => {
     try{
       await addLocation({
         name,
-        sorting,
+        ordering,
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
@@ -50,14 +50,14 @@ const AddLocation = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="sorting" 
-          label={labels.sorting}
+          name="ordering" 
+          label={labels.ordering}
           floatingLabel 
           clearButton
           type="number" 
-          value={sorting} 
-          onChange={e => setSorting(e.target.value)}
-          onInputClear={() => setSorting('')}
+          value={ordering} 
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
         />
         <ListItem>
           <span>{labels.hasDelivery}</span>
@@ -81,7 +81,7 @@ const AddLocation = props => {
           />
           : ''}
       </List>
-      {!name || !sorting || (hasDelivery && !deliveryFees) ? '' :
+      {!name || !ordering || (hasDelivery && !deliveryFees) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

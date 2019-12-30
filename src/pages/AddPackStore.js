@@ -3,6 +3,7 @@ import { addStorePack, showMessage, showError, getMessage } from '../data/action
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { setup } from '../data/config'
 
 const AddPackStore = props => {
   const { state } = useContext(StoreContext)
@@ -32,9 +33,9 @@ const AddPackStore = props => {
   const getDefaultPrice = () => {
     if (cost) {
       if (pack.subQuantity > 1) {
-        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + labels.profit) / 100000).toFixed(3))
+        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + setup.profit) / 100000).toFixed(3))
       } else {
-        setPrice((cost * (100 + labels.profit) / 100).toFixed(3))
+        setPrice((cost * (100 + setup.profit) / 100).toFixed(3))
       }
     }
   }

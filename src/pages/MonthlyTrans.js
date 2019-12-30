@@ -137,12 +137,12 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={labels.profitTitle}
+            title={labels.profit}
             after={(profit / 1000).toFixed(3)}
           />
           <ListItem
             link="#"
-            title={labels.fixedFeesTitle}
+            title={labels.fixedFees}
             after={(fixedFees / 1000).toFixed(3)}
           />
           <ListItem
