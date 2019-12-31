@@ -1,5 +1,5 @@
 import React, {useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -11,9 +11,9 @@ const EditProduct = props => {
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
+  const [engName, setEngName] = useState(product.engName)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
-  const [isNew, setIsNew] = useState(product.isNew)
   const [countryId, setCountryId] = useState(product.countryId)
   const [tagId, setTagId] = useState(product.tagId)
   const [storageId, setStorageId] = useState(product.storageId)
@@ -44,15 +44,15 @@ const EditProduct = props => {
   }
   const hasChanged = useMemo(() => {
     if (name !== product.name) return true
+    if (engName !== product.engName) return true
     if (countryId !== product.countryId) return true
     if (categoryId !== product.categoryId) return true
     if (trademarkId !== product.trademarkId) return true
     if (tagId !== product.tagId) return true
     if (storageId !== product.storageId) return true
-    if (isNew !== product.isNew) return true
     if (imageUrl !== product.imageUrl) return true
     return false
-  }, [product, name, countryId, categoryId, trademarkId, tagId, storageId, isNew, imageUrl])
+  }, [product, name, engName, countryId, categoryId, trademarkId, tagId, storageId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -66,8 +66,8 @@ const EditProduct = props => {
         id: props.id,
         categoryId,
         name,
+        engName,
         trademarkId,
-        isNew,
         countryId,
         tagId,
         storageId,
@@ -93,6 +93,16 @@ const EditProduct = props => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="engName" 
+          label={labels.engName}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={engName} 
+          onChange={e => setEngName(e.target.value)}
+          onInputClear={() => setEngName('')}
         />
         <ListItem
           title={labels.category}
@@ -184,15 +194,6 @@ const EditProduct = props => {
             )}
           </select>
         </ListItem>
-        <ListItem>
-          <span>{labels.isNew}</span>
-          <Toggle 
-            name="isNew" 
-            color="green" 
-            checked={isNew} 
-            onToggleChange={() => setIsNew(!isNew)}
-          />
-        </ListItem>
         <ListInput 
           name="image" 
           label="Image" 
@@ -204,7 +205,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
+      {(!name && !engName) || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

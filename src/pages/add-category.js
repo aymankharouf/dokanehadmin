@@ -1,16 +1,13 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addCategory, showMessage, showError, getMessage } from '../data/actions'
 import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 
 const AddCategory = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const section = useMemo(() => state.sections.find(s => s.id === props.id)
-  , [state.sections, props.id]) 
+  const [ordering, setOrdering] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -20,10 +17,7 @@ const AddCategory = props => {
 
   const handleSubmit = async () => {
     try{
-      await addCategory({
-        sectionId: props.id,
-        name
-      })
+      await addCategory(props.id, name, Number(ordering))
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -33,17 +27,28 @@ const AddCategory = props => {
   
   return (
     <Page>
-      <Navbar title={`${labels.addCategory} ${section.name}`} backLink={labels.back} />
+      <Navbar title={labels.addCategory} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
           label={labels.name}
           floatingLabel 
+          clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="ordering" 
+          label={labels.ordering}
+          floatingLabel 
+          clearButton
+          type="number" 
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
         />
       </List>
-      {!name ? '' :
+      {!name || !ordering ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

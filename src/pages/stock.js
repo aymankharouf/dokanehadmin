@@ -41,7 +41,7 @@ const Stock = props => {
               return (
                 <ListItem
                   link={`/stock-pack-trans/${p.packId}`}
-                  title={productInfo.name}
+                  title={productInfo.name || productInfo.engName}
                   subtitle={packInfo.name}
                   text={`${labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                   footer={`${labels.quantity}: ${quantityText(p.quantity)}`}

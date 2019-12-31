@@ -21,17 +21,18 @@ const PriceAlarms = props => {
             {priceAlarms.length === 0 ? 
               <ListItem title={labels.noData} /> 
             : priceAlarms.map(a => {
-                const pack = state.packs.find(p => p.id === a.packId)
+                const packInfo = state.packs.find(p => p.id === a.packId)
+                const productInfo = state.products.find(p => p.id === packInfo.productId)
                 return (
                   <ListItem
                     link={`/price-alarm-details/${a.id}`}
-                    title={state.products.find(p => p.id === pack.productId).name}
-                    subtitle={pack.name}
+                    title={productInfo.name || productInfo.engName}
+                    subtitle={packInfo.name}
                     text={moment(a.time.toDate()).fromNow()}
                     after={(a.price / 1000).toFixed(3)}
                     key={a.id}
                   >
-                    <PackImage slot="media" pack={pack} type="list" />
+                    <PackImage slot="media" pack={packInfo} type="list" />
                   </ListItem>
                 )
               })

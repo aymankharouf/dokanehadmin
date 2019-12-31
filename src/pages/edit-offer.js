@@ -30,7 +30,7 @@ const EditOffer = props => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} ${p.name}`
+        name: `${productInfo.name || productInfo.engName} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -83,7 +83,7 @@ const EditOffer = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${labels.editOffer} ${product.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.editOffer} ${product.name || product.engName}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 

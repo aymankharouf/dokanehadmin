@@ -62,7 +62,7 @@ const PriceAlarmDetails = props => {
 
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${product.name || product.engName} ${pack.name}`} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="blue" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>

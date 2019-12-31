@@ -23,11 +23,9 @@ const RelatedProducts = props => {
                 return (
                   <ListItem
                     link={`/product-packs/${p.id}`}
-                    title={p.name}
+                    title={p.name || p.engName}
                     subtitle={state.categories.find(c => c.id === p.categoryId).name}
                     text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
-                    badge={p.isNew ? labels.new : ''}
-                    badgeColor="red"
                     key={p.id}
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

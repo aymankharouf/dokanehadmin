@@ -101,10 +101,11 @@ const RequestedPacks = props => {
 						<ListItem title={labels.noData} /> 
 					: requiredPacks.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
+							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 							return (
 								<ListItem
 									link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
-									title={state.products.find(pr => pr.id === packInfo.productId).name}
+									title={productInfo.name || productInfo.engName}
 									subtitle={packInfo.name}
 									text={`${labels.requested}: ${quantityText(p.quantity)}`}
 									after={(p.price / 1000).toFixed(3)}

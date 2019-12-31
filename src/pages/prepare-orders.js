@@ -47,11 +47,12 @@ const PrepareOrders = props => {
 						<ListItem title={labels.noData} /> 
 					: packs.map(p => {
 							const packInfo = state.packs.find(pa => pa.id === p.packId)
+							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 							const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
 							return (
 								<ListItem
 									link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
-									title={state.products.find(pr => pr.id === packInfo.productId).name}
+									title={productInfo.name || productInfo.engName}
 									subtitle={packInfo.name}
 									text={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
 									key={i++}

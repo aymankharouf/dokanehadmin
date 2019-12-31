@@ -43,7 +43,7 @@ const StorePacks = props => {
               return (
                 <ListItem
                   link={`/store-pack-details/${p.id}`}
-                  title={productInfo.name}
+                  title={productInfo.name || productInfo.engName}
                   subtitle={packInfo.name}
                   text={moment(p.time.toDate()).fromNow()}
                   footer={packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
@@ -51,7 +51,6 @@ const StorePacks = props => {
                   key={p.id}
                 >
                   <PackImage slot="media" pack={packInfo} type="list" />
-                  {productInfo.isNew ? <Badge slot="title" color='red'>{labels.new}</Badge> : ''}
                   {packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
                 </ListItem>
               )

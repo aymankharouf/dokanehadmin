@@ -18,9 +18,7 @@ import EditPrice from './pages/edit-price'
 import Countries from './pages/countries'
 import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
-import Sections from './pages/sections'
-import AddSection from './pages/add-section'
-import SectionCategories from './pages/section-categories'
+import Categories from './pages/categories'
 import AddCategory from './pages/add-category'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
@@ -40,7 +38,6 @@ import AddPack from './pages/add-pack'
 import PackDetails from './pages/pack-details'
 import EditPack from './pages/edit-pack'
 import EditCountry from './pages/edit-country'
-import EditSection from './pages/edit-section'
 import EditCategory from './pages/edit-category'
 import EditTrademark from './pages/edit-trademark'
 import EditStore from './pages/edit-store'
@@ -227,20 +224,8 @@ export default [
     component: EditSpending
   },
   {
-    path: '/sections/',
-    component: Sections
-  },
-  {
-    path: '/add-section/',
-    component: AddSection
-  },
-  {
-    path: '/section-categories/:id',
-    component: SectionCategories
-  },
-  {
-    path: '/edit-section/:id',
-    component: EditSection
+    path: '/categories/:id',
+    component: Categories,
   },
   {
     path: '/add-category/:id',

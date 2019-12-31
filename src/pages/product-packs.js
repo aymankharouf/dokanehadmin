@@ -1,10 +1,11 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Popover, Link } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
+import BottomToolbar from './bottom-toolbar'
 
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
@@ -16,7 +17,7 @@ const ProductPacks = props => {
   }, [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name} backLink={labels.back} />
+      <Navbar title={product.name || product.engName} backLink={labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
@@ -43,40 +44,18 @@ const ProductPacks = props => {
           </ListItem>
         )}
       </List>
-      <Popover className="popover-menu">
-        <List>
-          <ListItem 
-            link={`/product-details/${props.id}`}
-            popoverClose 
-            title={labels.details}
-          />
-          <ListItem 
-            link={`/add-pack/${props.id}`}
-            popoverClose 
-            title={labels.addPack}
-          />
-          <ListItem 
-            link={`/add-offer/${props.id}`}
-            popoverClose 
-            title={labels.addOffer}
-          />
-          <ListItem 
-            link={`/add-bulk/${props.id}`}
-            popoverClose 
-            title={labels.addBulk}
-          />
-          <ListItem 
-            link={`/related-products/${props.id}`}
-            popoverClose 
-            title={labels.relatedProducts}
-          />
-
-        </List>
-      </Popover>
-
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+        <Icon material="build"></Icon>
+      </Fab>
+      <Actions id="actions" className="test">
+        <ActionsButton onClick={() => props.f7router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
+        <ActionsButton onClick={() => props.f7router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
+        <ActionsButton onClick={() => props.f7router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>
+        <ActionsButton onClick={() => props.f7router.navigate(`/add-bulk/${props.id}`)}>{labels.addBulk}</ActionsButton>
+        <ActionsButton onClick={() => props.f7router.navigate(`/related-products/${props.id}`)}>{labels.relatedProducts}</ActionsButton>
+      </Actions>
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
-        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
+        <BottomToolbar/>
       </Toolbar>
     </Page>
   )

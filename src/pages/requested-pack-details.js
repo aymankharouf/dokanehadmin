@@ -206,7 +206,7 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={labels.back} />
+      <Navbar title={product.name || product.engName} backLink={labels.back} />
       <Block>
         <Card>
           <CardContent>
@@ -241,7 +241,7 @@ const RequestedPackDetails = props => {
             return (
               <ListItem 
                 title={storeInfo.name}
-                subtitle={`${productInfo.name} ${packInfo.name}`}
+                subtitle={`${productInfo.name || productInfo.engName} ${packInfo.name}`}
                 text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
                 footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
                 key={s.id}

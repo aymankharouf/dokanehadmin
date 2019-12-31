@@ -7,12 +7,12 @@ import { randomColors } from '../data/config'
 
 const Settings = props => {
   const sections = useMemo(() => [
-    {id: '1', name: 'المحلات', path: 'stores'},
-    {id: '2', name: 'الدول', path: 'countries'},
-    {id: '3', name: 'اﻻقسام', path: 'sections'},
-    {id: '4', name: 'العلامات التجارية', path: 'trademarks'},
-    {id: '5', name: 'المواقع', path: 'locations'},
-    {id: '6', name: 'الفئات', path: 'tags'}
+    {id: '1', name: 'المحلات', path: '/stores/'},
+    {id: '2', name: 'الدول', path: '/countries/'},
+    {id: '3', name: 'الاصناف', path: '/categories/0'},
+    {id: '4', name: 'العلامات التجارية', path: '/trademarks/'},
+    {id: '5', name: 'المناطق', path: '/locations/'},
+    {id: '6', name: 'الفئات', path: '/tags/'}
   ], [])
   let i = 0
   return(
@@ -25,7 +25,7 @@ const Settings = props => {
             fill 
             className="sections" 
             color={randomColors[i++ % 10].name} 
-            href={`/${s.path}/`} 
+            href={s.path} 
             key={s.id}
           >
             {s.name}

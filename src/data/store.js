@@ -9,7 +9,6 @@ const Store = props => {
   const basket = localData ? JSON.parse(localData) : ''
   const [user, setUser] = useState(null)
   const initState = {
-    sections: [], 
     categories: [], 
     countries: [], 
     stores: [], 
@@ -36,15 +35,6 @@ const Store = props => {
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
-    const unsubscribeSections = firebase.firestore().collection('sections').onSnapshot(docs => {
-      let sections = []
-      docs.forEach(doc => {
-        sections.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_SECTIONS', sections})
-    }, err => {
-      unsubscribeSections()
-    })  
     const unsubscribeCategories = firebase.firestore().collection('categories').onSnapshot(docs => {
       let categories = []
       docs.forEach(doc => {
@@ -90,7 +80,7 @@ const Store = props => {
     }, err => {
       unsubscribePacks()
     })
-    const unsubscribeForgetPassword = firebase.firestore().collection('forgetPassword').onSnapshot(docs => {
+    const unsubscribeForgetPassword = firebase.firestore().collection('forget-passwords').onSnapshot(docs => {
       let forgetPassword = []
       docs.forEach(doc => {
         forgetPassword.push({...doc.data(), id:doc.id})
@@ -157,7 +147,7 @@ const Store = props => {
         }, err => {
           unsubscribePurchases()
         })  
-        const unsubscribeStockTrans = firebase.firestore().collection('stockTrans').onSnapshot(docs => {
+        const unsubscribeStockTrans = firebase.firestore().collection('stock-trans').onSnapshot(docs => {
           let stockTrans = []
           docs.forEach(doc => {
             stockTrans.push({...doc.data(), id:doc.id})
@@ -166,7 +156,7 @@ const Store = props => {
         }, err => {
           unsubscribeStockTrans()
         })  
-        const unsubscribePriceAlarms = firebase.firestore().collection('priceAlarms').onSnapshot(docs => {
+        const unsubscribePriceAlarms = firebase.firestore().collection('alarms').onSnapshot(docs => {
           let priceAlarms = []
           docs.forEach(doc => {
             priceAlarms.push({...doc.data(), id:doc.id})
@@ -193,7 +183,7 @@ const Store = props => {
         }, err => {
           unsubscribeSpendings()
         })  
-        const unsubscribeMonthlyTrans = firebase.firestore().collection('monthlyTrans').onSnapshot(docs => {
+        const unsubscribeMonthlyTrans = firebase.firestore().collection('monthly-trans').onSnapshot(docs => {
           let monthlyTrans = []
           docs.forEach(doc => {
             monthlyTrans.push({...doc.data(), id:doc.id})
@@ -211,7 +201,7 @@ const Store = props => {
         }, err => {
           unsubscribeRatings()
         })  
-        const unsubscribeStorePacks = firebase.firestore().collection('storePacks').onSnapshot(docs => {
+        const unsubscribeStorePacks = firebase.firestore().collection('store-packs').onSnapshot(docs => {
           let storePacks = []
           docs.forEach(doc => {
             storePacks.push({...doc.data(), id:doc.id})
@@ -229,7 +219,7 @@ const Store = props => {
         }, err => {
           unsubscribeLogs()
         })  
-        const unsubscribeCancelRequests = firebase.firestore().collection('cancelRequests').onSnapshot(docs => {
+        const unsubscribeCancelRequests = firebase.firestore().collection('cancel-requests').onSnapshot(docs => {
           let cancelRequests = []
           docs.forEach(doc => {
             cancelRequests.push({...doc.data(), id:doc.id})

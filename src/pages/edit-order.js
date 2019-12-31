@@ -60,9 +60,10 @@ const EditOrder = props => {
         <List mediaList>
           {orderBasket.map(p => {
             const packInfo = state.packs.find(pa => pa.id === p.packId)
+            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
-                title={state.products.find(pr => pr.id === packInfo.productId).name}
+                title={productInfo.name || productInfo.engName}
                 subtitle={packInfo.name}
                 text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
                 footer={quantityDetails(p)}

@@ -20,7 +20,7 @@ const AddStorePack = props => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} ${p.name}`
+        name: `${productInfo.name || productInfo.engName} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)

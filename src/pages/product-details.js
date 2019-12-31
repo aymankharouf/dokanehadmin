@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { storageTypes } from '../data/config'
@@ -18,6 +18,14 @@ const ProductDetails = props => {
           floatingLabel 
           type="text" 
           value={product.name}
+          readonly
+        />
+        <ListInput 
+          name="engName" 
+          label={labels.engName}
+          floatingLabel 
+          type="text" 
+          value={product.engName}
           readonly
         />
         <ListInput 
@@ -60,15 +68,6 @@ const ProductDetails = props => {
           value={product.storageId ? storageTypes.find(t => t.id === product.storageId).name : ''}
           readonly
         />
-        <ListItem>
-          <span>{labels.isNew}</span>
-          <Toggle 
-            name="isNew" 
-            color="green" 
-            checked={product.isNew}
-            disabled
-          />
-        </ListItem>
         <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
       <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-product/${props.id}`}>

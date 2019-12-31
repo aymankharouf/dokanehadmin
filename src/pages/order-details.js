@@ -68,7 +68,7 @@ const OrderDetails = props => {
             return (
               <ListItem 
                 key={p.packId} 
-                title={productInfo.name}
+                title={productInfo.name || productInfo.engName}
                 subtitle={packInfo.name}
                 text={storeName ? `${labels.storeName}: ${storeName}` : ''}
                 footer={quantityDetails(p)}

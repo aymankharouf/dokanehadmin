@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Toggle, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { addProduct, showMessage, showError, getMessage } from '../data/actions'
+import { addProduct, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 import labels from '../data/labels'
 import { storageTypes } from '../data/config'
 
@@ -9,16 +9,24 @@ const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
+  const [engName, setEngName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [trademarkId, setTrademarkId] = useState('')
-  const [isNew, setIsNew] = useState(false)
   const [countryId, setCountryId] = useState('')
   const [tagId, setTagId] = useState('')
   const [storageId, setStorageId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  , [state.categories])
+  const categories = useMemo(() => {
+    let categories = state.categories.filter(c => c.isLeaf)
+    categories = categories.map(c => {
+      return {
+        id: c.id,
+        name: getCategoryName(c, state.categories)
+      }
+    })
+    return categories
+  }, [state.categories])
   const trademarks = useMemo(() => [...state.trademarks].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.trademarks])
   const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -50,9 +58,9 @@ const AddProduct = props => {
     try{
       const product = {
         name,
+        engName,
         categoryId,
         trademarkId,
-        isNew,
         countryId,
         tagId,
         storageId,
@@ -78,6 +86,16 @@ const AddProduct = props => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="engName" 
+          label={labels.engName}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={engName} 
+          onChange={e => setEngName(e.target.value)}
+          onInputClear={() => setEngName('')}
         />
         <ListItem
           title={labels.category}
@@ -169,18 +187,10 @@ const AddProduct = props => {
             )}
           </select>
         </ListItem>
-        <ListItem>
-          <span>{labels.isNew}</span>
-          <Toggle 
-          name="isNew" 
-          color="green" 
-          checked={isNew} 
-          onToggleChange={() => setIsNew(!isNew)}/>
-        </ListItem>
         <ListInput name="image" label={labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !countryId || !categoryId || !imageUrl ? '' :
+      {(!name && !engName) || !countryId || !categoryId || !imageUrl ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

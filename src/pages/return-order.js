@@ -27,7 +27,7 @@ const ReturnOrder = props => {
               <ListItem 
                 link={`/return-order-pack/${props.id}/pack/${p.packId}`}
                 key={p.packId} 
-                title={productInfo.name}
+                title={productInfo.name || productInfo.engName}
                 subtitle={packInfo.name}
                 text={storeName ? `${labels.storeName}: ${storeName}` : ''}
                 footer={`${labels.status}: ${statusNote}`}

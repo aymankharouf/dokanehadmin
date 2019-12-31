@@ -56,7 +56,7 @@ const AddPack = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${labels.addPack} ${product.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.addPack} ${product.name || product.engName}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 

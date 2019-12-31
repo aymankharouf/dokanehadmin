@@ -1,15 +1,15 @@
 export const setup = {
   fixedFees: 2.5,
-  maxDiscount: 200,
+  maxDiscount: 100,
   profit: 10,
   weightErrorMargin: 10,
   orderLimit: 50000,
   exceedPricePercent: 5,
   returnPenalty: 100,
-  invitationDiscount: 200,
-  priceAlarmDiscount: 200,
-  firstOrderDiscount: 250,
-  ratingDiscount: 100,
+  invitationDiscount: 100,
+  priceAlarmDiscount: 100,
+  firstOrderDiscount: 200,
+  ratingDiscount: 50,
 }
 
 export const randomColors = [

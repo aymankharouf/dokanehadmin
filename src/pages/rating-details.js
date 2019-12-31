@@ -42,7 +42,7 @@ const RatingDetails = props => {
         <ListInput 
           name="product" 
           label={labels.product}
-          value={product.name}
+          value={product.name || product.engName}
           floatingLabel 
           type="text" 
           readonly

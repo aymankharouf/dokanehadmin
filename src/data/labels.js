@@ -24,7 +24,6 @@ const labels = {
   trademark: 'العلامة التجارية',
   country: 'الدولة',
   description: 'الوصف',
-  isNew: 'جديد؟',
   byWeight: 'بالوزن؟',
   isOffer: 'عرض؟',
   price: 'السعر',
@@ -157,10 +156,10 @@ const labels = {
   oldPassword: 'كلمة السر الحالية',
   newPassword: 'كلمة السر الجديدة',
   changePasswordSuccess: 'تم تغيير كلمة السر بنجاح',
-  locations: 'المواقع',
-  addLocation: 'اضافة موقع',
+  locations: 'المناطق',
+  addLocation: 'اضافة منطقة',
   hasDelivery: 'خدمة التوصيل؟',
-  editLocation: 'تعديل موقع',
+  editLocation: 'تعديل منطقة',
   withDelivery: 'خدمة التوصيل',
   approveRatings: 'اعتماد التقييمات',
   approvals: 'الموافقات',
@@ -275,6 +274,9 @@ const labels = {
   exceedPricePurchase: 'سيتم الشراء للعملاء الذين يسمحون بتجاوز السعر',
   noPurchase: 'لا يوجد ما يتم شراؤه بسبب ارتفاع السعر',
   offerUpTo: 'عرض حتى تاريخ',
+  engName: 'الاسم بالانجليزية',
+  addBrother: 'اضافة صنف بنفس المستوى',
+  addChild: 'اضافة صنف فرعي'
 }
 
 export default labels
