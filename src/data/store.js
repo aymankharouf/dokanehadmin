@@ -31,7 +31,7 @@ const Store = props => {
     ratings: [],
     storePacks: [],
     logs: [],
-    cancelOrders: [],
+    cancelRequests: [],
     tags: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
@@ -229,14 +229,14 @@ const Store = props => {
         }, err => {
           unsubscribeLogs()
         })  
-        const unsubscribeCancelOrders = firebase.firestore().collection('cancelOrders').onSnapshot(docs => {
-          let cancelOrders = []
+        const unsubscribeCancelRequests = firebase.firestore().collection('cancelRequests').onSnapshot(docs => {
+          let cancelRequests = []
           docs.forEach(doc => {
-            cancelOrders.push({...doc.data(), id:doc.id})
+            cancelRequests.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_CANCEL_ORDERS', cancelOrders})
+          dispatch({type: 'SET_CANCEL_REQUESTS', cancelRequests})
         }, err => {
-          unsubscribeCancelOrders()
+          unsubscribeCancelRequests()
         })  
         const unsubscribeTags = firebase.firestore().collection('tags').onSnapshot(docs => {
           let tags = []

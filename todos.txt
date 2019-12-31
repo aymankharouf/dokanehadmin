@@ -143,3 +143,9 @@ stores last month trans & requested packs that can be purchased from
 approve for invitations
 archive data
 add order for sections & categories
+english name for product
+building no and street name for customer
+prevent new order until approving the previous one
+add heirarcy to categories and delete sections 
+diff in delivery fees as special discount
+delete new flag

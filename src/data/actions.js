@@ -245,16 +245,16 @@ export const returnOrder = (order, storePacks, packs) => {
   return batch.commit()
 }
 
-export const updateOrderStatus = (order, type, storePacks, packs, users, invitations, cancelOrderId) => {
+export const updateOrderStatus = (order, type, storePacks, packs, users, invitations, cancelRequestId) => {
   const batch = firebase.firestore().batch()
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
     status: type,
     statusTime: new Date()
   })
-  if (cancelOrderId) {
-    const cancelOrderRef = firebase.firestore().collection('cancelOrders').doc(cancelOrderId)
-    batch.update(cancelOrderRef, {
+  if (cancelRequestId) {
+    const cancelRequestRef = firebase.firestore().collection('cancelRequests').doc(cancelRequestId)
+    batch.update(cancelRequestRef, {
       status: 'a'
     })  
   }

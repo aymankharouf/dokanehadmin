@@ -1,3 +1,17 @@
+export const setup = {
+  fixedFees: 2.5,
+  maxDiscount: 200,
+  profit: 10,
+  weightErrorMargin: 10,
+  orderLimit: 50000,
+  exceedPricePercent: 5,
+  returnPenalty: 100,
+  invitationDiscount: 200,
+  priceAlarmDiscount: 200,
+  firstOrderDiscount: 250,
+  ratingDiscount: 100,
+}
+
 export const randomColors = [
   {id: 0, name: 'red'},
   {id: 1, name: 'green'},
@@ -86,19 +100,5 @@ export const storageTypes = [
   {id: 'f', name: 'مجمد'}
 ]
 
-export const setup = {
-  fixedFees: 2.5,
-  maxDiscount: 250,
-  profit: 10,
-  weightErrorMargin: 10,
-  orderLimit: 50000,
-  exceedPricePercent: 5,
-  returnPenalty: 100,
-  invitationDiscount: 250,
-  priceAlarmDiscount: 250,
-  firstOrderDiscount: 300,
-  ratingDiscount: 100,
-
-}
 
 

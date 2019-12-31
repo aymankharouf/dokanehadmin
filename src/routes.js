@@ -1,94 +1,94 @@
-import Home from './pages/Home'
-import NotFoundPage from './pages/NotFoundPage'
-import Panel from './pages/Panel'
-import Login from './pages/Login'
-import Products from './pages/Products'
-import ProductPacks from './pages/ProductPacks'
-import Basket from './pages/Basket'
-import Stores from './pages/Stores'
-import StorePacks from './pages/StorePacks'
-import AddStorePack from './pages/AddStorePack'
-import AddProduct from './pages/AddProduct'
-import OrdersList from './pages/OrdersList'
-import OrderDetails from './pages/OrderDetails'
-import StorePackDetails from './pages/StorePackDetails'
-import AddStore from './pages/AddStore'
-import EditProduct from './pages/EditProduct'
-import EditPrice from './pages/EditPrice'
-import Countries from './pages/Countries'
-import AddCountry from './pages/AddCountry'
-import Settings from './pages/Settings'
-import Sections from './pages/Sections'
-import AddSection from './pages/AddSection'
-import SectionCategories from './pages/SectionCategories'
-import AddCategory from './pages/AddCategory'
-import Trademarks from './pages/Trademarks'
-import AddTrademark from './pages/AddTrademark'
-import Orders from './pages/Orders'
-import RequestedPacks from './pages/RequestedPacks'
-import RequestedPackDetails from './pages/RequestedPackDetails'
-import ConfirmPurchase from './pages/ConfirmPurchase'
-import Purchases from './pages/Purchases'
-import PurchaseDetails from './pages/PurchaseDetails'
-import Stock from './pages/Stock'
-import StockPackTrans from './pages/StockPackTrans'
-import StockTrans from './pages/StockTrans'
-import StockTransDetails from './pages/StockTransDetails'
-import Customers from './pages/Customers'
-import ForgetPassword from './pages/ForgetPassword'
-import AddPack from './pages/AddPack'
-import PackDetails from './pages/PackDetails'
-import EditPack from './pages/EditPack'
-import EditCountry from './pages/EditCountry'
-import EditSection from './pages/EditSection'
-import EditCategory from './pages/EditCategory'
-import EditTrademark from './pages/EditTrademark'
-import EditStore from './pages/EditStore'
-import CustomerDetails from './pages/CustomerDetails'
-import EditCustomer from './pages/EditCustomer'
-import NewUsers from './pages/NewUsers'
-import ApproveUser from './pages/ApproveUser'
-import PriceAlarms from './pages/PriceAlarms'
-import PriceAlarmDetails from './pages/PriceAlarmDetails'
-import Offers from './pages/Offers'
-import Spendings from './pages/Spendings'
-import AddSpending from './pages/AddSpending'
-import EditSpending from './pages/EditSpending'
-import Profits from './pages/Profits'
-import MonthlyTrans from './pages/MonthlyTrans'
-import RetreivePassword from './pages/RetreivePassword'
-import StoreOwners from './pages/StoreOwners'
-import EditOrder from './pages/EditOrder'
-import ChangePassword from './pages/ChangePassword'
-import Locations from './pages/Locations'
-import AddLocation from './pages/AddLocation'
-import EditLocation from './pages/EditLocation'
-import Ratings from './pages/Ratings'
-import Approvals from './pages/Approvals'
-import RatingDetails from './pages/RatingDetails'
-import PackTrans from './pages/PackTrans'
-import AddPackStore from './pages/AddPackStore'
-import CancelOrders from './pages/CancelOrders'
-import Logs from './pages/Logs'
-import Prices from './pages/Prices'
-import StoreDetails from './pages/StoreDetails'
-import PrepareOrders from './pages/PrepareOrders'
-import PrepareOrdersList from './pages/PrepareOrdersList'
-import ReturnOrder from './pages/ReturnOrder'
-import ReturnOrderPack from './pages/ReturnOrderPack'
-import FollowupOrders from './pages/FollowupOrders'
-import FollowupOrdersList from './pages/FollowupOrdersList'
-import FollowupOrderDetails from './pages/FollowupOrderDetails'
-import SellStore from './pages/SellStore'
-import ProductDetails from './pages/ProductDetails'
-import AddOffer from './pages/AddOffer'
-import EditOffer from './pages/EditOffer'
-import Tags from './pages/Tags'
-import AddTag from './pages/AddTag'
-import EditTag from './pages/EditTag'
-import RelatedProducts from './pages/RelatedProducts'
-import AddBulk from './pages/AddBulk'
-import EditBulk from './pages/EditBulk'
+import Home from './pages/home'
+import NotFoundPage from './pages/not-found-page'
+import Panel from './pages/panel'
+import Login from './pages/login'
+import Products from './pages/products'
+import ProductPacks from './pages/product-packs'
+import Basket from './pages/basket'
+import Stores from './pages/stores'
+import StorePacks from './pages/store-packs'
+import AddStorePack from './pages/add-store-pack'
+import AddProduct from './pages/add-product'
+import OrdersList from './pages/orders-list'
+import OrderDetails from './pages/order-details'
+import StorePackDetails from './pages/store-pack-details'
+import AddStore from './pages/add-store'
+import EditProduct from './pages/edit-product'
+import EditPrice from './pages/edit-price'
+import Countries from './pages/countries'
+import AddCountry from './pages/add-country'
+import Settings from './pages/settings'
+import Sections from './pages/sections'
+import AddSection from './pages/add-section'
+import SectionCategories from './pages/section-categories'
+import AddCategory from './pages/add-category'
+import Trademarks from './pages/trademarks'
+import AddTrademark from './pages/add-trademark'
+import Orders from './pages/orders'
+import RequestedPacks from './pages/requested-packs'
+import RequestedPackDetails from './pages/requested-pack-details'
+import ConfirmPurchase from './pages/confirm-purchase'
+import Purchases from './pages/purchases'
+import PurchaseDetails from './pages/purchase-details'
+import Stock from './pages/stock'
+import StockPackTrans from './pages/stock-pack-trans'
+import StockTrans from './pages/stock-trans'
+import StockTransDetails from './pages/stock-trans-details'
+import Customers from './pages/customers'
+import ForgetPassword from './pages/forget-password'
+import AddPack from './pages/add-pack'
+import PackDetails from './pages/pack-details'
+import EditPack from './pages/edit-pack'
+import EditCountry from './pages/edit-country'
+import EditSection from './pages/edit-section'
+import EditCategory from './pages/edit-category'
+import EditTrademark from './pages/edit-trademark'
+import EditStore from './pages/edit-store'
+import CustomerDetails from './pages/customer-details'
+import EditCustomer from './pages/edit-customer'
+import NewUsers from './pages/new-users'
+import ApproveUser from './pages/approve-user'
+import PriceAlarms from './pages/price-alarms'
+import PriceAlarmDetails from './pages/price-alarm-details'
+import Offers from './pages/offers'
+import Spendings from './pages/spendings'
+import AddSpending from './pages/add-spending'
+import EditSpending from './pages/edit-spending'
+import Profits from './pages/profits'
+import MonthlyTrans from './pages/monthly-trans'
+import RetreivePassword from './pages/retreive-password'
+import StoreOwners from './pages/store-owners'
+import EditOrder from './pages/edit-order'
+import ChangePassword from './pages/change-password'
+import Locations from './pages/locations'
+import AddLocation from './pages/add-location'
+import EditLocation from './pages/edit-location'
+import Ratings from './pages/ratings'
+import Approvals from './pages/approvals'
+import RatingDetails from './pages/rating-details'
+import PackTrans from './pages/pack-trans'
+import AddPackStore from './pages/add-pack-store'
+import CancelRequests from './pages/cancel-requests'
+import Logs from './pages/logs'
+import Prices from './pages/prices'
+import StoreDetails from './pages/store-details'
+import PrepareOrders from './pages/prepare-orders'
+import PrepareOrdersList from './pages/prepare-orders-list'
+import ReturnOrder from './pages/return-order'
+import ReturnOrderPack from './pages/return-order-pack'
+import FollowupOrders from './pages/followup-orders'
+import FollowupOrdersList from './pages/followup-orders-list'
+import FollowupOrderDetails from './pages/followup-order-details'
+import SellStore from './pages/sell-store'
+import ProductDetails from './pages/product-details'
+import AddOffer from './pages/add-offer'
+import EditOffer from './pages/edit-offer'
+import Tags from './pages/tags'
+import AddTag from './pages/add-tag'
+import EditTag from './pages/edit-tag'
+import RelatedProducts from './pages/related-products'
+import AddBulk from './pages/add-bulk'
+import EditBulk from './pages/edit-bulk'
 
 export default [
   {
@@ -111,11 +111,11 @@ export default [
     },
   },
   {
-    path: '/panelLogin/',
+    path: '/panel-login/',
     component: Login,
   },
   {
-    path: '/changePassword/',
+    path: '/change-password/',
     component: ChangePassword
   },
   {
@@ -127,15 +127,15 @@ export default [
     component: Products,
   },
   {
-    path: '/productPacks/:id',
+    path: '/product-packs/:id',
     component: ProductPacks
   },
   {
-    path: '/productDetails/:id',
+    path: '/product-details/:id',
     component: ProductDetails
   },
   {
-    path: '/editProduct/:id',
+    path: '/edit-product/:id',
     component: EditProduct
   },
   {
@@ -143,7 +143,7 @@ export default [
     component: Basket,
   },
   {
-    path: '/confirmPurchase/',
+    path: '/confirm-purchase/',
     component: ConfirmPurchase
   },
   {
@@ -155,7 +155,7 @@ export default [
     component: Stores,
   },
   {
-    path: '/addStore/',
+    path: '/add-store/',
     component: AddStore
   },
   {
@@ -167,35 +167,35 @@ export default [
     component: Prices,
   },
   {
-    path: '/newUsers/',
+    path: '/new-users/',
     component: NewUsers
   },
   {
-    path: '/approveUser/:id',
+    path: '/approve-user/:id',
     component: ApproveUser
   },
   {
-    path: '/customerDetails/:id/full/:full',
+    path: '/customer-details/:id/full/:full',
     component: CustomerDetails
   },
   {
-    path: '/editCustomer/:id',
+    path: '/edit-customer/:id',
     component: EditCustomer
   },
   {
-    path: '/storeDetails/:id',
+    path: '/store-details/:id',
     component: StoreDetails
   },
   {
-    path: '/forgetPassword/',
+    path: '/forget-password/',
     component: ForgetPassword
   },
   {
-    path: '/priceAlarms/',
+    path: '/price-alarms/',
     component: PriceAlarms
   },
   {
-    path: '/priceAlarmDetails/:id',
+    path: '/price-alarm-details/:id',
     component: PriceAlarmDetails
   },
   {
@@ -207,11 +207,11 @@ export default [
     component: Countries,
   },
   {
-    path: '/addCountry/',
+    path: '/add-country/',
     component: AddCountry
   },
   {
-    path: '/editCountry/:id',
+    path: '/edit-country/:id',
     component: EditCountry
   },
   {
@@ -219,11 +219,11 @@ export default [
     component: Spendings
   },
   {
-    path: '/addSpending/',
+    path: '/add-spending/',
     component: AddSpending
   },
   {
-    path: '/editSpending/:id',
+    path: '/edit-spending/:id',
     component: EditSpending
   },
   {
@@ -231,23 +231,23 @@ export default [
     component: Sections
   },
   {
-    path: '/addSection/',
+    path: '/add-section/',
     component: AddSection
   },
   {
-    path: '/sectionCategories/:id',
+    path: '/section-categories/:id',
     component: SectionCategories
   },
   {
-    path: '/editSection/:id',
+    path: '/edit-section/:id',
     component: EditSection
   },
   {
-    path: '/addCategory/:id',
+    path: '/add-category/:id',
     component: AddCategory
   },
   {
-    path: '/editCategory/:id',
+    path: '/edit-category/:id',
     component: EditCategory
   },
   {
@@ -255,59 +255,59 @@ export default [
     component: Trademarks
   },
   {
-    path: '/addTrademark/',
+    path: '/add-trademark/',
     component: AddTrademark,
   },
   {
-    path: '/editTrademark/:id',
+    path: '/edit-trademark/:id',
     component: EditTrademark,
   },
   {
-    path: '/storePacks/:id',
+    path: '/store-packs/:id',
     component: StorePacks
   },
   {
-    path: '/editStore/:id',
+    path: '/edit-store/:id',
     component: EditStore
   },
   {
-    path: '/addStorePack/:id',
+    path: '/add-store-pack/:id',
     component: AddStorePack
   },
   {
-    path: '/addPackStore/:id',
+    path: '/add-pack-store/:id',
     component: AddPackStore
   },
   {
-    path: '/addProduct/',
+    path: '/add-product/',
     component: AddProduct
   },
   {
-    path: '/addPack/:id',
+    path: '/add-pack/:id',
     component: AddPack
   },
   {
-    path: '/addOffer/:id',
+    path: '/add-offer/:id',
     component: AddOffer
   },
   {
-    path: '/packDetails/:id',
+    path: '/pack-details/:id',
     component: PackDetails
   },
   {
-    path: '/editPack/:id',
+    path: '/edit-pack/:id',
     component: EditPack
   },
   {
-    path: '/editOffer/:id',
+    path: '/edit-offer/:id',
     component: EditOffer
   },
   {
-    path: '/storePackDetails/:id',
+    path: '/store-pack-details/:id',
     component: StorePackDetails
   },
   {
-    path: '/editPrice/:id',
+    path: '/edit-price/:id',
     component: EditPrice
   },
   {
@@ -315,27 +315,27 @@ export default [
     component: Orders,
   },
   {
-    path: '/ordersList/:id',
+    path: '/orders-list/:id',
     component: OrdersList,
   },
   {
-    path: '/orderDetails/:id',
+    path: '/order-details/:id',
     component: OrderDetails
   },
   {
-    path: '/cancelOrder/:id/cancelOrder/:cancelOrderId',
+    path: '/cancel-order/:id/request/:requestId',
     component: OrderDetails
   },
   {
-    path: '/editOrder/:id',
+    path: '/edit-order/:id',
     component: EditOrder
   },
   {
-    path: '/requestedPacks/',
+    path: '/requested-packs/',
     component: RequestedPacks
   },
   {
-    path: '/requestedPackDetails/:packId/quantity/:quantity/price/:price/order/:orderId/exceedPriceQuantity/:exceedPriceQuantity',
+    path: '/requested-pack-details/:packId/quantity/:quantity/price/:price/order/:orderId/exceed-price-quantity/:exceedPriceQuantity',
     component: RequestedPackDetails
   },
   {
@@ -343,7 +343,7 @@ export default [
     component: Purchases,
   },
   {
-    path: '/purchaseDetails/:id',
+    path: '/purchase-details/:id',
     component: PurchaseDetails
   },
   {
@@ -351,15 +351,15 @@ export default [
     component: Stock,
   },
   {
-    path: '/stockPackTrans/:id',
+    path: '/stock-pack-trans/:id',
     component: StockPackTrans
   },
   {
-    path: '/stockTrans/',
+    path: '/stock-trans/',
     component: StockTrans
   },
   {
-    path: '/stockTransDetails/:id',
+    path: '/stock-trans-details/:id',
     component: StockTransDetails
   },
   {
@@ -367,15 +367,15 @@ export default [
     component: Profits,
   },
   {
-    path: '/monthlyTrans/:id',
+    path: '/monthly-trans/:id',
     component: MonthlyTrans,
   },
   {
-    path: '/retreivePassword/:id',
+    path: '/retreive-password/:id',
     component: RetreivePassword,
   },
   {
-    path: '/storeOwners/:id',
+    path: '/store-owners/:id',
     component: StoreOwners,
   },
   {
@@ -383,11 +383,11 @@ export default [
     component: Locations
   },
   {
-    path: '/addLocation/',
+    path: '/add-location/',
     component: AddLocation
   },
   {
-    path: '/editLocation/:id',
+    path: '/edit-location/:id',
     component: EditLocation
   },
   {
@@ -399,51 +399,51 @@ export default [
     component: Approvals
   },
   {
-    path: '/ratingDetails/:id',
+    path: '/rating-details/:id',
     component: RatingDetails
   },
   {
-    path: '/packTrans/:id',
+    path: '/pack-trans/:id',
     component: PackTrans
   },
   {
-    path: '/cancelOrders/',
-    component: CancelOrders
+    path: '/cancel-requests/',
+    component: CancelRequests
   },
   {
     path: '/logs/',
     component: Logs
   },
   {
-    path: '/prepareOrders/',
+    path: '/prepare-orders/',
     component: PrepareOrders
   },
   {
-    path: '/prepareOrdersList/:packId/order/:orderId',
+    path: '/prepare-orders-list/:packId/order/:orderId',
     component: PrepareOrdersList
   },
   {
-    path: '/returnOrder/:id',
+    path: '/return-order/:id',
     component: ReturnOrder
   },
   {
-    path: '/returnOrderPack/:orderId/pack/:packId',
+    path: '/return-order-pack/:orderId/pack/:packId',
     component: ReturnOrderPack
   },
   {
-    path: '/followupOrders/',
+    path: '/followup-orders/',
     component: FollowupOrders
   },
   {
-    path: '/followupOrdersList/:id',
+    path: '/followup-orders-list/:id',
     component: FollowupOrdersList
   },
   {
-    path: '/followupOrderDetails/:id',
+    path: '/followup-order-details/:id',
     component: FollowupOrderDetails
   },
   {
-    path: '/sellStore/:id',
+    path: '/sell-store/:id',
     component: SellStore
   },
   {
@@ -451,23 +451,23 @@ export default [
     component: Tags
   },
   {
-    path: '/addTag/',
+    path: '/add-tag/',
     component: AddTag
   },
   {
-    path: '/editTag/:id',
+    path: '/edit-tag/:id',
     component: EditTag
   },
   {
-    path: '/relatedProducts/:id',
+    path: '/related-products/:id',
     component: RelatedProducts
   },
   {
-    path: '/addBulk/:id',
+    path: '/add-bulk/:id',
     component: AddBulk
   },
   {
-    path: '/addBulk/:id',
+    path: '/edit-bulk/:id',
     component: EditBulk
   },
   {

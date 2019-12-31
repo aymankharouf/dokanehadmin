@@ -1,0 +1,45 @@
+import React, { useContext, useMemo } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
+import BottomToolbar from './bottom-toolbar'
+import moment from 'moment'
+import 'moment/locale/ar'
+import { StoreContext } from '../data/store'
+import labels from '../data/labels'
+
+const ForgetPassword = props => {
+  const { state } = useContext(StoreContext)
+  const forgetPassword = useMemo(() => {
+    const forgetpassword = state.forgetPassword.filter(f => f.status === 'n')
+    return forgetpassword.sort((f1, f2) => f1.time.seconds - f2.time.seconds)
+  } , [state.forgetPassword])
+  return(
+    <Page>
+      <Navbar title={labels.forgetPassword} backLink={labels.back} />
+      <Block>
+          <List mediaList>
+            {forgetPassword.length === 0 ? 
+              <ListItem title={labels.noData} /> 
+            : forgetPassword.map(f => {
+                const userInfo = state.users.find(u => u.mobile === f.mobile)
+                if (!userInfo) return ''
+                return (
+                  <ListItem
+                    link={`/retreive-password/${f.id}`}
+                    title={`${labels.user}: ${userInfo.name}`}
+                    subtitle={`${labels.mobile}: ${userInfo.mobile}`}
+                    text={moment(f.time.toDate()).fromNow()}
+                    key={f.id}
+                  />
+                )
+              })
+            }
+          </List>
+      </Block>
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
+    </Page>
+  )
+}
+
+export default ForgetPassword
