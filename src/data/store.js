@@ -21,7 +21,7 @@ const Store = props => {
     stockTrans: [],
     products: [],
     packs: [],
-    forgetPasswords: [],
+    passwordRequests: [],
     invitations: [],
     customers: [],
     spendings: [],
@@ -80,14 +80,14 @@ const Store = props => {
     }, err => {
       unsubscribePacks()
     })
-    const unsubscribeForgetPasswords = firebase.firestore().collection('forget-passwords').onSnapshot(docs => {
-      let forgetPasswords = []
+    const unsubscribePasswordRequests = firebase.firestore().collection('password-requests').onSnapshot(docs => {
+      let passwordRequests = []
       docs.forEach(doc => {
-        forgetPasswords.push({...doc.data(), id:doc.id})
+        passwordRequests.push({...doc.data(), id:doc.id})
       })
-      dispatch({type: 'SET_FORGET_PASSWORDS', forgetPasswords})
+      dispatch({type: 'SET_PASSWORD-REQUESTS', passwordRequests})
     }, err => {
-      unsubscribeForgetPasswords()
+      unsubscribePasswordRequests()
     })
     const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
       let locations = []

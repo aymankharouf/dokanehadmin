@@ -33,7 +33,7 @@ import StockPackTrans from './pages/stock-pack-trans'
 import StockTrans from './pages/stock-trans'
 import StockTransDetails from './pages/stock-trans-details'
 import Customers from './pages/customers'
-import ForgetPasswords from './pages/forget-passwords'
+import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
 import PackDetails from './pages/pack-details'
 import EditPack from './pages/edit-pack'
@@ -87,6 +87,7 @@ import RelatedProducts from './pages/related-products'
 import AddBulk from './pages/add-bulk'
 import EditBulk from './pages/edit-bulk'
 import Invitations from './pages/invitations'
+import InvitationDetails from './pages/invitation-details'
 
 export default [
   {
@@ -185,8 +186,8 @@ export default [
     component: StoreDetails
   },
   {
-    path: '/forget-passwords/',
-    component: ForgetPasswords
+    path: '/password-requests/',
+    component: PasswordRequests
   },
   {
     path: '/price-alarms/',
@@ -459,6 +460,10 @@ export default [
   {
     path: '/invitations/',
     component: Invitations
+  },
+  {
+    path: '/invitation-details/:id',
+    component: InvitationDetails
   },
   {
     path: '(.*)',

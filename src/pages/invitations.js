@@ -24,7 +24,7 @@ const Invitations = props => {
             const userInfo = state.users.find(u => u.id === i.userId)
               return (
                 <ListItem
-                  link={`/invitation/${i.id}`}
+                  link={`/invitation-details/${i.id}`}
                   title={`${labels.user}: ${userInfo.name}`}
                   subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                   text={`${i.friendName}: ${i.friendMobile}`}

@@ -69,15 +69,6 @@ export const ratingValues = [
   {id: 1, name: 'أنصح به'}
 ]
 
-export const otherMobileHolders = [
-  {id: '1', name: 'نفسه'},
-  {id: '2', name: 'زوج/زوجة'},
-  {id: '3', name: 'احد اﻻبناء'},
-  {id: '4', name: 'احد الوالدين'},
-  {id: '5', name: 'صديق'},
-  {id: '6', name: 'جار'}
-]
-
 export const orderPositions = [
   {id: 's', name: 'المستودع'},
   {id: 'c', name: 'مركز التوزيع'},

@@ -4,7 +4,6 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { approveUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { otherMobileHolders } from '../data/config'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
@@ -17,7 +16,6 @@ const ApproveUser = props => {
   const [storeId, setStoreId] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [otherMobileHolder, setOtherMobileHolder] = useState('')
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -50,14 +48,18 @@ const ApproveUser = props => {
       if (otherMobile === userInfo.mobile) {
         throw new Error('sameMobile')
       }
-      if (!otherMobile) setOtherMobileHolder('')
+      if (otherMobile && state.users.find(u => u.mobile === otherMobile)) {
+        throw new Error('otherUserMobile')
+      }
+      if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
+        throw new Error('otherUserMobile')
+      }
       await approveUser({
         id: props.id,
         name,
         storeId,
         locationId,
         otherMobile,
-        otherMobileHolder,
         address,
       })
       showMessage(labels.approveSuccess)
@@ -142,26 +144,6 @@ const ApproveUser = props => {
           onChange={e => setOtherMobile(e.target.value)}
           onInputClear={() => setOtherMobile('')}
         />
-        {otherMobile ? 
-          <ListItem
-            title={labels.otherMobileHolder}
-            smartSelect
-            smartSelectParams={{
-              openIn: "popup", 
-              closeOnSelect: true, 
-              searchbar: true, 
-              searchbarPlaceholder: labels.search,
-              popupCloseLinkText: labels.close
-            }}
-          >
-            <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
-              <option value=""></option>
-              {otherMobileHolders.map(h => 
-                <option key={h.id} value={h.id}>{h.name}</option>
-              )}
-            </select>
-          </ListItem>
-        : ''}
         <ListInput 
           name="address" 
           label={labels.address}

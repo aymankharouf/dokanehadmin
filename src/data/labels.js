@@ -59,7 +59,7 @@ const labels = {
   stockTransDetails: 'تفاصيل حركة المستودع',
   stockName: 'مستودعات دكانة نت',
   editOrder: 'تعديل طلب',
-  forgetPassword: 'طلبات نسيان كلمة السر',
+  passwordRequests: 'طلبات كلمة السر',
   customers: 'العملاء',
   choosePack: 'الرجاء اختيار الحزمة',
   pack: 'الحزمة',
@@ -103,7 +103,6 @@ const labels = {
   orderLimit: 'سقف الطلبات',
   totalOrders: 'عدد الطلبات',
   totalPayments: 'مجموع الدفعات',
-  forgetPasswords: 'نسيان كلمة السر',
   allCustomers: 'كل العملاء',
   editCustomer: 'تعديل بيانات عميل',
   type: 'التصنيف',
@@ -276,7 +275,12 @@ const labels = {
   offerUpTo: 'عرض حتى تاريخ',
   addBrother: 'اضافة صنف بنفس المستوى',
   addChild: 'اضافة صنف فرعي',
-  invitations: 'الدعوات'
+  invitations: 'الدعوات',
+  invitationDetails: 'تفاصيل الدعوة',
+  otherUserMobile: 'رقم الموبايل البديل يعود لمستخدم اخر',
+  friendName: 'اسم الصديق',
+  mobileCheck: 'التحقق من الموبايل',
+  notUsedMobile: 'رقم الموبايل غير مستخدم'
 }
 
 export default labels

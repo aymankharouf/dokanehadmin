@@ -4,7 +4,6 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { otherMobileHolders } from '../data/config'
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
@@ -22,7 +21,6 @@ const EditCustomer = props => {
   const [position, setPosition] = useState(customer.position)
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [otherMobileHolder, setOtherMobileHolder] = useState(customer.otherMobileHolder)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
@@ -43,12 +41,11 @@ const EditCustomer = props => {
     if (position !== customer.position) return true
     if (isBlocked !== customer.isBlocked) return true
     if (otherMobile !== customer.otherMobile) return true
-    if (otherMobileHolder !== customer.otherMobileHolder) return true
     if (exceedPrice !== customer.exceedPrice) return true
     if (deliveryFees * 1000 !== customer.deliveryFees) return true
     if (orderLimit * 1000 !== customer.orderLimit) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, otherMobileHolder, exceedPrice, deliveryFees, orderLimit])
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -81,7 +78,6 @@ const EditCustomer = props => {
         position,
         isBlocked,
         otherMobile,
-        otherMobileHolder,
         exceedPrice,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000
@@ -205,26 +201,6 @@ const EditCustomer = props => {
           onChange={e => setOtherMobile(e.target.value)}
           onInputClear={() => setOtherMobile('')}
         />
-        {otherMobile ? 
-          <ListItem
-            title={labels.otherMobileHolder}
-            smartSelect
-            smartSelectParams={{
-              openIn: "popup", 
-              closeOnSelect: true, 
-              searchbar: true, 
-              searchbarPlaceholder: labels.search,
-              popupCloseLinkText: labels.close
-            }}
-          >
-            <select name="otherMobileHolder" value={otherMobileHolder} onChange={e => setOtherMobileHolder(e.target.value)}>
-              <option value=""></option>
-              {otherMobileHolders.map(h => 
-                <option key={h.id} value={h.id}>{h.name}</option>
-              )}
-            </select>
-          </ListItem>
-        : ''}
         <ListInput 
           name="position" 
           label={labels.position}

@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Toolbar, Button } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { resolveForgetPassword, showMessage, showError, getMessage } from '../data/actions'
+import { resolvePasswordRequest, showMessage, showError, getMessage } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
@@ -9,10 +9,10 @@ import { randomColors } from '../data/config'
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const forgetPasswordRequest = useMemo(() => state.forgetPasswords.find(f => f.id === props.id)
-  , [state.forgetPasswords, props.id])
-  const user = useMemo(() => state.users.find(u => u.mobile === forgetPasswordRequest.mobile)
-  , [state.users, forgetPasswordRequest])
+  const passwordRequest = useMemo(() => state.passwordRequests.find(r => r.id === props.id)
+  , [state.passwordRequests, props.id])
+  const user = useMemo(() => state.users.find(u => u.mobile === passwordRequest.mobile)
+  , [state.users, passwordRequest])
   const password = useMemo(() => {
     const password = user.colors.map(c => randomColors.find(rc => rc.name === c).id)
     return password.join('')
@@ -25,7 +25,7 @@ const RetreivePassword = props => {
   }, [error])
   const handleSend = async () => {
     try{
-      await resolveForgetPassword(props.id)
+      await resolvePasswordRequest(props.id)
       showMessage(labels.sendSuccess)
       props.f7router.back()
     } catch(err) {

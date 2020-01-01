@@ -173,10 +173,10 @@ const Reducer = (state, action) => {
           ...state,
           priceAlarms: action.priceAlarms
         }
-      case 'SET_FORGET_PASSWORDS':
+      case 'SET_PASSWORD_REQUESTS':
         return {
           ...state,
-          forgetPasswords: action.forgetPasswords
+          passwordRequests: action.passwordRequests
         }
       case 'SET_INVITATIONS':
         return {

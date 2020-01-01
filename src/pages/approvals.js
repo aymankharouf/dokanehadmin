@@ -15,8 +15,8 @@ const Approvals = props => {
   , [state.users, state.customers])
   const priceAlarms = useMemo(() => state.priceAlarms.filter(a => a.status === 'n')
   , [state.priceAlarms])
-  const forgetPasswords = useMemo(() => state.forgetPasswords.filter(f => f.resolved === false)
-   , [state.forgetPasswords])
+  const passwordRequests = useMemo(() => state.passwordRequests.filter(r => r.resolved === false)
+   , [state.passwordRequests])
    const ratings = useMemo(() => state.ratings.filter(r => r.status === 'n')
   , [state.ratings])
   const invitations = useMemo(() => state.invitations.filter(r => r.status === 'n')
@@ -26,10 +26,10 @@ const Approvals = props => {
     {id: '2', name: 'الغاء الطلبات', path: '/cancel-requests/', count: cancelRequests.length},
     {id: '3', name: 'المستخدمين', path: '/new-users/', count: newUsers.length},
     {id: '4', name: 'اشعارات الاسعار', path: '/price-alarms/', count: priceAlarms.length},
-    {id: '5', name: 'نسيان كلمة السر', path: '/forget-passwords/', count: forgetPasswords.length},
+    {id: '5', name: 'نسيان كلمة السر', path: '/password-requests/', count: passwordRequests.length},
     {id: '6', name: 'التقييمات', path: '/ratings/', count: ratings.length},
     {id: '7', name: 'الدعوات', path: '/invitations/', count: invitations.length},
-  ], [newOrders, newUsers, priceAlarms, forgetPasswords, ratings, cancelRequests, invitations])
+  ], [newOrders, newUsers, priceAlarms, passwordRequests, ratings, cancelRequests, invitations])
   let i = 0
   return(
     <Page>

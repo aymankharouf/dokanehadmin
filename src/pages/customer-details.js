@@ -3,7 +3,6 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
-import { otherMobileHolders } from '../data/config'
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
@@ -15,8 +14,6 @@ const CustomerDetails = props => {
   , [state.orders, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
-  const otherMobileHolderName = useMemo(() => customer.otherMobileHolder ? otherMobileHolders.find(h => h.id === customer.otherMobileHolder).name : ''
-  , [customer])
 
   return (
     <Page>
@@ -120,14 +117,6 @@ const CustomerDetails = props => {
           label={labels.otherMobile}
           value={customer.otherMobile}
           type="number"
-          readonly
-        />
-        <ListInput 
-          name="otherMobileHolder" 
-          label={labels.otherMobileHolder}
-          value={otherMobileHolderName}
-          floatingLabel 
-          type="text"
           readonly
         />
         <ListInput 

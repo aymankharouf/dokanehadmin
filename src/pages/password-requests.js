@@ -6,29 +6,29 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const ForgetPasswords = props => {
+const PasswordRequests = props => {
   const { state } = useContext(StoreContext)
-  const forgetPasswords = useMemo(() => {
-    const forgetpasswords = state.forgetPasswords.filter(f => f.status === 'n')
-    return forgetpasswords.sort((f1, f2) => f1.time.seconds - f2.time.seconds)
-  } , [state.forgetPasswords])
+  const passwordRequests = useMemo(() => {
+    const passwordRequests = state.passwordRequests.filter(r => r.status === 'n')
+    return passwordRequests.sort((r1, r2) => r1.time.seconds - r2.time.seconds)
+  } , [state.passwordRequests])
   return(
     <Page>
-      <Navbar title={labels.forgetPasswords} backLink={labels.back} />
+      <Navbar title={labels.passwordRequests} backLink={labels.back} />
       <Block>
           <List mediaList>
-            {forgetPasswords.length === 0 ? 
+            {passwordRequests.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : forgetPasswords.map(f => {
-                const userInfo = state.users.find(u => u.mobile === f.mobile)
+            : passwordRequests.map(r => {
+                const userInfo = state.users.find(u => u.mobile === r.mobile)
                 if (!userInfo) return ''
                 return (
                   <ListItem
-                    link={`/retreive-password/${f.id}`}
+                    link={`/retreive-password/${r.id}`}
                     title={`${labels.user}: ${userInfo.name}`}
                     subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                    text={moment(f.time.toDate()).fromNow()}
-                    key={f.id}
+                    text={moment(r.time.toDate()).fromNow()}
+                    key={r.id}
                   />
                 )
               })
@@ -42,4 +42,4 @@ const ForgetPasswords = props => {
   )
 }
 
-export default ForgetPasswords
+export default PasswordRequests

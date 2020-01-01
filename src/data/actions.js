@@ -285,7 +285,7 @@ export const updateOrderStatus = (order, type, storePacks, packs, users, invitat
       })
     })
     const userInfo = users.find(u => u.id === order.userId)
-    const invitedBy = invitations.find(i => i.friendMobile === userInfo.mobile)
+    const invitedBy = invitations.find(i => i.friendMobile === userInfo.mobile && i.status === 'a')
     if (invitedBy) {
       customerRef = firebase.firestore().collection('customers').doc(invitedBy.userId)
       batch.update(customerRef, {
@@ -748,8 +748,8 @@ export const editTrademark = trademark => {
   return firebase.firestore().collection('trademarks').doc(trademark.id).update(trademark)
 }
 
-export const resolveForgetPassword = transId => {
-  return firebase.firestore().collection('forget-passwords').doc(transId).update({
+export const resolvePasswordRequest = requestId => {
+  return firebase.firestore().collection('password-requests').doc(requestId).update({
     resolved: true
   })
 }
@@ -797,7 +797,6 @@ export const approveUser = user => {
     position: '',
     isBlocked: false,
     otherMobile: user.otherMobile,
-    otherMobileHolder: user.otherMobileHolder,
     exceedPrice: false,
     time: new Date()
   })
@@ -1129,4 +1128,8 @@ export const allocateOrderPack = (order, pack) => {
     position: isFinished ? 's' : '',
     statusTime: isFinished ? new Date() : order.statusTime
   })
+}
+
+export const approveInvitation = invitation => {
+  return firebase.firestore().collection('invitations').doc(invitation.id).update(invitation)
 }
