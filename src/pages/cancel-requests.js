@@ -24,7 +24,7 @@ const CancelRequests = props => {
               const userInfo = state.users.find(u => u.id === r.order.userId)
               return (
                 <ListItem
-                  link={`/cancel-order/${r.order.id}/request/${r.id}`}
+                  link={`/cancel-request/${r.order.id}/request/${r.id}`}
                   title={`${labels.user}: ${userInfo.name}`}
                   subtitle={`${labels.mobile}: ${userInfo.mobile}`}
                   text={orderStatus.find(s => s.id === r.order.status).name}

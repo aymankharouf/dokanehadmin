@@ -63,7 +63,7 @@ const EditOrder = props => {
             const productInfo = state.products.find(pr => pr.id === packInfo.productId)
             return (
               <ListItem
-                title={productInfo.name || productInfo.engName}
+                title={productInfo.name}
                 subtitle={packInfo.name}
                 text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
                 footer={quantityDetails(p)}

@@ -21,14 +21,6 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
-          name="engName" 
-          label={labels.engName}
-          floatingLabel 
-          type="text" 
-          value={product.engName}
-          readonly
-        />
-        <ListInput 
           name="categoryId" 
           label={labels.category}
           floatingLabel 

@@ -17,7 +17,7 @@ const ProductPacks = props => {
   }, [state.packs, props.id]) 
   return (
     <Page>
-      <Navbar title={product.name || product.engName} backLink={labels.back} />
+      <Navbar title={product.name} backLink={labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />

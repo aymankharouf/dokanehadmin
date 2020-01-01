@@ -67,7 +67,7 @@ const EditPrice = props => {
       <Navbar title={`${labels.editPrice} ${store.name}`} backLink={labels.back} />
       <Card>
         <CardHeader>
-          <p>{product.name || product.engName}</p>
+          <p>{product.name}</p>
           <p>{pack.name}</p>
         </CardHeader>
         <CardContent>

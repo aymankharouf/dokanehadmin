@@ -171,14 +171,14 @@ const ApproveUser = props => {
           onChange={e => setAddress(e.target.value)}
         />
       </List>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
       {!name || (userInfo.storeName && !storeId) || !locationId ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
     </Page>
   )
 }

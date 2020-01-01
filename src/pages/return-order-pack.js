@@ -52,7 +52,7 @@ const ReturnOrderPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name || product.engName} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <PackImage pack={pack} type="card" />

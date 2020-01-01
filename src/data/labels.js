@@ -274,9 +274,9 @@ const labels = {
   exceedPricePurchase: 'سيتم الشراء للعملاء الذين يسمحون بتجاوز السعر',
   noPurchase: 'لا يوجد ما يتم شراؤه بسبب ارتفاع السعر',
   offerUpTo: 'عرض حتى تاريخ',
-  engName: 'الاسم بالانجليزية',
   addBrother: 'اضافة صنف بنفس المستوى',
-  addChild: 'اضافة صنف فرعي'
+  addChild: 'اضافة صنف فرعي',
+  invitations: 'الدعوات'
 }
 
 export default labels

@@ -86,7 +86,7 @@ const StorePackDetails = props => {
   if (!storePack) return null //to handle delete operation
   return (
     <Page>
-      <Navbar title={`${product.name || product.engName} ${state.stores.find(s => s.id === storePack.storeId).name}`} backLink={labels.back} />
+      <Navbar title={`${product.name} ${state.stores.find(s => s.id === storePack.storeId).name}`} backLink={labels.back} />
       <Block>
         <Card>
           <CardContent>

@@ -26,7 +26,7 @@ const PriceAlarms = props => {
                 return (
                   <ListItem
                     link={`/price-alarm-details/${a.id}`}
-                    title={productInfo.name || productInfo.engName}
+                    title={productInfo.name}
                     subtitle={packInfo.name}
                     text={moment(a.time.toDate()).fromNow()}
                     after={(a.price / 1000).toFixed(3)}

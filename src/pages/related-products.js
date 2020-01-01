@@ -23,7 +23,7 @@ const RelatedProducts = props => {
                 return (
                   <ListItem
                     link={`/product-packs/${p.id}`}
-                    title={p.name || p.engName}
+                    title={p.name}
                     subtitle={state.categories.find(c => c.id === p.categoryId).name}
                     text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
                     key={p.id}

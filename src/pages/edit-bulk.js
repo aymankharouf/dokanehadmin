@@ -57,7 +57,7 @@ const EditBulk = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${labels.editBulk} ${product.name || product.engName}`} backLink={labels.back} />
+      <Navbar title={`${labels.editBulk} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 

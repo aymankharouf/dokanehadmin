@@ -35,12 +35,11 @@ const Products = props => {
                   <ListItem
                     link={`/product-packs/${p.id}`}
                     title={p.name}
-                    subtitle={p.engName}
-                    text={state.categories.find(c => c.id === p.categoryId).name}
-                    footer={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
+                    subtitle={state.categories.find(c => c.id === p.categoryId).name}
+                    text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
                     key={p.id}
                   >
-                    <img slot="media" src={p.imageUrl} className="img-list" alt={p.name || p.engName} />
+                    <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
                   </ListItem>
                 )
               })

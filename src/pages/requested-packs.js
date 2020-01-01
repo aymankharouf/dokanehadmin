@@ -105,7 +105,7 @@ const RequestedPacks = props => {
 							return (
 								<ListItem
 									link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
-									title={productInfo.name || productInfo.engName}
+									title={productInfo.name}
 									subtitle={packInfo.name}
 									text={`${labels.requested}: ${quantityText(p.quantity)}`}
 									after={(p.price / 1000).toFixed(3)}

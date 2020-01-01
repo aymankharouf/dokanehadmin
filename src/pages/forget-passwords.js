@@ -6,20 +6,20 @@ import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const ForgetPassword = props => {
+const ForgetPasswords = props => {
   const { state } = useContext(StoreContext)
-  const forgetPassword = useMemo(() => {
-    const forgetpassword = state.forgetPassword.filter(f => f.status === 'n')
-    return forgetpassword.sort((f1, f2) => f1.time.seconds - f2.time.seconds)
-  } , [state.forgetPassword])
+  const forgetPasswords = useMemo(() => {
+    const forgetpasswords = state.forgetPasswords.filter(f => f.status === 'n')
+    return forgetpasswords.sort((f1, f2) => f1.time.seconds - f2.time.seconds)
+  } , [state.forgetPasswords])
   return(
     <Page>
-      <Navbar title={labels.forgetPassword} backLink={labels.back} />
+      <Navbar title={labels.forgetPasswords} backLink={labels.back} />
       <Block>
           <List mediaList>
-            {forgetPassword.length === 0 ? 
+            {forgetPasswords.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : forgetPassword.map(f => {
+            : forgetPasswords.map(f => {
                 const userInfo = state.users.find(u => u.mobile === f.mobile)
                 if (!userInfo) return ''
                 return (
@@ -42,4 +42,4 @@ const ForgetPassword = props => {
   )
 }
 
-export default ForgetPassword
+export default ForgetPasswords

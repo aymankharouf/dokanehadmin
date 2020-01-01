@@ -11,7 +11,6 @@ const EditProduct = props => {
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
-  const [engName, setEngName] = useState(product.engName)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [countryId, setCountryId] = useState(product.countryId)
@@ -44,7 +43,6 @@ const EditProduct = props => {
   }
   const hasChanged = useMemo(() => {
     if (name !== product.name) return true
-    if (engName !== product.engName) return true
     if (countryId !== product.countryId) return true
     if (categoryId !== product.categoryId) return true
     if (trademarkId !== product.trademarkId) return true
@@ -52,7 +50,7 @@ const EditProduct = props => {
     if (storageId !== product.storageId) return true
     if (imageUrl !== product.imageUrl) return true
     return false
-  }, [product, name, engName, countryId, categoryId, trademarkId, tagId, storageId, imageUrl])
+  }, [product, name, countryId, categoryId, trademarkId, tagId, storageId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -66,7 +64,6 @@ const EditProduct = props => {
         id: props.id,
         categoryId,
         name,
-        engName,
         trademarkId,
         countryId,
         tagId,
@@ -93,16 +90,6 @@ const EditProduct = props => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="engName" 
-          label={labels.engName}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={engName} 
-          onChange={e => setEngName(e.target.value)}
-          onInputClear={() => setEngName('')}
         />
         <ListItem
           title={labels.category}
@@ -205,7 +192,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {(!name && !engName) || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
+      {!name || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -107,7 +107,9 @@
 *offer end date to user
 *request for new products or packs
 *add heirarcy to categories and delete sections
-*english name for product
+*add ordering for sections & categories
+*prevent new order until approving the previous one
+*approve for invitations
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -142,9 +144,5 @@ button to add shortcut PWA
 note for stop the service
 merging orders
 stores last month trans & requested packs that can be purchased from
-approve for invitations
 archive data
-add order for sections & categories
-building no and street name for customer
-prevent new order until approving the previous one
 diff in delivery fees as special discount

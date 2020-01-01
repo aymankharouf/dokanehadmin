@@ -43,7 +43,7 @@ const StorePacks = props => {
               return (
                 <ListItem
                   link={`/store-pack-details/${p.id}`}
-                  title={productInfo.name || productInfo.engName}
+                  title={productInfo.name}
                   subtitle={packInfo.name}
                   text={moment(p.time.toDate()).fromNow()}
                   footer={packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}

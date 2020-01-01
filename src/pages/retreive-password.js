@@ -9,10 +9,10 @@ import { randomColors } from '../data/config'
 const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const forgetPasswordTrans = useMemo(() => state.forgetPassword.find(f => f.id === props.id)
-  , [state.forgetPassword, props.id])
-  const user = useMemo(() => state.users.find(u => u.mobile === forgetPasswordTrans.mobile)
-  , [state.users, forgetPasswordTrans])
+  const forgetPasswordRequest = useMemo(() => state.forgetPasswords.find(f => f.id === props.id)
+  , [state.forgetPasswords, props.id])
+  const user = useMemo(() => state.users.find(u => u.mobile === forgetPasswordRequest.mobile)
+  , [state.users, forgetPasswordRequest])
   const password = useMemo(() => {
     const password = user.colors.map(c => randomColors.find(rc => rc.name === c).id)
     return password.join('')

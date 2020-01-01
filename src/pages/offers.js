@@ -26,7 +26,7 @@ const Offers = props => {
                 return (
                   <ListItem
                     link={`/store-pack-details/${p.id}`}
-                    title={productInfo.name || productInfo.engName}
+                    title={productInfo.name}
                     subtitle={packInfo.name}
                     text={`${labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
                     footer={moment(p.offerEnd.toDate()).format('Y/M/D')}

@@ -789,6 +789,7 @@ export const approveUser = user => {
     storeId: user.storeId,
     address: user.address,
     orderLimit: 0,
+    deliveryFees: 0,
     withDelivery: false,
     locationId: user.locationId,
     discounts: 0,

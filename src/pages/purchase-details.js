@@ -23,7 +23,7 @@ const PurchaseDetails = props => {
               const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
               return (
                 <ListItem 
-                  title={productInfo.name || productInfo.engName}
+                  title={productInfo.name}
                   subtitle={packInfo.name}
                   text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
                   footer={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}

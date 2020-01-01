@@ -52,7 +52,7 @@ const PrepareOrders = props => {
 							return (
 								<ListItem
 									link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
-									title={productInfo.name || productInfo.engName}
+									title={productInfo.name}
 									subtitle={packInfo.name}
 									text={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
 									key={i++}

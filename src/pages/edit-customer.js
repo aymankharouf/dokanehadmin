@@ -26,6 +26,7 @@ const EditCustomer = props => {
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
+  const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -45,8 +46,9 @@ const EditCustomer = props => {
     if (otherMobileHolder !== customer.otherMobileHolder) return true
     if (exceedPrice !== customer.exceedPrice) return true
     if (deliveryFees * 1000 !== customer.deliveryFees) return true
+    if (orderLimit * 1000 !== customer.orderLimit) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, otherMobileHolder, exceedPrice, deliveryFees])
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, otherMobileHolder, exceedPrice, deliveryFees, orderLimit])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -81,7 +83,8 @@ const EditCustomer = props => {
         otherMobile,
         otherMobileHolder,
         exceedPrice,
-        deliveryFees: deliveryFees * 1000
+        deliveryFees: deliveryFees * 1000,
+        orderLimit: orderLimit * 1000
       }
       await editCustomer(customer, name)
       showMessage(labels.editSuccess)
@@ -179,6 +182,16 @@ const EditCustomer = props => {
           type="number" 
           onChange={e => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
+        />
+        <ListInput 
+          name="orderLimit" 
+          label={labels.orderLimit}
+          value={orderLimit}
+          floatingLabel 
+          clearButton
+          type="number" 
+          onChange={e => setOrderLimit(e.target.value)}
+          onInputClear={() => setOrderLimit('')}
         />
         <ListInput
           label={labels.otherMobile}

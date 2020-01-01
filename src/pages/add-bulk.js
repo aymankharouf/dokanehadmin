@@ -53,7 +53,7 @@ const AddBulk = props => {
   if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${labels.addBulk} ${product.name || product.engName}`} backLink={labels.back} />
+      <Navbar title={`${labels.addBulk} ${product.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 

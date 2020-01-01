@@ -9,7 +9,6 @@ const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [engName, setEngName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [trademarkId, setTrademarkId] = useState('')
   const [countryId, setCountryId] = useState('')
@@ -58,7 +57,6 @@ const AddProduct = props => {
     try{
       const product = {
         name,
-        engName,
         categoryId,
         trademarkId,
         countryId,
@@ -86,16 +84,6 @@ const AddProduct = props => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="engName" 
-          label={labels.engName}
-          floatingLabel 
-          clearButton
-          type="text" 
-          value={engName} 
-          onChange={e => setEngName(e.target.value)}
-          onInputClear={() => setEngName('')}
         />
         <ListItem
           title={labels.category}
@@ -190,7 +178,7 @@ const AddProduct = props => {
         <ListInput name="image" label={labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {(!name && !engName) || !countryId || !categoryId || !imageUrl ? '' :
+      {!name || !countryId || !categoryId || !imageUrl ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
