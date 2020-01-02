@@ -13,13 +13,15 @@ const Invitations = props => {
     let invitations = state.invitations.filter(i => i.status === 'n')
     invitations = invitations.map(i => {
       const userInfo = state.users.find(u => u.id === i.userId)
+      const customerInfo = state.customers.find(c => c.id === i.userId)
       return {
         ...i,
-        userInfo
+        userInfo,
+        customerInfo
       }
     })
     return invitations.sort((i1, i2) => i1.time.seconds - i2.time.seconds)
-  }, [state.invitations, state.users])
+  }, [state.invitations, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.invitations} backLink={labels.back} />
@@ -30,10 +32,9 @@ const Invitations = props => {
           : invitations.map(i => 
               <ListItem
                 link={`/invitation-details/${i.id}`}
-                title={`${labels.user}: ${i.userInfo.name}`}
-                subtitle={`${labels.mobile}: ${i.userInfo.mobile}`}
-                text={`${i.friendName}: ${i.friendMobile}`}
-                footer={moment(i.time.toDate()).fromNow()}
+                title={i.customerInfo.fullName || `${i.userInfo.name}:${i.userInfo.mobile}`}
+                subtitle={`${i.friendName}: ${i.friendMobile}`}
+                text={moment(i.time.toDate()).fromNow()}
                 key={i.id}
               />                
             )

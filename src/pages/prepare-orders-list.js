@@ -12,13 +12,15 @@ const PrepareOrdersList = props => {
     let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
     orders = orders.map(o => {
       const userInfo = state.users.find(u => u.id === o.userId)
+      const customerInfo = state.customers.find(c => c.id === o.userid)
       return {
         ...o,
-        userInfo
+        userInfo,
+        customerInfo
       }
     })
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
-  }, [state.orders, state.users, props.orderId, props.packId])
+  }, [state.orders, state.users, state.customers, props.orderId, props.packId])
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
@@ -47,9 +49,8 @@ const PrepareOrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                title={`${labels.user}: ${o.userInfo.name}`}
-                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
-                text={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
+                title={o.customerInfo.fullName || `${o.userinfo.name}:${o.userinfo.mobile}`}
+                subtitle={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                 key={o.id}
               >
                 <Button slot="after" onClick={() => handleAllocate(o)}>{labels.allocate}</Button>

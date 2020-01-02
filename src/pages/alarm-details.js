@@ -20,14 +20,14 @@ const AlarmDetails = props => {
   , [state.products, pack])
   const userInfo = useMemo(() => state.users.find(u => u.id === alarm.userId)
   , [state.users, alarm])
-  const customer = useMemo(() => state.customers.find(c => c.id === alarm.userId)
+  const customerInfo = useMemo(() => state.customers.find(c => c.id === alarm.userId)
   , [state.customers, alarm])
-  const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : alarm.storeName
-  , [customer, state.stores, alarm])
+  const storeName = useMemo(() => customerInfo.storeId ? state.stores.find(s => s.id === customerInfo.storeId).name : alarm.storeName
+  , [customerInfo, state.stores, alarm])
   const storeLocation = useMemo(() => {
-    const location = customer.storeId ? state.stores.find(s => s.id === customer.storeId).locationId : alarm.locationId
+    const location = customerInfo.storeId ? state.stores.find(s => s.id === customerInfo.storeId).locationId : alarm.locationId
     return state.locations.find(l => l.id === location).name
-  }, [customer, state.stores, state.locations, alarm])
+  }, [customerInfo, state.stores, state.locations, alarm])
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -52,7 +52,7 @@ const AlarmDetails = props => {
 
   const handleApprove = async () => {
     try{
-      await approveAlarm(alarm, pack, storeId, customer, state.storePacks, state.packs)
+      await approveAlarm(alarm, pack, storeId, customerInfo, state.storePacks, state.packs)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
@@ -76,7 +76,7 @@ const AlarmDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-          {customer.storeId || storeId ? 
+          {customerInfo.storeId || storeId ? 
             <FabButton color="green" onClick={() => handleApprove()}>
               <Icon material="done"></Icon>
             </FabButton>
@@ -90,14 +90,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={userInfo.name}
-          type="text" 
-          readonly
-        />
-        <ListInput 
-          name="userMobile" 
-          label={labels.mobile}
-          value={userInfo.mobile}
+          value={customerInfo.fullName || `${userInfo.name}:${userInfo.mobile}`}
           type="text" 
           readonly
         />
@@ -164,7 +157,7 @@ const AlarmDetails = props => {
           type="text" 
           readonly
         />
-        {customer.storeId ? '' :
+        {customerInfo.storeId ? '' :
           <ListItem
             title={labels.store}
             smartSelect

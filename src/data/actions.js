@@ -800,6 +800,7 @@ export const approveUser = user => {
   const customerRef = firebase.firestore().collection('customers').doc(user.id)
   batch.set(customerRef, {
     name: user.name,
+    fullName: `${user.name}${user.storeName ? '-' + user.storeName : ''}: ${user.mobile}`, 
     storeId: user.storeId,
     address: user.address,
     orderLimit: 0,
@@ -1017,12 +1018,12 @@ export const changePassword = async (oldPassword, newPassword) => {
   return user.updatePassword(newPassword)
 }
 
-export const approveRating = (rating, product, customerInfo) => {
+export const approveRating = (rating, product, userInfo) => {
   const batch = firebase.firestore().batch()
   const ratingRef = firebase.firestore().collection('ratings').doc(rating.id)
   batch.update(ratingRef, {
     status: 'a',
-    userName: customerInfo.name
+    userName: userInfo.name
   })
   const oldRating = product.rating || 0
   const ratingCount = product.ratingCount || 0

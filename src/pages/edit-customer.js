@@ -13,8 +13,7 @@ const EditCustomer = props => {
   , [state.customers, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
-  const [name, setName] = useState(userInfo.name)
-  const [nickName, setNickName] = useState(customer.name)
+  const [name, setName] = useState(customer.name)
   const [address, setAddress] = useState(customer.address)
   const [storeId, setStoreId] = useState(customer.storeId)
   const [locationId, setLocationId] = useState(customer.locationId)
@@ -35,7 +34,6 @@ const EditCustomer = props => {
   , [state.locations])
   const hasChanged = useMemo(() => {
     if (name !== userInfo.name) return true
-    if (nickName !== customer.name) return true
     if (address !== customer.address) return true
     if (storeId !== customer.storeId) return true
     if (locationId !== customer.locationId) return true
@@ -48,7 +46,7 @@ const EditCustomer = props => {
     if (orderLimit * 1000 !== customer.orderLimit) return true
     if (deliveryInterval !== customer.deliveryInterval) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
+  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -71,9 +69,11 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
+      const fullName = `${name}${storeId ? '-' + state.stores.find(s => s.id === storeId).name : ''}: ${state.users.find(u => u.id === customer.id).mobile}`
       const customer = {
         id: props.id,
-        name: nickName,
+        name,
+        fullName,
         storeId,
         address,
         locationId,
@@ -106,16 +106,6 @@ const EditCustomer = props => {
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="nickName" 
-          label={labels.nickName}
-          value={nickName}
-          floatingLabel 
-          clearButton
-          type="text" 
-          onChange={e => setNickName(e.target.value)}
-          onInputClear={() => setNickName('')}
         />
         <ListInput 
           name="mobile" 

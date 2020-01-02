@@ -54,6 +54,7 @@ const ApproveUser = props => {
       if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
         throw new Error('otherUserMobile')
       }
+      const storeName = storeId ? state.stores.find(s => s.id === storeId).name : ''
       await approveUser({
         id: props.id,
         name,
@@ -61,6 +62,7 @@ const ApproveUser = props => {
         locationId,
         otherMobile,
         address,
+        storeName
       })
       showMessage(labels.approveSuccess)
       props.f7router.back()  

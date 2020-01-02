@@ -13,9 +13,11 @@ const StoreOwners = props => {
     let storeOwners = state.customers.filter(c => c.storeId === props.id)
     storeOwners = storeOwners.map(o => {
       const userInfo = state.users.find(u => u.id === o.id)
+      const customerInfo = state.customers.find(c => c.id === o.id)
       return {
         ...o,
-        userInfo
+        userInfo,
+        customerInfo
       }
     })
     return storeOwners
@@ -30,8 +32,7 @@ const StoreOwners = props => {
           : storeOwners.map(o => 
               <ListItem 
                 link="#"
-                title={`${labels.user}: ${o.userInfo.name}`} 
-                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
+                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`} 
                 key={o.id} 
               />
             )

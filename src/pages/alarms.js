@@ -18,18 +18,17 @@ const Alarms = props => {
       const productInfo = state.products.find(p => p.id === packInfo.productId)
       const userInfo = state.users.find(u => u.id === a.userId)
       const customerInfo = state.customers.find(c => c.id === a.userId)
-      const userName = customerInfo?.storeId ? `${userInfo.name}-${state.stores.find(s => s.id === customerInfo.storeId).name}` : userInfo.name
       return {
         ...a,
         packInfo,
         productInfo,
         userInfo,
-        userName,
+        customerInfo,
         alarmTypeInfo,
       }
     })
     return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
-  }, [state.alarms, state.packs, state.products, state.users, state.customers, state.stores])
+  }, [state.alarms, state.packs, state.products, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.alarms} backLink={labels.back} />
@@ -41,7 +40,7 @@ const Alarms = props => {
                 <ListItem
                   link={`/alarm-details/${a.id}`}
                   title={a.alarmTypeInfo.name}
-                  subtitle={`${a.userName} ${a.userInfo.mobile}`}
+                  subtitle={a.customerInfo.fullName || `${a.userInfo.name}:${a.userInfo.mobile}`}
                   text={`${a.productInfo.name} ${a.packInfo.name}`}
                   footer={moment(a.time.toDate()).fromNow()}
                   key={a.id}

@@ -20,7 +20,7 @@ const RelatedProducts = props => {
       }
     })
     return relatedProducts.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.products, product, props.id])
+  }, [state.products, state.categories, state.countries, product, props.id])
   return(
     <Page>
       <Navbar title={labels.relatedProducts} backLink={labels.back} />

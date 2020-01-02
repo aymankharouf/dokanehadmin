@@ -103,8 +103,8 @@ export const alarmTypes = [
 ]
 
 export const deliveryIntervals = [
-  {id: 'm', name: '9:00 - 12:00'},
-  {id: 'a', name: '14:00 - 17:00'},
-  {id: 'n', name: '19:00 - 22:00'},
+  {id: 'm', name: 'صباحا'},
+  {id: 'a', name: 'بعد الظهر'},
+  {id: 'n', name: 'مساءا'},
   {id: 'u', name: 'اي وقت'}
 ]

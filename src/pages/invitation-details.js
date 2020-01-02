@@ -12,6 +12,8 @@ const InvitationDetails = props => {
   , [state.invitations, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === invitation.userId)
   , [state.users, invitation])
+  const customerInfo = useMemo(() => state.customers.find(c => c.id === invitation.userId)
+  , [state.customers, invitation])
   const mobileCheck = useMemo(() => {
     if (state.users.find(u => u.mobile === invitation.friendMobile)) {
       return false
@@ -48,15 +50,7 @@ const InvitationDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={userInfo.name}
-          floatingLabel 
-          type="text"
-          readonly
-        />
-        <ListInput 
-          name="userMobile" 
-          label={labels.mobile}
-          value={userInfo.mobile}
+          value={customerInfo.fullName || `${userInfo.name}:${userInfo.mobile}`}
           floatingLabel 
           type="text"
           readonly

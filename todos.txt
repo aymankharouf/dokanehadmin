@@ -112,6 +112,7 @@
 *approve for invitations
 *diff in delivery fees as special discount
 *delivery intervals
+*user name and customer name
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -146,4 +147,3 @@ merging orders
 stores last month trans & requested packs that can be purchased from
 archive data
 firebase security && testing
-user name and customer name

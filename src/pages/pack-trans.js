@@ -26,7 +26,7 @@ const PackTrans = props => {
       }
     })
     return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
-  }, [state.purchases, pack])
+  }, [state.purchases, state.stores, pack])
   return(
     <Page>
       <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />

@@ -283,7 +283,9 @@ const labels = {
   notUsedMobile: 'رقم الموبايل غير مستخدم',
   newProduct: 'اسم المنتج الجديد',
   newPack: 'اسم العبوة الجديدة',
-  deliveryInterval: 'فترة التسليم'
+  deliveryInterval: 'فترة التسليم',
+  userName: 'اسم المستخدم',
+  fullName: 'الاسم التوضيحي'
 }
 
 export default labels

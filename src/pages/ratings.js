@@ -13,14 +13,16 @@ const Ratings = props => {
     ratings = ratings.map(r => {
       const productInfo = state.products.find(p => p.id === r.productId)
       const userInfo = state.users.find(u => u.id === r.userId)
+      const customerInfo = state.customers.find(c => c.id === r.userId)
       return {
         ...r,
         productInfo,
-        userInfo
+        userInfo,
+        customerInfo
       }
     })
     return ratings.sort((r1, r2) => r1.time.seconds - r2.time.seconds)
-  }, [state.ratings, state.products, state.users])
+  }, [state.ratings, state.products, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.approveRatings} backLink={labels.back} />
@@ -32,7 +34,7 @@ const Ratings = props => {
               <ListItem
                 link={`/rating-details/${r.id}`}
                 title={r.productInfo.name}
-                subtitle={r.userInfo.name}
+                subtitle={r.customerInfo.fullName || `${r.userInfo.name}:${r.userinfo.mobile}`}
                 text={moment(r.time.toDate()).fromNow()}
                 key={r.id}
               >

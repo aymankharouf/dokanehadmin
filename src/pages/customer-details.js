@@ -26,8 +26,8 @@ const CustomerDetails = props => {
       }
       <List form>
         <ListInput 
-          name="name" 
-          label={labels.name}
+          name="userName" 
+          label={labels.userName}
           value={userInfo.name}
           type="text" 
           readonly
@@ -37,6 +37,20 @@ const CustomerDetails = props => {
           label={labels.mobile}
           value={userInfo.mobile}
           type="number"
+          readonly
+        />
+        <ListInput 
+          name="name" 
+          label={labels.name}
+          value={customer.name}
+          type="text" 
+          readonly
+        />
+        <ListInput 
+          name="fullName" 
+          label={labels.fullName}
+          value={customer.fullName}
+          type="text" 
           readonly
         />
         {props.full === '0' ? '' :

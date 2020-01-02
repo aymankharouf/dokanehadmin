@@ -15,15 +15,17 @@ const OrdersList = props => {
     let orders = state.orders.filter(o => o.status === props.id)
     orders = orders.map(o => {
       const userInfo = state.users.find(u => u.id === o.userId)
+      const customerInfo = state.customers.find(c => clearInterval.id === o.userId)
       const positionInfo = orderPositions.find(p => p.id === o.position)
       return {
         ...o,
         userInfo,
+        customerInfo,
         positionInfo
       }
     })
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
-  }, [state.orders, state.users, props.id])
+  }, [state.orders, state.users, state.customers, props.id])
   return(
     <Page>
       <Navbar title={`${labels.orders} ${status.name}`} backLink={labels.back}>
@@ -49,15 +51,14 @@ const OrdersList = props => {
           : orders.map(o => 
               <ListItem
                 link={`/order-details/${o.id}`}
-                title={`${labels.user}: ${o.userInfo.name}`}
-                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
-                text={o.position ? o.positionInfo.name : ''}
-                footer={moment(o.time.toDate()).fromNow()}
+                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
+                subtitle={o.position ? o.positionInfo.name : ''}
+                text={moment(o.time.toDate()).fromNow()}
+                footer={moment(o.statusTime.toDate()).fromNow()}
                 after={(o.total / 1000).toFixed(3)}
                 key={o.id}
               >
-                {o.statusTime ? <div className="list-subtext1">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
-                {o.withDelivery || o.urgent ? <div className="list-subtext2">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
+                {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
               </ListItem>
             )
           }

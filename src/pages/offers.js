@@ -24,7 +24,7 @@ const Offers = props => {
       }
     })
     return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
-  }, [state.storePacks, state.packs, state.products, state.stores])
+  }, [state.storePacks, state.packs, state.products, state.stores, state.countries])
   return(
     <Page>
       <Navbar title={labels.EndedOffers} backLink={labels.back} />
