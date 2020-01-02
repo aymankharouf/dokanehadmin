@@ -15,8 +15,7 @@ const AddStorePack = props => {
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   const packs = useMemo(() => {
-    let packs = state.packs
-    packs = packs.map(p => {
+    const packs = state.packs.map(p => {
       const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
@@ -80,7 +79,7 @@ const AddStorePack = props => {
       <Navbar title={`${labels.addProduct} ${store.name}`} backLink={labels.back} />
       <List form>
         <ListItem
-          title={labels.pack}
+          title={labels.product}
           smartSelect
           smartSelectParams={{
             openIn: "popup", 

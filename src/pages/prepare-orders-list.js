@@ -9,9 +9,16 @@ const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const orders = useMemo(() => {
-    const orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
+    let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
+    orders = orders.map(o => {
+      const userInfo = state.users.find(u => u.id === o.userId)
+      return {
+        ...o,
+        userInfo
+      }
+    })
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
-  }, [state.orders, props.orderId, props.packId])
+  }, [state.orders, state.users, props.orderId, props.packId])
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
   const product = useMemo(() => state.products.find(p => p.id === pack.productId)
@@ -38,19 +45,16 @@ const PrepareOrdersList = props => {
         <List mediaList>
           {orders.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : orders.map(o => {
-              const userInfo = state.users.find(u => u.id === o.userId)
-              return (
-                <ListItem
-                  title={`${labels.user}: ${userInfo.name}`}
-                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
-                  key={o.id}
-                >
-                  <Button slot="after" onClick={() => handleAllocate(o)}>{labels.allocate}</Button>
-                </ListItem>
-              )
-            })
+          : orders.map(o => 
+              <ListItem
+                title={`${labels.user}: ${o.userInfo.name}`}
+                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
+                text={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
+                key={o.id}
+              >
+                <Button slot="after" onClick={() => handleAllocate(o)}>{labels.allocate}</Button>
+              </ListItem>
+            )
           }
         </List>
       </Block>

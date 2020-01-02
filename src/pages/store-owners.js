@@ -9,8 +9,17 @@ const StoreOwners = props => {
   const { state } = useContext(StoreContext)
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
-  const storeOwners = useMemo(() => state.customers.filter(c => c.storeId === props.id)
-  , [state.customers, props.id])
+  const storeOwners = useMemo(() => {
+    let storeOwners = state.customers.filter(c => c.storeId === props.id)
+    storeOwners = storeOwners.map(o => {
+      const userInfo = state.users.find(u => u.id === o.id)
+      return {
+        ...o,
+        userInfo
+      }
+    })
+    return storeOwners
+  }, [state.customers, state.users, props.id])
   return (
     <Page>
       <Navbar title={`${labels.storeOwners} ${store.name}`} backLink={labels.back} />
@@ -18,17 +27,14 @@ const StoreOwners = props => {
         <List mediaList>
           {storeOwners.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storeOwners.map(o => {
-              const userInfo = state.users.find(u => u.id === o.id)
-              return (
-                <ListItem 
-                  link="#"
-                  title={`${labels.user}: ${userInfo.name}`} 
-                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  key={o.id} 
-                />
-              )
-            })
+          : storeOwners.map(o => 
+              <ListItem 
+                link="#"
+                title={`${labels.user}: ${o.userInfo.name}`} 
+                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
+                key={o.id} 
+              />
+            )
           }
         </List>
       </Block>

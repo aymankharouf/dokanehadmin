@@ -13,8 +13,17 @@ const StorePacks = props => {
   , [state.stores, props.id])
   let storePacks = useMemo(() => {
     let storePacks = state.storePacks.filter(p => p.storeId === props.id)
+    storePacks = storePacks.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      return {
+        ...p,
+        packInfo,
+        productInfo
+      }
+    })
     return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
-  }, [state.storePacks, props.id])
+  }, [state.storePacks, state.packs, state.products, props.id])
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={labels.back}>
@@ -37,24 +46,20 @@ const StorePacks = props => {
         <List mediaList className="search-list searchbar-found">
           {storePacks.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storePacks.map(p => {
-              const packInfo = state.packs.find(pa => pa.id === p.packId)
-              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-              return (
-                <ListItem
-                  link={`/store-pack-details/${p.id}`}
-                  title={productInfo.name}
-                  subtitle={packInfo.name}
-                  text={moment(p.time.toDate()).fromNow()}
-                  footer={packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
-                  after={(p.price / 1000).toFixed(3)}
-                  key={p.id}
-                >
-                  <PackImage slot="media" pack={packInfo} type="list" />
-                  {packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
-                </ListItem>
-              )
-            })
+          : storePacks.map(p => 
+              <ListItem
+                link={`/store-pack-details/${p.id}`}
+                title={p.productInfo.name}
+                subtitle={p.packInfo.name}
+                text={moment(p.time.toDate()).fromNow()}
+                footer={p.packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(p.packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
+                after={(p.price / 1000).toFixed(3)}
+                key={p.id}
+              >
+                <PackImage slot="media" pack={p.packInfo} type="list" />
+                {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
+              </ListItem>
+            )
           }
         </List>
       </Block>

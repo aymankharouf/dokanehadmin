@@ -16,8 +16,19 @@ const EditOrder = props => {
   , [state.customers, order])
   const customerLocation = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId) : ''
   , [state.locations, customer])
-  const orderBasket = useMemo(() => state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
-  , [state.orderBasket])
+  const orderBasket = useMemo(() => {
+    let orderBasket = state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
+    orderBasket = orderBasket.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      return {
+        ...p,
+        packInfo,
+        productInfo
+      }
+    })
+    return orderBasket
+  }, [state.orderBasket, state.packs, state.products])
   const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.gross, 0)
   , [orderBasket])
   useEffect(() => {
@@ -58,29 +69,25 @@ const EditOrder = props => {
       <Navbar title={labels.editOrder} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {orderBasket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            return (
-              <ListItem
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
-                footer={quantityDetails(p)}
-                key={p.packId}
-              >
-                <PackImage slot="media" pack={packInfo} type="list" />
-                <div className="list-subtext1">{`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
-                <Stepper
-                  slot="after"
-                  fill
-                  buttonsOnly
-                  onStepperPlusClick={() => dispatch({type: 'INCREASE_ORDER_QUANTITY', pack: p})}
-                  onStepperMinusClick={() => dispatch({type: 'DECREASE_ORDER_QUANTITY', pack: p})}
-                />
-              </ListItem>
-            )
-          })}
+          {orderBasket.map(p =>
+            <ListItem
+              title={p.productInfo.name}
+              subtitle={p.packInfo.name}
+              text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
+              footer={quantityDetails(p)}
+              key={p.packId}
+            >
+              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <div className="list-subtext1">{`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
+              <Stepper
+                slot="after"
+                fill
+                buttonsOnly
+                onStepperPlusClick={() => dispatch({type: 'INCREASE_ORDER_QUANTITY', pack: p})}
+                onStepperMinusClick={() => dispatch({type: 'DECREASE_ORDER_QUANTITY', pack: p})}
+              />
+            </ListItem>
+          )}
         </List>
         <List form>
           <ListItem>

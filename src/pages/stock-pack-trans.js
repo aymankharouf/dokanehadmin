@@ -17,19 +17,23 @@ const StockPackTrans = props => {
   const stockPackInfo = useMemo(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id)
   , [state.storePacks, props.id])
   const packTrans = useMemo(() => {
-    const stockTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
-    const packTrans = stockTrans.map(t => {
+    let packTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
+    packTrans = packTrans.map(t => {
       const transPack = t.basket.find(p => p.packId === pack.id)
+      const storeInfo = state.stores.find(s => s.id === t.storeId)
+      const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
       return {
         ...transPack,
         id: t.id,
         storeId: t.storeId,
         type: t.type,
-        time: t.time
+        time: t.time,
+        storeInfo,
+        stockTransTypeInfo
       }
     })
     return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
-  }, [state.stockTrans, pack])
+  }, [state.stockTrans, state.stores, pack])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -61,22 +65,19 @@ const StockPackTrans = props => {
         <List mediaList>
           {packTrans.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : packTrans.map(t => {
-              const storeInfo = state.stores.find(s => s.id === t.storeId)
-              return (
-                <ListItem
-                  title={`${stockTransTypes.find(ty => ty.id === t.type).name} ${storeInfo?.name || ''}`}
-                  subtitle={moment(t.time.toDate()).fromNow()}
-                  text={`${labels.quantity}: ${quantityText(t.quantity)}`}
-                  footer={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
-                  key={t.id}
-                >
-                  {storeInfo?.canReturn ?
-                    <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{labels.returnPacks}</Button>
-                  : ''}
-                </ListItem>
-              )
-            })
+          : packTrans.map(t => 
+              <ListItem
+                title={`${t.stockTransTypesInfo.name} ${t.storeInfo?.name || ''}`}
+                subtitle={moment(t.time.toDate()).fromNow()}
+                text={`${labels.quantity}: ${quantityText(t.quantity)}`}
+                footer={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
+                key={t.id}
+              >
+                {t.storeInfo?.canReturn ?
+                  <Button slot="after" onClick={() => handleAddTrans('c', t.storeId, t.cost, t.price)}>{labels.returnPacks}</Button>
+                : ''}
+              </ListItem>
+            )
           }
         </List>
       </Block>

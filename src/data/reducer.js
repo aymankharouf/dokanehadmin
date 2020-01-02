@@ -168,10 +168,10 @@ const Reducer = (state, action) => {
           ...state,
           stockTrans: action.stockTrans
         }
-      case 'SET_PRICE_ALARMS':
+      case 'SET_ALARMS':
         return {
           ...state,
-          priceAlarms: action.priceAlarms
+          alarms: action.alarms
         }
       case 'SET_PASSWORD_REQUESTS':
         return {

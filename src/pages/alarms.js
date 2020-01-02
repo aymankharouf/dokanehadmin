@@ -1,0 +1,62 @@
+import React, { useContext, useMemo } from 'react'
+import { Block, Page, Navbar, List, ListItem, Toolbar} from 'framework7-react'
+import BottomToolbar from './bottom-toolbar'
+import moment from 'moment'
+import 'moment/locale/ar'
+import { StoreContext } from '../data/store'
+import PackImage from './pack-image'
+import labels from '../data/labels'
+import { alarmTypes } from '../data/config'
+
+const Alarms = props => {
+  const { state } = useContext(StoreContext)
+  const alarms = useMemo(() => {
+    let alarms = state.alarms.filter(a => a.status === 'n')
+    alarms = alarms.map(a => {
+      const alarmTypeInfo = alarmTypes.find(t => t.id === a.alarmType)
+      const packInfo = state.packs.find(p => p.id === a.packId)
+      const productInfo = state.products.find(p => p.id === packInfo.productId)
+      const userInfo = state.users.find(u => u.id === a.userId)
+      const customerInfo = state.customers.find(c => c.id === a.userId)
+      const userName = customerInfo?.storeId ? `${userInfo.name}-${state.stores.find(s => s.id === customerInfo.storeId).name}` : userInfo.name
+      return {
+        ...a,
+        packInfo,
+        productInfo,
+        userInfo,
+        userName,
+        alarmTypeInfo,
+      }
+    })
+    return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
+  }, [state.alarms, state.packs, state.products, state.users, state.customers, state.stores])
+  return(
+    <Page>
+      <Navbar title={labels.alarms} backLink={labels.back} />
+      <Block>
+          <List mediaList>
+            {alarms.length === 0 ? 
+              <ListItem title={labels.noData} /> 
+            : alarms.map(a => 
+                <ListItem
+                  link={`/alarm-details/${a.id}`}
+                  title={a.alarmTypeInfo.name}
+                  subtitle={`${a.userName} ${a.userInfo.mobile}`}
+                  text={`${a.productInfo.name} ${a.packInfo.name}`}
+                  footer={moment(a.time.toDate()).fromNow()}
+                  key={a.id}
+                >
+                  <PackImage slot="media" pack={a.packInfo} type="list" />
+                </ListItem>
+              )
+            }
+          </List>
+      </Block>
+      <Toolbar bottom>
+        <BottomToolbar/>
+      </Toolbar>
+    </Page>
+  )
+}
+
+export default Alarms

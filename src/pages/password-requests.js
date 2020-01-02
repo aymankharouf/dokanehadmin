@@ -9,9 +9,17 @@ import labels from '../data/labels'
 const PasswordRequests = props => {
   const { state } = useContext(StoreContext)
   const passwordRequests = useMemo(() => {
-    const passwordRequests = state.passwordRequests.filter(r => r.status === 'n')
+    let passwordRequests = state.passwordRequests.filter(r => r.status === 'n')
+    passwordRequests = passwordRequests.map(r => {
+      const userInfo = state.users.find(u => u.mobile === r.mobile)
+      return {
+        ...r,
+        userInfo
+      }
+    })
+    passwordRequests = passwordRequests.filter(r => r.userInfo)
     return passwordRequests.sort((r1, r2) => r1.time.seconds - r2.time.seconds)
-  } , [state.passwordRequests])
+  } , [state.passwordRequests, state.users])
   return(
     <Page>
       <Navbar title={labels.passwordRequests} backLink={labels.back} />
@@ -19,19 +27,15 @@ const PasswordRequests = props => {
           <List mediaList>
             {passwordRequests.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : passwordRequests.map(r => {
-                const userInfo = state.users.find(u => u.mobile === r.mobile)
-                if (!userInfo) return ''
-                return (
-                  <ListItem
-                    link={`/retreive-password/${r.id}`}
-                    title={`${labels.user}: ${userInfo.name}`}
-                    subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                    text={moment(r.time.toDate()).fromNow()}
-                    key={r.id}
-                  />
-                )
-              })
+            : passwordRequests.map(r => 
+                <ListItem
+                  link={`/retreive-password/${r.id}`}
+                  title={`${labels.user}: ${r.userInfo.name}`}
+                  subtitle={`${labels.mobile}: ${r.userInfo.mobile}`}
+                  text={moment(r.time.toDate()).fromNow()}
+                  key={r.id}
+                />
+              )
             }
           </List>
       </Block>

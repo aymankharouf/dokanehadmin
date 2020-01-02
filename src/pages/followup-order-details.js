@@ -11,6 +11,21 @@ const FollowupOrderDetails = props => {
   const [error, setError] = useState('')
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
+  const orderBasket = useMemo(() => order.basket.map(p => {
+    const packInfo = state.packs.find(pa => pa.id === p.packId)
+    const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+    const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+    const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+    const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
+    return {
+      ...p,
+      packInfo,
+      productInfo,
+      storeName,
+      changePriceNote,
+      statusNote
+    }
+  }), [order, state.packs, state.products, state.stores])
   const fractionFromProfit = useMemo(() => {
     let fraction = 0
     if (order.fixedFees === 0) {
@@ -71,26 +86,19 @@ const FollowupOrderDetails = props => {
       <Navbar title={labels.orderDetails} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {order.basket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-            const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-            return (
-              <ListItem 
-                key={p.packId} 
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={storeName ? `${labels.storeName}: ${storeName}` : ''}
-                footer={quantityDetails(p)}
-                after={(p.gross / 1000).toFixed(3)}
-              >
-                {changePriceNote ? <div className="list-subtext1">{changePriceNote}</div> : ''}
-                <div className="list-subtext2">{`${labels.status}: ${statusNote}`}</div>
-              </ListItem>
-            )
-          })}
+          {orderBasket.map(p => 
+            <ListItem 
+              key={p.packId} 
+              title={p.productInfo.name}
+              subtitle={p.packInfo.name}
+              text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
+              footer={quantityDetails(p)}
+              after={(p.gross / 1000).toFixed(3)}
+            >
+              {p.changePriceNote ? <div className="list-subtext1">{p.changePriceNote}</div> : ''}
+              <div className="list-subtext2">{`${labels.status}: ${p.statusNote}`}</div>
+            </ListItem>
+          )}
           {order.withDelivery ? 
             <ListItem>
               <span>{labels.withDelivery}</span>

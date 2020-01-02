@@ -6,8 +6,18 @@ import labels from '../data/labels'
 
 const Products = props => {
   const { state } = useContext(StoreContext)
-  const products = useMemo(() => [...state.products].sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  , [state.products])
+  const products = useMemo(() => {
+    const products = state.products.map(p => {
+      const countryInfo = state.countries.find(c => c.id === p.countryId)
+      const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+      return {
+        ...p,
+        countryInfo,
+        categoryInfo
+      }
+    })
+    return products.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  }, [state.products, state.countries, state.categories])
   return(
     <Page>
       <Navbar title={labels.allProducts} backLink={labels.back}>
@@ -30,19 +40,17 @@ const Products = props => {
           <List mediaList className="search-list searchbar-found">
             {products.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : products.map(p => {
-                return (
-                  <ListItem
-                    link={`/product-packs/${p.id}`}
-                    title={p.name}
-                    subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                    text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
-                    key={p.id}
-                  >
-                    <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
-                  </ListItem>
-                )
-              })
+            : products.map(p => 
+                <ListItem
+                  link={`/product-packs/${p.id}`}
+                  title={p.name}
+                  subtitle={p.categoryInfo.name}
+                  text={`${labels.productOf} ${p.countryInfo.name}`}
+                  key={p.id}
+                >
+                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
+                </ListItem>
+              )
             }
           </List>
       </Block>

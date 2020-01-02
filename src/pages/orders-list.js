@@ -12,9 +12,18 @@ const OrdersList = props => {
   const status = useMemo(() => orderStatus.find(s => s.id === props.id)
   , [props.id])
   const orders = useMemo(() => {
-    const orders = state.orders.filter(o => o.status === props.id)
+    let orders = state.orders.filter(o => o.status === props.id)
+    orders = orders.map(o => {
+      const userInfo = state.users.find(u => u.id === o.userId)
+      const positionInfo = orderPositions.find(p => p.id === o.position)
+      return {
+        ...o,
+        userInfo,
+        positionInfo
+      }
+    })
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
-  }, [state.orders, props.id])
+  }, [state.orders, state.users, props.id])
   return(
     <Page>
       <Navbar title={`${labels.orders} ${status.name}`} backLink={labels.back}>
@@ -37,23 +46,20 @@ const OrdersList = props => {
         <List mediaList className="search-list searchbar-found">
           {orders.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : orders.map(o => {
-              const userInfo = state.users.find(u => u.id === o.userId)
-              return (
-                <ListItem
-                  link={`/order-details/${o.id}`}
-                  title={`${labels.user}: ${userInfo.name}`}
-                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={o.position ? orderPositions.find(p => p.id === o.position).name : ''}
-                  footer={moment(o.time.toDate()).fromNow()}
-                  after={(o.total / 1000).toFixed(3)}
-                  key={o.id}
-                >
-                  {o.statusTime ? <div className="list-subtext1">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
-                  {o.withDelivery || o.urgent ? <div className="list-subtext2">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
-                </ListItem>
-              )
-            })
+          : orders.map(o => 
+              <ListItem
+                link={`/order-details/${o.id}`}
+                title={`${labels.user}: ${o.userInfo.name}`}
+                subtitle={`${labels.mobile}: ${o.userInfo.mobile}`}
+                text={o.position ? o.positionInfo.name : ''}
+                footer={moment(o.time.toDate()).fromNow()}
+                after={(o.total / 1000).toFixed(3)}
+                key={o.id}
+              >
+                {o.statusTime ? <div className="list-subtext1">{moment(o.statusTime.toDate()).fromNow()}</div> : ''}
+                {o.withDelivery || o.urgent ? <div className="list-subtext2">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
+              </ListItem>
+            )
           }
         </List>
       </Block>

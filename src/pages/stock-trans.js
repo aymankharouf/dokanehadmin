@@ -9,8 +9,18 @@ import { stockTransTypes } from '../data/config'
 
 const StockTrans = props => {
   const { state } = useContext(StoreContext)
-  const stockTrans = useMemo(() => [...state.stockTrans].sort((t1, t2) => t2.time.seconds - t1.time.seconds)
-  , [state.stockTrans])
+  const stockTrans = useMemo(() => {
+    const stockTrans = state.stockTrans.map(t => {
+      const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
+      const storeInfo = state.stores.find(s => s.id === t.storeId)
+      return {
+        ...t,
+        stockTransTypeInfo,
+        storeInfo
+      }
+    })
+    return stockTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
+  }, [state.stockTrans, state.stores])
   return(
     <Page>
       <Navbar title={labels.stockTrans} backLink={labels.back} />
@@ -21,7 +31,7 @@ const StockTrans = props => {
           : stockTrans.map(t => 
               <ListItem
                 link={`/stock-trans-details/${t.id}`}
-                title={`${stockTransTypes.find(ty => ty.id === t.type).name} ${t.storeId ? state.stores.find(s => s.id === t.storeId).name : ''}`}
+                title={`${t.stockTransTypeInfo.name} ${t.storeId ? t.storeInfo.name : ''}`}
                 subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.total / 1000).toFixed(3)}
                 key={t.id}

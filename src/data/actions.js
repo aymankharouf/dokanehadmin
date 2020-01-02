@@ -537,7 +537,7 @@ export const addProduct = async (product, image) => {
 }
 
 export const editProduct = async (product, image) => {
-  let url
+  /*let url
   if (image) {
     const filename = image.name
     const ext = filename.slice(filename.lastIndexOf('.'))
@@ -549,7 +549,14 @@ export const editProduct = async (product, image) => {
   return firebase.firestore().collection('products').doc(product.id).update({
     ...product,
     imageUrl: url
-  })
+  })*/
+  const batch = firebase.firestore().batch()
+  let productRef
+  for (let i = 0; i < 100; i++) {
+    productRef = firebase.firestore().collection('products').doc()
+    batch.set(productRef, product)
+  }
+  return batch.commit()
 }
 
 export const editPrice = (storePack, oldPrice, pack, storePacks, packs) => {
@@ -759,7 +766,14 @@ export const addPack = pack => {
 }
 
 export const editPack = pack => {
-  return firebase.firestore().collection('packs').doc(pack.id).update(pack)
+  //return firebase.firestore().collection('packs').doc(pack.id).update(pack)
+  const batch = firebase.firestore().batch()
+  let packRef
+  for (let i = 0; i < 100; i++) {
+    packRef = firebase.firestore().collection('packs').doc()
+    batch.set(packRef, pack)
+  }
+  return batch.commit()
 }
 
 export const addTag = tag => {
@@ -791,6 +805,7 @@ export const approveUser = user => {
     orderLimit: 0,
     deliveryFees: 0,
     withDelivery: false,
+    deliveryInterval: '',
     locationId: user.locationId,
     discounts: 0,
     isOldAge: false,
@@ -809,24 +824,24 @@ export const approveUser = user => {
   return batch.commit()
 }
 
-export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks, packs) => {
+export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) => {
   const batch = firebase.firestore().batch()
-  const storeId = customer.storeId || store.id
-  const priceAlarmRef = firebase.firestore().collection('alarms').doc(priceAlarm.id)
-  batch.update(priceAlarmRef, {
+  const storeId = customer.storeId || store
+  const alarmRef = firebase.firestore().collection('alarms').doc(alarm.id)
+  batch.update(alarmRef, {
     status: 'a',
-    storeId: customer.storeId ? '' : store.id
+    storeId
   })  
-  const storePack = storePacks.find(p => p.storeId === storeId && p.packId === priceAlarm.packId)
+  const storePack = storePacks.find(p => p.storeId === storeId && p.packId === alarm.packId)
   const oldPrice = storePack.price
-  if (priceAlarm.price > 0) {
+  if (['1', '2', '3'].includes(alarm.alarmType)) {
     const newStorePack = { 
       ...storePack,
       storeId,
-      cost: priceAlarm.price,
-      price: priceAlarm.price,
-      userId: priceAlarm.userId,
-      offerEnd: priceAlarm.offerEnd,
+      cost: alarm.price,
+      price: alarm.price,
+      userId: alarm.userId,
+      offerEnd: alarm.offerEnd,
       time: new Date(),
     }
     const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
@@ -840,7 +855,7 @@ export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks,
         offerEnd
       })
     }
-  } else {
+  } else if (alarm.alarmType === '4') {
     const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
     batch.delete(storePackRef)
     if (storePack.price === pack.price) {
@@ -853,17 +868,17 @@ export const approvePriceAlarm = (priceAlarm, pack, store, customer, storePacks,
       })
     }
   }
-  if (!customer.storeId){
+  if (alarm.alarmType === '1'){
     const customerRef = firebase.firestore().collection('customers').doc(customer.id)
     batch.update(customerRef, {
-      discounts: firebase.firestore.FieldValue.increment(setup.priceAlarmDiscount)
+      discounts: firebase.firestore.FieldValue.increment(setup.alarmDiscount)
     })
   }
   return batch.commit()
 }
 
-export const rejectPriceAlarm = priceAlarm => {
-  return firebase.firestore().collection('alarms').doc(priceAlarm.id).update({
+export const rejectAlarm = alarm => {
+  return firebase.firestore().collection('alarms').doc(alarm.id).update({
     status: 'r'
   })
 }

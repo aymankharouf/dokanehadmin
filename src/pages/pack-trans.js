@@ -17,11 +17,12 @@ const PackTrans = props => {
     const purchases = state.purchases.filter(p => p.basket.find(p => p.packId === pack.id))
     const packTrans = purchases.map(p => {
       const transPack = p.basket.find(pa => pa.packId === pack.id)
+      const storeInfo = state.stores.find(s => s.id === p.storeId)
       return {
         ...transPack,
         id: p.id,
-        storeId: p.storeId,
-        time: p.time
+        time: p.time,
+        storeInfo
       }
     })
     return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
@@ -35,7 +36,7 @@ const PackTrans = props => {
             <ListItem title={labels.noData} /> 
           : packTrans.map(t => 
               <ListItem
-                title={state.stores.find(s => s.id === t.storeId).name}
+                title={t.storeInfo.name}
                 subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.cost / 1000).toFixed(3)}
                 key={t.id}

@@ -10,8 +10,19 @@ const Stock = props => {
   const { state, user } = useContext(StoreContext)
   const storePacks = useMemo(() => {
     let storePacks = state.storePacks.filter(p => p.storeId === 's')
+    storePacks = storePacks.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      const countryInfo = state.countries.find(c => c.id === p.productInfo.countryId)
+      return {
+        ...p,
+        packInfo,
+        productInfo,
+        countryInfo
+      }
+    })
     return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
-    }, [state.storePacks])
+    }, [state.storePacks, state.packs, state.products, state.countries])
   if (!user) return <ReLogin />
   return(
     <Page>
@@ -35,23 +46,19 @@ const Stock = props => {
         <List mediaList className="search-list searchbar-found">
           {storePacks.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storePacks.map(p => {
-              const packInfo = state.packs.find(pa => pa.id === p.packId)
-              const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-              return (
-                <ListItem
-                  link={`/stock-pack-trans/${p.packId}`}
-                  title={productInfo.name}
-                  subtitle={packInfo.name}
-                  text={`${labels.productOf} ${state.countries.find(c => c.id === productInfo.countryId).name}`}
-                  footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
-                  after={(p.cost / 1000).toFixed(3)}
-                  key={p.id}
-                >
-                  <PackImage slot="media" pack={packInfo} type="list" />
-                </ListItem>
-              )
-            })
+          : storePacks.map(p => 
+              <ListItem
+                link={`/stock-pack-trans/${p.packId}`}
+                title={p.productInfo.name}
+                subtitle={p.packInfo.name}
+                text={`${labels.productOf} ${p.countryInfo.name}`}
+                footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
+                after={(p.cost / 1000).toFixed(3)}
+                key={p.id}
+              >
+                <PackImage slot="media" pack={p.packInfo} type="list" />
+              </ListItem>
+            )
           }
         </List>
       </Block>

@@ -47,6 +47,8 @@ const RequestedPacks = props => {
 			})
 		})
 		packsArray = packsArray.map(p => {
+			const packInfo = state.packs.find(pa => pa.id === p.packId)
+			const productInfo = state.products.find(pr => pr.id === packInfo.productId)
 			let inBasket, offerInfo
 			let inBasketQuantity = 0
 			if (state.basket.packs) {
@@ -77,21 +79,29 @@ const RequestedPacks = props => {
 				if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > setup.weightErrorMargin) {
 					return {
 						...p,
+						packInfo,
+						productInfo,
 						quantity: addQuantity(p.quantity, -1 * inBasketQuantity),
-						exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity)
+						exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity),
 					}
 				} else {
 					return {
 						...p,
+						packInfo,
+						productInfo,
 						quantity: 0
 					}
 				}
 			} else {
-				return p
+				return {
+					...p,
+					packInfo,
+					productInfo
+				}
 			}
 		})
 		setRequiredPacks(packsArray.filter(p => p.quantity > 0))
-	}, [state.basket, approvedOrders, state.packs, state.customers])
+	}, [state.basket, approvedOrders, state.packs, state.products, state.customers])
   return(
     <Page>
       <Navbar title={labels.requestedPacks} backLink={labels.back} />
@@ -99,22 +109,18 @@ const RequestedPacks = props => {
 				<List mediaList>
 					{requiredPacks.length === 0 ? 
 						<ListItem title={labels.noData} /> 
-					: requiredPacks.map(p => {
-							const packInfo = state.packs.find(pa => pa.id === p.packId)
-							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-							return (
-								<ListItem
-									link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
-									title={productInfo.name}
-									subtitle={packInfo.name}
-									text={`${labels.requested}: ${quantityText(p.quantity)}`}
-									after={(p.price / 1000).toFixed(3)}
-									key={i++}
-								>
-									<PackImage slot="media" pack={packInfo} type="list" />
-								</ListItem>
-							)
-						})
+					: requiredPacks.map(p => 
+							<ListItem
+								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
+								title={p.productInfo.name}
+								subtitle={p.packInfo.name}
+								text={`${labels.requested}: ${quantityText(p.quantity)}`}
+								after={(p.price / 1000).toFixed(3)}
+								key={i++}
+							>
+								<PackImage slot="media" pack={p.packInfo} type="list" />
+							</ListItem>
+						)
 					}
 				</List>
       </Block>

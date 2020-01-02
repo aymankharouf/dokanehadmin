@@ -3,6 +3,7 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
+import { deliveryIntervals } from '../data/config'
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
@@ -43,7 +44,6 @@ const CustomerDetails = props => {
             name="orderLimit" 
             label={labels.orderLimit}
             value={(customer.orderLimit / 1000).toFixed(3)}
-            floatingLabel 
             type="number"
             readonly
           />
@@ -69,7 +69,6 @@ const CustomerDetails = props => {
             name="totalOrders" 
             label={labels.totalOrders}
             value={customerOrders.length}
-            floatingLabel 
             type="number"
             readonly
           />
@@ -78,7 +77,6 @@ const CustomerDetails = props => {
           name="locationName" 
           label={labels.location}
           value={state.locations.find(l => l.id === customer.locationId).name}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -87,7 +85,6 @@ const CustomerDetails = props => {
             name="discounts" 
             label={labels.discountBalance}
             value={(customer.discounts / 1000).toFixed(3)}
-            floatingLabel 
             type="number"
             readonly
           />
@@ -97,7 +94,6 @@ const CustomerDetails = props => {
             name="deliveryFees" 
             label={labels.deliveryFees}
             value={(customer.deliveryFees / 1000).toFixed(3)}
-            floatingLabel 
             type="number"
             readonly
           />
@@ -107,7 +103,6 @@ const CustomerDetails = props => {
             name="storeName" 
             label={labels.store}
             value={storeName}
-            floatingLabel 
             type="text"
             readonly
           />
@@ -120,10 +115,16 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
+          name="deliveryInterval" 
+          label={labels.deliveryInterval}
+          value={customer.deliveryInterval ? deliveryIntervals.find(i => i.id === customer.deliveryInterval).name : ''}
+          type="text"
+          readonly
+        />
+        <ListInput 
           name="address" 
           label={labels.address}
           value={customer.address}
-          floatingLabel 
           type="text" 
           readonly
         />

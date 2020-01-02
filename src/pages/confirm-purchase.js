@@ -12,6 +12,20 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
+  const basket = useMemo(() => {
+    const basket = state.basket.packs.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+      return {
+        ...p,
+        packInfo,
+        productInfo,
+        weightText
+      }
+    })
+    return basket.sort((p1, p2) => p1.time - p2.time)
+  }, [state.basket, state.packs, state.products])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0)
   , [state.basket])
   const [discount, setDiscount] = useState((total * (store.discount || 0) / 100000).toFixed(3))
@@ -45,46 +59,40 @@ const ConfirmPurchase = props => {
     <Page>
     <Navbar title={`${labels.confirmPurchase} ${store.name}`} backLink={labels.back} />
     <Block>
-        <List mediaList>
-          {state.basket.packs.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-            return (
-              <ListItem 
-                key={i++} 
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                footer={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
-                after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
-              />
-            )
-          }
-          )}
+      <List mediaList>
+        {basket.map(p => 
           <ListItem 
-            title={labels.total} 
-            className="total" 
-            after={(total / 1000).toFixed(3)} 
+            key={i++} 
+            title={p.productInfo.name}
+            subtitle={p.packInfo.name}
+            text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+            footer={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}
+            after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
           />
-          {store.id === 's' ? '' :
-            <ListInput 
-              name="discount" 
-              label={labels.discount}
-              value={discount}
-              clearButton
-              floatingLabel 
-              type="number" 
-              onChange={e => setDiscount(e.target.value)}
-              onInputClear={() => setDiscount('')}
-            />
-          }
-          <ListItem 
-            title={labels.net} 
-            className="net" 
-            after={((total - (discount * 1000)) / 1000).toFixed(3)} 
+        )}
+        <ListItem 
+          title={labels.total} 
+          className="total" 
+          after={(total / 1000).toFixed(3)} 
+        />
+        {store.id === 's' ? '' :
+          <ListInput 
+            name="discount" 
+            label={labels.discount}
+            value={discount}
+            clearButton
+            floatingLabel 
+            type="number" 
+            onChange={e => setDiscount(e.target.value)}
+            onInputClear={() => setDiscount('')}
           />
-        </List>
+        }
+        <ListItem 
+          title={labels.net} 
+          className="net" 
+          after={((total - (discount * 1000)) / 1000).toFixed(3)} 
+        />
+      </List>
     </Block>
     <Fab position="center-bottom" slot="fixed" text={labels.confirm} color="green" onClick={() => handlePurchase()}>
       <Icon material="done"></Icon>

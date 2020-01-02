@@ -9,9 +9,18 @@ import labels from '../data/labels'
 const Ratings = props => {
   const { state } = useContext(StoreContext)
   const ratings = useMemo(() => {
-    const ratings = state.ratings.filter(r => r.status === 'n')
+    let ratings = state.ratings.filter(r => r.status === 'n')
+    ratings = ratings.map(r => {
+      const productInfo = state.products.find(p => p.id === r.productId)
+      const userInfo = state.users.find(u => u.id === r.userId)
+      return {
+        ...r,
+        productInfo,
+        userInfo
+      }
+    })
     return ratings.sort((r1, r2) => r1.time.seconds - r2.time.seconds)
-  }, [state.ratings])
+  }, [state.ratings, state.products, state.users])
   return(
     <Page>
       <Navbar title={labels.approveRatings} backLink={labels.back} />
@@ -19,20 +28,17 @@ const Ratings = props => {
         <List mediaList>
           {ratings.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : ratings.map(r => {
-              const product = state.products.find(p => p.id === r.productId)
-              return (
-                <ListItem
-                  link={`/rating-details/${r.id}`}
-                  title={product.name}
-                  subtitle={state.users.find(u => u.id === r.userId).name}
-                  text={moment(r.time.toDate()).fromNow()}
-                  key={r.id}
-                >
-                  <img slot="media" src={product.imageUrl} className="img-list" alt={product.name} />
-                </ListItem>
-              )
-            })
+          : ratings.map(r => 
+              <ListItem
+                link={`/rating-details/${r.id}`}
+                title={r.productInfo.name}
+                subtitle={r.userInfo.name}
+                text={moment(r.time.toDate()).fromNow()}
+                key={r.id}
+              >
+                <img slot="media" src={r.productInfo.imageUrl} className="img-list" alt={r.productInfo.name} />
+              </ListItem>
+            )
           }
         </List>
       </Block>

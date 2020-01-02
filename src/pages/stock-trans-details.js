@@ -12,26 +12,31 @@ const StockTransDetails = props => {
   const { state, user } = useContext(StoreContext)
   const stockTrans = useMemo(() => state.stockTrans.find(t => t.id === props.id)
   , [state.stockTrans, props.id])
+  const stockTransBasket = useMemo(() => stockTrans.basket.map(p => {
+    const packInfo = state.packs.find(pa => pa.id === p.packId)
+    const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+    return {
+      ...p,
+      packInfo,
+      productInfo
+    }
+  }), [stockTrans, state.packs, state.products])
   if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={`${stockTransTypes.find(ty => ty.id === stockTrans.type).name} ${stockTrans.storeId ? state.stores.find(s => s.id === stockTrans.storeId).name : ''}`} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {stockTrans.basket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            return (
-              <ListItem 
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={`${labels.quantity}: ${quantityText(p.quantity)}`}
-                after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
-                key={p.packId}
-              >
-                <PackImage slot="media" pack={packInfo} type="list" />
-              </ListItem>
-            )}
+          {stockTransBasket.map(p => 
+            <ListItem 
+              title={p.productInfo.name}
+              subtitle={p.packInfo.name}
+              text={`${labels.quantity}: ${quantityText(p.quantity)}`}
+              after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
+              key={p.packId}
+            >
+              <PackImage slot="media" pack={p.packInfo} type="list" />
+            </ListItem>
           )}
         </List>
       </Block>

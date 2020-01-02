@@ -61,13 +61,13 @@ const labels = {
   editOrder: 'تعديل طلب',
   passwordRequests: 'طلبات كلمة السر',
   customers: 'العملاء',
-  choosePack: 'الرجاء اختيار الحزمة',
-  pack: 'الحزمة',
+  choosePack: 'الرجاء اختيار العبوة',
+  pack: 'العبوة',
   enterQuantity: 'الرجاء تحديد الكمية',
-  addPack: 'اضافة حزمة',
+  addPack: 'اضافة عبوة',
   edit: 'تعديل',
   delete: 'حذف',
-  editPack: 'تعديل حزمة',
+  editPack: 'تعديل عبوة',
   quantity: 'الكمية',
   loginSuccess: 'اهلا وسهلا بك',
   email: 'البريد اﻻلكتروني',
@@ -110,7 +110,7 @@ const labels = {
   newUsers: 'عملاء جدد',
   approveSuccess: 'تم اﻻعتماد بنجاح',
   approveUser: 'اعتماد عميل جديد',
-  priceAlarms: 'اشعارات اﻻسعار',
+  alarms: 'الاشعارات',
   notFoundPageTitle: 'الصفحة غير موجودة',
   notFoundPageError: 'حدث خطأ ... الصفحة غير موجودة',
   back: 'رجوع',
@@ -280,7 +280,10 @@ const labels = {
   otherUserMobile: 'رقم الموبايل البديل يعود لمستخدم اخر',
   friendName: 'اسم الصديق',
   mobileCheck: 'التحقق من الموبايل',
-  notUsedMobile: 'رقم الموبايل غير مستخدم'
+  notUsedMobile: 'رقم الموبايل غير مستخدم',
+  newProduct: 'اسم المنتج الجديد',
+  newPack: 'اسم العبوة الجديدة',
+  deliveryInterval: 'فترة التسليم'
 }
 
 export default labels

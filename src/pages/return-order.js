@@ -8,8 +8,26 @@ import { orderPackStatus } from '../data/config'
 
 const ReturnOrder = props => {
   const { state, user } = useContext(StoreContext)
-  const order = useMemo(() => state.orders.find(o => o.id === props.id)
-  , [state.orders, props.id])
+  const orderBasket = useMemo(() => {
+    const order = state.orders.find(o => o.id === props.id)
+    let basket = order.basket
+    basket = basket.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+      const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+      const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
+      return {
+        ...p,
+        packInfo,
+        productInfo,
+        storeName,
+        changePriceNote,
+        statusNote
+      }
+    })
+    return basket
+  }, [state.orders, state.packs, state.products, state.stores, props.id])
 
   if (!user) return <ReLogin />
   return(
@@ -17,27 +35,20 @@ const ReturnOrder = props => {
       <Navbar title={labels.returnOrder} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {order.basket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-            const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-            const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-            return (
-              <ListItem 
-                link={`/return-order-pack/${props.id}/pack/${p.packId}`}
-                key={p.packId} 
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={storeName ? `${labels.storeName}: ${storeName}` : ''}
-                footer={`${labels.status}: ${statusNote}`}
-                after={(p.gross / 1000).toFixed(3)}
-              >
-                {changePriceNote ? <div className="list-subtext1">{changePriceNote}</div> : ''}
-                <div className="list-subtext2">{quantityDetails(p)}</div>
-              </ListItem>
-            )
-          })}
+          {orderBasket.map(p => 
+            <ListItem 
+              link={`/return-order-pack/${props.id}/pack/${p.packId}`}
+              key={p.packId} 
+              title={p.productInfo.name}
+              subtitle={p.packInfo.name}
+              text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
+              footer={`${labels.status}: ${p.statusNote}`}
+              after={(p.gross / 1000).toFixed(3)}
+            >
+              {p.changePriceNote ? <div className="list-subtext1">{p.changePriceNote}</div> : ''}
+              <div className="list-subtext2">{quantityDetails(p)}</div>
+            </ListItem>
+          )}
         </List>
       </Block>
       <Toolbar bottom>

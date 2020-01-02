@@ -9,7 +9,16 @@ const RelatedProducts = props => {
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const relatedProducts = useMemo(() => {
-    const relatedProducts = state.products.filter(p => p.id !== props.id && p.tagId === product.tagId)
+    let relatedProducts = state.products.filter(p => p.id !== props.id && p.tagId === product.tagId)
+    relatedProducts = relatedProducts.map(p => {
+      const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+      const countryInfo = state.countries.find(c => c.id === p.countryId)
+      return {
+        ...p,
+        categoryInfo,
+        countryInfo
+      }
+    })
     return relatedProducts.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.products, product, props.id])
   return(
@@ -24,8 +33,8 @@ const RelatedProducts = props => {
                   <ListItem
                     link={`/product-packs/${p.id}`}
                     title={p.name}
-                    subtitle={state.categories.find(c => c.id === p.categoryId).name}
-                    text={`${labels.productOf} ${state.countries.find(c => c.id === p.countryId).name}`}
+                    subtitle={p.categoryInfo.name}
+                    text={`${labels.productOf} ${p.countryInfo.name}`}
                     key={p.id}
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

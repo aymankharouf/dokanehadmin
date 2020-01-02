@@ -58,13 +58,19 @@ const RequestedPackDetails = props => {
           }
         }
       }
+      const storeInfo = state.stores.find(st => st.id === s.storeId)
+      const packInfo = state.packs.find(p => p.id === s.packId)
+      const productInfo = state.products.find(p => p.id === packInfo.productId)
       return {
         ...s,
         packId,
         price,
         quantity,
         unitPrice,
-        isOffer
+        isOffer,
+        storeInfo,
+        packInfo,
+        productInfo
       }
     })
     packStores = packStores.filter(s => s.packId)
@@ -92,7 +98,7 @@ const RequestedPackDetails = props => {
         return s1.unitPrice - s2.unitPrice
       }
     })
-  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
+  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs, state.products])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -234,22 +240,17 @@ const RequestedPackDetails = props => {
               onClick={() => handleUnavailable(true)}
             />
           : ''}
-          {packStores.map(s => {
-            const storeInfo = state.stores.find(st => st.id === s.storeId)
-            const packInfo = state.packs.find(p => p.id === s.packId)
-            const productInfo = state.products.find(p => p.id === packInfo.productId)
-            return (
-              <ListItem 
-                title={storeInfo.name}
-                subtitle={`${productInfo.name} ${packInfo.name}`}
-                text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-                footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
-                key={s.id}
-              >
-                <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
-              </ListItem>
-            )
-          })}
+          {packStores.map(s => 
+            <ListItem 
+              title={s.storeInfo.name}
+              subtitle={`${s.productInfo.name} ${s.packInfo.name}`}
+              text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+              footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
+              key={s.id}
+            >
+              <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
+            </ListItem>
+          )}
         </List>
       </Block>
       <Toolbar bottom>

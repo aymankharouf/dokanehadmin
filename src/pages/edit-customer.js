@@ -4,6 +4,7 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { deliveryIntervals } from '../data/config'
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
@@ -25,6 +26,7 @@ const EditCustomer = props => {
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
+  const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval || '')
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
@@ -44,8 +46,9 @@ const EditCustomer = props => {
     if (exceedPrice !== customer.exceedPrice) return true
     if (deliveryFees * 1000 !== customer.deliveryFees) return true
     if (orderLimit * 1000 !== customer.orderLimit) return true
+    if (deliveryInterval !== customer.deliveryInterval) return true
     return false
-  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit])
+  }, [userInfo, customer, name, nickName, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -80,7 +83,8 @@ const EditCustomer = props => {
         otherMobile,
         exceedPrice,
         deliveryFees: deliveryFees * 1000,
-        orderLimit: orderLimit * 1000
+        orderLimit: orderLimit * 1000,
+        deliveryInterval
       }
       await editCustomer(customer, name)
       showMessage(labels.editSuccess)
@@ -179,6 +183,24 @@ const EditCustomer = props => {
           onChange={e => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
         />
+        <ListItem
+          title={labels.deliveryInterval}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="deliveryInterval" value={deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
+            <option value=""></option>
+            {deliveryIntervals.map(i => 
+              <option key={i.id} value={i.id}>{i.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="orderLimit" 
           label={labels.orderLimit}

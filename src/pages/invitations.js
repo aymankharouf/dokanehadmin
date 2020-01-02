@@ -10,9 +10,16 @@ import labels from '../data/labels'
 const Invitations = props => {
   const { state } = useContext(StoreContext)
   const invitations = useMemo(() => {
-    const invitations = state.invitations.filter(i => i.status === 'n')
+    let invitations = state.invitations.filter(i => i.status === 'n')
+    invitations = invitations.map(i => {
+      const userInfo = state.users.find(u => u.id === i.userId)
+      return {
+        ...i,
+        userInfo
+      }
+    })
     return invitations.sort((i1, i2) => i1.time.seconds - i2.time.seconds)
-  }, [state.invitations])
+  }, [state.invitations, state.users])
   return(
     <Page>
       <Navbar title={labels.invitations} backLink={labels.back} />
@@ -20,19 +27,16 @@ const Invitations = props => {
         <List mediaList>
           {invitations.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : invitations.map(i => {
-            const userInfo = state.users.find(u => u.id === i.userId)
-              return (
-                <ListItem
-                  link={`/invitation-details/${i.id}`}
-                  title={`${labels.user}: ${userInfo.name}`}
-                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={`${i.friendName}: ${i.friendMobile}`}
-                  footer={moment(i.time.toDate()).fromNow()}
-                  key={i.id}
-                />                
-              )
-            })
+          : invitations.map(i => 
+              <ListItem
+                link={`/invitation-details/${i.id}`}
+                title={`${labels.user}: ${i.userInfo.name}`}
+                subtitle={`${labels.mobile}: ${i.userInfo.mobile}`}
+                text={`${i.friendName}: ${i.friendMobile}`}
+                footer={moment(i.time.toDate()).fromNow()}
+                key={i.id}
+              />                
+            )
           }
         </List>
       </Block>

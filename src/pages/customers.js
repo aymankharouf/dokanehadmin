@@ -9,8 +9,16 @@ import labels from '../data/labels'
 
 const Customers = props => {
   const { state } = useContext(StoreContext)
-  const customers = useMemo(() => [...state.customers].sort((c1, c2) => c2.time.seconds - c1.time.seconds)
-  , [state.customers]) 
+  const customers = useMemo(() => {
+    const customers = state.customers.map(c => {
+      const userInfo = state.users.find(u => u.id === c.id)
+      return {
+        ...c,
+        userInfo
+      }
+    })
+    return customers.sort((c1, c2) => c2.time.seconds - c1.time.seconds)
+  }, [state.customers, state.users]) 
   return(
     <Page>
       <Navbar title={labels.customers} backLink={labels.back}>
@@ -33,20 +41,17 @@ const Customers = props => {
         <List mediaList className="search-list searchbar-found">
           {customers.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : customers.map(c => {
-              const userInfo = state.users.find(u => u.id === c.id)
-              return (
-                <ListItem
-                  link={`/customer-details/${c.id}/full/1`}
-                  title={`${labels.user}: ${userInfo.name}`}
-                  subtitle={`${labels.mobile}: ${userInfo.mobile}`}
-                  text={moment(c.time.toDate()).fromNow()}
-                  badge={c.isBlocked ? labels.isBlocked : ''}
-                  badgeColor="red"
-                  key={c.id}
-                />
-              )
-            })
+          : customers.map(c => 
+              <ListItem
+                link={`/customer-details/${c.id}/full/1`}
+                title={`${labels.user}: ${c.userInfo.name}`}
+                subtitle={`${labels.mobile}: ${c.userInfo.mobile}`}
+                text={moment(c.time.toDate()).fromNow()}
+                badge={c.isBlocked ? labels.isBlocked : ''}
+                badgeColor="red"
+                key={c.id}
+              />
+            )
           }
         </List>
       </Block>

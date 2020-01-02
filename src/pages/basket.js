@@ -9,8 +9,21 @@ const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
-  const basket = useMemo(() => state.basket ? [...state.basket.packs].sort((p1, p2) => p1.time - p2.time) : []
-  , [state.basket])
+  const basket = useMemo(() => {
+    let basket = state.basket ? state.basket.packs : []
+    basket = basket.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+      return {
+        ...p,
+        packInfo,
+        productInfo,
+        weightText
+      }
+    })
+    return basket.sort((p1, p2) => p1.time - p2.time)
+  }, [state.basket, state.packs, state.products])
   const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) : 0
   , [state.basket])
   let i = 0
@@ -31,30 +44,25 @@ const Basket = props => {
       <Navbar title={`${labels.basket_from} ${store?.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {basket.map(p => {
-            const packInfo = state.packs.find(pa => pa.id === p.packId)
-            const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-            const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-            return (
-              <ListItem
-                title={productInfo.name}
-                subtitle={packInfo.name}
-                text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-                footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
-                key={i++}
-              >
-                <PackImage slot="media" pack={packInfo} type="list" />
-                <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}</div>
-                <Stepper
-                  slot="after"
-                  fill
-                  buttonsOnly
-                  onStepperPlusClick={() => handleAdd(p)}
-                  onStepperMinusClick={() => dispatch({type: 'DECREASE_QUANTITY', pack: p})}
-                />
-              </ListItem>
-            )
-          })}
+          {basket.map(p => 
+            <ListItem
+              title={p.productInfo.name}
+              subtitle={p.packInfo.name}
+              text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+              key={i++}
+            >
+              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <Stepper
+                slot="after"
+                fill
+                buttonsOnly
+                onStepperPlusClick={() => handleAdd(p)}
+                onStepperMinusClick={() => dispatch({type: 'DECREASE_QUANTITY', pack: p})}
+              />
+            </ListItem>
+          )}
         </List>
       </Block>
       <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" href="/confirm-purchase/">

@@ -55,8 +55,10 @@ const PackDetails = props => {
           }
         }
       }
+      const storeInfo = state.stores.find(st => st.id === s.storeId)
       return {
         ...s,
+        storeInfo,
         packId,
         quantity,
         price,
@@ -160,26 +162,23 @@ const PackDetails = props => {
         </CardFooter>
       </Card>
       <List mediaList>
-      {packStores.map(s => {
-        const storeInfo = state.stores.find(st => st.id === s.storeId)
-        return (
-          <ListItem 
-            title={storeInfo.name}
-            subtitle={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}`}
-            footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
-            key={s.id}
-          >
-            {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
-            {s.isOffer ? 
-              <Badge slot="title" color='green'>{labels.offer}</Badge> 
-            : ''}
-            {s.storeId === 's' ? '' :
-              <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
-            }
-          </ListItem>
-        )
-      })}
+      {packStores.map(s => 
+        <ListItem 
+          title={s.storeInfo.name}
+          subtitle={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+          text={`${labels.price}: ${(s.price / 1000).toFixed(3)}`}
+          footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
+          key={s.id}
+        >
+          {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
+          {s.isOffer ? 
+            <Badge slot="title" color='green'>{labels.offer}</Badge> 
+          : ''}
+          {s.storeId === 's' ? '' :
+            <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
+          }
+        </ListItem>
+      )}
       </List>
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>

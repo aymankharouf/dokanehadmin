@@ -45,8 +45,8 @@ import CustomerDetails from './pages/customer-details'
 import EditCustomer from './pages/edit-customer'
 import NewUsers from './pages/new-users'
 import ApproveUser from './pages/approve-user'
-import PriceAlarms from './pages/price-alarms'
-import PriceAlarmDetails from './pages/price-alarm-details'
+import Alarms from './pages/alarms'
+import AlarmDetails from './pages/alarm-details'
 import Offers from './pages/offers'
 import Spendings from './pages/spendings'
 import AddSpending from './pages/add-spending'
@@ -190,12 +190,12 @@ export default [
     component: PasswordRequests
   },
   {
-    path: '/price-alarms/',
-    component: PriceAlarms
+    path: '/alarms/',
+    component: Alarms
   },
   {
-    path: '/price-alarm-details/:id',
-    component: PriceAlarmDetails
+    path: '/alarm-details/:id',
+    component: AlarmDetails
   },
   {
     path: '/offers/',

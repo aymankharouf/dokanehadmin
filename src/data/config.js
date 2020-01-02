@@ -7,7 +7,7 @@ export const setup = {
   exceedPricePercent: 5,
   returnPenalty: 100,
   invitationDiscount: 100,
-  priceAlarmDiscount: 100,
+  alarmDiscount: 100,
   firstOrderDiscount: 200,
   ratingDiscount: 50,
 }
@@ -91,5 +91,20 @@ export const storageTypes = [
   {id: 'f', name: 'مجمد'}
 ]
 
+export const alarmTypes = [
+  {id: '1', name: 'الابلاغ عن سعر أقل', actor: 'c'},
+  {id: '2', name: 'الابلاغ عن تغيير السعر', actor: 'o', isAvailable: true},
+  {id: '3', name: 'الابلاغ عن توفر هذا المنتج/العرض', actor: 'o', isAvailable: false},
+  {id: '4', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', actor: 'o', isAvailable: true},
+  {id: '5', name: 'الابلاغ عن توفر منتج بديل', actor: 'a'},
+  {id: '6', name: 'الابلاغ غن توفر عبوة جديدة للمنتج', actor: 'a'},
+  {id: '7', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: true},
+  {id: '8', name: 'الابلاغ عن عرض على شكل مجموعة', actor: 'o', isAvailable: true},
+]
 
-
+export const deliveryIntervals = [
+  {id: 'm', name: '9:00 - 12:00'},
+  {id: 'a', name: '14:00 - 17:00'},
+  {id: 'n', name: '19:00 - 22:00'},
+  {id: 'u', name: 'اي وقت'}
+]

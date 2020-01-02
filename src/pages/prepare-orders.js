@@ -36,8 +36,19 @@ const PrepareOrders = props => {
 				}
 			})
 		})
+		packsArray = packsArray.map(p => {
+			const packInfo = state.packs.find(pa => pa.id === p.packId)
+			const productInfo = state.products.find(pr => pr.id === packInfo.productId)
+			const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+			return {
+				...p,
+				packInfo,
+				productInfo,
+				weightText
+			}
+		})
 		setPacks(packsArray)
-	}, [finishedOrders])
+	}, [finishedOrders, state.packs, state.products])
   return(
     <Page>
       <Navbar title={labels.PurchasedProducts} backLink={labels.back} />
@@ -45,22 +56,17 @@ const PrepareOrders = props => {
 				<List mediaList>
 					{packs.length === 0 ? 
 						<ListItem title={labels.noData} /> 
-					: packs.map(p => {
-							const packInfo = state.packs.find(pa => pa.id === p.packId)
-							const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-							const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-							return (
-								<ListItem
-									link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
-									title={productInfo.name}
-									subtitle={packInfo.name}
-									text={`${labels.quantity}: ${quantityText(p.quantity)} ${weightText}`}
-									key={i++}
-								>
-									<PackImage slot="media" pack={packInfo} type="list" />
-								</ListItem>
-							)
-						})
+					: packs.map(p => 
+							<ListItem
+								link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
+								title={p.productInfo.name}
+								subtitle={p.packInfo.name}
+								text={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}
+								key={i++}
+							>
+								<PackImage slot="media" pack={p.packInfo} type="list" />
+							</ListItem>
+						)
 					}
 				</List>
       </Block>

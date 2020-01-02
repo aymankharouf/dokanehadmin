@@ -110,6 +110,8 @@
 *add ordering for sections & categories
 *prevent new order until approving the previous one
 *approve for invitations
+*diff in delivery fees as special discount
+*delivery intervals
 news
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
@@ -117,7 +119,6 @@ data types in firebase
 loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
-handle security for storePack in app application
 smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 delivery plan by locations
 modify store page (requested packs, ended offers, last request from owner, packs count)
@@ -137,7 +138,6 @@ customer follow-up
 advertisements & request for advert from store owner
 blacklist customer who did not pick his order
 store trans --purchases & returns
-delivery intervals
 test & load test & code review
 detect device size note
 button to add shortcut PWA
@@ -145,4 +145,5 @@ note for stop the service
 merging orders
 stores last month trans & requested packs that can be purchased from
 archive data
-diff in delivery fees as special discount
+firebase security && testing
+user name and customer name

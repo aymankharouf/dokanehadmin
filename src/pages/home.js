@@ -26,13 +26,18 @@ const Home = props => {
         <NavTitleLarge><img src="/dokaneh_logo.png" alt="logo" className="logo" /></NavTitleLarge>
       </Navbar>
       <Block>
-        {mainPages.map(p => {
-          return (
-            <Button large fill className="sections" color={randomColors[i++ % 10].name} href={`/${p.path}/`} key={p.id}>
-              <span className="section-label">{p.name}</span>
-            </Button>
-          )
-        })}
+        {mainPages.map(p => 
+          <Button 
+            large 
+            fill 
+            className="sections" 
+            color={randomColors[i++ % 10].name} 
+            href={`/${p.path}/`} 
+            key={p.id}
+          >
+            {p.name}
+          </Button>
+        )}
       </Block>
       <Toolbar bottom>
         <BottomToolbar isHome="1"/>
