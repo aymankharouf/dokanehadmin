@@ -1,11 +1,12 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
+import BottomToolbar from './bottom-toolbar'
 
 const StockPackTrans = props => {
   const { state } = useContext(StoreContext)
@@ -67,10 +68,10 @@ const StockPackTrans = props => {
             <ListItem title={labels.noData} /> 
           : packTrans.map(t => 
               <ListItem
-                title={`${t.stockTransTypesInfo.name} ${t.storeInfo?.name || ''}`}
-                subtitle={moment(t.time.toDate()).fromNow()}
-                text={`${labels.quantity}: ${quantityText(t.quantity)}`}
-                footer={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
+                title={`${t.stockTransTypeInfo.name} ${t.storeInfo?.name || ''}`}
+                subtitle={`${labels.quantity}: ${quantityText(t.quantity)}`}
+                text={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
+                footer={moment(t.time.toDate()).fromNow()}
                 key={t.id}
               >
                 {t.storeInfo?.canReturn ?
@@ -81,44 +82,19 @@ const StockPackTrans = props => {
           }
         </List>
       </Block>
-      <Popover className="popover-menu">
-        <List>
-          {stockPackInfo.quantity === 0 ? '' :
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={labels.donate} 
-              onClick={() => handleAddTrans('g')}
-            />
-          }
-          {stockPackInfo.quantity === 0 ? '' :
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={labels.destroy} 
-              onClick={() => handleAddTrans('d')}
-            />
-          }
-          {stockPackInfo.quantity === 0 ? '' :
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={labels.withdraw} 
-              onClick={() => handleAddTrans('w')}
-            />
-          }
-          {stockPackInfo.quantity === 0 ? '' :
-            <ListItem 
-              link={`/sell-store/${props.id}`}
-              popoverClose 
-              title={labels.sell} 
-            />
-          }
-        </List>
-      </Popover>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+        <Icon material="build"></Icon>
+      </Fab>
+      {stockPackInfo.quantity === 0 ? '' :
+        <Actions id="actions">
+          <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>
+          <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
+          <ActionsButton onClick={() => handleAddTrans('w')}>{labels.withdraw}</ActionsButton>
+          <ActionsButton onClick={() => props.f7router.navigate(`/sell-store/${props.id}`)}>{labels.sell}</ActionsButton>
+        </Actions>
+      }
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
-        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
+        <BottomToolbar/>
       </Toolbar>
     </Page>
   )

@@ -1,10 +1,11 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link, Toggle } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Toggle, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
+import BottomToolbar from './bottom-toolbar'
 
 const FollowupOrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -141,47 +142,26 @@ const FollowupOrderDetails = props => {
           />
         </List>
       </Block>
-      <Popover className="popover-menu">
-        <List>
-          <ListItem 
-            link={`/customer-details/${order.userId}/full/0`}
-            popoverClose 
-            title={labels.customerInfo} 
-          />
-          <ListItem 
-            link={`/return-order/${order.id}`}
-            popoverClose 
-            title={labels.returnPacks} 
-          />
-          {order.position === 's' && (order.total === 0 || order.status === 'd') ? '' :
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'd' ? labels.receiveOrderAmount : labels.toStore} 
-              onClick={() => handleSend()}
-            />
-          }
-          {order.total === 0 || order.status === 'd' ? '' :
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={labels.deliver} 
-              onClick={() => handleDelivery()}
-            />
-          }
-          {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
-            <ListItem 
-              link="#"
-              popoverClose 
-              title={labels.toStock} 
-              onClick={() => handleReturn()}
-            />
-          : ''}
-        </List>
-      </Popover>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+        <Icon material="build"></Icon>
+      </Fab>
+      <Actions id="actions">
+        <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/0`)}>{labels.customerInfo}</ActionsButton>
+        <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${order.id}`)}>{labels.returnPacks}</ActionsButton>
+        {order.position === 's' && (order.total === 0 || order.status === 'd') ? '' :
+          <ActionsButton onClick={() => handleSend()}>
+            {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'd' ? labels.receiveOrderAmount : labels.toStore}
+          </ActionsButton>
+        }
+        {order.total === 0 || order.status === 'd' ? '' :
+          <ActionsButton onClick={() => handleDelivery()}>{labels.deliver}</ActionsButton>
+        }
+        {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
+          <ActionsButton onClick={() => handleReturn()}>{labels.toStock}</ActionsButton>
+        : ''}
+      </Actions>
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
-        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
+        <BottomToolbar/>
       </Toolbar>
     </Page>
   )

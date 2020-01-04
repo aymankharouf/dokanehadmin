@@ -220,3 +220,7 @@
 .actions-button-text {
   font-size: 1rem;
 }
+
+.actions-button {
+  height: 3rem;
+}

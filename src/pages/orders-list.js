@@ -1,21 +1,24 @@
-import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Popover, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { orderStatus, orderPositions } from '../data/config'
+import { archiveOrder, showMessage, getMessage, showError } from '../data/actions'
 
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
+  const [currentOrder, setCurrentOrder] = useState('')
   const status = useMemo(() => orderStatus.find(s => s.id === props.id)
   , [props.id])
   const orders = useMemo(() => {
     let orders = state.orders.filter(o => o.status === props.id)
     orders = orders.map(o => {
       const userInfo = state.users.find(u => u.id === o.userId)
-      const customerInfo = state.customers.find(c => clearInterval.id === o.userId)
+      const customerInfo = state.customers.find(c => c.id === o.userId)
       const positionInfo = orderPositions.find(p => p.id === o.position)
       return {
         ...o,
@@ -26,6 +29,23 @@ const OrdersList = props => {
     })
     return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
   }, [state.orders, state.users, state.customers, props.id])
+  useEffect(() => {
+    if (error) {
+      showError(error)
+      setError('')
+    }
+  }, [error])
+
+  const handleArchive = order => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        await archiveOrder(order)
+        showMessage(labels.archiveSuccess)
+      } catch(err) {
+        setError(getMessage(props, err))
+      }
+    }) 
+  } 
   return(
     <Page>
       <Navbar title={`${labels.orders} ${status.name}`} backLink={labels.back}>
@@ -50,19 +70,36 @@ const OrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                link={`/order-details/${o.id}`}
-                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
-                subtitle={o.position ? o.positionInfo.name : ''}
+                title={o.customerInfo?.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
+                subtitle={o.positionInfo?.name || ''}
                 text={moment(o.time.toDate()).fromNow()}
-                footer={moment(o.statusTime.toDate()).fromNow()}
-                after={(o.total / 1000).toFixed(3)}
+                footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
                 key={o.id}
               >
                 {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
+                {['c', 'r', 'u', 'i', 's', 'd'].includes(props.id) ?
+                  <Link slot="after" popoverOpen=".orders-list-menu" iconMaterial="more_vert" onClick={()=> setCurrentOrder(o)}/>
+                : <Button slot="after" href={`/order-details/${o.id}`}>{labels.details}</Button>
+                }
               </ListItem>
             )
           }
         </List>
+        <Popover className="orders-list-menu">
+        <List>
+          <ListItem 
+            link={`/order-details/${currentOrder.id}`}
+            popoverClose 
+            title={labels.details} 
+          />
+          <ListItem 
+            link="#"
+            popoverClose 
+            title={labels.archive}
+            onClick={() => handleArchive(currentOrder)}
+          />
+          </List>
+        </Popover>
       </Block>
       <Toolbar bottom>
         <BottomToolbar/>

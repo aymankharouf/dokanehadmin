@@ -66,7 +66,7 @@ const AddStorePack = props => {
         time: new Date()
       }
       const pack = state.packs.find(p => p.id === packId)
-      await addStorePack(storePack, pack, state.storePacks)
+      await addStorePack(storePack, pack, state.storePacks, state.packs)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {

@@ -10,8 +10,8 @@ const AddProduct = props => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
-  const [trademarkId, setTrademarkId] = useState('')
-  const [countryId, setCountryId] = useState('')
+  const [trademark, setTrademark] = useState('')
+  const [country, setCountry] = useState('')
   const [tagId, setTagId] = useState('')
   const [storageId, setStorageId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -58,11 +58,14 @@ const AddProduct = props => {
       const product = {
         name,
         categoryId,
-        trademarkId,
-        countryId,
+        trademark,
+        country,
         tagId,
         storageId,
+        isActive: false,
         imageUrl,
+        sales: 0,
+        time: new Date()
       }
       await addProduct(product, image)
       showMessage(labels.addSuccess)
@@ -114,10 +117,10 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
+          <select name="trademark" value={trademark} onChange={e => setTrademark(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.name}>{t.name}</option>
             )}
           </select>
         </ListItem>
@@ -132,10 +135,10 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
+          <select name="country" value={country} onChange={e => setCountry(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.name}>{c.name}</option>
             )}
           </select>
         </ListItem>
@@ -178,7 +181,7 @@ const AddProduct = props => {
         <ListInput name="image" label={labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !countryId || !categoryId || !imageUrl ? '' :
+      {!name || !country || !categoryId || !imageUrl ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

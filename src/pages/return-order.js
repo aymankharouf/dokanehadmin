@@ -1,10 +1,11 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { quantityDetails } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
+import BottomToolbar from './bottom-toolbar'
 
 const ReturnOrder = props => {
   const { state, user } = useContext(StoreContext)
@@ -52,8 +53,7 @@ const ReturnOrder = props => {
         </List>
       </Block>
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
-        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
+        <BottomToolbar/>
       </Toolbar>
     </Page>
   )

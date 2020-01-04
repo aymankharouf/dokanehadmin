@@ -11,7 +11,7 @@ const ApproveUser = props => {
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
-  const [locationId, setLocationId] = useState(userInfo.locationId)
+  const [locationId, setLocationId] = useState('')
   const [address, setAddress] = useState('')
   const [storeId, setStoreId] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
@@ -57,6 +57,7 @@ const ApproveUser = props => {
       const storeName = storeId ? state.stores.find(s => s.id === storeId).name : ''
       await approveUser({
         id: props.id,
+        mobile: userInfo.mobile,
         name,
         storeId,
         locationId,

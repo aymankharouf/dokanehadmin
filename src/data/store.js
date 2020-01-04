@@ -102,7 +102,7 @@ const Store = props => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
-        const unsubscribeOrders = firebase.firestore().collection('orders').onSnapshot(docs => {
+        const unsubscribeOrders = firebase.firestore().collection('orders').where('isArchived', '==', false).onSnapshot(docs => {
           let orders = []
           docs.forEach(doc => {
             orders.push({...doc.data(), id:doc.id})

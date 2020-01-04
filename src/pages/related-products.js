@@ -12,15 +12,13 @@ const RelatedProducts = props => {
     let relatedProducts = state.products.filter(p => p.id !== props.id && p.tagId === product.tagId)
     relatedProducts = relatedProducts.map(p => {
       const categoryInfo = state.categories.find(c => c.id === p.categoryId)
-      const countryInfo = state.countries.find(c => c.id === p.countryId)
       return {
         ...p,
-        categoryInfo,
-        countryInfo
+        categoryInfo
       }
     })
     return relatedProducts.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.products, state.categories, state.countries, product, props.id])
+  }, [state.products, state.categories, product, props.id])
   return(
     <Page>
       <Navbar title={labels.relatedProducts} backLink={labels.back} />
@@ -34,7 +32,7 @@ const RelatedProducts = props => {
                     link={`/product-packs/${p.id}`}
                     title={p.name}
                     subtitle={p.categoryInfo.name}
-                    text={`${labels.productOf} ${p.countryInfo.name}`}
+                    text={`${labels.productOf} ${p.trademark ? labels.company + ' ' + p.trademark + '-' : ''}${p.country}`}
                     key={p.id}
                   >
                     <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

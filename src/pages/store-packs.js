@@ -1,14 +1,17 @@
-import React, { useContext, useMemo } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Popover } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
 import PackImage from './pack-image'
 import labels from '../data/labels'
+import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, getMessage, showError } from '../data/actions'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
+  const [currentStorePack, setCurrentStorePack] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
   let storePacks = useMemo(() => {
@@ -24,6 +27,72 @@ const StorePacks = props => {
     })
     return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
   }, [state.storePacks, state.packs, state.products, props.id])
+  useEffect(() => {
+    if (error) {
+      showError(error)
+      setError('')
+    }
+  }, [error])
+  const handleDelete = storePack => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        await deleteStorePack(storePack, state.storePacks, state.packs)
+        showMessage(labels.deleteSuccess)
+      } catch(err) {
+        setError(getMessage(props, err))
+      }
+    })
+  }
+  const handleConfirmPrice = async storePack => {
+    try{
+      await confirmPrice(storePack)
+      showMessage(labels.approveSuccess)
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+  }
+  const handleHaltOffer = async storePack => {
+    try{
+      const offerEndDate = new Date(storePack.offerEnd)
+      const today = (new Date()).setHours(0, 0, 0, 0)
+      if (offerEndDate > today) {
+        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+          try{
+            await haltOffer(storePack, state.storePacks, state.packs)
+            showMessage(labels.haltSuccess)
+            props.f7router.back()  
+          } catch(err) {
+            setError(getMessage(props, err))
+          }
+        })
+      } else {
+        await haltOffer(storePack, state.storePacks, state.packs)
+        showMessage(labels.haltSuccess)
+      }
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+  }
+  const handleExtendOffer = storePack => {
+    f7.dialog.prompt(labels.confirmationText, labels.confirmationTitle, async days => {
+      try{
+        if (!days || Number(days) <= 0) {
+          throw new Error('invalidValue')
+        }
+        const offerEnd = storePack.offerEnd.toDate()
+        offerEnd.setDate(offerEnd.getDate() + Number(days))
+        const newStorePack = {
+          ...storePack,
+          offerEnd
+        }
+        await extendOffer(newStorePack)
+        showMessage(labels.editSuccess)
+      } catch(err) {
+        setError(getMessage(props, err))
+      }
+    })
+  }
+
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={labels.back}>
@@ -48,16 +117,16 @@ const StorePacks = props => {
             <ListItem title={labels.noData} /> 
           : storePacks.map(p => 
               <ListItem
-                link={`/store-pack-details/${p.id}`}
                 title={p.productInfo.name}
                 subtitle={p.packInfo.name}
-                text={moment(p.time.toDate()).fromNow()}
+                text={(p.price / 1000).toFixed(3)}
                 footer={p.packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(p.packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
-                after={(p.price / 1000).toFixed(3)}
                 key={p.id}
               >
+                <div className="list-subtext1">{moment(p.time.toDate()).fromNow()}</div>
                 <PackImage slot="media" pack={p.packInfo} type="list" />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
+                <Link slot="after" popoverOpen=".store-packs-menu" iconMaterial="more_vert" onClick={()=> setCurrentStorePack(p)}/>
               </ListItem>
             )
           }
@@ -68,6 +137,50 @@ const StorePacks = props => {
           <Icon material="add"></Icon>
         </Fab>
       }
+      <Popover className="store-packs-menu">
+        <List>
+          {store.id === 's' && currentStorePack.quantity === 0 ? '' : 
+            <ListItem 
+              link={`/edit-price/${currentStorePack.id}`} 
+              popoverClose 
+              title={labels.editPrice}
+            />
+          }
+          {store.id === 's' ? '' : 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={labels.delete} 
+              onClick={() => handleDelete(currentStorePack)}
+            />
+          }
+          {store.id === 's' ? '' : 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={labels.confirmPrice} 
+              onClick={() => handleConfirmPrice(currentStorePack)}
+            />
+          }
+          {currentStorePack.offerEnd ? 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={labels.haltOffer} 
+              onClick={() => handleHaltOffer(currentStorePack)}
+            /> 
+          : ''}
+          {currentStorePack.offerEnd ? 
+            <ListItem 
+              link="#" 
+              popoverClose 
+              title={labels.extendOffer} 
+              onClick={() => handleExtendOffer(currentStorePack)}
+            /> 
+          : ''}
+        </List>
+      </Popover>
+
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

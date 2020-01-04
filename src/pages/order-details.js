@@ -1,10 +1,11 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Popover, Link } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
+import BottomToolbar from './bottom-toolbar'
 
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
@@ -56,9 +57,29 @@ const OrderDetails = props => {
     try{
       if (type === 'e') {
         props.f7router.navigate(`/edit-order/${order.id}`)
-      } else {
+      } else {  
         if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
+        }
+        if (type === 'i') {
+          f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+            try{
+              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId, true)
+              showMessage(labels.editSuccess)
+              props.f7router.back()
+            } catch(err) {
+              setError(getMessage(props, err))
+            }
+          },
+          async () => {
+            try{
+              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId, false)
+              showMessage(labels.editSuccess)
+              props.f7router.back()
+            } catch(err) {
+              setError(getMessage(props, err))
+            }
+          })
         }
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId)
         showMessage(labels.editSuccess)
@@ -124,27 +145,18 @@ const OrderDetails = props => {
           : ''}
         </List>
       </Block>
-      <Popover className="popover-menu">
-        <List>
-          <ListItem 
-            link={`/customer-details/${order.userId}/full/1`}
-            popoverClose 
-            title={labels.customerInfo} 
-          />
-          {statusActions.map(a => 
-            <ListItem 
-              link="#" 
-              key={a.id} 
-              popoverClose 
-              title={a.title} 
-              onClick={() => handleAction(a.id)}
-            />
-          )}
-        </List>
-      </Popover>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+        <Icon material="build"></Icon>
+      </Fab>
+      <Actions id="actions">
+        <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/1`)}>{labels.customerInfo}</ActionsButton>
+        {statusActions.map(a => 
+          <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.title}</ActionsButton>
+        )}
+      </Actions>
+
       <Toolbar bottom>
-        <Link href="/home/" iconMaterial="home" />
-        <Link popoverOpen=".popover-menu" iconMaterial="more_vert" />
+        <BottomToolbar/>
       </Toolbar>
     </Page>
   )

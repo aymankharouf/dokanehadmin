@@ -14,4 +14,5 @@ var config = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
 }
 firebase.initializeApp(config)
+firebase.firestore().enablePersistence()
 export default firebase

@@ -12,8 +12,8 @@ const EditProduct = props => {
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
   const [categoryId, setCategoryId] = useState(product.categoryId)
-  const [trademarkId, setTrademarkId] = useState(product.trademarkId)
-  const [countryId, setCountryId] = useState(product.countryId)
+  const [trademark, setTrademark] = useState(product.trademark)
+  const [country, setCountry] = useState(product.country)
   const [tagId, setTagId] = useState(product.tagId)
   const [storageId, setStorageId] = useState(product.storageId)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
@@ -43,14 +43,14 @@ const EditProduct = props => {
   }
   const hasChanged = useMemo(() => {
     if (name !== product.name) return true
-    if (countryId !== product.countryId) return true
+    if (country !== product.country) return true
     if (categoryId !== product.categoryId) return true
-    if (trademarkId !== product.trademarkId) return true
+    if (trademark !== product.trademark) return true
     if (tagId !== product.tagId) return true
     if (storageId !== product.storageId) return true
     if (imageUrl !== product.imageUrl) return true
     return false
-  }, [product, name, countryId, categoryId, trademarkId, tagId, storageId, imageUrl])
+  }, [product, name, country, categoryId, trademark, tagId, storageId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -64,8 +64,8 @@ const EditProduct = props => {
         id: props.id,
         categoryId,
         name,
-        trademarkId,
-        countryId,
+        trademark,
+        country,
         tagId,
         storageId,
         imageUrl
@@ -120,10 +120,10 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
+          <select name="trademark" value={trademark} onChange={e => setTrademark(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.name}>{t.name}</option>
             )}
           </select>
         </ListItem>
@@ -138,10 +138,10 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
+          <select name="country" value={country} onChange={e => setCountry(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.name}>{c.name}</option>
             )}
           </select>
         </ListItem>
@@ -192,7 +192,7 @@ const EditProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={name} />
       </List>
-      {!name || !countryId || !categoryId || !imageUrl || !hasChanged ? '' :
+      {!name || !country || !categoryId || !imageUrl || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

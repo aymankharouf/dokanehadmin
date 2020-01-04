@@ -23,8 +23,8 @@ const ProductPacks = props => {
           <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
         <CardFooter>
-          <p>{`${labels.productOf} ${state.countries.find(c => c.id === product.countryId).name}`}</p>
-          {product.trademarkId ? <p><RatingStars rating={product.rating} /></p> : ''}
+          <p>{`${labels.productOf} ${product.trademark ? labels.company + ' ' + product.trademark + '-' : ''}${product.country}`}</p>
+          {product.trademark ? <p><RatingStars rating={product.rating} /></p> : ''}
         </CardFooter>
       </Card>
       <List mediaList>
@@ -33,13 +33,12 @@ const ProductPacks = props => {
             link={`/pack-details/${p.id}`}
             title={p.name}
             subtitle={moment(p.time.toDate()).fromNow()}
+            text={p.isActive ? '' : labels.inActive}
             after={p.price ? (p.price / 1000).toFixed(3) : ''} 
             key={p.id} 
           >
             {p.isOffer ? 
-              <Badge slot="title" color="green">
-                {labels.offer}
-              </Badge> 
+              <Badge slot="title" color="green">{labels.offer}</Badge> 
             : ''}
           </ListItem>
         )}
@@ -47,7 +46,7 @@ const ProductPacks = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
         <Icon material="build"></Icon>
       </Fab>
-      <Actions id="actions" className="test">
+      <Actions id="actions">
         <ActionsButton onClick={() => props.f7router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>

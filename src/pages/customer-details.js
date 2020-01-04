@@ -11,8 +11,6 @@ const CustomerDetails = props => {
   , [state.customers, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
-  const customerOrders = useMemo(() => state.orders.filter(o => o.userId === props.id && o.status === 'd')
-  , [state.orders, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
 
@@ -82,7 +80,16 @@ const CustomerDetails = props => {
           <ListInput 
             name="totalOrders" 
             label={labels.totalOrders}
-            value={customerOrders.length}
+            value={customer.ordersCount}
+            type="number"
+            readonly
+          />
+        }
+        {props.full === '0' ? '' :
+          <ListInput 
+            name="totalDeliveredOrders" 
+            label={labels.totalDeliveredOrders}
+            value={customer.deliveredOrdersCount}
             type="number"
             readonly
           />

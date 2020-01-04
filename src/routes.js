@@ -11,7 +11,6 @@ import AddStorePack from './pages/add-store-pack'
 import AddProduct from './pages/add-product'
 import OrdersList from './pages/orders-list'
 import OrderDetails from './pages/order-details'
-import StorePackDetails from './pages/store-pack-details'
 import AddStore from './pages/add-store'
 import EditProduct from './pages/edit-product'
 import EditPrice from './pages/edit-price'
@@ -288,10 +287,6 @@ export default [
   {
     path: '/edit-offer/:id',
     component: EditOffer
-  },
-  {
-    path: '/store-pack-details/:id',
-    component: StorePackDetails
   },
   {
     path: '/edit-price/:id',

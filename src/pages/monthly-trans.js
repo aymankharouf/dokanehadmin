@@ -33,10 +33,13 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const profit = useMemo(() => monthlyTrans?.profit ?? deliveredOrders.reduce((sum, o) => sum + o.profit, 0)
   , [deliveredOrders, monthlyTrans])
-  const fixedFees = monthlyTrans?.fixedFees ?? deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
+  const fixedFees = useMemo(() => monthlyTrans?.fixedFees ?? deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0)
+  , [deliveredOrders, monthlyTrans])
   const deliveryFees = useMemo(() => monthlyTrans?.deliveryFees ?? deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0)
   , [deliveredOrders, monthlyTrans])
-  const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount ? o.discount : 0), 0)
+  const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + o.discount, 0)
+  , [deliveredOrders, monthlyTrans])
+  const specialDiscounts = useMemo(() => monthlyTrans?.specialDiscounts ?? deliveredOrders.reduce((sum, o) => sum + o.specialDiscount, 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -96,7 +99,8 @@ const MonthlyTrans = props => {
         expenses,
         donations,
         damages,
-        withdraws
+        withdraws,
+        specialDiscounts
       }
       await addMonthlyTrans(trans)
       showMessage(labels.addSuccess)
@@ -164,6 +168,11 @@ const MonthlyTrans = props => {
             link="#"
             title={labels.discounts}
             after={(discounts / 1000).toFixed(3)}
+          />
+          <ListItem
+            link="#"
+            title={labels.specialDiscounts}
+            after={(specialDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

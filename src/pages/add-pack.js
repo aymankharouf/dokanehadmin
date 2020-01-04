@@ -45,6 +45,7 @@ const AddPack = props => {
         byWeight,
         isOffer: false,
         price: 0,
+        isActive: false,
         time: new Date()
       })
       showMessage(labels.addSuccess)

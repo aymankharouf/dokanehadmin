@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Page, Navbar, List, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { logout } from '../data/actions'
 import labels from '../data/labels'
@@ -8,8 +8,8 @@ const Panel = props => {
   const { user, dispatch } = useContext(StoreContext)
   const handleLogout = () => {
     logout().then(() => {
-      props.f7router.app.views.main.router.navigate('/home/', {reloadAll: true})
-      props.f7router.app.panel.close('right') 
+      f7.views.main.router.navigate('/home/', {reloadAll: true})
+      f7.panel.close('right') 
       dispatch({type: 'CLEAR_BASKET'})
     })
   }

@@ -3,21 +3,20 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { getCategoryName } from '../data/actions'
 
 const Products = props => {
   const { state } = useContext(StoreContext)
   const products = useMemo(() => {
     const products = state.products.map(p => {
-      const countryInfo = state.countries.find(c => c.id === p.countryId)
       const categoryInfo = state.categories.find(c => c.id === p.categoryId)
       return {
         ...p,
-        countryInfo,
         categoryInfo
       }
     })
-    return products.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.products, state.countries, state.categories])
+    return products.sort((p1, p2) => p1.sales - p2.sales)
+  }, [state.products, state.categories])
   return(
     <Page>
       <Navbar title={labels.allProducts} backLink={labels.back}>
@@ -44,8 +43,9 @@ const Products = props => {
                 <ListItem
                   link={`/product-packs/${p.id}`}
                   title={p.name}
-                  subtitle={p.categoryInfo.name}
-                  text={`${labels.productOf} ${p.countryInfo.name}`}
+                  subtitle={getCategoryName(p.categoryInfo, state.categories)}
+                  text={`${labels.productOf} ${p.trademark ? labels.company + ' ' + p.trademark + '-' : ''}${p.country}`}
+                  footer={p.isActive ? '' : labels.inActive}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

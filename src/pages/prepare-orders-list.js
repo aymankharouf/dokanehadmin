@@ -12,7 +12,7 @@ const PrepareOrdersList = props => {
     let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
     orders = orders.map(o => {
       const userInfo = state.users.find(u => u.id === o.userId)
-      const customerInfo = state.customers.find(c => c.id === o.userid)
+      const customerInfo = state.customers.find(c => c.id === o.userId)
       return {
         ...o,
         userInfo,

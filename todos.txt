@@ -113,7 +113,14 @@
 *diff in delivery fees as special discount
 *delivery intervals
 *user name and customer name
-news
+*firebase security
+*navigation & performance
+*most wanted products
+*note for stop the service
+*blacklist customer who did not pick his order
+*archive data
+*offline db
+*notifications
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
 data types in firebase
@@ -121,29 +128,20 @@ loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
 smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
-delivery plan by locations
 modify store page (requested packs, ended offers, last request from owner, packs count)
 modify owner page to categorize his products
 add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 check for page permissions (admin & app)
-product describtion
-navigation & performance
 hints & help
-alert & notifications
-most wanted products
 product details (in stoke, sales, stores, in order)
 last ordered product by the user in the same category & its price & quantity
 purchase history by category for the user
 cancel a purchase or part of it
 customer follow-up
 advertisements & request for advert from store owner
-blacklist customer who did not pick his order
 store trans --purchases & returns
 test & load test & code review
 detect device size note
 button to add shortcut PWA
-note for stop the service
 merging orders
 stores last month trans & requested packs that can be purchased from
-archive data
-firebase security && testing

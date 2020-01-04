@@ -69,7 +69,7 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
-      const fullName = `${name}${storeId ? '-' + state.stores.find(s => s.id === storeId).name : ''}: ${state.users.find(u => u.id === customer.id).mobile}`
+      const fullName = `${name}${storeId ? '-' + state.stores.find(s => s.id === storeId).name : ''}: ${userInfo.mobile}`
       const customer = {
         id: props.id,
         name,
@@ -86,7 +86,7 @@ const EditCustomer = props => {
         orderLimit: orderLimit * 1000,
         deliveryInterval
       }
-      await editCustomer(customer, name)
+      await editCustomer(customer)
       showMessage(labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
@@ -106,14 +106,6 @@ const EditCustomer = props => {
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="mobile" 
-          label={labels.mobile}
-          value={userInfo.mobile}
-          floatingLabel 
-          type="number"
-          readonly
         />
         <ListItem
           title={labels.store}

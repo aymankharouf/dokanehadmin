@@ -13,16 +13,14 @@ const Stock = props => {
     storePacks = storePacks.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
       const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-      const countryInfo = state.countries.find(c => c.id === p.productInfo.countryId)
       return {
         ...p,
         packInfo,
         productInfo,
-        countryInfo
       }
     })
     return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
-    }, [state.storePacks, state.packs, state.products, state.countries])
+    }, [state.storePacks, state.packs, state.products])
   if (!user) return <ReLogin />
   return(
     <Page>
@@ -51,7 +49,7 @@ const Stock = props => {
                 link={`/stock-pack-trans/${p.packId}`}
                 title={p.productInfo.name}
                 subtitle={p.packInfo.name}
-                text={`${labels.productOf} ${p.countryInfo.name}`}
+                text={`${labels.productOf} ${p.productInfo.trademark ? labels.company + ' ' + p.productInfo.trademark + '-' : ''}${p.productInfo.country}`}
                 footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
                 after={(p.cost / 1000).toFixed(3)}
                 key={p.id}

@@ -29,11 +29,11 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
-          name="trademarkId" 
+          name="trademark" 
           label={labels.trademark}
           floatingLabel 
           type="text" 
-          value={product.trademarkId ? state.trademarks.find(t => t.id === product.trademarkId).name : ''}
+          value={product.trademark}
           readonly
         />
         <ListInput 
@@ -41,7 +41,7 @@ const ProductDetails = props => {
           label={labels.country}
           floatingLabel 
           type="text" 
-          value={state.countries.find(c => c.id === product.countryId).name}
+          value={product.country}
           readonly
         />
         <ListInput 
