@@ -86,7 +86,6 @@ const ApproveUser = props => {
         <ListInput 
           name="mobile" 
           label={labels.mobile}
-          floatingLabel 
           type="number"
           value={userInfo.mobile}
           readonly
@@ -94,7 +93,6 @@ const ApproveUser = props => {
         <ListInput 
           name="storeName" 
           label={labels.storeName}
-          floatingLabel 
           type="text"
           value={userInfo.storeName || ''}
           readonly

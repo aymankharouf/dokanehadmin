@@ -15,7 +15,6 @@ const ProductDetails = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           type="text" 
           value={product.name}
           readonly
@@ -23,7 +22,6 @@ const ProductDetails = props => {
         <ListInput 
           name="categoryId" 
           label={labels.category}
-          floatingLabel 
           type="text" 
           value={state.categories.find(c => c.id === product.categoryId).name}
           readonly
@@ -31,7 +29,6 @@ const ProductDetails = props => {
         <ListInput 
           name="trademark" 
           label={labels.trademark}
-          floatingLabel 
           type="text" 
           value={product.trademark}
           readonly
@@ -39,7 +36,6 @@ const ProductDetails = props => {
         <ListInput 
           name="countryId" 
           label={labels.country}
-          floatingLabel 
           type="text" 
           value={product.country}
           readonly
@@ -47,7 +43,6 @@ const ProductDetails = props => {
         <ListInput 
           name="tagId" 
           label={labels.tag}
-          floatingLabel 
           type="text" 
           value={product.tagId ? state.tags.find(t => t.id === product.tagId).name : ''}
           readonly
@@ -55,7 +50,6 @@ const ProductDetails = props => {
         <ListInput 
           name="storageId" 
           label={labels.storage}
-          floatingLabel 
           type="text" 
           value={product.storageId ? storageTypes.find(t => t.id === product.storageId).name : ''}
           readonly

@@ -10,6 +10,7 @@ export const setup = {
   alarmDiscount: 100,
   firstOrderDiscount: 200,
   ratingDiscount: 50,
+  deliveryFees: 200
 }
 
 export const randomColors = [
@@ -107,4 +108,16 @@ export const deliveryIntervals = [
   {id: 'a', name: 'بعد الظهر'},
   {id: 'n', name: 'مساءا'},
   {id: 'u', name: 'اي وقت'}
+]
+
+export const callTypes = [
+  {id: 'p', name: 'اتصال هاتفي'},
+  {id: 's', name: 'رسالة نصية'},
+  {id: 'w', name: 'واتساب'}
+]
+
+export const callResults = [
+  {id: 'r', name: 'تم التواصل'},
+  {id: 'n', name: 'لا استجابة'},
+  {id: 'p', name: 'تم تأجيل الاستلام'}
 ]

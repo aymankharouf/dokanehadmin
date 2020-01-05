@@ -39,7 +39,7 @@ const MonthlyTrans = props => {
   , [deliveredOrders, monthlyTrans])
   const discounts = useMemo(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + o.discount, 0)
   , [deliveredOrders, monthlyTrans])
-  const specialDiscounts = useMemo(() => monthlyTrans?.specialDiscounts ?? deliveredOrders.reduce((sum, o) => sum + o.specialDiscount, 0)
+  const deliveryDiscounts = useMemo(() => monthlyTrans?.deliveryDiscounts ?? deliveredOrders.reduce((sum, o) => sum + o.deliveryDiscount, 0)
   , [deliveredOrders, monthlyTrans])
   const purchaseDiscounts = useMemo(() => {
     const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
@@ -100,7 +100,7 @@ const MonthlyTrans = props => {
         donations,
         damages,
         withdraws,
-        specialDiscounts
+        deliveryDiscounts
       }
       await addMonthlyTrans(trans)
       showMessage(labels.addSuccess)
@@ -171,8 +171,8 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={labels.specialDiscounts}
-            after={(specialDiscounts / 1000).toFixed(3)}
+            title={labels.deliveryDiscounts}
+            after={(deliveryDiscounts / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

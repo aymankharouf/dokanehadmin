@@ -45,7 +45,7 @@ const EditOrder = props => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
-        await updateOrderStatus(order, type, state.storePacks, state.packs)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()

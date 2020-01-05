@@ -121,25 +121,23 @@
 *archive data
 *offline db
 *notifications
+*add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
+*customer follow-up
+modify owner page to categorize his products
+store trans --purchases & returns
+smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 debit
 ending offers & chance to feed stock by comparing the next price other than the offer
 data types in firebase
 loading indicator
 request for edit order partially 
 finished orders calling & feed back (if with delivery which time to deliver)
-smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 modify store page (requested packs, ended offers, last request from owner, packs count)
-modify owner page to categorize his products
-add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 check for page permissions (admin & app)
 hints & help
-product details (in stoke, sales, stores, in order)
-last ordered product by the user in the same category & its price & quantity
 purchase history by category for the user
 cancel a purchase or part of it
-customer follow-up
 advertisements & request for advert from store owner
-store trans --purchases & returns
 test & load test & code review
 detect device size note
 button to add shortcut PWA

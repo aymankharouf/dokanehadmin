@@ -90,7 +90,6 @@ const SellStore = props => {
             name="profit" 
             label={labels.profit}
             value={(profit / 1000).toFixed(3)}
-            floatingLabel 
             type="number" 
             readonly
           />

@@ -40,7 +40,6 @@ const RetreivePassword = props => {
           name="name" 
           label={labels.name}
           value={user.name}
-          floatingLabel 
           type="text" 
           readonly
         />
@@ -48,7 +47,6 @@ const RetreivePassword = props => {
           name="mobile" 
           label={labels.mobile}
           value={user.mobile}
-          floatingLabel 
           type="number"
           readonly
         />
@@ -56,7 +54,6 @@ const RetreivePassword = props => {
           name="password" 
           label={labels.password}
           value={password}
-          floatingLabel 
           type="number"
           readonly
         />

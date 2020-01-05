@@ -33,7 +33,7 @@ const FollowupOrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                link={`/followup-order-details/${o.id}`}
+                link={`/order-details/${o.id}/type/f`}
                 title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
                 subtitle={`${labels.status}: ${o.orderStatusInfo.name}`}
                 text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}

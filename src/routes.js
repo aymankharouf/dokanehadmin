@@ -74,7 +74,6 @@ import ReturnOrder from './pages/return-order'
 import ReturnOrderPack from './pages/return-order-pack'
 import FollowupOrders from './pages/followup-orders'
 import FollowupOrdersList from './pages/followup-orders-list'
-import FollowupOrderDetails from './pages/followup-order-details'
 import SellStore from './pages/sell-store'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
@@ -87,6 +86,11 @@ import AddBulk from './pages/add-bulk'
 import EditBulk from './pages/edit-bulk'
 import Invitations from './pages/invitations'
 import InvitationDetails from './pages/invitation-details'
+import Notifications from './pages/notifications'
+import AddNotification from './pages/add-notification'
+import ArchivedOrders from './pages/archived-orders'
+import CustomerCalls from './pages/customer-calls'
+import AddCall from './pages/add-call'
 
 export default [
   {
@@ -301,11 +305,11 @@ export default [
     component: OrdersList,
   },
   {
-    path: '/order-details/:id',
+    path: '/order-details/:id/type/:type',
     component: OrderDetails
   },
   {
-    path: '/cancel-request/:id/request/:requestId',
+    path: '/cancel-request/:id/request/:requestId/type/:type',
     component: OrderDetails
   },
   {
@@ -421,10 +425,6 @@ export default [
     component: FollowupOrdersList
   },
   {
-    path: '/followup-order-details/:id',
-    component: FollowupOrderDetails
-  },
-  {
     path: '/sell-store/:id',
     component: SellStore
   },
@@ -459,6 +459,26 @@ export default [
   {
     path: '/invitation-details/:id',
     component: InvitationDetails
+  },
+  {
+    path: '/notifications/',
+    component: Notifications
+  },
+  {
+    path: '/add-notification/',
+    component: AddNotification
+  },
+  {
+    path: '/archived-orders/',
+    component: ArchivedOrders
+  },
+  {
+    path: '/customer-calls/:id',
+    component: CustomerCalls
+  },
+  {
+    path: '/add-call/:id',
+    component: AddCall
   },
   {
     path: '(.*)',

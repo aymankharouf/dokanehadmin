@@ -228,7 +228,7 @@ const Reducer = (state, action) => {
           ...state,
           storePacks: action.storePacks
         }
-      case 'SET_CANCEL_REQUESTS/':
+      case 'SET_CANCEL_REQUESTS':
         return {
           ...state,
           cancelRequests: action.cancelRequests
@@ -242,6 +242,21 @@ const Reducer = (state, action) => {
         return {
           ...state,
           tags: action.tags
+        }
+      case 'SET_NOTIFICATIONS':
+        return {
+          ...state,
+          notifications: action.notifications
+        }
+      case 'SET_ARCHIVED_ORDERS':
+        return {
+          ...state,
+          archivedOrders: action.orders
+        }
+      case 'SET_CALLS':
+        return {
+          ...state,
+          calls: action.calls
         }
       default:
         return state

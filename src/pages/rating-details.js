@@ -43,7 +43,6 @@ const RatingDetails = props => {
           name="product" 
           label={labels.product}
           value={product.name}
-          floatingLabel 
           type="text" 
           readonly
         />
@@ -51,7 +50,6 @@ const RatingDetails = props => {
           name="user" 
           label={labels.user}
           value={customerInfo.name}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -59,7 +57,6 @@ const RatingDetails = props => {
           name="value" 
           label={labels.ratingValue}
           value={ratingValues.find(v => v.id === rating.value).name}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -67,7 +64,6 @@ const RatingDetails = props => {
           name="comment" 
           label={labels.comment}
           value={rating.comment}
-          floatingLabel 
           type="text"
           readonly
         />

@@ -23,27 +23,33 @@ const CustomerDetails = props => {
         </Fab>
       }
       <List form>
-        <ListInput 
-          name="userName" 
-          label={labels.userName}
-          value={userInfo.name}
-          type="text" 
-          readonly
-        />
-        <ListInput 
-          name="mobile" 
-          label={labels.mobile}
-          value={userInfo.mobile}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={customer.name}
-          type="text" 
-          readonly
-        />
+        {props.full === '0' ? '' :
+          <ListInput 
+            name="userName" 
+            label={labels.userName}
+            value={userInfo.name}
+            type="text" 
+            readonly
+          />
+        }
+        {props.full === '0' ? '' :
+          <ListInput 
+            name="mobile" 
+            label={labels.mobile}
+            value={userInfo.mobile}
+            type="number"
+            readonly
+          />
+        }
+        {props.full === '0' ? '' :
+          <ListInput 
+            name="name" 
+            label={labels.name}
+            value={customer.name}
+            type="text" 
+            readonly
+          />
+        }
         <ListInput 
           name="fullName" 
           label={labels.fullName}
@@ -112,9 +118,9 @@ const CustomerDetails = props => {
         }
         {props.full === '0' ? '' :
           <ListInput 
-            name="deliveryFees" 
-            label={labels.deliveryFees}
-            value={(customer.deliveryFees / 1000).toFixed(3)}
+            name="deliveryFees" sw
+            label={labels.deliveryDiscount}
+            value={(customer.deliveryDiscount / 1000).toFixed(3)}
             type="number"
             readonly
           />

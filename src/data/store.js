@@ -31,7 +31,10 @@ const Store = props => {
     storePacks: [],
     logs: [],
     cancelRequests: [],
-    tags: []
+    tags: [],
+    notifications: [],
+    archivedOrders: [],
+    calls: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -236,6 +239,24 @@ const Store = props => {
           dispatch({type: 'SET_TAGS', tags})
         }, err => {
           unsubscribeTags()
+        })  
+        const unsubscribeNotifications = firebase.firestore().collection('notifications').onSnapshot(docs => {
+          let notifications = []
+          docs.forEach(doc => {
+            notifications.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_NOTIFICATIONS', notifications})
+        }, err => {
+          unsubscribeNotifications()
+        })  
+        const unsubscribeCalls = firebase.firestore().collection('calls').onSnapshot(docs => {
+          let calls = []
+          docs.forEach(doc => {
+            calls.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_CALLS', calls})
+        }, err => {
+          unsubscribeCalls()
         })  
       }
     })

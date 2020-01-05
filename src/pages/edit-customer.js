@@ -23,7 +23,7 @@ const EditCustomer = props => {
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
-  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
+  const [deliveryDiscount, setDeliveryDiscount] = useState((customer.deliveryDiscount / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval || '')
   const stores = useMemo(() => {
@@ -42,11 +42,11 @@ const EditCustomer = props => {
     if (isBlocked !== customer.isBlocked) return true
     if (otherMobile !== customer.otherMobile) return true
     if (exceedPrice !== customer.exceedPrice) return true
-    if (deliveryFees * 1000 !== customer.deliveryFees) return true
+    if (deliveryDiscount * 1000 !== customer.deliveryDiscount) return true
     if (orderLimit * 1000 !== customer.orderLimit) return true
     if (deliveryInterval !== customer.deliveryInterval) return true
     return false
-  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
+  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -82,7 +82,7 @@ const EditCustomer = props => {
         isBlocked,
         otherMobile,
         exceedPrice,
-        deliveryFees: deliveryFees * 1000,
+        deliveryDiscount: deliveryDiscount * 1000,
         orderLimit: orderLimit * 1000,
         deliveryInterval
       }
@@ -157,13 +157,13 @@ const EditCustomer = props => {
         </ListItem>
         <ListInput 
           name="deliveryFees" 
-          label={labels.deliveryFees}
-          value={deliveryFees}
+          label={labels.deliveryDiscount}
+          value={deliveryDiscount}
           floatingLabel 
           clearButton
           type="number" 
-          onChange={e => setDeliveryFees(e.target.value)}
-          onInputClear={() => setDeliveryFees('')}
+          onChange={e => setDeliveryDiscount(e.target.value)}
+          onInputClear={() => setDeliveryDiscount('')}
         />
         <ListItem
           title={labels.deliveryInterval}

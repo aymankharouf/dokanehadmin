@@ -70,7 +70,7 @@ const OrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                title={o.customerInfo?.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
+                title={o.customerInfo?.fullName || `${o.userInfo?.name}:${o.userInfo?.mobile}`}
                 subtitle={o.positionInfo?.name || ''}
                 text={moment(o.time.toDate()).fromNow()}
                 footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
@@ -79,7 +79,7 @@ const OrdersList = props => {
                 {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
                 {['c', 'r', 'u', 'i', 's', 'd'].includes(props.id) ?
                   <Link slot="after" popoverOpen=".orders-list-menu" iconMaterial="more_vert" onClick={()=> setCurrentOrder(o)}/>
-                : <Button slot="after" href={`/order-details/${o.id}`}>{labels.details}</Button>
+                : <Button slot="after" href={`/order-details/${o.id}/type/n`}>{labels.details}</Button>
                 }
               </ListItem>
             )
@@ -88,7 +88,7 @@ const OrdersList = props => {
         <Popover className="orders-list-menu">
         <List>
           <ListItem 
-            link={`/order-details/${currentOrder.id}`}
+            link={`/order-details/${currentOrder.id}/type/n`}
             popoverClose 
             title={labels.details} 
           />

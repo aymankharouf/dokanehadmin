@@ -20,7 +20,6 @@ const StoreDetails = props => {
           name="name" 
           label={labels.name}
           value={store.name}
-          floatingLabel
           type="text" 
           readonly
         />
@@ -28,7 +27,6 @@ const StoreDetails = props => {
           name="mobile"
           label={labels.mobile}
           value={store.mobile || ''}
-          floatingLabel
           type="number"
           readonly
         />
@@ -36,7 +34,6 @@ const StoreDetails = props => {
           name="type"
           label={labels.type}
           value={storeTypes.find(t => t.id === store.type).name}
-          floatingLabel
           type="text"
           readonly
         />
@@ -44,7 +41,6 @@ const StoreDetails = props => {
           name="discount"
           label={labels.discount}
           value={store.discount || ''}
-          floatingLabel
           type="number"
           readonly
         />
@@ -61,7 +57,6 @@ const StoreDetails = props => {
           name="location"
           label={labels.location}
           value={store.locationId ? state.locations.find(l => l.id === store.locationId).name : ''}
-          floatingLabel
           type="text"
           readonly
         />
@@ -69,7 +64,6 @@ const StoreDetails = props => {
           name="address" 
           label={labels.address}
           value={store.address || ''}
-          floatingLabel
           type="text"
         />
         <ListItem

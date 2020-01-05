@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -10,8 +10,8 @@ import BottomToolbar from './bottom-toolbar'
 const OrderDetails = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const order = useMemo(() => state.orders.find(o => o.id === props.id)
-  , [state.orders, props.id])
+  const order = useMemo(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id)
+  , [state.orders, state.archivedOrders, props.id, props.type])
   const orderBasket = useMemo(() => order.basket.map(p => {
     const packInfo = state.packs.find(pa => pa.id === p.packId)
     const productInfo = state.products.find(pr => pr.id === packInfo.productId)
@@ -64,7 +64,7 @@ const OrderDetails = props => {
         if (type === 'i') {
           f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
             try{
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId, true)
+              await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, true)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
@@ -73,7 +73,7 @@ const OrderDetails = props => {
           },
           async () => {
             try{
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId, false)
+              await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, false)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
@@ -81,10 +81,49 @@ const OrderDetails = props => {
             }
           })
         }
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, state.invitations, props.requestId)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId)
         showMessage(labels.editSuccess)
         props.f7router.back()
       }  
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+  }
+  const handleSend = async () => {
+    try{
+      if (order.position !== 's' && order.status === 'd') {
+        f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
+          try{
+            await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
+            showMessage(labels.sendSuccess)
+            props.f7router.back()
+          } catch(err) {
+            setError(getMessage(props, err))
+          }
+        })  
+      } else {
+        await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
+        showMessage(labels.sendSuccess)
+        props.f7router.back()
+      }
+    } catch(err) {
+      setError(getMessage(props, err))
+    }
+  }
+  const handleDelivery = async () => {
+    try{
+      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.calls, state.users, state.invitations, props.cancelOrderId)
+      showMessage(labels.editSuccess)
+      props.f7router.back()
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+  }
+  const handleReturn = async () => {
+    try {
+      await returnOrder(order, state.storePacks, state.packs)
+      showMessage(labels.editSuccess)
+      props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
 		}
@@ -148,13 +187,33 @@ const OrderDetails = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
         <Icon material="build"></Icon>
       </Fab>
-      <Actions id="actions">
-        <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/1`)}>{labels.customerInfo}</ActionsButton>
-        {statusActions.map(a => 
-          <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.title}</ActionsButton>
-        )}
-      </Actions>
-
+      {props.type === 'f' ?
+        <Actions id="actions">
+          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/0`)}>{labels.customerInfo}</ActionsButton>
+          {order.status === 'p' ? 
+            <ActionsButton onClick={() => props.f7router.navigate(`/customer-calls/${order.userId}`)}>{labels.customerCalls}</ActionsButton>
+          : ''}
+          <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${order.id}`)}>{labels.returnPacks}</ActionsButton>
+          {order.position === 's' && (order.total === 0 || order.status === 'd') ? '' :
+            <ActionsButton onClick={() => handleSend()}>
+              {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'd' ? labels.receiveOrderAmount : labels.toStore}
+            </ActionsButton>
+          }
+          {order.total === 0 || order.status === 'd' ? '' :
+            <ActionsButton onClick={() => handleDelivery()}>{labels.deliver}</ActionsButton>
+          }
+          {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
+            <ActionsButton onClick={() => handleReturn()}>{labels.toStock}</ActionsButton>
+          : ''}
+        </Actions>
+      : 
+        <Actions id="actions">
+          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/1`)}>{labels.customerInfo}</ActionsButton>
+          {props.type === 'n' && statusActions.map(a => 
+            <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.title}</ActionsButton>
+          )}
+        </Actions>
+      }
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

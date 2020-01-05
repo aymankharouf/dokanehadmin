@@ -33,7 +33,7 @@ const CancelRequests = props => {
             <ListItem title={labels.noData} /> 
           : cancelRequests.map(r => 
               <ListItem
-                link={`/cancel-request/${r.order.id}/request/${r.id}`}
+                link={`/cancel-request/${r.order.id}/request/${r.id}/type/n`}
                 title={r.customerInfo.fullName || `${r.userinfo.name}:${r.userinfo.mobile}`}
                 subtitle={r.orderStatusInfo.name}
                 text={moment(r.time.toDate()).fromNow()}

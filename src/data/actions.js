@@ -239,13 +239,14 @@ export const returnOrder = (order, storePacks, packs) => {
   if (returnedPenalty > 0) {
     const customerRef = firebase.firestore().collection('customers').doc(order.userId)
     batch.update(customerRef, {
-      discounts: firebase.firestore.FieldValue.increment(-1 * returnedPenalty)
+      discounts: firebase.firestore.FieldValue.increment(-1 * returnedPenalty),
+      returnedCount: firebase.firestore.FieldValue.increment(basket.length)
     })    
   }
   return batch.commit()
 }
 
-export const updateOrderStatus = (order, type, storePacks, packs, users, invitations, cancelRequestId, blockUserFlag) => {
+export const updateOrderStatus = (order, type, storePacks, packs, calls, users, invitations, cancelRequestId, blockUserFlag) => {
   const batch = firebase.firestore().batch()
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
@@ -256,19 +257,21 @@ export const updateOrderStatus = (order, type, storePacks, packs, users, invitat
     const cancelRequestRef = firebase.firestore().collection('cancel-requests').doc(cancelRequestId)
     batch.update(cancelRequestRef, {
       status: 'a'
-    })  
+    })
+    sendNotification(batch, order.userId, labels.approveCancelRequestNotification)
   }
   let customerRef
   if (type === 'a') {
     customerRef = firebase.firestore().collection('customers').doc(order.userId)
     batch.update(customerRef, {
       ordersCount: firebase.firestore.FieldValue.increment(1)
-    })  
+    }) 
     if (order.discount > 0 && order.discount < setup.firstOrderDiscount) { //not first order
       batch.update(customerRef, {
         discounts: firebase.firestore.FieldValue.increment(-1 * order.discount)
       })  
     }
+    sendNotification(batch, order.userId, labels.approveOrderNotification)
   } else if (type === 'c') {
     if (order.discount > 0 && order.discount < setup.firstOrderDiscount) { //not first order
       customerRef = firebase.firestore().collection('customers').doc(order.userId)
@@ -284,7 +287,9 @@ export const updateOrderStatus = (order, type, storePacks, packs, users, invitat
       batch.update(customerRef, {
         isBlocked: true
       })
+      sendNotification(batch, order.userId, labels.blockCustomerNotification)
     }
+    deleteCalls(batch, order, calls)
   } else if (type === 'd'){
     order.basket.forEach(p => {
       const packInfo = packs.find(pa => pa.id === p.packId)
@@ -295,7 +300,8 @@ export const updateOrderStatus = (order, type, storePacks, packs, users, invitat
     })
     customerRef = firebase.firestore().collection('customers').doc(order.userId)
     batch.update(customerRef, {
-      deliveredOrdersCount: firebase.firestore.FieldValue.increment(1)
+      deliveredOrdersCount: firebase.firestore.FieldValue.increment(1),
+      deliveredOrdersTotal: firebase.firestore.FieldValue.increment(order.total)
     })  
     const userInfo = users.find(u => u.id === order.userId)
     const invitedBy = invitations.find(i => i.friendMobile === userInfo.mobile && i.status === 'a')
@@ -310,6 +316,7 @@ export const updateOrderStatus = (order, type, storePacks, packs, users, invitat
         position: firebase.firestore.FieldValue.delete()
       })
     }
+    deleteCalls(batch, order, calls)
   }
   return batch.commit()
 }
@@ -858,7 +865,7 @@ export const approveUser = user => {
     storeId: user.storeId,
     address: user.address,
     orderLimit: 0,
-    deliveryFees: 0,
+    deliveryDiscount: 0,
     withDelivery: false,
     deliveryInterval: '',
     locationId: user.locationId,
@@ -870,6 +877,8 @@ export const approveUser = user => {
     exceedPrice: false,
     ordersCount: 0,
     deliveredOrdersCount: 0,
+    returnedCount: 0,
+    deliveredOrdersTotal: 0,
     time: new Date()
   })
   const userRef = firebase.firestore().collection('users').doc(user.id)
@@ -895,6 +904,7 @@ export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) =>
     batch.update(customerRef, {
       discounts: firebase.firestore.FieldValue.increment(setup.alarmDiscount)
     })
+    sendNotification(batch, customer.id, labels.approveAlarmNotification)
   } else if (alarm.alarmType === '2') {
     const oldPrice = storePack.price
     const newStorePack = { 
@@ -917,6 +927,7 @@ export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) =>
         offerEnd
       })
     }
+    sendNotification(batch, customer.id, labels.approveOweneChangePriceNotification)
   } else if (alarm.alarmType === '4') {
     const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
     batch.delete(storePackRef)
@@ -939,6 +950,7 @@ export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) =>
         }
       }
     }
+    sendNotification(batch, customer.id, labels.approveOweneDeletemNotification)
   }
   return batch.commit()
 }
@@ -1102,6 +1114,7 @@ export const approveRating = (rating, product, userInfo) => {
   batch.update(customerRef, {
     discounts: firebase.firestore.FieldValue.increment(setup.ratingDiscount)
   })
+  sendNotification(batch, rating.userId, labels.approveRatingNotification)
   return batch.commit()
 }
 
@@ -1193,6 +1206,7 @@ export const addStockTrans = (type, packId, quantity, cost, price, storePacks, p
 }
 
 export const allocateOrderPack = (order, pack) => {
+  const batch = firebase.firestore().batch()
   const orderPack = order.basket.find(p => p.packId === pack.id)
   const otherPacks = order.basket.filter(p => p.packId !== pack.id)
   const basket = [
@@ -1203,20 +1217,66 @@ export const allocateOrderPack = (order, pack) => {
     }
   ]
   const isFinished = basket.filter(p => p.purchased > 0).length === basket.filter(p => p.purchased > 0 && p.isAllocated).length
-  return firebase.firestore().collection('orders').doc(order.id).update({
+  const orderRef = firebase.firestore().collection('orders').doc(order.id)
+  batch.update(orderRef, {
     basket,
     status: isFinished ? 'p' : order.status,
     position: isFinished ? 's' : '',
     statusTime: isFinished ? new Date() : order.statusTime
   })
+  sendNotification(batch, order.userId, order.withDelivery ? labels.prepareOrderWithDeliveryNotification : labels.prepareOrderNotification)
+  return batch.commit()
 }
 
 export const approveInvitation = invitation => {
-  return firebase.firestore().collection('invitations').doc(invitation.id).update(invitation)
+  const batch = firebase.firestore().batch()
+  const invitationRef = firebase.firestore().collection('invitations').doc(invitation.id)
+  batch.update(invitationRef, invitation)
+  sendNotification(batch, invitation.userId, labels.approveInvitationNotification)
 }
 
 export const archiveOrder = order => {
   return firebase.firestore().collection('orders').doc(order.id).update({
     isArchived: true
+  })
+}
+
+export const addNotification = notification => {
+  return firebase.firestore().collection('notifications').add(notification)
+}
+
+export const deleteNotification = notification => {
+  return firebase.firestore().collection('notifications').doc(notification.id).delete()
+}
+
+const sendNotification = (batch, toCustomerId, message) => {
+  const notificationRef = firebase.firestore().collection('notifications').doc()
+  batch.set(notificationRef, {
+    toCustomerId,
+    message,
+    status: 'n',
+    time: new Date()
+  })
+}
+
+export const getArchivedOrders = async () => {
+  let orders = []
+  await firebase.firestore().collection('orders').where('isArchived', '==', true).get().then(docs => {
+    docs.forEach(doc => {
+      orders.push({...doc.data(), id:doc.id})
+    })
+  })
+  return orders
+}
+
+export const addCall = call => {
+  return firebase.firestore().collection('calls').add(call)
+}
+
+const deleteCalls = (batch, order, calls) => {
+  const customerCalls = calls.filter(c => c.userId === order.userId)
+  customerCalls.forEach(c => {
+    const callRef = firebase.firestore().collection('calls').doc(c.id)
+    batch.delete(callRef)
   })
 }

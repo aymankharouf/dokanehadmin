@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
@@ -24,9 +24,9 @@ const AddProduct = props => {
         name: getCategoryName(c, state.categories)
       }
     })
-    return categories
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   }, [state.categories])
-  const trademarks = useMemo(() => [...state.trademarks].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
   , [state.trademarks])
   const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.countries]) 

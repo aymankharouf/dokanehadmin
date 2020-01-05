@@ -30,6 +30,10 @@ const Orders = props => {
               key={s.id}
             />
           )}
+          <ListItem 
+            link="/archived-orders/" 
+            title={labels.archived} 
+          />
 				</List>
       </Block>
       <Toolbar bottom>

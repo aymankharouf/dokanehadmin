@@ -51,7 +51,6 @@ const InvitationDetails = props => {
           name="userName" 
           label={labels.user}
           value={customerInfo.fullName || `${userInfo.name}:${userInfo.mobile}`}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -59,7 +58,6 @@ const InvitationDetails = props => {
           name="friendName" 
           label={labels.friendName}
           value={invitation.friendName}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -67,7 +65,6 @@ const InvitationDetails = props => {
           name="friendMobile" 
           label={labels.mobile}
           value={invitation.friendMobile}
-          floatingLabel 
           type="text"
           readonly
         />
@@ -75,7 +72,6 @@ const InvitationDetails = props => {
           name="mobileCheck" 
           label={labels.mobileCheck}
           value={mobileCheck ? labels.notUsedMobile : labels.otherUserMobile}
-          floatingLabel 
           type="text"
           readonly
         />

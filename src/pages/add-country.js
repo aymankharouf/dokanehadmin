@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { addCountry, showMessage, showError, getMessage } from '../data/actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar} from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 
