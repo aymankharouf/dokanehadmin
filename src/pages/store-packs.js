@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import PackImage from './pack-image'
 import labels from '../data/labels'
-import { deleteStorePack, confirmPrice, haltOffer, extendOffer, showMessage, getMessage, showError } from '../data/actions'
+import { deleteStorePack, haltOffer, showMessage, getMessage, showError } from '../data/actions'
 
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
@@ -43,14 +43,6 @@ const StorePacks = props => {
       }
     })
   }
-  const handleConfirmPrice = async storePack => {
-    try{
-      await confirmPrice(storePack)
-      showMessage(labels.approveSuccess)
-    } catch(err) {
-			setError(getMessage(props, err))
-		}
-  }
   const handleHaltOffer = async storePack => {
     try{
       const offerEndDate = new Date(storePack.offerEnd)
@@ -73,26 +65,6 @@ const StorePacks = props => {
 			setError(getMessage(props, err))
 		}
   }
-  const handleExtendOffer = storePack => {
-    f7.dialog.prompt(labels.confirmationText, labels.confirmationTitle, async days => {
-      try{
-        if (!days || Number(days) <= 0) {
-          throw new Error('invalidValue')
-        }
-        const offerEnd = storePack.offerEnd.toDate()
-        offerEnd.setDate(offerEnd.getDate() + Number(days))
-        const newStorePack = {
-          ...storePack,
-          offerEnd
-        }
-        await extendOffer(newStorePack)
-        showMessage(labels.editSuccess)
-      } catch(err) {
-        setError(getMessage(props, err))
-      }
-    })
-  }
-
   return(
     <Page>
       <Navbar title={`${store.name}`} backLink={labels.back}>
@@ -154,28 +126,12 @@ const StorePacks = props => {
               onClick={() => handleDelete(currentStorePack)}
             />
           }
-          {store.id === 's' ? '' : 
-            <ListItem 
-              link="#" 
-              popoverClose 
-              title={labels.confirmPrice} 
-              onClick={() => handleConfirmPrice(currentStorePack)}
-            />
-          }
           {currentStorePack.offerEnd ? 
             <ListItem 
               link="#" 
               popoverClose 
               title={labels.haltOffer} 
               onClick={() => handleHaltOffer(currentStorePack)}
-            /> 
-          : ''}
-          {currentStorePack.offerEnd ? 
-            <ListItem 
-              link="#" 
-              popoverClose 
-              title={labels.extendOffer} 
-              onClick={() => handleExtendOffer(currentStorePack)}
             /> 
           : ''}
         </List>

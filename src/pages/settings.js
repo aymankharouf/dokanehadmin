@@ -20,14 +20,7 @@ const Settings = props => {
       <Navbar title={labels.settings} backLink={labels.back} />
       <Block>
         {sections.map(s => 
-          <Button 
-            large 
-            fill 
-            className="sections" 
-            color={randomColors[i++ % 10].name} 
-            href={s.path} 
-            key={s.id}
-          >
+          <Button large fill className="sections" color={randomColors[i++ % 10].name} href={s.path} key={s.id}>
             {s.name}
           </Button>
         )}

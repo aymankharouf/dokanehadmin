@@ -123,23 +123,17 @@
 *notifications
 *add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 *customer follow-up
+*finished orders calling & feed back
+*prevent archive order before monthly trans
 modify owner page to categorize his products
 store trans --purchases & returns
 smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 debit
-ending offers & chance to feed stock by comparing the next price other than the offer
-data types in firebase
-loading indicator
 request for edit order partially 
-finished orders calling & feed back (if with delivery which time to deliver)
-modify store page (requested packs, ended offers, last request from owner, packs count)
 check for page permissions (admin & app)
 hints & help
 purchase history by category for the user
 cancel a purchase or part of it
 advertisements & request for advert from store owner
-test & load test & code review
-detect device size note
-button to add shortcut PWA
 merging orders
 stores last month trans & requested packs that can be purchased from

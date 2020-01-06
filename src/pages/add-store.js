@@ -55,7 +55,8 @@ const AddStore = props => {
         locationId,
         position,
         canReturn,
-        address
+        address,
+        lastUpdate: new Date()
       })
       showMessage(labels.addSuccess)
       props.f7router.back()

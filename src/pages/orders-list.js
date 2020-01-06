@@ -39,6 +39,11 @@ const OrdersList = props => {
   const handleArchive = order => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
+        const year = (order.time.toDate()).getFullYear()
+        const month = (order.time.toDate()).getMonth() + 1
+        if (!state.monthlyTrans.find(t => t.id === year * 100 + month)) {
+          throw new Error('noArchiveBeforeMothlyTrans')
+        }
         await archiveOrder(order)
         showMessage(labels.archiveSuccess)
       } catch(err) {
@@ -73,7 +78,7 @@ const OrdersList = props => {
                 title={o.customerInfo?.fullName || `${o.userInfo?.name}:${o.userInfo?.mobile}`}
                 subtitle={o.positionInfo?.name || ''}
                 text={moment(o.time.toDate()).fromNow()}
-                footer={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
+                footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 key={o.id}
               >
                 {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}

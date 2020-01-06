@@ -186,9 +186,7 @@ const labels = {
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
   nickName: 'الاسم المختصر',
   confirmationTitle: 'تأكيد العملية',
-  confirmPrice: 'تثبيت السعر',
   haltOffer: 'تعليق العرض',
-  extendOffer: 'تمديد العرض',
   purchaseDiscounts: 'خصومات المشتريات',
   discountBalance: 'رصيد الخصومات',
   discounts: 'الخصومات',
@@ -303,8 +301,8 @@ const labels = {
   prepareOrderWithDeliveryNotification: 'تم تجهيز طلبك سوف يتم التواصل معك من قبل الموزع لاستلامه',
   prepareOrderNotification: 'تم تجهيز طلبك يمكنك استلامه من مركز التوزيع',
   approveAlarmNotification: 'تم اعتماد بلاغك عن سعر اقل، سوف تحصل على خصم في طلبك القادم',
-  approveOweneChangePriceNotification: 'تم اعتماد طلبك بتغيير السعر',
-  approveOweneDeletemNotification: 'تم اعتماد طلبك بنفاد منتج من محلك',
+  approveOwenerChangePriceNotification: 'تم تغيير السعر للمنتج بناء على طلبك',
+  approveOwenerDeletemNotification: 'تم حذف المنتج من محلك بناء على طلبك',
   approveRatingNotification: 'تم اعتماد تقييمك للمنتج، سوف تحصل على خصم في طلبك القادم',
   approveCancelRequestNotification: 'تم اعتماد طلبك بإلغاء طلب الشراء',
   approveInvitationNotification: 'تم اعتماد دعوتك لصديق، سوف تحصل على خصم بمجرد ان يقوم صديقك بأول عملية شراء',
@@ -313,7 +311,8 @@ const labels = {
   callResult: 'نتيجة الاتصال',
   addCall: 'اثبات اتصال',
   customerCalls: 'الاتصال بالعميل',
-  callsTo: 'الاتصالات بـ'
+  callsTo: 'الاتصالات بـ',
+  noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية'
 }
 
 export default labels

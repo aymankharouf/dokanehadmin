@@ -36,7 +36,7 @@ const FollowupOrdersList = props => {
                 link={`/order-details/${o.id}/type/f`}
                 title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
                 subtitle={`${labels.status}: ${o.orderStatusInfo.name}`}
-                text={o.statusTime ? moment(o.statusTime.toDate()).fromNow() : ''}
+                text={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 footer={o.withDelivery ? labels.withDeliveryNote : ''}
                 after={(o.total / 1000).toFixed(3)}
                 key={o.id}
