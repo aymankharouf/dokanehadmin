@@ -50,12 +50,12 @@ export const storeTypes = [
 
 export const stockTransTypes = [
   {id: 'p', name: 'شراء'},
-  {id: 's', name: 'بيع'},
+  {id: 'r', name: 'بيع تجزئة'},
   {id: 'i', name: 'استيداع'},
   {id: 'd', name: 'اتلاف'},
   {id: 'g', name: 'تبرع'},
   {id: 'r', name: 'ارجاع'},
-  {id: 'c', name: 'تصريف'},
+  {id: 's', name: 'بيع'},
   {id: 'w', name: 'سحب'}
 ]
 

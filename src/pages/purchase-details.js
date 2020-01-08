@@ -5,6 +5,7 @@ import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
+import PackImage from './pack-image'
 
 
 const PurchaseDetails = props => {
@@ -37,7 +38,9 @@ const PurchaseDetails = props => {
                 footer={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}
                 after={(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
                 key={p.packId} 
-              />
+              >
+                <PackImage slot="media" pack={p.packInfo} type="list" />
+              </ListItem>
             )}
           </List>
       </Block>

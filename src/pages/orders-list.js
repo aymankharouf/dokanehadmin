@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Popover, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Popover } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -75,6 +75,7 @@ const OrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
+                link={['n', 'a', 'e', 'f', 'p'].includes(props.id) ? `/order-details/${o.id}/type/n` : ''}
                 title={o.customerInfo?.fullName || `${o.userInfo?.name}:${o.userInfo?.mobile}`}
                 subtitle={o.positionInfo?.name || ''}
                 text={moment(o.time.toDate()).fromNow()}
@@ -82,9 +83,8 @@ const OrdersList = props => {
                 key={o.id}
               >
                 {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
-                {['c', 'r', 'u', 'i', 's', 'd'].includes(props.id) ?
+                {['n', 'a', 'e', 'f', 'p'].includes(props.id) ? '' :
                   <Link slot="after" popoverOpen=".orders-list-menu" iconMaterial="more_vert" onClick={()=> setCurrentOrder(o)}/>
-                : <Button slot="after" href={`/order-details/${o.id}/type/n`}>{labels.details}</Button>
                 }
               </ListItem>
             )

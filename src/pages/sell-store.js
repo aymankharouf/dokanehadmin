@@ -35,7 +35,7 @@ const SellStore = props => {
       if (Number(quantity) <= 0 || Number(quantity) > packStock.quantity) {
         throw new Error('invalidValue')
       }
-      await addStockTrans('c', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
+      await addStockTrans('s', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {

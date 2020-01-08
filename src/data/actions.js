@@ -296,7 +296,7 @@ export const updateOrderStatus = (order, type, storePacks, packs, calls, users, 
       const packInfo = packs.find(pa => pa.id === p.packId)
       const productRef = firebase.firestore().collection('products').doc(packInfo.productId)
       batch.update(productRef, {
-        sales: firebase.firestore.FieldValue.increment(p.quantity)
+        sales: firebase.firestore.FieldValue.increment(p.purchased)
       })
     })
     customerRef = firebase.firestore().collection('customers').doc(order.userId)
@@ -488,7 +488,7 @@ export const stockOut = (basket, orders, storePacks, packs, customers) => {
   const total = packBasket.reduce((sum, p) => sum + parseInt(p.price * p.quantity), 0)
   batch.set(transRef, {
     basket: packBasket,
-    type: 's',
+    type: 'r',
     total,
     time: new Date()
   })
@@ -1311,4 +1311,93 @@ const deleteCalls = (batch, order, calls) => {
     const callRef = firebase.firestore().collection('calls').doc(c.id)
     batch.delete(callRef)
   })
+}
+
+export const requestedPacks = (orders, basket, customers, packs, products) => {
+  let packsArray = []
+  orders.forEach(o => {
+    const customerInfo = customers.find(c => c.id === o.userId)
+    o.basket.forEach(p => {
+      let exceedPriceQuantity = 0
+      if (p.status === 'n' || p.status === 'p') {
+        const packInfo = packs.find(pa => pa.id === p.packId)
+        const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
+        if (p.price < packInfo.price && parseInt(p.price * (100 + setup.exceedPricePercent) / 100) >= packInfo.price && customerInfo.exceedPrice) {
+          exceedPriceQuantity = p.quantity - p.purchased
+        }
+        if (!packInfo.byWeight && found) {
+          packsArray = packsArray.filter(pa => pa.packId !== found.packId)
+          packsArray.push({
+            ...found, 
+            quantity: found.quantity + p.quantity - p.purchased,
+            exceedPriceQuantity: found.exceedPriceQuantity + exceedPriceQuantity
+          })
+        } else {
+          packsArray.push({
+            packId: p.packId,
+            price: p.price, 
+            quantity: p.quantity - p.purchased,
+            exceedPriceQuantity,
+            byWeight: packInfo.byWeight,
+            orderId: o.id
+          })
+        }
+      }
+    })
+  })
+  packsArray = packsArray.map(p => {
+    const packInfo = packs.find(pa => pa.id === p.packId)
+    const productInfo = products.find(pr => pr.id === packInfo.productId)
+    let inBasket, offerInfo
+    let inBasketQuantity = 0
+    if (basket.packs) {
+      if (p.byWeight) {
+        inBasket = basket.packs.find(pa => pa.packId === p.packId && pa.orderId === p.orderId)
+        inBasketQuantity = inBasket?.quantity || 0
+      } else {
+        inBasket = basket.packs.find(pa => pa.packId === p.packId && pa.price === p.price)
+        if (inBasket) {
+          inBasketQuantity = inBasket.quantity
+        } else {
+          inBasket = basket.packs.find(bp => packs.find(pa => pa.id === bp.packId && (pa.subPackId === p.packId || pa.bonusPackId === p.packId)) && bp.price === p.price)
+          if (inBasket) {
+            offerInfo = packs.find(pa => pa.id === inBasket.packId && pa.subPackId === p.packId)
+            if (offerInfo) {
+              inBasketQuantity = inBasket.quantity * offerInfo.subQuantity
+            } else {
+              offerInfo = packs.find(pa => p.aid === inBasket.packId && pa.bonusPackId === p.packId)
+              if (offerInfo) {
+                inBasketQuantity = inBasket.quantity * offerInfo.bonusQuantity
+              }
+            }
+          }
+        }
+      }	
+    }
+    if (inBasketQuantity > 0) {
+      if (parseInt(Math.abs(addQuantity(p.quantity, -1 * inBasketQuantity)) / p.quantity * 100) > setup.weightErrorMargin) {
+        return {
+          ...p,
+          packInfo,
+          productInfo,
+          quantity: addQuantity(p.quantity, -1 * inBasketQuantity),
+          exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity),
+        }
+      } else {
+        return {
+          ...p,
+          packInfo,
+          productInfo,
+          quantity: 0
+        }
+      }
+    } else {
+      return {
+        ...p,
+        packInfo,
+        productInfo
+      }
+    }
+  })
+  return packsArray.filter(p => p.quantity > 0)
 }

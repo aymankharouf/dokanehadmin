@@ -124,7 +124,7 @@ const labels = {
   spendingAmount: 'القيمة',
   spendingDate: 'التاريخ',
   profits: 'اﻻرباح والمبيعات',
-  addToBasketSuccess: 'تمت الاضافة الى سلة المشتريات',
+  addToBasketSuccess: 'تمت الاضافة الى السلة',
   retreivePassword: 'استرجاع كلمة السر',
   sendSuccess: 'تم الارسال',
   send: 'ارسال',
@@ -132,7 +132,7 @@ const labels = {
   position: 'احداثيات الموقع',
   isOldAge: 'كبير في السن',
   multipleStores: 'من أكثر من محل',
-  alreadyInBasket: 'هذا المنتج موجود في سلة المشتريات',
+  alreadyInBasket: 'هذا المنتج موجود في السلة',
   editSpending: 'تعديل مصروف',
   priceHigherThanRequested: 'السعر الحالي اعلى من السعر في الطلب',
   purchaseSuccess: 'تم الشراء',
@@ -172,7 +172,7 @@ const labels = {
   haltSuccess: 'تم تعليق العرض',
   noOffers: 'لا يوجد عرض ليتم تعليقه',
   relogin: 'عليك تسجيل الدخول أوﻻ',
-  duplicatePacKInBasket: 'تم اضافة هذا المنتج في سلة المشتريات سابقا',
+  duplicatePacKInBasket: 'تم اضافة هذا المنتج في السلة سابقا',
   offerEnded: 'لا يمكن الشراء، انتهى العرض',
   otherMobileHolder: 'صاحب رقم الموبايل البديل',
   otherMobile: 'رقم موبايل بديل',
@@ -312,7 +312,8 @@ const labels = {
   addCall: 'اثبات اتصال',
   customerCalls: 'الاتصال بالعميل',
   callsTo: 'الاتصالات بـ',
-  noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية'
+  noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية',
+  trans: 'حركات'
 }
 
 export default labels

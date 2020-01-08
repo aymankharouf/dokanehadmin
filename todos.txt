@@ -125,15 +125,16 @@
 *customer follow-up
 *finished orders calling & feed back
 *prevent archive order before monthly trans
-modify owner page to categorize his products
-store trans --purchases & returns
-smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
+*modify owner page to categorize his products
+*purchase history by category for the user
+*store trans --purchases & returns
+*smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
+*favorites
+*stores last month trans & requested packs that can be purchased from
 debit
 request for edit order partially 
 check for page permissions (admin & app)
 hints & help
-purchase history by category for the user
 cancel a purchase or part of it
-advertisements & request for advert from store owner
+advertisements
 merging orders
-stores last month trans & requested packs that can be purchased from

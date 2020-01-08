@@ -37,12 +37,12 @@ const OrderDetails = props => {
   }, [order])
   const statusActions = useMemo(() => {
     const statusActions = [
-      {id: 'a', title: 'اعتماد', status: ['n', 's'], cancelFlag: false},
-      {id: 'e', title: 'تعديل', status: ['n', 'a', 'e', 's', 'f', 'p'], cancelFlag: false},
-      {id: 's', title: 'تعليق', status: ['n', 'a'], cancelFlag: false},
-      {id: 'r', title: 'رفض', status: ['n', 's'], cancelFlag: false},
-      {id: 'c', title: 'الغاء', status: ['n', 's', 'a'], cancelFlag: true},
-      {id: 'i', title: 'استيداع', status: ['f', 'e', 'p'], cancelFlag: true},
+      {id: 'a', name: 'اعتماد', status: ['n', 's'], cancelFlag: false},
+      {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f', 'p'], cancelFlag: false},
+      {id: 's', name: 'تعليق', status: ['n', 'a'], cancelFlag: false},
+      {id: 'r', name: 'رفض', status: ['n', 's'], cancelFlag: false},
+      {id: 'c', name: 'الغاء', status: ['n', 's', 'a'], cancelFlag: true},
+      {id: 'i', name: 'استيداع', status: ['f', 'e', 'p'], cancelFlag: true},
     ]
     return statusActions.filter(a => a.status.find(s => s === order.status) && (props.requestId ? a.cancelFlag : true))
   }, [order.status, props.requestId])
@@ -210,7 +210,7 @@ const OrderDetails = props => {
         <Actions id="actions">
           <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/1`)}>{labels.customerInfo}</ActionsButton>
           {props.type === 'n' && statusActions.map(a => 
-            <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.title}</ActionsButton>
+            <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.name}</ActionsButton>
           )}
         </Actions>
       }

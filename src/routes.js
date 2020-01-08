@@ -91,6 +91,7 @@ import AddNotification from './pages/add-notification'
 import ArchivedOrders from './pages/archived-orders'
 import CustomerCalls from './pages/customer-calls'
 import AddCall from './pages/add-call'
+import StoreTrans from './pages/store-trans'
 
 export default [
   {
@@ -479,6 +480,10 @@ export default [
   {
     path: '/add-call/:id',
     component: AddCall
+  },
+  {
+    path: '/store-trans/:id',
+    component: StoreTrans
   },
   {
     path: '(.*)',
