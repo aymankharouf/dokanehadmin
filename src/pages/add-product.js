@@ -3,7 +3,6 @@ import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-r
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 import labels from '../data/labels'
-import { storageTypes } from '../data/config'
 
 const AddProduct = props => {
   const { state } = useContext(StoreContext)
@@ -13,7 +12,6 @@ const AddProduct = props => {
   const [trademark, setTrademark] = useState('')
   const [country, setCountry] = useState('')
   const [tagId, setTagId] = useState('')
-  const [storageId, setStorageId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
   const categories = useMemo(() => {
@@ -61,7 +59,6 @@ const AddProduct = props => {
         trademark,
         country,
         tagId,
-        storageId,
         isActive: false,
         imageUrl,
         sales: 0,
@@ -156,24 +153,6 @@ const AddProduct = props => {
           <select name="tagId" value={tagId} onChange={e => setTagId(e.target.value)}>
             <option value=""></option>
             {tags.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.storage}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="storageId" value={storageId} onChange={e => setStorageId(e.target.value)}>
-            <option value=""></option>
-            {storageTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>

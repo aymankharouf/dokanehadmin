@@ -9,8 +9,6 @@ const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
   const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
-  const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
-  , [state.users, props.id])
   const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
   , [customer, state.stores])
 
@@ -23,24 +21,6 @@ const CustomerDetails = props => {
         </Fab>
       }
       <List form>
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="userName" 
-            label={labels.userName}
-            value={userInfo.name}
-            type="text" 
-            readonly
-          />
-        }
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="mobile" 
-            label={labels.mobile}
-            value={userInfo.mobile}
-            type="number"
-            readonly
-          />
-        }
         {props.full === '0' ? '' :
           <ListInput 
             name="name" 

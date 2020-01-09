@@ -61,7 +61,6 @@ import AddLocation from './pages/add-location'
 import EditLocation from './pages/edit-location'
 import Ratings from './pages/ratings'
 import Approvals from './pages/approvals'
-import RatingDetails from './pages/rating-details'
 import PackTrans from './pages/pack-trans'
 import AddPackStore from './pages/add-pack-store'
 import CancelRequests from './pages/cancel-requests'
@@ -92,6 +91,7 @@ import ArchivedOrders from './pages/archived-orders'
 import CustomerCalls from './pages/customer-calls'
 import AddCall from './pages/add-call'
 import StoreTrans from './pages/store-trans'
+import PurchasePlan from './pages/purchase-plan'
 
 export default [
   {
@@ -386,10 +386,6 @@ export default [
     component: Approvals
   },
   {
-    path: '/rating-details/:id',
-    component: RatingDetails
-  },
-  {
     path: '/pack-trans/:id',
     component: PackTrans
   },
@@ -484,6 +480,14 @@ export default [
   {
     path: '/store-trans/:id',
     component: StoreTrans
+  },
+  {
+    path: '/purchase-plan/',
+    component: PurchasePlan
+  },
+  {
+    path: '/purchase-plan-details/:id',
+    component: RequestedPacks
   },
   {
     path: '(.*)',

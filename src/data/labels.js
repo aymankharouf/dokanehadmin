@@ -164,7 +164,6 @@ const labels = {
   approvals: 'الموافقات',
   ratingDetails: 'تفاصيل التقييم',
   user: 'المستخدم',
-  ratingValue: 'التقييم',
   comment: 'التعليق',
   notApprovedUser: 'يجب اعتماد صاحب الطلب اوﻻ',
   isActive: 'فعال',
@@ -184,7 +183,6 @@ const labels = {
   invalidPeriod: 'الرجاء التأكد من مدة العرض',
   offerDays: 'عرض لمدة',
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
-  nickName: 'الاسم المختصر',
   confirmationTitle: 'تأكيد العملية',
   haltOffer: 'تعليق العرض',
   purchaseDiscounts: 'خصومات المشتريات',
@@ -248,7 +246,6 @@ const labels = {
   editTag: 'تعديل فئة',
   tag: 'الفئة',
   relatedProducts: 'المنتجات ذات العلاقة',
-  storage: 'طريقة الحفظ',
   closeExpired: 'صلاحية قصيرة',
   purchase: 'شراء',
   offerToExpire: 'عرض لقرب الصلاحية',
@@ -303,7 +300,6 @@ const labels = {
   approveAlarmNotification: 'تم اعتماد بلاغك عن سعر اقل، سوف تحصل على خصم في طلبك القادم',
   approveOwenerChangePriceNotification: 'تم تغيير السعر للمنتج بناء على طلبك',
   approveOwenerDeletemNotification: 'تم حذف المنتج من محلك بناء على طلبك',
-  approveRatingNotification: 'تم اعتماد تقييمك للمنتج، سوف تحصل على خصم في طلبك القادم',
   approveCancelRequestNotification: 'تم اعتماد طلبك بإلغاء طلب الشراء',
   approveInvitationNotification: 'تم اعتماد دعوتك لصديق، سوف تحصل على خصم بمجرد ان يقوم صديقك بأول عملية شراء',
   blockCustomerNotification: 'تم للاسف حظر التعامل معك لعم استلامك لطلبك',
@@ -313,7 +309,9 @@ const labels = {
   customerCalls: 'الاتصال بالعميل',
   callsTo: 'الاتصالات بـ',
   noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية',
-  trans: 'حركات'
+  trans: 'حركات',
+  purchasePlan: 'خطة الشراء',
+  approve: 'اعتماد'
 }
 
 export default labels

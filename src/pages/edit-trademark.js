@@ -21,10 +21,7 @@ const EditTrademark = props => {
 
   const handleEdit = async () => {
     try{
-      await editTrademark({
-        id: trademark.id,
-        name
-      })
+      await editTrademark(trademark.id, name, trademark.name, state.products)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

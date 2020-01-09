@@ -3,7 +3,6 @@ import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-r
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { storageTypes } from '../data/config'
 
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
@@ -15,7 +14,6 @@ const EditProduct = props => {
   const [trademark, setTrademark] = useState(product.trademark)
   const [country, setCountry] = useState(product.country)
   const [tagId, setTagId] = useState(product.tagId)
-  const [storageId, setStorageId] = useState(product.storageId)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -47,10 +45,9 @@ const EditProduct = props => {
     if (categoryId !== product.categoryId) return true
     if (trademark !== product.trademark) return true
     if (tagId !== product.tagId) return true
-    if (storageId !== product.storageId) return true
     if (imageUrl !== product.imageUrl) return true
     return false
-  }, [product, name, country, categoryId, trademark, tagId, storageId, imageUrl])
+  }, [product, name, country, categoryId, trademark, tagId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -67,7 +64,6 @@ const EditProduct = props => {
         trademark,
         country,
         tagId,
-        storageId,
         imageUrl
       }
       await editProduct(product, image)
@@ -159,24 +155,6 @@ const EditProduct = props => {
           <select name="tagId" value={tagId} onChange={e => setTagId(e.target.value)}>
             <option value=""></option>
             {tags.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.storage}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="storageId" value={storageId} onChange={e => setStorageId(e.target.value)}>
-            <option value=""></option>
-            {storageTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>

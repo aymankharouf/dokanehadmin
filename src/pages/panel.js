@@ -33,6 +33,7 @@ const Panel = props => {
         {user ? <ListItem link="/change-password/" title={labels.changePassword} /> : ''}
         {user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/purchase-plan/" title={labels.purchasePlan} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/prepare-orders/" title={labels.prepareOrders} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/followup-orders/" title={labels.followupOrders} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/approvals/" title={labels.approvals} view="#main-view" panelClose /> : ''}

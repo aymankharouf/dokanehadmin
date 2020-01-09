@@ -2,7 +2,6 @@ import React, { useContext, useMemo } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { storageTypes } from '../data/config'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
@@ -45,13 +44,6 @@ const ProductDetails = props => {
           label={labels.tag}
           type="text" 
           value={product.tagId ? state.tags.find(t => t.id === product.tagId).name : ''}
-          readonly
-        />
-        <ListInput 
-          name="storageId" 
-          label={labels.storage}
-          type="text" 
-          value={product.storageId ? storageTypes.find(t => t.id === product.storageId).name : ''}
           readonly
         />
         <img src={product.imageUrl} className="img-card" alt={product.name} />

@@ -2,7 +2,7 @@ import React, { useContext, useState, useMemo, useEffect } from 'react'
 import { f7, Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
-import { packUnavailable, showMessage, showError, getMessage, addQuantity } from '../data/actions'
+import { packUnavailable, showMessage, showError, getMessage, addQuantity, getRequestedPackStores } from '../data/actions'
 import PackImage from './pack-image'
 import labels from '../data/labels'
 import { setup } from '../data/config'
@@ -19,61 +19,7 @@ const RequestedPackDetails = props => {
     return basketStock?.quantity || 0
   }, [state.basket, props.packId])
   const packStores = useMemo(() => {
-    let packStores = state.storePacks.filter(p => (p.packId === props.packId || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === props.packId || pa.bonusPackId === props.packId))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * basketStockQuantity) > 0))
-    packStores = packStores.map(s => {
-      let packId, unitPrice, quantity, offerInfo, isOffer, price
-      if (s.packId === props.packId) {
-        packId = s.packId
-        if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
-          price = s.price
-          unitPrice = s.price
-        } else {
-          price = s.cost
-          unitPrice = s.price
-        }
-        quantity = s.quantity
-        isOffer = false
-      } else {
-        offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === props.packId)
-        if (offerInfo) {
-          packId = offerInfo.id
-          if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
-            unitPrice = parseInt((s.price / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
-            price = s.price
-            isOffer = true
-          } else {
-            unitPrice = s.price
-            price = s.cost
-            isOffer = false
-          }
-          quantity = offerInfo.subQuantity
-        } else {
-          offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === props.packId)
-          if (offerInfo) {
-            packId = offerInfo.id
-            price = s.price
-            unitPrice = parseInt((s.price / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
-            quantity = offerInfo.bonusQuantity
-            isOffer = true
-          }
-        }
-      }
-      const storeInfo = state.stores.find(st => st.id === s.storeId)
-      const packInfo = state.packs.find(p => p.id === s.packId)
-      const productInfo = state.products.find(p => p.id === packInfo.productId)
-      return {
-        ...s,
-        packId,
-        price,
-        quantity,
-        unitPrice,
-        isOffer,
-        storeInfo,
-        packInfo,
-        productInfo
-      }
-    })
-    packStores = packStores.filter(s => s.packId)
+    const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs, state.products)
     const today = new Date()
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
@@ -83,8 +29,8 @@ const RequestedPackDetails = props => {
         const store2 = state.stores.find(s => s.id === s2.storeId)
         if (store1.type === store2.type){
           if (store2.discount === store1.discount) {
-            const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() < today)
-            const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() < today)
+            const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() >= today)
+            const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() >= today)
             const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
             const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
             return store1Sales - store2Sales
@@ -98,7 +44,7 @@ const RequestedPackDetails = props => {
         return s1.unitPrice - s2.unitPrice
       }
     })
-  }, [props.packId, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs, state.products])
+  }, [pack, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs, state.products])
   useEffect(() => {
     if (error) {
       showError(error)

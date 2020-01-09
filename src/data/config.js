@@ -65,11 +65,6 @@ export const spendingTypes = [
   {id: 'm', name: 'صيانة'},
 ]
 
-export const ratingValues = [
-  {id: 0, name: 'ﻻ أنصح به'},
-  {id: 1, name: 'أنصح به'}
-]
-
 export const orderPositions = [
   {id: 's', name: 'المستودع'},
   {id: 'c', name: 'مركز التوزيع'},
@@ -84,12 +79,6 @@ export const orderPackStatus = [
   {id: 'pu', name: 'شراء جزئي والباقي غير متوفر'},
   {id: 'r', name: 'مرتجع'},
   {id: 'pr', name: 'مرتجع جزئي'}
-]
-
-export const storageTypes = [
-  {id: 'd', name: 'جاف'},
-  {id: 'c', name: 'مبرد'},
-  {id: 'f', name: 'مجمد'}
 ]
 
 export const alarmTypes = [
