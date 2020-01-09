@@ -12,14 +12,12 @@ const RequestedPackDetails = props => {
 	const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const basketStockQuantity = useMemo(() => {
     const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
     return basketStock?.quantity || 0
   }, [state.basket, props.packId])
   const packStores = useMemo(() => {
-    const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs, state.products)
+    const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs)
     const today = new Date()
     today.setDate(today.getDate() - 30)
     return packStores.sort((s1, s2) => 
@@ -44,7 +42,7 @@ const RequestedPackDetails = props => {
         return s1.unitPrice - s2.unitPrice
       }
     })
-  }, [pack, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs, state.products])
+  }, [pack, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -158,7 +156,7 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={labels.back} />
+      <Navbar title={pack.productNname} backLink={labels.back} />
       <Block>
         <Card>
           <CardContent>
@@ -189,7 +187,7 @@ const RequestedPackDetails = props => {
           {packStores.map(s => 
             <ListItem 
               title={s.storeInfo.name}
-              subtitle={`${s.productInfo.name} ${s.packInfo.name}`}
+              subtitle={`${s.packInfo.productName} ${s.packInfo.name}`}
               text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
               footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
               key={s.id}

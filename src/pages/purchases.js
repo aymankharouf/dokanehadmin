@@ -5,10 +5,10 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import ReLogin from './relogin'
 
 const Purchases = props => {
-  const { state } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   const purchases = useMemo(() => {
     const purchases = state.purchases.map(p => {
       const storeInfo = state.stores.find(s => s.id === p.storeId)
@@ -19,6 +19,8 @@ const Purchases = props => {
     })
     return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
   }, [state.purchases, state.stores])
+
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={labels.purchases} backLink={labels.back} />

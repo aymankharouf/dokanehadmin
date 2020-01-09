@@ -4,9 +4,10 @@ import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { getCategoryName } from '../data/actions'
+import ReLogin from './relogin'
 
 const Products = props => {
-  const { state } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   const products = useMemo(() => {
     const products = state.products.map(p => {
       const categoryInfo = state.categories.find(c => c.id === p.categoryId)
@@ -17,6 +18,8 @@ const Products = props => {
     })
     return products.sort((p1, p2) => p1.sales - p2.sales)
   }, [state.products, state.categories])
+  
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={labels.allProducts} backLink={labels.back}>
@@ -45,7 +48,6 @@ const Products = props => {
                   title={p.name}
                   subtitle={getCategoryName(p.categoryInfo, state.categories)}
                   text={`${labels.productOf} ${p.trademark ? labels.company + ' ' + p.trademark + '-' : ''}${p.country}`}
-                  footer={p.isActive ? '' : labels.inActive}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

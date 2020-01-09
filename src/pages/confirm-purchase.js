@@ -1,31 +1,28 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
-import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
 
 
 const ConfirmPurchase = props => {
-  const { state, user, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
   const basket = useMemo(() => {
     const basket = state.basket.packs.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
       return {
         ...p,
         packInfo,
-        productInfo,
         weightText
       }
     })
     return basket.sort((p1, p2) => p1.time - p2.time)
-  }, [state.basket, state.packs, state.products])
+  }, [state.basket, state.packs])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0)
   , [state.basket])
   const [discount, setDiscount] = useState((total * (store.discount || 0) / 100000).toFixed(3))
@@ -54,7 +51,6 @@ const ConfirmPurchase = props => {
 			setError(getMessage(props, err))
 		}
   }
-  if (!user) return <ReLogin />
   return(
     <Page>
     <Navbar title={`${labels.confirmPurchase} ${store.name}`} backLink={labels.back} />
@@ -63,7 +59,7 @@ const ConfirmPurchase = props => {
         {basket.map(p => 
           <ListItem 
             key={i++} 
-            title={p.productInfo.name}
+            title={p.packInfo.productName}
             subtitle={p.packInfo.name}
             text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
             footer={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}

@@ -17,15 +17,13 @@ const EditPurchase = props => {
     let purchaseBasket = state.purchaseBasket ? state.purchaseBasket.filter(p => p.quantity > 0) : []
     purchaseBasket = purchaseBasket.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       return {
         ...p,
-        packInfo,
-        productInfo
+        packInfo
       }
     })
     return purchaseBasket
-  }, [state.purchaseBasket, state.packs, state.products])
+  }, [state.purchaseBasket, state.packs])
   const total = useMemo(() => purchaseBasket.reduce((sum, p) => sum + p.gross, 0)
   , [purchaseBasket])
   useEffect(() => {
@@ -68,7 +66,7 @@ const EditPurchase = props => {
         <List mediaList>
           {purchaseBasket.map(p =>
             <ListItem
-              title={p.productInfo.name}
+              title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
               footer={quantityDetails(p)}

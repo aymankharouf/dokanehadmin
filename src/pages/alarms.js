@@ -15,20 +15,18 @@ const Alarms = props => {
     alarms = alarms.map(a => {
       const alarmTypeInfo = alarmTypes.find(t => t.id === a.alarmType)
       const packInfo = state.packs.find(p => p.id === a.packId)
-      const productInfo = state.products.find(p => p.id === packInfo.productId)
       const userInfo = state.users.find(u => u.id === a.userId)
       const customerInfo = state.customers.find(c => c.id === a.userId)
       return {
         ...a,
         packInfo,
-        productInfo,
         userInfo,
         customerInfo,
         alarmTypeInfo,
       }
     })
     return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
-  }, [state.alarms, state.packs, state.products, state.users, state.customers])
+  }, [state.alarms, state.packs, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.alarms} backLink={labels.back} />
@@ -41,7 +39,7 @@ const Alarms = props => {
                   link={`/alarm-details/${a.id}`}
                   title={a.alarmTypeInfo.name}
                   subtitle={a.customerInfo.fullName || `${a.userInfo.name}:${a.userInfo.mobile}`}
-                  text={`${a.productInfo.name} ${a.packInfo.name}`}
+                  text={`${a.packInfo.productName} ${a.packInfo.name}`}
                   footer={moment(a.time.toDate()).fromNow()}
                   key={a.id}
                 >

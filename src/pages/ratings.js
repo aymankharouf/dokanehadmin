@@ -33,7 +33,7 @@ const Ratings = props => {
   }, [error])
   const handleApprove = async rating => {
     try{
-      await approveRating(rating, state.products)
+      await approveRating(rating, state.products, state.packs)
       showMessage(labels.approveSuccess)
     } catch(err) {
 			setError(getMessage(props, err))

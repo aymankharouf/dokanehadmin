@@ -14,8 +14,6 @@ const SellStore = props => {
   , [state.stores])
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const packStock = useMemo(() => state.storePacks.find(p => p.packId === props.id && p.storeId === 's')
   , [state.storePacks, props.id])
   const profit = useMemo(() => parseInt(price * quantity * 1000) - parseInt(packStock.cost * quantity)
@@ -45,7 +43,7 @@ const SellStore = props => {
 
   return (
     <Page>
-      <Navbar title={`${labels.sell} ${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.sell} ${pack.productName} ${pack.name}`} backLink={labels.back} />
       <List form>
         <ListItem
           title={labels.store}

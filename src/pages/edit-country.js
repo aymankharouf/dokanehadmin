@@ -21,7 +21,7 @@ const EditCountry = props => {
 
   const handleEdit = async () => {
     try{
-      await editCountry(country.id, name, country.name, state.products)
+      await editCountry(country.id, name, country.name, state.products, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

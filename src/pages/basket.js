@@ -13,17 +13,15 @@ const Basket = props => {
     let basket = state.basket ? state.basket.packs : []
     basket = basket.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
       return {
         ...p,
         packInfo,
-        productInfo,
         weightText
       }
     })
     return basket.sort((p1, p2) => p1.time - p2.time)
-  }, [state.basket, state.packs, state.products])
+  }, [state.basket, state.packs])
   const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) : 0
   , [state.basket])
   let i = 0
@@ -46,7 +44,7 @@ const Basket = props => {
         <List mediaList>
           {basket.map(p => 
             <ListItem
-              title={p.productInfo.name}
+              title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
               footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}

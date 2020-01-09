@@ -5,12 +5,14 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-
+import ReLogin from './relogin'
 
 const Customers = props => {
-  const { state } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   const customers = useMemo(() => [...state.customers].sort((c1, c2) => c2.time.seconds - c1.time.seconds)
-  , [state.customers]) 
+  , [state.customers])
+
+  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={labels.customers} backLink={labels.back}>

@@ -20,15 +20,13 @@ const EditOrder = props => {
     let orderBasket = state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
     orderBasket = orderBasket.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       return {
         ...p,
-        packInfo,
-        productInfo
+        packInfo
       }
     })
     return orderBasket
-  }, [state.orderBasket, state.packs, state.products])
+  }, [state.orderBasket, state.packs])
   const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.gross, 0)
   , [orderBasket])
   useEffect(() => {
@@ -71,7 +69,7 @@ const EditOrder = props => {
         <List mediaList>
           {orderBasket.map(p =>
             <ListItem
-              title={p.productInfo.name}
+              title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
               footer={quantityDetails(p)}

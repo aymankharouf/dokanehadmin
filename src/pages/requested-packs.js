@@ -14,16 +14,16 @@ const RequestedPacks = props => {
 	
 	let i = 0
 	useEffect(() => {
-		let packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs, state.products)
+		let packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
 		if (props.id){
 			packs = packs.filter(p => {
 				const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-				const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, state.products, p.price)
+				const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
 				return packStores.find(ps => ps.storeId === props.id)
 			})	
 		}
 		setRequestedPacks(packs)
-	}, [props.id, state.basket, approvedOrders, state.packs, state.products, state.customers, state.stores, state.storePacks])
+	}, [props.id, state.basket, approvedOrders, state.packs, state.customers, state.stores, state.storePacks])
   return(
     <Page>
       <Navbar title={`${labels.requestedPacks} ${props.id ? '-' + state.stores.find(s => s.id === props.id).name : ''}`} backLink={labels.back} />
@@ -34,7 +34,7 @@ const RequestedPacks = props => {
 					: requestedPacks.map(p => 
 							<ListItem
 								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
-								title={p.productInfo.name}
+								title={p.packInfo.productName}
 								subtitle={p.packInfo.name}
 								text={`${labels.requested}: ${quantityText(p.quantity)}`}
 								after={(p.price / 1000).toFixed(3)}

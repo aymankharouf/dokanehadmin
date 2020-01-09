@@ -17,8 +17,6 @@ const AddPackStore = props => {
   , [state.stores])
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -73,7 +71,7 @@ const AddPackStore = props => {
 
   return (
     <Page>
-      <Navbar title={`${labels.addPrice} ${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}`} backLink={labels.back} />
       <List form>
         <ListItem
           title={labels.store}

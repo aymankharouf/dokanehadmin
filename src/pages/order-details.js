@@ -1,6 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
-import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/actions'
 import labels from '../data/labels'
@@ -8,25 +7,23 @@ import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
 
 const OrderDetails = props => {
-  const { state, user } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const order = useMemo(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id)
   , [state.orders, state.archivedOrders, props.id, props.type])
   const orderBasket = useMemo(() => order.basket.map(p => {
     const packInfo = state.packs.find(pa => pa.id === p.packId)
-    const productInfo = state.products.find(pr => pr.id === packInfo.productId)
     const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
     const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
     const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
     return {
       ...p,
       packInfo,
-      productInfo,
       storeName,
       changePriceNote,
       statusNote
     }
-  }), [order, state.packs, state.products, state.stores])
+  }), [order, state.packs, state.stores])
   const fractionFromProfit = useMemo(() => {
     let fraction = 0
     if (order.fixedFees === 0) {
@@ -128,7 +125,6 @@ const OrderDetails = props => {
 			setError(getMessage(props, err))
 		}
   }
-  if (!user) return <ReLogin />
   return(
     <Page>
       <Navbar title={labels.orderDetails} backLink={labels.back} />
@@ -137,7 +133,7 @@ const OrderDetails = props => {
           {orderBasket.map(p => 
             <ListItem 
               key={p.packId} 
-              title={p.productInfo.name}
+              title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
               footer={quantityDetails(p)}

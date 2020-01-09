@@ -132,9 +132,9 @@
 *favorites
 *stores last month trans & requested packs that can be purchased from
 *cancel a purchase or part of it
-debit
+*check for page permissions (admin & app)
 request for edit order partially 
 merging orders
-check for page permissions (admin & app)
 hints & help
 advertisements
+debit

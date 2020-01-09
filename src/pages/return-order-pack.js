@@ -11,8 +11,6 @@ const ReturnOrderPack = props => {
   const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const orderPack = useMemo(() => {
     const basket = state.orders.find(o => o.id === props.orderId).basket
     return basket.find(p => p.packId === props.packId)
@@ -52,7 +50,7 @@ const ReturnOrderPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${pack.productName} ${pack.name}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <PackImage pack={pack} type="card" />

@@ -16,14 +16,13 @@ const AddStorePack = props => {
   , [state.stores, props.id])
   const packs = useMemo(() => {
     const packs = state.packs.map(p => {
-      const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} ${p.name}`
+        name: `${p.productName} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.packs, state.products]) 
+  }, [state.packs]) 
   useEffect(() => {
     if (error) {
       showError(error)

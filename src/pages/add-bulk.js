@@ -2,11 +2,10 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import ReLogin from './relogin'
 import labels from '../data/labels'
 
 const AddBulk = props => {
-  const { state, user } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [orderLimit, setOrderLimit] = useState('')
@@ -30,6 +29,15 @@ const AddBulk = props => {
       const subPackInfo = state.packs.find(p => p.id === subPackId)
       const pack = {
         productId: props.id,
+        productName: product.name,
+        imageUrl: product.imageUrl,
+        categoryId: product.categoryId,
+        country: product.country,
+        trademark: product.trademark,
+        tagId: product.tagId,
+        sales: product.sales,
+        rating: product.rating,
+        ratingCount: product.ratingCount,
         name,
         isOffer: false,
         closeExpired: false,
@@ -50,7 +58,6 @@ const AddBulk = props => {
 			setError(getMessage(props, err))
 		}
   }
-  if (!user) return <ReLogin />
   return (
     <Page>
       <Navbar title={`${labels.addBulk} ${product.name}`} backLink={labels.back} />

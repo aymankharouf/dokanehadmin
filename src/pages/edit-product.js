@@ -66,7 +66,7 @@ const EditProduct = props => {
         tagId,
         imageUrl
       }
-      await editProduct(product, image)
+      await editProduct(product, image, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

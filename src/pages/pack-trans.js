@@ -11,8 +11,6 @@ const PackTrans = props => {
   const { state } = useContext(StoreContext)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const packTrans = useMemo(() => {
     const purchases = state.purchases.filter(p => p.basket.find(p => p.packId === pack.id))
     const packTrans = purchases.map(p => {
@@ -29,7 +27,7 @@ const PackTrans = props => {
   }, [state.purchases, state.stores, pack])
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${pack.productName} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {packTrans.length === 0 ? 

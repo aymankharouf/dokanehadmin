@@ -18,15 +18,13 @@ const StorePacks = props => {
     let storePacks = state.storePacks.filter(p => p.storeId === props.id)
     storePacks = storePacks.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       return {
         ...p,
-        packInfo,
-        productInfo
+        packInfo
       }
     })
     return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
-  }, [state.storePacks, state.packs, state.products, props.id])
+  }, [state.storePacks, state.packs, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -89,7 +87,7 @@ const StorePacks = props => {
             <ListItem title={labels.noData} /> 
           : storePacks.map(p => 
               <ListItem
-                title={p.productInfo.name}
+                title={p.packInfo.productName}
                 subtitle={p.packInfo.name}
                 text={(p.price / 1000).toFixed(3)}
                 footer={p.packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(p.packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}

@@ -13,8 +13,6 @@ const StockPackTrans = props => {
   const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const stockPackInfo = useMemo(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id)
   , [state.storePacks, props.id])
   const packTrans = useMemo(() => {
@@ -61,7 +59,7 @@ const StockPackTrans = props => {
   }
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${pack.productName} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {packTrans.length === 0 ? 

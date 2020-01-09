@@ -2,11 +2,10 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import ReLogin from './relogin'
 import labels from '../data/labels'
 
 const AddOffer = props => {
-  const { state, user } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [orderLimit, setOrderLimit] = useState('')
@@ -24,14 +23,13 @@ const AddOffer = props => {
   const bonusPacks = useMemo(() => {
     let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
     packs = packs.map(p => {
-      const productInfo = state.products.find(pr => pr.id === p.productId)
       return {
         id: p.id,
-        name: `${productInfo.name} ${p.name}`
+        name: `${p.setErrorproductName} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.packs, state.products, props.id]) 
+  }, [state.packs, props.id]) 
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
@@ -58,6 +56,15 @@ const AddOffer = props => {
       const subPackInfo = state.packs.find(p => p.id === subPackId)
       const pack = {
         productId: props.id,
+        productName: product.name,
+        imageUrl: product.imageUrl,
+        categoryId: product.categoryId,
+        country: product.country,
+        trademark: product.trademark,
+        tagId: product.tagId,
+        sales: product.sales,
+        rating: product.rating,
+        ratingCount: product.ratingCount,
         name,
         isOffer: true,
         closeExpired,
@@ -81,7 +88,6 @@ const AddOffer = props => {
 			setError(getMessage(props, err))
 		}
   }
-  if (!user) return <ReLogin />
   return (
     <Page>
       <Navbar title={`${labels.addOffer} ${product.name}`} backLink={labels.back} />

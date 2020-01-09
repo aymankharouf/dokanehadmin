@@ -6,9 +6,10 @@ import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { deleteNotification, showMessage, showError, getMessage } from '../data/actions'
+import ReLogin from './relogin'
 
 const Notifications = props => {
-  const { state } = useContext(StoreContext)
+  const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
   const notifications = useMemo(() => {
     const notifications = state.notifications.map(n => {
@@ -37,6 +38,8 @@ const Notifications = props => {
       }
     })  
   }
+
+  if (!user) return <ReLogin />
   return (
     <Page>
       <Navbar title={labels.notifications} backLink={labels.back} />

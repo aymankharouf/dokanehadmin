@@ -16,10 +16,10 @@ const PurchasePlan = props => {
 		let storesArray = []
 		const today = new Date()
     today.setDate(today.getDate() - 30)
-		const packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs, state.products)
+		const packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
 		packs.forEach(p => {
 			const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, state.products, p.price)
+			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
 			packStores.forEach(ps => {
 				const found = storesArray.find(s => s.store.id === ps.storeId)
 				if (found) {
@@ -55,7 +55,7 @@ const PurchasePlan = props => {
 			}
 		})
 		setStores(storesArray)
-	}, [state.basket, approvedOrders, state.stores, state.packs, state.products, state.customers, state.storePacks, state.purchases])
+	}, [state.basket, approvedOrders, state.stores, state.packs, state.customers, state.storePacks, state.purchases])
   return(
     <Page>
       <Navbar title={labels.purchasePlan} backLink={labels.back} />

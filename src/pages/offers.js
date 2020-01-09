@@ -12,17 +12,15 @@ const Offers = props => {
     let storePacks = state.storePacks.filter(p => p.offerEnd)
     storePacks = storePacks.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const productInfo = state.products.find(pr => pr.id === packInfo.productId)
       const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
       return {
         ...p,
         packInfo,
-        productInfo,
         storeName
       }
     })
     return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
-  }, [state.storePacks, state.packs, state.products, state.stores])
+  }, [state.storePacks, state.packs, state.stores])
   return(
     <Page>
       <Navbar title={labels.EndedOffers} backLink={labels.back} />
@@ -33,9 +31,9 @@ const Offers = props => {
             : storePacks.map(p => 
                 <ListItem
                   link={`/store-pack-details/${p.id}`}
-                  title={p.productInfo.name}
+                  title={p.packInfo.productName}
                   subtitle={p.packInfo.name}
-                  text={`${labels.productOf} ${p.productInfo.trademark ? labels.company + ' ' + p.productInfo.trademark + '-' : ''}${p.productInfo.country}`}
+                  text={`${labels.productOf} ${p.packInfo.trademark ? labels.company + ' ' + p.packInfo.trademark + '-' : ''}${p.packInfo.country}`}
                   footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
                   after={(p.price / 1000).toFixed(3)}
                   key={p.id}

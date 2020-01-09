@@ -16,8 +16,6 @@ const AlarmDetails = props => {
   , [state.alarms, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === alarm.packId)
   , [state.packs, alarm])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const userInfo = useMemo(() => state.users.find(u => u.id === alarm.userId)
   , [state.users, alarm])
   const customerInfo = useMemo(() => state.customers.find(c => c.id === alarm.userId)
@@ -97,7 +95,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="productName" 
           label={labels.product}
-          value={product.name}
+          value={pack.productName}
           type="text" 
           readonly
         />

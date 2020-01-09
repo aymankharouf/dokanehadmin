@@ -33,7 +33,6 @@ const ProductPacks = props => {
             link={`/pack-details/${p.id}`}
             title={p.name}
             subtitle={moment(p.time.toDate()).fromNow()}
-            text={p.isActive ? '' : labels.inActive}
             after={p.price ? (p.price / 1000).toFixed(3) : ''} 
             key={p.id} 
           >

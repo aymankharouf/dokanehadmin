@@ -23,8 +23,6 @@ const PrepareOrdersList = props => {
   }, [state.orders, state.users, state.customers, props.orderId, props.packId])
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -42,7 +40,7 @@ const PrepareOrdersList = props => {
   }
   return(
     <Page>
-      <Navbar title={`${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${pack.productName} ${pack.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {orders.length === 0 ? 

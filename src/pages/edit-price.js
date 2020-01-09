@@ -13,8 +13,6 @@ const EditPrice = props => {
   , [state.storePacks, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
   , [state.packs, storePack])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const store = useMemo(() => state.stores.find(s => s.id === storePack.storeId)
   , [state.stores, storePack])
   const [cost, setCost] = useState('')
@@ -67,7 +65,7 @@ const EditPrice = props => {
       <Navbar title={`${labels.editPrice} ${store.name}`} backLink={labels.back} />
       <Card>
         <CardHeader>
-          <p>{product.name}</p>
+          <p>{pack.productName}</p>
           <p>{pack.name}</p>
         </CardHeader>
         <CardContent>

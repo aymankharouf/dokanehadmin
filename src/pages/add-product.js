@@ -59,9 +59,10 @@ const AddProduct = props => {
         trademark,
         country,
         tagId,
-        isActive: false,
         imageUrl,
         sales: 0,
+        rating: 0,
+        ratingCount: 0,
         time: new Date()
       }
       await addProduct(product, image)

@@ -10,8 +10,6 @@ const EditPack = props => {
   const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [bonusUnits, setBonusUnits] = useState(pack.bonusUnits)
@@ -59,7 +57,7 @@ const EditPack = props => {
   }
   return (
     <Page>
-      <Navbar title={`${labels.editPack} ${product.name} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.editPack} ${pack.productName} ${pack.name}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 

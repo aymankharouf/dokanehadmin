@@ -2,16 +2,13 @@ import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import ReLogin from './relogin'
 import labels from '../data/labels'
 
 const EditBulk = props => {
-  const { state, user } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-  const product = useMemo(() => state.products.find(p => p.id === pack.productId)
-  , [state.products, pack])
 
   const [name, setName] = useState(pack.name)
   const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
@@ -54,10 +51,9 @@ const EditBulk = props => {
 			setError(getMessage(props, err))
 		}
   }
-  if (!user) return <ReLogin />
   return (
     <Page>
-      <Navbar title={`${labels.editBulk} ${product.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.editBulk} ${pack.productName}`} backLink={labels.back} />
       <List form>
         <ListInput 
           name="name" 
