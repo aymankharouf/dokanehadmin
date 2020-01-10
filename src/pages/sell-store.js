@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -7,6 +7,7 @@ import labels from '../data/labels'
 const SellStore = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState('')
   const [storeId, setStoreId] = useState('')
@@ -24,6 +25,13 @@ const SellStore = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
@@ -33,10 +41,13 @@ const SellStore = props => {
       if (Number(quantity) <= 0 || Number(quantity) > packStock.quantity) {
         throw new Error('invalidValue')
       }
+      setInprocess(true)
       await addStockTrans('s', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
     	setError(getMessage(props, err))
     }
   }

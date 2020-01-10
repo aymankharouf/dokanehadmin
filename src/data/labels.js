@@ -57,7 +57,7 @@ const labels = {
   invalidFile: 'الرجاء التأكد من ملف الصورة',
   stockTrans: 'حركات المستودع',
   stockTransDetails: 'تفاصيل حركة المستودع',
-  stockName: 'مستودعات دكانة نت',
+  stockName: 'دكانة نت',
   editOrder: 'تعديل طلب',
   passwordRequests: 'طلبات كلمة السر',
   customers: 'العملاء',
@@ -118,7 +118,7 @@ const labels = {
   endOffer: 'انتهى العرض',
   rejectSuccess: 'تم الرفض',
   spendings: 'المصاريف',
-  invalidSpendingDate: 'الرجاء التأكد من التاريخ المدخل',
+  invalidDate: 'الرجاء التأكد من التاريخ المدخل',
   invalidValue: 'الرجاء التأكد من القيمة المدخلة',
   newSpending: 'اضافة مصروف',
   spendingAmount: 'القيمة',
@@ -229,7 +229,7 @@ const labels = {
   damages: 'مواد متلفة',
   withdraw: 'سحب',
   withdraws: 'سحب مواد',
-  canReturn: 'ارجاع',
+  allowReturn: 'السماح بالارجاع',
   storeNotReturn: 'هذا المحل لا يقبل اﻻرجاع',
   sell: 'بيع',
   cashing: 'بيع المواد',
@@ -311,7 +311,8 @@ const labels = {
   noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية',
   trans: 'حركات',
   purchasePlan: 'خطة الشراء',
-  approve: 'اعتماد'
+  approve: 'اعتماد',
+  inprocess: 'تنفيذ العملية'
 }
 
 export default labels

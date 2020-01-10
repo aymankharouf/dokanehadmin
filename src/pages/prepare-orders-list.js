@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { allocateOrderPack, showMessage, getMessage, showError } from '../data/actions'
@@ -8,6 +8,7 @@ import labels from '../data/labels'
 const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] =useState(false)
   const orders = useMemo(() => {
     let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
     orders = orders.map(o => {
@@ -29,12 +30,23 @@ const PrepareOrdersList = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleAllocate = async order => {
     try{
+      setInprocess(true)
       await allocateOrderPack(order, pack)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

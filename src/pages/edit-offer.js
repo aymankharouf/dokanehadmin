@@ -1,15 +1,15 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 const EditOffer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
-
   const [name, setName] = useState(pack.name)
   const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
@@ -43,13 +43,20 @@ const EditOffer = props => {
     if (closeExpired !== pack.closeExpired) return true
     return false
   }, [pack, name, orderLimit, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
-
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleSubmit = async () => {
     try{
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
@@ -69,10 +76,13 @@ const EditOffer = props => {
         bonusPercent: Number(bonusPercent),
         closeExpired
       }
+      setInprocess(true)
       await editPack(newPack)
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

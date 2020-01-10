@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { editSpending, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -9,6 +9,7 @@ import { spendingTypes } from '../data/config'
 const EditSpending = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const spending = useMemo(() => state.spendings.find(s => s.id === props.id)
   , [state.spendings, props.id])
   const [type, setType] = useState(spending.type)
@@ -47,10 +48,18 @@ const EditSpending = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleEdit = async () => {
     try{
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
+      setInprocess(true)
       await editSpending({
         id: spending.id,
         type,
@@ -58,9 +67,11 @@ const EditSpending = props => {
         spendingDate: formatedDate,
         description
       })
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}    
   }

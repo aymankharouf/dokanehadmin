@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, Icon, Fab, Toolbar, FabButton, FabButtons, ListInput, BlockTitle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, Icon, Fab, Toolbar, FabButton, FabButtons, ListInput, BlockTitle } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -11,6 +11,7 @@ import { alarmTypes } from '../data/config'
 const AlarmDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [storeId, setStoreId] = useState('')
   const alarm = useMemo(() => state.alarms.find(a => a.id === props.id)
   , [state.alarms, props.id])
@@ -47,22 +48,35 @@ const AlarmDetails = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleApprove = async () => {
     try{
+      setInprocess(true)
       await approveAlarm(alarm, pack, storeId, customerInfo, state.storePacks, state.packs)
+      setInprocess(false)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   const handleReject = async () => {
     try{
+      setInprocess(true)
       await rejectAlarm(alarm)
+      setInprocess(false)
       showMessage(labels.rejectSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

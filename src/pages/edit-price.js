@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editPrice, showMessage, showError, getMessage } from '../data/actions'
 import PackImage from './pack-image'
@@ -9,6 +9,7 @@ import { setup } from '../data/config'
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const storePack = useMemo(() => state.storePacks.find(p => p.id === props.id)
   , [state.storePacks, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
@@ -24,6 +25,14 @@ const EditPrice = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const getDefaultPrice = () => {
     if (cost) {
       if (pack.subQuantity > 1) {
@@ -53,10 +62,13 @@ const EditPrice = props => {
         offerEnd,
         time: new Date()
       }
+      setInprocess(true)
       await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

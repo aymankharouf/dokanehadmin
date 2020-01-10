@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { addSpending, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { spendingTypes } from '../data/config'
 
 const AddSpending = props => {
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [type, setType] = useState('')
   const [spendingAmount, setSpendingAmount] = useState('')
   const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
   const [spendingDate, setSpendingDate] = useState([new Date()])
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
-
   useEffect(() => {
     const validateAmount = value => {
       if (value > 0){
@@ -42,19 +42,29 @@ const AddSpending = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
+      setInprocess(true)
       await addSpending({
         type,
         spendingAmount: spendingAmount * 1000,
         spendingDate: formatedDate,
         description
       })
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

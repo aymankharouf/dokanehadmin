@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { addCategory, showMessage, showError, getMessage } from '../data/actions'
-import {Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 
 
 const AddCategory = props => {
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [ordering, setOrdering] = useState('')
   useEffect(() => {
@@ -14,13 +15,23 @@ const AddCategory = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
+      setInprocess(true)
       await addCategory(props.id, name, Number(ordering))
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

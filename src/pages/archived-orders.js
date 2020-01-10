@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -11,12 +11,16 @@ import { getArchivedOrders, getMessage, showError } from '../data/actions'
 const ArchivedOrders = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   useEffect(() => {
     const retreiveOrders = async () => {
       try{
+        setInprocess(true)
         const orders = await getArchivedOrders()
+        setInprocess(false)
         dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     }
@@ -41,11 +45,22 @@ const ArchivedOrders = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleRefresh = async () => {
     try{
+      setInprocess(true)
       const orders = await getArchivedOrders()
+      setInprocess(false)
       dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
     } catch(err) {
+      setInprocess(false)
       setError(getMessage(props, err))
     }
   }

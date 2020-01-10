@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 const AddOffer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [orderLimit, setOrderLimit] = useState('')
   const [subPackId, setSubPackId] = useState('')
@@ -48,6 +49,14 @@ const AddOffer = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleSubmit = async () => {
     try{
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
@@ -81,10 +90,13 @@ const AddOffer = props => {
         bonusPercent: Number(bonusPercent),
         time: new Date()
       }
+      setInprocess(true)
       await addPack(pack)
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

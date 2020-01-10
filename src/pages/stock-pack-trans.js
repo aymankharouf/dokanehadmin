@@ -11,6 +11,7 @@ import BottomToolbar from './bottom-toolbar'
 const StockPackTrans = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
   const stockPackInfo = useMemo(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id)
@@ -39,6 +40,13 @@ const StockPackTrans = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleAddTrans = (type, storeId, cost, price) => {
     f7.dialog.prompt(labels.enterQuantity, labels.quantity, async quantity => {
@@ -49,10 +57,13 @@ const StockPackTrans = props => {
         if (Number(quantity) === 0 || Number(quantity) > stockPackInfo.quantity) {
           throw new Error('invalidValue')
         }
+        setInprocess(true)
         await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId)
+        setInprocess(false)
         showMessage(labels.addSuccess)
         props.f7router.back()
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }      
     })

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
@@ -9,6 +9,7 @@ import { deliveryIntervals } from '../data/config'
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
@@ -66,6 +67,13 @@ const EditCustomer = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
@@ -86,10 +94,13 @@ const EditCustomer = props => {
         orderLimit: orderLimit * 1000,
         deliveryInterval
       }
+      setInprocess(true)
       await editCustomer(customer)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

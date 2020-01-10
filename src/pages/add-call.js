@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
@@ -9,6 +9,7 @@ import { addCall, showMessage, showError, getMessage } from '../data/actions'
 const AddCall = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [callType, setCallType] = useState('')
   const [callResult, setCallResult] = useState('')
   const customerInfo = useMemo(() => state.customers.find(u => u.id === props.id)
@@ -19,18 +20,27 @@ const AddCall = props => {
       setError('')
     }
   }, [error])
-
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
   const handleSubmit = async () => {
     try{
+      setInprocess(true)
       await addCall({
         userId: props.id,
         callType,
         callResult,
         time: new Date()
       })
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

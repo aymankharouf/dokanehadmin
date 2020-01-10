@@ -1,5 +1,5 @@
 import React, {useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -7,6 +7,7 @@ import labels from '../data/labels'
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const product = useMemo(() => state.products.find(p => p.id === props.id)
   , [state.products, props.id])
   const [name, setName] = useState(product.name)
@@ -54,6 +55,13 @@ const EditProduct = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
@@ -66,10 +74,13 @@ const EditProduct = props => {
         tagId,
         imageUrl
       }
+      setInprocess(true)
       await editProduct(product, image, state.packs)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

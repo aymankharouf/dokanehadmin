@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
@@ -8,6 +8,7 @@ import labels from '../data/labels'
 const InvitationDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const invitation = useMemo(() => state.invitations.find(i => i.id === props.id)
   , [state.invitations, props.id])
   const userInfo = useMemo(() => state.users.find(u => u.id === invitation.userId)
@@ -29,13 +30,23 @@ const InvitationDetails = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleApprove = async () => {
     try{
+      setInprocess(true)
       await approveInvitation({...invitation, status: mobileCheck ? 'a' : 'r'})
+      setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

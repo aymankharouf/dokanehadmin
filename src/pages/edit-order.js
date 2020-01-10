@@ -8,6 +8,7 @@ import labels from '../data/labels'
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const order = useMemo(() => state.orders.find(o => o.id === props.id)
   , [state.orders, props.id])
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
@@ -38,27 +39,40 @@ const EditOrder = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
+        setInprocess(true)
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls)
+        setInprocess(false)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  
   }
   const handleSubmit = async () => {
     try{
+      setInprocess(true)
       await editOrder({...order, withDelivery, urgent}, state.orderBasket, state.storePacks, state.packs, state.locations, state.customers.find(c => c.id === order.userId))
+      setInprocess(false)
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

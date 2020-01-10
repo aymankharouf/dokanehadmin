@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -10,6 +10,7 @@ import { approveRating, showMessage, showError, getMessage } from '../data/actio
 const Ratings = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] =useState(false)
   const ratings = useMemo(() => {
     let ratings = state.ratings.filter(r => r.status === 'n')
     ratings = ratings.map(r => {
@@ -31,11 +32,22 @@ const Ratings = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleApprove = async rating => {
     try{
+      setInprocess(true)
       await approveRating(rating, state.products, state.packs)
+      setInprocess(false)
       showMessage(labels.approveSuccess)
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { login, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
 const Login = props => {
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   useEffect(() => {
@@ -13,14 +14,24 @@ const Login = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleLogin = async () => {
     try{
+      setInprocess(true)
       await login(email, password)
+      setInprocess(false)
       showMessage(labels.loginSuccess)
       props.f7router.back()
       props.f7router.app.panel.close('right')  
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

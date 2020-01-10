@@ -9,6 +9,7 @@ import BottomToolbar from './bottom-toolbar'
 const OrderDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const order = useMemo(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id)
   , [state.orders, state.archivedOrders, props.id, props.type])
   const orderBasket = useMemo(() => order.basket.map(p => {
@@ -49,6 +50,13 @@ const OrderDetails = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleAction = async type => {
     try{
@@ -61,28 +69,37 @@ const OrderDetails = props => {
         if (type === 'i') {
           f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
             try{
+              setInprocess(true)
               await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, true)
+              setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
+              setInprocess(false)
               setError(getMessage(props, err))
             }
           },
           async () => {
             try{
+              setInprocess(true)
               await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, false)
+              setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
+              setInprocess(false)
               setError(getMessage(props, err))
             }
           })
         }
+        setInprocess(true)
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId)
+        setInprocess(false)
         showMessage(labels.editSuccess)
         props.f7router.back()
       }  
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -91,37 +108,49 @@ const OrderDetails = props => {
       if (order.position !== 's' && order.status === 'd') {
         f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
           try{
+            setInprocess(true)
             await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
+            setInprocess(false)
             showMessage(labels.sendSuccess)
             props.f7router.back()
           } catch(err) {
+            setInprocess(false)
             setError(getMessage(props, err))
           }
         })  
       } else {
+        setInprocess(true)
         await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
+        setInprocess(false)
         showMessage(labels.sendSuccess)
         props.f7router.back()
       }
     } catch(err) {
+      setInprocess(false)
       setError(getMessage(props, err))
     }
   }
   const handleDelivery = async () => {
     try{
+      setInprocess(true)
       await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.calls, state.users, state.invitations, props.cancelOrderId)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   const handleReturn = async () => {
     try {
+      setInprocess(true)
       await returnOrder(order, state.storePacks, state.packs)
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

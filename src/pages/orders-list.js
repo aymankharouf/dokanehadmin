@@ -11,6 +11,7 @@ import { archiveOrder, showMessage, getMessage, showError } from '../data/action
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [currentOrder, setCurrentOrder] = useState('')
   const status = useMemo(() => orderStatus.find(s => s.id === props.id)
   , [props.id])
@@ -35,6 +36,13 @@ const OrdersList = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleArchive = order => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
@@ -44,9 +52,12 @@ const OrdersList = props => {
         if (!state.monthlyTrans.find(t => t.id === year * 100 + month)) {
           throw new Error('noArchiveBeforeMothlyTrans')
         }
+        setInprocess(true)
         await archiveOrder(order)
+        setInprocess(false)
         showMessage(labels.archiveSuccess)
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     }) 

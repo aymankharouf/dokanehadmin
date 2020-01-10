@@ -138,3 +138,4 @@ merging orders
 hints & help
 advertisements
 debit
+auto archive orders & purchases after monthly trans

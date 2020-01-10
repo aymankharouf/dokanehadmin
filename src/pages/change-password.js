@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Button } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { changePassword, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -7,19 +7,30 @@ const ChangePassword = props => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
+      setInprocess(true)
       await changePassword(oldPassword, newPassword)
+      setInprocess(false)
       showMessage(labels.changePasswordSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

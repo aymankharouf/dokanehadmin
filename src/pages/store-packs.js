@@ -11,6 +11,7 @@ import { deleteStorePack, haltOffer, showMessage, getMessage, showError } from '
 const StorePacks = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [currentStorePack, setCurrentStorePack] = useState('')
   const store = useMemo(() => state.stores.find(s => s.id === props.id)
   , [state.stores, props.id])
@@ -31,12 +32,23 @@ const StorePacks = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleDelete = storePack => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
+        setInprocess(true)
         await deleteStorePack(storePack, state.storePacks, state.packs)
+        setInprocess(false)
         showMessage(labels.deleteSuccess)
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     })
@@ -48,18 +60,24 @@ const StorePacks = props => {
       if (offerEndDate > today) {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
+            setInprocess(true)
             await haltOffer(storePack, state.storePacks, state.packs)
+            setInprocess(false)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
+            setInprocess(false)
             setError(getMessage(props, err))
           }
         })
       } else {
+        setInprocess(true)
         await haltOffer(storePack, state.storePacks, state.packs)
+        setInprocess(false)
         showMessage(labels.haltSuccess)
       }
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

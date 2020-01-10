@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -8,6 +8,7 @@ import labels from '../data/labels'
 const EditLocation = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const location = useMemo(() => state.locations.find(l => l.id === props.id)
   , [state.locations, props.id])
   const [name, setName] = useState(location.name)
@@ -30,9 +31,17 @@ const EditLocation = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleEdit = async () => {
     try{
+      setInprocess(true)
       await editLocation({
         id: location.id,
         name,
@@ -40,9 +49,11 @@ const EditLocation = props => {
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
+      setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()  
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

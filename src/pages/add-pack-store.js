@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { addStorePack, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { setup } from '../data/config'
@@ -8,6 +8,7 @@ import { setup } from '../data/config'
 const AddPackStore = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
@@ -23,6 +24,14 @@ const AddPackStore = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   useEffect(() => {
     if (storeId) {
       setStore(state.stores.find(s => s.id === storeId))
@@ -61,10 +70,13 @@ const AddPackStore = props => {
         offerEnd,
         time: new Date()
       }
+      setInprocess(true)
       await addStorePack(storePack, pack, state.storePacks, state.packs)
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
     	setError(getMessage(props, err))
     }
   }

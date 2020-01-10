@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { addTrademark, showMessage, showError, getMessage } from '../data/actions'
-import {Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 
 
 const AddTrademark = props => {
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   useEffect(() => {
     if (error) {
@@ -14,12 +15,23 @@ const AddTrademark = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleSubmit = async () => {
     try{
+      setInprocess(true)
       await addTrademark({name})
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

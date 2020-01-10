@@ -11,6 +11,7 @@ import ReLogin from './relogin'
 const Notifications = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const notifications = useMemo(() => {
     const notifications = state.notifications.map(n => {
       const customerInfo = n.toCustomerId === '0' ? '' : state.customers.find(c => c.id === n.toCustomerId)
@@ -27,13 +28,23 @@ const Notifications = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleDelete = notification => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
+        setInprocess(true)
         await deleteNotification(notification)
+        setInprocess(false)
         showMessage(labels.deleteSuccess)
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  

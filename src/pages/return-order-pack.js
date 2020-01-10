@@ -9,6 +9,7 @@ import labels from '../data/labels'
 const ReturnOrderPack = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
   const orderPack = useMemo(() => {
@@ -22,14 +23,25 @@ const ReturnOrderPack = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handleSumit = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const order = state.orders.find(o => o.id === props.orderId)
+        setInprocess(true)
         await returnOrderPacks(order, pack, returned)
+        setInprocess(false)
         showMessage(labels.editSuccess)
         props.f7router.back()
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     })

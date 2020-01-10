@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 import labels from '../data/labels'
@@ -7,6 +7,7 @@ import labels from '../data/labels'
 const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [trademark, setTrademark] = useState('')
@@ -50,6 +51,13 @@ const AddProduct = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try{
@@ -65,10 +73,13 @@ const AddProduct = props => {
         ratingCount: 0,
         time: new Date()
       }
+      setInprocess(true)
       await addProduct(product, image)
+      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

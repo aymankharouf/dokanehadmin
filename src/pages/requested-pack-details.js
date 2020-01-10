@@ -9,7 +9,8 @@ import { setup } from '../data/config'
 
 const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
-	const [error, setError] = useState('')
+  const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
   const basketStockQuantity = useMemo(() => {
@@ -49,6 +50,14 @@ const RequestedPackDetails = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const addToBasket = (packStore, requested, exceedPriceType) => {
     try {
       const packInfo = state.packs.find(p => p.id === packStore.packId)
@@ -146,10 +155,13 @@ const RequestedPackDetails = props => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
+        setInprocess(true)
         await packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
+        setInprocess(false)
         showMessage(labels.executeSuccess)
         props.f7router.back()
       } catch(err) {
+        setInprocess(false)
         setError(getMessage(props, err))
       }
     })

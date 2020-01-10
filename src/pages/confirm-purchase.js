@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -9,6 +9,7 @@ import labels from '../data/labels'
 const ConfirmPurchase = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
   , [state.basket, state.stores])
   const basket = useMemo(() => {
@@ -33,21 +34,33 @@ const ConfirmPurchase = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handlePurchase = async () => {
     try{
       if (store.id === 's') {
+        setInprocess(true)
         await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
+        setInprocess(false)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
+        setInprocess(true)
         await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount)
+        setInprocess(false)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       }  
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

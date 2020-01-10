@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { approveUser, showMessage, showError, getMessage } from '../data/actions'
@@ -8,6 +8,7 @@ import labels from '../data/labels'
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
   , [state.users, props.id])
   const [name, setName] = useState(userInfo.name)
@@ -42,6 +43,13 @@ const ApproveUser = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
 
   const handleSubmit = async () => {
     try {
@@ -55,6 +63,7 @@ const ApproveUser = props => {
         throw new Error('otherUserMobile')
       }
       const storeName = storeId ? state.stores.find(s => s.id === storeId).name : ''
+      setInprocess(true)
       await approveUser({
         id: props.id,
         mobile: userInfo.mobile,
@@ -65,9 +74,11 @@ const ApproveUser = props => {
         address,
         storeName
       })
+      setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

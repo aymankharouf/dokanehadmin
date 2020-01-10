@@ -731,9 +731,9 @@ export const editStore = store => {
   return firebase.firestore().collection('stores').doc(store.id).update(store)
 }
 
-export const addStock = name => {
+export const addStock = () => {
   return firebase.firestore().collection('stores').doc('s').set({
-    name,
+    name: labels.stockName,
     type: '1'
   })
 }

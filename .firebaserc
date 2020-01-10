@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "dokaneh-6870f"
+    "default": "dokanehnet"
   },
   "targets": {
-    "dokaneh-6870f": {
+    "dokanehnet": {
       "hosting": {
         "admin": [
-          "dokanehadmin"
+          "dokanehnetad"
         ]
       }
     }

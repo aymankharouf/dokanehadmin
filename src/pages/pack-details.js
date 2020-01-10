@@ -10,6 +10,7 @@ import labels from '../data/labels'
 const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const pack = useMemo(() => state.packs.find(p => p.id === props.id)
   , [state.packs, props.id])
   const packStores = useMemo(() => {
@@ -96,6 +97,14 @@ const PackDetails = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
   const handlePurchase = packStore => {
 		try{
       if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
@@ -141,9 +150,12 @@ const PackDetails = props => {
 	}
   const handleRefreshPrice = async () => {
     try{
+      setInprocess(true)
       await refreshPackPrice(pack, state.storePacks, state.packs)
+      setInprocess(false)
       showMessage(labels.refreshSuccess)
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
