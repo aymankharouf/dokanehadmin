@@ -559,12 +559,12 @@ export const addStorePack = (storePack, pack, storePacks, packs) => {
 }
 
 export const addProduct = async (product, image) => {
-  const docRef = await firebase.firestore().collection('products').add(product)
+  const productRef = await firebase.firestore().collection('products').add(product)
   const filename = image.name
   const ext = filename.slice(filename.lastIndexOf('.'))
-  const fileData = await firebase.storage().ref().child('products/' + docRef.id + ext).put(image)
+  const fileData = await firebase.storage().ref().child('products/' + productRef.id + ext).put(image)
   const url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
-  return firebase.firestore().collection('products').doc(docRef.id).update({imageUrl: url})
+  return firebase.firestore().collection('products').doc(productRef.id).update({imageUrl: url})
 }
 
 export const editProduct = async (product, image, packs) => {
@@ -1038,8 +1038,20 @@ export const packUnavailable = (pack, packPrice, orders, overPriced) => {
   return batch.commit()
 }
 
-export const addMonthlyTrans = trans => {
-  return firebase.firestore().collection('monthly-trans').doc(trans.id).set(trans)
+export const addMonthlyTrans = (trans, orders) => {
+  const batch = firebase.firestore().batch()
+  const transRef = firebase.firestore().collection('monthly-trans').doc(trans.id)
+  batch.set(transRef, trans)
+  const month = (Number(trans.id) % 100) - 1
+  const year = parseInt(Number(trans.id) / 100)
+  const ordersToArchived = orders.filter(o => ['s', 'r', 'd', 'c', 'u', 'i'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
+  ordersToArchived.forEach(o => {
+    const orderRef = firebase.firestore().collection('orders').doc(o.id)
+    batch.update(orderRef, {
+      isArchived: true
+    })
+  })
+  return batch.commit()
 }
 
 export const editOrder = (order, basket, storePacks, packs, locations, customer) => {
@@ -1264,12 +1276,6 @@ export const approveInvitation = invitation => {
   sendNotification(batch, invitation.userId, labels.approveInvitationNotification)
 }
 
-export const archiveOrder = order => {
-  return firebase.firestore().collection('orders').doc(order.id).update({
-    isArchived: true
-  })
-}
-
 export const addNotification = notification => {
   return firebase.firestore().collection('notifications').add(notification)
 }
@@ -1450,4 +1456,51 @@ export const getRequestedPackStores = (pack, basketStockQuantity, storePacks, st
     }
   })
   return packStores.filter(s => s.packId && (leastPrice ? s.unitPrice <= leastPrice : true))
+}
+
+export const addAdvert = async (advert, image) => {
+  const advertRef = await firebase.firestore().collection('adverts').add(advert)
+  const filename = image.name
+  const ext = filename.slice(filename.lastIndexOf('.'))
+  const fileData = await firebase.storage().ref().child('adverts/' + advertRef.id + ext).put(image)
+  const url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+  return firebase.firestore().collection('adverts').doc(advertRef.id).update({imageUrl: url})
+}
+
+export const updateAdvertStatus = (advert, isActive, adverts) => {
+  const batch = firebase.firestore().batch()
+  let advertRef = firebase.firestore().collection('adverts').doc(advert.id)
+  batch.update(advertRef, {
+    isActive
+  })
+  if (isActive) {
+    const activeAdvert = adverts.find(a => a.isActive)
+    if (activeAdvert) {
+      advertRef = firebase.firestore().collection('adverts').doc(activeAdvert.id)
+      batch.update(advertRef, {
+        isActive: false
+      })
+    }
+  }
+  return batch.commit()
+}
+
+export const deleteAdvert = advert => {
+  return firebase.firestore().collection('adverts').doc(advert.id).delete()
+}
+
+export const editAdvert = async (advert, image) => {
+  let url
+  if (image) {
+    const filename = image.name
+    const ext = filename.slice(filename.lastIndexOf('.'))
+    const fileData = await firebase.storage().ref().child('adverts/' + advert.id + ext).put(image)
+    url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+  } else {
+    url = advert.imageUrl
+  }
+  return firebase.firestore().collection('adverts').doc(advert.id).update({
+    ...advert,
+    imageUrl: url
+  })
 }

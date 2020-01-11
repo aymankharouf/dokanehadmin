@@ -92,6 +92,10 @@ import CustomerCalls from './pages/customer-calls'
 import AddCall from './pages/add-call'
 import StoreTrans from './pages/store-trans'
 import PurchasePlan from './pages/purchase-plan'
+import Adverts from './pages/adverts'
+import AddAdvert from './pages/add-advert'
+import AdvertDetails from './pages/advert-details'
+import EditAdvert from './pages/edit-advert'
 
 export default [
   {
@@ -488,6 +492,22 @@ export default [
   {
     path: '/purchase-plan-details/:id',
     component: RequestedPacks
+  },
+  {
+    path: '/adverts/',
+    component: Adverts
+  },
+  {
+    path: '/add-advert/',
+    component: AddAdvert
+  },
+  {
+    path: '/advert-details/:id',
+    component: AdvertDetails
+  },
+  {
+    path: '/edit-advert/:id',
+    component: EditAdvert
   },
   {
     path: '(.*)',

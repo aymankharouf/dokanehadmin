@@ -34,7 +34,8 @@ const Store = props => {
     tags: [],
     notifications: [],
     archivedOrders: [],
-    calls: []
+    calls: [],
+    adverts: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -46,33 +47,6 @@ const Store = props => {
       dispatch({type: 'SET_CATEGORIES', categories})
     }, err => {
       unsubscribeCategories()
-    })
-    const unsubscribeTrademarks = firebase.firestore().collection('trademarks').onSnapshot(docs => {
-      let trademarks = []
-      docs.forEach(doc => {
-        trademarks.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_TRADEMARKS', trademarks})
-    }, err => {
-      unsubscribeTrademarks()
-    })  
-    const unsubscribeCountries = firebase.firestore().collection('countries').onSnapshot(docs => {
-      let countries = []
-      docs.forEach(doc => {
-        countries.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_COUNTRIES', countries})
-    }, err => {
-      unsubscribeCountries()
-    })  
-    const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
-      let products = []
-      docs.forEach(doc => {
-        products.push({...doc.data(), id: doc.id})
-      })
-      dispatch({type: 'SET_PRODUCTS', products})
-    }, err => {
-      unsubscribeProducts()
     })
     const unsubscribePacks = firebase.firestore().collection('packs').onSnapshot(docs => {
       let packs = []
@@ -100,11 +74,46 @@ const Store = props => {
       dispatch({type: 'SET_LOCATIONS', locations})
     }, err => {
       unsubscribeLocations()
-    })  
-
+    }) 
+    const unsubscribeAdverts = firebase.firestore().collection('adverts').onSnapshot(docs => {
+      let adverts = []
+      docs.forEach(doc => {
+        adverts.push({...doc.data(), id:doc.id})
+      })
+      dispatch({type: 'SET_ADVERTS', adverts})
+    }, err => {
+      unsubscribeAdverts()
+    }) 
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
+        const unsubscribeTrademarks = firebase.firestore().collection('trademarks').onSnapshot(docs => {
+          let trademarks = []
+          docs.forEach(doc => {
+            trademarks.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_TRADEMARKS', trademarks})
+        }, err => {
+          unsubscribeTrademarks()
+        })  
+        const unsubscribeCountries = firebase.firestore().collection('countries').onSnapshot(docs => {
+          let countries = []
+          docs.forEach(doc => {
+            countries.push({...doc.data(), id:doc.id})
+          })
+          dispatch({type: 'SET_COUNTRIES', countries})
+        }, err => {
+          unsubscribeCountries()
+        })  
+        const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
+          let products = []
+          docs.forEach(doc => {
+            products.push({...doc.data(), id: doc.id})
+          })
+          dispatch({type: 'SET_PRODUCTS', products})
+        }, err => {
+          unsubscribeProducts()
+        })    
         const unsubscribeOrders = firebase.firestore().collection('orders').where('isArchived', '==', false).onSnapshot(docs => {
           let orders = []
           docs.forEach(doc => {

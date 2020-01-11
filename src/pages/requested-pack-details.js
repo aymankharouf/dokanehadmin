@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { f7, Block, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { packUnavailable, showMessage, showError, getMessage, addQuantity, getRequestedPackStores } from '../data/actions'
@@ -168,47 +168,45 @@ const RequestedPackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={pack.productNname} backLink={labels.back} />
-      <Block>
-        <Card>
-          <CardContent>
-            <div className="card-title">{pack.name}</div>
-            <PackImage pack={pack} type="card" />
-          </CardContent>
-          <CardFooter>
-            <p>{`${labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
-            {`${labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
-            {`${labels.quantity}: ${props.quantity}`}</p>
-          </CardFooter>
-        </Card>
-        <List mediaList>
-          {packStores.length === 0 ? 
-            <ListItem 
-              link="#"
-              title={labels.unavailable}
-              onClick={() => handleUnavailable(false)}
-            />
-          : ''}
-          {pack.price > Number(props.price) ? 
-            <ListItem 
-              link="#"
-              title={labels.overPriced}
-              onClick={() => handleUnavailable(true)}
-            />
-          : ''}
-          {packStores.map(s => 
-            <ListItem 
-              title={s.storeInfo.name}
-              subtitle={`${s.packInfo.productName} ${s.packInfo.name}`}
-              text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-              footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
-              key={s.id}
-            >
-              <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
-            </ListItem>
-          )}
-        </List>
-      </Block>
+      <Navbar title={pack.productName} backLink={labels.back} />
+      <Card>
+        <CardContent>
+          <div className="card-title">{pack.name}</div>
+          <PackImage pack={pack} type="card" />
+        </CardContent>
+        <CardFooter>
+          <p>{`${labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
+          {`${labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
+          {`${labels.quantity}: ${props.quantity}`}</p>
+        </CardFooter>
+      </Card>
+      <List mediaList>
+        {packStores.length === 0 ? 
+          <ListItem 
+            link="#"
+            title={labels.unavailable}
+            onClick={() => handleUnavailable(false)}
+          />
+        : ''}
+        {pack.price > Number(props.price) ? 
+          <ListItem 
+            link="#"
+            title={labels.overPriced}
+            onClick={() => handleUnavailable(true)}
+          />
+        : ''}
+        {packStores.map(s => 
+          <ListItem 
+            title={s.storeInfo.name}
+            subtitle={`${s.packInfo.productName} ${s.packInfo.name}`}
+            text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+            footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
+            key={s.id}
+          >
+            <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
+          </ListItem>
+        )}
+      </List>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

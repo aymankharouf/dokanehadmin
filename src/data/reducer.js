@@ -258,6 +258,11 @@ const Reducer = (state, action) => {
           ...state,
           calls: action.calls
         }
+      case 'SET_ADVERTS':
+        return {
+          ...state,
+          adverts: action.adverts
+        }
       default:
         return state
     }

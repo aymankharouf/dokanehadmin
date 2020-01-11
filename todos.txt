@@ -133,9 +133,9 @@
 *stores last month trans & requested packs that can be purchased from
 *cancel a purchase or part of it
 *check for page permissions (admin & app)
+*auto archive orders & purchases after monthly trans
+*hints & help
+*advertisements
 request for edit order partially 
 merging orders
-hints & help
-advertisements
 debit
-auto archive orders & purchases after monthly trans

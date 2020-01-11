@@ -12,7 +12,8 @@ const Settings = props => {
     {id: '3', name: 'الاصناف', path: '/categories/0'},
     {id: '4', name: 'العلامات التجارية', path: '/trademarks/'},
     {id: '5', name: 'المناطق', path: '/locations/'},
-    {id: '6', name: 'الفئات', path: '/tags/'}
+    {id: '6', name: 'الفئات', path: '/tags/'},
+    {id: '7', name: 'الاعلانات', path: '/adverts/'}
   ], [])
   let i = 0
   return(

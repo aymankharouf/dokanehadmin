@@ -312,7 +312,15 @@ const labels = {
   trans: 'حركات',
   purchasePlan: 'خطة الشراء',
   approve: 'اعتماد',
-  inprocess: 'تنفيذ العملية'
+  inprocess: 'تنفيذ العملية',
+  addAdvert: 'اضافة اعلان',
+  title: 'العنوان',
+  text: 'النص',
+  stop: 'ايقاف',
+  activate: 'تفعيل',
+  adverts: 'الاعلانات',
+  advertDetails: 'تفاصيل الاعلان',
+  editAdvert: 'تعديل اعلان'
 }
 
 export default labels
