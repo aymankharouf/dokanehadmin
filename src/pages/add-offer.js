@@ -77,18 +77,16 @@ const AddOffer = props => {
         name,
         isOffer: true,
         closeExpired,
-        price: 0,
         subPackId,
         subQuantity: Number(subQuantity),
-        subPercent: Number(subPercent),
+        subPercent: subPercent / 100,
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
         orderLimit: Number(orderLimit),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
-        bonusPercent: Number(bonusPercent),
-        time: new Date()
+        bonusPercent: bonusPercent / 100
       }
       setInprocess(true)
       await addPack(pack)

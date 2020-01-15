@@ -70,7 +70,7 @@ const RetreivePassword = props => {
           readonly
         />
       </List>
-      <Button large onClick={() => handleSend()}>{labels.send}</Button>
+      <Button text={labels.send} large onClick={() => handleSend()} />
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

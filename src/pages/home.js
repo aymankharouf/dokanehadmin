@@ -28,17 +28,16 @@ const Home = props => {
       </Navbar>
       <Block>
         {mainPages.map(p => 
-          <Button 
+          <Button
+            text={p.name}
             large 
             fill 
             className="sections" 
             color={randomColors[i++ % 10].name} 
             href={p.path} 
             key={p.id}
-          >
-            {p.name}
-          </Button>
-        )}
+          />
+       )}
       </Block>
       <Toolbar bottom>
         <BottomToolbar isHome="1"/>

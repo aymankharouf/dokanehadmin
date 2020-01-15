@@ -131,11 +131,15 @@
 *smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
 *favorites
 *stores last month trans & requested packs that can be purchased from
-*cancel a purchase or part of it
 *check for page permissions (admin & app)
 *auto archive orders & purchases after monthly trans
 *hints & help
 *advertisements
-request for edit order partially 
-merging orders
+*request for edit order partially 
+*merging orders
+cancel a purchase or part of it
 debit
+return purchase discount
+delete unimportant data
+manage endoffer when approve alarm
+activetime and time & urgent flag

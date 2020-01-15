@@ -63,7 +63,7 @@ const PrepareOrdersList = props => {
                 subtitle={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                 key={o.id}
               >
-                <Button slot="after" onClick={() => handleAllocate(o)}>{labels.allocate}</Button>
+                <Button text={labels.allocate} slot="after" onClick={() => handleAllocate(o)} />
               </ListItem>
             )
           }

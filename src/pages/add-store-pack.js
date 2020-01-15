@@ -70,8 +70,7 @@ const AddStorePack = props => {
         storeId: store.id,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
-        offerEnd,
-        time: new Date()
+        offerEnd
       }
       const pack = state.packs.find(p => p.id === packId)
       setInprocess(true)

@@ -64,8 +64,7 @@ const AddStore = props => {
         locationId,
         position,
         canReturn,
-        address,
-        lastUpdate: new Date()
+        address
       })
       setInprocess(false)
       showMessage(labels.addSuccess)

@@ -61,9 +61,7 @@ const AddPack = props => {
         isDivided,
         closeExpired: false,
         byWeight,
-        isOffer: false,
-        price: 0,
-        time: new Date()
+        isOffer: false
       })
       setInprocess(false)
       showMessage(labels.addSuccess)

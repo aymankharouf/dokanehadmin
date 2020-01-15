@@ -56,8 +56,7 @@ const AddBulk = props => {
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        orderLimit: Number(orderLimit),
-        time: new Date()
+        orderLimit: Number(orderLimit)
       }
       setInprocess(true)
       await addPack(pack)

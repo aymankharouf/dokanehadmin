@@ -70,10 +70,10 @@ const EditOffer = props => {
         subQuantity: Number(subQuantity),
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         orderLimit: Number(orderLimit),
-        subPercent: Number(subPercent),
+        subPercent: subPercent / 100,
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
-        bonusPercent: Number(bonusPercent),
+        bonusPercent: bonusPercent / 100,
         closeExpired
       }
       setInprocess(true)

@@ -1,10 +1,10 @@
 export const setup = {
-  fixedFees: 2.5,
+  fixedFees: 0.025,
   maxDiscount: 100,
-  profit: 10,
+  profit: 0.1,
   weightErrorMargin: 10,
   orderLimit: 50000,
-  exceedPricePercent: 5,
+  exceedPricePercent: 0.05,
   returnPenalty: 100,
   invitationDiscount: 100,
   alarmDiscount: 100,
@@ -37,7 +37,8 @@ export const orderStatus = [
   {id: 'd', name: 'مستلم'},
   {id: 'c', name: 'ملغي'},
   {id: 'u', name: 'غير متوفر'},
-  {id: 'i', name: 'استيداع'}
+  {id: 'i', name: 'استيداع'},
+  {id: 'm', name: 'مدمج'}
 ]  
 
 export const storeTypes = [
@@ -109,4 +110,10 @@ export const callResults = [
   {id: 'r', name: 'تم التواصل'},
   {id: 'n', name: 'لا استجابة'},
   {id: 'p', name: 'تم تأجيل الاستلام'}
+]
+
+export const orderRequestTypes = [
+  {id: 'e', name: 'تعديل'},
+  {id: 'm', name: 'دمج'},
+  {id: 'c', name: 'الغاء'}
 ]

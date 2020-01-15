@@ -301,6 +301,8 @@ const labels = {
   approveOwenerChangePriceNotification: 'تم تغيير السعر للمنتج بناء على طلبك',
   approveOwenerDeletemNotification: 'تم حذف المنتج من محلك بناء على طلبك',
   approveCancelRequestNotification: 'تم اعتماد طلبك بإلغاء طلب الشراء',
+  approveMergeRequestNotification: 'تم اعتماد طلبك بدمج طلبي شراء',
+  approveEditRequestNotification: 'تم اعتماد طلبك بتعديل طلب الشراء',
   approveInvitationNotification: 'تم اعتماد دعوتك لصديق، سوف تحصل على خصم بمجرد ان يقوم صديقك بأول عملية شراء',
   blockCustomerNotification: 'تم للاسف حظر التعامل معك لعم استلامك لطلبك',
   callType: 'نوع الاتصال',
@@ -320,7 +322,22 @@ const labels = {
   activate: 'تفعيل',
   adverts: 'الاعلانات',
   advertDetails: 'تفاصيل الاعلان',
-  editAdvert: 'تعديل اعلان'
+  editAdvert: 'تعديل اعلان',
+  confirmMergeText: 'هناك طلب آخر لهذا العميل لم يتم تنفيذه بعد، هل تود دمجهما',
+  mergeSuccess: 'تم الدمج',
+  request: 'طلب',
+  requestedChange: 'التغيرر المطلوب',
+  increase: 'زيادة',
+  decrease: 'انقاص',
+  changeDeliveryToOff: 'الغاء التوصيل',
+  changeDeliveryToOn: 'اضافة خدمة التوصيل',
+  changeUrgentToOff: 'تحويل الطلب الى غير مستعجل',
+  changeUrgentToOn: 'تحويل الطلب الى مستعجل',
+  orderRequestPending: 'هناك طلب تعديل مرتبط بهذا الطلب غير معالج',
+  samePackWithDiffPrice: 'لا يمكن الدمج لوجود نفس المنتج في الطلبين لكن بسعرين مختلفين',
+  samePackPurchasedByWeight: 'لا يمكن الدمج لوجود منتج تم شراؤه بالوزن في الطلب السابق',
+  diffInDelivery: 'لا يمكن الدمج لاختلاف طريقة التسليم بين الطلبين',
+  diffInUrgent: 'لا يمكن الدمج لاختلاف مؤشر الاستعجال بين الطلبين'
 }
 
 export default labels

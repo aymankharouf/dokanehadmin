@@ -203,7 +203,7 @@ const RequestedPackDetails = props => {
             footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
             key={s.id}
           >
-            <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
+            <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} />
           </ListItem>
         )}
       </List>

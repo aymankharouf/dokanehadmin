@@ -224,3 +224,9 @@
 .actions-button {
   height: 3rem;
 }
+
+.note {
+  font-size: 0.9rem;
+  text-align: center;
+  color: red;
+}

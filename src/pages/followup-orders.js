@@ -21,16 +21,15 @@ const FollowupOrders = props => {
       <Navbar title={labels.followupOrders} backLink={labels.back} />
       <Block>
         {positions.map(p => 
-          <Button 
+          <Button
+            text={`${p.name} ${p.orders.length > 0 ? '(' + p.orders.length + ')' : ''}`}
             large 
             fill 
             className="sections" 
             color={randomColors[i++ % 10].name} 
             href={`/followup-orders-list/${p.id}`} 
             key={p.id}
-          >
-            {`${p.name} ${p.orders.length > 0 ? '(' + p.orders.length + ')' : ''}`}
-          </Button>
+          />
         )}
       </Block>
       <Toolbar bottom>

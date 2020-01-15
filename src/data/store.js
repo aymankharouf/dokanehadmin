@@ -30,7 +30,7 @@ const Store = props => {
     ratings: [],
     storePacks: [],
     logs: [],
-    cancelRequests: [],
+    orderRequests: [],
     tags: [],
     notifications: [],
     archivedOrders: [],
@@ -231,14 +231,14 @@ const Store = props => {
         }, err => {
           unsubscribeLogs()
         })  
-        const unsubscribeCancelRequests = firebase.firestore().collection('cancel-requests').onSnapshot(docs => {
-          let cancelRequests = []
+        const unsubscribeOrderRequests = firebase.firestore().collection('order-requests').onSnapshot(docs => {
+          let orderRequests = []
           docs.forEach(doc => {
-            cancelRequests.push({...doc.data(), id:doc.id})
+            orderRequests.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_CANCEL_REQUESTS', cancelRequests})
+          dispatch({type: 'SET_ORDER_REQUESTS', orderRequests})
         }, err => {
-          unsubscribeCancelRequests()
+          unsubscribeOrderRequests()
         })  
         const unsubscribeTags = firebase.firestore().collection('tags').onSnapshot(docs => {
           let tags = []

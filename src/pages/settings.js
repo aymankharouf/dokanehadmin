@@ -21,9 +21,15 @@ const Settings = props => {
       <Navbar title={labels.settings} backLink={labels.back} />
       <Block>
         {sections.map(s => 
-          <Button large fill className="sections" color={randomColors[i++ % 10].name} href={s.path} key={s.id}>
-            {s.name}
-          </Button>
+          <Button 
+            text={s.name} 
+            large 
+            fill 
+            className="sections" 
+            color={randomColors[i++ % 10].name} 
+            href={s.path} 
+            key={s.id} 
+          />
         )}
       </Block>
       <Toolbar bottom>

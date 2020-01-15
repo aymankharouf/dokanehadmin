@@ -54,7 +54,7 @@ const Login = props => {
         />
       </List>
       {!email || !password ? '' : 
-        <Button large onClick={() => handleLogin()}>{labels.logon}</Button>
+        <Button text={labels.logon} large onClick={() => handleLogin()} />
       }
     </Page>
   )

@@ -185,7 +185,7 @@ const PackDetails = props => {
             <Badge slot="title" color='green'>{labels.offer}</Badge> 
           : ''}
           {s.storeId === 's' ? '' :
-            <Button slot="after" onClick={() => handlePurchase(s)}>{labels.purchase}</Button>
+            <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} />
           }
         </ListItem>
       )}

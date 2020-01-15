@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder, mergeOrder } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -25,14 +25,6 @@ const OrderDetails = props => {
       statusNote
     }
   }), [order, state.packs, state.stores])
-  const fractionFromProfit = useMemo(() => {
-    let fraction = 0
-    if (order.fixedFees === 0) {
-      const profit = order.basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
-      fraction = profit - order.profit
-    }
-    return fraction
-  }, [order])
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', name: 'اعتماد', status: ['n', 's'], cancelFlag: false},
@@ -44,6 +36,11 @@ const OrderDetails = props => {
     ]
     return statusActions.filter(a => a.status.find(s => s === order.status) && (props.requestId ? a.cancelFlag : true))
   }, [order.status, props.requestId])
+  const lastOrder = useMemo(() => {
+    const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
+    userOrders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    return ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''
+  }, [state.orders, order])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -62,42 +59,81 @@ const OrderDetails = props => {
     try{
       if (type === 'e') {
         props.f7router.navigate(`/edit-order/${order.id}`)
-      } else {  
-        if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
+      } else if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
-        }
-        if (type === 'i') {
-          f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
-            try{
-              setInprocess(true)
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, true)
-              setInprocess(false)
-              showMessage(labels.editSuccess)
-              props.f7router.back()
-            } catch(err) {
-              setInprocess(false)
-              setError(getMessage(props, err))
+      } else if (type === 'a' && state.orderRequests.find(r => r.order.id === order.id && r.status === 'n')){
+          throw new Error('orderRequestPending')
+      } else if (type === 'a' && lastOrder) {
+        f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, async () => {
+          try{
+            if (order.withDelivery !== lastOrder.withDelivery) {
+              throw new Error('diffInDelivery')
             }
-          },
-          async () => {
-            try{
-              setInprocess(true)
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId, false)
-              setInprocess(false)
-              showMessage(labels.editSuccess)
-              props.f7router.back()
-            } catch(err) {
-              setInprocess(false)
-              setError(getMessage(props, err))
+            if (order.urgent !== lastOrder.urgent) {
+              throw new Error('diffInUrgent')
             }
-          })
-        }
+            let found
+            for (let p of order.basket) {
+              found = lastOrder.basket.find(bp => bp.packId === p.packId)
+              if (found && found.price !== p.price) {
+                throw new Error('samePackWithDiffPrice')
+              }
+              if (found && found.weight > 0 && state.packs.find(pa => pa.id === p.packId).isDivided) {
+                throw new Error('samePackPurchasedByWeight')
+              }
+            }
+            setInprocess(true)
+            await mergeOrder(order, lastOrder)
+            setInprocess(false)
+            showMessage(labels.mergeSuccess)
+            props.f7router.back()
+          } catch(err) {
+            setInprocess(false)
+            setError(getMessage(props, err))
+          }
+        }, async () => {
+          try{
+            setInprocess(true)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId)
+            setInprocess(false)
+            showMessage(labels.editSuccess)
+            props.f7router.back()
+              } catch(err) {
+            setInprocess(false)
+            setError(getMessage(props, err))
+          }
+        })
+      } else if (type === 'i') {
+        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+          try{
+            setInprocess(true)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, true)
+            setInprocess(false)
+            showMessage(labels.editSuccess)
+            props.f7router.back()
+          } catch(err) {
+            setInprocess(false)
+            setError(getMessage(props, err))
+          }
+        }, async () => {
+          try{
+            setInprocess(true)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
+            setInprocess(false)
+            showMessage(labels.editSuccess)
+            props.f7router.back()
+          } catch(err) {
+            setInprocess(false)
+            setError(getMessage(props, err))
+          }
+        })
+      } else {
         setInprocess(true)
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
         setInprocess(false)
         showMessage(labels.editSuccess)
         props.f7router.back()
-      }  
+      }
     } catch(err) {
       setInprocess(false)
 			setError(getMessage(props, err))
@@ -199,7 +235,7 @@ const OrderDetails = props => {
           <ListItem 
             title={labels.net} 
             className="net" 
-            after={((order.total + order.fixedFees + (order.deliveryFees || 0) - (order.discount || 0) - fractionFromProfit) / 1000).toFixed(3)} 
+            after={((order.total + order.fixedFees + (order.deliveryFees || 0) - (order.discount || 0)) / 1000).toFixed(3)} 
           />
           {order.profit ? 
             <ListItem 

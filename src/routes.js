@@ -63,7 +63,7 @@ import Ratings from './pages/ratings'
 import Approvals from './pages/approvals'
 import PackTrans from './pages/pack-trans'
 import AddPackStore from './pages/add-pack-store'
-import CancelRequests from './pages/cancel-requests'
+import OrderRequests from './pages/order-requests'
 import Logs from './pages/logs'
 import Prices from './pages/prices'
 import StoreDetails from './pages/store-details'
@@ -96,6 +96,7 @@ import Adverts from './pages/adverts'
 import AddAdvert from './pages/add-advert'
 import AdvertDetails from './pages/advert-details'
 import EditAdvert from './pages/edit-advert'
+import OrderRequestDetails from './pages/order-request-details'
 
 export default [
   {
@@ -314,10 +315,6 @@ export default [
     component: OrderDetails
   },
   {
-    path: '/cancel-request/:id/request/:requestId/type/:type',
-    component: OrderDetails
-  },
-  {
     path: '/edit-order/:id',
     component: EditOrder
   },
@@ -394,8 +391,8 @@ export default [
     component: PackTrans
   },
   {
-    path: '/cancel-requests/',
-    component: CancelRequests
+    path: '/order-requests/',
+    component: OrderRequests
   },
   {
     path: '/logs/',
@@ -508,6 +505,10 @@ export default [
   {
     path: '/edit-advert/:id',
     component: EditAdvert
+  },
+  {
+    path: '/order-request-details/:id',
+    component: OrderRequestDetails
   },
   {
     path: '(.*)',

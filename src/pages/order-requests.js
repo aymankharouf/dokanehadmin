@@ -5,38 +5,41 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { orderStatus } from '../data/config'
+import { orderStatus, orderRequestTypes } from '../data/config'
 
-const CancelRequests = props => {
+const OrderRequests = props => {
   const { state } = useContext(StoreContext)
-  const cancelRequests = useMemo(() => {
-    let requests = state.cancelRequests.filter(o => o.status === 'n')
+  const orderRequests = useMemo(() => {
+    let requests = state.orderRequests.filter(r => r.status === 'n')
     requests = requests.map(r => {
       const userInfo = state.users.find(u => u.id === r.order.userId)
-      const customerInfo = state.customers.find(c => c.id === r.userId)
+      const customerInfo = state.customers.find(c => c.id === r.order.userId)
       const orderStatusInfo = orderStatus.find(s => s.id === r.order.status)
+      const requestTypeInfo = orderRequestTypes.find(t => t.id === r.type)
       return {
         ...r,
         userInfo,
         customerInfo,
-        orderStatusInfo
+        orderStatusInfo,
+        requestTypeInfo
       }
     })
     return requests.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
-  }, [state.cancelRequests, state.users, state.customers])
+  }, [state.orderRequests, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.cancelOrders} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {cancelRequests.length === 0 ? 
+          {orderRequests.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : cancelRequests.map(r => 
+          : orderRequests.map(r => 
               <ListItem
-                link={`/cancel-request/${r.order.id}/request/${r.id}/type/n`}
+                link={`/order-request-details/${r.id}`}
                 title={r.customerInfo.fullName || `${r.userinfo.name}:${r.userinfo.mobile}`}
                 subtitle={r.orderStatusInfo.name}
-                text={moment(r.time.toDate()).fromNow()}
+                text={r.requestTypeInfo.name}
+                footer={moment(r.time.toDate()).fromNow()}
                 after={(r.order.total / 1000).toFixed(3)}
                 key={r.id}
               />
@@ -51,4 +54,4 @@ const CancelRequests = props => {
   )
 }
 
-export default CancelRequests
+export default OrderRequests

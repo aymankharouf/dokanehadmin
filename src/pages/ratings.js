@@ -67,7 +67,7 @@ const Ratings = props => {
                 key={r.id}
               >
                 <img slot="media" src={r.productInfo.imageUrl} className="img-list" alt={r.productInfo.name} />
-                <Button slot="after" onClick={() => handleApprove(r)}>{labels.approve}</Button>
+                <Button text={labels.approve} slot="after" onClick={() => handleApprove(r)} />
               </ListItem>
             )
           }

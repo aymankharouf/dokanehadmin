@@ -59,8 +59,7 @@ const EditPrice = props => {
         ...storePack,
         price: price * 1000,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
-        offerEnd,
-        time: new Date()
+        offerEnd
       }
       setInprocess(true)
       await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)

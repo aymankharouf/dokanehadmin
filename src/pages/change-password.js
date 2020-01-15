@@ -57,7 +57,7 @@ const ChangePassword = props => {
         />
       </List>
       {!oldPassword || !newPassword || oldPassword === newPassword ? '' :
-        <Button large onClick={() => handleSubmit()}>{labels.submit}</Button>
+        <Button text={labels.submit} large onClick={() => handleSubmit()} />
       }
     </Page>
   )

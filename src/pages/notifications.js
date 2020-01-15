@@ -66,7 +66,7 @@ const Notifications = props => {
                 footer={moment(n.time.toDate()).fromNow()}
                 key={n.id}
               >
-                <Button slot="after" onClick={() => handleDelete(n)}>{labels.delete}</Button>
+                <Button text={labels.delete} slot="after" onClick={() => handleDelete(n)} />
               </ListItem>
             )
           }

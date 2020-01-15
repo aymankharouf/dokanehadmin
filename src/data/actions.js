@@ -11,7 +11,7 @@ export const getMessage = (props, error) => {
       userId: firebase.auth().currentUser.uid,
       error: error.code,
       page: props.f7route.route.component.name,
-      time: new Date()
+      time: firebase.firestore.FieldValue.serverTimestamp()
     })
   }
   return labels[errorCode] ? labels[errorCode] : labels['unknownError']
@@ -73,7 +73,7 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
   if (orderPack.price < basketPack.actual) {
     if (basketPack.exceedPriceType === 'p' && orderPack.price < currentPrice){
       customerInfo = customers.find(c => c.id === order.userId)
-      if (customerInfo.exceedPrice && parseInt(orderPack.price * (100 + setup.exceedPricePercent) / 100) >= basketPack.actual){
+      if (customerInfo.exceedPrice && parseInt(orderPack.price * (1 + setup.exceedPricePercent)) >= basketPack.actual){
         actual = basketPack.actual
       } else {
         return
@@ -93,7 +93,6 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
   const avgCost = orderPackQuantity === 0 ? basketPack.cost : parseInt((orderPack.cost * orderPackQuantity + basketPack.cost * basketPackQuantity) / addQuantity(orderPackQuantity, basketPackQuantity))
   const avgActual = orderPackQuantity === 0 ? actual : parseInt((orderPack.actual * orderPackQuantity + basketPack.actual * basketPackQuantity) / addQuantity(orderPackQuantity, basketPackQuantity))
   const weight = addQuantity(orderPack.weight || 0, basketPack.weight)
-  const fees = storeId === 's' ? 0 : parseInt(actual * basketPackQuantity * setup.fixedFees / 100)
   let status 
   if (basketPack.isDivided) {
     status = parseInt(Math.abs(addQuantity(orderPack.quantity, -1 * orderPack.purchased, -1 * basketPack.quantity)) / orderPack.quantity * 100) <= setup.weightErrorMargin ? 'f' : 'p'
@@ -110,8 +109,7 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
       actual: avgActual,
       gross: status === 'f' ? parseInt(avgActual * addQuantity(orderPackQuantity, basketPackQuantity)) : parseInt(avgActual * addQuantity(orderPackQuantity, basketPackQuantity)) + parseInt(orderPack.price * addQuantity(orderPack.quantity, -1 * orderPackQuantity, -1 * basketPackQuantity)),
       weight,
-      status,
-      fees: (orderPack.fees || 0) + fees
+      status
     }
   ]
   if (basket.length === basket.filter(p => ['f', 'u', 'pu'].includes(p.status)).length) {
@@ -119,15 +117,8 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
   }
   let profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? ((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
   const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
-  let fixedFees = basket.reduce((sum, p) => sum + (p.fees || 0), 0)
-  fixedFees = Math.ceil(((order.urgent ? 1.5 : 1) * fixedFees) / 50) * 50
   const fraction = total - Math.floor(total / 50) * 50
-  if (fraction <= fixedFees) {
-    fixedFees = fixedFees - fraction
-  } else {
-    profit = profit - (fraction - fixedFees)
-    fixedFees = 0
-  }
+  const fixedFees = Math.ceil((order.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
     basket,
@@ -135,21 +126,21 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
     total,
     fixedFees,
     status: orderStatus,
-    lastUpdate: new Date()
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
 }
 
 export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, customers) => {
   let remaining = basketPack.quantity
   let orderPack, otherPacks, purchased, orderStatus, avgCost, avgActual, status
-  let basket, profit, total, fixedFees, fraction, orderRef, fees, customerInfo, actual
+  let basket, profit, total, fixedFees, fraction, orderRef, customerInfo, actual
   for (let o of orders){
     if (remaining <= 0) break
     orderPack = o.basket.find(p => p.packId === basketPack.packId)
     if (orderPack.price < basketPack.actual) {
       if (basketPack.exceedPriceType === 'p' && orderPack.price < currentPrice){
         customerInfo = customers.find(c => c.id === o.userId)
-        if (customerInfo.exceedPrice && parseInt(orderPack.price * (100 + setup.exceedPricePercent) / 100) >= basketPack.actual){
+        if (customerInfo.exceedPrice && parseInt(orderPack.price * (1 + setup.exceedPricePercent)) >= basketPack.actual){
           actual = basketPack.actual
         } else {
           break
@@ -172,7 +163,6 @@ export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, c
     avgCost = orderPack.purchased === 0 ? basketPack.cost : parseInt((orderPack.cost * orderPack.purchased + basketPack.cost * purchased) / addQuantity(orderPack.purchased, purchased))
     avgActual = orderPack.purchased === 0 ? actual : parseInt((orderPack.actual * orderPack.purchased + actual * purchased) / addQuantity(orderPack.purchased, purchased))
     status = orderPack.quantity === addQuantity(orderPack.purchased, purchased) ? 'f' : 'p'
-    fees = storeId === 's' ? 0 : parseInt(actual * purchased * setup.fixedFees * (basketPack.isOffer ? 2 : 1) / 100)
     basket = [
       ...otherPacks, 
       {
@@ -182,8 +172,7 @@ export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, c
         cost: avgCost,
         actual: avgActual,
         gross: status === 'f' ? avgActual * addQuantity(orderPack.purchased, purchased) : avgActual * addQuantity(orderPack.purchased, purchased) + orderPack.price * addQuantity(orderPack.quantity, -1 * orderPack.purchased, -1 * purchased),
-        status,
-        fees: (orderPack.fees || 0) + fees
+        status
       }
     ]
     if (basket.length === basket.filter(p => ['f', 'u', 'pu'].includes(p.status)).length) {
@@ -191,15 +180,8 @@ export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, c
     }
     profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight ? p.weight : p.purchased)) : 0, 0)
     total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
-    fixedFees = basket.reduce((sum, p) => sum + (p.fees || 0), 0)
-    fixedFees = Math.ceil(((o.urgent ? 1.5 : 1) * fixedFees) / 50) * 50
     fraction = total - Math.floor(total / 50) * 50
-    if (fraction <= fixedFees) {
-      fixedFees = fixedFees - fraction
-    } else {
-      profit = profit - (fraction - fixedFees)
-      fixedFees = 0
-    }
+    fixedFees = Math.ceil((o.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction  
     orderRef = firebase.firestore().collection('orders').doc(o.id)
     batch.update(orderRef, {
       basket,
@@ -207,7 +189,7 @@ export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, c
       total,
       fixedFees,
       status: orderStatus,
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
     remaining -=  purchased
   }
@@ -229,7 +211,7 @@ export const returnOrder = (order, storePacks, packs) => {
     batch.update(orderRef, {
       status: 'i',
       position: firebase.firestore.FieldValue.delete(),
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
   } else {
     batch.update(orderRef, {
@@ -247,55 +229,48 @@ export const returnOrder = (order, storePacks, packs) => {
   return batch.commit()
 }
 
-export const updateOrderStatus = (order, type, storePacks, packs, calls, users, invitations, cancelRequestId, blockUserFlag) => {
-  const batch = firebase.firestore().batch()
+export const updateOrderStatus = (order, type, storePacks, packs, calls, users, invitations, blockUserFlag, batch) => {
+  const newBatch = batch || firebase.firestore().batch()
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
-  batch.update(orderRef, {
+  newBatch.update(orderRef, {
     status: type,
-    lastUpdate: new Date()
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
-  if (cancelRequestId) {
-    const cancelRequestRef = firebase.firestore().collection('cancel-requests').doc(cancelRequestId)
-    batch.update(cancelRequestRef, {
-      status: 'a'
-    })
-    sendNotification(batch, order.userId, labels.approveCancelRequestNotification)
-  }
   let customerRef
   if (type === 'a') {
     customerRef = firebase.firestore().collection('customers').doc(order.userId)
-    batch.update(customerRef, {
+    newBatch.update(customerRef, {
       ordersCount: firebase.firestore.FieldValue.increment(1)
     }) 
     if (order.discount > 0 && order.discount < setup.firstOrderDiscount) { //not first order
-      batch.update(customerRef, {
+      newBatch.update(customerRef, {
         discounts: firebase.firestore.FieldValue.increment(-1 * order.discount)
       })  
     }
-    sendNotification(batch, order.userId, labels.approveOrderNotification)
+    sendNotification(newBatch, order.userId, labels.approveOrderNotification)
   } else if (type === 'c') {
     if (order.discount > 0 && order.discount < setup.firstOrderDiscount) { //not first order
       customerRef = firebase.firestore().collection('customers').doc(order.userId)
-      batch.update(customerRef, {
+      newBatch.update(customerRef, {
         discounts: firebase.firestore.FieldValue.increment(order.discount)
       })  
     }
   } else if (type === 'i') {
     const basket = order.basket.filter(p => p.purchased > 0)
-    stockIn(batch, 'i', basket, storePacks, packs)
+    stockIn(newBatch, 'i', basket, storePacks, packs)
     if (blockUserFlag) {
       customerRef = firebase.firestore().collection('customers').doc(order.userId)
       batch.update(customerRef, {
         isBlocked: true
       })
-      sendNotification(batch, order.userId, labels.blockCustomerNotification)
+      sendNotification(newBatch, order.userId, labels.blockCustomerNotification)
     }
-    deleteCalls(batch, order, calls)
+    deleteCalls(newBatch, order, calls)
   } else if (type === 'd'){
     order.basket.forEach(p => {
       const packInfo = packs.find(pa => pa.id === p.packId)
       const productRef = firebase.firestore().collection('products').doc(packInfo.productId)
-      batch.update(productRef, {
+      newBatch.update(productRef, {
         sales: firebase.firestore.FieldValue.increment(p.purchased)
       })
       const affectedPacks = packs.filter(pa => pa.productId === packInfo.productId)
@@ -307,7 +282,7 @@ export const updateOrderStatus = (order, type, storePacks, packs, calls, users, 
       })
     })
     customerRef = firebase.firestore().collection('customers').doc(order.userId)
-    batch.update(customerRef, {
+    newBatch.update(customerRef, {
       deliveredOrdersCount: firebase.firestore.FieldValue.increment(1),
       deliveredOrdersTotal: firebase.firestore.FieldValue.increment(order.total)
     })  
@@ -315,18 +290,20 @@ export const updateOrderStatus = (order, type, storePacks, packs, calls, users, 
     const invitedBy = invitations.find(i => i.friendMobile === userInfo.mobile && i.status === 'a')
     if (invitedBy) {
       customerRef = firebase.firestore().collection('customers').doc(invitedBy.userId)
-      batch.update(customerRef, {
+      newBatch.update(customerRef, {
         discounts: firebase.firestore.FieldValue.increment(setup.invitationDiscount)
       })
     }
     if (order.position === 's' && !order.basket.find(p => p.returned > 0)) {
-      batch.update(orderRef, {
+      newBatch.update(orderRef, {
         position: firebase.firestore.FieldValue.delete()
       })
     }
-    deleteCalls(batch, order, calls)
+    deleteCalls(newBatch, order, calls)
   }
-  return batch.commit()
+  if (!batch) {
+    return newBatch.commit()
+  }
 }
 
 const stockIn = (batch, type, basket, storePacks, packs, storeId) => {
@@ -334,7 +311,7 @@ const stockIn = (batch, type, basket, storePacks, packs, storeId) => {
   const newBasket = basket.map(p => {
     return {
       packId: p.packId,
-      price: parseInt(p.cost * (100 + setup.profit) / 100),
+      price: parseInt(p.cost * (1 + setup.profit)),
       quantity: p.quantity,
       cost: p.cost
     }
@@ -345,7 +322,7 @@ const stockIn = (batch, type, basket, storePacks, packs, storeId) => {
     storeId: storeId || '',
     type,
     total,
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   newBasket.forEach(p => {
     packStockIn(batch, p, storePacks, packs)
@@ -364,7 +341,7 @@ const packStockIn = (batch, basketPack, storePacks, packs) => {
       price: avgPrice, 
       cost: avgCost, 
       quantity: addQuantity(basketPack.quantity, stock.quantity), 
-      time: new Date()
+      time: firebase.firestore.FieldValue.serverTimestamp()
     }
     storePackRef = firebase.firestore().collection('store-packs').doc(stock.id)
     batch.update(storePackRef, newStock)
@@ -375,7 +352,7 @@ const packStockIn = (batch, basketPack, storePacks, packs) => {
       price: basketPack.price, 
       cost: basketPack.cost, 
       quantity: basketPack.quantity, 
-      time: new Date()
+      time: firebase.firestore.FieldValue.serverTimestamp()
     }
     storePackRef = firebase.firestore().collection('store-packs').doc()
     batch.set(storePackRef, newStock)
@@ -411,7 +388,7 @@ export const confirmPurchase = (basket, orders, storeId, storePacks, packs, cust
     basket: packBasket,
     total,
     discount: parseInt(discount * 1000),
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   let packOrders, remaining, packInfo, pack, quantity
   let packsIn = []
@@ -489,7 +466,7 @@ export const stockOut = (basket, orders, storePacks, packs, customers) => {
     basket: packBasket,
     type: 'r',
     total,
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   const approvedOrders = orders.filter(o => o.status === 'a' || o.status === 'e')
   basket.forEach(p => {
@@ -519,7 +496,7 @@ const packStockOut = (batch, basketPack, storePacks, packs) => {
       price: 0,
       cost: 0,
       quantity: 0, 
-      time: new Date()
+      time: firebase.firestore.FieldValue.serverTimestamp()
     })
     const pack = packs.find(p => p.id === basketPack.packId)
     const { minPrice, minStoreId, weightedPrice, offerEnd } = getMinPrice(stock, pack, storePacks, packs, true)
@@ -536,10 +513,13 @@ const packStockOut = (batch, basketPack, storePacks, packs) => {
 export const addStorePack = (storePack, pack, storePacks, packs) => {
   const batch = firebase.firestore().batch()
   const storePackRef = firebase.firestore().collection('store-packs').doc()
-  batch.set(storePackRef, storePack)
+  batch.set(storePackRef, {
+    ...storePack,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
   const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
   batch.update(storeRef, {
-    lastUpdate: new Date()
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
   let newPack = pack
   if (storePack.cost !== storePack.price && storePack.storeId !== 's' && pack.subPackId) { //from type 5
@@ -559,7 +539,13 @@ export const addStorePack = (storePack, pack, storePacks, packs) => {
 }
 
 export const addProduct = async (product, image) => {
-  const productRef = await firebase.firestore().collection('products').add(product)
+  const productRef = await firebase.firestore().collection('products').add({
+    ...product,
+    sales: 0,
+    rating: 0,
+    ratingCount: 0,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
   const filename = image.name
   const ext = filename.slice(filename.lastIndexOf('.'))
   const fileData = await firebase.storage().ref().child('products/' + productRef.id + ext).put(image)
@@ -604,10 +590,13 @@ export const editProduct = async (product, image, packs) => {
 export const editPrice = (storePack, oldPrice, pack, storePacks, packs) => {
   const batch = firebase.firestore().batch()
   const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
-  batch.update(storePackRef, storePack)
+  batch.update(storePackRef, {
+    ...storePack,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
   const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
     batch.update(storeRef, {
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
   let newPack = pack
   if (storePack.cost !== storePack.price && storePack.storeId !== 's' && pack.subPackId) { //from type 5
@@ -634,7 +623,7 @@ export const haltOffer = (storePack, storePacks, packs) => {
   })
   const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
   batch.update(storeRef, {
-    lastUpdate: new Date()
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
   const pack = packs.find(p => p.id === storePack.packId)
   if (storePack.price === pack.price) {
@@ -703,7 +692,7 @@ export const deleteStorePack = (storePack, storePacks, packs) => {
   batch.delete(storePackRef)
   const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
   batch.update(storeRef, {
-    lastUpdate: new Date()
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
   const pack = packs.find(p => p.id === storePack.packId)
   let newPack = pack
@@ -724,7 +713,10 @@ export const deleteStorePack = (storePack, storePacks, packs) => {
 }
 
 export const addStore = store => {
-  return firebase.firestore().collection('stores').add(store)
+  return firebase.firestore().collection('stores').add({
+    ...store,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
 }
 
 export const editStore = store => {
@@ -741,7 +733,7 @@ export const addStock = () => {
 export const addSpending = spending => {
   return firebase.firestore().collection('spendings').add({
     ...spending,
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
 }
 
@@ -859,7 +851,11 @@ export const resolvePasswordRequest = requestId => {
 }
 
 export const addPack = pack => {
-  return firebase.firestore().collection('packs').add(pack)
+  return firebase.firestore().collection('packs').add({
+    ...pack,
+    price: 0,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
 }
 
 export const editPack = pack => {
@@ -901,7 +897,7 @@ export const approveUser = user => {
     deliveredOrdersCount: 0,
     returnedCount: 0,
     deliveredOrdersTotal: 0,
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
@@ -936,13 +932,13 @@ export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) =>
       price: alarm.price,
       userId: alarm.userId,
       offerEnd: alarm.offerEnd,
-      time: new Date(),
+      time: firebase.firestore.FieldValue.serverTimestamp()
     }
     const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
     batch.update(storePackRef, newStorePack)
     const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
     batch.update(storeRef, {
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
     if (newStorePack.price < pack.price || pack.price === 0 || pack.price === oldPrice) {
       const { minPrice, minStoreId, weightedPrice, offerEnd } = getMinPrice(newStorePack, pack, storePacks, packs, false)
@@ -960,7 +956,7 @@ export const approveAlarm = (alarm, pack, store, customer, storePacks, packs) =>
     batch.delete(storePackRef)
     const storeRef = firebase.firestore().collection('stores').doc(storePack.storeId)
     batch.update(storeRef, {
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
     if (storePack.price === pack.price) {
       const { minPrice, minStoreId, weightedPrice, offerEnd } = getMinPrice(storePack, pack, storePacks, packs, true)
@@ -1014,15 +1010,8 @@ export const packUnavailable = (pack, packPrice, orders, overPriced) => {
       discount = 0
     } else {
       profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
-      fixedFees = basket.reduce((sum, p) => sum + (p.fees || 0), 0)
-      fixedFees = Math.ceil(((o.urgent ? 1.5 : 1) * fixedFees) / 50) * 50
       fraction = total - Math.floor(total / 50) * 50
-      if (fraction <= fixedFees) {
-        fixedFees = fixedFees - fraction
-      } else {
-        profit = profit - (fraction - fixedFees)
-        fixedFees = 0
-      }
+      fixedFees = Math.ceil((o.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
     }
     const orderRef = firebase.firestore().collection('orders').doc(o.id)
     batch.update(orderRef, {
@@ -1032,7 +1021,7 @@ export const packUnavailable = (pack, packPrice, orders, overPriced) => {
       fixedFees,
       discount,
       status: orderStatus,
-      lastUpdate: new Date()
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
     })
   })
   return batch.commit()
@@ -1054,8 +1043,8 @@ export const addMonthlyTrans = (trans, orders) => {
   return batch.commit()
 }
 
-export const editOrder = (order, basket, storePacks, packs, locations, customer) => {
-  const batch = firebase.firestore().batch()
+export const editOrder = (order, basket, storePacks, packs, locations, customers, batch) => {
+  const newBatch = batch || firebase.firestore().batch()
   let returnBasket = basket.filter(p => p.quantity < p.purchased)
   if (returnBasket.length > 0){
     returnBasket = returnBasket.map(p => {
@@ -1064,36 +1053,25 @@ export const editOrder = (order, basket, storePacks, packs, locations, customer)
         quantity: addQuantity(p.purchased, p.quantity)
       }
     })
-    stockIn(batch, 'i', returnBasket, storePacks, packs)
+    stockIn(newBatch, 'i', returnBasket, storePacks, packs)
   }
   let packBasket = basket.filter(p => p.quantity > 0)
   packBasket = packBasket.map(p => {
     const status = p.quantity === p.purchased ? 'f' : p.purchased > 0 ? 'p' : 'n'
-    let returnedFees = 0
-    if (p.quantity < p.purchased) {
-      returnedFees = Math.max(0, parseInt((p.purchased - p.quantity) * p.actual * setup.fixedFees / 100))
-    }
     return {
       ...p,
       purchased: Math.min(p.quantity, p.purchased),
       status,
       gross: status === 'f' ? parseInt(p.actual * (p.weight || p.purchased)) : parseInt((p.actual || 0) * (p.weight || p.purchased)) + parseInt(p.price * addQuantity(p.quantity, -1 * p.purchased)),
-      fees: (p.fees || 0) - returnedFees
     }
   })
   let profit = packBasket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
   const total = packBasket.reduce((sum, p) => sum + (p.gross || 0), 0)
-  let fixedFees = packBasket.reduce((sum, p) => sum + (p.fees || 0), 0)
-  fixedFees = Math.ceil(((order.urgent ? 1.5 : 1) * fixedFees) / 50) * 50
   const fraction = total - Math.floor(total / 50) * 50
-  if (fraction <= fixedFees) {
-    fixedFees = fixedFees - fraction
-  } else {
-    profit = profit - (fraction - fixedFees)
-    fixedFees = 0
-  }
+  const fixedFees = Math.ceil((order.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
+  const customer = customers.find(c => c.id === order.userId)
   const customerLocation = customer.locationId ? locations.find(l => l.id === customer.locationId) : ''
-  const deliveryFees = order.withDelivery ? (customer.deliveryFees ?? (customerLocation?.deliveryFees || '')) * (order.urgent ? 1.5 : 1) : 0
+  const deliveryFees = order.withDelivery ? (customerLocation?.deliveryFees || setup.deliveryFees) * (order.urgent ? 1.5 : 1) - (customer.deliveryDiscount || 0) : 0
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   let orderStatus = order.status
   if (packBasket.length === 0){
@@ -1107,18 +1085,20 @@ export const editOrder = (order, basket, storePacks, packs, locations, customer)
   } else if (packBasket.filter(p => p.purchased > 0).length > 0) {
     orderStatus = 'e'
   }
-  const lastUpdate = orderStatus === order.status ? (order.lastUpdate || order.time) : new Date()
-  batch.update(orderRef, {
+  newBatch.update(orderRef, {
     ...order,
     basket: packBasket,
     total,
     profit,
     fixedFees,
     deliveryFees,
+    deliveryDiscount: order.withDelivery ? customer.deliveryDiscount : 0,
     status: orderStatus,
-    lastUpdate
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
-  return batch.commit()
+  if (!batch) {
+    return newBatch.commit()
+  }
 }
 
 export const changePassword = async (oldPassword, newPassword) => {
@@ -1174,7 +1154,7 @@ export const returnOrderPacks = (order, pack, returned) => {
   const batch = firebase.firestore().batch()
   const orderPack = order.basket.find(p => p.packId === pack.id)
   const otherPacks = order.basket.filter(p => p.packId !== pack.id)
-  let status, gross, returnedFees
+  let status, gross
   if (returned === 0 && orderPack.returned > 0) {
     if (pack.isDivided) {
       status = parseInt(Math.abs(addQuantity(orderPack.quantity, -1 * orderPack.purchased)) / orderPack.quantity * 100) <= setup.weightErrorMargin ? 'f' : 'pu'
@@ -1182,16 +1162,13 @@ export const returnOrderPacks = (order, pack, returned) => {
       status = orderPack.quantity === orderPack.purchased ? 'f' : 'pu'
     }
     gross = parseInt(orderPack.actual * (orderPack.weight || orderPack.purchased))
-    returnedFees = -1 * parseInt(orderPack.returned * orderPack.actual * setup.fixedFees / 100)
   } else {
     if (returned === orderPack.purchased) {
       status = 'r'
       gross = 0
-      returnedFees = orderPack.fees
     } else {
       status = 'pr'
       gross = parseInt(orderPack.actual * addQuantity(orderPack.weight || orderPack.purchased, -1 * returned))
-      returnedFees = parseInt(returned * orderPack.actual * setup.fixedFees / 100)
     }
   }
   const basket = [
@@ -1201,20 +1178,12 @@ export const returnOrderPacks = (order, pack, returned) => {
       status,
       gross,
       returned: pack.isDivided || !pack.byWeight ? returned : orderPack.purchased,
-      fees: orderPack.fees - returnedFees
     }
   ]
   let profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu', 'pr'].includes(p.status) ? parseInt((p.actual - p.cost) * addQuantity(p.weight || p.purchased, -1 * (p.returned || 0))) : 0, 0)
   const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
-  let fixedFees = basket.reduce((sum, p) => sum + (p.fees || 0), 0)
-  fixedFees = Math.ceil(((order.urgent ? 1.5 : 1) * fixedFees) / 50) * 50
   const fraction = total - Math.floor(total / 50) * 50
-  if (fraction <= fixedFees) {
-    fixedFees = fixedFees - fraction
-  } else {
-    profit = profit - (fraction - fixedFees)
-    fixedFees = 0
-  }
+  const fixedFees = Math.ceil((order.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
     basket,
@@ -1240,7 +1209,7 @@ export const addStockTrans = (type, packId, quantity, cost, price, storePacks, p
     storeId: storeId || '',
     type,
     total,
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
   packStockOut(batch, packBasket, storePacks, packs)
   return batch.commit()
@@ -1248,22 +1217,19 @@ export const addStockTrans = (type, packId, quantity, cost, price, storePacks, p
 
 export const allocateOrderPack = (order, pack) => {
   const batch = firebase.firestore().batch()
-  const orderPack = order.basket.find(p => p.packId === pack.id)
-  const otherPacks = order.basket.filter(p => p.packId !== pack.id)
-  const basket = [
-    ...otherPacks, 
-    {
-      ...orderPack, 
-      isAllocated: true
-    }
-  ]
+  let basket = order.basket
+  const orderPackIndex = basket.findIndex(p => p.packId === pack.id)
+  basket.splice(orderPackIndex, 1, {
+    ...basket[orderPackIndex],
+    isAllocated: true
+  })
   const isFinished = basket.filter(p => p.purchased > 0).length === basket.filter(p => p.purchased > 0 && p.isAllocated).length
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
   batch.update(orderRef, {
     basket,
     status: isFinished ? 'p' : order.status,
     position: isFinished ? 's' : '',
-    lastUpdate: isFinished ? new Date() : order.lastUpdate
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
   })
   sendNotification(batch, order.userId, order.withDelivery ? labels.prepareOrderWithDeliveryNotification : labels.prepareOrderNotification)
   return batch.commit()
@@ -1290,7 +1256,7 @@ const sendNotification = (batch, toCustomerId, message) => {
     toCustomerId,
     message,
     status: 'n',
-    time: new Date()
+    time: firebase.firestore.FieldValue.serverTimestamp()
   })
 }
 
@@ -1305,7 +1271,10 @@ export const getArchivedOrders = async () => {
 }
 
 export const addCall = call => {
-  return firebase.firestore().collection('calls').add(call)
+  return firebase.firestore().collection('calls').add({
+    ...call,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
 }
 
 const deleteCalls = (batch, order, calls) => {
@@ -1325,7 +1294,7 @@ export const getRequestedPacks = (orders, basket, customers, packs) => {
       if (p.status === 'n' || p.status === 'p') {
         const packInfo = packs.find(pa => pa.id === p.packId)
         const found = packsArray.find(pa => pa.packId === p.packId && pa.price === p.price)
-        if (p.price < packInfo.price && parseInt(p.price * (100 + setup.exceedPricePercent) / 100) >= packInfo.price && customerInfo.exceedPrice) {
+        if (p.price < packInfo.price && parseInt(p.price * (1 + setup.exceedPricePercent)) >= packInfo.price && customerInfo.exceedPrice) {
           exceedPriceQuantity = p.quantity - p.purchased
         }
         if (!packInfo.byWeight && found) {
@@ -1458,8 +1427,13 @@ export const getRequestedPackStores = (pack, basketStockQuantity, storePacks, st
   return packStores.filter(s => s.packId && (leastPrice ? s.unitPrice <= leastPrice : true))
 }
 
-export const addAdvert = async (advert, image) => {
-  const advertRef = await firebase.firestore().collection('adverts').add(advert)
+export const addAdvert = async (title, text, image) => {
+  const advertRef = await firebase.firestore().collection('adverts').add({
+    title,
+    text,
+    isActive: false,
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  })
   const filename = image.name
   const ext = filename.slice(filename.lastIndexOf('.'))
   const fileData = await firebase.storage().ref().child('adverts/' + advertRef.id + ext).put(image)
@@ -1503,4 +1477,66 @@ export const editAdvert = async (advert, image) => {
     ...advert,
     imageUrl: url
   })
+}
+
+export const mergeOrder = (order, lastOrder, batch) => {
+  const newBatch = batch ? batch : firebase.firestore().batch()
+  let basket = lastOrder.basket
+  order.basket.forEach(p => {
+    let newItem
+    let found = lastOrder.basket.find(bp => bp.packId === p.packId)
+    if (found === -1) {
+      newItem = p
+    } else {
+      const status = p.status === 'f' ? 'p' : p.status
+      const newQuantity = addQuantity(basket[found].quantity, p.quantity)
+      newItem = {
+        ...basket[found],
+        quantity: newQuantity,
+        status,
+        gross: status === 'f' ? parseInt(p.actual * (p.weight || p.purchased)) : parseInt((p.actual || 0) * (p.weight || p.purchased)) + parseInt(p.price * addQuantity(newQuantity, -1 * p.purchased)),
+      }  
+    }
+    basket.splice(found === -1 ? basket.length : found, found === -1 ? 0 : 1, newItem)
+  })
+  const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
+  const fraction = total - Math.floor(total / 50) * 50
+  const fixedFees = Math.ceil((order.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
+  let orderRef = firebase.firestore().collection('orders').doc(lastOrder.id)
+  newBatch.update(orderRef, {
+    basket,
+    total,
+    fixedFees,
+    activeTime: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  orderRef = firebase.firestore().collection('orders').doc(order.id)
+  newBatch.update(orderRef, {
+    status: 'm',
+    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  if (!batch) {
+    return newBatch.commit()
+  }
+} 
+
+export const approveOrderRequest = (orderRequest, orders, storePacks, packs, calls, users, invitations, locations, customers) => {
+  const batch = firebase.firestore().batch()
+  const requestRef = firebase.firestore().collection('order-requests').doc(orderRequest.id)
+  if (orderRequest.type === 'm') {
+    const userOrders = orders.filter(o => o.id !== orderRequest.order.id && o.userId === orderRequest.order.userId)
+    userOrders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    const lastOrder = ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''    
+    mergeOrder(orderRequest.order, lastOrder, batch)
+    sendNotification(batch, orderRequest.order.userId, labels.approveMergeRequestNotification)
+  } else if (orderRequest.type === 'c') {
+    updateOrderStatus (orderRequest.order, 'i', storePacks, packs, calls, users, invitations, false, batch)
+    sendNotification(batch, orderRequest.order.userId, labels.approveCancelRequestNotification)
+  } else {
+    editOrder (orderRequest.order, orderRequest.basket, storePacks, packs, locations, customers, batch)
+    sendNotification(batch, orderRequest.order.userId, labels.approveEditRequestNotification)
+  }
+  batch.update(requestRef, {
+    status: 'a'
+  })
+  return batch.commit()
 }

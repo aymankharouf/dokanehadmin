@@ -67,8 +67,7 @@ const AddPackStore = props => {
         storeId,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
-        offerEnd,
-        time: new Date()
+        offerEnd
       }
       setInprocess(true)
       await addStorePack(storePack, pack, state.storePacks, state.packs)

@@ -15,9 +15,4 @@ var config = {
 }
 firebase.initializeApp(config)
 firebase.firestore().enablePersistence()
-.catch(function(err) {
-  if (err.code === 'unimplemented') {
-    alert('لتفعيل كامل مميزات هذا الموقع، يرجى التصفح باستخدام احد المتصفحات التالية: كروم، فايرفوكس، سفاري')
-  }
-})
 export default firebase
