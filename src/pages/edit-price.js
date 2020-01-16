@@ -36,9 +36,9 @@ const EditPrice = props => {
   const getDefaultPrice = () => {
     if (cost) {
       if (pack.subQuantity > 1) {
-        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + setup.profit) / 100000).toFixed(3))
+        setPrice((cost / pack.subQuantity * (1 + setup.profit)).toFixed(3))
       } else {
-        setPrice((cost * (100 + setup.profit) / 100).toFixed(3))
+        setPrice((cost * (1 + setup.profit)).toFixed(3))
       }
     }
   }
@@ -59,7 +59,8 @@ const EditPrice = props => {
         ...storePack,
         price: price * 1000,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
-        offerEnd
+        offerEnd,
+        time: new Date()
       }
       setInprocess(true)
       await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)

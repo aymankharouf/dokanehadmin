@@ -33,7 +33,8 @@ const AddCall = props => {
       await addCall({
         userId: props.id,
         callType,
-        callResult
+        callResult,
+        time: new Date()
       })
       setInprocess(false)
       showMessage(labels.addSuccess)

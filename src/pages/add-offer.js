@@ -86,7 +86,9 @@ const AddOffer = props => {
         orderLimit: Number(orderLimit),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
-        bonusPercent: bonusPercent / 100
+        bonusPercent: bonusPercent / 100,
+        price: 0,
+        time: new Date()
       }
       setInprocess(true)
       await addPack(pack)

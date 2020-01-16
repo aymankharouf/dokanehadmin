@@ -42,8 +42,7 @@ const AddPack = props => {
 
   const handleSubmit = async () => {
     try{
-      setInprocess(true)
-      await addPack({
+      const pack = {
         productId: props.id,
         productName: product.name,
         imageUrl: product.imageUrl,
@@ -61,8 +60,12 @@ const AddPack = props => {
         isDivided,
         closeExpired: false,
         byWeight,
-        isOffer: false
-      })
+        isOffer: false,
+        price: 0,
+        time: new Date()
+      }
+      setInprocess(true)
+      await addPack(pack)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

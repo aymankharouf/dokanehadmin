@@ -26,7 +26,7 @@ const ConfirmPurchase = props => {
   }, [state.basket, state.packs])
   const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0)
   , [state.basket])
-  const [discount, setDiscount] = useState((total * (store.discount || 0) / 100000).toFixed(3))
+  const [discount, setDiscount] = useState((total * (store.discount || 0) / 1000).toFixed(3))
   let i = 0
   useEffect(() => {
     if (error) {

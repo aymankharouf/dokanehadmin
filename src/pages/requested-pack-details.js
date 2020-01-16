@@ -136,7 +136,7 @@ const RequestedPackDetails = props => {
       }
       if (packStore.unitPrice > Number(props.price)){
         if (Number(props.price) < pack.price) { 
-          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (100 + setup.exceedPricePercent) / 100) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
+          if (packStore.unitPrice === pack.price && parseInt(Number(props.price) * (1 + setup.exceedPricePercent)) >= packStore.price && Number(props.exceedPriceQuantity) > 0) {
             f7.dialog.confirm(labels.exceedPricePurchase, labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceedPriceQuantity), 'p'))
           } else {
             throw new Error('noPurchase')

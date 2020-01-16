@@ -84,7 +84,7 @@ const StockPackTrans = props => {
                 key={t.id}
               >
                 {t.storeInfo?.canReturn ?
-                  <Button text={labels.returnPacks} slot="after" onClick={() => handleAddTrans('r', t.storeId, t.cost, t.price)} />
+                  <Button text={labels.return} slot="after" onClick={() => handleAddTrans('r', t.storeId, t.cost, t.price)} />
                 : ''}
               </ListItem>
             )

@@ -38,12 +38,12 @@ const StoreDetails = props => {
         <ListInput
           name="discount"
           label={labels.discount}
-          value={store.discount || ''}
+          value={store.discount * 100}
           type="number"
           readonly
         />
         <ListItem>
-          <span>{labels.canReturn}</span>
+          <span>{labels.allowReturn}</span>
           <Toggle 
             name="canReturn" 
             color="green" 

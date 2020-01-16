@@ -9,8 +9,10 @@ const Stores = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const stores = useMemo(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  , [state.stores])
+  const stores = useMemo(() => {
+    const stores = state.stores.filter(s => s.id !== 's')
+    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  }, [state.stores])
   const stock = useMemo(() => state.stores.find(s => s.id === 's')
   , [state.stores])
   useEffect(() => {

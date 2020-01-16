@@ -42,9 +42,9 @@ const AddStorePack = props => {
     if (cost && packId) {
       const pack = state.packs.find(p => p.id === packId)
       if (pack.subQuantity > 1) {
-        setPrice((parseInt(cost * 1000 / pack.subQuantity) * (100 + setup.profit) / 100000).toFixed(3))
+        setPrice((cost / pack.subQuantity * (1 + setup.profit)).toFixed(3))
       } else {
-        setPrice((cost * (100 + setup.profit) / 100).toFixed(3))
+        setPrice((cost * (1 + setup.profit)).toFixed(3))
       }
     }
   }

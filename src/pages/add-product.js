@@ -67,7 +67,11 @@ const AddProduct = props => {
         trademark,
         country,
         tagId,
-        imageUrl
+        sales: 0,
+        rating: 0,
+        ratingCount: 0,
+        imageUrl,
+        time: new Date()
       }
       setInprocess(true)
       await addProduct(product, image)

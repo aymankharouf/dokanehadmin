@@ -58,7 +58,8 @@ const AddSpending = props => {
         type,
         spendingAmount: spendingAmount * 1000,
         spendingDate: formatedDate,
-        description
+        description,
+        time: new Date()
       })
       setInprocess(false)
       showMessage(labels.addSuccess)

@@ -34,7 +34,7 @@ const PackDetails = props => {
         if (offerInfo) {
           packId = offerInfo.id
           if (s.cost === s.price || s.storeId === 's') { // for type 5 get cost as total price not unit price
-            unitPrice = parseInt((s.price / offerInfo.subQuantity) * (offerInfo.subPercent / 100))
+            unitPrice = parseInt(s.price / offerInfo.subQuantity * offerInfo.subPercent)
             price = s.price
             isOffer = true
           } else {
@@ -48,7 +48,7 @@ const PackDetails = props => {
           if (offerInfo) {
             packId = offerInfo.id
             price = s.price
-            unitPrice = parseInt((s.price / offerInfo.bonusQuantity) * (offerInfo.bonusPercent / 100))
+            unitPrice = parseInt(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent)
             quantity = offerInfo.bonusQuantity
             isOffer = true
           }

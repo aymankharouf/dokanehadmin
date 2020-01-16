@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Popover } from 'framework7-react'
+import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -40,11 +40,11 @@ const StorePacks = props => {
     }
   }, [inprocess])
 
-  const handleDelete = storePack => {
+  const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        await deleteStorePack(storePack, state.storePacks, state.packs)
+        await deleteStorePack(currentStorePack, state.storePacks, state.packs)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
       } catch(err) {
@@ -53,15 +53,15 @@ const StorePacks = props => {
       }
     })
   }
-  const handleHaltOffer = async storePack => {
+  const handleHaltOffer = async () => {
     try{
-      const offerEndDate = new Date(storePack.offerEnd)
+      const offerEndDate = new Date(currentStorePack.offerEnd)
       const today = (new Date()).setHours(0, 0, 0, 0)
       if (offerEndDate > today) {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
-            await haltOffer(storePack, state.storePacks, state.packs)
+            await haltOffer(currentStorePack, state.storePacks, state.packs)
             setInprocess(false)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
@@ -72,7 +72,7 @@ const StorePacks = props => {
         })
       } else {
         setInprocess(true)
-        await haltOffer(storePack, state.storePacks, state.packs)
+        await haltOffer(currentStorePack, state.storePacks, state.packs)
         setInprocess(false)
         showMessage(labels.haltSuccess)
       }
@@ -80,6 +80,10 @@ const StorePacks = props => {
       setInprocess(false)
 			setError(getMessage(props, err))
 		}
+  }
+  const handleActions = storePack => {
+    setCurrentStorePack(storePack)
+    f7.actions.open('#store-pack-actions')
   }
   return(
     <Page>
@@ -110,11 +114,12 @@ const StorePacks = props => {
                 text={(p.price / 1000).toFixed(3)}
                 footer={p.packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(p.packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
                 key={p.id}
+                className={currentStorePack && currentStorePack.id === p.id ? 'selected' : ''}
               >
                 <div className="list-subtext1">{moment(p.time.toDate()).fromNow()}</div>
                 <PackImage slot="media" pack={p.packInfo} type="list" />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
-                <Link slot="after" popoverOpen=".store-packs-menu" iconMaterial="more_vert" onClick={()=> setCurrentStorePack(p)}/>
+                <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(p)}/>
               </ListItem>
             )
           }
@@ -125,34 +130,17 @@ const StorePacks = props => {
           <Icon material="add"></Icon>
         </Fab>
       }
-      <Popover className="store-packs-menu">
-        <List>
-          {store.id === 's' && currentStorePack.quantity === 0 ? '' : 
-            <ListItem 
-              link={`/edit-price/${currentStorePack.id}`} 
-              popoverClose 
-              title={labels.editPrice}
-            />
-          }
-          {store.id === 's' ? '' : 
-            <ListItem 
-              link="#" 
-              popoverClose 
-              title={labels.delete} 
-              onClick={() => handleDelete(currentStorePack)}
-            />
-          }
-          {currentStorePack.offerEnd ? 
-            <ListItem 
-              link="#" 
-              popoverClose 
-              title={labels.haltOffer} 
-              onClick={() => handleHaltOffer(currentStorePack)}
-            /> 
-          : ''}
-        </List>
-      </Popover>
-
+      <Actions id="store-pack-actions">
+        {store.id === 's' && currentStorePack.quantity === 0 ? '' : 
+          <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.id}`)}>{labels.editPrice}</ActionsButton>
+        }
+        {store.id === 's' ? '' :
+          <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
+        }
+        {currentStorePack.offerEnd ?
+          <ActionsButton onClick={() => handleHaltOffer()}>{labels.haltOffer}</ActionsButton>
+        : ''}
+      </Actions>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

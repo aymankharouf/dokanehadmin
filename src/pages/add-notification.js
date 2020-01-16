@@ -34,7 +34,8 @@ const AddNotification = props => {
       await addNotification({
         toCustomerId, 
         message,
-        status: 'n'
+        status: 'n',
+        time: new Date()
       })
       setInprocess(false)
       showMessage(labels.addSuccess)

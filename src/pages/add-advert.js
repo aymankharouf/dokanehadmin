@@ -40,8 +40,14 @@ const AddAdvert = props => {
 
   const handleSubmit = async () => {
     try{
+      const advert = {
+        title,
+        text,
+        isActive: false,
+        time: new Date()
+      }
       setInprocess(true)
-      await addAdvert(title, text, image)
+      await addAdvert(advert, image)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

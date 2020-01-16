@@ -59,12 +59,13 @@ const AddStore = props => {
       await addStore({
         name,
         type,
-        discount,
+        discount : discount / 100,
         mobile,
         locationId,
         position,
         canReturn,
-        address
+        address,
+        time: new Date()
       })
       setInprocess(false)
       showMessage(labels.addSuccess)
@@ -129,7 +130,7 @@ const AddStore = props => {
           onInputClear={() => setDiscount('')}
         />
         <ListItem>
-          <span>{labels.canReturn}</span>
+          <span>{labels.allowReturn}</span>
           <Toggle 
             name="canReturn" 
             color="green" 

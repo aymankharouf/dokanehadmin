@@ -19,7 +19,7 @@ const EditStore = props => {
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
-  const [discount, setDiscount] = useState(store.discount)
+  const [discount, setDiscount] = useState(store.discount * 100)
   const [locationId, setLocationId] = useState(store.locationId)
   const [position, setPosition] = useState(store.position)
   const [canReturn, setCanReturn] = useState(store.canReturn)
@@ -43,7 +43,7 @@ const EditStore = props => {
   const hasChanged = useMemo(() => {
     if (name !== store.name) return true
     if (mobile !== store.mobile) return true
-    if (discount !== store.discount) return true
+    if (discount !== store.discount * 100) return true
     if (address !== store.address) return true
     if (locationId !== store.locationId) return true
     if (position !== store.position) return true
@@ -74,7 +74,7 @@ const EditStore = props => {
         id: store.id,
         name,
         type,
-        discount,
+        discount: discount / 100,
         canReturn,
         mobile,
         locationId,
@@ -144,7 +144,7 @@ const EditStore = props => {
           onInputClear={() => setDiscount('')}
         />
         <ListItem>
-          <span>{labels.canReturn}</span>
+          <span>{labels.allowReturn}</span>
           <Toggle 
             name="canReturn" 
             color="green" 

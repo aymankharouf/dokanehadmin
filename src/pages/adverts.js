@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Popover, Link } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -27,7 +27,10 @@ const Adverts = props => {
       f7.dialog.close()
     }
   }, [inprocess])
-
+  const handleAction = advert => {
+    setCurrentAdvert(advert)
+    f7.actions.open('#advert-actions')
+  }
   const handleUpdate = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
@@ -68,8 +71,9 @@ const Adverts = props => {
                 text={a.isActive ? labels.isActive : labels.inActive}
                 footer={moment(a.time.toDate()).fromNow()}
                 key={a.id}
+                className={currentAdvert && currentAdvert.id === a.id ? 'selected' : ''}
               >
-                <Link slot="after" popoverOpen=".advert-actions" iconMaterial="more_vert" onClick={()=> setCurrentAdvert(a)}/>
+                <Link slot="after" iconMaterial="more_vert" onClick={()=> handleAction(a)}/>
               </ListItem>
             )
           }
@@ -78,27 +82,12 @@ const Adverts = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-advert/">
         <Icon material="add"></Icon>
       </Fab>
-      <Popover className="advert-actions">
-        <List>
-          <ListItem 
-            link={`/advert-details/${currentAdvert.id}`}
-            popoverClose 
-            title={labels.details} 
-          />
-          <ListItem 
-            link="#"
-            popoverClose 
-            title={labels.delete}
-            onClick={() => handleDelete()}
-          />
-          <ListItem 
-            link="#"
-            popoverClose 
-            title={currentAdvert.isActive ? labels.stop : labels.activate}
-            onClick={() => handleUpdate()}
-          />
-        </List>
-      </Popover>
+      <Actions id="advert-actions">
+        <ActionsButton onClick={() => props.f7router.navigate(`/advert-details/${currentAdvert.id}`)}>{labels.details}</ActionsButton>
+        <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
+        <ActionsButton onClick={() => handleUpdate()}>{currentAdvert.isActive ? labels.stop : labels.activate}</ActionsButton>
+      </Actions>
+
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>
