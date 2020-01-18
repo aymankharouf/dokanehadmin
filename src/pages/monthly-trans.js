@@ -14,12 +14,12 @@ const MonthlyTrans = props => {
   const monthlyTrans = useMemo(() => state.monthlyTrans.find(t => t.id === props.id)
   , [state.monthlyTrans, props.id])
   const orders = useMemo(() => {
-    const orders = state.orders.filter(o => ['a', 'e', 'f', 'p', 'd'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
+    const orders = state.orders.filter(o => ['a', 'e', 'd', 'p', 't', 'f'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
     return orders
   }, [state.orders, month, year])
-  const finishedOrders = useMemo(() => orders.filter(o => o.status === 'f' || o.status === 'p')
+  const finishedOrders = useMemo(() => orders.filter(o => o.status === 'd' || o.status === 'p')
   , [orders])
-  const deliveredOrders = useMemo(() => orders.filter(o => o.status === 'd')
+  const deliveredOrders = useMemo(() => orders.filter(o => o.status === 't' || o.status === 'f')
   , [orders])
   const ordersCount = monthlyTrans?.ordersCount ?? orders.length
   const deliveredOrdersCount = monthlyTrans?.deliveredOrdersCount ?? deliveredOrders.length

@@ -45,7 +45,7 @@ const ProductPacks = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#product-actions')}>
         <Icon material="build"></Icon>
       </Fab>
-      <Actions id="pruduct-actions">
+      <Actions id="product-actions">
         <ActionsButton onClick={() => props.f7router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>

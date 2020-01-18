@@ -234,3 +234,7 @@
 .selected {
   background-color: lightskyblue;
 }
+
+.toolbar-inner .link {
+  font-size: 0.8rem;
+}

@@ -37,7 +37,7 @@ const Customers = props => {
             <ListItem title={labels.noData} /> 
           : customers.map(c => 
               <ListItem
-                link={`/customer-details/${c.id}/full/1`}
+                link={`/customer-details/${c.id}`}
                 title={c.fullName}
                 subtitle={moment(c.time.toDate()).fromNow()}
                 badge={c.isBlocked ? labels.isBlocked : ''}

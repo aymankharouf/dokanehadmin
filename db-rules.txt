@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth.token.name == 'a';
+      allow create: if request.auth.uid != null;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+    match /products/{productId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /packs/{packId} {
+    	allow read;
+    	allow write: if request.auth.token.name == 'a';
+    }
+    match /purchases/{purshaseId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /orders/{orderId} {
+    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == 'c' || request.auth.token.name == 'd';
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow update: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == 'c';
+      allow delete: if request.auth.token.name == 'a';
+    }
+    match /invitations/{invitationId} {
+    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+    match /ratings/{ratingId} {
+    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'admin';
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+		match /customers/{customerId} {
+			allow get: if request.auth.uid == customerId;
+      allow list: if request.auth.token.name == 'a' || request.auth.token.name == 'c' || request.auth.token.name == 'd';
+      allow write: if request.auth.token.name == 'a';
+		}
+		match /stock-trans/{transId} {
+			allow read, write: if request.auth.token.name == 'a';
+		}
+    match /stores/{storeId} {
+    	allow read: if request.auth.uid != null;
+    	allow write: if request.auth.token.name == 'a';
+    }
+    match /countries/{countryId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /tags/{tagId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /categories/{categoryId} {
+    	allow read;
+    	allow write: if request.auth.token.name == 'a';
+    }
+    match /trademarks/{trademarkId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /alarms/{alarmId} {
+    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
+    	allow create: if request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+    match /password-requests/{requestId} {
+    	allow read, write;
+    }
+    match /spendings/{spendingId} {
+    	allow read, write: if request.auth.token.name == 'a';
+    }
+    match /monthly-trans/{transId} {
+    	allow read, write : if request.auth.token.name == 'a';
+    }
+    match /locations/{locationId} {
+    	allow read;
+    	allow write: if request.auth.token.name == 'a';
+    }
+    match /store-packs/{storePackId} {
+    	allow read: if request.auth.uid != null;
+      allow write: if request.auth.token.name == 'a';
+    }
+    match /logs/{logId} {
+    	allow read: if request.auth.token.name == 'a';
+      allow create: if request.auth.uid != null;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+    match /order-requests/{requestId} {
+    	allow read: if request.auth.uid == resource.data.order.userId || request.auth.token.name == 'a';
+    	allow create: if request.auth.uid == request.resource.data.order.userId;
+      allow update, delete: if request.auth.token.name == 'a';
+    }
+    match /notifications/{notificationId} {
+    	allow read: if request.auth.uid == resource.data.toCustomerId || (resource.data.toCustomerId == '0' && request.auth.uid != null) || request.auth.token.name == 'a';
+      allow create: if request.auth.token.name == 'a';
+      allow update, delete: if request.auth.uid == resource.data.toCustomerId || request.auth.token.name == 'a';
+    }
+    match /calls/{callId} {
+    	allow read, write : if request.auth.token.name == 'a';
+    }
+    match /favorites/{favoriteId} {
+    	allow read: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+     match /adverts/{advertId} {
+    	allow read;
+      allow write: if request.auth.token.name == 'a';
+    }
+  }
+}

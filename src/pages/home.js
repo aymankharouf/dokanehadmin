@@ -37,7 +37,7 @@ const Home = props => {
             href={p.path} 
             key={p.id}
           />
-       )}
+        )}
       </Block>
       <Toolbar bottom>
         <BottomToolbar isHome="1"/>

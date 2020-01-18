@@ -2,7 +2,7 @@ const labels = {
   news: 'آخر الاخبار',
   offers: 'العروض',
   popular: 'اﻻكثر مبيعا',
-  registerTitle: 'التسجيل ﻷول مرة',
+  registerTitle: 'تسجيل جديد',
   name: 'اﻻسم',
   mobile: 'الموبايل',
   password: 'كلمة السر',
@@ -129,7 +129,7 @@ const labels = {
   sendSuccess: 'تم الارسال',
   send: 'ارسال',
   storeOwners: 'موظفي المحل',
-  position: 'احداثيات الموقع',
+  position: 'الموقع',
   isOldAge: 'كبير في السن',
   multipleStores: 'من أكثر من محل',
   alreadyInBasket: 'هذا المنتج موجود في السلة',
@@ -339,6 +339,12 @@ const labels = {
   diffInDelivery: 'لا يمكن الدمج لاختلاف طريقة التسليم بين الطلبين',
   diffInUrgent: 'لا يمكن الدمج لاختلاف مؤشر الاستعجال بين الطلبين',
   return: 'ارجاع',
+  permitUser: 'منح صلاحية',
+  permit: 'منح',
+  permitSuccess: 'تم تعديل الصلاحية',
+  registerSuccess: 'تم التسجيل',
+  mapPosition: 'الموقع على الخريطة',
+  openTime: 'اوقات الدوام'
 }
 
 export default labels

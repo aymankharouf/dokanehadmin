@@ -15,21 +15,17 @@ const CustomerDetails = props => {
   return (
     <Page>
       <Navbar title={labels.customerDetails} backLink={labels.back} />
-      {props.full === '0' ? '' :
-        <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-customer/${props.id}`}>
-          <Icon material="edit"></Icon>
-        </Fab>
-      }
+      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-customer/${props.id}`}>
+        <Icon material="edit"></Icon>
+      </Fab>
       <List form>
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="name" 
-            label={labels.name}
-            value={customer.name}
-            type="text" 
-            readonly
-          />
-        }
+        <ListInput 
+          name="name" 
+          label={labels.name}
+          value={customer.name}
+          type="text" 
+          readonly
+        />
         <ListInput 
           name="fullName" 
           label={labels.fullName}
@@ -37,49 +33,39 @@ const CustomerDetails = props => {
           type="text" 
           readonly
         />
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="orderLimit" 
-            label={labels.orderLimit}
-            value={(customer.orderLimit / 1000).toFixed(3)}
-            type="number"
-            readonly
-          />
-        }
+        <ListInput 
+          name="orderLimit" 
+          label={labels.orderLimit}
+          value={(customer.orderLimit / 1000).toFixed(3)}
+          type="number"
+          readonly
+        />
         <ListItem>
           <span>{labels.isOldAge}</span>
           <Toggle color="blue" checked={customer.isOldAge} disabled />
         </ListItem>
-        {props.full === '0' ? '' :
-          <ListItem>
-            <span>{labels.isBlocked}</span>
-            <Toggle color="blue" checked={customer.isBlocked} disabled />
-          </ListItem>
-        }
-        {props.full === '0' ? '' :
-          <ListItem>
-            <span>{labels.exceedPrice}</span>
-            <Toggle color="blue" checked={customer.exceedPrice} disabled />
-          </ListItem>
-        }
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="totalOrders" 
-            label={labels.totalOrders}
-            value={customer.ordersCount}
-            type="number"
-            readonly
-          />
-        }
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="totalDeliveredOrders" 
-            label={labels.totalDeliveredOrders}
-            value={customer.deliveredOrdersCount}
-            type="number"
-            readonly
-          />
-        }
+        <ListItem>
+          <span>{labels.isBlocked}</span>
+          <Toggle color="blue" checked={customer.isBlocked} disabled />
+        </ListItem>
+        <ListItem>
+          <span>{labels.exceedPrice}</span>
+          <Toggle color="blue" checked={customer.exceedPrice} disabled />
+        </ListItem>
+        <ListInput 
+          name="totalOrders" 
+          label={labels.totalOrders}
+          value={customer.ordersCount}
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="totalDeliveredOrders" 
+          label={labels.totalDeliveredOrders}
+          value={customer.deliveredOrdersCount}
+          type="number"
+          readonly
+        />
         <ListInput 
           name="locationName" 
           label={labels.location}
@@ -87,33 +73,27 @@ const CustomerDetails = props => {
           type="text"
           readonly
         />
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="discounts" 
-            label={labels.discountBalance}
-            value={(customer.discounts / 1000).toFixed(3)}
-            type="number"
-            readonly
-          />
-        }
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="deliveryFees" sw
-            label={labels.deliveryDiscount}
-            value={(customer.deliveryDiscount / 1000).toFixed(3)}
-            type="number"
-            readonly
-          />
-        }
-        {props.full === '0' ? '' :
-          <ListInput 
-            name="storeName" 
-            label={labels.store}
-            value={storeName}
-            type="text"
-            readonly
-          />
-        }
+        <ListInput 
+          name="discounts" 
+          label={labels.discountBalance}
+          value={(customer.discounts / 1000).toFixed(3)}
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="deliveryFees" sw
+          label={labels.deliveryDiscount}
+          value={(customer.deliveryDiscount / 1000).toFixed(3)}
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="storeName" 
+          label={labels.store}
+          value={storeName}
+          type="text"
+          readonly
+        />
         <ListInput 
           name="otherMobile" 
           label={labels.otherMobile}

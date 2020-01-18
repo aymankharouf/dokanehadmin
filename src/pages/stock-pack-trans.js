@@ -51,7 +51,7 @@ const StockPackTrans = props => {
   const handleAddTrans = (type, storeId, cost, price) => {
     f7.dialog.prompt(labels.enterQuantity, labels.quantity, async quantity => {
       try{
-        if (storeId && !state.stores.find(s => s.id === storeId).canReturn) {
+        if (storeId && !state.stores.find(s => s.id === storeId).allowReturn) {
           throw new Error('storeNotReturn')
         }
         if (Number(quantity) === 0 || Number(quantity) > stockPackInfo.quantity) {
@@ -83,7 +83,7 @@ const StockPackTrans = props => {
                 footer={moment(t.time.toDate()).fromNow()}
                 key={t.id}
               >
-                {t.storeInfo?.canReturn ?
+                {t.storeInfo?.allowReturn ?
                   <Button text={labels.return} slot="after" onClick={() => handleAddTrans('r', t.storeId, t.cost, t.price)} />
                 : ''}
               </ListItem>

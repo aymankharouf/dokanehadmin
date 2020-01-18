@@ -138,10 +138,13 @@
 *request for edit order partially 
 *merging orders
 *cancel a purchase or part of it
-debit
+*add hint to pack detail page as basket
+*create admin users & security for delivery person
+*store opening times
 return purchase discount
 delete unimportant data
 manage endoffer when approve alarm
 activetime and time & urgent flag
-security for delivery person
-add hint to pack detail page as basket
+debit
+use cashing
+pwa

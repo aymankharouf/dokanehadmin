@@ -19,7 +19,7 @@ const EditCustomer = props => {
   const [storeId, setStoreId] = useState(customer.storeId)
   const [locationId, setLocationId] = useState(customer.locationId)
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
-  const [position, setPosition] = useState(customer.position)
+  const [mapPosition, setMapPosition] = useState(customer.mapPosition)
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
@@ -39,7 +39,7 @@ const EditCustomer = props => {
     if (storeId !== customer.storeId) return true
     if (locationId !== customer.locationId) return true
     if (isOldAge !== customer.isOldAge) return true
-    if (position !== customer.position) return true
+    if (mapPosition !== customer.mapPosition) return true
     if (isBlocked !== customer.isBlocked) return true
     if (otherMobile !== customer.otherMobile) return true
     if (exceedPrice !== customer.exceedPrice) return true
@@ -47,7 +47,7 @@ const EditCustomer = props => {
     if (orderLimit * 1000 !== customer.orderLimit) return true
     if (deliveryInterval !== customer.deliveryInterval) return true
     return false
-  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, position, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
+  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -86,7 +86,7 @@ const EditCustomer = props => {
         address,
         locationId,
         isOldAge,
-        position,
+        mapPosition,
         isBlocked,
         otherMobile,
         exceedPrice,
@@ -217,14 +217,14 @@ const EditCustomer = props => {
           onInputClear={() => setOtherMobile('')}
         />
         <ListInput 
-          name="position" 
-          label={labels.position}
-          value={position}
+          name="mapPosition" 
+          label={labels.mapPosition}
+          value={mapPosition}
           floatingLabel 
           clearButton
           type="text" 
-          onChange={e => setPosition(e.target.value)}
-          onInputClear={() => setPosition('')}
+          onChange={e => setMapPosition(e.target.value)}
+          onInputClear={() => setMapPosition('')}
         />
         <ListInput 
           name="address" 

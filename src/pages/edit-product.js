@@ -65,8 +65,8 @@ const EditProduct = props => {
 
   const handleSubmit = async () => {
     try{
-      const product = {
-        id: props.id,
+      const newProduct = {
+        ...product,
         categoryId,
         name,
         trademark,
@@ -75,7 +75,7 @@ const EditProduct = props => {
         imageUrl
       }
       setInprocess(true)
-      await editProduct(product, image, state.packs)
+      await editProduct(newProduct, image, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

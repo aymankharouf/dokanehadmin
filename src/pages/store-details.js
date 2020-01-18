@@ -45,9 +45,9 @@ const StoreDetails = props => {
         <ListItem>
           <span>{labels.allowReturn}</span>
           <Toggle 
-            name="canReturn" 
+            name="allowReturn" 
             color="green" 
-            checked={store.canReturn || false} 
+            checked={store.allowReturn || false} 
             disabled
           />
         </ListItem>
@@ -55,6 +55,13 @@ const StoreDetails = props => {
           name="location"
           label={labels.location}
           value={store.locationId ? state.locations.find(l => l.id === store.locationId).name : ''}
+          type="text"
+          readonly
+        />
+        <ListInput
+          name="openTime"
+          label={labels.openTime}
+          value={store.openTime || ''}
           type="text"
           readonly
         />

@@ -27,15 +27,15 @@ const OrderDetails = props => {
   }), [order, state.packs, state.stores])
   const statusActions = useMemo(() => {
     const statusActions = [
-      {id: 'a', name: 'اعتماد', status: ['n', 's'], cancelFlag: false},
-      {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f', 'p'], cancelFlag: false},
-      {id: 's', name: 'تعليق', status: ['n', 'a'], cancelFlag: false},
-      {id: 'r', name: 'رفض', status: ['n', 's'], cancelFlag: false},
-      {id: 'c', name: 'الغاء', status: ['n', 's', 'a'], cancelFlag: true},
-      {id: 'i', name: 'استيداع', status: ['f', 'e', 'p'], cancelFlag: true},
+      {id: 'a', name: 'اعتماد', status: ['n', 's']},
+      {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'd', 'p']},
+      {id: 's', name: 'تعليق', status: ['n', 'a']},
+      {id: 'r', name: 'رفض', status: ['n', 's']},
+      {id: 'c', name: 'الغاء', status: ['n', 's', 'a']},
+      {id: 'i', name: 'استيداع', status: ['d', 'e', 'p']},
     ]
-    return statusActions.filter(a => a.status.find(s => s === order.status) && (props.requestId ? a.cancelFlag : true))
-  }, [order.status, props.requestId])
+    return statusActions.filter(a => a.status.find(s => s === order.status))
+  }, [order.status])
   const lastOrder = useMemo(() => {
     const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
     userOrders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
@@ -94,7 +94,7 @@ const OrderDetails = props => {
         }, async () => {
           try{
             setInprocess(true)
-            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, props.requestId)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
             setInprocess(false)
             showMessage(labels.editSuccess)
             props.f7router.back()
@@ -141,7 +141,7 @@ const OrderDetails = props => {
   }
   const handleSend = async () => {
     try{
-      if (order.position !== 's' && order.status === 'd') {
+      if (order.position !== 's' && order.status === 't') {
         f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
@@ -169,7 +169,7 @@ const OrderDetails = props => {
   const handleDelivery = async () => {
     try{
       setInprocess(true)
-      await updateOrderStatus(order, 'd', state.storePacks, state.packs, state.calls, state.users, state.invitations, props.cancelOrderId)
+      await updateOrderStatus(order, 'f', state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -250,17 +250,17 @@ const OrderDetails = props => {
       </Fab>
       {props.type === 'f' ?
         <Actions id="actions">
-          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/0`)}>{labels.customerInfo}</ActionsButton>
+          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
           {order.status === 'p' ? 
             <ActionsButton onClick={() => props.f7router.navigate(`/customer-calls/${order.userId}`)}>{labels.customerCalls}</ActionsButton>
           : ''}
           <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${order.id}`)}>{labels.returnPacks}</ActionsButton>
-          {order.position === 's' && (order.total === 0 || order.status === 'd') ? '' :
+          {order.position === 's' && (order.total === 0 || order.status === 'f') ? '' :
             <ActionsButton onClick={() => handleSend()}>
-              {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'd' ? labels.receiveOrderAmount : labels.toStore}
+              {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'f' ? labels.receiveOrderAmount : labels.toStore}
             </ActionsButton>
           }
-          {order.total === 0 || order.status === 'd' ? '' :
+          {order.total === 0 || order.status === 'f' ? '' :
             <ActionsButton onClick={() => handleDelivery()}>{labels.deliver}</ActionsButton>
           }
           {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
@@ -269,7 +269,7 @@ const OrderDetails = props => {
         </Actions>
       : 
         <Actions id="actions">
-          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}/full/1`)}>{labels.customerInfo}</ActionsButton>
+          <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
           {props.type === 'n' && statusActions.map(a => 
             <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.name}</ActionsButton>
           )}

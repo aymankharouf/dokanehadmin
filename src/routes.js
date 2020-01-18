@@ -97,6 +97,8 @@ import AddAdvert from './pages/add-advert'
 import AdvertDetails from './pages/advert-details'
 import EditAdvert from './pages/edit-advert'
 import OrderRequestDetails from './pages/order-request-details'
+import PermitUser from './pages/permit-user'
+import Register from './pages/register'
 
 export default [
   {
@@ -125,6 +127,14 @@ export default [
   {
     path: '/change-password/',
     component: ChangePassword
+  },
+  {
+    path: '/permit-user/',
+    component: PermitUser
+  },
+  {
+    path: '/register/',
+    component: Register
   },
   {
     path: '/search/',
@@ -183,7 +193,7 @@ export default [
     component: ApproveUser
   },
   {
-    path: '/customer-details/:id/full/:full',
+    path: '/customer-details/:id',
     component: CustomerDetails
   },
   {

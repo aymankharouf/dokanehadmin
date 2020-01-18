@@ -23,7 +23,6 @@ const ApproveUser = props => {
   }, [state.stores]) 
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
-
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -50,7 +49,6 @@ const ApproveUser = props => {
       f7.dialog.close()
     }
   }, [inprocess])
-
   const handleSubmit = async () => {
     try {
       if (otherMobile === userInfo.mobile) {
@@ -62,18 +60,8 @@ const ApproveUser = props => {
       if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
         throw new Error('otherUserMobile')
       }
-      const storeName = storeId ? state.stores.find(s => s.id === storeId).name : ''
       setInprocess(true)
-      await approveUser({
-        id: props.id,
-        mobile: userInfo.mobile,
-        name,
-        storeId,
-        locationId,
-        otherMobile,
-        address,
-        storeName
-      })
+      await approveUser(props.id, name, userInfo.mobile, storeId, locationId, otherMobile, address, state.stores)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  

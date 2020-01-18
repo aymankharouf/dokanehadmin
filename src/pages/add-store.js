@@ -17,8 +17,9 @@ const AddStore = props => {
   const [address, setAddress] = useState('')
   const [discount, setDiscount] = useState('')
   const [locationId, setLocationId] = useState('')
-  const [position, setPosition] = useState('')
-  const [canReturn, setCanReturn] = useState(false)
+  const [mapPosition, setMapPosition] = useState('')
+  const [allowReturn, setAllowReturn] = useState(false)
+  const [openTime, setOpenTime] = useState('')
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
 
@@ -62,8 +63,9 @@ const AddStore = props => {
         discount : discount / 100,
         mobile,
         locationId,
-        position,
-        canReturn,
+        mapPosition,
+        allowReturn,
+        openTime,
         address,
         time: new Date()
       })
@@ -132,10 +134,10 @@ const AddStore = props => {
         <ListItem>
           <span>{labels.allowReturn}</span>
           <Toggle 
-            name="canReturn" 
+            name="allowReturn" 
             color="green" 
-            checked={canReturn} 
-            onToggleChange={() => setCanReturn(!canReturn)}
+            checked={allowReturn} 
+            onToggleChange={() => setAllowReturn(!allowReturn)}
           />
         </ListItem>
         <ListItem
@@ -157,14 +159,24 @@ const AddStore = props => {
           </select>
         </ListItem>
         <ListInput
-          name="position"
-          label={labels.position}
-          value={position}
+          name="openTime"
+          label={labels.openTime}
+          value={openTime}
           floatingLabel
           clearButton
           type="text"
-          onChange={e => setPosition(e.target.value)}
-          onInputClear={() => setPosition('')}
+          onChange={e => setOpenTime(e.target.value)}
+          onInputClear={() => setOpenTime('')}
+        />
+        <ListInput
+          name="mapPosition"
+          label={labels.mapPosition}
+          value={mapPosition}
+          floatingLabel
+          clearButton
+          type="text"
+          onChange={e => setMapPosition(e.target.value)}
+          onInputClear={() => setMapPosition('')}
         />
         <ListInput 
           name="address" 

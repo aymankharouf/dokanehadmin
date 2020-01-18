@@ -10,7 +10,7 @@ const PrepareOrdersList = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] =useState(false)
   const orders = useMemo(() => {
-    let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
+    let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
     orders = orders.map(o => {
       const userInfo = state.users.find(u => u.id === o.userId)
       const customerInfo = state.customers.find(c => c.id === o.userId)

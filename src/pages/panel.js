@@ -19,18 +19,10 @@ const Panel = props => {
       <Navbar title={labels.mainPanelTitle} />
       <List>
         {user ? 
-          <ListItem 
-            link="#" 
-            title={labels.logout} 
-            onClick={() => handleLogout()} 
-          />
-        :
-          <ListItem 
-            link="/panel-login/"
-            title={labels.login}
-          />
+          <ListItem link="#" title={labels.logout} onClick={() => handleLogout()} />
+        : 
+          <ListItem link="/panel-login/" title={labels.login} />
         }
-        {user ? <ListItem link="/change-password/" title={labels.changePassword} /> : ''}
         {user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/purchase-plan/" title={labels.purchasePlan} view="#main-view" panelClose /> : ''}
@@ -40,6 +32,7 @@ const Panel = props => {
         {user ? <ListItem link="/offers/" title={labels.offers} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/profits/" title={labels.profits} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/permit-user/" title={labels.permitUser} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

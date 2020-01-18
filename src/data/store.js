@@ -266,7 +266,7 @@ const Store = props => {
           dispatch({type: 'SET_CALLS', calls})
         }, err => {
           unsubscribeCalls()
-        })  
+        })
       }
     })
   }, [])

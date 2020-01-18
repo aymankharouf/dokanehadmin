@@ -1,7 +1,7 @@
 import firebase from './firebase'
 import labels from './labels'
 import { f7 } from 'framework7-react'
-import { setup } from './config'
+import { setup, randomColors } from './config'
 import moment from 'moment'
 
 export const getMessage = (props, error) => {
@@ -117,7 +117,7 @@ export const updateOrder = (batch, storeId, order, basketPack, currentPrice, cus
     }
   ]
   if (basket.length === basket.filter(p => ['f', 'u', 'pu'].includes(p.status)).length) {
-    orderStatus = 'f'
+    orderStatus = 'd'
   }
   let profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? ((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
   const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
@@ -183,7 +183,7 @@ export const updateOrders = (batch, storeId, orders, basketPack, currentPrice, c
       }
     ]
     if (basket.length === basket.filter(p => ['f', 'u', 'pu'].includes(p.status)).length) {
-      orderStatus = 'f'
+      orderStatus = 'd'
     }
     profit = basket.reduce((sum, p) => sum + ['p', 'f', 'pu'].includes(p.status) ? parseInt((p.actual - p.cost) * (p.weight ? p.weight : p.purchased)) : 0, 0)
     total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
@@ -273,7 +273,7 @@ export const updateOrderStatus = (order, type, storePacks, packs, calls, users, 
       sendNotification(newBatch, order.userId, labels.blockCustomerNotification)
     }
     deleteCalls(newBatch, order, calls)
-  } else if (type === 'd'){
+  } else if (type === 'f'){
     order.basket.forEach(p => {
       const packInfo = packs.find(pa => pa.id === p.packId)
       const productRef = firebase.firestore().collection('products').doc(packInfo.productId)
@@ -859,24 +859,25 @@ export const editCustomer = customer => {
   return firebase.firestore().collection('customers').doc(customer.id).update(customer)
 }
 
-export const approveUser = user => {
+export const approveUser = (id, name, mobile, storeId, locationId, otherMobile, address, stores) => {
   const batch = firebase.firestore().batch()
-  const customerRef = firebase.firestore().collection('customers').doc(user.id)
+  const fullName = storeId ? `${name}-${stores.find(s => s.id === storeId).name}:${mobile}` : `${name}:${mobile}`
+  const customerRef = firebase.firestore().collection('customers').doc(id)
   batch.set(customerRef, {
-    name: user.name,
-    fullName: `${user.name}${user.storeName ? '-' + user.storeName : ''}: ${user.mobile}`, 
-    storeId: user.storeId,
-    address: user.address,
+    name,
+    fullName, 
+    storeId,
+    address,
     orderLimit: 0,
     deliveryDiscount: 0,
     withDelivery: false,
     deliveryInterval: '',
-    locationId: user.locationId,
+    locationId,
     discounts: 0,
     isOldAge: false,
-    position: '',
+    mapPosition: '',
     isBlocked: false,
-    otherMobile: user.otherMobile,
+    otherMobile,
     exceedPrice: false,
     ordersCount: 0,
     deliveredOrdersCount: 0,
@@ -884,11 +885,10 @@ export const approveUser = user => {
     deliveredOrdersTotal: 0,
     time: new Date()
   })
-  const userRef = firebase.firestore().collection('users').doc(user.id)
+  const userRef = firebase.firestore().collection('users').doc(id)
   batch.update(userRef, {
-    name: user.name,
-    storeName: firebase.firestore.FieldValue.delete(),
-    locationId: firebase.firestore.FieldValue.delete()
+    name,
+    storeName: firebase.firestore.FieldValue.delete()
   })
   return batch.commit()
 }
@@ -983,7 +983,7 @@ export const packUnavailable = (pack, packPrice, orders, overPriced) => {
     if (basket.length === basket.filter(p => p.status === 'u').length) {
       orderStatus = 'u'
     } else if (basket.length === basket.filter(p => ['f', 'u', 'pu'].includes(p.status)).length) {
-      orderStatus = 'f'
+      orderStatus = 'd'
     }
     const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
     let fixedFees, fraction, profit
@@ -1019,7 +1019,7 @@ export const addMonthlyTrans = (trans, orders) => {
   batch.set(transRef, trans)
   const month = (Number(trans.id) % 100) - 1
   const year = parseInt(Number(trans.id) / 100)
-  const ordersToArchived = orders.filter(o => ['s', 'r', 'd', 'c', 'u', 'i'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
+  const ordersToArchived = orders.filter(o => ['s', 'r', 'f', 'c', 'm', 'u', 'i'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
   ordersToArchived.forEach(o => {
     const orderRef = firebase.firestore().collection('orders').doc(o.id)
     batch.update(orderRef, {
@@ -1067,7 +1067,7 @@ export const editOrder = (order, basket, storePacks, packs, locations, customers
       orderStatus = 'i'
     }
   } else if (packBasket.length === packBasket.filter(p => p.status === 'f').length){
-    orderStatus = 'f'
+    orderStatus = 'd'
   } else if (packBasket.filter(p => p.purchased > 0).length > 0) {
     orderStatus = 'e'
   }
@@ -1127,7 +1127,7 @@ export const approveRating = (rating, products, packs) => {
 }
 
 export const sendOrder = (order, position) => {
-  if (position === 's' && order.status === 'd' && !order.basket.find(p => p.returned > 0)){
+  if (position === 's' && order.status === 't' && !order.basket.find(p => p.returned > 0)){
     return firebase.firestore().collection('orders').doc(order.id).update({
       position: firebase.firestore.FieldValue.delete()
     })  
@@ -1600,4 +1600,31 @@ export const returnPurchasePack = (purchase, pack, orders, stockTrans, storePack
     }
   }
   return batch.commit()
+}
+
+export const permitUser = async (userId, type, users) => {
+  if (type) {
+    await firebase.firestore().collection('users').doc(userId).update({
+      permissionType: type
+    })  
+  } else {
+    await firebase.firestore().collection('users').doc(userId).update({
+      permissionType: firebase.firestore.FieldValue.delete()
+    })  
+  }
+  const userInfo = users.find(u => u.id === userId)
+  const colors = userInfo.colors.map(c => randomColors.find(rc => rc.name === c).id)
+  const password = colors.join('')
+  await firebase.auth().signInWithEmailAndPassword(userInfo.mobile + '@gmail.com', userInfo.mobile.substring(9, 2) + password)
+  await firebase.auth().currentUser.updateProfile({
+    displayName: type
+  })
+  return firebase.auth().signOut()
+}
+
+export const registerUser = async (email, password) => {
+  await firebase.auth().createUserWithEmailAndPassword(email, password)
+  return firebase.auth().currentUser.updateProfile({
+    displayName: 'a'
+  })
 }

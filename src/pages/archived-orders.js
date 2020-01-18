@@ -18,7 +18,9 @@ const ArchivedOrders = props => {
         setInprocess(true)
         const orders = await getArchivedOrders()
         setInprocess(false)
-        dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
+        if (orders.length > 0) {
+          dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
+        }
       } catch(err) {
         setInprocess(false)
         setError(getMessage(props, err))

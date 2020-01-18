@@ -50,7 +50,7 @@ const EditOrder = props => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
-        const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
+        const type = ['d', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         setInprocess(true)
         await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls)
         setInprocess(false)
