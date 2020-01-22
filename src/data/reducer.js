@@ -168,20 +168,10 @@ const Reducer = (state, action) => {
           ...state,
           stockTrans: action.stockTrans
         }
-      case 'SET_ALARMS':
-        return {
-          ...state,
-          alarms: action.alarms
-        }
       case 'SET_PASSWORD_REQUESTS':
         return {
           ...state,
           passwordRequests: action.passwordRequests
-        }
-      case 'SET_INVITATIONS':
-        return {
-          ...state,
-          invitations: action.invitations
         }
       case 'SET_PRODUCTS':
         return {
@@ -208,20 +198,10 @@ const Reducer = (state, action) => {
           ...state,
           monthlyTrans: action.monthlyTrans
         }
-      case 'SET_COMMENTS':
-        return {
-          ...state,
-          comments: action.comments
-        }
       case 'SET_LOCATIONS':
         return {
           ...state,
           locations: action.locations
-        }
-      case 'SET_RATINGS':
-        return {
-          ...state,
-          ratings: action.ratings
         }
       case 'SET_STORE_PACKS':
         return {
@@ -243,25 +223,20 @@ const Reducer = (state, action) => {
           ...state,
           tags: action.tags
         }
-      case 'SET_NOTIFICATIONS':
-        return {
-          ...state,
-          notifications: action.notifications
-        }
       case 'SET_ARCHIVED_ORDERS':
         return {
           ...state,
           archivedOrders: action.orders
         }
-      case 'SET_CALLS':
-        return {
-          ...state,
-          calls: action.calls
-        }
       case 'SET_ADVERTS':
         return {
           ...state,
           adverts: action.adverts
+        }
+      case 'SET_ARCHIVED_PURCHASES':
+        return {
+          ...state,
+          archivedPurchases: action.purchases
         }
       default:
         return state

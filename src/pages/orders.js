@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
+import { Block, Page, Navbar, Toolbar, List, ListItem, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
-import ReLogin from './relogin'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { randomColors, orderStatus } from '../data/config'
@@ -17,10 +16,13 @@ const Orders = props => {
     }
   }), [state.orders])
   let i = 0
-  if (!user) return <ReLogin />
+  if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
       <Navbar title={labels.orders} backLink={labels.back} />
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => props.f7router.navigate('/archived-orders/')}>
+        <Icon material="backup"></Icon>
+      </Fab>
       <Block>
 				<List>
           {orderStatuses.map(s => 
@@ -32,10 +34,6 @@ const Orders = props => {
               key={s.id}
             />
           )}
-          <ListItem 
-            link="/archived-orders/" 
-            title={labels.archived} 
-          />
 				</List>
       </Block>
       <Toolbar bottom>

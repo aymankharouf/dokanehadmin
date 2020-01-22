@@ -19,6 +19,7 @@ const EditOffer = props => {
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
   const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
+  const [hasChanged, setHasChanged] = useState(false)
   const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight)
   , [state.packs, pack])
   const bonusPacks = useMemo(() => {
@@ -31,17 +32,17 @@ const EditOffer = props => {
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.packs, props.id]) 
-  const hasChanged = useMemo(() => {
-    if (name !== pack.name) return true
-    if (orderLimit !== pack.orderLimit) return true
-    if (subPackId !== pack.subPackId) return true
-    if (subQuantity !== pack.subQuantity) return true
-    if (subPercent !== pack.subPercent) return true
-    if (bonusPackId !== pack.bonusPackId) return true
-    if (bonusQuantity !== pack.bonusQuantity) return true
-    if (bonusPercent !== pack.bonusPercent) return true
-    if (closeExpired !== pack.closeExpired) return true
-    return false
+  useEffect(() => {
+    if (name !== pack.name
+    || orderLimit !== pack.orderLimit
+    || subPackId !== pack.subPackId
+    || subQuantity !== pack.subQuantity
+    || subPercent !== pack.subPercent
+    || bonusPackId !== pack.bonusPackId
+    || bonusQuantity !== pack.bonusQuantity
+    || bonusPercent !== pack.bonusPercent
+    || closeExpired !== pack.closeExpired) setHasChanged(true)
+    else setHasChanged(false)
   }, [pack, name, orderLimit, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
   useEffect(() => {
     if (error) {

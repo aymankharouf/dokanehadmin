@@ -63,8 +63,9 @@ export const stockTransTypes = [
 
 export const spendingTypes = [
   {id: 'w', name: 'سحب'},
-  {id: 'f', name: 'بنزين'},
+  {id: 'p', name: 'بنزين'},
   {id: 'm', name: 'صيانة'},
+  {id: 'f', name: 'فرق اسعار'}
 ]
 
 export const orderPositions = [
@@ -88,10 +89,9 @@ export const alarmTypes = [
   {id: '2', name: 'الابلاغ عن تغيير السعر', actor: 'o', isAvailable: true},
   {id: '3', name: 'الابلاغ عن توفر هذا المنتج/العرض', actor: 'o', isAvailable: false},
   {id: '4', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', actor: 'o', isAvailable: true},
-  {id: '5', name: 'الابلاغ عن توفر منتج بديل', actor: 'a'},
-  {id: '6', name: 'الابلاغ غن توفر عبوة جديدة للمنتج', actor: 'a'},
-  {id: '7', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: true},
-  {id: '8', name: 'الابلاغ عن عرض على شكل مجموعة', actor: 'o', isAvailable: true},
+  {id: '5', name: 'الابلاغ عن توفر بديل', actor: 'a'},
+  {id: '6', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: true},
+  {id: '7', name: 'الابلاغ عن عرض على شكل مجموعة', actor: 'o', isAvailable: true},
 ]
 
 export const deliveryIntervals = [
@@ -117,4 +117,9 @@ export const orderRequestTypes = [
   {id: 'e', name: 'تعديل'},
   {id: 'm', name: 'دمج'},
   {id: 'c', name: 'الغاء'}
+]
+
+export const advertType = [
+  {id: 'a', name: 'اعلان'},
+  {id: 'n', name: 'تنويه'}
 ]

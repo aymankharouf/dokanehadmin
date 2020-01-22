@@ -4,7 +4,6 @@ import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { getCategoryName } from '../data/actions'
-import ReLogin from './relogin'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
@@ -19,7 +18,7 @@ const Products = props => {
     return products.sort((p1, p2) => p1.sales - p2.sales)
   }, [state.products, state.categories])
   
-  if (!user) return <ReLogin />
+  if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
       <Navbar title={labels.allProducts} backLink={labels.back}>

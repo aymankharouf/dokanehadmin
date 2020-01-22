@@ -42,7 +42,7 @@ const SellStore = props => {
         throw new Error('invalidValue')
       }
       setInprocess(true)
-      await addStockTrans('s', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId)
+      await addStockTrans('s', pack.id, Number(quantity), packStock.cost, Number(price), state.storePacks, state.packs, storeId, state.stores)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

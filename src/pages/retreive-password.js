@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Toolbar, Button } from 'framework7-react'
+import React, { useContext, useMemo, useState, useEffect, useRef } from 'react'
+import { f7, Page, Navbar, List, ListInput, Toolbar, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { resolvePasswordRequest, showMessage, showError, getMessage } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
@@ -10,9 +10,8 @@ const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const passwordRequest = useMemo(() => state.passwordRequests.find(r => r.id === props.id)
-  , [state.passwordRequests, props.id])
-  const user = useMemo(() => state.users.find(u => u.mobile === passwordRequest.mobile)
+  const passwordRequest = useRef(state.passwordRequests.find(r => r.id === props.id))
+  const user = useMemo(() => state.users.find(u => u.mobile === passwordRequest.current.mobile)
   , [state.users, passwordRequest])
   const password = useMemo(() => {
     const password = user.colors.map(c => randomColors.find(rc => rc.name === c).id)
@@ -32,7 +31,7 @@ const RetreivePassword = props => {
     }
   }, [inprocess])
 
-  const handleSend = async () => {
+  const handleResolve = async () => {
     try{
       setInprocess(true)
       await resolvePasswordRequest(props.id)
@@ -70,7 +69,9 @@ const RetreivePassword = props => {
           readonly
         />
       </List>
-      <Button text={labels.send} large onClick={() => handleSend()} />
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleResolve()}>
+        <Icon material="done"></Icon>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

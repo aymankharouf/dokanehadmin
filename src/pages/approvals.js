@@ -13,14 +13,14 @@ const Approvals = props => {
   , [state.orderRequests])
   const newUsers = useMemo(() => state.users.filter(u => !state.customers.find(c => c.id === u.id))
   , [state.users, state.customers])
-  const alarms = useMemo(() => state.alarms.filter(a => a.status === 'n')
-  , [state.alarms])
-  const passwordRequests = useMemo(() => state.passwordRequests.filter(r => r.resolved === false)
+  const alarms = useMemo(() => state.users.filter(u => u.alarms?.find(i => i.status === 'n'))
+  , [state.users])
+  const passwordRequests = useMemo(() => state.passwordRequests.filter(r => r.status === 'n')
    , [state.passwordRequests])
-   const ratings = useMemo(() => state.ratings.filter(r => r.status === 'n')
-  , [state.ratings])
-  const invitations = useMemo(() => state.invitations.filter(r => r.status === 'n')
-  , [state.invitations])
+   const ratings = useMemo(() => state.users.filter(u => u.ratings?.find(r => r.status === 'n'))
+  , [state.users])
+  const invitations = useMemo(() => state.users.filter(u => u.invitations?.find(i => i.status === 'n'))
+  , [state.users])
   const sections = useMemo(() => [
     {id: '1', name: 'الطلبات', path: '/orders-list/n', count: newOrders.length},
     {id: '2', name: 'تعديل الطلبات', path: '/order-requests/', count: orderRequests.length},

@@ -11,22 +11,26 @@ import { alarmTypes } from '../data/config'
 const Alarms = props => {
   const { state } = useContext(StoreContext)
   const alarms = useMemo(() => {
-    let alarms = state.alarms.filter(a => a.status === 'n')
-    alarms = alarms.map(a => {
-      const alarmTypeInfo = alarmTypes.find(t => t.id === a.alarmType)
-      const packInfo = state.packs.find(p => p.id === a.packId)
-      const userInfo = state.users.find(u => u.id === a.userId)
-      const customerInfo = state.customers.find(c => c.id === a.userId)
-      return {
-        ...a,
-        packInfo,
-        userInfo,
-        customerInfo,
-        alarmTypeInfo,
-      }
+    let alarms = []
+    let users = state.users.filter(u => u.alarms?.find(a => a.status === 'n'))
+    users.forEach(u => {
+      u.alarms.forEach(a => {
+        if (a.status === 'n') {
+          const alarmTypeInfo = alarmTypes.find(t => t.id === a.type)
+          const packInfo = state.packs.find(p => p.id === a.packId)
+          const customerInfo = state.customers.find(c => c.id === u.id)
+          alarms.push({
+            ...a,
+            packInfo,
+            userInfo: u,
+            customerInfo,
+            alarmTypeInfo
+          })
+        }
+      })
     })
-    return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
-  }, [state.alarms, state.packs, state.users, state.customers])
+   return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
+  }, [state.packs, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.alarms} backLink={labels.back} />
@@ -36,7 +40,7 @@ const Alarms = props => {
               <ListItem title={labels.noData} /> 
             : alarms.map(a => 
                 <ListItem
-                  link={`/alarm-details/${a.id}`}
+                  link={`/alarm-details/${a.id}/user/${a.userInfo.id}`}
                   title={a.alarmTypeInfo.name}
                   subtitle={a.customerInfo.fullName || `${a.userInfo.name}:${a.userInfo.mobile}`}
                   text={`${a.packInfo.productName} ${a.packInfo.name}`}

@@ -1,14 +1,17 @@
-import React, { useContext, useMemo } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
+import React, { useContext, useMemo, useState, useEffect } from 'react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
 
 
 const Logs = props => {
   const { state } = useContext(StoreContext)
+  const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const logs = useMemo(() => {
     const logs = state.logs.map(l => {
       const userInfo = state.users.find(u => u.id === l.userId)
@@ -19,6 +22,34 @@ const Logs = props => {
     })
     return logs.sort((l1, l2) => l2.time.seconds - l1.time.seconds)
   }, [state.logs, state.users])
+  useEffect(() => {
+    if (error) {
+      showError(error)
+      setError('')
+    }
+  }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
+
+  const handleDelete = log => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        setInprocess(true)
+        await deleteLog(log)
+        setInprocess(false)
+        showMessage(labels.deleteSuccess)
+      } catch(err) {
+        setInprocess(false)
+        setError(getMessage(props, err))
+      }
+    })  
+  }
+
   return(
     <Page>
       <Navbar title={labels.logs} backLink={labels.back} />
@@ -35,6 +66,7 @@ const Logs = props => {
                 key={l.id}
               >
                 <div className="list-subtext1">{l.error}</div>
+                <Button text={labels.delete} slot="after" onClick={() => handleDelete(l)} />
               </ListItem>
             )
           }

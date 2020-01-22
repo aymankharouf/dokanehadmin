@@ -99,6 +99,7 @@ import EditAdvert from './pages/edit-advert'
 import OrderRequestDetails from './pages/order-request-details'
 import PermitUser from './pages/permit-user'
 import Register from './pages/register'
+import ArchivedPurchases from './pages/archived-purchases'
 
 export default [
   {
@@ -213,7 +214,7 @@ export default [
     component: Alarms
   },
   {
-    path: '/alarm-details/:id',
+    path: '/alarm-details/:id/user/:userId',
     component: AlarmDetails
   },
   {
@@ -333,7 +334,7 @@ export default [
     component: RequestedPacks
   },
   {
-    path: '/requested-pack-details/:packId/quantity/:quantity/price/:price/order/:orderId/exceed-price-quantity/:exceedPriceQuantity',
+    path: '/requested-pack-details/:packId/quantity/:quantity/price/:price/order/:orderId/exceed/:exceed',
     component: RequestedPackDetails
   },
   {
@@ -341,7 +342,7 @@ export default [
     component: Purchases,
   },
   {
-    path: '/purchase-details/:id',
+    path: '/purchase-details/:id/type/:type',
     component: PurchaseDetails
   },
   {
@@ -465,7 +466,7 @@ export default [
     component: Invitations
   },
   {
-    path: '/invitation-details/:id',
+    path: '/invitation-details/:userId/mobile/:mobile',
     component: InvitationDetails
   },
   {
@@ -519,6 +520,10 @@ export default [
   {
     path: '/order-request-details/:id',
     component: OrderRequestDetails
+  },
+  {
+    path: '/archived-purchases/',
+    component: ArchivedPurchases
   },
   {
     path: '(.*)',

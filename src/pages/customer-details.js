@@ -81,7 +81,7 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="deliveryFees" sw
+          name="deliveryFees"
           label={labels.deliveryDiscount}
           value={(customer.deliveryDiscount / 1000).toFixed(3)}
           type="number"

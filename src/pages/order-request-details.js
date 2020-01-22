@@ -59,7 +59,7 @@ const OrderRequestDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveOrderRequest(orderRequest, state.orders, state.storePacks, state.packs, state.calls, state.users, state.invitations, state.locations, state.customers)
+      await approveOrderRequest(orderRequest, state.orders, state.storePacks, state.packs, state.users, state.locations, state.customers)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()

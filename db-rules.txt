@@ -2,9 +2,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userId} {
-      allow read: if request.auth.token.name == 'a';
-      allow create: if request.auth.uid != null;
-      allow update, delete: if request.auth.token.name == 'a';
+      allow get: if request.auth.uid == userId;
+      allow list: if request.auth.token.name == 'a';
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId || request.auth.token.name == 'a';
+      allow delete: if request.auth.token.name == 'a';
     }
     match /products/{productId} {
     	allow read, write: if request.auth.token.name == 'a';
@@ -17,20 +19,10 @@ service cloud.firestore {
     	allow read, write: if request.auth.token.name == 'a';
     }
     match /orders/{orderId} {
-    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == 'c' || request.auth.token.name == 'd';
+    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == resource.data.position;
       allow create: if request.auth.uid == request.resource.data.userId;
-      allow update: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == 'c';
+      allow update: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a' || request.auth.token.name == resource.data.position;
       allow delete: if request.auth.token.name == 'a';
-    }
-    match /invitations/{invitationId} {
-    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
-      allow create: if request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth.token.name == 'a';
-    }
-    match /ratings/{ratingId} {
-    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'admin';
-      allow create: if request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth.token.name == 'a';
     }
 		match /customers/{customerId} {
 			allow get: if request.auth.uid == customerId;
@@ -41,8 +33,7 @@ service cloud.firestore {
 			allow read, write: if request.auth.token.name == 'a';
 		}
     match /stores/{storeId} {
-    	allow read: if request.auth.uid != null;
-    	allow write: if request.auth.token.name == 'a';
+    	allow read, write: if request.auth.token.name == 'a';
     }
     match /countries/{countryId} {
     	allow read, write: if request.auth.token.name == 'a';
@@ -57,11 +48,6 @@ service cloud.firestore {
     match /trademarks/{trademarkId} {
     	allow read, write: if request.auth.token.name == 'a';
     }
-    match /alarms/{alarmId} {
-    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
-    	allow create: if request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth.token.name == 'a';
-    }
     match /password-requests/{requestId} {
     	allow read, write;
     }
@@ -72,7 +58,7 @@ service cloud.firestore {
     	allow read, write : if request.auth.token.name == 'a';
     }
     match /locations/{locationId} {
-    	allow read;
+    	allow read: if request.auth.uid != null;
     	allow write: if request.auth.token.name == 'a';
     }
     match /store-packs/{storePackId} {
@@ -88,19 +74,6 @@ service cloud.firestore {
     	allow read: if request.auth.uid == resource.data.order.userId || request.auth.token.name == 'a';
     	allow create: if request.auth.uid == request.resource.data.order.userId;
       allow update, delete: if request.auth.token.name == 'a';
-    }
-    match /notifications/{notificationId} {
-    	allow read: if request.auth.uid == resource.data.toCustomerId || (resource.data.toCustomerId == '0' && request.auth.uid != null) || request.auth.token.name == 'a';
-      allow create: if request.auth.token.name == 'a';
-      allow update, delete: if request.auth.uid == resource.data.toCustomerId || request.auth.token.name == 'a';
-    }
-    match /calls/{callId} {
-    	allow read, write : if request.auth.token.name == 'a';
-    }
-    match /favorites/{favoriteId} {
-    	allow read: if request.auth.uid == resource.data.userId;
-      allow create: if request.auth.uid == request.resource.data.userId;
-      allow update, delete: if request.auth.uid == resource.data.userId;
     }
      match /adverts/{advertId} {
     	allow read;

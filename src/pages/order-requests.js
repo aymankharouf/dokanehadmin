@@ -24,7 +24,7 @@ const OrderRequests = props => {
         requestTypeInfo
       }
     })
-    return requests.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    return requests.sort((r1, r2) => r2.time.seconds - r1.time.seconds)
   }, [state.orderRequests, state.users, state.customers])
   return(
     <Page>
@@ -36,7 +36,7 @@ const OrderRequests = props => {
           : orderRequests.map(r => 
               <ListItem
                 link={`/order-request-details/${r.id}`}
-                title={r.customerInfo.fullName || `${r.userinfo.name}:${r.userinfo.mobile}`}
+                title={r.customerInfo.fullName || `${r.userInfo.name}:${r.userInfo.mobile}`}
                 subtitle={r.orderStatusInfo.name}
                 text={r.requestTypeInfo.name}
                 footer={moment(r.time.toDate()).fromNow()}

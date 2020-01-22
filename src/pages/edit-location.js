@@ -15,12 +15,13 @@ const EditLocation = props => {
   const [ordering, setOrdering] = useState(location.ordering)
   const [hasDelivery, setHasDelivery] = useState(location.hasDelivery)
   const [deliveryFees, setDeliveryFees] = useState((location.deliveryFees / 1000).toFixed(3))
-  const hasChanged = useMemo(() => {
-    if (name !== location.name) return true
-    if (ordering !== location.ordering) return true
-    if (hasDelivery !== location.hasDelivery) return true
-    if (deliveryFees * 1000 !== location.deliveryFees) return true
-    return false
+  const [hasChanged, setHasChanged] = useState(false)
+  useEffect(() => {
+    if (name !== location.name
+    || ordering !== location.ordering
+    || hasDelivery !== location.hasDelivery
+    || deliveryFees * 1000 !== location.deliveryFees) setHasChanged(true)
+    else setHasChanged(false)
   }, [location, name, ordering, hasDelivery, deliveryFees])
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')

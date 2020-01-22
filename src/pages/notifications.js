@@ -6,22 +6,24 @@ import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { deleteNotification, showMessage, showError, getMessage } from '../data/actions'
-import ReLogin from './relogin'
 
 const Notifications = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const notifications = useMemo(() => {
-    const notifications = state.notifications.map(n => {
-      const customerInfo = n.toCustomerId === '0' ? '' : state.customers.find(c => c.id === n.toCustomerId)
-      return {
-        ...n,
-        customerInfo
-      }
+    let notifications = []
+    let users = state.users.filter(u => u.notifications)
+    users.forEach(u => {
+      u.notifications.forEach(n => {
+        notifications.push({
+          ...n,
+          userInfo: u
+        })
+      })
     })
     return notifications.sort((n1, n2) => n2.time.seconds - n1.time.seconds)
-  }, [state.notifications, state.customers])
+  }, [state.users])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -36,11 +38,11 @@ const Notifications = props => {
     }
   }, [inprocess])
 
-  const handleDelete = notification => {
+  const handleDelete = (userInfo, notificationId) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        await deleteNotification(notification)
+        await deleteNotification(userInfo, notificationId,)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
       } catch(err) {
@@ -50,7 +52,7 @@ const Notifications = props => {
     })  
   }
 
-  if (!user) return <ReLogin />
+  if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return (
     <Page>
       <Navbar title={labels.notifications} backLink={labels.back} />
@@ -60,13 +62,14 @@ const Notifications = props => {
             <ListItem title={labels.noData} />
           : notifications.map(n =>
               <ListItem
-                title={n.customerInfo?.fullName || labels.allCustomers}
-                subtitle={n.status === 'n' ? labels.notRead : labels.read}
+                title={`${n.userInfo.name}:${n.userInfo.mobile}`}
+                subtitle={n.title}
                 text={n.message}
                 footer={moment(n.time.toDate()).fromNow()}
                 key={n.id}
               >
-                <Button text={labels.delete} slot="after" onClick={() => handleDelete(n)} />
+                <div className="list-subtext1">{n.status === 'n' ? labels.notRead : labels.read}</div>
+                <Button text={labels.delete} slot="after" onClick={() => handleDelete(n.userInfo, n.id)} />
               </ListItem>
             )
           }

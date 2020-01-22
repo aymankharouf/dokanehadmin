@@ -9,12 +9,13 @@ const MonthlyTrans = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
+  const [buttonVisisble, setButtonVisible] = useState(false)
   const month = (Number(props.id) % 100) - 1
   const year = parseInt(Number(props.id) / 100)
   const monthlyTrans = useMemo(() => state.monthlyTrans.find(t => t.id === props.id)
   , [state.monthlyTrans, props.id])
   const orders = useMemo(() => {
-    const orders = state.orders.filter(o => ['a', 'e', 'd', 'p', 't', 'f'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month)
+    const orders = state.orders.filter(o => ['a', 'e', 'd', 'p', 't', 'f'].includes(o.status) && (o.activeTime.toDate()).getFullYear() === year && (o.activeTime.toDate()).getMonth() === month)
     return orders
   }, [state.orders, month, year])
   const finishedOrders = useMemo(() => orders.filter(o => o.status === 'd' || o.status === 'p')
@@ -68,12 +69,13 @@ const MonthlyTrans = props => {
     const expenses = spendings.filter(s => s.type !== 'w')
     return expenses.reduce((sum, s) => sum + s.spendingAmount, 0)
   }, [spendings, monthlyTrans])
-  const buttonVisisble = useMemo(() => {
+  useEffect(() => {
     const today = new Date()
     if ((today.getFullYear() * 100 + Number(today.getMonth())) > year * 100 + month) {
-      return monthlyTrans ? false : true
+      setButtonVisible(monthlyTrans ? false :true)
+    } else {
+      setButtonVisible(false)
     }
-    return false
   }, [year, month, monthlyTrans])
   useEffect(() => {
     if (error) {
@@ -111,7 +113,7 @@ const MonthlyTrans = props => {
         deliveryDiscounts
       }
       setInprocess(true)
-      await addMonthlyTrans(trans)
+      await addMonthlyTrans(trans, state.orders, state.purchases, state.stockTrans)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

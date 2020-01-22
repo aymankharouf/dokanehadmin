@@ -10,8 +10,10 @@ import { callTypes, callResults } from '../data/config'
 
 const CustomerCalls = props => {
   const { state } = useContext(StoreContext)
+  const orderInfo = useMemo(() => state.orders.find(o => o.id === props.id)
+  , [state.orders, props.id])
   const calls = useMemo(() => {
-    let calls = state.calls.filter(c => c.userId === props.id)
+    let calls = orderInfo.calls || []
     calls = calls.map(c => {
       const callTypeInfo = callTypes.find(t => t.id === c.callType)
       const callResultInfo = callResults.find(r => r.id === c.callResult)
@@ -22,10 +24,11 @@ const CustomerCalls = props => {
       }
     })
     return calls.sort((c1, c2) => c2.time.seconds - c1.time.seconds)
-  }, [state.calls, props.id]) 
+  }, [orderInfo])
+  let i = 0
   return(
     <Page>
-      <Navbar title={`${labels.callsTo} ${state.customers.find(c => c.id === props.id).fullName}`} backLink={labels.back} />
+      <Navbar title={`${labels.callsTo} ${state.customers.find(c => c.id === orderInfo.userId).fullName}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {calls.length === 0 ? 
@@ -35,7 +38,7 @@ const CustomerCalls = props => {
                 title={c.callTypeInfo.name}
                 subtitle={c.callResultInfo.name}
                 text={moment(c.time.toDate()).fromNow()}
-                key={c.id}
+                key={i++}
               />
             )
           }

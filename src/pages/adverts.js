@@ -6,6 +6,7 @@ import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert } from '../data/actions'
+import { advertType } from '../data/config'
 
 const Adverts = props => {
   const { state } = useContext(StoreContext)
@@ -35,7 +36,7 @@ const Adverts = props => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        await updateAdvertStatus(currentAdvert, !currentAdvert.isActive, state.adverts)
+        await updateAdvertStatus(currentAdvert, state.adverts)
         setInprocess(false)
         showMessage(labels.editSuccess)
       } catch(err) {
@@ -66,13 +67,14 @@ const Adverts = props => {
             <ListItem title={labels.noData} />
           : adverts.map(a =>
               <ListItem
-                title={a.title}
-                subtitle={a.text}
-                text={a.isActive ? labels.isActive : labels.inActive}
+                title={advertType.find(t => t.id === a.type).name}
+                subtitle={a.title}
+                text={a.text}
                 footer={moment(a.time.toDate()).fromNow()}
                 key={a.id}
                 className={currentAdvert && currentAdvert.id === a.id ? 'selected' : ''}
               >
+                <div className="list-subtext1">{a.isActive ? labels.isActive : labels.inActive}</div>
                 <Link slot="after" iconMaterial="more_vert" onClick={()=> handleAction(a)}/>
               </ListItem>
             )

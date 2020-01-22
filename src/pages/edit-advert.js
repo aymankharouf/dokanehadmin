@@ -15,6 +15,7 @@ const EditAdvert = props => {
   const [imageUrl, setImageUrl] = useState(advert.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
+  const [hasChanged, setHasChanged] = useState(false)
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -29,11 +30,11 @@ const EditAdvert = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
-  const hasChanged = useMemo(() => {
-    if (title !== advert.title) return true
-    if (text !== advert.text) return true
-    if (imageUrl !== advert.imageUrl) return true
-    return false
+  useEffect(() => {
+    if (title !== advert.title
+    || text !== advert.text
+    || imageUrl !== advert.imageUrl) setHasChanged(true)
+    else setHasChanged(false)
   }, [advert, title, text, imageUrl])
   useEffect(() => {
     if (error) {

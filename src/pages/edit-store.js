@@ -24,6 +24,7 @@ const EditStore = props => {
   const [mapPosition, setMapPosition] = useState(store.mapPosition)
   const [allowReturn, setAllowReturn] = useState(store.allowReturn)
   const [openTime, setOpenTime] = useState(store.openTime)
+  const [hasChanged, setHasChanged] = useState(false)
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
 
@@ -41,16 +42,16 @@ const EditStore = props => {
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
   }, [mobile])
-  const hasChanged = useMemo(() => {
-    if (name !== store.name) return true
-    if (mobile !== store.mobile) return true
-    if (discount !== store.discount * 100) return true
-    if (address !== store.address) return true
-    if (locationId !== store.locationId) return true
-    if (mapPosition !== store.mapPosition) return true
-    if (allowReturn !== store.allowReturn) return true
-    if (openTime !== store.openTime) return true
-    return false
+  useEffect(() => {
+    if (name !== store.name
+    || mobile !== store.mobile
+    || discount !== store.discount * 100
+    || address !== store.address
+    || locationId !== store.locationId
+    || mapPosition !== store.mapPosition
+    || allowReturn !== store.allowReturn
+    || openTime !== store.openTime) setHasChanged(true)
+    else setHasChanged(false)
   }, [store, name, mobile, discount, address, locationId, mapPosition, allowReturn, openTime])
   useEffect(() => {
     if (error) {

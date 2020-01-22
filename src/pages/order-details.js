@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, returnOrder, mergeOrder } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, finishOrder, mergeOrder } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -38,7 +38,7 @@ const OrderDetails = props => {
   }, [order.status])
   const lastOrder = useMemo(() => {
     const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
-    userOrders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    userOrders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
     return ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''
   }, [state.orders, order])
   useEffect(() => {
@@ -94,7 +94,7 @@ const OrderDetails = props => {
         }, async () => {
           try{
             setInprocess(true)
-            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
             setInprocess(false)
             showMessage(labels.editSuccess)
             props.f7router.back()
@@ -107,7 +107,7 @@ const OrderDetails = props => {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
-            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, true)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, true)
             setInprocess(false)
             showMessage(labels.editSuccess)
             props.f7router.back()
@@ -118,7 +118,7 @@ const OrderDetails = props => {
         }, async () => {
           try{
             setInprocess(true)
-            await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
+            await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
             setInprocess(false)
             showMessage(labels.editSuccess)
             props.f7router.back()
@@ -129,7 +129,7 @@ const OrderDetails = props => {
         })
       } else {
         setInprocess(true)
-        await updateOrderStatus(order, type, state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
         setInprocess(false)
         showMessage(labels.editSuccess)
         props.f7router.back()
@@ -141,26 +141,11 @@ const OrderDetails = props => {
   }
   const handleSend = async () => {
     try{
-      if (order.position !== 's' && order.status === 't') {
-        f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
-          try{
-            setInprocess(true)
-            await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
-            setInprocess(false)
-            showMessage(labels.sendSuccess)
-            props.f7router.back()
-          } catch(err) {
-            setInprocess(false)
-            setError(getMessage(props, err))
-          }
-        })  
-      } else {
-        setInprocess(true)
-        await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
-        setInprocess(false)
-        showMessage(labels.sendSuccess)
-        props.f7router.back()
-      }
+      setInprocess(true)
+      await sendOrder(order, order.position === 's' ? (order.withDelivery ? 'd' : 'c') : 's')
+      setInprocess(false)
+      showMessage(labels.sendSuccess)
+      props.f7router.back()
     } catch(err) {
       setInprocess(false)
       setError(getMessage(props, err))
@@ -168,11 +153,26 @@ const OrderDetails = props => {
   }
   const handleDelivery = async () => {
     try{
-      setInprocess(true)
-      await updateOrderStatus(order, 'f', state.storePacks, state.packs, state.calls, state.users, state.invitations, false)
-      setInprocess(false)
-      showMessage(labels.editSuccess)
-      props.f7router.back()
+      if (order.status === 't') {
+        f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
+          try{
+            setInprocess(true)
+            await finishOrder(order, 'f', state.storePacks, state.packs, state.users, false)
+            setInprocess(false)
+            showMessage(labels.editSuccess)
+            props.f7router.back()  
+          } catch(err) {
+            setInprocess(false)
+            setError(getMessage(props, err))
+          }
+        })  
+      } else {
+        setInprocess(true)
+        await finishOrder(order, 'f', state.storePacks, state.packs, state.users, false)
+        setInprocess(false)
+        showMessage(labels.editSuccess)
+        props.f7router.back()  
+      }
     } catch(err) {
       setInprocess(false)
 			setError(getMessage(props, err))
@@ -181,7 +181,7 @@ const OrderDetails = props => {
   const handleReturn = async () => {
     try {
       setInprocess(true)
-      await returnOrder(order, state.storePacks, state.packs)
+      await updateOrderStatus(order, 'i', state.storePacks, state.packs, state.users, false)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -251,19 +251,21 @@ const OrderDetails = props => {
       {props.type === 'f' ?
         <Actions id="actions">
           <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
-          {order.status === 'p' ? 
-            <ActionsButton onClick={() => props.f7router.navigate(`/customer-calls/${order.userId}`)}>{labels.customerCalls}</ActionsButton>
+          {order.position === 's' ? 
+            <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${props.id}`)}>{labels.returnPacks}</ActionsButton>
           : ''}
-          <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${order.id}`)}>{labels.returnPacks}</ActionsButton>
-          {order.position === 's' && (order.total === 0 || order.status === 'f') ? '' :
+          {order.status === 'p' ? 
+            <ActionsButton onClick={() => props.f7router.navigate(`/customer-calls/${props.id}`)}>{labels.customerCalls}</ActionsButton>
+          : ''}
+          {order.status === 'p' && order.total > 0 ?
             <ActionsButton onClick={() => handleSend()}>
-              {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : order.status === 'f' ? labels.receiveOrderAmount : labels.toStore}
+              {order.position === 's' ? (order.withDelivery ? labels.toCar : labels.toCenter) : labels.toStore}
             </ActionsButton>
-          }
-          {order.total === 0 || order.status === 'f' ? '' :
-            <ActionsButton onClick={() => handleDelivery()}>{labels.deliver}</ActionsButton>
-          }
-          {order.position === 's' && order.basket.find(p => p.returned > 0) ? 
+          : ''}
+          {order.status === 't' || (order.status === 'p' && order.position === 's') ?
+            <ActionsButton onClick={() => handleDelivery()}>{order.status === 't' ? labels.receiveOrderAmount : labels.deliver}</ActionsButton>
+          : ''}
+          {order.total === 0 ? 
             <ActionsButton onClick={() => handleReturn()}>{labels.toStock}</ActionsButton>
           : ''}
         </Actions>

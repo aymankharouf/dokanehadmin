@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
 import { addAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { advertType } from '../data/config'
 
 const AddAdvert = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
+  const [type, setType] = useState('')
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -41,6 +43,7 @@ const AddAdvert = props => {
   const handleSubmit = async () => {
     try{
       const advert = {
+        type,
         title,
         text,
         isActive: false,
@@ -60,6 +63,24 @@ const AddAdvert = props => {
     <Page>
       <Navbar title={labels.addAdvert} backLink={labels.back} />
       <List form>
+        <ListItem
+          title={labels.type}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
+            <option value=""></option>
+            {advertType.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="title" 
           label={labels.title}

@@ -18,6 +18,7 @@ const EditProduct = props => {
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
+  const [hasChanged, setHasChanged] = useState(false)
   const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.categories]) 
   const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
@@ -40,14 +41,14 @@ const EditProduct = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
-  const hasChanged = useMemo(() => {
-    if (name !== product.name) return true
-    if (country !== product.country) return true
-    if (categoryId !== product.categoryId) return true
-    if (trademark !== product.trademark) return true
-    if (tagId !== product.tagId) return true
-    if (imageUrl !== product.imageUrl) return true
-    return false
+  useEffect(() => {
+    if (name !== product.name
+    || country !== product.country
+    || categoryId !== product.categoryId
+    || trademark !== product.trademark
+    || tagId !== product.tagId
+    || imageUrl !== product.imageUrl) setHasChanged(true)
+    else setHasChanged(false)
   }, [product, name, country, categoryId, trademark, tagId, imageUrl])
   useEffect(() => {
     if (error) {

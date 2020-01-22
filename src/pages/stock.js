@@ -4,7 +4,6 @@ import { StoreContext } from '../data/store'
 import PackImage from './pack-image'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
-import ReLogin from './relogin'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
@@ -20,7 +19,7 @@ const Stock = props => {
     return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     }, [state.storePacks, state.packs])
 
-  if (!user) return <ReLogin />
+  if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
       <Navbar title={labels.stock} backLink={labels.back}>

@@ -5,42 +5,39 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { orderStatus } from '../data/config'
-import { getArchivedOrders, getMessage, showError } from '../data/actions'
+import { getArchivedPurchases, getMessage, showError } from '../data/actions'
 
-const ArchivedOrders = props => {
+const ArchivedPurchases = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   useEffect(() => {
-    const retreiveOrders = async () => {
+    const retreivePurchases = async () => {
       try{
         setInprocess(true)
-        const orders = await getArchivedOrders()
+        const purchases = await getArchivedPurchases()
         setInprocess(false)
-        if (orders.length > 0) {
-          dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
+        if (purchases.length > 0) {
+          dispatch({type: 'SET_ARCHIVED_PURCHASES', purchases})
         }
       } catch(err) {
         setInprocess(false)
         setError(getMessage(props, err))
       }
     }
-    if (state.archivedOrders.length === 0) retreiveOrders()
-  }, [state.archivedOrders, dispatch, props])
+    if (state.archivedPurchases.length === 0) retreivePurchases()
+  }, [state.archivedPurchases, dispatch, props])
 
-  const orders = useMemo(() => {
-    const orders = state.archivedOrders.map(o => {
-      const customerInfo = state.customers.find(c => c.id === o.userId)
-      const statusInfo = orderStatus.find(s => s.id === o.status)
+  const purchases = useMemo(() => {
+    const purchases = state.archivedPurchases.map(p => {
+      const storeInfo = state.stores.find(s => s.id === p.storeId)
       return {
-        ...o,
-        customerInfo,
-        statusInfo
+        ...p,
+        storeInfo
       }
     })
-    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
-  }, [state.archivedOrders, state.customers])
+    return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
+    }, [state.archivedPurchases, state.stores])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -57,7 +54,7 @@ const ArchivedOrders = props => {
 
   return(
     <Page>
-      <Navbar title={labels.archivedOrders} backLink={labels.back}>
+      <Navbar title={labels.archivedPurchases} backLink={labels.back}>
       <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -75,15 +72,15 @@ const ArchivedOrders = props => {
           <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {orders.length === 0 ? 
+        {purchases.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : orders.map(o => 
+          : purchases.map(p => 
               <ListItem
-                link={`/order-details/${o.id}/type/a`}
-                title={o.customerInfo?.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
-                subtitle={o.statusInfo.name}
-                text={moment(o.activeTime.toDate()).fromNow()}
-                key={o.id}
+                link={`/purchase-details/${p.id}/type/a`}
+                title={p.storeInfo.name}
+                subtitle={moment(p.time.toDate()).fromNow()}
+                after={((p.total - p.discount) / 1000).toFixed(3)}
+                key={p.id}
               />
             )
           }
@@ -96,4 +93,4 @@ const ArchivedOrders = props => {
   )
 }
 
-export default ArchivedOrders
+export default ArchivedPurchases

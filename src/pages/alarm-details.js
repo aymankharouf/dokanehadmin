@@ -13,24 +13,35 @@ const AlarmDetails = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [storeId, setStoreId] = useState('')
-  const alarm = useMemo(() => state.alarms.find(a => a.id === props.id)
-  , [state.alarms, props.id])
+  const [newPackId, setNewPackId] = useState('')
+  const userInfo = useMemo(() => state.users.find(u => u.id === props.userId)
+  , [state.users, props.userId])
+  const alarm = useMemo(() => userInfo.alarms.find(a => a.id === Number(props.id))
+  , [userInfo, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === alarm.packId)
   , [state.packs, alarm])
-  const userInfo = useMemo(() => state.users.find(u => u.id === alarm.userId)
-  , [state.users, alarm])
-  const customerInfo = useMemo(() => state.customers.find(c => c.id === alarm.userId)
-  , [state.customers, alarm])
+  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.userId)
+  , [state.customers, props.userId])
   const storeName = useMemo(() => customerInfo.storeId ? state.stores.find(s => s.id === customerInfo.storeId).name : alarm.storeName
   , [customerInfo, state.stores, alarm])
-  const storeLocation = useMemo(() => {
-    const location = customerInfo.storeId ? state.stores.find(s => s.id === customerInfo.storeId).locationId : alarm.locationId
-    return state.locations.find(l => l.id === location).name
-  }, [customerInfo, state.stores, state.locations, alarm])
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores])
+  const packs = useMemo(() => {
+    let packs = state.packs
+    if (['6', '7'].includes(alarm.type)) {
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+    }
+    packs = packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.productName} ${p.name}`
+      }
+    })
+    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  }, [state.packs, alarm, pack]) 
+
   const storePacks = useMemo(() => {
     let storePacks = state.storePacks.filter(p => p.packId === pack.id)
     storePacks = storePacks.map(p => {
@@ -59,7 +70,7 @@ const AlarmDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveAlarm(alarm, pack, storeId, customerInfo, state.storePacks, state.packs)
+      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.storePacks, state.packs, state.users)
       setInprocess(false)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
@@ -71,7 +82,7 @@ const AlarmDetails = props => {
   const handleReject = async () => {
     try{
       setInprocess(true)
-      await rejectAlarm(alarm)
+      await rejectAlarm(userInfo, alarm.id)
       setInprocess(false)
       showMessage(labels.rejectSuccess)
       props.f7router.back()
@@ -80,19 +91,18 @@ const AlarmDetails = props => {
 			setError(getMessage(props, err))
 		}
   }
-
   return (
     <Page>
-      <Navbar title={alarmTypes.find(t => t.id === alarm.alarmType).name} backLink={labels.back} />
+      <Navbar title={alarmTypes.find(t => t.id === alarm.type).name} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="blue" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-          {customerInfo.storeId || storeId ? 
+          {(!customerInfo.storeId && !storeId) || (!newPackId && ['5', '6', '7'].includes(alarm.type)) ? '' : 
             <FabButton color="green" onClick={() => handleApprove()}>
               <Icon material="done"></Icon>
             </FabButton>
-          : ''}
+          }
           <FabButton color="red" onClick={() => handleReject()}>
           <Icon material="close"></Icon>
           </FabButton>
@@ -127,20 +137,15 @@ const AlarmDetails = props => {
           type="number" 
           readonly
         />
-        <ListInput 
-          name="newProduct" 
-          label={labels.newProduct}
-          value={alarm.newProduct}
-          type="text" 
-          readonly
-        />
-        <ListInput 
-          name="newPack" 
-          label={labels.newPack}
-          value={alarm.newPack}
-          type="text" 
-          readonly
-        />
+        {alarm.type === '5' ? 
+          <ListInput 
+            name="alternative" 
+            label={labels.alternative}
+            value={alarm.alternative}
+            type="text" 
+            readonly
+          />
+        : ''}
         <ListInput 
           name="newPrice"
           label={labels.price}
@@ -148,24 +153,28 @@ const AlarmDetails = props => {
           type="number" 
           readonly
         />
-        <ListInput 
-          name="quantity"
-          label={labels.quantity}
-          value={alarm.quantity}
-          type="number" 
-          readonly
-        />
+        {['6', '7'].includes(alarm.type) ? 
+          <ListInput 
+            name="quantity"
+            label={labels.quantity}
+            value={alarm.quantity}
+            type="number" 
+            readonly
+          />
+        : ''}
+        {customerInfo.storeId ? 
+          <ListInput 
+            name="offerDays"
+            label={labels.offerDays}
+            value={alarm.offerDays}
+            type="number" 
+            readonly
+          />
+        : ''}
         <ListInput 
           name="storeName" 
           label={labels.storeName}
           value={storeName}
-          type="text" 
-          readonly
-        />
-        <ListInput 
-          name="storeLocation" 
-          label={labels.location}
-          value={storeLocation}
           type="text" 
           readonly
         />
@@ -189,6 +198,26 @@ const AlarmDetails = props => {
             </select>
           </ListItem>
         }
+        {['5', '6', '7'].includes(alarm.type) ?
+          <ListItem
+            title={labels.newProduct}
+            smartSelect
+            smartSelectParams={{
+              openIn: "popup", 
+              closeOnSelect: true, 
+              searchbar: true, 
+              searchbarPlaceholder: labels.search,
+              popupCloseLinkText: labels.close
+            }}
+          >
+            <select name="newPackId" value={newPackId} onChange={e => setNewPackId(e.target.value)}>
+              <option value=""></option>
+              {packs.map(p => 
+                <option key={p.id} value={p.id}>{p.name}</option>
+              )}
+            </select>
+          </ListItem>
+        : ''}
       </List>
       <BlockTitle>
         {labels.prices}
@@ -197,7 +226,7 @@ const AlarmDetails = props => {
         {storePacks.map(p => 
           <ListItem 
             title={p.currentStore.name}
-            subtitle={p.quantity ? `${state.labels.quantity}: ${p.quantity}` : ''}
+            subtitle={p.quantity ? `${labels.quantity}: ${p.quantity}` : ''}
             text={moment(p.time.toDate()).fromNow()} 
             after={(p.price / 1000).toFixed(3)} 
             key={p.id} 

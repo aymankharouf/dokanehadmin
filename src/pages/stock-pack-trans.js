@@ -58,7 +58,7 @@ const StockPackTrans = props => {
           throw new Error('invalidValue')
         }
         setInprocess(true)
-        await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId)
+        await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId, state.stores)
         setInprocess(false)
         showMessage(labels.addSuccess)
         props.f7router.back()

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
+import React, { useContext, useMemo, useEffect, useState, useRef } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -9,21 +9,20 @@ const InvitationDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const invitation = useMemo(() => state.invitations.find(i => i.id === props.id)
-  , [state.invitations, props.id])
-  const userInfo = useMemo(() => state.users.find(u => u.id === invitation.userId)
-  , [state.users, invitation])
-  const customerInfo = useMemo(() => state.customers.find(c => c.id === invitation.userId)
-  , [state.customers, invitation])
+  const userInfo = useRef(state.users.find(u => u.id === props.userId))
+  const customerInfo = useRef(state.customers.find(c => c.id === props.userId))
   const mobileCheck = useMemo(() => {
-    if (state.users.find(u => u.mobile === invitation.friendMobile)) {
-      return false
+    if (state.users.find(u => u.mobile === props.mobile)) {
+      return '1'
     }
-    if (state.customers.find(c => c.otherMobile === invitation.friendMobile)) {
-      return false
+    if (state.customers.find(c => c.otherMobile === props.mobile)) {
+      return '1'
     }
-    return true
-  }, [state.users, state.customers, invitation])
+    if (state.users.find(u => u.id !== props.userId && u.invitations?.find(i => i.mobile === props.mobile))) {
+      return '2'
+    }
+    return '0'
+  }, [state.users, state.customers, props.mobile, props.userId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -41,7 +40,7 @@ const InvitationDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveInvitation({...invitation, status: mobileCheck ? 'a' : 'r'})
+      await approveInvitation(userInfo.current, props.mobile, mobileCheck, state.users)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()
@@ -61,28 +60,28 @@ const InvitationDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={customerInfo.fullName || `${userInfo.name}:${userInfo.mobile}`}
+          value={customerInfo.current.fullName || `${userInfo.current.name}:${userInfo.current.mobile}`}
           type="text"
           readonly
         />
         <ListInput 
           name="friendName" 
           label={labels.friendName}
-          value={invitation.friendName}
+          value={userInfo.current.invitations.find(i => i.mobile === props.mobile).name}
           type="text"
           readonly
         />
         <ListInput 
           name="friendMobile" 
           label={labels.mobile}
-          value={invitation.friendMobile}
+          value={props.mobile}
           type="text"
           readonly
         />
         <ListInput 
           name="mobileCheck" 
           label={labels.mobileCheck}
-          value={mobileCheck ? labels.notUsedMobile : labels.otherUserMobile}
+          value={mobileCheck === '0' ? labels.notUsedMobile : (mobileCheck === '1' ? labels.alreadyUser : labels.invitedByOther)}
           type="text"
           readonly
         />

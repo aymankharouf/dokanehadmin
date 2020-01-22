@@ -12,8 +12,10 @@ const AddCall = props => {
   const [inprocess, setInprocess] = useState(false)
   const [callType, setCallType] = useState('')
   const [callResult, setCallResult] = useState('')
-  const customerInfo = useMemo(() => state.customers.find(u => u.id === props.id)
-  , [state.customers, props.id])
+  const orderInfo = useMemo(() => state.orders.find(o => o.id === props.id)
+  , [state.orders, props.id])
+  const customerInfo = useMemo(() => state.customers.find(u => u.id === orderInfo.userId)
+  , [state.customers, orderInfo])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -30,12 +32,7 @@ const AddCall = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await addCall({
-        userId: props.id,
-        callType,
-        callResult,
-        time: new Date()
-      })
+      await addCall(orderInfo, callType, callResult)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

@@ -20,7 +20,7 @@ const PrepareOrdersList = props => {
         customerInfo
       }
     })
-    return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
   }, [state.orders, state.users, state.customers, props.orderId, props.packId])
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
@@ -41,7 +41,7 @@ const PrepareOrdersList = props => {
   const handleAllocate = async order => {
     try{
       setInprocess(true)
-      await allocateOrderPack(order, pack)
+      await allocateOrderPack(order, pack, state.users, state.stores)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -59,7 +59,7 @@ const PrepareOrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                title={o.customerInfo.fullName || `${o.userinfo.name}:${o.userinfo.mobile}`}
+                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
                 subtitle={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                 key={o.id}
               >

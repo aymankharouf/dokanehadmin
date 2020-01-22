@@ -16,7 +16,6 @@ const EditCustomer = props => {
   , [state.users, props.id])
   const [name, setName] = useState(customer.name)
   const [address, setAddress] = useState(customer.address)
-  const [storeId, setStoreId] = useState(customer.storeId)
   const [locationId, setLocationId] = useState(customer.locationId)
   const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
@@ -27,27 +26,27 @@ const EditCustomer = props => {
   const [deliveryDiscount, setDeliveryDiscount] = useState((customer.deliveryDiscount / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval || '')
+  const [hasChanged, setHasChanged] = useState(false)
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores]) 
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
-  const hasChanged = useMemo(() => {
-    if (name !== userInfo.name) return true
-    if (address !== customer.address) return true
-    if (storeId !== customer.storeId) return true
-    if (locationId !== customer.locationId) return true
-    if (isOldAge !== customer.isOldAge) return true
-    if (mapPosition !== customer.mapPosition) return true
-    if (isBlocked !== customer.isBlocked) return true
-    if (otherMobile !== customer.otherMobile) return true
-    if (exceedPrice !== customer.exceedPrice) return true
-    if (deliveryDiscount * 1000 !== customer.deliveryDiscount) return true
-    if (orderLimit * 1000 !== customer.orderLimit) return true
-    if (deliveryInterval !== customer.deliveryInterval) return true
-    return false
-  }, [userInfo, customer, name, address, storeId, locationId, isOldAge, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
+  useEffect(() => {
+    if (name !== customer.name
+    || address !== customer.address
+    || locationId !== customer.locationId
+    || isOldAge !== customer.isOldAge
+    || mapPosition !== customer.mapPosition
+    || isBlocked !== customer.isBlocked
+    || otherMobile !== customer.otherMobile
+    || exceedPrice !== customer.exceedPrice
+    || deliveryDiscount * 1000 !== customer.deliveryDiscount
+    || orderLimit * 1000 !== customer.orderLimit
+    || deliveryInterval !== customer.deliveryInterval) setHasChanged(true)
+    else setHasChanged(false)
+  }, [customer, name, address, locationId, isOldAge, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -77,12 +76,11 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
-      const fullName = `${name}${storeId ? '-' + state.stores.find(s => s.id === storeId).name : ''}: ${userInfo.mobile}`
-      const customer = {
+      const fullName = customer.storeId ? `${name}-${stores.find(s => s.id === customer.storeId).name}:${userInfo.mobile}` : `${name}:${userInfo.mobile}`
+      const newCustomer = {
         id: props.id,
         name,
         fullName,
-        storeId,
         address,
         locationId,
         isOldAge,
@@ -95,7 +93,7 @@ const EditCustomer = props => {
         deliveryInterval
       }
       setInprocess(true)
-      await editCustomer(customer)
+      await editCustomer(newCustomer)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()    
@@ -118,24 +116,6 @@ const EditCustomer = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListItem
-          title={labels.store}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListItem
           title={labels.location}
           smartSelect

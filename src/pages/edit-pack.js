@@ -17,14 +17,15 @@ const EditPack = props => {
   const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
-  const hasChanged = useMemo(() => {
-    if (name !== pack.name) return true
-    if (unitsCount !== pack.unitsCount) return true
-    if (bonusUnits !== pack.bonusUnits) return true
-    if (orderLimit !== pack.orderLimit) return true
-    if (isDivided !== pack.isDivided) return true
-    if (byWeight !== pack.byWeight) return true
-    return false
+  const [hasChanged, setHasChanged] = useState(false)
+  useEffect(() => {
+    if (name !== pack.name
+    || unitsCount !== pack.unitsCount
+    || bonusUnits !== pack.bonusUnits
+    || orderLimit !== pack.orderLimit
+    || isDivided !== pack.isDivided
+    || byWeight !== pack.byWeight) setHasChanged(true)
+    else setHasChanged(false)
   }, [pack, name, unitsCount, orderLimit, isDivided, byWeight, bonusUnits])
   useEffect(() => {
     if (isDivided) {

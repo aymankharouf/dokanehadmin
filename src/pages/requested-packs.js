@@ -33,7 +33,7 @@ const RequestedPacks = props => {
 						<ListItem title={labels.noData} /> 
 					: requestedPacks.map(p => 
 							<ListItem
-								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed-price-quantity/${p.exceedPriceQuantity}`}
+								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed/${p.exceedPriceQuantity}`}
 								title={p.packInfo.productName}
 								subtitle={p.packInfo.name}
 								text={`${labels.requested}: ${quantityText(p.quantity)}`}

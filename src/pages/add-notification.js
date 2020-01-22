@@ -10,7 +10,8 @@ const AddNotification = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [toCustomerId, setToCustomerId] = useState('')
+  const [userId, setUserId] = useState('')
+  const [title, setTitle] = useState('')
   const [message, setMessage] = useState('')
   const customers = useMemo(() => [...state.customers].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   , [state.customers])
@@ -31,12 +32,7 @@ const AddNotification = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await addNotification({
-        toCustomerId, 
-        message,
-        status: 'n',
-        time: new Date()
-      })
+      await addNotification(state.users.find(u => u.id === userId), title, message)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
@@ -60,14 +56,23 @@ const AddNotification = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="toCustomerId" value={toCustomerId} onChange={e => setToCustomerId(e.target.value)}>
+          <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
-            <option value="0">{labels.allCustomers}</option>
             {customers.map(c => 
               <option key={c.id} value={c.id}>{c.fullName}</option>
             )}
           </select>
         </ListItem>
+        <ListInput 
+          name="title" 
+          label={labels.title} 
+          floatingLabel
+          clearButton
+          type="text"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          onInputClear={() => setTitle('')}
+        />
         <ListInput 
           name="message" 
           label={labels.message} 
@@ -79,7 +84,7 @@ const AddNotification = props => {
           onInputClear={() => setMessage('')}
         />
       </List>
-      {!toCustomerId || !message ? '' :
+      {!userId || !title || !message ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

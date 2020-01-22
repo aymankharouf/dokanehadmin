@@ -17,25 +17,21 @@ const Store = props => {
     users: [],
     purchases: [],
     orders: [],
-    alarms: [],
     stockTrans: [],
     products: [],
     packs: [],
     passwordRequests: [],
-    invitations: [],
     customers: [],
     spendings: [],
     monthlyTrans: [],
     locations: [],
-    ratings: [],
     storePacks: [],
     logs: [],
     orderRequests: [],
     tags: [],
-    notifications: [],
     archivedOrders: [],
-    calls: [],
-    adverts: []
+    adverts: [],
+    archivedPurchases: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -62,7 +58,7 @@ const Store = props => {
       docs.forEach(doc => {
         passwordRequests.push({...doc.data(), id:doc.id})
       })
-      dispatch({type: 'SET_PASSWORD-REQUESTS', passwordRequests})
+      dispatch({type: 'SET_PASSWORD_REQUESTS', passwordRequests})
     }, err => {
       unsubscribePasswordRequests()
     })
@@ -150,7 +146,7 @@ const Store = props => {
         }, err => {
           unsubscribeStores()
         })  
-        const unsubscribePurchases = firebase.firestore().collection('purchases').onSnapshot(docs => {
+        const unsubscribePurchases = firebase.firestore().collection('purchases').where('isArchived', '==', false).onSnapshot(docs => {
           let purchases = []
           docs.forEach(doc => {
             purchases.push({...doc.data(), id:doc.id})
@@ -159,7 +155,7 @@ const Store = props => {
         }, err => {
           unsubscribePurchases()
         })  
-        const unsubscribeStockTrans = firebase.firestore().collection('stock-trans').onSnapshot(docs => {
+        const unsubscribeStockTrans = firebase.firestore().collection('stock-trans').where('isArchived', '==', false).onSnapshot(docs => {
           let stockTrans = []
           docs.forEach(doc => {
             stockTrans.push({...doc.data(), id:doc.id})
@@ -168,24 +164,6 @@ const Store = props => {
         }, err => {
           unsubscribeStockTrans()
         })  
-        const unsubscribeAlarms = firebase.firestore().collection('alarms').onSnapshot(docs => {
-          let alarms = []
-          docs.forEach(doc => {
-            alarms.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_ALARMS', alarms})
-        }, err => {
-          unsubscribeAlarms()
-        })  
-        const unsubscribeInvitations = firebase.firestore().collection('invitations').onSnapshot(docs => {
-          let invitations = []
-          docs.forEach(doc => {
-            invitations.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_INVITATIONS', invitations})
-        }, err => {
-          unsubscribeInvitations()
-        })
         const unsubscribeSpendings = firebase.firestore().collection('spendings').onSnapshot(docs => {
           let spendings = []
           docs.forEach(doc => {
@@ -203,15 +181,6 @@ const Store = props => {
           dispatch({type: 'SET_MONTHLY_TRANS', monthlyTrans})
         }, err => {
           unsubscribeMonthlyTrans()
-        })  
-        const unsubscribeRatings = firebase.firestore().collection('ratings').onSnapshot(docs => {
-          let ratings = []
-          docs.forEach(doc => {
-            ratings.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_RATINGS', ratings})
-        }, err => {
-          unsubscribeRatings()
         })  
         const unsubscribeStorePacks = firebase.firestore().collection('store-packs').onSnapshot(docs => {
           let storePacks = []
@@ -249,24 +218,6 @@ const Store = props => {
         }, err => {
           unsubscribeTags()
         })  
-        const unsubscribeNotifications = firebase.firestore().collection('notifications').onSnapshot(docs => {
-          let notifications = []
-          docs.forEach(doc => {
-            notifications.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_NOTIFICATIONS', notifications})
-        }, err => {
-          unsubscribeNotifications()
-        })  
-        const unsubscribeCalls = firebase.firestore().collection('calls').onSnapshot(docs => {
-          let calls = []
-          docs.forEach(doc => {
-            calls.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_CALLS', calls})
-        }, err => {
-          unsubscribeCalls()
-        })
       }
     })
   }, [])

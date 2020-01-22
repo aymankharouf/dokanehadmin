@@ -19,6 +19,7 @@ const EditSpending = props => {
   const [spendingDate, setSpendingDate] = useState(initSpendingDate)
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState(spending.description)
+  const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     const validateAmount = value => {
       if (value > 0){
@@ -75,14 +76,14 @@ const EditSpending = props => {
 			setError(getMessage(props, err))
 		}    
   }
-  const hasChanged = useMemo(() => {
-    if (spendingAmount * 1000 !== spending.spendingAmount) return true
-    if (type !== spending.type) return true
-    if (description !== spending.description) return true
-    if (!spending.spendingDate && spendingDate.length > 0) return true
-    if (spending.spendingDate && spendingDate.length === 0) return true
-    if ((spending.spendingDate.toDate()).toString() !== (new Date(spendingDate)).toString()) return true
-    return false
+  useEffect(() => {
+    if (spendingAmount * 1000 !== spending.spendingAmount
+    || type !== spending.type
+    || description !== spending.description
+    || (!spending.spendingDate && spendingDate.length > 0)
+    || (spending.spendingDate && spendingDate.length === 0)
+    || (spending.spendingDate.toDate()).toString() !== (new Date(spendingDate)).toString()) setHasChanged(true)
+    else setHasChanged(false)
   }, [spending, spendingAmount, spendingDate, type, description])
 
   return (

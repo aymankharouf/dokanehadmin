@@ -10,9 +10,22 @@ const PermitUser = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [userId, setUserId] = useState('')
+  const [storeId, setStoreId] = useState('')
   const [position, setPosition] = useState('')
-  const users = useMemo(() => [...state.users].sort((u1, u2) => u1.name > u2.name ? 1 : -1)
-  , [state.users])
+  const users = useMemo(() => {
+    const users = state.users.map(u => {
+      return {
+        ...u,
+        name: `${u.name}${u.storeName ? '-' + u.storeName : ''}:${u.mobile}`
+      }
+    })
+    return users.sort((u1, u2) => u1.name > u2.name ? 1 : -1)
+  }, [state.users])
+  const stores = useMemo(() => {
+    const stores = state.stores.filter(s => s.id !== 's')
+    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  }, [state.stores]) 
+
   useEffect(() => {
     if (error) {
       showError(error)
@@ -36,9 +49,9 @@ const PermitUser = props => {
   const handlePermit = async () => {
     try{
       setInprocess(true)
-      await permitUser(userId, position, state.users)
+      await permitUser(userId, storeId, position, state.users, state.stores)
       setInprocess(false)
-      showMessage(labels.registerSuccess)
+      showMessage(labels.permitSuccess)
       props.f7router.back()
     } catch (err){
       setInprocess(false)
@@ -64,10 +77,29 @@ const PermitUser = props => {
           <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
             {users.map(u => 
-              <option key={u.id} value={u.id}>{`${u.name}: ${u.mobile}`}</option>
+              <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
         </ListItem>
+        <ListItem
+          title={labels.store}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
+            <option value=""></option>
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
+            )}
+          </select>
+        </ListItem>
+
         <ListItem
           title={labels.position}
           smartSelect

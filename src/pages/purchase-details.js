@@ -11,8 +11,8 @@ const PurchaseDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const purchase = useMemo(() => state.purchases.find(p => p.id === props.id)
-  , [state.purchases, props.id])
+  const purchase = useMemo(() => props.type === 'a' ? state.archivedPurchases.find(p => p.id === props.id) : state.purchases.find(p => p.id === props.id)
+  , [state.purchases, state.archivedPurchases, props.id, props.type])
   const purchaseBasket = useMemo(() => {
     return purchase ? purchase.basket.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
@@ -41,7 +41,7 @@ const PurchaseDetails = props => {
   const handleReturn = async pack => {
     try{
       setInprocess(true)
-      await returnPurchasePack(purchase, pack, state.orders, state.stockTrans, state.storePacks, state.packs)
+      await returnPurchasePack(purchase, pack, state.orders, state.stockTrans, state.storePacks, state.packs, state.stores)
       setInprocess(false)
       showMessage(labels.executeSuccess)
       props.f7router.back()

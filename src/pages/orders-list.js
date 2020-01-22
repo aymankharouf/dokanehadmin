@@ -24,7 +24,7 @@ const OrdersList = props => {
         positionInfo
       }
     })
-    return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
+    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
   }, [state.orders, state.users, state.customers, props.id])
 
   return(
@@ -54,7 +54,7 @@ const OrdersList = props => {
                 link={`/order-details/${o.id}/type/n`}
                 title={o.customerInfo?.fullName || `${o.userInfo?.name}:${o.userInfo?.mobile}`}
                 subtitle={o.positionInfo?.name || ''}
-                text={moment(o.time.toDate()).fromNow()}
+                text={moment(o.activeTime.toDate()).fromNow()}
                 footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 key={o.id}
               >
