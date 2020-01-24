@@ -10,7 +10,6 @@ const InvitationDetails = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const userInfo = useRef(state.users.find(u => u.id === props.userId))
-  const customerInfo = useRef(state.customers.find(c => c.id === props.userId))
   const mobileCheck = useMemo(() => {
     if (state.users.find(u => u.mobile === props.mobile)) {
       return '1'
@@ -60,7 +59,7 @@ const InvitationDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={customerInfo.current.fullName || `${userInfo.current.name}:${userInfo.current.mobile}`}
+          value={userInfo.current.fullName}
           type="text"
           readonly
         />

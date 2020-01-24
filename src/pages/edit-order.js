@@ -15,10 +15,10 @@ const EditOrder = props => {
   const [urgent, setUrgent] = useState(order.urgent)
   const customer = useMemo(() => state.customers.find(c => c.id === order.userId)
   , [state.customers, order])
-  const customerLocation = useMemo(() => customer.locationId ? state.locations.find(l => l.id === customer.locationId) : ''
+  const customerLocation = useMemo(() => state.locations.find(l => l.id === customer.locationId) || ''
   , [state.locations, customer])
   const orderBasket = useMemo(() => {
-    let orderBasket = state.orderBasket ? state.orderBasket.filter(p => p.quantity > 0) : []
+    let orderBasket = state.orderBasket?.filter(p => p.quantity > 0) || []
     orderBasket = orderBasket.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
       return {

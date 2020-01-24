@@ -10,18 +10,16 @@ const PrepareOrdersList = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] =useState(false)
   const orders = useMemo(() => {
-    let orders = state.orders.filter(o => props.orderId === '0' ? (o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) : o.id === props.orderId)
+    let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
     orders = orders.map(o => {
-      const userInfo = state.users.find(u => u.id === o.userId)
       const customerInfo = state.customers.find(c => c.id === o.userId)
       return {
         ...o,
-        userInfo,
-        customerInfo
+        customerInfo,
       }
     })
     return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
-  }, [state.orders, state.users, state.customers, props.orderId, props.packId])
+  }, [state.orders, state.customers, props.orderId, props.packId])
   const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
   , [state.packs, props.packId])
   useEffect(() => {
@@ -59,7 +57,7 @@ const PrepareOrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
+                title={o.customerInfo.fullName}
                 subtitle={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
                 key={o.id}
               >

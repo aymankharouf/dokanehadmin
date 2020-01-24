@@ -43,7 +43,7 @@ const ProductDetails = props => {
           name="tagId" 
           label={labels.tag}
           type="text" 
-          value={product.tagId ? state.tags.find(t => t.id === product.tagId).name : ''}
+          value={state.tags.find(t => t.id === product.tagId)?.name || ''}
           readonly
         />
         <img src={product.imageUrl} className="img-card" alt={product.name} />

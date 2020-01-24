@@ -9,7 +9,7 @@ import labels from '../data/labels'
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
 	const [requestedPacks, setRequestedPacks] = useState([])
-	const approvedOrders = useMemo(() => state.orders.filter(o => o.status === 'a' || o.status === 'e')
+	const approvedOrders = useMemo(() => state.orders.filter(o => ['a', 'e'].includes(o.status))
 	, [state.orders])
 	
 	let i = 0

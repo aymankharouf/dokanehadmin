@@ -16,22 +16,24 @@ const AlarmDetails = props => {
   const [newPackId, setNewPackId] = useState('')
   const userInfo = useMemo(() => state.users.find(u => u.id === props.userId)
   , [state.users, props.userId])
+  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.userId)
+  , [state.customers, props.userId])
   const alarm = useMemo(() => userInfo.alarms.find(a => a.id === Number(props.id))
   , [userInfo, props.id])
   const pack = useMemo(() => state.packs.find(p => p.id === alarm.packId)
   , [state.packs, alarm])
-  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.userId)
-  , [state.customers, props.userId])
-  const storeName = useMemo(() => customerInfo.storeId ? state.stores.find(s => s.id === customerInfo.storeId).name : alarm.storeName
+  const storeName = useMemo(() => state.stores.find(s => s.id === customerInfo.storeId)?.name || alarm.storeName
   , [customerInfo, state.stores, alarm])
   const stores = useMemo(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }, [state.stores])
   const packs = useMemo(() => {
-    let packs = state.packs
-    if (['6', '7'].includes(alarm.type)) {
+    let packs = state.packs.filter(p => p.id !== pack.id)
+    if (alarm.type === '7') {
       packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+    } else if (alarmTypes.type === '6') {
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
     }
     packs = packs.map(p => {
       return {
@@ -43,7 +45,7 @@ const AlarmDetails = props => {
   }, [state.packs, alarm, pack]) 
 
   const storePacks = useMemo(() => {
-    let storePacks = state.storePacks.filter(p => p.packId === pack.id)
+    let storePacks = state.storePacks.filter(p => p.packId === (newPackId || pack.id))
     storePacks = storePacks.map(p => {
       const currentStore = state.stores.find(st => st.id === p.storeId)
       return {
@@ -52,7 +54,7 @@ const AlarmDetails = props => {
       }
     })
     return storePacks.sort((p1, p2) => p1.price - p2.price)
-  }, [state.storePacks, state.stores, pack])
+  }, [state.storePacks, state.stores, pack, newPackId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -112,7 +114,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={customerInfo.fullName || `${userInfo.name}:${userInfo.mobile}`}
+          value={customerInfo.fullName}
           type="text" 
           readonly
         />

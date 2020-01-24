@@ -12,18 +12,16 @@ const FollowupOrdersList = props => {
   const orders = useMemo(() => {
     let orders = state.orders.filter(o => o.position === props.id)
     orders = orders.map(o => {
-      const userInfo = state.users.find(u => u.id === o.userId)
       const customerInfo = state.customers.find(c => c.id === o.userId)
       const orderStatusInfo = orderStatus.find(s => s.id === o.status)
       return {
         ...o,
-        userInfo,
         customerInfo,
         orderStatusInfo
       }
     })
     return orders
-  }, [state.orders, state.users, state.customers, props.id])
+  }, [state.orders, state.customers, props.id])
   return(
     <Page>
       <Navbar title={`${labels.followupOrders} ${orderPositions.find(p => p.id === props.id).name}`} backLink={labels.back} />
@@ -34,7 +32,7 @@ const FollowupOrdersList = props => {
           : orders.map(o => 
               <ListItem
                 link={`/order-details/${o.id}/type/f`}
-                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`}
+                title={o.customerInfo.fullName}
                 subtitle={`${labels.status}: ${o.orderStatusInfo.name}`}
                 text={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 footer={o.withDelivery ? labels.withDeliveryNote : ''}

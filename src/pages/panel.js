@@ -32,7 +32,7 @@ const Panel = props => {
         {user ? <ListItem link="/offers/" title={labels.offers} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/profits/" title={labels.profits} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
-        {user ? <ListItem link="/permit-user/" title={labels.permitUser} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/permissions/" title={labels.permissions} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

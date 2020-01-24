@@ -331,9 +331,11 @@ const labels = {
   diffInDelivery: 'لا يمكن الدمج لاختلاف طريقة التسليم بين الطلبين',
   diffInUrgent: 'لا يمكن الدمج لاختلاف مؤشر الاستعجال بين الطلبين',
   return: 'ارجاع',
-  permitUser: 'منح صلاحية',
+  permitUser: 'منح الصلاحية',
+  unPermitUser: 'سحب الصلاحية',
   permit: 'منح',
   permitSuccess: 'تم تعديل الصلاحية',
+  unPermitSuccess: 'تم سحب الصلاحية',
   registerSuccess: 'تم التسجيل',
   mapPosition: 'الموقع على الخريطة',
   openTime: 'اوقات الدوام',
@@ -343,7 +345,9 @@ const labels = {
   alreadyUser: 'رقم الموبايل يعود لمستخدم فعلي',
   approval: 'موافقة',
   notice: 'تبليغ',
-  newProduct: 'المنتج الجديد'
+  newProduct: 'المنتج الجديد',
+  finishedOrdersAffected: 'هناك طلبات منتهية سوف تتأثر، لا يمكن التنفيذ',
+  permissions: 'الصلاحيات'
 }
 
 export default labels

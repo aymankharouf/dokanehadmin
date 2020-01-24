@@ -42,7 +42,7 @@ const Alarms = props => {
                 <ListItem
                   link={`/alarm-details/${a.id}/user/${a.userInfo.id}`}
                   title={a.alarmTypeInfo.name}
-                  subtitle={a.customerInfo.fullName || `${a.userInfo.name}:${a.userInfo.mobile}`}
+                  subtitle={a.customerInfo.fullName}
                   text={`${a.packInfo.productName} ${a.packInfo.name}`}
                   footer={moment(a.time.toDate()).fromNow()}
                   key={a.id}

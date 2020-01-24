@@ -133,7 +133,6 @@
 *stores last month trans & requested packs that can be purchased from
 *check for page permissions (admin & app)
 *auto archive orders & purchases after monthly trans
-*hints & help
 *advertisements
 *request for edit order partially 
 *merging orders
@@ -144,15 +143,17 @@
 *manage endoffer when approve alarm
 *activetime and time & urgent flag
 *add image product & pack names to basket
-delete unimportant data
+*add all for every category
+*delete unimportant data
+*add new pack to approve alarms
+*duplicate password request by local storage
+*add note for change price in basket
+*prevent purchase pack return if any affacted order has been delivered
 debit
 use cashing
 pwa
-add all for every category
-add new pack to approve alarms
-add stock trans archive
-add note for change price in basket
-duplicate password request by local storage
-prevent purchase pack return if any affacted order has been delivered
+add stock trans archive, products & packs
 return purchase discount
-change request for only deleivery type or urgent
+change request for only delivery type or urgent
+handle realtime & useref
+hints & help

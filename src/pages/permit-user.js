@@ -9,9 +9,11 @@ const PermitUser = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [userId, setUserId] = useState('')
-  const [storeId, setStoreId] = useState('')
-  const [position, setPosition] = useState('')
+  const [userId, setUserId] = useState(props.id === '0' ? '' : props.id)
+  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.id)
+  , [state.customers, props.id])
+  const [storeId, setStoreId] = useState(props.id === '0' ? '' : (customerInfo.storeId || ''))
+  const [position, setPosition] = useState(props.id === '0' ? '' : (customerInfo.permissionType || ''))
   const users = useMemo(() => {
     const users = state.users.map(u => {
       return {
@@ -41,11 +43,13 @@ const PermitUser = props => {
   }, [inprocess])
   useEffect(() => {
     if (userId) {
-      setPosition(state.users.find(u => u.id === userId).permissionType || '')
+      setPosition(state.customers.find(c => c.id === userId).permissionType || '')
+      setStoreId(state.customers.find(c => c.id === userId).storeId || '')
     } else {
       setPosition('')
+      setStoreId('')
     }
-  }, [userId, state.users])
+  }, [userId, state.customers])
   const handlePermit = async () => {
     try{
       setInprocess(true)
@@ -73,6 +77,7 @@ const PermitUser = props => {
             searchbarPlaceholder: labels.search,
             popupCloseLinkText: labels.close
           }}
+          disabled={props.id !== '0'}
         >
           <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>

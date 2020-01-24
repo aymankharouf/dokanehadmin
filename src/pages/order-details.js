@@ -13,18 +13,16 @@ const OrderDetails = props => {
   const order = useMemo(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id)
   , [state.orders, state.archivedOrders, props.id, props.type])
   const orderBasket = useMemo(() => order.basket.map(p => {
-    const packInfo = state.packs.find(pa => pa.id === p.packId)
     const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
     const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
     const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
     return {
       ...p,
-      packInfo,
       storeName,
       changePriceNote,
       statusNote
     }
-  }), [order, state.packs, state.stores])
+  }), [order, state.stores])
   const statusActions = useMemo(() => {
     const statusActions = [
       {id: 'a', name: 'اعتماد', status: ['n', 's']},
@@ -198,8 +196,8 @@ const OrderDetails = props => {
           {orderBasket.map(p => 
             <ListItem 
               key={p.packId} 
-              title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
+              title={p.productName}
+              subtitle={p.packName}
               text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
               footer={quantityDetails(p)}
               after={(p.gross / 1000).toFixed(3)}

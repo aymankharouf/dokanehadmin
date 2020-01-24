@@ -11,7 +11,7 @@ const NewUsers = props => {
   const { state } = useContext(StoreContext)
   const newUsers = useMemo(() => {
     const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id))
-    return newUsers.sort((u1, u2) => u1.time.seconds - u2.time.seconds)
+    return newUsers.sort((u1, u2) => u2.time.seconds - u1.time.seconds)
   }, [state.users, state.customers])
   return(
     <Page>

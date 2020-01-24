@@ -12,16 +12,14 @@ const StoreOwners = props => {
   const storeOwners = useMemo(() => {
     let storeOwners = state.customers.filter(c => c.storeId === props.id)
     storeOwners = storeOwners.map(o => {
-      const userInfo = state.users.find(u => u.id === o.id)
       const customerInfo = state.customers.find(c => c.id === o.id)
       return {
         ...o,
-        userInfo,
-        customerInfo
+        customerInfo,
       }
     })
     return storeOwners
-  }, [state.customers, state.users, props.id])
+  }, [state.customers, props.id])
   return (
     <Page>
       <Navbar title={`${labels.storeOwners} ${store.name}`} backLink={labels.back} />
@@ -32,7 +30,7 @@ const StoreOwners = props => {
           : storeOwners.map(o => 
               <ListItem 
                 link="#"
-                title={o.customerInfo.fullName || `${o.userInfo.name}:${o.userInfo.mobile}`} 
+                title={o.customerInfo.fullName} 
                 key={o.id} 
               />
             )

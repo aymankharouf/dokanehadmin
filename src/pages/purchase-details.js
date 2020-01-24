@@ -40,6 +40,10 @@ const PurchaseDetails = props => {
 
   const handleReturn = async pack => {
     try{
+      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.lastPurchaseId === purchase.id) && ['d', 'p', 't', 'f'].includes(o.status))
+      if (affectedOrders.length > 0) {
+        throw new Error('finishedOrdersAffected')
+      }
       setInprocess(true)
       await returnPurchasePack(purchase, pack, state.orders, state.stockTrans, state.storePacks, state.packs, state.stores)
       setInprocess(false)

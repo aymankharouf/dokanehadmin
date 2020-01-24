@@ -100,6 +100,8 @@ import OrderRequestDetails from './pages/order-request-details'
 import PermitUser from './pages/permit-user'
 import Register from './pages/register'
 import ArchivedPurchases from './pages/archived-purchases'
+import Permissions from './pages/permissions'
+import PermissionList from './pages/permission-list'
 
 export default [
   {
@@ -130,7 +132,7 @@ export default [
     component: ChangePassword
   },
   {
-    path: '/permit-user/',
+    path: '/permit-user/:id',
     component: PermitUser
   },
   {
@@ -524,6 +526,14 @@ export default [
   {
     path: '/archived-purchases/',
     component: ArchivedPurchases
+  },
+  {
+    path: '/permissions/',
+    component: Permissions
+  },
+  {
+    path: '/permission-list/:id',
+    component: PermissionList
   },
   {
     path: '(.*)',

@@ -54,7 +54,7 @@ const StoreDetails = props => {
         <ListInput
           name="location"
           label={labels.location}
-          value={store.locationId ? state.locations.find(l => l.id === store.locationId).name : ''}
+          value={state.locations.find(l => l.id === store.locationId)?.name || ''}
           type="text"
           readonly
         />

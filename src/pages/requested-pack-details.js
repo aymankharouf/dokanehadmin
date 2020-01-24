@@ -154,7 +154,7 @@ const RequestedPackDetails = props => {
   const handleUnavailable = overPriced => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
-        const approvedOrders = state.orders.filter(o => o.status === 'a' || o.status === 'e')
+        const approvedOrders = state.orders.filter(o => ['a', 'e'].includes(o.status))
         setInprocess(true)
         await packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
         setInprocess(false)

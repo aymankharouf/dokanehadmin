@@ -22,15 +22,12 @@ const EditCustomer = props => {
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
+  const [withDelivery, setWithDelivery] = useState(customer.withDelivery)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryDiscount, setDeliveryDiscount] = useState((customer.deliveryDiscount / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval || '')
   const [hasChanged, setHasChanged] = useState(false)
-  const stores = useMemo(() => {
-    const stores = state.stores.filter(s => s.id !== 's')
-    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  }, [state.stores]) 
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
   useEffect(() => {
@@ -40,13 +37,14 @@ const EditCustomer = props => {
     || isOldAge !== customer.isOldAge
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
+    || withDelivery !== customer.withDelivery
     || otherMobile !== customer.otherMobile
     || exceedPrice !== customer.exceedPrice
     || deliveryDiscount * 1000 !== customer.deliveryDiscount
     || orderLimit * 1000 !== customer.orderLimit
     || deliveryInterval !== customer.deliveryInterval) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, name, address, locationId, isOldAge, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
+  }, [customer, name, address, locationId, isOldAge, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -76,11 +74,9 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
-      const fullName = customer.storeId ? `${name}-${stores.find(s => s.id === customer.storeId).name}:${userInfo.mobile}` : `${name}:${userInfo.mobile}`
       const newCustomer = {
         id: props.id,
         name,
-        fullName,
         address,
         locationId,
         isOldAge,
@@ -90,10 +86,11 @@ const EditCustomer = props => {
         exceedPrice,
         deliveryDiscount: deliveryDiscount * 1000,
         orderLimit: orderLimit * 1000,
-        deliveryInterval
+        deliveryInterval,
+        withDelivery
       }
       setInprocess(true)
-      await editCustomer(newCustomer)
+      await editCustomer(newCustomer, userInfo.mobile, customer.storeId, state.stores)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()    
@@ -141,6 +138,10 @@ const EditCustomer = props => {
         <ListItem>
           <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
+        </ListItem>
+        <ListItem>
+          <span>{labels.withDelivery}</span>
+          <Toggle color="blue" checked={withDelivery} onToggleChange={() => setWithDelivery(!withDelivery)} />
         </ListItem>
         <ListItem>
           <span>{labels.exceedPrice}</span>

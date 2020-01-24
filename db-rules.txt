@@ -49,7 +49,8 @@ service cloud.firestore {
     	allow read, write: if request.auth.token.name == 'a';
     }
     match /password-requests/{requestId} {
-    	allow read, write;
+    	allow read: if request.auth.token.name == 'a';
+    	allow write;
     }
     match /spendings/{spendingId} {
     	allow read, write: if request.auth.token.name == 'a';

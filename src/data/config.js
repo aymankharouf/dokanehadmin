@@ -123,3 +123,9 @@ export const advertType = [
   {id: 'a', name: 'اعلان'},
   {id: 'n', name: 'تنويه'}
 ]
+
+export const permissionSections = [
+  {id: 's', name: 'اصحاب المحلات'},
+  {id: 'n', name: 'مستخدمين جدد'},
+  {id: 'd', name: 'موصلي الطلبات'}
+]

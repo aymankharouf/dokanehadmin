@@ -49,7 +49,7 @@ const AddCall = props => {
           name="name" 
           label={labels.fullName} 
           type="text"
-          value={customerInfo.fullName}
+          value={customerInfo.name}
           readonly
         />
         <ListInput 

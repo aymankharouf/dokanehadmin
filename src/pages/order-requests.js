@@ -12,20 +12,18 @@ const OrderRequests = props => {
   const orderRequests = useMemo(() => {
     let requests = state.orderRequests.filter(r => r.status === 'n')
     requests = requests.map(r => {
-      const userInfo = state.users.find(u => u.id === r.order.userId)
       const customerInfo = state.customers.find(c => c.id === r.order.userId)
       const orderStatusInfo = orderStatus.find(s => s.id === r.order.status)
       const requestTypeInfo = orderRequestTypes.find(t => t.id === r.type)
       return {
         ...r,
-        userInfo,
         customerInfo,
         orderStatusInfo,
         requestTypeInfo
       }
     })
     return requests.sort((r1, r2) => r2.time.seconds - r1.time.seconds)
-  }, [state.orderRequests, state.users, state.customers])
+  }, [state.orderRequests, state.customers])
   return(
     <Page>
       <Navbar title={labels.cancelOrders} backLink={labels.back} />
@@ -36,7 +34,7 @@ const OrderRequests = props => {
           : orderRequests.map(r => 
               <ListItem
                 link={`/order-request-details/${r.id}`}
-                title={r.customerInfo.fullName || `${r.userInfo.name}:${r.userInfo.mobile}`}
+                title={r.customerInfo.fullName}
                 subtitle={r.orderStatusInfo.name}
                 text={r.requestTypeInfo.name}
                 footer={moment(r.time.toDate()).fromNow()}

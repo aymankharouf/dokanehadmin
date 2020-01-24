@@ -18,9 +18,9 @@ const MonthlyTrans = props => {
     const orders = state.orders.filter(o => ['a', 'e', 'd', 'p', 't', 'f'].includes(o.status) && (o.activeTime.toDate()).getFullYear() === year && (o.activeTime.toDate()).getMonth() === month)
     return orders
   }, [state.orders, month, year])
-  const finishedOrders = useMemo(() => orders.filter(o => o.status === 'd' || o.status === 'p')
+  const finishedOrders = useMemo(() => orders.filter(o => ['d', 'p'].includes(o.status))
   , [orders])
-  const deliveredOrders = useMemo(() => orders.filter(o => o.status === 't' || o.status === 'f')
+  const deliveredOrders = useMemo(() => orders.filter(o => ['t', 'f'].includes(o.status))
   , [orders])
   const ordersCount = monthlyTrans?.ordersCount ?? orders.length
   const deliveredOrdersCount = monthlyTrans?.deliveredOrdersCount ?? deliveredOrders.length
@@ -72,7 +72,7 @@ const MonthlyTrans = props => {
   useEffect(() => {
     const today = new Date()
     if ((today.getFullYear() * 100 + Number(today.getMonth())) > year * 100 + month) {
-      setButtonVisible(monthlyTrans ? false :true)
+      setButtonVisible(monthlyTrans ? false : true)
     } else {
       setButtonVisible(false)
     }

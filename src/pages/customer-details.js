@@ -9,7 +9,7 @@ const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
   const customer = useMemo(() => state.customers.find(c => c.id === props.id)
   , [state.customers, props.id])
-  const storeName = useMemo(() => customer.storeId ? state.stores.find(s => s.id === customer.storeId).name : ''
+  const storeName = useMemo(() => state.stores.find(s => s.id === customer.storeId)?.name || ''
   , [customer, state.stores])
 
   return (
@@ -104,7 +104,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="deliveryInterval" 
           label={labels.deliveryInterval}
-          value={customer.deliveryInterval ? deliveryIntervals.find(i => i.id === customer.deliveryInterval).name : ''}
+          value={deliveryIntervals.find(i => i.id === customer.deliveryInterval)?.name || ''}
           type="text"
           readonly
         />

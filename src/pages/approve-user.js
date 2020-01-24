@@ -14,13 +14,8 @@ const ApproveUser = props => {
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState('')
   const [address, setAddress] = useState('')
-  const [storeId, setStoreId] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const stores = useMemo(() => {
-    const stores = state.stores.filter(s => s.id !== 's')
-    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  }, [state.stores]) 
   const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
   , [state.locations])
   useEffect(() => {
@@ -61,7 +56,7 @@ const ApproveUser = props => {
         throw new Error('otherUserMobile')
       }
       setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, storeId, locationId, otherMobile, address, state.stores)
+      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName, address)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  
@@ -96,24 +91,6 @@ const ApproveUser = props => {
           value={userInfo.storeName || ''}
           readonly
         />
-        <ListItem
-          title={labels.store}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListItem
           title={labels.location}
           smartSelect
@@ -153,7 +130,7 @@ const ApproveUser = props => {
           onChange={e => setAddress(e.target.value)}
         />
       </List>
-      {!name || (userInfo.storeName && !storeId) || !locationId ? '' :
+      {!name || !locationId ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
