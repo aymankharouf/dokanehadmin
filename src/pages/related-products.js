@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -6,18 +6,20 @@ import labels from '../data/labels'
 
 const RelatedProducts = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
-  const relatedProducts = useMemo(() => {
-    let relatedProducts = state.products.filter(p => p.id !== props.id && p.tagId === product.tagId)
-    relatedProducts = relatedProducts.map(p => {
-      const categoryInfo = state.categories.find(c => c.id === p.categoryId)
-      return {
-        ...p,
-        categoryInfo
-      }
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
+  const [relatedProducts, setRelatedProducts] = useState([])
+  useEffect(() => {
+    setRelatedProducts(() => {
+      let relatedProducts = state.products.filter(p => p.id !== props.id && p.tagId === product.tagId)
+      relatedProducts = relatedProducts.map(p => {
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+        return {
+          ...p,
+          categoryInfo
+        }
+      })
+      return relatedProducts.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
     })
-    return relatedProducts.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.products, state.categories, product, props.id])
   return(
     <Page>

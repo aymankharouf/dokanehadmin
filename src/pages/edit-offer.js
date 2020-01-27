@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -8,30 +8,43 @@ const EditOffer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
-  const [name, setName] = useState(pack.name)
-  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
-  const [subPackId, setSubPackId] = useState(pack.subPackId)
-  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
-  const [subPercent, setSubPercent] = useState(pack.subPercent)
-  const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
-  const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
-  const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
-  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [name, setName] = useState('')
+  const [orderLimit, setOrderLimit] = useState('')
+  const [subPackId, setSubPackId] = useState('')
+  const [subQuantity, setSubQuantity] = useState('')
+  const [subPercent, setSubPercent] = useState('')
+  const [bonusPackId, setBonusPackId] = useState('')
+  const [bonusQuantity, setBonusQuantity] = useState('')
+  const [bonusPercent, setBonusPercent] = useState('')
+  const [closeExpired, setCloseExpired] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight)
-  , [state.packs, pack])
-  const bonusPacks = useMemo(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
-    packs = packs.map(p => {
-      return {
-        id: p.id,
-        name: `${p.productName} ${p.name}`
-      }
+  const [packs, setPacks] = useState([])
+  const [bonusPacks, setBonusPacks] = useState([])
+  useEffect(() => {
+    setName(pack.name)
+    setOrderLimit(pack.orderLimit)
+    setSubPackId(pack.subPackId)
+    setSubQuantity(pack.subQuantity)
+    setSubPercent(pack.subPercent)
+    setBonusPackId(pack.bonusPackId)
+    setBonusQuantity(pack.bonusQuantity)
+    setBonusPercent(pack.bonusPercent)
+    setCloseExpired(pack.closeExpired)
+  }, [pack])
+  useEffect(() => {
+    setPacks(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
+    setBonusPacks(() => {
+      let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+      packs = packs.map(p => {
+        return {
+          id: p.id,
+          name: `${p.productName} ${p.name}`
+        }
+      })
+      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
     })
-    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.packs, props.id]) 
+  }, [state.packs, pack, props.id])
   useEffect(() => {
     if (name !== pack.name
     || orderLimit !== pack.orderLimit

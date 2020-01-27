@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -12,10 +12,11 @@ const AddCall = props => {
   const [inprocess, setInprocess] = useState(false)
   const [callType, setCallType] = useState('')
   const [callResult, setCallResult] = useState('')
-  const orderInfo = useMemo(() => state.orders.find(o => o.id === props.id)
-  , [state.orders, props.id])
-  const customerInfo = useMemo(() => state.customers.find(u => u.id === orderInfo.userId)
-  , [state.customers, orderInfo])
+  const [orderInfo] = useState(() => state.orders.find(o => o.id === props.id))
+  const [customerInfo, setCustomerInfo] = useState('')
+  useEffect(() => {
+    setCustomerInfo(() => state.customers.find(u => u.id === orderInfo.userId))
+  }, [state.customers, orderInfo])
   useEffect(() => {
     if (error) {
       showError(error)

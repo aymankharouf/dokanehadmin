@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -7,7 +7,10 @@ import labels from '../data/labels'
 
 const Trademarks = props => {
   const { state } = useContext(StoreContext)
-  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1), [state.trademarks])
+  const [trademarks, setTrademarks] = useState([])
+  useEffect(() => {
+    setTrademarks(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  }, [state.trademarks])
 
   return (
     <Page>

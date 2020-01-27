@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -7,10 +7,11 @@ import { deliveryIntervals } from '../data/config'
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
-  const customer = useMemo(() => state.customers.find(c => c.id === props.id)
-  , [state.customers, props.id])
-  const storeName = useMemo(() => state.stores.find(s => s.id === customer.storeId)?.name || ''
-  , [customer, state.stores])
+  const [customer] = useState(() => state.customers.find(c => c.id === props.id))
+  const [storeName, setStoreName] = useState('')
+  useEffect(() => {
+    setStoreName(() => state.stores.find(s => s.id === customer.storeId)?.name || '')
+  }, [customer, state.stores])
 
   return (
     <Page>

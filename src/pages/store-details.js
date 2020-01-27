@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -7,8 +7,7 @@ import { storeTypes } from '../data/config'
 
 const StoreDetails = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(s => s.id === props.id)
-  , [state.stores, props.id])
+  const [store] = useState(() => state.stores.find(s => s.id === props.id))
 
   return (
     <Page>
@@ -77,6 +76,9 @@ const StoreDetails = props => {
           <Icon material="keyboard_arrow_down"></Icon>
           <Icon material="close"></Icon>
           <FabButtons position="bottom">
+            <FabButton color="green" onClick={() => props.f7router.navigate(`/store-packs/${props.id}`)}>
+              <Icon material="shopping_cart"></Icon>
+            </FabButton>
             <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-store/${props.id}`)}>
               <Icon material="edit"></Icon>
             </FabButton>

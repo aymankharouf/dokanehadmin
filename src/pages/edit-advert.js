@@ -1,4 +1,4 @@
-import React, {useState, useContext, useMemo, useEffect } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
@@ -8,8 +8,7 @@ const EditAdvert = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const advert = useMemo(() => state.adverts.find(a => a.id === props.id)
-  , [state.adverts, props.id])
+  const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
   const [title, setTitle] = useState(advert.title)
   const [text, setText] = useState(advert.text)
   const [imageUrl, setImageUrl] = useState(advert.imageUrl)

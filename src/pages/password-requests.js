@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -8,8 +8,10 @@ import labels from '../data/labels'
 
 const PasswordRequests = props => {
   const { state } = useContext(StoreContext)
-  const passwordRequests = useMemo(() => state.passwordRequests.sort((r1, r2) => r1.time.seconds - r2.time.seconds)
-  , [state.passwordRequests])
+  const [passwordRequests, setPasswordRequests] = useState([])
+  useEffect(() => {
+    setPasswordRequests(() => state.passwordRequests.sort((r1, r2) => r1.time.seconds - r2.time.seconds))
+  }, [state.passwordRequests])
 
   return(
     <Page>

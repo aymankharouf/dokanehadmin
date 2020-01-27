@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -12,10 +12,11 @@ const AddBulk = props => {
   const [orderLimit, setOrderLimit] = useState('')
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
-  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight)
-  , [state.packs, props.id])
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
+  const [packs, setPacks] = useState([])
+  useEffect(() => {
+    setPacks(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
+  }, [state.packs, props.id])
   useEffect(() => {
     if (error) {
       showError(error)

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -12,27 +12,28 @@ const StockPackTrans = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
-  const stockPackInfo = useMemo(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id)
-  , [state.storePacks, props.id])
-  const packTrans = useMemo(() => {
-    let packTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
-    packTrans = packTrans.map(t => {
-      const transPack = t.basket.find(p => p.packId === pack.id)
-      const storeInfo = state.stores.find(s => s.id === t.storeId)
-      const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
-      return {
-        ...transPack,
-        id: t.id,
-        storeId: t.storeId,
-        type: t.type,
-        time: t.time,
-        storeInfo,
-        stockTransTypeInfo
-      }
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [stockPackInfo] = useState(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id))
+  const [packTrans, setPackTrans] = useState([])
+  useEffect(() => {
+    setPackTrans(() => {
+      let packTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
+      packTrans = packTrans.map(t => {
+        const transPack = t.basket.find(p => p.packId === pack.id)
+        const storeInfo = state.stores.find(s => s.id === t.storeId)
+        const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
+        return {
+          ...transPack,
+          id: t.id,
+          storeId: t.storeId,
+          type: t.type,
+          time: t.time,
+          storeInfo,
+          stockTransTypeInfo
+        }
+      })
+      return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
     })
-    return packTrans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
   }, [state.stockTrans, state.stores, pack])
   useEffect(() => {
     if (error) {

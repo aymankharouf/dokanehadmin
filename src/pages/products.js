@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -7,15 +7,18 @@ import { getCategoryName } from '../data/actions'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
-  const products = useMemo(() => {
-    const products = state.products.map(p => {
-      const categoryInfo = state.categories.find(c => c.id === p.categoryId)
-      return {
-        ...p,
-        categoryInfo
-      }
+  const [products, setProducts] = useState([])
+  useEffect(() => {
+    setProducts(() => {
+      const products = state.products.map(p => {
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+        return {
+          ...p,
+          categoryInfo
+        }
+      })
+      return products.sort((p1, p2) => p1.sales - p2.sales)
     })
-    return products.sort((p1, p2) => p1.sales - p2.sales)
   }, [state.products, state.categories])
   
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>

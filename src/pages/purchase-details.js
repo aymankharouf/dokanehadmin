@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -11,18 +11,20 @@ const PurchaseDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const purchase = useMemo(() => props.type === 'a' ? state.archivedPurchases.find(p => p.id === props.id) : state.purchases.find(p => p.id === props.id)
-  , [state.purchases, state.archivedPurchases, props.id, props.type])
-  const purchaseBasket = useMemo(() => {
-    return purchase ? purchase.basket.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-      return {
-        ...p,
-        packInfo,
-        weightText
-      }
-    }) : []
+  const [purchase] = useState(() => props.type === 'a' ? state.archivedPurchases.find(p => p.id === props.id) : state.purchases.find(p => p.id === props.id))
+  const [purchaseBasket, setPurchaseBasket] = useState([])
+  useEffect(() => {
+    setPurchaseBasket(() => {
+      return purchase ? purchase.basket.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+        return {
+          ...p,
+          packInfo,
+          weightText
+        }
+      }) : []
+    })
   }, [state.packs, purchase])
   useEffect(() => {
     if (error) {

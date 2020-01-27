@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -9,13 +9,18 @@ const EditLocation = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const location = useMemo(() => state.locations.find(l => l.id === props.id)
-  , [state.locations, props.id])
-  const [name, setName] = useState(location.name)
-  const [ordering, setOrdering] = useState(location.ordering)
-  const [hasDelivery, setHasDelivery] = useState(location.hasDelivery)
-  const [deliveryFees, setDeliveryFees] = useState((location.deliveryFees / 1000).toFixed(3))
+  const [location] = useState(() => state.locations.find(l => l.id === props.id))
+  const [name, setName] = useState('')
+  const [ordering, setOrdering] = useState('')
+  const [hasDelivery, setHasDelivery] = useState('')
+  const [deliveryFees, setDeliveryFees] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
+  useEffect(() => {
+    setName(location.name)
+    setOrdering(location.ordering)
+    setHasDelivery(location.hasDelivery)
+    setDeliveryFees((location.deliveryFees / 1000).toFixed(3))
+  }, [location])
   useEffect(() => {
     if (name !== location.name
     || ordering !== location.ordering

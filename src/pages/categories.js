@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -6,12 +6,15 @@ import BottomToolbar from './bottom-toolbar'
 
 const Categories = props => {
   const { state } = useContext(StoreContext)
-  const categories = useMemo(() => {
-    const categories = state.categories.filter(c => c.parentId === props.id)
-    return categories.sort((c1, c2) => c1.ordering - c2.ordering)
+  const [categories, setCategories] = useState([])
+  const [currentCategory, setCurrentCategory] = useState('')
+  useEffect(() => {
+    setCategories(() => {
+      const categories = state.categories.filter(c => c.parentId === props.id)
+      return categories.sort((c1, c2) => c1.ordering - c2.ordering)
+    })
+    setCurrentCategory(() => state.categories.find(c => c.id === props.id) || '')
   }, [state.categories, props.id])
-  const currentCategory = useMemo(() => props.id === '0' ? '' : state.categories.find(c => c.id === props.id)
-  , [state.categories, props.id])
   return (
     <Page>
       <Navbar title={`${labels.categories} ${currentCategory?.name || ''}`} backLink={labels.back} />
@@ -23,6 +26,7 @@ const Categories = props => {
               <ListItem 
                 link={`/categories/${c.id}`} 
                 title={c.name} 
+                after={c.ordering}
                 key={c.id} 
               />
             )

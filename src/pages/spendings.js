@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -9,15 +9,18 @@ import { spendingTypes } from '../data/config'
 
 const Spendings = props => {
   const { state, user } = useContext(StoreContext)
-  const spendings = useMemo(() => {
-    const spendings = state.spendings.map(s => {
-      const spendingTypeInfo = spendingTypes.find(t => t.id === s.type)
-      return {
-        ...s,
-        spendingTypeInfo
-      }
+  const [spendings, setSpendings] = useState([])
+  useEffect(() => {
+    setSpendings(() => {
+      const spendings = state.spendings.map(s => {
+        const spendingTypeInfo = spendingTypes.find(t => t.id === s.type)
+        return {
+          ...s,
+          spendingTypeInfo
+        }
+      })
+      return spendings.sort((s1, s2) => s2.time.seconds - s1.time.seconds)
     })
-    return spendings.sort((s1, s2) => s2.time.seconds - s1.time.seconds)
   }, [state.spendings])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>

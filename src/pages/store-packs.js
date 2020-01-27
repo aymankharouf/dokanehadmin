@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -13,18 +13,20 @@ const StorePacks = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [currentStorePack, setCurrentStorePack] = useState('')
-  const store = useMemo(() => state.stores.find(s => s.id === props.id)
-  , [state.stores, props.id])
-  let storePacks = useMemo(() => {
-    let storePacks = state.storePacks.filter(p => p.storeId === props.id)
-    storePacks = storePacks.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      return {
-        ...p,
-        packInfo
-      }
+  const [store] = useState(() => state.stores.find(s => s.id === props.id))
+  const [storePacks, setStorePacks] = useState([])
+  useEffect(() => {
+    setStorePacks(() => {
+      let storePacks = state.storePacks.filter(p => p.storeId === props.id)
+      storePacks = storePacks.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        return {
+          ...p,
+          packInfo
+        }
+      })
+      return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
     })
-    return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
   }, [state.storePacks, state.packs, props.id])
   useEffect(() => {
     if (error) {

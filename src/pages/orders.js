@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Toolbar, List, ListItem, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -8,13 +8,18 @@ import { randomColors, orderStatus } from '../data/config'
 
 const Orders = props => {
   const { state, user } = useContext(StoreContext)
-  const orderStatuses = useMemo(() => orderStatus.map(s => {
-    const orders = state.orders.filter(o => o.status === s.id)
-    return {
-      ...s,
-      orders
-    }
-  }), [state.orders])
+  const [orderStatuses, setOrderStatuses] = useState([])
+  const [orderRequests, setOrderRequests] = useState([])
+  useEffect(() => {
+    setOrderStatuses(() => orderStatus.map(s => {
+      const orders = state.orders.filter(o => o.status === s.id)
+      return {
+        ...s,
+        orders
+      }
+    }))
+    setOrderRequests(() => state.orders.filter(r => r.requestStatus === 'n'))
+  }, [state.orders])
   let i = 0
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
@@ -25,6 +30,12 @@ const Orders = props => {
       </Fab>
       <Block>
 				<List>
+          <ListItem 
+            link="/order-requests/" 
+            title={labels.orderRequests} 
+            badge={orderRequests.length} 
+            badgeColor={randomColors[i++ % 10].name} 
+          />
           {orderStatuses.map(s => 
             <ListItem 
               link={`/orders-list/${s.id}/`} 

@@ -149,11 +149,14 @@
 *duplicate password request by local storage
 *add note for change price in basket
 *prevent purchase pack return if any affacted order has been delivered
+*change request for only delivery type or urgent
 debit
 use cashing
 pwa
 add stock trans archive, products & packs
 return purchase discount
-change request for only delivery type or urgent
 handle realtime & useref
 hints & help
+reducer do not read state
+read archive by period
+delete and change price from pack details page

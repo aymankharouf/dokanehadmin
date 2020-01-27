@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState, useRef } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -9,18 +9,21 @@ const InvitationDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const userInfo = useRef(state.users.find(u => u.id === props.userId))
-  const mobileCheck = useMemo(() => {
-    if (state.users.find(u => u.mobile === props.mobile)) {
-      return '1'
-    }
-    if (state.customers.find(c => c.otherMobile === props.mobile)) {
-      return '1'
-    }
-    if (state.users.find(u => u.id !== props.userId && u.invitations?.find(i => i.mobile === props.mobile))) {
-      return '2'
-    }
-    return '0'
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.userId))
+  const [mobileCheck, setMobileCheck] = useState('')
+  useEffect(() => {
+    setMobileCheck(() => {
+      if (state.users.find(u => u.mobile === props.mobile)) {
+        return '1'
+      }
+      if (state.customers.find(c => c.otherMobile === props.mobile)) {
+        return '1'
+      }
+      if (state.users.find(u => u.id !== props.userId && u.invitations?.find(i => i.mobile === props.mobile))) {
+        return '2'
+      }
+      return '0'
+    })
   }, [state.users, state.customers, props.mobile, props.userId])
   useEffect(() => {
     if (error) {

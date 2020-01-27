@@ -1,4 +1,4 @@
-import React, {useState, useContext, useMemo, useEffect } from 'react'
+import React, {useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
@@ -8,25 +8,28 @@ const EditProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
-  const [name, setName] = useState(product.name)
-  const [categoryId, setCategoryId] = useState(product.categoryId)
-  const [trademark, setTrademark] = useState(product.trademark)
-  const [country, setCountry] = useState(product.country)
-  const [tagId, setTagId] = useState(product.tagId)
-  const [imageUrl, setImageUrl] = useState(product.imageUrl)
+  const product = useState(() => state.products.find(p => p.id === props.id))
+  const [name, setName] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+  const [trademark, setTrademark] = useState('')
+  const [country, setCountry] = useState('')
+  const [tagId, setTagId] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const categories = useMemo(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  , [state.categories]) 
-  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.trademarks]) 
-  const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  , [state.countries]) 
-  const tags = useMemo(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.tags]) 
+  const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
+  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
+  const [tags] = useState(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  useEffect(() => {
+    setName(product.name)
+    setCategoryId(product.categoryId)
+    setTrademark(product.trademark)
+    setCountry(product.country)
+    setTagId(product.tagId)
+    setImageUrl(product.imageUrl)
+  }, [product])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name

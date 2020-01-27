@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -14,8 +14,7 @@ const AddPack = props => {
   const [orderLimit, setOrderLimit] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
   useEffect(() => {
     if (error) {
       showError(error)

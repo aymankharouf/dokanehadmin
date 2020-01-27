@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Button, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -10,20 +10,22 @@ const PermissionList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const customers = useMemo(() => {
-    let customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId) || (props.id === 'd' && c.permission_type))
-    customers = customers.map(c => {
-      const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
-      const permissionTypeName = orderPositions.find(p => p.id === c.permissionType)?.name || ''
-      const userInfo = state.users.find(u => u.id === c.id)
-      return {
-        ...c,
-        name: `${c.name}:${userInfo.mobile}`,
-        storeName,
-        permissionTypeName
-      }
+  const [customers, setCustomers] = useState([])
+  useEffect(() => {
+    setCustomers(() => {
+      const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId) || (props.id === 'd' && c.permission_type))
+      return customers.map(c => {
+        const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
+        const permissionTypeName = orderPositions.find(p => p.id === c.permissionType)?.name || ''
+        const userInfo = state.users.find(u => u.id === c.id)
+        return {
+          ...c,
+          name: `${c.name}:${userInfo.mobile}`,
+          storeName,
+          permissionTypeName
+        }
+      })
     })
-    return customers
   }, [state.customers, state.stores, state.users, props.id])
   useEffect(() => {
     if (error) {

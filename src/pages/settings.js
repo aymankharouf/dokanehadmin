@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -6,7 +6,7 @@ import { randomColors } from '../data/config'
 
 
 const Settings = props => {
-  const sections = useMemo(() => [
+  const [sections] = useState(() => [
     {id: '1', name: 'المحلات', path: '/stores/'},
     {id: '2', name: 'الدول', path: '/countries/'},
     {id: '3', name: 'الاصناف', path: '/categories/0'},
@@ -14,7 +14,7 @@ const Settings = props => {
     {id: '5', name: 'المناطق', path: '/locations/'},
     {id: '6', name: 'الفئات', path: '/tags/'},
     {id: '7', name: 'الاعلانات', path: '/adverts/'}
-  ], [])
+  ])
   let i = 0
   return(
     <Page>

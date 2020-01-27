@@ -1,12 +1,11 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 const ProductDetails = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
   return (
     <Page>
       <Navbar title={labels.productDetails} backLink={labels.back} />

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -8,15 +8,18 @@ import labels from '../data/labels'
 
 const Purchases = props => {
   const { state, user } = useContext(StoreContext)
-  const purchases = useMemo(() => {
-    const purchases = state.purchases.map(p => {
-      const storeInfo = state.stores.find(s => s.id === p.storeId)
-      return {
-        ...p,
-        storeInfo
-      }
+  const [purchases, setPurchases] = useState([])
+  useEffect(() => {
+    setPurchases(() => {
+      const purchases = state.purchases.map(p => {
+        const storeInfo = state.stores.find(s => s.id === p.storeId)
+        return {
+          ...p,
+          storeInfo
+        }
+      })
+      return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
     })
-    return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
   }, [state.purchases, state.stores])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>

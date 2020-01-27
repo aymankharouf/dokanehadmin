@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -8,8 +8,10 @@ import labels from '../data/labels'
 
 const Customers = props => {
   const { state, user } = useContext(StoreContext)
-  const customers = useMemo(() => [...state.customers].sort((c1, c2) => c2.time.seconds - c1.time.seconds)
-  , [state.customers])
+  const [customers, setCustomers] = useState([])
+  useEffect(() => {
+    setCustomers(() => [...state.customers].sort((c1, c2) => c2.time.seconds - c1.time.seconds))
+  }, [state.customers])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(

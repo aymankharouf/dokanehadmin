@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -7,19 +7,18 @@ import { randomColors, permissionSections } from '../data/config'
 
 const Permissions = props => {
   const { state } = useContext(StoreContext)
-  const storeOwners = useMemo(() => state.customers.filter(c => c.storeId)
-  , [state.customers])
-  const newOwners = useMemo(() => state.customers.filter(c => c.storeName && !c.storeId)
-  , [state.customers])
-  const deliveryUsers = useMemo(() => state.customers.filter(c => c.permissionType)
-  , [state.customers])
-  const sections = useMemo(() => permissionSections.map(s => {
-    return {
-      ...s,
-      count: s.id === 's' ? storeOwners.length : s.id === 'n' ? newOwners.length : deliveryUsers.length
-    }
-  })
-  , [storeOwners, newOwners, deliveryUsers])
+  const [storeOwners] = useState(() => state.customers.filter(c => c.storeId))
+  const [newOwners] = useState(() => state.customers.filter(c => c.storeName && !c.storeId))
+  const [deliveryUsers] = useState(() => state.customers.filter(c => c.permissionType))
+  const [sections, setSections] = useState([])
+  useEffect(() => {
+    setSections(() => permissionSections.map(s => {
+      return {
+        ...s,
+        count: s.id === 's' ? storeOwners.length : s.id === 'n' ? newOwners.length : deliveryUsers.length
+      }
+    }))
+  }, [storeOwners, newOwners, deliveryUsers])
   let i = 0
   return(
     <Page>

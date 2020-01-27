@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -9,15 +9,16 @@ const ApproveUser = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const userInfo = useMemo(() => state.users.find(u => u.id === props.id)
-  , [state.users, props.id])
-  const [name, setName] = useState(userInfo.name)
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
+  const [name, setName] = useState('')
   const [locationId, setLocationId] = useState('')
   const [address, setAddress] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
-  , [state.locations])
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  useEffect(() => {
+    setName(userInfo.name)
+  }, [userInfo])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/

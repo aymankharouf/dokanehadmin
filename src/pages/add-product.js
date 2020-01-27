@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
@@ -15,7 +15,7 @@ const AddProduct = props => {
   const [tagId, setTagId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const categories = useMemo(() => {
+  const [categories] = useState(() => {
     let categories = state.categories.filter(c => c.isLeaf)
     categories = categories.map(c => {
       return {
@@ -24,13 +24,10 @@ const AddProduct = props => {
       }
     })
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  }, [state.categories])
-  const trademarks = useMemo(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.trademarks])
-  const countries = useMemo(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  , [state.countries]) 
-  const tags = useMemo(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)
-  , [state.tags]) 
+  })
+  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1)) 
+  const [tags] = useState(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1)) 
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name

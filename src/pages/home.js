@@ -1,20 +1,19 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { randomColors } from '../data/config'
 
 
 const Home = props => {
-  const mainPages = useMemo(() => [
+  const [mainPages] = useState(() => [
     {id: '1', name: 'الطلبات', path: '/orders/'},
-    {id: '2', name: 'اﻻسعار', path: '/prices/'},
-    {id: '3', name: 'المنتجات', path: '/products/'},
-    {id: '4', name: 'المشتريات', path: '/purchases/'},
-    {id: '5', name: 'العملاء', path: '/customers/'},
-    {id: '6', name: 'المستودع', path: '/stock/'},
-    {id: '7', name: 'المصاريف', path: '/spendings/'},
-    {id: '8', name: 'التنبيهات', path: '/notifications/'}
-  ], [])
+    {id: '2', name: 'المنتجات', path: '/products/'},
+    {id: '3', name: 'المشتريات', path: '/purchases/'},
+    {id: '4', name: 'العملاء', path: '/customers/'},
+    {id: '5', name: 'المستودع', path: '/stock/'},
+    {id: '6', name: 'المصاريف', path: '/spendings/'},
+    {id: '7', name: 'التنبيهات', path: '/notifications/'}
+  ])
 
   let i = 0
   return (

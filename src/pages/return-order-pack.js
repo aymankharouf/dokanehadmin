@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -10,13 +10,18 @@ const ReturnOrderPack = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
-  , [state.packs, props.packId])
-  const orderPack = useMemo(() => {
-    const basket = state.orders.find(o => o.id === props.orderId).basket
-    return basket.find(p => p.packId === props.packId)
+  const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
+  const [orderPack, setOrderPack] = useState('')
+  const [returned, setReturned] = useState('')
+  useEffect(() => {
+    setOrderPack(() => {
+      const basket = state.orders.find(o => o.id === props.orderId).basket
+      return basket.find(p => p.packId === props.packId)
+    })
   }, [state.orders, props.orderId, props.packId])
-  const [returned, setReturned] = useState(orderPack.returned || 0)
+  useEffect(() => {
+    setReturned(orderPack.returned || 0)
+  }, [orderPack])
   useEffect(() => {
     if (error) {
       showError(error)

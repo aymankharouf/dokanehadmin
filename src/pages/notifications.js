@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -11,18 +11,21 @@ const Notifications = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const notifications = useMemo(() => {
-    let notifications = []
-    let users = state.users.filter(u => u.notifications)
-    users.forEach(u => {
-      u.notifications.forEach(n => {
-        notifications.push({
-          ...n,
-          userInfo: u
+  const [notifications, setNotifications] = useState([])
+  useEffect(() => {
+    setNotifications(() => {
+      let notifications = []
+      let users = state.users.filter(u => u.notifications)
+      users.forEach(u => {
+        u.notifications.forEach(n => {
+          notifications.push({
+            ...n,
+            userInfo: u
+          })
         })
       })
+      return notifications.sort((n1, n2) => n2.time.seconds - n1.time.seconds)
     })
-    return notifications.sort((n1, n2) => n2.time.seconds - n1.time.seconds)
   }, [state.users])
   useEffect(() => {
     if (error) {

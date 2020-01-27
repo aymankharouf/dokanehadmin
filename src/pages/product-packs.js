@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
@@ -9,11 +9,13 @@ import BottomToolbar from './bottom-toolbar'
 
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
-  const packs = useMemo(() => {
-    const packs = state.packs.filter(p => p.productId === props.id)
-    return packs.sort((p1, p2) => p2.price - p1.price)
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
+  const [packs, setPacks] = useState([])
+  useEffect(() => {
+    setPacks(() => {
+      const packs = state.packs.filter(p => p.productId === props.id)
+      return packs.sort((p1, p2) => p2.price - p1.price)
+    })
   }, [state.packs, props.id]) 
   return (
     <Page>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -8,10 +8,8 @@ import labels from '../data/labels'
 const PurchasePlan = props => {
 	const { state } = useContext(StoreContext)
 	const [stores, setStores] = useState([])
-	const approvedOrders = useMemo(() => state.orders.filter(o => ['a', 'e'].includes(o.status))
-	, [state.orders])
+	const approvedOrders = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
 	
-	let i = 0
 	useEffect(() => {
 		let storesArray = []
 		const today = new Date()
@@ -56,7 +54,8 @@ const PurchasePlan = props => {
 		})
 		setStores(storesArray)
 	}, [state.basket, approvedOrders, state.stores, state.packs, state.customers, state.storePacks, state.purchases])
-  return(
+	let i = 0
+	return(
     <Page>
       <Navbar title={labels.purchasePlan} backLink={labels.back} />
       <Block>

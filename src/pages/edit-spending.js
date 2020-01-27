@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editSpending, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,16 +10,20 @@ const EditSpending = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const spending = useMemo(() => state.spendings.find(s => s.id === props.id)
-  , [state.spendings, props.id])
-  const [type, setType] = useState(spending.type)
-  const [spendingAmount, setSpendingAmount] = useState((spending.spendingAmount / 1000).toFixed(3))
+  const [spending] = useState(() => state.spendings.find(s => s.id === props.id))
+  const [type, setType] = useState('')
+  const [spendingAmount, setSpendingAmount] = useState('')
   const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
-  const initSpendingDate = spending.spendingDate ? [spending.spendingDate.toDate()] : ''
-  const [spendingDate, setSpendingDate] = useState(initSpendingDate)
+  const [spendingDate, setSpendingDate] = useState('')
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
-  const [description, setDescription] = useState(spending.description)
+  const [description, setDescription] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
+  useEffect(() => {
+    setType(spending.type)
+    setSpendingAmount((spending.spendingAmount / 1000).toFixed(3))
+    setSpendingDate(() => spending.spendingDate ? [spending.spendingDate.toDate()] : '')
+    setDescription(spending.description)
+  }, [spending])
   useEffect(() => {
     const validateAmount = value => {
       if (value > 0){

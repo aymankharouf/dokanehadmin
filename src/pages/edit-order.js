@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
@@ -9,27 +9,39 @@ const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const order = useMemo(() => state.orders.find(o => o.id === props.id)
-  , [state.orders, props.id])
-  const [withDelivery, setWithDelivery] = useState(order.withDelivery)
-  const [urgent, setUrgent] = useState(order.urgent)
-  const customer = useMemo(() => state.customers.find(c => c.id === order.userId)
-  , [state.customers, order])
-  const customerLocation = useMemo(() => state.locations.find(l => l.id === customer.locationId) || ''
-  , [state.locations, customer])
-  const orderBasket = useMemo(() => {
-    let orderBasket = state.orderBasket?.filter(p => p.quantity > 0) || []
-    orderBasket = orderBasket.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      return {
-        ...p,
-        packInfo
-      }
+  const [order] = useState(() => state.orders.find(o => o.id === props.id))
+  const [withDelivery, setWithDelivery] = useState('')
+  const [urgent, setUrgent] = useState('')
+  const [customer, setCustomer] = useState('')
+  const [customerLocation, setCustomerLocation] = useState('')
+  const [orderBasket, setOrderBasket] = useState([])
+  const [total, setTotal] = useState('')
+  useEffect(() => {
+    setWithDelivery(order.withDelivery)
+    setUrgent(order.urgent)
+  }, [order])
+  useEffect(() => {
+    setCustomer(() => state.customers.find(c => c.id === order.userId))
+  }, [state.customers, order])
+  useEffect(() => {
+    setCustomerLocation(() => state.locations.find(l => l.id === customer.locationId) || '')
+  }, [state.locations, customer])
+  useEffect(() => {
+    setOrderBasket(() => {
+      let orderBasket = state.orderBasket?.filter(p => p.quantity > 0) || []
+      orderBasket = orderBasket.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId) || ''
+        return {
+          ...p,
+          packInfo
+        }
+      })
+      return orderBasket
     })
-    return orderBasket
   }, [state.orderBasket, state.packs])
-  const total = useMemo(() => orderBasket.reduce((sum, p) => sum + p.gross, 0)
-  , [orderBasket])
+  useEffect(() => {
+    setTotal(() => orderBasket.reduce((sum, p) => sum + p.gross, 0))
+  }, [orderBasket])
   useEffect(() => {
     dispatch({type: 'LOAD_ORDER_BASKET', order})
   }, [dispatch, order])

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editTag, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,9 +10,11 @@ const EditTag = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const tag = useMemo(() => state.tags.find(t => t.id === props.id)
-  , [state.tags, props.id])
-  const [name, setName] = useState(tag.name)
+  const [tag] = useState(() => state.tags.find(t => t.id === props.id))
+  const [name, setName] = useState('')
+  useEffect(() => {
+    setName(tag.name)
+  }, [tag])
   useEffect(() => {
     if (error) {
       showError(error)

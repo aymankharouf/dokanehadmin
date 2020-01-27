@@ -65,7 +65,6 @@ import PackTrans from './pages/pack-trans'
 import AddPackStore from './pages/add-pack-store'
 import OrderRequests from './pages/order-requests'
 import Logs from './pages/logs'
-import Prices from './pages/prices'
 import StoreDetails from './pages/store-details'
 import PrepareOrders from './pages/prepare-orders'
 import PrepareOrdersList from './pages/prepare-orders-list'
@@ -182,10 +181,6 @@ export default [
   {
     path: '/customers/',
     component: Customers,
-  },
-  {
-    path: '/prices/',
-    component: Prices,
   },
   {
     path: '/new-users/',

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -9,12 +9,14 @@ const Stores = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const stores = useMemo(() => {
-    const stores = state.stores.filter(s => s.id !== 's')
-    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+  const [stores, setStores] = useState([])
+  const [stock] = useState(() => state.stores.find(s => s.id === 's'))
+  useEffect(() => {
+    setStores(() => {
+      const stores = state.stores.filter(s => s.id !== 's')
+      return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
+    })
   }, [state.stores])
-  const stock = useMemo(() => state.stores.find(s => s.id === 's')
-  , [state.stores])
   useEffect(() => {
     if (error) {
       showError(error)

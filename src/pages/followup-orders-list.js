@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -9,18 +9,20 @@ import { orderStatus, orderPositions } from '../data/config'
 
 const FollowupOrdersList = props => {
   const { state } = useContext(StoreContext)
-  const orders = useMemo(() => {
-    let orders = state.orders.filter(o => o.position === props.id)
-    orders = orders.map(o => {
-      const customerInfo = state.customers.find(c => c.id === o.userId)
-      const orderStatusInfo = orderStatus.find(s => s.id === o.status)
-      return {
-        ...o,
-        customerInfo,
-        orderStatusInfo
-      }
+  const [orders, setOrders] = useState([])
+  useEffect(() => {
+    setOrders(() => {
+      const orders = state.orders.filter(o => o.position === props.id)
+      return orders.map(o => {
+        const customerInfo = state.customers.find(c => c.id === o.userId)
+        const orderStatusInfo = orderStatus.find(s => s.id === o.status)
+        return {
+          ...o,
+          customerInfo,
+          orderStatusInfo
+        }
+      })
     })
-    return orders
   }, [state.orders, state.customers, props.id])
   return(
     <Page>

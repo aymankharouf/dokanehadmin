@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -7,29 +7,38 @@ import { randomColors } from '../data/config'
 
 const Approvals = props => {
   const { state } = useContext(StoreContext)
-  const newOrders = useMemo(() => state.orders.filter(o => o.status === 'n')
-  , [state.orders])
-  const orderRequests = useMemo(() => state.orderRequests.filter(r => r.status === 'n')
-  , [state.orderRequests])
-  const newUsers = useMemo(() => state.users.filter(u => !state.customers.find(c => c.id === u.id))
-  , [state.users, state.customers])
-  const alarms = useMemo(() => state.users.filter(u => u.alarms?.find(i => i.status === 'n'))
-  , [state.users])
-  const passwordRequests = useMemo(() => state.passwordRequests.filter(r => r.status === 'n')
-   , [state.passwordRequests])
-   const ratings = useMemo(() => state.users.filter(u => u.ratings?.find(r => r.status === 'n'))
-  , [state.users])
-  const invitations = useMemo(() => state.users.filter(u => u.invitations?.find(i => i.status === 'n'))
-  , [state.users])
-  const sections = useMemo(() => [
-    {id: '1', name: 'الطلبات', path: '/orders-list/n', count: newOrders.length},
-    {id: '2', name: 'تعديل الطلبات', path: '/order-requests/', count: orderRequests.length},
-    {id: '3', name: 'المستخدمين', path: '/new-users/', count: newUsers.length},
-    {id: '4', name: 'الاشعارات', path: '/alarms/', count: alarms.length},
-    {id: '5', name: 'طلبات كلمة السر', path: '/password-requests/', count: passwordRequests.length},
-    {id: '6', name: 'التقييمات', path: '/ratings/', count: ratings.length},
-    {id: '7', name: 'الدعوات', path: '/invitations/', count: invitations.length},
-  ], [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations])
+  const [newOrders, setNewOrders] = useState([])
+  const [orderRequests, setOrderRequests] = useState([])
+  const [newUsers, setNewUsers] = useState([])
+  const [alarms, setAlarms] = useState([])
+  const [passwordRequests, setPasswordRequests] = useState([])
+  const [ratings, setRatings] = useState([])
+  const [invitations, setInvitations] = useState([])
+  const [sections, setSections] = useState([])
+  useEffect(() => {
+    setNewOrders(() => state.orders.filter(o => o.status === 'n'))
+    setOrderRequests(() => state.orders.filter(r => r.requestStatus === 'n'))
+  }, [state.orders])
+  useEffect(() => {
+    setNewUsers(() => state.users.filter(u => !state.customers.find(c => c.id === u.id)))
+    setAlarms(() => state.users.filter(u => u.alarms?.find(i => i.status === 'n')))
+    setRatings(() => state.users.filter(u => u.ratings?.find(r => r.status === 'n')))
+    setInvitations(() => state.users.filter(u => u.invitations?.find(i => i.status === 'n')))
+  }, [state.users, state.customers])
+  useEffect(() => {
+    setPasswordRequests(() => state.passwordRequests.filter(r => r.status === 'n'))
+  }, [state.passwordRequests]) 
+  useEffect(() => {
+    setSections(() => [
+      {id: '1', name: 'الطلبات', path: '/orders-list/n', count: newOrders.length},
+      {id: '2', name: 'تعديل الطلبات', path: '/order-requests/', count: orderRequests.length},
+      {id: '3', name: 'المستخدمين', path: '/new-users/', count: newUsers.length},
+      {id: '4', name: 'الاشعارات', path: '/alarms/', count: alarms.length},
+      {id: '5', name: 'طلبات كلمة السر', path: '/password-requests/', count: passwordRequests.length},
+      {id: '6', name: 'التقييمات', path: '/ratings/', count: ratings.length},
+      {id: '7', name: 'الدعوات', path: '/invitations/', count: invitations.length},
+    ])
+  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations])
   let i = 0
   return(
     <Page>

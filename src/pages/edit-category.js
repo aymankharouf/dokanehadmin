@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editCategory, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,10 +10,13 @@ const EditCategory = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const category = useMemo(() => state.categories.find(c => c.id === props.id)
-  , [state.categories, props.id])
-  const [name, setName] = useState(category.name)
-  const [ordering, setOrdering] = useState(category.ordering)
+  const [category] = useState(() => state.categories.find(c => c.id === props.id))
+  const [name, setName] = useState('')
+  const [ordering, setOrdering] = useState('')
+  useEffect(() => {
+    setName(category.name)
+    setOrdering(category.ordering)
+  }, [category])
   useEffect(() => {
     if (error) {
       showError(error)

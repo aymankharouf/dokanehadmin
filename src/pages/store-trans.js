@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -9,26 +9,28 @@ import BottomToolbar from './bottom-toolbar'
 
 const StoreTrans = props => {
   const { state } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(s => s.id === props.id)
-  , [state.stores, props.id])
-  const trans = useMemo(() => {
-    const stockTrans = state.stockTrans.filter(t => t.storeId === props.id && t.type !== 'p')
-    let purchases = state.purchases.filter(p => p.storeId === props.id)
-    purchases = purchases.map(p => {
-      return {
-        ...p,
-        type: 'p'
-      }
+  const [store] = useState(() => state.stores.find(s => s.id === props.id))
+  const [trans, setTrans] = useState([])
+  useEffect(() => {
+    setTrans(() => {
+      const stockTrans = state.stockTrans.filter(t => t.storeId === props.id && t.type !== 'p')
+      let purchases = state.purchases.filter(p => p.storeId === props.id)
+      purchases = purchases.map(p => {
+        return {
+          ...p,
+          type: 'p'
+        }
+      })
+      let trans = [...purchases, ...stockTrans]
+      trans = trans.map(t => {
+        const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
+        return {
+          ...t,
+          stockTransTypeInfo
+        }
+      })
+      return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
     })
-    let trans = [...purchases, ...stockTrans]
-    trans = trans.map(t => {
-      const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
-      return {
-        ...t,
-        stockTransTypeInfo
-      }
-    })
-    return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
   }, [state.stockTrans, state.purchases, props.id])
 
   return(

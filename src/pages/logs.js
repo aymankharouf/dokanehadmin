@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -12,15 +12,18 @@ const Logs = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const logs = useMemo(() => {
-    const logs = state.logs.map(l => {
-      const userInfo = state.users.find(u => u.id === l.userId)
-      return {
-        ...l,
-        userInfo
-      }
+  const [logs, setLogs] = useState([])
+  useEffect(() => {
+    setLogs(() => {
+      const logs = state.logs.map(l => {
+        const userInfo = state.users.find(u => u.id === l.userId)
+        return {
+          ...l,
+          userInfo
+        }
+      })
+      return logs.sort((l1, l2) => l2.time.seconds - l1.time.seconds)
     })
-    return logs.sort((l1, l2) => l2.time.seconds - l1.time.seconds)
   }, [state.logs, state.users])
   useEffect(() => {
     if (error) {

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -9,9 +9,12 @@ import labels from '../data/labels'
 
 const NewUsers = props => {
   const { state } = useContext(StoreContext)
-  const newUsers = useMemo(() => {
-    const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id))
-    return newUsers.sort((u1, u2) => u2.time.seconds - u1.time.seconds)
+  const [newUsers, setNewUsers] = useState([])
+  useEffect(() => {
+    setNewUsers(() => {
+      const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id))
+      return newUsers.sort((u1, u2) => u2.time.seconds - u1.time.seconds)
+    })
   }, [state.users, state.customers])
   return(
     <Page>

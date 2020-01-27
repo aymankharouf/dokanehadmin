@@ -917,7 +917,7 @@ export const approveAlarm = (user, alarm, pack, store, newPackId, customer, stor
     alarms
   })
   const storePack = storePacks.find(p => p.storeId === storeId && p.packId === (newPackId || alarm.packId))
-  if (alarm.type === '1' || (alarm.type === '5' && !customer.storeId)){
+  if (['1', '5'].includes(alarm.type)){
     const customerRef = firebase.firestore().collection('customers').doc(user.id)
     batch.update(customerRef, {
       discounts: firebase.firestore.FieldValue.increment(setup.alarmDiscount)
@@ -930,7 +930,7 @@ export const approveAlarm = (user, alarm, pack, store, newPackId, customer, stor
     offerEnd.setDate(offerEnd.getDate() + alarm.offerDays)
   }
   let type = alarm.type
-  if (alarm.type === '1' || (alarm.type === '5' && !customer.storeId)) {
+  if (['1', '5'].includes(alarm.type)) {
     type = storePack ? '2' : '3'
   }
   if (type === '2') {
@@ -1540,12 +1540,11 @@ export const editAdvert = async (advert, image) => {
   })
 }
 
-export const mergeOrder = (order, lastOrder, batch) => {
-  const newBatch = batch ? batch : firebase.firestore().batch()
-  let basket = lastOrder.basket
+export const mergeOrder = (order, basket, mergedOrderId, batch) => {
+  const newBatch =  batch || firebase.firestore().batch()
   order.basket.forEach(p => {
     let newItem
-    let found = lastOrder.basket.find(bp => bp.packId === p.packId)
+    let found = basket.findIndex(bp => bp.packId === p.packId)
     if (found === -1) {
       newItem = p
     } else {
@@ -1563,14 +1562,14 @@ export const mergeOrder = (order, lastOrder, batch) => {
   const total = basket.reduce((sum, p) => sum + (p.gross || 0), 0)
   const fraction = total - Math.floor(total / 50) * 50
   const fixedFees = Math.ceil((order.urgent ? 1.5 : 1) * setup.fixedFees * total / 50) * 50 - fraction
-  let orderRef = firebase.firestore().collection('orders').doc(lastOrder.id)
+  let orderRef = firebase.firestore().collection('orders').doc(order.id)
   newBatch.update(orderRef, {
     basket,
     total,
     fixedFees,
     activeTime: new Date()
   })
-  orderRef = firebase.firestore().collection('orders').doc(order.id)
+  orderRef = firebase.firestore().collection('orders').doc(mergedOrderId)
   newBatch.update(orderRef, {
     status: 'm',
     lastUpdate: new Date()
@@ -1580,24 +1579,22 @@ export const mergeOrder = (order, lastOrder, batch) => {
   }
 } 
 
-export const approveOrderRequest = (orderRequest, orders, storePacks, packs, users, locations, customers) => {
+export const approveOrderRequest = (order, orders, storePacks, packs, users, locations, customers) => {
   const batch = firebase.firestore().batch()
-  const requestRef = firebase.firestore().collection('order-requests').doc(orderRequest.id)
-  if (orderRequest.type === 'm') {
-    const userOrders = orders.filter(o => o.id !== orderRequest.order.id && o.userId === orderRequest.order.userId)
-    userOrders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
-    const lastOrder = ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''    
-    mergeOrder(orderRequest.order, lastOrder, batch)
-    sendNotification(batch, orderRequest.order.userId, labels.approval, labels.approveMergeRequest, users)
-  } else if (orderRequest.type === 'c') {
-    updateOrderStatus (orderRequest.order, 'i', storePacks, packs, users, false, batch)
-    sendNotification(batch, orderRequest.order.userId, labels.approval, labels.approveCancelRequest, users)
+  const orderRef = firebase.firestore().collection('orders').doc(order.id)
+  if (order.requestType === 'm') {
+    const mergedOrder = orders.find(o => o.userId === order.userId && o.status === 's')
+    mergeOrder(order, order.requestBasket, mergedOrder?.id || '', batch)
+    sendNotification(batch, order.userId, labels.approval, labels.approveMergeRequest, users)
+  } else if (order.requestType === 'c') {
+    updateOrderStatus (order, 'i', storePacks, packs, users, false, batch)
+    sendNotification(batch, order.userId, labels.approval, labels.approveCancelRequest, users)
   } else {
-    editOrder (orderRequest.order, orderRequest.basket, storePacks, packs, locations, customers, batch)
-    sendNotification(batch, orderRequest.order.userId, labels.approval, labels.approveEditRequest, users)
+    editOrder (order, order.requestBasket, storePacks, packs, locations, customers, batch)
+    sendNotification(batch, order.userId, labels.approval, labels.approveEditRequest, users)
   }
-  batch.update(requestRef, {
-    status: 'a'
+  batch.update(orderRef, {
+    requestStatus: 'a'
   })
   return batch.commit()
 }

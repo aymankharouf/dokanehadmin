@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -11,84 +11,86 @@ const PackDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
-  const packStores = useMemo(() => {
-    let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
-    packStores = packStores.map(s => {
-      let packId, unitPrice, quantity, offerInfo, isOffer, price
-      if (s.packId === pack.id) {
-        packId = s.packId
-        if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
-          price = s.price
-          unitPrice = s.price
-        } else {
-          price = s.cost
-          unitPrice = s.price
-        }
-        unitPrice = s.price 
-        quantity = s.quantity
-        isOffer = false
-      } else {
-        offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id)
-        if (offerInfo) {
-          packId = offerInfo.id
-          if (s.cost === s.price || s.storeId === 's') { // for type 5 get cost as total price not unit price
-            unitPrice = parseInt(s.price / offerInfo.subQuantity * offerInfo.subPercent)
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [packStores, setPackStores] = useState([])
+  useEffect(() => {
+    setPackStores(() => {
+      let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
+      packStores = packStores.map(s => {
+        let packId, unitPrice, quantity, offerInfo, isOffer, price
+        if (s.packId === pack.id) {
+          packId = s.packId
+          if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
             price = s.price
-            isOffer = true
-          } else {
             unitPrice = s.price
+          } else {
             price = s.cost
-            isOffer = false
+            unitPrice = s.price
           }
-          quantity = offerInfo.subQuantity
+          unitPrice = s.price 
+          quantity = s.quantity
+          isOffer = false
         } else {
-          offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
+          offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id)
           if (offerInfo) {
             packId = offerInfo.id
-            price = s.price
-            unitPrice = parseInt(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent)
-            quantity = offerInfo.bonusQuantity
-            isOffer = true
+            if (s.cost === s.price || s.storeId === 's') { // for type 5 get cost as total price not unit price
+              unitPrice = parseInt(s.price / offerInfo.subQuantity * offerInfo.subPercent)
+              price = s.price
+              isOffer = true
+            } else {
+              unitPrice = s.price
+              price = s.cost
+              isOffer = false
+            }
+            quantity = offerInfo.subQuantity
+          } else {
+            offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
+            if (offerInfo) {
+              packId = offerInfo.id
+              price = s.price
+              unitPrice = parseInt(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent)
+              quantity = offerInfo.bonusQuantity
+              isOffer = true
+            }
           }
         }
-      }
-      const storeInfo = state.stores.find(st => st.id === s.storeId)
-      return {
-        ...s,
-        storeInfo,
-        packId,
-        quantity,
-        price,
-        unitPrice,
-        isOffer
-      }
-    })
-    packStores = packStores.filter(s => s.packId)
-    const today = new Date()
-    today.setDate(today.getDate() - 30)
-    return packStores.sort((s1, s2) => 
-    {
-      if (s1.unitPrice === s2.unitPrice) {
-        const store1 = state.stores.find(s => s.id === s1.storeId)
-        const store2 = state.stores.find(s => s.id === s2.storeId)
-        if (store1.type === store2.type){
-          if (store2.discount === store1.discount) {
-            const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() < today)
-            const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() < today)
-            const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
-            const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
-            return store1Sales - store2Sales
+        const storeInfo = state.stores.find(st => st.id === s.storeId)
+        return {
+          ...s,
+          storeInfo,
+          packId,
+          quantity,
+          price,
+          unitPrice,
+          isOffer
+        }
+      })
+      packStores = packStores.filter(s => s.packId)
+      const today = new Date()
+      today.setDate(today.getDate() - 30)
+      return packStores.sort((s1, s2) => 
+      {
+        if (s1.unitPrice === s2.unitPrice) {
+          const store1 = state.stores.find(s => s.id === s1.storeId)
+          const store2 = state.stores.find(s => s.id === s2.storeId)
+          if (store1.type === store2.type){
+            if (store2.discount === store1.discount) {
+              const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() < today)
+              const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() < today)
+              const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
+              const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
+              return store1Sales - store2Sales
+            } else {
+              return Number(store2.discount) - Number(store1.discount)
+            }
           } else {
-            return Number(store2.discount) - Number(store1.discount)
+            return Number(store1.type) - Number(store2.type)
           }
         } else {
-          return Number(store1.type) - Number(store2.type)
+          return s1.unitPrice - s2.unitPrice
         }
-      } else {
-        return s1.unitPrice - s2.unitPrice
-      }
+      })
     })
   }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
   useEffect(() => {

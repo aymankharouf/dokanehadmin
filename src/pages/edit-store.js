@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editStore, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,24 +10,34 @@ const EditStore = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const store = useMemo(() => state.stores.find(s => s.id === props.id)
-  , [state.stores, props.id])
-  const storeOwners = useMemo(() => state.customers.filter(c => c.storeId === props.id)
-  , [state.customers, props.id])
-  const [type, setType] = useState(store.type)
-  const [name, setName] = useState(store.name)
-  const [mobile, setMobile] = useState(store.mobile)
+  const [store] = useState(() => state.stores.find(s => s.id === props.id))
+  const [storeOwners, setStoreOwners] = useState([])
+  const [type, setType] = useState('')
+  const [name, setName] = useState('')
+  const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
-  const [address, setAddress] = useState(store.address)
-  const [discount, setDiscount] = useState(store.discount * 100)
-  const [locationId, setLocationId] = useState(store.locationId)
-  const [mapPosition, setMapPosition] = useState(store.mapPosition)
-  const [allowReturn, setAllowReturn] = useState(store.allowReturn)
-  const [openTime, setOpenTime] = useState(store.openTime)
+  const [address, setAddress] = useState('')
+  const [discount, setDiscount] = useState('')
+  const [locationId, setLocationId] = useState('')
+  const [mapPosition, setMapPosition] = useState('')
+  const [allowReturn, setAllowReturn] = useState('')
+  const [openTime, setOpenTime] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
-  , [state.locations])
-
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  useEffect(() => {
+    setStoreOwners(() => state.customers.filter(c => c.storeId === props.id))
+  }, [state.customers, props.id])
+  useEffect(() => {
+    setType(store.type)
+    setName(store.name)
+    setMobile(store.mobile)
+    setAddress(store.address)
+    setDiscount(store.discount * 100)
+    setLocationId(store.locationId)
+    setMapPosition(store.mapPosition)
+    setAllowReturn(store.allowReturn)
+    setOpenTime(store.openTime)
+  }, [store])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/

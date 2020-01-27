@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -20,8 +20,7 @@ const AddStore = props => {
   const [mapPosition, setMapPosition] = useState('')
   const [allowReturn, setAllowReturn] = useState(false)
   const [openTime, setOpenTime] = useState('')
-  const locations = useMemo(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering)
-  , [state.locations])
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
 
   useEffect(() => {
     const patterns = {

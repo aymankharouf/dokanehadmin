@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -11,6 +11,7 @@ const ArchivedPurchases = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
+  const [purchases, setPurchases] = useState([])
   useEffect(() => {
     const retreivePurchases = async () => {
       try{
@@ -26,18 +27,19 @@ const ArchivedPurchases = props => {
       }
     }
     if (state.archivedPurchases.length === 0) retreivePurchases()
-  }, [state.archivedPurchases, dispatch, props])
-
-  const purchases = useMemo(() => {
-    const purchases = state.archivedPurchases.map(p => {
-      const storeInfo = state.stores.find(s => s.id === p.storeId)
-      return {
-        ...p,
-        storeInfo
-      }
+  })
+  useEffect(() => {
+    setPurchases(() => {
+      const purchases = state.archivedPurchases.map(p => {
+        const storeInfo = state.stores.find(s => s.id === p.storeId)
+        return {
+          ...p,
+          storeInfo
+        }
+      })
+      return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
     })
-    return purchases.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
-    }, [state.archivedPurchases, state.stores])
+  }, [state.archivedPurchases, state.stores])
   useEffect(() => {
     if (error) {
       showError(error)

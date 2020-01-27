@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -9,19 +9,21 @@ const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] =useState(false)
-  const orders = useMemo(() => {
-    let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
-    orders = orders.map(o => {
-      const customerInfo = state.customers.find(c => c.id === o.userId)
-      return {
-        ...o,
-        customerInfo,
-      }
+  const [orders, setOrders] = useState([])
+  const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
+  useEffect(() => {
+    setOrders(() => {
+      let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
+      orders = orders.map(o => {
+        const customerInfo = state.customers.find(c => c.id === o.userId)
+        return {
+          ...o,
+          customerInfo,
+        }
+      })
+      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
     })
-    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
   }, [state.orders, state.customers, props.orderId, props.packId])
-  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
-  , [state.packs, props.packId])
   useEffect(() => {
     if (error) {
       showError(error)

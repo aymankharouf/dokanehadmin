@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editCountry, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,9 +10,11 @@ const EditCountry = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const country = useMemo(() => state.countries.find(c => c.id === props.id)
-  , [state.countries, props.id])
-  const [name, setName] = useState(country.name)
+  const [country] = useState(() => state.countries.find(c => c.id === props.id))
+  const [name, setName] = useState('')
+  useEffect(() => {
+    setName(country.name)
+  }, [country])
   useEffect(() => {
     if (error) {
       showError(error)

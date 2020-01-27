@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -9,10 +9,7 @@ import labels from '../data/labels'
 const PrepareOrders = props => {
   const { state } = useContext(StoreContext)
 	const [packs, setPacks] = useState([])
-	const finishedOrders = useMemo(() => state.orders.filter(o => o.status === 'd')
-	, [state.orders])
-	
-	let i = 0
+	const [finishedOrders] = useState(() => state.orders.filter(o => o.status === 'd'))
 	useEffect(() => {
 		let packsArray = []
 		finishedOrders.forEach(o => {
@@ -49,6 +46,7 @@ const PrepareOrders = props => {
 		})
 		setPacks(packsArray)
 	}, [finishedOrders, state.packs, state.products])
+	let i = 0
   return(
     <Page>
       <Navbar title={labels.PurchasedProducts} backLink={labels.back} />

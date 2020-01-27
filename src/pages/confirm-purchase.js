@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -10,24 +10,28 @@ const ConfirmPurchase = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
-  , [state.basket, state.stores])
-  const basket = useMemo(() => {
-    const basket = state.basket.packs.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-      return {
-        ...p,
-        packInfo,
-        weightText
-      }
+  const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
+  const [basket, setBasket] = useState([])
+  const [total, setTotal] = useState('')
+  const [discount, setDiscount] = useState('')
+  useEffect(() => {
+    setBasket(() => {
+      const basket = state.basket.packs.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+        return {
+          ...p,
+          packInfo,
+          weightText
+        }
+      })
+      return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    return basket.sort((p1, p2) => p1.time - p2.time)
+    setTotal(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0))
   }, [state.basket, state.packs])
-  const total = useMemo(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0)
-  , [state.basket])
-  const [discount, setDiscount] = useState((total * (store.discount || 0) / 1000).toFixed(3))
-  let i = 0
+  useEffect(() => {
+    setDiscount((total * (store.discount || 0) / 1000).toFixed(3))
+  }, [total, store])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -64,6 +68,7 @@ const ConfirmPurchase = props => {
 			setError(getMessage(props, err))
 		}
   }
+  let i = 0
   return(
     <Page>
     <Navbar title={`${labels.confirmPurchase} ${store.name}`} backLink={labels.back} />

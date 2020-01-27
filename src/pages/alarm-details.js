@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, Icon, Fab, Toolbar, FabButton, FabButtons, ListInput, BlockTitle } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -14,46 +14,55 @@ const AlarmDetails = props => {
   const [inprocess, setInprocess] = useState(false)
   const [storeId, setStoreId] = useState('')
   const [newPackId, setNewPackId] = useState('')
-  const userInfo = useMemo(() => state.users.find(u => u.id === props.userId)
-  , [state.users, props.userId])
-  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.userId)
-  , [state.customers, props.userId])
-  const alarm = useMemo(() => userInfo.alarms.find(a => a.id === Number(props.id))
-  , [userInfo, props.id])
-  const pack = useMemo(() => state.packs.find(p => p.id === alarm.packId)
-  , [state.packs, alarm])
-  const storeName = useMemo(() => state.stores.find(s => s.id === customerInfo.storeId)?.name || alarm.storeName
-  , [customerInfo, state.stores, alarm])
-  const stores = useMemo(() => {
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.userId))
+  const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId))
+  const [alarm, setAlarm] = useState('')
+  const [pack, setPack] = useState('')
+  const [storeName, setStoreName] = useState('')
+  const [stores] = useState(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  }, [state.stores])
-  const packs = useMemo(() => {
-    let packs = state.packs.filter(p => p.id !== pack.id)
-    if (alarm.type === '7') {
-      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
-    } else if (alarmTypes.type === '6') {
-      packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
-    }
-    packs = packs.map(p => {
-      return {
-        id: p.id,
-        name: `${p.productName} ${p.name}`
+  })
+  const [packs, setPacks] = useState([])
+  const [storePacks, setStorePacks] = useState([])
+  useEffect(() => {
+    setAlarm(() => userInfo.alarms.find(a => a.id === Number(props.id)))
+  }, [userInfo, props.id])
+  useEffect(() => {
+    setPack(() => state.packs.find(p => p.id === alarm.packId))
+  }, [state.packs, alarm])
+  useEffect(() => {
+    setStoreName(() => state.stores.find(s => s.id === customerInfo.storeId)?.name || alarm.storeName)
+  }, [customerInfo, state.stores, alarm])
+  useEffect(() => {
+    setPacks(() => {
+      let packs = state.packs.filter(p => p.id !== pack.id)
+      if (alarm.type === '8') {
+        packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+      } else if (alarmTypes.type === '7') {
+        packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
       }
+      packs = packs.map(p => {
+        return {
+          id: p.id,
+          name: `${p.productName} ${p.name}`
+        }
+      })
+      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
     })
-    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }, [state.packs, alarm, pack]) 
-
-  const storePacks = useMemo(() => {
-    let storePacks = state.storePacks.filter(p => p.packId === (newPackId || pack.id))
-    storePacks = storePacks.map(p => {
-      const currentStore = state.stores.find(st => st.id === p.storeId)
-      return {
-        ...p,
-        currentStore
-      }
+  useEffect(() => {
+    setStorePacks(() => {
+      let storePacks = state.storePacks.filter(p => p.packId === (newPackId || pack.id))
+      storePacks = storePacks.map(p => {
+        const currentStore = state.stores.find(st => st.id === p.storeId)
+        return {
+          ...p,
+          currentStore
+        }
+      })
+      return storePacks.sort((p1, p2) => p1.price - p2.price)
     })
-    return storePacks.sort((p1, p2) => p1.price - p2.price)
   }, [state.storePacks, state.stores, pack, newPackId])
   useEffect(() => {
     if (error) {
@@ -100,7 +109,7 @@ const AlarmDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>
         <FabButtons position="bottom">
-          {(!customerInfo.storeId && !storeId) || (!newPackId && ['5', '6', '7'].includes(alarm.type)) ? '' : 
+          {(!customerInfo.storeId && !storeId) || (!newPackId && ['5', '6', '7', '8'].includes(alarm.type)) ? '' : 
             <FabButton color="green" onClick={() => handleApprove()}>
               <Icon material="done"></Icon>
             </FabButton>
@@ -139,7 +148,7 @@ const AlarmDetails = props => {
           type="number" 
           readonly
         />
-        {alarm.type === '5' ? 
+        {['5', '6'].includes(alarm.type) ? 
           <ListInput 
             name="alternative" 
             label={labels.alternative}
@@ -155,7 +164,7 @@ const AlarmDetails = props => {
           type="number" 
           readonly
         />
-        {['6', '7'].includes(alarm.type) ? 
+        {['7', '8'].includes(alarm.type) ? 
           <ListInput 
             name="quantity"
             label={labels.quantity}
@@ -164,7 +173,7 @@ const AlarmDetails = props => {
             readonly
           />
         : ''}
-        {customerInfo.storeId ? 
+        {['1', '5'].includes(props.alarmType) ? '' :
           <ListInput 
             name="offerDays"
             label={labels.offerDays}
@@ -172,7 +181,7 @@ const AlarmDetails = props => {
             type="number" 
             readonly
           />
-        : ''}
+        }
         <ListInput 
           name="storeName" 
           label={labels.storeName}
@@ -180,7 +189,7 @@ const AlarmDetails = props => {
           type="text" 
           readonly
         />
-        {customerInfo.storeId ? '' :
+        {['1', '5'].includes(props.alarmType) ?
           <ListItem
             title={labels.store}
             smartSelect
@@ -199,8 +208,8 @@ const AlarmDetails = props => {
               )}
             </select>
           </ListItem>
-        }
-        {['5', '6', '7'].includes(alarm.type) ?
+        : ''}
+        {['5', '6', '7', '8'].includes(alarm.type) ?
           <ListItem
             title={labels.newProduct}
             smartSelect

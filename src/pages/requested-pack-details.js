@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -11,37 +11,42 @@ const RequestedPackDetails = props => {
 	const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.packId)
-  , [state.packs, props.packId])
-  const basketStockQuantity = useMemo(() => {
-    const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
-    return basketStock?.quantity || 0
+  const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
+  const [basketStockQuantity, setBasketStockQuantity] = useState('')
+  const [packStores, setPackStores] = useState([])
+  useEffect(() => {
+    setBasketStockQuantity(() => {
+      const basketStock = state.basket.storeId === 's' && state.basket.packs.find(p => p.packId === props.packId)
+      return basketStock?.quantity || 0
+    })
   }, [state.basket, props.packId])
-  const packStores = useMemo(() => {
-    const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs)
-    const today = new Date()
-    today.setDate(today.getDate() - 30)
-    return packStores.sort((s1, s2) => 
-    {
-      if (s1.unitPrice === s2.unitPrice) {
-        const store1 = state.stores.find(s => s.id === s1.storeId)
-        const store2 = state.stores.find(s => s.id === s2.storeId)
-        if (store1.type === store2.type){
-          if (store2.discount === store1.discount) {
-            const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() >= today)
-            const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() >= today)
-            const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
-            const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
-            return store1Sales - store2Sales
+  useEffect(() => {
+    setPackStores(() => {
+      const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs)
+      const today = new Date()
+      today.setDate(today.getDate() - 30)
+      return packStores.sort((s1, s2) => 
+      {
+        if (s1.unitPrice === s2.unitPrice) {
+          const store1 = state.stores.find(s => s.id === s1.storeId)
+          const store2 = state.stores.find(s => s.id === s2.storeId)
+          if (store1.type === store2.type){
+            if (store2.discount === store1.discount) {
+              const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() >= today)
+              const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() >= today)
+              const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
+              const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
+              return store1Sales - store2Sales
+            } else {
+              return Number(store2.discount) - Number(store1.discount)
+            }
           } else {
-            return Number(store2.discount) - Number(store1.discount)
+            return Number(store1.type) - Number(store2.type)
           }
         } else {
-          return Number(store1.type) - Number(store2.type)
+          return s1.unitPrice - s2.unitPrice
         }
-      } else {
-        return s1.unitPrice - s2.unitPrice
-      }
+      })
     })
   }, [pack, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
   useEffect(() => {

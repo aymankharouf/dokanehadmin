@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, Button } from 'framework7-react'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -10,11 +10,10 @@ const PermitUser = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [userId, setUserId] = useState(props.id === '0' ? '' : props.id)
-  const customerInfo = useMemo(() => state.customers.find(c => c.id === props.id)
-  , [state.customers, props.id])
-  const [storeId, setStoreId] = useState(props.id === '0' ? '' : (customerInfo.storeId || ''))
-  const [position, setPosition] = useState(props.id === '0' ? '' : (customerInfo.permissionType || ''))
-  const users = useMemo(() => {
+  const [customerInfo] = useState(() => state.customers.find(c => c.id === props.id))
+  const [storeId, setStoreId] = useState('')
+  const [position, setPosition] = useState('')
+  const [users] = useState(() => {
     const users = state.users.map(u => {
       return {
         ...u,
@@ -22,12 +21,15 @@ const PermitUser = props => {
       }
     })
     return users.sort((u1, u2) => u1.name > u2.name ? 1 : -1)
-  }, [state.users])
-  const stores = useMemo(() => {
+  })
+  const [stores] = useState(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  }, [state.stores]) 
-
+  }) 
+  useEffect(() => {
+    setStoreId(props.id === '0' ? '' : (customerInfo.storeId || ''))
+    setPosition(props.id === '0' ? '' : (customerInfo.permissionType || ''))
+  }, [customerInfo, props.id])
   useEffect(() => {
     if (error) {
       showError(error)

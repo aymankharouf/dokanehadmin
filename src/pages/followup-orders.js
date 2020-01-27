@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -8,13 +8,16 @@ import { randomColors, orderPositions } from '../data/config'
 
 const FollowupOrders = props => {
   const { state } = useContext(StoreContext)
-  const positions = useMemo(() => orderPositions.map(p => {
-    const orders = state.orders.filter(o => o.position === p.id)
-    return {
-      ...p,
-      orders
-    }
-  }), [state.orders])
+  const [positions, setPositions] = useState([])
+  useEffect(() => {
+    setPositions(() => orderPositions.map(p => {
+      const orders = state.orders.filter(o => o.position === p.id)
+      return {
+        ...p,
+        orders
+      }
+    }))
+  }, [state.orders])
   let i = 0
   return(
     <Page>

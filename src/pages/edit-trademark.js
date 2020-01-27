@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editTrademark, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -10,9 +10,11 @@ const EditTrademark = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const trademark = useMemo(() => state.trademarks.find(t => t.id === props.id)
-  , [state.trademarks, props.id])
-  const [name, setName] = useState(trademark.name)
+  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id))
+  const [name, setName] = useState('')
+  useEffect(() => {
+    setName(trademark.name)
+  }, [trademark])
   useEffect(() => {
     if (error) {
       showError(error)

@@ -1,10 +1,9 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState } from 'react'
 import { StoreContext } from '../data/store'
 
 const PackImage = props => {
   const { state } = useContext(StoreContext)
-  const bonusPack = useMemo(() => props.pack.bonusPackId ? state.packs.find(p => p.id === props.pack.bonusPackId) : ''
-  , [state.packs, props.pack])
+  const [bonusPack] = useState(() => state.packs.find(p => p.id === props.pack.bonusPackId) || '')
   return (
     <div className="relative">
       <img src={props.pack.imageUrl} className={`img-${props.type}`} alt={props.pack.productName} />

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editPrice, showMessage, showError, getMessage } from '../data/actions'
@@ -10,15 +10,18 @@ const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const storePack = useMemo(() => state.storePacks.find(p => p.id === props.id)
-  , [state.storePacks, props.id])
-  const pack = useMemo(() => state.packs.find(p => p.id === storePack.packId)
-  , [state.packs, storePack])
-  const store = useMemo(() => state.stores.find(s => s.id === storePack.storeId)
-  , [state.stores, storePack])
+  const storePack = useState(() => state.storePacks.find(p => p.id === props.id))
+  const [pack, setPack] = useState('')
+  const [store, setStore] = useState('')
   const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
+  useEffect(() => {
+    setPack(() => state.packs.find(p => p.id === storePack.packId))
+  }, [state.packs, storePack])
+  useEffect(() => {
+    setStore(() => state.stores.find(s => s.id === storePack.storeId))
+  }, [state.stores, storePack])
   useEffect(() => {
     if (error) {
       showError(error)

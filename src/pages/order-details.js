@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, finishOrder, mergeOrder } from '../data/actions'
@@ -10,34 +10,42 @@ const OrderDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const order = useMemo(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id)
-  , [state.orders, state.archivedOrders, props.id, props.type])
-  const orderBasket = useMemo(() => order.basket.map(p => {
-    const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-    const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-    const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-    return {
-      ...p,
-      storeName,
-      changePriceNote,
-      statusNote
-    }
-  }), [order, state.stores])
-  const statusActions = useMemo(() => {
-    const statusActions = [
-      {id: 'a', name: 'اعتماد', status: ['n', 's']},
-      {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'd', 'p']},
-      {id: 's', name: 'تعليق', status: ['n', 'a']},
-      {id: 'r', name: 'رفض', status: ['n', 's']},
-      {id: 'c', name: 'الغاء', status: ['n', 's', 'a']},
-      {id: 'i', name: 'استيداع', status: ['d', 'e', 'p']},
-    ]
-    return statusActions.filter(a => a.status.find(s => s === order.status))
-  }, [order.status])
-  const lastOrder = useMemo(() => {
-    const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
-    userOrders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
-    return ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''
+  const [order] = useState(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id))
+  const [orderBasket, setOrderBasket] = useState([])
+  const [statusActions, setStatusActions] = useState([])
+  const [lastOrder, setLastOrder] = useState('')
+  useEffect(() => {
+    setOrderBasket(() => order.basket.map(p => {
+      const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+      const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+      const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
+      return {
+        ...p,
+        storeName,
+        changePriceNote,
+        statusNote
+      }
+    }))
+  }, [order, state.stores])
+  useEffect(() => {
+    setStatusActions(() => {
+      const statusActions = [
+        {id: 'a', name: 'اعتماد', status: ['n', 's']},
+        {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'd', 'p']},
+        {id: 's', name: 'تعليق', status: ['n', 'a']},
+        {id: 'r', name: 'رفض', status: ['n', 's']},
+        {id: 'c', name: 'الغاء', status: ['n', 's', 'a']},
+        {id: 'i', name: 'استيداع', status: ['d', 'e', 'p']},
+      ]
+      return statusActions.filter(a => a.status.find(s => s === order.status))
+    })
+  }, [order])
+  useEffect(() => {
+    setLastOrder(() => {
+      const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
+      userOrders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
+      return ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''
+    })
   }, [state.orders, order])
   useEffect(() => {
     if (error) {
@@ -58,9 +66,7 @@ const OrderDetails = props => {
       if (type === 'e') {
         props.f7router.navigate(`/edit-order/${order.id}`)
       } else if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
-          throw new Error('notApprovedUser')
-      } else if (type === 'a' && state.orderRequests.find(r => r.order.id === order.id && r.status === 'n')){
-          throw new Error('orderRequestPending')
+        throw new Error('notApprovedUser')
       } else if (type === 'a' && lastOrder) {
         f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, async () => {
           try{
@@ -81,7 +87,7 @@ const OrderDetails = props => {
               }
             }
             setInprocess(true)
-            await mergeOrder(order, lastOrder)
+            await mergeOrder(lastOrder, order.basket, order.id)
             setInprocess(false)
             showMessage(labels.mergeSuccess)
             props.f7router.back()

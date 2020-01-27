@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { addNotification, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
@@ -13,8 +13,7 @@ const AddNotification = props => {
   const [userId, setUserId] = useState('')
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('')
-  const customers = useMemo(() => [...state.customers].sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  , [state.customers])
+  const [customers] = useState(() => [...state.customers].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   useEffect(() => {
     if (error) {
       showError(error)

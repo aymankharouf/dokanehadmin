@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -9,11 +9,9 @@ import labels from '../data/labels'
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
 	const [requestedPacks, setRequestedPacks] = useState([])
-	const approvedOrders = useMemo(() => state.orders.filter(o => ['a', 'e'].includes(o.status))
-	, [state.orders])
 	
-	let i = 0
 	useEffect(() => {
+		const approvedOrders = state.orders.filter(o => ['a', 'e'].includes(o.status))
 		let packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
 		if (props.id){
 			packs = packs.filter(p => {
@@ -23,8 +21,9 @@ const RequestedPacks = props => {
 			})	
 		}
 		setRequestedPacks(packs)
-	}, [props.id, state.basket, approvedOrders, state.packs, state.customers, state.stores, state.storePacks])
-  return(
+	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.storePacks])
+	let i = 0
+	return(
     <Page>
       <Navbar title={`${labels.requestedPacks} ${props.id ? '-' + state.stores.find(s => s.id === props.id).name : ''}`} backLink={labels.back} />
       <Block>

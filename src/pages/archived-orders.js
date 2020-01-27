@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -12,6 +12,7 @@ const ArchivedOrders = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
+  const [orders, setOrders] = useState([])
   useEffect(() => {
     const retreiveOrders = async () => {
       try{
@@ -27,19 +28,20 @@ const ArchivedOrders = props => {
       }
     }
     if (state.archivedOrders.length === 0) retreiveOrders()
-  }, [state.archivedOrders, dispatch, props])
-
-  const orders = useMemo(() => {
-    const orders = state.archivedOrders.map(o => {
-      const customerInfo = state.customers.find(c => c.id === o.userId)
-      const statusInfo = orderStatus.find(s => s.id === o.status)
-      return {
-        ...o,
-        customerInfo,
-        statusInfo
-      }
+  })
+  useEffect(() => {
+    setOrders(() => {
+      const orders = state.archivedOrders.map(o => {
+        const customerInfo = state.customers.find(c => c.id === o.userId)
+        const statusInfo = orderStatus.find(s => s.id === o.status)
+        return {
+          ...o,
+          customerInfo,
+          statusInfo
+        }
+      })
+      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)  
     })
-    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
   }, [state.archivedOrders, state.customers])
   useEffect(() => {
     if (error) {

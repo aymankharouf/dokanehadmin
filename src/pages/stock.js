@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import PackImage from './pack-image'
@@ -7,17 +7,20 @@ import labels from '../data/labels'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
-  const storePacks = useMemo(() => {
-    let storePacks = state.storePacks.filter(p => p.storeId === 's')
-    storePacks = storePacks.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      return {
-        ...p,
-        packInfo
-      }
+  const [storePacks, setStorePacks] = useState([])
+  useEffect(() => {
+    setStorePacks(() => {
+      let storePacks = state.storePacks.filter(p => p.storeId === 's')
+      storePacks = storePacks.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        return {
+          ...p,
+          packInfo
+        }
+      })
+      return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     })
-    return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
-    }, [state.storePacks, state.packs])
+  }, [state.storePacks, state.packs])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(

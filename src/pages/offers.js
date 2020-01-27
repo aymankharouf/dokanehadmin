@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -8,18 +8,21 @@ import labels from '../data/labels'
 
 const Offers = props => {
   const { state } = useContext(StoreContext)
-  const storePacks = useMemo(() => {
-    let storePacks = state.storePacks.filter(p => p.offerEnd)
-    storePacks = storePacks.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-      return {
-        ...p,
-        packInfo,
-        storeName
-      }
+  const [storePacks, setStorePacks] = useState([])
+  useEffect(() => {
+    setStorePacks(() => {
+      let storePacks = state.storePacks.filter(p => p.offerEnd)
+      storePacks = storePacks.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+        return {
+          ...p,
+          packInfo,
+          storeName
+        }
+      })
+      return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
     })
-    return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
   }, [state.storePacks, state.packs, state.stores])
   return(
     <Page>

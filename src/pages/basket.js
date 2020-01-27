@@ -1,29 +1,30 @@
-import React, { useContext, useMemo, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
-  const store = useMemo(() => state.stores.find(s => s.id === state.basket.storeId)
-  , [state.basket, state.stores])
-  const basket = useMemo(() => {
-    let basket = state.basket ? state.basket.packs : []
-    basket = basket.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-      return {
-        ...p,
-        packInfo,
-        weightText
-      }
+  const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
+  const [basket, setBasket] = useState([])
+  const [totalPrice, setTotalPrice] = useState('')
+  useEffect(() => {
+    setBasket(() => {
+      let basket = state.basket ? state.basket.packs : []
+      basket = basket.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId) || ''
+        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+        return {
+          ...p,
+          packInfo,
+          weightText
+        }
+      })
+      return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    return basket.sort((p1, p2) => p1.time - p2.time)
+    setTotalPrice(() => state.basket?.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket, state.packs])
-  const totalPrice = useMemo(() => state.basket ? state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) : 0
-  , [state.basket])
   let i = 0
   useEffect(() => {
     if (!state.basket) props.f7router.navigate('/home/', {reloadAll: true})
@@ -50,7 +51,6 @@ const Basket = props => {
               footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++}
             >
-              <PackImage slot="media" pack={p.packInfo} type="list" />
               <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
               <Stepper
                 slot="after"

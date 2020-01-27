@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -8,15 +8,16 @@ const EditBulk = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [name, setName] = useState(pack.name)
   const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
   const [hasChanged, setHasChanged] = useState(false)
-  const packs = useMemo(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight)
-  , [state.packs, pack])
+  const [packs, setPacks] = useState([])
+  useEffect(() => {
+    setPacks(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
+  }, [state.packs, pack])
   useEffect(() => {
     if (name !== pack.name
     || orderLimit !== pack.orderLimit

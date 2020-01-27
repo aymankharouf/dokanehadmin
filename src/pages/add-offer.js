@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -17,20 +17,22 @@ const AddOffer = props => {
   const [bonusQuantity, setBonusQuantity] = useState('')
   const [bonusPercent, setBonusPercent] = useState('')
   const [closeExpired, setCloseExpired] = useState(false)
-  const product = useMemo(() => state.products.find(p => p.id === props.id)
-  , [state.products, props.id])
-  const packs = useMemo(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight)
-  , [state.packs, props.id])
-  const bonusPacks = useMemo(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
-    packs = packs.map(p => {
-      return {
-        id: p.id,
-        name: `${p.setErrorproductName} ${p.name}`
-      }
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
+  const [packs, setPacks] = useState([])
+  const [bonusPacks, setBonusPacks] = useState([])
+  useEffect(() => {
+    setPacks(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
+    setBonusPacks(() => {
+      let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+      packs = packs.map(p => {
+        return {
+          id: p.id,
+          name: `${p.setErrorproductName} ${p.name}`
+        }
+      })
+      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
     })
-    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.packs, props.id]) 
+  }, [state.packs, props.id])
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {

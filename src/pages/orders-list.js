@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
@@ -9,22 +9,24 @@ import { orderStatus, orderPositions } from '../data/config'
 
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
-  const status = useMemo(() => orderStatus.find(s => s.id === props.id)
-  , [props.id])
-  const orders = useMemo(() => {
-    let orders = state.orders.filter(o => o.status === props.id)
-    orders = orders.map(o => {
-      const userInfo = state.users.find(u => u.id === o.userId)
-      const customerInfo = state.customers.find(c => c.id === o.userId)
-      const positionInfo = orderPositions.find(p => p.id === o.position)
-      return {
-        ...o,
-        userInfo,
-        customerInfo,
-        positionInfo
-      }
+  const [status] = useState(() => orderStatus.find(s => s.id === props.id))
+  const [orders, setOrders] = useState([])
+  useEffect(() => {
+    setOrders(() => {
+      let orders = state.orders.filter(o => o.status === props.id)
+      orders = orders.map(o => {
+        const userInfo = state.users.find(u => u.id === o.userId)
+        const customerInfo = state.customers.find(c => c.id === o.userId)
+        const positionInfo = orderPositions.find(p => p.id === o.position)
+        return {
+          ...o,
+          userInfo,
+          customerInfo,
+          positionInfo
+        }
+      })
+      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
     })
-    return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
   }, [state.orders, state.users, state.customers, props.id])
 
   return(

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addStockTrans, showMessage, showError, getMessage } from '../data/actions'
@@ -11,14 +11,13 @@ const SellStore = props => {
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState('')
   const [storeId, setStoreId] = useState('')
-  const stores = useMemo(() => state.stores.filter(s => s.id !== 's')
-  , [state.stores])
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
-  const packStock = useMemo(() => state.storePacks.find(p => p.packId === props.id && p.storeId === 's')
-  , [state.storePacks, props.id])
-  const profit = useMemo(() => parseInt(price * quantity * 1000) - parseInt(packStock.cost * quantity)
-  , [packStock, price, quantity])
+  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [packStock] = useState(() => state.storePacks.find(p => p.packId === props.id && p.storeId === 's'))
+  const [profit, setProfit] = useState('')
+  useEffect(() => {
+    setProfit(() => parseInt(price * quantity * 1000) - parseInt(packStock.cost * quantity))
+  }, [packStock, price, quantity])
   useEffect(() => {
     if (error) {
       showError(error)

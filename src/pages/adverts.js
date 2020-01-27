@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -13,8 +13,10 @@ const Adverts = props => {
   const [currentAdvert, setCurrentAdvert] = useState('')
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const adverts = useMemo(() => [...state.adverts].sort((a1, a2) => a2.time.seconds - a1.time.seconds)
-  , [state.adverts])
+  const [adverts, setAdverts] = useState([])
+  useEffect(() => {
+    setAdverts(() => [...state.adverts].sort((a1, a2) => a2.time.seconds - a1.time.seconds))
+  }, [state.adverts])
   useEffect(() => {
     if (error) {
       showError(error)

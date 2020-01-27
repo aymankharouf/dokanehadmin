@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityDetails } from '../data/actions'
@@ -8,23 +8,24 @@ import BottomToolbar from './bottom-toolbar'
 
 const ReturnOrder = props => {
   const { state } = useContext(StoreContext)
-  const orderBasket = useMemo(() => {
-    const order = state.orders.find(o => o.id === props.id)
-    let basket = order.basket
-    basket = basket.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-      const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
-      const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-      return {
-        ...p,
-        packInfo,
-        storeName,
-        changePriceNote,
-        statusNote
-      }
+  const [orderBasket, setOrderBasket] = useState([])
+  useEffect(() => {
+    setOrderBasket(() => {
+      const order = state.orders.find(o => o.id === props.id)
+      let basket = order.basket
+      basket = basket.map(p => {
+        const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+        const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+        const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
+        return {
+          ...p,
+          storeName,
+          changePriceNote,
+          statusNote
+        }
+      })
+      return basket
     })
-    return basket
   }, [state.orders, state.packs, state.stores, props.id])
 
   return(
@@ -36,8 +37,8 @@ const ReturnOrder = props => {
             <ListItem 
               link={`/return-order-pack/${props.id}/pack/${p.packId}`}
               key={p.packId} 
-              title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
+              title={p.productName}
+              subtitle={p.packName}
               text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
               footer={`${labels.status}: ${p.statusNote}`}
               after={(p.gross / 1000).toFixed(3)}

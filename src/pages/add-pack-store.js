@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { addStorePack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -14,10 +14,8 @@ const AddPackStore = props => {
   const [offerDays, setOfferDays] = useState('')
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState('')
-  const stores = useMemo(() => state.stores.filter(s => s.id !== 's')
-  , [state.stores])
-  const pack = useMemo(() => state.packs.find(p => p.id === props.id)
-  , [state.packs, props.id])
+  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   useEffect(() => {
     if (error) {
       showError(error)
