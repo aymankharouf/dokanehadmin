@@ -90,6 +90,7 @@ const AddOffer = props => {
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100,
         price: 0,
+        isArchived: false,
         time: new Date()
       }
       setInprocess(true)

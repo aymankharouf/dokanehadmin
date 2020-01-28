@@ -14,6 +14,7 @@ const Approvals = props => {
   const [passwordRequests, setPasswordRequests] = useState([])
   const [ratings, setRatings] = useState([])
   const [invitations, setInvitations] = useState([])
+  const [debitRequests, setDebitRequests] = useState([])
   const [sections, setSections] = useState([])
   useEffect(() => {
     setNewOrders(() => state.orders.filter(o => o.status === 'n'))
@@ -24,6 +25,7 @@ const Approvals = props => {
     setAlarms(() => state.users.filter(u => u.alarms?.find(i => i.status === 'n')))
     setRatings(() => state.users.filter(u => u.ratings?.find(r => r.status === 'n')))
     setInvitations(() => state.users.filter(u => u.invitations?.find(i => i.status === 'n')))
+    setDebitRequests(() => state.users.filter(u => u.debitRequestStatus === 'n'))
   }, [state.users, state.customers])
   useEffect(() => {
     setPasswordRequests(() => state.passwordRequests.filter(r => r.status === 'n'))
@@ -37,8 +39,9 @@ const Approvals = props => {
       {id: '5', name: 'طلبات كلمة السر', path: '/password-requests/', count: passwordRequests.length},
       {id: '6', name: 'التقييمات', path: '/ratings/', count: ratings.length},
       {id: '7', name: 'الدعوات', path: '/invitations/', count: invitations.length},
+      {id: '8', name: 'الدفع لاحقا', path: '/debit-requests/', count: debitRequests.length},
     ])
-  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations])
+  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations, debitRequests])
   let i = 0
   return(
     <Page>

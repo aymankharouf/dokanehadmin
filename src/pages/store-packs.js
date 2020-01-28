@@ -9,7 +9,7 @@ import labels from '../data/labels'
 import { deleteStorePack, haltOffer, showMessage, getMessage, showError } from '../data/actions'
 
 const StorePacks = props => {
-  const { state } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [currentStorePack, setCurrentStorePack] = useState('')
@@ -83,6 +83,49 @@ const StorePacks = props => {
 			setError(getMessage(props, err))
 		}
   }
+  const handlePurchase = () => {
+		try{
+      if (currentStorePack.offerEnd && new Date() > currentStorePack.offerEnd.toDate()) {
+        throw new Error('offerEnded')
+      }
+			if (state.basket.storeId && state.basket.storeId !== currentStorePack.storeId){
+				throw new Error('twoDiffStores')
+      }
+      if (state.basket.packs && state.basket.packs.find(p => p.packId === currentStorePack.packId)) {
+        throw new Error('duplicatePacKInBasket')
+      }
+      const packInfo = state.packs.find(p => p.id === currentStorePack.packId)
+      let params
+      if (packInfo.byWeight) {
+        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, async weight => {
+          params = {
+            pack: packInfo,
+            packStore: currentStorePack,
+            quantity : packInfo.isDivided ? Number(weight) : 1,
+            price: currentStorePack.price,
+            orderId: props.orderId,
+            weight: Number(weight),
+          }
+          dispatch({type: 'ADD_TO_BASKET', params})
+          showMessage(labels.addToBasketSuccess)
+          props.f7router.back()
+        })
+      } else {
+        params = {
+          pack: packInfo, 
+          packStore: currentStorePack,
+          quantity: 1,
+          price: currentStorePack.price,
+          orderId: props.orderId,
+        }
+        dispatch({type: 'ADD_TO_BASKET', params})
+        showMessage(labels.addToBasketSuccess)
+        props.f7router.back()
+      }
+    } catch(err) {
+			setError(getMessage(props, err))
+		}
+	}
   const handleActions = storePack => {
     setCurrentStorePack(storePack)
     f7.actions.open('#store-pack-actions')
@@ -133,11 +176,15 @@ const StorePacks = props => {
         </Fab>
       }
       <Actions id="store-pack-actions">
+        <ActionsButton onClick={() =>props.f7router.navigate(`/pack-details/${currentStorePack.packId}`)}>{labels.details}</ActionsButton>
         {store.id === 's' && currentStorePack.quantity === 0 ? '' : 
           <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.id}`)}>{labels.editPrice}</ActionsButton>
         }
         {store.id === 's' ? '' :
           <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
+        }
+        {store.id === 's' ? '' :
+          <ActionsButton onClick={() => handlePurchase()}>{labels.purchase}</ActionsButton>
         }
         {currentStorePack.offerEnd ?
           <ActionsButton onClick={() => handleHaltOffer()}>{labels.haltOffer}</ActionsButton>

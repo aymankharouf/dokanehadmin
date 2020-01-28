@@ -8,7 +8,7 @@ const EditProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const product = useState(() => state.products.find(p => p.id === props.id))
+  const [product] = useState(() => state.products.find(p => p.id === props.id))
   const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [trademark, setTrademark] = useState('')

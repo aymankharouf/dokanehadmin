@@ -10,12 +10,13 @@ const Stores = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [stores, setStores] = useState([])
-  const [stock] = useState(() => state.stores.find(s => s.id === 's'))
+  const [stock, setStock] = useState('')
   useEffect(() => {
     setStores(() => {
       const stores = state.stores.filter(s => s.id !== 's')
       return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
     })
+    setStock(() => state.stores.find(s => s.id === 's'))
   }, [state.stores])
   useEffect(() => {
     if (error) {

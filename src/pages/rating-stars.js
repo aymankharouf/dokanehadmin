@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Icon } from 'framework7-react'
 
 const RatingStars = props => {
-  const stars = useState(() => {
+  const [stars] = useState(() => {
     const rating_round = Math.round(props.rating / .5 ) * .5
     const rating_int = parseInt(rating_round)
     const rating_fraction = rating_round - rating_int

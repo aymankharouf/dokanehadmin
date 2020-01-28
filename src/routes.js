@@ -101,6 +101,9 @@ import Register from './pages/register'
 import ArchivedPurchases from './pages/archived-purchases'
 import Permissions from './pages/permissions'
 import PermissionList from './pages/permission-list'
+import ArchivedStockTrans from './pages/archived-stock-trans'
+import ArchivedProducts from './pages/archived-products'
+import DebitRequests from './pages/debit-requests'
 
 export default [
   {
@@ -147,7 +150,7 @@ export default [
     component: Products,
   },
   {
-    path: '/product-packs/:id',
+    path: '/product-packs/:id/type/:type',
     component: ProductPacks
   },
   {
@@ -355,7 +358,7 @@ export default [
     component: StockTrans
   },
   {
-    path: '/stock-trans-details/:id',
+    path: '/stock-trans-details/:id/type/:type',
     component: StockTransDetails
   },
   {
@@ -529,6 +532,18 @@ export default [
   {
     path: '/permission-list/:id',
     component: PermissionList
+  },
+  {
+    path: '/archived-stock-trans/',
+    component: ArchivedStockTrans
+  },
+  {
+    path: '/archived-products/',
+    component: ArchivedProducts
+  },
+  {
+    path: '/debit-requests/',
+    component: DebitRequests
   },
   {
     path: '(.*)',

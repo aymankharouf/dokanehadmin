@@ -60,6 +60,7 @@ const AddPack = props => {
         closeExpired: false,
         byWeight,
         isOffer: false,
+        isArchived: false,
         price: 0,
         time: new Date()
       }

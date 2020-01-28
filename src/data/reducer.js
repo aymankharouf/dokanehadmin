@@ -1,7 +1,5 @@
 const Reducer = (state, action) => {
-    let otherPacks
-    let pack
-    let nextQuantity
+    let pack, packIndex, packs, nextQuantity
     const increment = [0.125, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7]
     switch (action.type){
       case 'ADD_TO_BASKET':
@@ -27,46 +25,37 @@ const Reducer = (state, action) => {
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'INCREASE_QUANTITY':
-        if (action.pack.orderId) {
-          pack = state.basket.packs.find(p => p.packId === action.pack.packId && p.orderId === action.pack.orderId)
-          otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId || p.orderId !== action.pack.orderId)
-        } else {
-          pack = state.basket.packs.find(p => p.packId === action.pack.packId)
-          otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
-        }
-        if (!pack.isDivided && (!action.pack.orderId || !(pack.quantity + 1 > pack.requested))) {
+        if (!action.pack.isDivided && (!action.pack.orderId || !(action.pack.quantity + 1 > action.pack.requested))) {
           pack = {
-            ...pack,
-            quantity: pack.quantity + 1
+            ...action.pack,
+            quantity: action.pack.quantity + 1
           }
         }
-        return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
+        packs = state.basket.packs.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        packs.splice(packIndex, 1, pack)
+        return {...state, basket: {...state.basket, packs}}
       case 'DECREASE_QUANTITY':
-        if (action.pack.orderId) {
-          pack = state.basket.packs.find(p => p.packId === action.pack.packId && p.orderId === action.pack.orderId)
-          otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId || p.orderId !== action.pack.orderId)
-        } else {
-          pack = state.basket.packs.find(p => p.packId === action.pack.packId)
-          otherPacks = state.basket.packs.filter(p => p.packId !== action.pack.packId)
-        }
-        if (pack.isDivided) {
+        if (action.pack.isDivided) {
           nextQuantity = 0
         } else {
-          nextQuantity = pack.quantity - 1
+          nextQuantity = action.pack.quantity - 1
         }
+        packs = state.basket.packs.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
         if (nextQuantity === 0) {
-          if (otherPacks.length > 0){
-            return {...state, basket: {...state.basket, packs: otherPacks}}
-          } else {
+          packs.splice(packIndex, 1)
+          if (packs.length === 0){
             return {...state, basket: ''}
           }
         } else {
           pack = {
-            ...pack,
+            ...action.pack,
             quantity: nextQuantity
-          }  
-          return {...state, basket: {...state.basket, packs: [...otherPacks, pack]}}
+          }
+          packs.splice(packIndex, 1, pack)
         }
+        return {...state, basket: {...state.basket, packs}}
       case 'CLEAR_BASKET':
         return {
           ...state,
@@ -83,51 +72,53 @@ const Reducer = (state, action) => {
           orderBasket: []
         }
       case 'INCREASE_ORDER_QUANTITY':
-        pack = state.orderBasket.find(p => p.packId === action.pack.packId)
-        otherPacks = state.orderBasket.filter(p => p.packId !== action.pack.packId)
-        if (pack.isDivided) {
-          nextQuantity = increment.filter(i => i > pack.quantity)
+        if (action.pack.isDivided) {
+          nextQuantity = increment.filter(i => i > action.pack.quantity)
           nextQuantity = Math.min(...nextQuantity)
-          nextQuantity = nextQuantity === Infinity ? pack.quantity : nextQuantity
+          nextQuantity = nextQuantity === Infinity ? action.pack.quantity : nextQuantity
         } else {
-          nextQuantity = pack.quantity + 1
+          nextQuantity = action.pack.quantity + 1
         }
         pack = {
-          ...pack,
+          ...action.pack,
           quantity: nextQuantity,
-          gross: parseInt(pack.price * nextQuantity)
+          gross: parseInt(action.pack.price * nextQuantity)
         }
-        return {...state, orderBasket: [...otherPacks, pack]}
+        packs = state.orderBasket.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        packs.splice(packIndex, 1, pack)  
+        return {...state, orderBasket: packs}
       case 'DECREASE_ORDER_QUANTITY':
-        pack = state.orderBasket.find(p => p.packId === action.pack.packId)
-        otherPacks = state.orderBasket.filter(p => p.packId !== action.pack.packId)
-        if (pack.weight) {
-          if (pack.isDivided) {
-            if (pack.quantity > pack.weight) {
-              nextQuantity = pack.weight
+        if (action.pack.weight) {
+          if (action.pack.isDivided) {
+            if (action.pack.quantity > action.pack.weight) {
+              nextQuantity = action.pack.weight
             } else {
               nextQuantity = 0
             }  
           } else {
-            if (pack.quantity > pack.purchased) {
-              nextQuantity = pack.purchased
+            if (action.pack.quantity > action.pack.purchased) {
+              nextQuantity = action.pack.purchased
             } else {
               nextQuantity = 0
             }  
           }
-        } else if (pack.isDivided) {
-          nextQuantity = increment.filter(i => i < pack.quantity)
+        } else if (action.pack.isDivided) {
+          nextQuantity = increment.filter(i => i < action.pack.quantity)
           nextQuantity = Math.max(...nextQuantity)
           nextQuantity = nextQuantity === -Infinity ? 0 : nextQuantity
         } else {
-          nextQuantity = pack.quantity - 1
+          nextQuantity = action.pack.quantity - 1
         }
         pack = {
-          ...pack,
+          ...action.pack,
           quantity: nextQuantity,
-          gross: parseInt(pack.price * nextQuantity)
+          gross: parseInt(action.pack.price * nextQuantity)
         }  
-        return {...state, orderBasket: [...otherPacks, pack]}
+        packs = state.orderBasket.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        packs.splice(packIndex, 1, pack)  
+        return {...state, orderBasket: packs}
       case 'SET_COUNTRIES':
         return {
           ...state,
@@ -218,20 +209,35 @@ const Reducer = (state, action) => {
           ...state,
           tags: action.tags
         }
-      case 'SET_ARCHIVED_ORDERS':
+      case 'ADD_ARCHIVED_ORDERS':
         return {
           ...state,
-          archivedOrders: action.orders
+          archivedOrders: [...state.archivedOrders, ...action.orders]
         }
       case 'SET_ADVERTS':
         return {
           ...state,
           adverts: action.adverts
         }
-      case 'SET_ARCHIVED_PURCHASES':
+      case 'ADD_ARCHIVED_PURCHASES':
         return {
           ...state,
-          archivedPurchases: action.purchases
+          archivedPurchases: [...state.archivedPurchases, ...action.purchases]
+        }
+      case 'ADD_ARCHIVED_STOCK_TRANS':
+        return {
+          ...state,
+          archivedStockTrans: [...state.archivedStockTrans, ...action.stockTrans]
+        }
+      case 'SET_ARCHIVED_PRODUCTS':
+        return {
+          ...state,
+          archivedProducts: action.archivedProducts
+        }
+      case 'SET_ARCHIVED_PACKS':
+        return {
+          ...state,
+          archivedPacks: action.archivedPacks
         }
       default:
         return state

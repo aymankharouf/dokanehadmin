@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
@@ -27,13 +27,17 @@ const StockTrans = props => {
   return(
     <Page>
       <Navbar title={labels.stockTrans} backLink={labels.back} />
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => props.f7router.navigate('/archived-stock-trans/')}>
+        <Icon material="backup"></Icon>
+      </Fab>
+
       <Block>
         <List mediaList>
           {stockTrans.length === 0 ? 
             <ListItem title={labels.noData} /> 
           : stockTrans.map(t => 
               <ListItem
-                link={`/stock-trans-details/${t.id}`}
+                link={`/stock-trans-details/${t.id}/type/n`}
                 title={`${t.stockTransTypeInfo.name} ${t.storeId ? t.storeInfo.name : ''}`}
                 subtitle={moment(t.time.toDate()).fromNow()}
                 after={(t.total / 1000).toFixed(3)}

@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link } from 'framework7-react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -13,22 +13,8 @@ const ArchivedOrders = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [orders, setOrders] = useState([])
-  useEffect(() => {
-    const retreiveOrders = async () => {
-      try{
-        setInprocess(true)
-        const orders = await getArchivedOrders()
-        setInprocess(false)
-        if (orders.length > 0) {
-          dispatch({type: 'SET_ARCHIVED_ORDERS', orders})
-        }
-      } catch(err) {
-        setInprocess(false)
-        setError(getMessage(props, err))
-      }
-    }
-    if (state.archivedOrders.length === 0) retreiveOrders()
-  })
+  const [monthlyTrans] = useState(() => [...state.monthlyTrans.sort((t1, t2) => t2.id - t1.id)])
+  const lastMonth = useRef(0)
   useEffect(() => {
     setOrders(() => {
       const orders = state.archivedOrders.map(o => {
@@ -56,7 +42,24 @@ const ArchivedOrders = props => {
       f7.dialog.close()
     }
   }, [inprocess])
-
+  const handleRetreive = async () => {
+    try{
+      const id = monthlyTrans[lastMonth.current]?.id
+      if (!id) {
+        throw new Error('noMoreArchive')
+      }
+      setInprocess(true)
+      const orders = await getArchivedOrders(id)
+      setInprocess(false)  
+      if (orders.length > 0) {
+        dispatch({type: 'ADD_ARCHIVED_ORDERS', orders})
+      }
+      lastMonth.current++
+  } catch(err) {
+      setInprocess(false)
+      setError(getMessage(props, err))
+    }
+  }
   return(
     <Page>
       <Navbar title={labels.archivedOrders} backLink={labels.back}>
@@ -91,6 +94,9 @@ const ArchivedOrders = props => {
           }
         </List>
       </Block>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
+        <Icon material="cached"></Icon>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

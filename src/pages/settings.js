@@ -7,13 +7,12 @@ import { randomColors } from '../data/config'
 
 const Settings = props => {
   const [sections] = useState(() => [
-    {id: '1', name: 'المحلات', path: '/stores/'},
-    {id: '2', name: 'الدول', path: '/countries/'},
-    {id: '3', name: 'الاصناف', path: '/categories/0'},
-    {id: '4', name: 'العلامات التجارية', path: '/trademarks/'},
-    {id: '5', name: 'المناطق', path: '/locations/'},
-    {id: '6', name: 'الفئات', path: '/tags/'},
-    {id: '7', name: 'الاعلانات', path: '/adverts/'}
+    {id: '1', name: 'الدول', path: '/countries/'},
+    {id: '2', name: 'الاصناف', path: '/categories/0'},
+    {id: '3', name: 'العلامات التجارية', path: '/trademarks/'},
+    {id: '4', name: 'المناطق', path: '/locations/'},
+    {id: '5', name: 'الفئات', path: '/tags/'},
+    {id: '6', name: 'الاعلانات', path: '/adverts/'}
   ])
   let i = 0
   return(

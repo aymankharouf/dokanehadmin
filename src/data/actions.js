@@ -1039,21 +1039,24 @@ export const addMonthlyTrans = (trans, orders, purchases, stockTrans) => {
   ordersToArchived.forEach(o => {
     const orderRef = firebase.firestore().collection('orders').doc(o.id)
     batch.update(orderRef, {
-      isArchived: true
+      isArchived: true,
+      archivedMonth: trans.id
     })
   })
   const purchasesToArchived = purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
   purchasesToArchived.forEach(p => {
     const purchaseRef = firebase.firestore().collection('purchases').doc(p.id)
     batch.update(purchaseRef, {
-      isArchived: true
+      isArchived: true,
+      archivedMonth: trans.id
     })
   })
   const stockTransToArchived = stockTrans.filter(t => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month)
   stockTransToArchived.forEach(t => {
     const stockTransRef = firebase.firestore().collection('stock-trans').doc(t.id)
     batch.update(stockTransRef, {
-      isArchived: true
+      isArchived: true,
+      archivedMonth: trans.id
     })
   })
   return batch.commit()
@@ -1315,9 +1318,12 @@ const sendNotification = (batch, userId, title, message, users) => {
   })
 }
 
-export const getArchivedOrders = async () => {
+export const getArchivedOrders = async month => {
   let orders = []
-  await firebase.firestore().collection('orders').where('isArchived', '==', true).get().then(docs => {
+  await firebase.firestore().collection('orders')
+          .where('isArchived', '==', true)
+          .where('activeMonth', '==', month)
+          .get().then(docs => {
     docs.forEach(doc => {
       orders.push({...doc.data(), id:doc.id})
     })
@@ -1325,14 +1331,30 @@ export const getArchivedOrders = async () => {
   return orders
 }
 
-export const getArchivedPurchases = async () => {
+export const getArchivedPurchases = async month => {
   let purchases = []
-  await firebase.firestore().collection('purchases').where('isArchived', '==', true).get().then(docs => {
+  await firebase.firestore().collection('purchases')
+          .where('isArchived', '==', true)
+          .where('activeMonth', '==', month)
+          .get().then(docs => {
     docs.forEach(doc => {
       purchases.push({...doc.data(), id:doc.id})
     })
   })
   return purchases
+}
+
+export const getArchivedStockTrans = async month => {
+  let stockTrans = []
+  await firebase.firestore().collection('stock-trans')
+          .where('isArchived', '==', true)
+          .where('activeMonth', '==', month)
+          .get().then(docs => {
+    docs.forEach(doc => {
+      stockTrans.push({...doc.data(), id:doc.id})
+    })
+  })
+  return stockTrans
 }
 
 export const addCall = (order, callType, callResult) => {
@@ -1728,4 +1750,50 @@ export const registerUser = async (email, password) => {
 
 export const deleteLog = log => {
   return firebase.firestore().collection('logs').doc(log.id).delete()
+}
+
+export const archiveProduct = async (product, packs) => {
+  const batch = firebase.firestore().batch()
+  const productRef = firebase.firestore().collection('products').doc(product.id)
+  batch.update(productRef, {
+    isArchived: true
+  })
+  const affectedPacks = packs.filter(p => p.productId === product.id)
+  affectedPacks.forEach(p => {
+    const packRef = firebase.firestore().collection('packs').doc(p.id)
+    batch.update(packRef, {
+      isArchived: true
+    })
+  })
+  return batch.commit()
+}
+
+export const getArchivedProducts = async () => {
+  let products = []
+  await firebase.firestore().collection('products')
+          .where('isArchived', '==', true)
+          .get().then(docs => {
+    docs.forEach(doc => {
+      products.push({...doc.data(), id:doc.id})
+    })
+  })
+  return products
+}
+
+export const getArchivedPacks = async () => {
+  let packs = []
+  await firebase.firestore().collection('packs')
+          .where('isArchived', '==', true)
+          .get().then(docs => {
+    docs.forEach(doc => {
+      packs.push({...doc.data(), id:doc.id})
+    })
+  })
+  return packs
+}
+
+export const approveDebitRequest = userId => {
+  return firebase.firestore().collection('users').doc(userId).update({
+    debitRequestStatus: 'a',
+  })
 }

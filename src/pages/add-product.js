@@ -68,6 +68,7 @@ const AddProduct = props => {
         rating: 0,
         ratingCount: 0,
         imageUrl,
+        isArchived: false,
         time: new Date()
       }
       setInprocess(true)

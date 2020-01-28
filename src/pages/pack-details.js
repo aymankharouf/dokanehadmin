@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, Button } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
@@ -8,7 +8,7 @@ import moment from 'moment'
 import labels from '../data/labels'
 
 const PackDetails = props => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
@@ -107,49 +107,6 @@ const PackDetails = props => {
     }
   }, [inprocess])
 
-  const handlePurchase = packStore => {
-		try{
-      if (packStore.offerEnd && new Date() > packStore.offerEnd.toDate()) {
-        throw new Error('offerEnded')
-      }
-			if (state.basket.storeId && state.basket.storeId !== packStore.storeId){
-				throw new Error('twoDiffStores')
-      }
-      if (state.basket.packs && state.basket.packs.find(p => p.packId === packStore.packId)) {
-        throw new Error('duplicatePacKInBasket')
-      }
-      const packInfo = state.packs.find(p => p.id === packStore.packId)
-      let params
-      if (packInfo.byWeight) {
-        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, async weight => {
-          params = {
-            pack: packInfo,
-            packStore,
-            quantity : packInfo.isDivided ? Number(weight) : 1,
-            price: packStore.price,
-            orderId: props.orderId,
-            weight: Number(weight),
-          }
-          dispatch({type: 'ADD_TO_BASKET', params})
-          showMessage(labels.addToBasketSuccess)
-          props.f7router.back()
-        })
-      } else {
-        params = {
-          pack: packInfo, 
-          packStore,
-          quantity: 1,
-          price: packStore.price,
-          orderId: props.orderId,
-        }
-        dispatch({type: 'ADD_TO_BASKET', params})
-        showMessage(labels.addToBasketSuccess)
-        props.f7router.back()
-      }
-    } catch(err) {
-			setError(getMessage(props, err))
-		}
-	}
   const handleRefreshPrice = async () => {
     try{
       setInprocess(true)
@@ -186,9 +143,6 @@ const PackDetails = props => {
           {s.isOffer ? 
             <Badge slot="title" color='green'>{labels.offer}</Badge> 
           : ''}
-          {s.storeId === 's' ? '' :
-            <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} />
-          }
         </ListItem>
       )}
       </List>
@@ -210,7 +164,6 @@ const PackDetails = props => {
           </FabButton>
         </FabButtons>
       </Fab>
-
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

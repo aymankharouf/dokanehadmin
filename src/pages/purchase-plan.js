@@ -8,7 +8,7 @@ import labels from '../data/labels'
 const PurchasePlan = props => {
 	const { state } = useContext(StoreContext)
 	const [stores, setStores] = useState([])
-	const approvedOrders = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
+	const [approvedOrders] = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
 	
 	useEffect(() => {
 		let storesArray = []

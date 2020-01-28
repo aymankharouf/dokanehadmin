@@ -30,7 +30,10 @@ const Store = props => {
     tags: [],
     archivedOrders: [],
     adverts: [],
-    archivedPurchases: []
+    archivedPurchases: [],
+    archivedStockTrans: [],
+    archivedProducts: [],
+    archivedPacks: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -43,7 +46,7 @@ const Store = props => {
     }, err => {
       unsubscribeCategories()
     })
-    const unsubscribePacks = firebase.firestore().collection('packs').onSnapshot(docs => {
+    const unsubscribePacks = firebase.firestore().collection('packs').where('isArchived', '==', false).onSnapshot(docs => {
       let packs = []
       docs.forEach(doc => {
         packs.push({...doc.data(), id: doc.id})
@@ -100,7 +103,7 @@ const Store = props => {
         }, err => {
           unsubscribeCountries()
         })  
-        const unsubscribeProducts = firebase.firestore().collection('products').onSnapshot(docs => {
+        const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products = []
           docs.forEach(doc => {
             products.push({...doc.data(), id: doc.id})

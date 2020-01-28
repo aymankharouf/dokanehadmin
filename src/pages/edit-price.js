@@ -10,7 +10,7 @@ const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const storePack = useState(() => state.storePacks.find(p => p.id === props.id))
+  const [storePack] = useState(() => state.storePacks.find(p => p.id === props.id))
   const [pack, setPack] = useState('')
   const [store, setStore] = useState('')
   const [cost, setCost] = useState('')

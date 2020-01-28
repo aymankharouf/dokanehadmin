@@ -9,7 +9,7 @@ import { stockTransTypes } from '../data/config'
 
 const StockTransDetails = props => {
   const { state } = useContext(StoreContext)
-  const [stockTrans] = useState(() => state.stockTrans.find(t => t.id === props.id))
+  const [stockTrans] = useState(() => props.type === 'a' ? state.archivedStockTrans.find(t => t.id === props.id) : state.stockTrans.find(t => t.id === props.id))
   const [stockTransBasket, setStockTransBasket] = useState([])
   useEffect(() => {
     setStockTransBasket(() => stockTrans.basket.map(p => {

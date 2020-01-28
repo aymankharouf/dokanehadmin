@@ -346,7 +346,11 @@ const labels = {
   notice: 'تبليغ',
   newProduct: 'المنتج الجديد',
   finishedOrdersAffected: 'هناك طلبات منتهية سوف تتأثر، لا يمكن التنفيذ',
-  permissions: 'الصلاحيات'
+  permissions: 'الصلاحيات',
+  noMoreArchive: 'لا يوجد ارشيف اضافي',
+  archivedStockTrans: 'ارشيف حركات المستودع',
+  archivedProducts: 'ارشيف المنتجات',
+  approveDebitRequests: 'اعتماد الدفع لاحقا'
 }
 
 export default labels

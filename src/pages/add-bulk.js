@@ -58,6 +58,7 @@ const AddBulk = props => {
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
         orderLimit: Number(orderLimit),
+        isArchived: false,
         time: new Date()
       }
       setInprocess(true)

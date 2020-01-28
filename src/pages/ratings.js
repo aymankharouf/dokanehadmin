@@ -8,7 +8,7 @@ import { approveRating, showMessage, showError, getMessage } from '../data/actio
 const Ratings = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] =useState(false)
+  const [inprocess, setInprocess] = useState(false)
   const [ratings, setRatings] = useState([])
   useEffect(() => {
     setRatings(() => {
