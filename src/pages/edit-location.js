@@ -11,23 +11,20 @@ const EditLocation = props => {
   const [inprocess, setInprocess] = useState(false)
   const [location] = useState(() => state.locations.find(l => l.id === props.id))
   const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState('')
   const [hasDelivery, setHasDelivery] = useState('')
   const [deliveryFees, setDeliveryFees] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     setName(location.name)
-    setOrdering(location.ordering)
     setHasDelivery(location.hasDelivery)
     setDeliveryFees((location.deliveryFees / 1000).toFixed(3))
   }, [location])
   useEffect(() => {
     if (name !== location.name
-    || ordering !== location.ordering
     || hasDelivery !== location.hasDelivery
     || deliveryFees * 1000 !== location.deliveryFees) setHasChanged(true)
     else setHasChanged(false)
-  }, [location, name, ordering, hasDelivery, deliveryFees])
+  }, [location, name, hasDelivery, deliveryFees])
   useEffect(() => {
     if (!hasDelivery) setDeliveryFees('')
   }, [hasDelivery])
@@ -51,7 +48,6 @@ const EditLocation = props => {
       await editLocation({
         id: location.id,
         name,
-        ordering,
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
@@ -77,16 +73,6 @@ const EditLocation = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={ordering} 
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
-        />
         <ListItem>
           <span>{labels.hasDelivery}</span>
           <Toggle 
@@ -109,7 +95,7 @@ const EditLocation = props => {
           />
         : ''}
       </List>
-      {!name || !ordering || (hasDelivery && !deliveryFees) || !hasChanged ? '' :
+      {!name || (hasDelivery && !deliveryFees) || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

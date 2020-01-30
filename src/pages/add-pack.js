@@ -48,7 +48,7 @@ const AddPack = props => {
         categoryId: product.categoryId,
         country: product.country,
         trademark: product.trademark,
-        tagId: product.tagId,
+        tag: product.tag,
         sales: product.sales,
         rating: product.rating,
         ratingCount: product.ratingCount,

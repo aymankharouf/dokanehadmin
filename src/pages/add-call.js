@@ -71,7 +71,7 @@ const AddCall = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="callType" value={callType} onChange={e => setCallType(e.target.value)}>
+          <select name="callType" defaultValue={callType} onChange={e => setCallType(e.target.value)}>
             <option value=""></option>
             {callTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
@@ -89,7 +89,7 @@ const AddCall = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="callResult" value={callResult} onChange={e => setCallResult(e.target.value)}>
+          <select name="callResult" defaultValue={callResult} onChange={e => setCallResult(e.target.value)}>
             <option value=""></option>
             {callResults.map(r => 
               <option key={r.id} value={r.id}>{r.name}</option>

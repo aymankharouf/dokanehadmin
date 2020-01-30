@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Card, CardContent, CardHeader, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editPrice, showMessage, showError, getMessage } from '../data/actions'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 import { setup } from '../data/config'
 
@@ -10,18 +9,11 @@ const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [storePack] = useState(() => state.storePacks.find(p => p.id === props.id))
-  const [pack, setPack] = useState('')
-  const [store, setStore] = useState('')
+  const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
+  const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [cost, setCost] = useState('')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
-  useEffect(() => {
-    setPack(() => state.packs.find(p => p.id === storePack.packId))
-  }, [state.packs, storePack])
-  useEffect(() => {
-    setStore(() => state.stores.find(s => s.id === storePack.storeId))
-  }, [state.stores, storePack])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -58,6 +50,7 @@ const EditPrice = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
+      const storePack = state.storePacks.find(p => p.packId === props.packId && p.storeId === props.storeId)
       const newStorePack = {
         ...storePack,
         price: price * 1000,
@@ -78,16 +71,21 @@ const EditPrice = props => {
   return (
     <Page>
       <Navbar title={`${labels.editPrice} ${store.name}`} backLink={labels.back} />
-      <Card>
-        <CardHeader>
-          <p>{pack.productName}</p>
-          <p>{pack.name}</p>
-        </CardHeader>
-        <CardContent>
-          <PackImage pack={pack} type="card" />
-        </CardContent>
-      </Card>
       <List form>
+        <ListInput 
+          name="productName" 
+          label={labels.product}
+          value={pack.productName}
+          type="text" 
+          readonly
+        />
+        <ListInput 
+          name="packName" 
+          label={labels.pack}
+          value={pack.name}
+          type="text" 
+          readonly
+        />
         {store.type === '5' ? 
           <ListInput 
             name="cost" 

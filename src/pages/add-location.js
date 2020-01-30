@@ -9,7 +9,6 @@ const AddLocation = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState('')
   const [hasDelivery, setHasDelivery] = useState(false)
   const [deliveryFees, setDeliveryFees] = useState('')
   useEffect(() => {
@@ -34,7 +33,6 @@ const AddLocation = props => {
       setInprocess(true)
       await addLocation({
         name,
-        ordering,
         hasDelivery,
         deliveryFees: deliveryFees * 1000
       })
@@ -60,16 +58,6 @@ const AddLocation = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={ordering} 
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
-        />
         <ListItem>
           <span>{labels.hasDelivery}</span>
           <Toggle 
@@ -92,7 +80,7 @@ const AddLocation = props => {
           />
           : ''}
       </List>
-      {!name || !ordering || (hasDelivery && !deliveryFees) ? '' :
+      {!name || (hasDelivery && !deliveryFees) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

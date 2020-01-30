@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { addTag, showMessage, showError, getMessage } from '../data/actions'
+import React, { useContext, useState, useEffect } from 'react'
+import { StoreContext } from '../data/store'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
+import { addTag, showMessage, showError, getMessage } from '../data/actions'
 
 
 const AddTag = props => {
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
@@ -25,8 +27,9 @@ const AddTag = props => {
 
   const handleSubmit = async () => {
     try{
+      const tags = state.lookups.find(l => l.id === 't')?.values || []
       setInprocess(true)
-      await addTag({name})
+      await addTag(name, tags)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

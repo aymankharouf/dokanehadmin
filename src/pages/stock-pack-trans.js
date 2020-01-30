@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -15,6 +15,7 @@ const StockPackTrans = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [stockPackInfo] = useState(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id))
   const [packTrans, setPackTrans] = useState([])
+  const actionsList = useRef('')
   useEffect(() => {
     setPackTrans(() => {
       let packTrans = state.stockTrans.filter(t => t.basket.find(p => p.packId === pack.id))
@@ -92,11 +93,11 @@ const StockPackTrans = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => actionsList.current.open()}>
         <Icon material="build"></Icon>
       </Fab>
       {stockPackInfo.quantity === 0 ? '' :
-        <Actions id="actions">
+        <Actions ref={actionsList}>
           <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>
           <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
           <ActionsButton onClick={() => handleAddTrans('w')}>{labels.withdraw}</ActionsButton>

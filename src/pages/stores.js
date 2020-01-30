@@ -12,12 +12,24 @@ const Stores = props => {
   const [stores, setStores] = useState([])
   const [stock, setStock] = useState('')
   useEffect(() => {
-    setStores(() => {
-      const stores = state.stores.filter(s => s.id !== 's')
-      return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-    })
     setStock(() => state.stores.find(s => s.id === 's'))
   }, [state.stores])
+  useEffect(() => {
+    setStores(() => {
+      const today = new Date()
+      today.setDate(today.getDate() - 30)
+      let stores = state.stores.filter(s => s.id !== 's')
+      stores = stores.map(s => {
+        const storePurchases = state.purchases.filter(p => p.storeId === s.id && p.time.toDate() >= today)
+        const sales = storePurchases.reduce((sum, p) => sum + p.total, 0)
+        return {
+          ...s,
+          sales
+        }
+      })
+      return stores.sort((s1, s2) => s1.sales - s2.sales)
+    })
+  }, [state.stores, state.purchases])
   useEffect(() => {
     if (error) {
       showError(error)

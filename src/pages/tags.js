@@ -9,8 +9,12 @@ const Tags = props => {
   const { state } = useContext(StoreContext)
   const [tags, setTags] = useState([])
   useEffect(() => {
-    setTags(() => [...state.tags].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
-  }, [state.tags])
+    setTags(() => {
+      const tags = state.lookups.find(l => l.id === 't')?.values || []
+      return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
+    })
+    }, [state.lookups])
+    let i = 0
   return (
     <Page>
       <Navbar title={labels.tags} backLink={labels.back} />
@@ -20,9 +24,9 @@ const Tags = props => {
             <ListItem title={labels.noData} /> 
           : tags.map(t =>
               <ListItem
-                link={`/edit-tag/${t.id}`}
-                title={t.name} 
-                key={t.id}
+                link={`/edit-tag/${t}`}
+                title={t} 
+                key={i++}
               />
             )
           }

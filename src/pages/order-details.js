@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, sendOrder, finishOrder, mergeOrder } from '../data/actions'
@@ -14,6 +14,7 @@ const OrderDetails = props => {
   const [orderBasket, setOrderBasket] = useState([])
   const [statusActions, setStatusActions] = useState([])
   const [lastOrder, setLastOrder] = useState('')
+  const actionsList = useRef('')
   useEffect(() => {
     setOrderBasket(() => order.basket.map(p => {
       const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
@@ -249,11 +250,11 @@ const OrderDetails = props => {
           : ''}
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#actions')}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => actionsList.current.open()}>
         <Icon material="build"></Icon>
       </Fab>
       {props.type === 'f' ?
-        <Actions id="actions">
+        <Actions ref={actionsList}>
           <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
           {order.position === 's' ? 
             <ActionsButton onClick={() => props.f7router.navigate(`/return-order/${props.id}`)}>{labels.returnPacks}</ActionsButton>
@@ -274,7 +275,7 @@ const OrderDetails = props => {
           : ''}
         </Actions>
       : 
-        <Actions id="actions">
+        <Actions ref={actionsList}>
           <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
           {props.type === 'n' && statusActions.map(a => 
             <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.name}</ActionsButton>

@@ -119,10 +119,10 @@ const Reducer = (state, action) => {
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)
         packs.splice(packIndex, 1, pack)  
         return {...state, orderBasket: packs}
-      case 'SET_COUNTRIES':
+      case 'SET_LOOKUPS':
         return {
           ...state,
-          countries: action.countries
+          lookups: action.lookups
         }
       case 'SET_STORES':
         return {
@@ -133,11 +133,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           categories: action.categories
-        }
-      case 'SET_TRADEMARKS':
-        return {
-          ...state,
-          trademarks: action.trademarks
         }
       case 'SET_USERS':
         return {
@@ -203,11 +198,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           logs: action.logs
-        }
-      case 'SET_TAGS':
-        return {
-          ...state,
-          tags: action.tags
         }
       case 'ADD_ARCHIVED_ORDERS':
         return {

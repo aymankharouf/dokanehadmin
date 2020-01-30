@@ -32,17 +32,17 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
-          name="countryId" 
+          name="country" 
           label={labels.country}
           type="text" 
           value={product.country}
           readonly
         />
         <ListInput 
-          name="tagId" 
+          name="tag" 
           label={labels.tag}
           type="text" 
-          value={state.tags.find(t => t.id === product.tagId)?.name || ''}
+          value={product.tag}
           readonly
         />
         <img src={product.imageUrl} className="img-card" alt={product.name} />

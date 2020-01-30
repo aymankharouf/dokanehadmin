@@ -22,10 +22,8 @@ const PackDetails = props => {
           packId = s.packId
           if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
             price = s.price
-            unitPrice = s.price
           } else {
             price = s.cost
-            unitPrice = s.price
           }
           unitPrice = s.price 
           quantity = s.quantity

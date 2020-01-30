@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
@@ -7,8 +7,10 @@ import { storeTypes } from '../data/config'
 
 const StoreDetails = props => {
   const { state } = useContext(StoreContext)
-  const [store] = useState(() => state.stores.find(s => s.id === props.id))
-
+  const [store, setStore] = useState('')
+  useEffect(() => {
+    setStore(() => state.stores.find(s => s.id === props.id))
+  }, [state.stores, props.id])
   return (
     <Page>
       <Navbar title={labels.storeDetails} backLink={labels.back} />
@@ -16,7 +18,7 @@ const StoreDetails = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          value={store.name}
+          value={store.name || ''}
           type="text" 
           readonly
         />
@@ -30,14 +32,14 @@ const StoreDetails = props => {
         <ListInput
           name="type"
           label={labels.type}
-          value={storeTypes.find(t => t.id === store.type).name}
+          value={storeTypes.find(t => t.id === store.type)?.name || ''}
           type="text"
           readonly
         />
         <ListInput
           name="discount"
           label={labels.discount}
-          value={store.discount * 100}
+          value={(store.discount || 0) * 100}
           type="number"
           readonly
         />
@@ -70,27 +72,26 @@ const StoreDetails = props => {
           value={store.address || ''}
           type="text"
         />
+
       </List>
-      {store.id === 's' ? '' :
-        <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-          <Icon material="keyboard_arrow_down"></Icon>
-          <Icon material="close"></Icon>
-          <FabButtons position="bottom">
-            <FabButton color="green" onClick={() => props.f7router.navigate(`/store-packs/${props.id}`)}>
-              <Icon material="shopping_cart"></Icon>
-            </FabButton>
-            <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-store/${props.id}`)}>
-              <Icon material="edit"></Icon>
-            </FabButton>
-            <FabButton color="yellow" onClick={() => props.f7router.navigate(`/store-trans/${store.id}`)}>
-              <Icon material="import_export"></Icon>
-            </FabButton>
-            <FabButton color="red" onClick={() => props.f7router.navigate(`/store-owners/${store.id}`)}>
-              <Icon material="perm_identity"></Icon>
-            </FabButton>
-          </FabButtons>
-        </Fab>
-      }
+      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
+          <FabButton color="green" onClick={() => props.f7router.navigate(`/store-packs/${props.id}`)}>
+            <Icon material="shopping_cart"></Icon>
+          </FabButton>
+          <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-store/${props.id}`)}>
+            <Icon material="edit"></Icon>
+          </FabButton>
+          <FabButton color="yellow" onClick={() => props.f7router.navigate(`/store-trans/${store.id}`)}>
+            <Icon material="import_export"></Icon>
+          </FabButton>
+          <FabButton color="red" onClick={() => props.f7router.navigate(`/store-owners/${store.id}`)}>
+            <Icon material="perm_identity"></Icon>
+          </FabButton>
+        </FabButtons>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

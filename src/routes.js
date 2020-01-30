@@ -230,7 +230,7 @@ export default [
     component: AddCountry
   },
   {
-    path: '/edit-country/:id',
+    path: '/edit-country/:name',
     component: EditCountry
   },
   {
@@ -266,7 +266,7 @@ export default [
     component: AddTrademark,
   },
   {
-    path: '/edit-trademark/:id',
+    path: '/edit-trademark/:name',
     component: EditTrademark,
   },
   {
@@ -310,7 +310,7 @@ export default [
     component: EditOffer
   },
   {
-    path: '/edit-price/:id',
+    path: '/edit-price/:packId/store/:storeId',
     component: EditPrice
   },
   {
@@ -446,7 +446,7 @@ export default [
     component: AddTag
   },
   {
-    path: '/edit-tag/:id',
+    path: '/edit-tag/:name',
     component: EditTag
   },
   {

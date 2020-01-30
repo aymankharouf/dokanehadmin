@@ -35,18 +35,12 @@ service cloud.firestore {
     match /stores/{storeId} {
     	allow read, write: if request.auth.token.name == 'a';
     }
-    match /countries/{countryId} {
-    	allow read, write: if request.auth.token.name == 'a';
-    }
-    match /tags/{tagId} {
+    match /lookups/{lookupId} {
     	allow read, write: if request.auth.token.name == 'a';
     }
     match /categories/{categoryId} {
     	allow read;
     	allow write: if request.auth.token.name == 'a';
-    }
-    match /trademarks/{trademarkId} {
-    	allow read, write: if request.auth.token.name == 'a';
     }
     match /password-requests/{requestId} {
     	allow read: if request.auth.token.name == 'a';

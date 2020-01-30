@@ -584,7 +584,7 @@ export const editProduct = async (product, image, packs) => {
       categoryId: product.categoryId,
       country: product.country,
       trademark: product.trademark,
-      tagId: product.tagId,
+      tag: product.tag,
       sales: product.sales,
       rating: product.rating,
       ratingCount: product.ratingCount
@@ -620,7 +620,8 @@ export const haltOffer = (storePack, storePacks, packs) => {
   const batch = firebase.firestore().batch()
   const storePackRef = firebase.firestore().collection('store-packs').doc(storePack.id)
   batch.update(storePackRef, {
-    price: 0
+    price: 0,
+    cost: 0
   })
   const pack = packs.find(p => p.id === storePack.packId)
   if (storePack.price === pack.price) {
@@ -730,15 +731,29 @@ export const editSpending = spending => {
   return firebase.firestore().collection('spendings').doc(spending.id).update(spending)
 }
 
-export const addCountry = country => {
-  return firebase.firestore().collection('countries').add(country)
+export const addCountry = (name, countries) => {
+  const batch = firebase.firestore().batch()
+  const countriesRef = firebase.firestore().collection('lookups').doc('c')
+  if (countries.length === 0) {
+    batch.set(countriesRef, {
+      values: [name]
+    })
+  } else {
+    batch.update(countriesRef, {
+      values: countries.push(name)
+    })
+  }
+  return batch.commit()
 }
 
-export const editCountry = (id, name, oldName, products, packs) => {
+export const editCountry = (name, oldName, countries, products, packs) => {
   const batch = firebase.firestore().batch()
-  const countryRef = firebase.firestore().collection('countries').doc(id)
-  batch.update(countryRef, {
-    name
+  const values = countries.slice()
+  const valueIndex = values.indexOf(oldName)
+  values.splice(valueIndex, 1, name)
+  const countriesRef = firebase.firestore().collection('lookups').doc('c')
+  batch.update(countriesRef, {
+    values
   })
   const affectedProducts = products.filter(p => p.country === oldName)
   affectedProducts.forEach(p => {
@@ -774,7 +789,8 @@ export const addCategory = (parentId, name, ordering) => {
       parentId,
       name,
       ordering,
-      isLeaf: true
+      isLeaf: true,
+      isActive: false
     })
   } else {
     categoryRef = firebase.firestore().collection('categories').doc(parentId)
@@ -786,7 +802,8 @@ export const addCategory = (parentId, name, ordering) => {
       parentId,
       name,
       ordering,
-      isLeaf: true
+      isLeaf: true,
+      isActive: false
     })
   }
   return batch.commit()
@@ -805,15 +822,29 @@ export const getCategoryName = (category, categories) => {
   }
 }
 
-export const addTrademark = trademark => {
-  return firebase.firestore().collection('trademarks').add(trademark)
+export const addTrademark = (name, trademarks) => {
+  const batch = firebase.firestore().batch()
+  const trademarksRef = firebase.firestore().collection('lookups').doc('m')
+  if (trademarks.length === 0) {
+    batch.set(trademarksRef, {
+      values: [name]
+    })
+  } else {
+    batch.update(trademarksRef, {
+      values: trademarks.push(name)
+    })
+  }
+  return batch.commit()
 }
 
-export const editTrademark = (id, name, oldName, products, packs) => {
+export const editTrademark = (name, oldName, trademarks, products, packs) => {
   const batch = firebase.firestore().batch()
-  const trademarkRef = firebase.firestore().collection('trademarks').doc(id)
-  batch.update(trademarkRef, {
-    name
+  const values = trademarks.slice()
+  const valueIndex = values.indexOf(oldName)
+  values.splice(valueIndex, 1, name)
+  const trademarksRef = firebase.firestore().collection('lookups').doc('m')
+  batch.update(trademarksRef, {
+    values
   })
   const affectedProducts = products.filter(p => p.trademark === oldName)
   affectedProducts.forEach(p => {
@@ -828,7 +859,47 @@ export const editTrademark = (id, name, oldName, products, packs) => {
         trademark: name
       })
     })
+  })
+  return batch.commit()
+}
 
+export const addTag = (name, tags) => {
+  const batch = firebase.firestore().batch()
+  const tagsRef = firebase.firestore().collection('lookups').doc('t')
+  if (tags.length === 0) {
+    batch.set(tagsRef, {
+      values: [name]
+    })
+  } else {
+    batch.update(tagsRef, {
+      values: tags.push(name)
+    })
+  }
+  return batch.commit()
+}
+
+export const editTag = (name, oldName, tags, products, packs) => {
+  const batch = firebase.firestore().batch()
+  const values = tags.slice()
+  const valueIndex = values.indexOf(oldName)
+  values.splice(valueIndex, 1, name)
+  const tagsRef = firebase.firestore().collection('lookups').doc('t')
+  batch.update(tagsRef, {
+    values
+  })
+  const affectedProducts = products.filter(p => p.tag === oldName)
+  affectedProducts.forEach(p => {
+    const productRef = firebase.firestore().collection('products').doc(p.id)
+    batch.update(productRef, {
+      tag: name
+    })
+    const affectedPacks = packs.filter(p => p.productId === p.id)
+    affectedPacks.forEach(pa => {
+      const packRef = firebase.firestore().collection('packs').doc(pa.id)
+      batch.update(packRef, {
+        tag: name
+      })
+    })
   })
   return batch.commit()
 }
@@ -843,14 +914,6 @@ export const addPack = pack => {
 
 export const editPack = pack => {
   return firebase.firestore().collection('packs').doc(pack.id).update(pack)
-}
-
-export const addTag = tag => {
-  return firebase.firestore().collection('tags').add(tag)
-}
-
-export const editTag = tag => {
-  return firebase.firestore().collection('tags').doc(tag.id).update(tag)
 }
 
 export const editCustomer = (customer, mobile, storeId, stores) => {
@@ -1283,7 +1346,7 @@ export const approveInvitation = (user, mobile, status, users) => {
 export const addNotification = (user, title, message) => {
   const notifications = user.notifications?.slice() || []
   notifications.push({
-    id: Math.random(),
+    id: Math.random().toString(),
     title,
     message,
     status: 'n',
@@ -1306,7 +1369,7 @@ export const deleteNotification = (user, notificationId) => {
 const sendNotification = (batch, userId, title, message, users) => {
   const notifications = users.find(u => u.id === userId).notifications?.slice() || []
   notifications.push({
-    id: Math.random(),
+    id: Math.random().toString(),
     title,
     message,
     status: 'n',

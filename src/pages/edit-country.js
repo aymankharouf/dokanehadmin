@@ -10,11 +10,7 @@ const EditCountry = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [country] = useState(() => state.countries.find(c => c.id === props.id))
-  const [name, setName] = useState('')
-  useEffect(() => {
-    setName(country.name)
-  }, [country])
+  const [name, setName] = useState(props.name)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -31,8 +27,9 @@ const EditCountry = props => {
 
   const handleEdit = async () => {
     try{
+      const countries = state.lookups.find(l => l.id === 'c')?.values
       setInprocess(true)
-      await editCountry(country.id, name, country.name, state.products, state.packs)
+      await editCountry(name, props.name, countries, state.products, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -56,7 +53,7 @@ const EditCountry = props => {
           onInputClear={() => setName('')}
         />
       </List>
-      {!name || (name === country.name) ? '' :
+      {!name || (name === props.name) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

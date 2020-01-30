@@ -7,12 +7,14 @@ import { deliveryIntervals } from '../data/config'
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
-  const [customer] = useState(() => state.customers.find(c => c.id === props.id))
+  const [customer, setCustomer] = useState('')
   const [storeName, setStoreName] = useState('')
+  useEffect(() => {
+    setCustomer(() => state.customers.find(c => c.id === props.id))
+  }, [state.customers, props.id])
   useEffect(() => {
     setStoreName(() => state.stores.find(s => s.id === customer.storeId)?.name || '')
   }, [customer, state.stores])
-
   return (
     <Page>
       <Navbar title={labels.customerDetails} backLink={labels.back} />
@@ -23,68 +25,68 @@ const CustomerDetails = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          value={customer.name}
+          value={customer.name || ''}
           type="text" 
           readonly
         />
         <ListInput 
           name="fullName" 
           label={labels.fullName}
-          value={customer.fullName}
+          value={customer.fullName || ''}
           type="text" 
           readonly
         />
         <ListInput 
           name="orderLimit" 
           label={labels.orderLimit}
-          value={(customer.orderLimit / 1000).toFixed(3)}
+          value={((customer.orderLimit || 0) / 1000).toFixed(3)}
           type="number"
           readonly
         />
         <ListItem>
           <span>{labels.isOldAge}</span>
-          <Toggle color="blue" checked={customer.isOldAge} disabled />
+          <Toggle color="blue" checked={customer.isOldAge || false} disabled />
         </ListItem>
         <ListItem>
           <span>{labels.isBlocked}</span>
-          <Toggle color="blue" checked={customer.isBlocked} disabled />
+          <Toggle color="blue" checked={customer.isBlocked || false} disabled />
         </ListItem>
         <ListItem>
           <span>{labels.exceedPrice}</span>
-          <Toggle color="blue" checked={customer.exceedPrice} disabled />
+          <Toggle color="blue" checked={customer.exceedPrice || false} disabled />
         </ListItem>
         <ListInput 
           name="totalOrders" 
           label={labels.totalOrders}
-          value={customer.ordersCount}
+          value={customer.ordersCount || ''}
           type="number"
           readonly
         />
         <ListInput 
           name="totalDeliveredOrders" 
           label={labels.totalDeliveredOrders}
-          value={customer.deliveredOrdersCount}
+          value={customer.deliveredOrdersCount || ''}
           type="number"
           readonly
         />
         <ListInput 
           name="locationName" 
           label={labels.location}
-          value={state.locations.find(l => l.id === customer.locationId).name}
+          value={state.locations.find(l => l.id === customer.locationId)?.name || ''}
           type="text"
           readonly
         />
         <ListInput 
           name="discounts" 
           label={labels.discountBalance}
-          value={(customer.discounts / 1000).toFixed(3)}
+          value={((customer.discounts || 0) / 1000).toFixed(3)}
           type="number"
           readonly
         />
         <ListInput 
           name="deliveryFees"
           label={labels.deliveryDiscount}
-          value={(customer.deliveryDiscount / 1000).toFixed(3)}
+          value={((customer.deliveryDiscount || 0) / 1000).toFixed(3)}
           type="number"
           readonly
         />
@@ -98,7 +100,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="otherMobile" 
           label={labels.otherMobile}
-          value={customer.otherMobile}
+          value={customer.otherMobile || ''}
           type="number"
           readonly
         />
@@ -112,7 +114,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="address" 
           label={labels.address}
-          value={customer.address}
+          value={customer.address || ''}
           type="text" 
           readonly
         />

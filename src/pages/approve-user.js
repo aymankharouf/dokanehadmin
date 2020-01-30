@@ -15,7 +15,7 @@ const ApproveUser = props => {
   const [address, setAddress] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
     setName(userInfo.name)
   }, [userInfo])
@@ -57,7 +57,7 @@ const ApproveUser = props => {
         throw new Error('otherUserMobile')
       }
       setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName, address)
+      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName || '', address)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  
@@ -103,7 +103,7 @@ const ApproveUser = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" defaultValue={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>

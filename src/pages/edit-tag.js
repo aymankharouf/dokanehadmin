@@ -10,11 +10,7 @@ const EditTag = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [tag] = useState(() => state.tags.find(t => t.id === props.id))
-  const [name, setName] = useState('')
-  useEffect(() => {
-    setName(tag.name)
-  }, [tag])
+  const [name, setName] = useState(props.name)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -31,11 +27,9 @@ const EditTag = props => {
 
   const handleEdit = async () => {
     try{
+      const tags = state.lookups.find(l => l.id === 't')?.values
       setInprocess(true)
-      await editTag({
-        id: tag.id,
-        name
-      })
+      await editTag(name, tags)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -59,7 +53,7 @@ const EditTag = props => {
           onInputClear={() => setName('')}
         />
       </List>
-      {!name || (name === tag.name) ? '' :
+      {!name || (name === props.name) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

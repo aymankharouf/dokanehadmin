@@ -99,7 +99,7 @@ const AddStorePack = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="packId" value={packId} onChange={e => setPackId(e.target.value)}>
+          <select name="packId" defaultValue={packId} onChange={e => setPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

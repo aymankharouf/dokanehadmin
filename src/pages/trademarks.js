@@ -9,9 +9,12 @@ const Trademarks = props => {
   const { state } = useContext(StoreContext)
   const [trademarks, setTrademarks] = useState([])
   useEffect(() => {
-    setTrademarks(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
-  }, [state.trademarks])
-
+    setTrademarks(() => {
+      const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+      return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
+    })
+  }, [state.lookups])
+  let i = 0
   return (
     <Page>
       <Navbar title={labels.trademarks} backLink={labels.back} />
@@ -24,9 +27,9 @@ const Trademarks = props => {
             <ListItem title={labels.noData} /> 
           : trademarks.map(t =>
               <ListItem 
-                link={`/edit-trademark/${t.id}`}
-                title={t.name} 
-                key={t.id} 
+                link={`/edit-trademark/${t}`}
+                title={t} 
+                key={i++} 
               />
             )
           }

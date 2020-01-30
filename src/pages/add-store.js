@@ -20,7 +20,7 @@ const AddStore = props => {
   const [mapPosition, setMapPosition] = useState('')
   const [allowReturn, setAllowReturn] = useState(false)
   const [openTime, setOpenTime] = useState('')
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
 
   useEffect(() => {
     const patterns = {
@@ -113,7 +113,7 @@ const AddStore = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="type" value={type} onChange={e => setType(e.target.value)}>
+          <select name="type" defaultValue={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {storeTypes.map(t => 
               t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
@@ -150,7 +150,7 @@ const AddStore = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" defaultValue={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>

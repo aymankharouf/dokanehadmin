@@ -9,7 +9,7 @@ const Locations = props => {
   const { state } = useContext(StoreContext)
   const [locations, setLocations] = useState([])
   useEffect(() => {
-    setLocations(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+    setLocations(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   }, [state.locations])
   return (
     <Page>

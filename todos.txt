@@ -153,8 +153,10 @@
 *handle realtime & useref
 *read archive by period
 *add stock trans archive, products & packs
+*debit
 return purchase discount
 hints & help
-debit
 use cashing
 pwa
+highlight urgent orders 
+edit product as add product

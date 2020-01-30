@@ -15,13 +15,12 @@ const Home = props => {
     {id: '7', name: 'المصاريف', path: '/spendings/'},
     {id: '8', name: 'التنبيهات', path: '/notifications/'}
   ])
-
   let i = 0
   return (
     <Page className="page-home">
       <Navbar large>
         <NavLeft>
-          <Link iconMaterial="menu" panelOpen="right"></Link>
+          <Link iconMaterial="menu" panelOpen="right" />
         </NavLeft>
         <NavTitle sliding><img src="/dokaneh_logo.png" alt="logo" className="logo" /></NavTitle>
         <NavTitleLarge><img src="/dokaneh_logo.png" alt="logo" className="logo" /></NavTitleLarge>

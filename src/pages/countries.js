@@ -9,8 +9,12 @@ const Countries = props => {
   const { state } = useContext(StoreContext)
   const [countries, setCountries] = useState([])
   useEffect(() => {
-    setCountries(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  }, [state.countries])
+    setCountries(() => {
+      const countries = state.lookups.find(l => l.id === 'c')?.values || []
+      return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
+    })
+  }, [state.lookups])
+  let i = 0
   return (
     <Page>
       <Navbar title={labels.countries} backLink={labels.back} />
@@ -20,9 +24,9 @@ const Countries = props => {
             <ListItem title={labels.noData} />
           : countries.map(c =>
               <ListItem
-                link={`/edit-country/${c.id}`}
-                title={c.name} 
-                key={c.id}
+                link={`/edit-country/${c}`}
+                title={c} 
+                key={i++}
               />
             )
           }

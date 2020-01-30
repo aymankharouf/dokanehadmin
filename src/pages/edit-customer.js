@@ -15,18 +15,18 @@ const EditCustomer = props => {
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const [locationId, setLocationId] = useState('')
-  const [isOldAge, setIsOldAge] = useState('')
+  const [isOldAge, setIsOldAge] = useState(false)
   const [mapPosition, setMapPosition] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [isBlocked, setIsBlocked] = useState('')
-  const [withDelivery, setWithDelivery] = useState('')
-  const [exceedPrice, setExceedPrice] = useState('')
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [withDelivery, setWithDelivery] = useState(false)
+  const [exceedPrice, setExceedPrice] = useState(false)
   const [deliveryDiscount, setDeliveryDiscount] = useState('')
   const [orderLimit, setOrderLimit] = useState('')
   const [deliveryInterval, setDeliveryInterval] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
     setName(customer.name)
     setAddress(customer.address)
@@ -135,7 +135,7 @@ const EditCustomer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" defaultValue={customer.locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
@@ -179,7 +179,7 @@ const EditCustomer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="deliveryInterval" value={deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
+          <select name="deliveryInterval" defaultValue={customer.deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
             <option value=""></option>
             {deliveryIntervals.map(i => 
               <option key={i.id} value={i.id}>{i.name}</option>

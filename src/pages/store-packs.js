@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -15,6 +15,7 @@ const StorePacks = props => {
   const [currentStorePack, setCurrentStorePack] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id))
   const [storePacks, setStorePacks] = useState([])
+  const actionsList = useRef('')
   useEffect(() => {
     setStorePacks(() => {
       let storePacks = state.storePacks.filter(p => p.storeId === props.id)
@@ -128,7 +129,7 @@ const StorePacks = props => {
 	}
   const handleActions = storePack => {
     setCurrentStorePack(storePack)
-    f7.actions.open('#store-pack-actions')
+    actionsList.current.open()
   }
   return(
     <Page>
@@ -157,7 +158,7 @@ const StorePacks = props => {
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.name}
                 text={(p.price / 1000).toFixed(3)}
-                footer={p.packInfo.offerEnd ? `${labels.offerUpTo}: ${moment(p.packInfo.offerEnd.toDate()).format('Y/M/D')}` : ''}
+                footer={p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd.toDate()).format('Y/M/D')}` : ''}
                 key={p.id}
                 className={currentStorePack && currentStorePack.id === p.id ? 'selected' : ''}
               >
@@ -175,10 +176,10 @@ const StorePacks = props => {
           <Icon material="add"></Icon>
         </Fab>
       }
-      <Actions id="store-pack-actions">
+      <Actions ref={actionsList}>
         <ActionsButton onClick={() =>props.f7router.navigate(`/pack-details/${currentStorePack.packId}`)}>{labels.details}</ActionsButton>
         {store.id === 's' && currentStorePack.quantity === 0 ? '' : 
-          <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.id}`)}>{labels.editPrice}</ActionsButton>
+          <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.packId}/store/${currentStorePack.storeId}`)}>{labels.editPrice}</ActionsButton>
         }
         {store.id === 's' ? '' :
           <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
@@ -186,7 +187,7 @@ const StorePacks = props => {
         {store.id === 's' ? '' :
           <ActionsButton onClick={() => handlePurchase()}>{labels.purchase}</ActionsButton>
         }
-        {currentStorePack.offerEnd ?
+        {currentStorePack.offerEnd && currentStorePack.price > 0 ?
           <ActionsButton onClick={() => handleHaltOffer()}>{labels.haltOffer}</ActionsButton>
         : ''}
       </Actions>

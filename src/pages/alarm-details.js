@@ -26,7 +26,7 @@ const AlarmDetails = props => {
   const [packs, setPacks] = useState([])
   const [storePacks, setStorePacks] = useState([])
   useEffect(() => {
-    setAlarm(() => userInfo.alarms.find(a => a.id === Number(props.id)))
+    setAlarm(() => userInfo.alarms.find(a => a.id === props.id))
   }, [userInfo, props.id])
   useEffect(() => {
     setPack(() => state.packs.find(p => p.id === alarm.packId))
@@ -201,7 +201,7 @@ const AlarmDetails = props => {
               popupCloseLinkText: labels.close
             }}
           >
-            <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
+            <select name="store" defaultValue={storeId} onChange={e => setStoreId(e.target.value)}>
               <option value=""></option>
               {stores.map(s => 
                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -221,7 +221,7 @@ const AlarmDetails = props => {
               popupCloseLinkText: labels.close
             }}
           >
-            <select name="newPackId" value={newPackId} onChange={e => setNewPackId(e.target.value)}>
+            <select name="newPackId" defaultValue={newPackId} onChange={e => setNewPackId(e.target.value)}>
               <option value=""></option>
               {packs.map(p => 
                 <option key={p.id} value={p.id}>{p.name}</option>

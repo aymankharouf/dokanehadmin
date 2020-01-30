@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import BottomToolbar from './bottom-toolbar'
@@ -28,7 +28,9 @@ const Categories = props => {
                 title={c.name} 
                 after={c.ordering}
                 key={c.id} 
-              />
+              >
+                {c.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
+              </ListItem>
             )
           }
         </List>

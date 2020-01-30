@@ -350,7 +350,13 @@ const labels = {
   noMoreArchive: 'لا يوجد ارشيف اضافي',
   archivedStockTrans: 'ارشيف حركات المستودع',
   archivedProducts: 'ارشيف المنتجات',
-  approveDebitRequests: 'اعتماد الدفع لاحقا'
+  approveDebitRequests: 'اعتماد الدفع لاحقا',
+  newTrademark: 'علامة تجارية جديدة',
+  enterName: 'ادخل الاسم',
+  newCountry: 'دولة جديدة',
+  newTag: 'فئة جديدة',
+  newCategory: 'تصنيف جديد',
+  mainCategory: 'يتبع'
 }
 
 export default labels

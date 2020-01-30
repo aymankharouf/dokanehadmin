@@ -72,7 +72,7 @@ const AddOffer = props => {
         categoryId: product.categoryId,
         country: product.country,
         trademark: product.trademark,
-        tagId: product.tagId,
+        tag: product.tag,
         sales: product.sales,
         rating: product.rating,
         ratingCount: product.ratingCount,
@@ -128,12 +128,7 @@ const AddOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select 
-            name="subPackId" 
-            value={subPackId} 
-            onChange={e => setSubPackId(e.target.value)} 
-            onBlur={() => generateName()}
-          >
+          <select name="subPackId" defaultValue={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -196,7 +191,7 @@ const AddOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
+          <select name="bonusPackId" defaultValue={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

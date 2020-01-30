@@ -10,7 +10,7 @@ const Store = props => {
   const [user, setUser] = useState(null)
   const initState = {
     categories: [], 
-    countries: [], 
+    lookups: [], 
     stores: [], 
     basket, 
     trademarks: [], 
@@ -85,23 +85,14 @@ const Store = props => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
-        const unsubscribeTrademarks = firebase.firestore().collection('trademarks').onSnapshot(docs => {
-          let trademarks = []
+        const unsubscribeLookups = firebase.firestore().collection('lookups').onSnapshot(docs => {
+          let lookups = []
           docs.forEach(doc => {
-            trademarks.push({...doc.data(), id:doc.id})
+            lookups.push({...doc.data(), id:doc.id})
           })
-          dispatch({type: 'SET_TRADEMARKS', trademarks})
+          dispatch({type: 'SET_LOOKUPS', lookups})
         }, err => {
-          unsubscribeTrademarks()
-        })  
-        const unsubscribeCountries = firebase.firestore().collection('countries').onSnapshot(docs => {
-          let countries = []
-          docs.forEach(doc => {
-            countries.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_COUNTRIES', countries})
-        }, err => {
-          unsubscribeCountries()
+          unsubscribeLookups()
         })  
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products = []
@@ -201,15 +192,6 @@ const Store = props => {
           dispatch({type: 'SET_LOGS', logs})
         }, err => {
           unsubscribeLogs()
-        })  
-        const unsubscribeTags = firebase.firestore().collection('tags').onSnapshot(docs => {
-          let tags = []
-          docs.forEach(doc => {
-            tags.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_TAGS', tags})
-        }, err => {
-          unsubscribeTags()
         })  
       }
     })

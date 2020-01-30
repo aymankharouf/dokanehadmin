@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
@@ -15,6 +15,7 @@ const ProductPacks = props => {
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find(p => p.id === props.id) : state.products.find(p => p.id === props.id))
   const [packs, setPacks] = useState([])
   const [activePacks, setActivePacks] = useState([])
+  const actionsList = useRef('')
   useEffect(() => {
     setPacks(() => {
       const packs = props.type === 'a' ? state.archivedPacks.filter(p => p.productId === props.id) : state.packs.filter(p => p.productId === props.id)
@@ -76,10 +77,10 @@ const ProductPacks = props => {
           </ListItem>
         )}
       </List>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.actions.open('#product-actions')}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => actionsList.current.open()}>
         <Icon material="build"></Icon>
       </Fab>
-      <Actions id="product-actions">
+      <Actions ref={actionsList}>
         <ActionsButton onClick={() => props.f7router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>

@@ -81,7 +81,7 @@ const PermitUser = props => {
           }}
           disabled={props.id !== '0'}
         >
-          <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
+          <select name="userId" defaultValue={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
             {users.map(u => 
               <option key={u.id} value={u.id}>{u.name}</option>
@@ -99,7 +99,7 @@ const PermitUser = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
+          <select name="store" defaultValue={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
             {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
@@ -118,7 +118,7 @@ const PermitUser = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="position" value={position} onChange={e => setPosition(e.target.value)}>
+          <select name="position" defaultValue={position} onChange={e => setPosition(e.target.value)}>
             <option value=""></option>
             {orderPositions.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

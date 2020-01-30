@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
@@ -14,6 +14,7 @@ const Adverts = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [adverts, setAdverts] = useState([])
+  const actionsList = useRef('')
   useEffect(() => {
     setAdverts(() => [...state.adverts].sort((a1, a2) => a2.time.seconds - a1.time.seconds))
   }, [state.adverts])
@@ -32,7 +33,7 @@ const Adverts = props => {
   }, [inprocess])
   const handleAction = advert => {
     setCurrentAdvert(advert)
-    f7.actions.open('#advert-actions')
+    actionsList.current.open()
   }
   const handleUpdate = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
@@ -86,7 +87,7 @@ const Adverts = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-advert/">
         <Icon material="add"></Icon>
       </Fab>
-      <Actions id="advert-actions">
+      <Actions ref={actionsList}>
         <ActionsButton onClick={() => props.f7router.navigate(`/advert-details/${currentAdvert.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
         <ActionsButton onClick={() => handleUpdate()}>{currentAdvert.isActive ? labels.stop : labels.activate}</ActionsButton>

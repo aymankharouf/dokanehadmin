@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo, useRef } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -9,50 +9,38 @@ const EditOffer = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
-  const [name, setName] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
-  const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState('')
-  const [subPercent, setSubPercent] = useState('')
-  const [bonusPackId, setBonusPackId] = useState('')
-  const [bonusQuantity, setBonusQuantity] = useState('')
-  const [bonusPercent, setBonusPercent] = useState('')
-  const [closeExpired, setCloseExpired] = useState('')
+  const [name, setName] = useState(pack.name)
+  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
+  const [subPackId, setSubPackId] = useState(pack.subPackId)
+  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
+  const [subPercent, setSubPercent] = useState(pack.subPercent)
+  const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
+  const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
+  const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
+  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
   const [packs, setPacks] = useState([])
-  const [bonusPacks, setBonusPacks] = useState([])
   useEffect(() => {
-    setName(pack.name)
-    setOrderLimit(pack.orderLimit)
-    setSubPackId(pack.subPackId)
-    setSubQuantity(pack.subQuantity)
-    setSubPercent(pack.subPercent)
-    setBonusPackId(pack.bonusPackId)
-    setBonusQuantity(pack.bonusQuantity)
-    setBonusPercent(pack.bonusPercent)
-    setCloseExpired(pack.closeExpired)
-  }, [pack])
-  useEffect(() => {
-    setPacks(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
-    setBonusPacks(() => {
-      let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
-      packs = packs.map(p => {
-        return {
-          id: p.id,
-          name: `${p.productName} ${p.name}`
-        }
-      })
-      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+    setPacks(() => state.packs)
+  }, [state.packs, pack])
+  const bonusPacks = useMemo(() => {
+    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+    packs = packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.productName} ${p.name}`
+      }
     })
-  }, [state.packs, pack, props.id])
+    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  }, [state.packs, props.id]) 
   useEffect(() => {
     if (name !== pack.name
     || orderLimit !== pack.orderLimit
     || subPackId !== pack.subPackId
     || subQuantity !== pack.subQuantity
-    || subPercent !== pack.subPercent
+    || subPercent !== pack.subPercent * 100
     || bonusPackId !== pack.bonusPackId
-    || bonusQuantity !== pack.bonusQuantity
+    || bonusQuantity !== pack.bonusQuantity * 100
     || bonusPercent !== pack.bonusPercent
     || closeExpired !== pack.closeExpired) setHasChanged(true)
     else setHasChanged(false)
@@ -82,7 +70,7 @@ const EditOffer = props => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
+        unitsCount: subQuantity * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         orderLimit: Number(orderLimit),
         subPercent: subPercent / 100,
         bonusPackId,
@@ -93,7 +81,7 @@ const EditOffer = props => {
       setInprocess(true)
       await editPack(newPack)
       setInprocess(false)
-      showMessage(labels.addSuccess)
+      showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
       setInprocess(false)
@@ -125,7 +113,7 @@ const EditOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
+          <select name="subPackId" defaultValue={pack.subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -187,7 +175,7 @@ const EditOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
+          <select name="bonusPackId" defaultValue={pack.bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
             <option value=""></option>
             {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
