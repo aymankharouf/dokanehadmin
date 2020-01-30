@@ -11,24 +11,21 @@ const EditCategory = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
-  const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState('')
-  const [categories, setCategories] = useState([])
-  const [parentId, setParentId] = useState('')
-  const [isActive, setIsActive] = useState(false)
+  const [name, setName] = useState(category.name)
+  const [ordering, setOrdering] = useState(category.ordering)
+  const [parentId, setParentId] = useState(category.parentId)
+  const [isActive, setIsActive] = useState(category.isActive)
   const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    setCategories(() => {
-      let categories = state.categories.filter(c => c.id !== props.id)
-      categories = categories.map(c => {
-        return {
-          id: c.id,
-          name: getCategoryName(c, state.categories)
-        }
-      })
-      return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  const [categories] = useState(() => {
+    let categories = state.categories.filter(c => c.id !== props.id)
+    categories = categories.map(c => {
+      return {
+        id: c.id,
+        name: getCategoryName(c, state.categories)
+      }
     })
-  }, [state.categories, props.id])
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  })
   useEffect(() => {
     if (name !== category.name
     || ordering !== category.ordering
@@ -91,7 +88,7 @@ const EditCategory = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="parentId" defaultValue={category.parentId} onChange={e => setParentId(e.target.value)}>
+          <select name="parentId" value={parentId} onChange={e => setParentId(e.target.value)}>
             <option value=""></option>
             {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>

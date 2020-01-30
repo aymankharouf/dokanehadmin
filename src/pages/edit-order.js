@@ -10,22 +10,12 @@ const EditOrder = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
-  const [withDelivery, setWithDelivery] = useState('')
-  const [urgent, setUrgent] = useState('')
-  const [customer, setCustomer] = useState('')
-  const [customerLocation, setCustomerLocation] = useState('')
+  const [withDelivery, setWithDelivery] = useState(order.withDelivery)
+  const [urgent, setUrgent] = useState(order.urgent)
+  const [customer] = useState(() => state.customers.find(c => c.id === order.userId))
+  const [customerLocation] = useState(() => state.locations.find(l => l.id === customer.locationId))
   const [orderBasket, setOrderBasket] = useState([])
   const [total, setTotal] = useState('')
-  useEffect(() => {
-    setWithDelivery(order.withDelivery)
-    setUrgent(order.urgent)
-  }, [order])
-  useEffect(() => {
-    setCustomer(() => state.customers.find(c => c.id === order.userId))
-  }, [state.customers, order])
-  useEffect(() => {
-    setCustomerLocation(() => state.locations.find(l => l.id === customer.locationId) || '')
-  }, [state.locations, customer])
   useEffect(() => {
     setOrderBasket(() => {
       let orderBasket = state.orderBasket?.filter(p => p.quantity > 0) || []

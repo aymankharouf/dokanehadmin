@@ -7,7 +7,7 @@ import { storeTypes } from '../data/config'
 
 const StoreDetails = props => {
   const { state } = useContext(StoreContext)
-  const [store, setStore] = useState('')
+  const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id))
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === props.id))
   }, [state.stores, props.id])
@@ -18,28 +18,28 @@ const StoreDetails = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          value={store.name || ''}
+          value={store.name}
           type="text" 
           readonly
         />
         <ListInput
           name="mobile"
           label={labels.mobile}
-          value={store.mobile || ''}
+          value={store.mobile}
           type="number"
           readonly
         />
         <ListInput
           name="type"
           label={labels.type}
-          value={storeTypes.find(t => t.id === store.type)?.name || ''}
+          value={storeTypes.find(t => t.id === store.type).name}
           type="text"
           readonly
         />
         <ListInput
           name="discount"
           label={labels.discount}
-          value={(store.discount || 0) * 100}
+          value={store.discount * 100}
           type="number"
           readonly
         />
@@ -48,28 +48,28 @@ const StoreDetails = props => {
           <Toggle 
             name="allowReturn" 
             color="green" 
-            checked={store.allowReturn || false} 
+            checked={store.allowReturn} 
             disabled
           />
         </ListItem>
         <ListInput
           name="location"
           label={labels.location}
-          value={state.locations.find(l => l.id === store.locationId)?.name || ''}
+          value={state.locations.find(l => l.id === store.locationId).name}
           type="text"
           readonly
         />
         <ListInput
           name="openTime"
           label={labels.openTime}
-          value={store.openTime || ''}
+          value={store.openTime}
           type="text"
           readonly
         />
         <ListInput 
           name="address" 
           label={labels.address}
-          value={store.address || ''}
+          value={store.address}
           type="text"
         />
 

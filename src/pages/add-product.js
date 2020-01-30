@@ -15,37 +15,29 @@ const AddProduct = props => {
   const [tag, setTag] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [categories, setCategories] = useState([])
-  const [trademarks, setTrademarks] = useState([])
-  const [countries, setCountries] = useState([])
-  const [tags, setTags] = useState([])
+  const [categories] = useState(() => {
+    let categories = state.categories.filter(c => c.isLeaf)
+    categories = categories.map(c => {
+      return {
+        id: c.id,
+        name: getCategoryName(c, state.categories)
+      }
+    })
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+  })
+  const [trademarks] = useState(() => {
+    const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+    return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
+  })
+  const [countries] = useState(() => {
+    const countries = state.lookups.find(l => l.id === 'c')?.values || []
+    return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
+  })
+  const [tags] = useState(() => {
+    const tags = state.lookups.find(l => l.id === 't')?.values || []
+    return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
+  })
   const actionsList = useRef('')
-  useEffect(() => {
-    setCategories(() => {
-      let categories = state.categories.filter(c => c.isLeaf)
-      categories = categories.map(c => {
-        return {
-          id: c.id,
-          name: getCategoryName(c, state.categories)
-        }
-      })
-      return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-    })
-  }, [state.categories])
-  useEffect(() => {
-    setCountries(() => {
-      const countries = state.lookups.find(l => l.id === 'c')?.values || []
-      return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-    })
-    setTrademarks(() => {
-      const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
-      return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
-    })
-    setTags(() => {
-      const tags = state.lookups.find(l => l.id === 't')?.values || []
-      return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
-    })
-  }, [state.lookups])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -180,7 +172,7 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="categoryId" defaultValue={categoryId} onChange={e => setCategoryId(e.target.value)}>
+          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
             <option value=""></option>
             {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -198,7 +190,7 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="trademark" defaultValue={trademark} onChange={e => setTrademark(e.target.value)}>
+          <select name="trademark" value={trademark} onChange={e => setTrademark(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
               <option key={t} value={t}>{t}</option>
@@ -216,7 +208,7 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="country" defaultValue={country} onChange={e => setCountry(e.target.value)}>
+          <select name="country" value={country} onChange={e => setCountry(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
               <option key={c} value={c}>{c}</option>
@@ -234,7 +226,7 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="tag" defaultValue={tag} onChange={e => setTag(e.target.value)}>
+          <select name="tag" value={tag} onChange={e => setTag(e.target.value)}>
             <option value=""></option>
             {tags.map(t => 
               <option key={t} value={t}>{t}</option>

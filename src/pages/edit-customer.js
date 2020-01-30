@@ -12,35 +12,21 @@ const EditCustomer = props => {
   const [inprocess, setInprocess] = useState(false)
   const [customer] = useState(() => state.customers.find(c => c.id === props.id))
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
-  const [name, setName] = useState('')
-  const [address, setAddress] = useState('')
-  const [locationId, setLocationId] = useState('')
-  const [isOldAge, setIsOldAge] = useState(false)
-  const [mapPosition, setMapPosition] = useState('')
-  const [otherMobile, setOtherMobile] = useState('')
+  const [name, setName] = useState(customer.name)
+  const [address, setAddress] = useState(customer.address)
+  const [locationId, setLocationId] = useState(customer.locationId)
+  const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
+  const [mapPosition, setMapPosition] = useState(customer.mapPosition)
+  const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [isBlocked, setIsBlocked] = useState(false)
-  const [withDelivery, setWithDelivery] = useState(false)
-  const [exceedPrice, setExceedPrice] = useState(false)
-  const [deliveryDiscount, setDeliveryDiscount] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
-  const [deliveryInterval, setDeliveryInterval] = useState('')
+  const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
+  const [withDelivery, setWithDelivery] = useState(customer.withDelivery)
+  const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
+  const [deliveryDiscount, setDeliveryDiscount] = useState((customer.deliveryDiscount / 1000).toFixed(3))
+  const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
+  const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval)
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  useEffect(() => {
-    setName(customer.name)
-    setAddress(customer.address)
-    setLocationId(customer.locationId)
-    setIsOldAge(customer.isOldAge)
-    setMapPosition(customer.mapPosition)
-    setOtherMobile(customer.otherMobile)
-    setIsBlocked(customer.isBlocked)
-    setWithDelivery(customer.withDelivery)
-    setExceedPrice(customer.exceedPrice)
-    setDeliveryDiscount((customer.deliveryDiscount / 1000).toFixed(3))
-    setOrderLimit((customer.orderLimit / 1000).toFixed(3))
-    setDeliveryInterval(customer.deliveryInterval || '')
-  }, [customer])
   useEffect(() => {
     if (name !== customer.name
     || address !== customer.address
@@ -135,7 +121,7 @@ const EditCustomer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="locationId" defaultValue={customer.locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>
@@ -179,7 +165,7 @@ const EditCustomer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="deliveryInterval" defaultValue={customer.deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
+          <select name="deliveryInterval" value={deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
             <option value=""></option>
             {deliveryIntervals.map(i => 
               <option key={i.id} value={i.id}>{i.name}</option>

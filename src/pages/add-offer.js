@@ -18,21 +18,17 @@ const AddOffer = props => {
   const [bonusPercent, setBonusPercent] = useState('')
   const [closeExpired, setCloseExpired] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [packs, setPacks] = useState([])
-  const [bonusPacks, setBonusPacks] = useState([])
-  useEffect(() => {
-    setPacks(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
-    setBonusPacks(() => {
-      let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
-      packs = packs.map(p => {
-        return {
-          id: p.id,
-          name: `${p.setErrorproductName} ${p.name}`
-        }
-      })
-      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
+  const [bonusPacks] = useState(() => {
+    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+    packs = packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.setErrorproductName} ${p.name}`
+      }
     })
-  }, [state.packs, props.id])
+    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  })
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
@@ -128,7 +124,7 @@ const AddOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" defaultValue={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -191,7 +187,7 @@ const AddOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="bonusPackId" defaultValue={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
+          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
@@ -19,11 +19,8 @@ const EditOffer = props => {
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent)
   const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
-  const [packs, setPacks] = useState([])
-  useEffect(() => {
-    setPacks(() => state.packs)
-  }, [state.packs, pack])
-  const bonusPacks = useMemo(() => {
+  const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
+  const [bonusPacks] = useState(() => {
     let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
     packs = packs.map(p => {
       return {
@@ -32,7 +29,7 @@ const EditOffer = props => {
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
-  }, [state.packs, props.id]) 
+  }) 
   useEffect(() => {
     if (name !== pack.name
     || orderLimit !== pack.orderLimit
@@ -113,7 +110,7 @@ const EditOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" defaultValue={pack.subPackId} onChange={e => setSubPackId(e.target.value)}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -175,7 +172,7 @@ const EditOffer = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="bonusPackId" defaultValue={pack.bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
+          <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
             <option value=""></option>
             {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

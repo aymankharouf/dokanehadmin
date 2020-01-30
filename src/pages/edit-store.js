@@ -11,33 +11,19 @@ const EditStore = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [store] = useState(() => state.stores.find(s => s.id === props.id))
-  const [storeOwners, setStoreOwners] = useState([])
-  const [type, setType] = useState('')
-  const [name, setName] = useState('')
-  const [mobile, setMobile] = useState('')
+  const [type, setType] = useState(store.type)
+  const [name, setName] = useState(store.name)
+  const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
-  const [address, setAddress] = useState('')
-  const [discount, setDiscount] = useState('')
-  const [locationId, setLocationId] = useState('')
-  const [mapPosition, setMapPosition] = useState('')
-  const [allowReturn, setAllowReturn] = useState(false)
-  const [openTime, setOpenTime] = useState('')
+  const [address, setAddress] = useState(store.address)
+  const [discount, setDiscount] = useState(store.discount * 100)
+  const [locationId, setLocationId] = useState(store.locationId)
+  const [mapPosition, setMapPosition] = useState(store.mapPosition)
+  const [allowReturn, setAllowReturn] = useState(store.allowReturn)
+  const [openTime, setOpenTime] = useState(store.openTime)
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  useEffect(() => {
-    setStoreOwners(() => state.customers.filter(c => c.storeId === props.id))
-  }, [state.customers, props.id])
-  useEffect(() => {
-    setType(store.type)
-    setName(store.name)
-    setMobile(store.mobile)
-    setAddress(store.address)
-    setDiscount(store.discount * 100)
-    setLocationId(store.locationId)
-    setMapPosition(store.mapPosition)
-    setAllowReturn(store.allowReturn)
-    setOpenTime(store.openTime)
-  }, [store])
+  const [storeOwners] = useState(() => state.customers.filter(c => c.storeId === props.id))
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -140,7 +126,7 @@ const EditStore = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="type" defaultValue={store.type} onChange={e => setType(e.target.value)}>
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {storeTypes.map(t => 
               t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
@@ -177,7 +163,7 @@ const EditStore = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="locationId" defaultValue={store.locationId} onChange={e => setLocationId(e.target.value)}>
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
             <option value=""></option>
             {locations.map(l => 
               <option key={l.id} value={l.id}>{l.name}</option>

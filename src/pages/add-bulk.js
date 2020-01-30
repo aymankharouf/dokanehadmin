@@ -13,10 +13,7 @@ const AddBulk = props => {
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [packs, setPacks] = useState([])
-  useEffect(() => {
-    setPacks(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
-  }, [state.packs, props.id])
+  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -96,7 +93,7 @@ const AddBulk = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" defaultValue={subPackId} onChange={e => setSubPackId(e.target.value)}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

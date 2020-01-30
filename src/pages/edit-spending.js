@@ -11,19 +11,13 @@ const EditSpending = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [spending] = useState(() => state.spendings.find(s => s.id === props.id))
-  const [type, setType] = useState('')
-  const [spendingAmount, setSpendingAmount] = useState('')
+  const [type, setType] = useState(spending.type)
+  const [spendingAmount, setSpendingAmount] = useState((spending.spendingAmount / 1000).toFixed(3))
   const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
-  const [spendingDate, setSpendingDate] = useState('')
+  const [spendingDate, setSpendingDate] = useState(() => spending.spendingDate ? [spending.spendingDate.toDate()] : '')
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState(spending.description)
   const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    setType(spending.type)
-    setSpendingAmount((spending.spendingAmount / 1000).toFixed(3))
-    setSpendingDate(() => spending.spendingDate ? [spending.spendingDate.toDate()] : '')
-    setDescription(spending.description)
-  }, [spending])
   useEffect(() => {
     const validateAmount = value => {
       if (value > 0){
@@ -115,7 +109,7 @@ const EditSpending = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="type" defaultValue={type} onChange={e => setType(e.target.value)}>
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {spendingTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>

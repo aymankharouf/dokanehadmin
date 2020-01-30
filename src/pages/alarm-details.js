@@ -16,41 +16,29 @@ const AlarmDetails = props => {
   const [newPackId, setNewPackId] = useState('')
   const [userInfo] = useState(() => state.users.find(u => u.id === props.userId))
   const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId))
-  const [alarm, setAlarm] = useState('')
-  const [pack, setPack] = useState('')
-  const [storeName, setStoreName] = useState('')
+  const [alarm] = useState(() => userInfo.alarms.find(a => a.id === props.id))
+  const [pack] = useState(() => state.packs.find(p => p.id === alarm.packId))
+  const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name || alarm.storeName)
   const [stores] = useState(() => {
     const stores = state.stores.filter(s => s.id !== 's')
     return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   })
-  const [packs, setPacks] = useState([])
-  const [storePacks, setStorePacks] = useState([])
-  useEffect(() => {
-    setAlarm(() => userInfo.alarms.find(a => a.id === props.id))
-  }, [userInfo, props.id])
-  useEffect(() => {
-    setPack(() => state.packs.find(p => p.id === alarm.packId))
-  }, [state.packs, alarm])
-  useEffect(() => {
-    setStoreName(() => state.stores.find(s => s.id === customerInfo.storeId)?.name || alarm.storeName)
-  }, [customerInfo, state.stores, alarm])
-  useEffect(() => {
-    setPacks(() => {
-      let packs = state.packs.filter(p => p.id !== pack.id)
-      if (alarm.type === '8') {
-        packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
-      } else if (alarmTypes.type === '7') {
-        packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
+  const [packs] = useState(() => {
+    let packs = state.packs.filter(p => p.id !== pack.id)
+    if (alarm.type === '8') {
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+    } else if (alarmTypes.type === '7') {
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
+    }
+    packs = packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.productName} ${p.name}`
       }
-      packs = packs.map(p => {
-        return {
-          id: p.id,
-          name: `${p.productName} ${p.name}`
-        }
-      })
-      return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
     })
-  }, [state.packs, alarm, pack]) 
+    return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
+  })
+  const [storePacks, setStorePacks] = useState([])
   useEffect(() => {
     setStorePacks(() => {
       let storePacks = state.storePacks.filter(p => p.packId === (newPackId || pack.id))
@@ -201,7 +189,7 @@ const AlarmDetails = props => {
               popupCloseLinkText: labels.close
             }}
           >
-            <select name="store" defaultValue={storeId} onChange={e => setStoreId(e.target.value)}>
+            <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
               <option value=""></option>
               {stores.map(s => 
                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -221,7 +209,7 @@ const AlarmDetails = props => {
               popupCloseLinkText: labels.close
             }}
           >
-            <select name="newPackId" defaultValue={newPackId} onChange={e => setNewPackId(e.target.value)}>
+            <select name="newPackId" value={newPackId} onChange={e => setNewPackId(e.target.value)}>
               <option value=""></option>
               {packs.map(p => 
                 <option key={p.id} value={p.id}>{p.name}</option>

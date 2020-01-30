@@ -10,15 +10,10 @@ const EditLocation = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [location] = useState(() => state.locations.find(l => l.id === props.id))
-  const [name, setName] = useState('')
-  const [hasDelivery, setHasDelivery] = useState('')
-  const [deliveryFees, setDeliveryFees] = useState('')
+  const [name, setName] = useState(location.name)
+  const [hasDelivery, setHasDelivery] = useState(location.hasDelivery)
+  const [deliveryFees, setDeliveryFees] = useState((location.deliveryFees / 1000).toFixed(3))
   const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    setName(location.name)
-    setHasDelivery(location.hasDelivery)
-    setDeliveryFees((location.deliveryFees / 1000).toFixed(3))
-  }, [location])
   useEffect(() => {
     if (name !== location.name
     || hasDelivery !== location.hasDelivery

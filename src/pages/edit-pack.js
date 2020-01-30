@@ -10,21 +10,13 @@ const EditPack = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
-  const [name, setName] = useState('')
-  const [unitsCount, setUnitsCount] = useState('')
-  const [bonusUnits, setBonusUnits] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
-  const [isDivided, setIsDivided] = useState('')
-  const [byWeight, setByWeight] = useState('')
+  const [name, setName] = useState(pack.name)
+  const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
+  const [bonusUnits, setBonusUnits] = useState(pack.bonusUnits)
+  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
+  const [isDivided, setIsDivided] = useState(pack.isDivided)
+  const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    setName(pack.name)
-    setUnitsCount(pack.unitsCount)
-    setBonusUnits(pack.bonusUnits)
-    setOrderLimit(pack.orderLimit)
-    setIsDivided(pack.isDivided)
-    setByWeight(pack.byWeight)
-  }, [pack])
   useEffect(() => {
     if (name !== pack.name
     || unitsCount !== pack.unitsCount

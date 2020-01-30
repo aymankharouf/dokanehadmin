@@ -9,21 +9,12 @@ const EditBulk = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
-  const [name, setName] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
-  const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState('')
+  const [name, setName] = useState(pack.name)
+  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
+  const [subPackId, setSubPackId] = useState(pack.subPackId)
+  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
   const [hasChanged, setHasChanged] = useState(false)
-  const [packs, setPacks] = useState([])
-  useEffect(() => {
-    setPacks(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
-  }, [state.packs, pack])
-  useEffect(() => {
-    setName(pack.name)
-    setOrderLimit(pack.orderLimit)
-    setSubPackId(pack.subPackId)
-    setSubQuantity(pack.subQuantity)
-  }, [pack])
+  const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
   useEffect(() => {
     if (name !== pack.name
     || orderLimit !== pack.orderLimit
@@ -95,7 +86,7 @@ const EditBulk = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" defaultValue={pack.subPackId} onChange={e => setSubPackId(e.target.value)}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>

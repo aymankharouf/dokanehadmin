@@ -9,28 +9,29 @@ const EditProduct = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [name, setName] = useState('')
-  const [categoryId, setCategoryId] = useState('')
-  const [trademark, setTrademark] = useState('')
-  const [country, setCountry] = useState('')
-  const [tag, setTag] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [name, setName] = useState(product.name)
+  const [categoryId, setCategoryId] = useState(product.categoryId)
+  const [trademark, setTrademark] = useState(product.trademark)
+  const [country, setCountry] = useState(product.country)
+  const [tag, setTag] = useState(product.tag)
+  const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  const [trademarks, setTrademarks] = useState([])
-  const [countries, setCountries] = useState([])
-  const [tags, setTags] = useState([])
+  const [trademarks] = useState(() => {
+    const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+    return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
+  })
+  const [countries] = useState(() => {
+    const countries = state.lookups.find(l => l.id === 'c')?.values || []
+    return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
+  })
+  const [tags] = useState(() => {
+    const tags = state.lookups.find(l => l.id === 't')?.values || []
+    return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
+  })
   const actionsList = useRef('')
-  useEffect(() => {
-    setName(product.name)
-    setCategoryId(product.categoryId)
-    setTrademark(product.trademark)
-    setCountry(product.country)
-    setTag(product.tag)
-    setImageUrl(product.imageUrl)
-  }, [product])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -54,21 +55,6 @@ const EditProduct = props => {
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
   }, [product, name, country, categoryId, trademark, tag, imageUrl])
-  useEffect(() => {
-    setCountries(() => {
-      const countries = state.lookups.find(l => l.id === 'c')?.values || []
-      return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-    })
-    setTrademarks(() => {
-      const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
-      return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
-    })
-    setTags(() => {
-      const tags = state.lookups.find(l => l.id === 't')?.values || []
-      return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
-    })
-  }, [state.lookups])
-
   useEffect(() => {
     if (error) {
       showError(error)
@@ -185,7 +171,7 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="categoryId" defaultValue={categoryId} onChange={e => setCategoryId(e.target.value)}>
+          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
             <option value=""></option>
             {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -203,7 +189,7 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="trademark" defaultValue={trademark} onChange={e => setTrademark(e.target.value)}>
+          <select name="trademark" value={trademark} onChange={e => setTrademark(e.target.value)}>
             <option value=""></option>
             {trademarks.map(t => 
               <option key={t} value={t}>{t}</option>
@@ -221,7 +207,7 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="country" defaultValue={country} onChange={e => setCountry(e.target.value)}>
+          <select name="country" value={country} onChange={e => setCountry(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
               <option key={c} value={c}>{c}</option>
@@ -239,7 +225,7 @@ const EditProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="tag" defaultValue={tag} onChange={e => setTag(e.target.value)}>
+          <select name="tag" value={tag} onChange={e => setTag(e.target.value)}>
             <option value=""></option>
             {tags.map(t => 
               <option key={t} value={t}>{t}</option>

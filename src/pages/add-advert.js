@@ -74,7 +74,7 @@ const AddAdvert = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="type" defaultValue={type} onChange={e => setType(e.target.value)}>
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
             {advertType.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
