@@ -72,7 +72,7 @@ const EditCustomer = props => {
   const handleSubmit = async () => {
     try{
       const newCustomer = {
-        id: props.id,
+        ...customer,
         name,
         address,
         locationId,

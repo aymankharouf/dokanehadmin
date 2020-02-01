@@ -68,9 +68,8 @@ const EditStore = props => {
       if (discount && discount <= 0) {
         throw new Error('invalidValue')
       }
-      setInprocess(true)
-      await editStore({
-        id: store.id,
+      const newStore = {
+        ...store,
         name,
         type,
         discount: discount / 100,
@@ -80,7 +79,9 @@ const EditStore = props => {
         address,
         mapPosition,
         openTime
-      })
+      }
+      setInprocess(true)
+      await editStore(newStore)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

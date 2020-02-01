@@ -39,13 +39,14 @@ const EditLocation = props => {
 
   const handleEdit = async () => {
     try{
-      setInprocess(true)
-      await editLocation({
-        id: location.id,
+      const newLocation = {
+        ...location,
         name,
         hasDelivery,
         deliveryFees: deliveryFees * 1000
-      })
+      }
+      setInprocess(true)
+      await editLocation(newLocation)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()  

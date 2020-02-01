@@ -158,5 +158,4 @@ return purchase discount
 hints & help
 use cashing
 pwa
-highlight urgent orders 
-edit product as add product
+favorites icons

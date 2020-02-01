@@ -356,7 +356,9 @@ const labels = {
   newCountry: 'دولة جديدة',
   newTag: 'فئة جديدة',
   newCategory: 'تصنيف جديد',
-  mainCategory: 'يتبع'
+  mainCategory: 'التصنيف الاعلى',
+  childrenCount: 'عدد الفروع',
+  attachedProducts: 'المنتجات المرتبطة'
 }
 
 export default labels

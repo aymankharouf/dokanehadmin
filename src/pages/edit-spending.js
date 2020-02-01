@@ -58,14 +58,15 @@ const EditSpending = props => {
   const handleEdit = async () => {
     try{
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
-      setInprocess(true)
-      await editSpending({
-        id: spending.id,
+      const newSpending = {
+        ...spending,
         type,
         spendingAmount: spendingAmount,
         spendingDate: formatedDate,
         description
-      })
+      }
+      setInprocess(true)
+      await editSpending(newSpending)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

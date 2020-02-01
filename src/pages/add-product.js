@@ -15,7 +15,7 @@ const AddProduct = props => {
   const [tag, setTag] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [categories] = useState(() => {
+  const [categories, setCategories] = useState(() => {
     let categories = state.categories.filter(c => c.isLeaf)
     categories = categories.map(c => {
       return {
@@ -25,19 +25,31 @@ const AddProduct = props => {
     })
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
-  const [trademarks] = useState(() => {
+  const [trademarks, setTrademarks] = useState(() => {
     const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
     return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
   })
-  const [countries] = useState(() => {
+  const [countries, setCountries] = useState(() => {
     const countries = state.lookups.find(l => l.id === 'c')?.values || []
     return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
   })
-  const [tags] = useState(() => {
+  const [tags, setTags] = useState(() => {
     const tags = state.lookups.find(l => l.id === 't')?.values || []
     return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
   })
   const actionsList = useRef('')
+  useEffect(() => {
+    setCategories(() => {
+      let categories = state.categories.filter(c => c.isLeaf)
+      categories = categories.map(c => {
+        return {
+          id: c.id,
+          name: getCategoryName(c, state.categories)
+        }
+      })
+      return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+    })
+  }, [state.categories])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -97,6 +109,7 @@ const AddProduct = props => {
         const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
         setInprocess(true)
         await addTrademark(name, trademarks)
+        setTrademarks(trademarks.concat(name))
         setInprocess(false)
         showMessage(labels.addSuccess)
       } catch(err) {
@@ -111,6 +124,7 @@ const AddProduct = props => {
         const countries = state.lookups.find(l => l.id === 'c')?.values || []
         setInprocess(true)
         await addCountry(name, countries)
+        setCountries(countries.concat(name))
         setInprocess(false)
         showMessage(labels.addSuccess)
       } catch(err) {
@@ -125,6 +139,7 @@ const AddProduct = props => {
         const tags = state.lookups.find(l => l.id === 't')?.values || []
         setInprocess(true)
         await addTag(name, tags)
+        setTags(tags.concat(name))
         setInprocess(false)
         showMessage(labels.addSuccess)
       } catch(err) {

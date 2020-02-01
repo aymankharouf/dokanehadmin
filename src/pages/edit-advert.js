@@ -51,14 +51,14 @@ const EditAdvert = props => {
 
   const handleSubmit = async () => {
     try{
-      const advert = {
-        id: props.id,
+      const newAdvert = {
+        ...advert,
         title,
         text,
         imageUrl
       }
       setInprocess(true)
-      await editAdvert(advert, image)
+      await editAdvert(newAdvert, image)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

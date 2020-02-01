@@ -56,14 +56,15 @@ const EditCategory = props => {
 
   const handleEdit = async () => {
     try{
-      setInprocess(true)
-      await editCategory({
-        id: category.id,
+      const newCategory = {
+        ...category,
         parentId,
         name,
         ordering,
         isActive
-      })
+      }
+      setInprocess(true)
+      await editCategory(newCategory, category.parentId, state.categories)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

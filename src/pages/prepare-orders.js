@@ -15,12 +15,11 @@ const PrepareOrders = props => {
 		finishedOrders.forEach(o => {
 			o.basket.forEach(p => {
 				if (p.purchased > 0 && !p.isAllocated) {
-					const found = packsArray.find(pa => pa.packId === p.packId)
-					if (!p.weight && found) {
-						packsArray = packsArray.filter(pa => pa.packId !== found.packId)
-						packsArray.push({
+					const found = packsArray.findIndex(pa => pa.packId === p.packId)
+					if (!p.weight && found > -1) {
+						packsArray.splice(found, 1, {
 							packId: p.packId,
-							quantity: p.purchased + found.quantity
+							quantity: p.purchased + packsArray[found].quantity
 						})
 					} else {
 						packsArray.push({
