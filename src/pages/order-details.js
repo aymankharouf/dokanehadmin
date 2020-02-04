@@ -71,12 +71,6 @@ const OrderDetails = props => {
       } else if (type === 'a' && lastOrder) {
         f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, async () => {
           try{
-            if (order.withDelivery !== lastOrder.withDelivery) {
-              throw new Error('diffInDelivery')
-            }
-            if (order.urgent !== lastOrder.urgent) {
-              throw new Error('diffInUrgent')
-            }
             let found
             for (let p of order.basket) {
               found = lastOrder.basket.find(bp => bp.packId === p.packId)
@@ -162,7 +156,7 @@ const OrderDetails = props => {
         f7.dialog.confirm(labels.confirmeReceiveText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
-            await finishOrder(order, 'f', state.storePacks, state.packs, state.users, false)
+            await finishOrder(order, state.storePacks, state.packs, state.users)
             setInprocess(false)
             showMessage(labels.editSuccess)
             props.f7router.back()  
@@ -173,7 +167,7 @@ const OrderDetails = props => {
         })  
       } else {
         setInprocess(true)
-        await finishOrder(order, 'f', state.storePacks, state.packs, state.users, false)
+        await finishOrder(order, state.storePacks, state.packs, state.users)
         setInprocess(false)
         showMessage(labels.editSuccess)
         props.f7router.back()  

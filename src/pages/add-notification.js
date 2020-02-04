@@ -31,7 +31,7 @@ const AddNotification = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await addNotification(state.users.find(u => u.id === userId), title, message)
+      await addNotification(userId, title, message)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

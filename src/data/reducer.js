@@ -5,6 +5,8 @@ const Reducer = (state, action) => {
       case 'ADD_TO_BASKET':
         pack = {
           packId: action.params.pack.id,
+          productName: action.params.pack.productName,
+          packName: action.params.pack.name,  
           price: action.params.price,
           quantity: action.params.quantity,
           actual: action.params.packStore.price,
@@ -20,8 +22,6 @@ const Reducer = (state, action) => {
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.params.packStore.storeId, packs: [pack]}}
         } else {
-          if (state.basket.storeId !== action.params.packStore.storeId) return state
-          if (state.basket.packs && state.basket.packs.find(p => p.id === action.params.pack.id)) return state
           return {...state, basket: {...state.basket, packs: [...state.basket.packs, pack]}}
         }
       case 'INCREASE_QUANTITY':
@@ -119,6 +119,57 @@ const Reducer = (state, action) => {
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)
         packs.splice(packIndex, 1, pack)  
         return {...state, orderBasket: packs}
+      case 'ADD_TO_RETURN_BASKET':
+        pack = {
+          packId: action.params.pack.packId,
+          cost: action.params.pack.cost,
+          price: action.params.pack.cost,
+          weight: action.params.pack.weight,
+          purchasedQuantity: action.params.pack.quantity,
+          remainQuantity: action.params.pack.quantity - (action.params.pack.returnedQuantity || 0),
+          returnedQuantity: action.params.pack.quantity - (action.params.pack.returnedQuantity || 0),
+          purchase: action.params.purchase
+        }
+        if (!state.returnBasket?.storeId) {
+          return {...state, returnBasket: {storeId: action.params.purchase.storeId, packs: [pack]}}
+        } else {
+          return {...state, returnBasket: {...state.returnBasket, packs: [...state.returnBasket.packs, pack]}}
+        }
+      case 'INCREASE_RETURN_QUANTITY':
+        pack = {
+          ...action.pack,
+          returnedQuantity: action.pack.returnedQuantity + 1
+        }
+        packs = state.returnBasket.packs.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        packs.splice(packIndex, 1, pack)
+        return {...state, returnBasket: {...state.returnBasket, packs}}
+      case 'DECREASE_RETURN_QUANTITY':
+        if (action.pack.packInfo.isDivided) {
+          nextQuantity = 0
+        } else {
+          nextQuantity = action.pack.returnedQuantity - 1
+        }
+        packs = state.returnBasket.packs.slice()
+        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        if (nextQuantity === 0) {
+          packs.splice(packIndex, 1)
+          if (packs.length === 0){
+            return {...state, returnBasket: ''}
+          }
+        } else {
+          pack = {
+            ...action.pack,
+            returnedQuantity: nextQuantity
+          }
+          packs.splice(packIndex, 1, pack)
+        }
+        return {...state, returnBasket: {...state.returnBasket, packs}}
+      case 'CLEAR_RETURN_BASKET':
+        return {
+          ...state,
+          returnBasket: ''
+        }  
       case 'SET_LOOKUPS':
         return {
           ...state,
@@ -183,11 +234,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           monthlyTrans: action.monthlyTrans
-        }
-      case 'SET_LOCATIONS':
-        return {
-          ...state,
-          locations: action.locations
         }
       case 'SET_STORE_PACKS':
         return {

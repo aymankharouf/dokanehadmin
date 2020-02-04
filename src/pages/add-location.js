@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { addLocation, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, Toggle, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 
@@ -9,11 +9,7 @@ const AddLocation = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
-  const [hasDelivery, setHasDelivery] = useState(false)
-  const [deliveryFees, setDeliveryFees] = useState('')
-  useEffect(() => {
-    if (!hasDelivery) setDeliveryFees('')
-  }, [hasDelivery])
+  const [fees, setFees] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -32,9 +28,9 @@ const AddLocation = props => {
     try{
       setInprocess(true)
       await addLocation({
+        id: Math.random().toString(),
         name,
-        hasDelivery,
-        deliveryFees: deliveryFees * 1000
+        fees: fees * 1000
       })
       setInprocess(false)
       showMessage(labels.addSuccess)
@@ -58,29 +54,18 @@ const AddLocation = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListItem>
-          <span>{labels.hasDelivery}</span>
-          <Toggle 
-            name="hasDelivery" 
-            color="green" 
-            checked={hasDelivery} 
-            onToggleChange={() => setHasDelivery(!hasDelivery)}
-          />
-        </ListItem>
-        {hasDelivery ?
-          <ListInput 
-            name="deliveryFees" 
-            label={labels.deliveryFees}
-            floatingLabel 
-            clearButton
-            type="number" 
-            value={deliveryFees} 
-            onChange={e => setDeliveryFees(e.target.value)}
-            onInputClear={() => setDeliveryFees('')}
-          />
-          : ''}
+        <ListInput 
+          name="deliveryFees" 
+          label={labels.deliveryFees}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={fees} 
+          onChange={e => setFees(e.target.value)}
+          onInputClear={() => setFees('')}
+        />
       </List>
-      {!name || (hasDelivery && !deliveryFees) ? '' :
+      {!name || !fees ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

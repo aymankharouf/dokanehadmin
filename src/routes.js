@@ -76,9 +76,6 @@ import SellStore from './pages/sell-store'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
-import Tags from './pages/tags'
-import AddTag from './pages/add-tag'
-import EditTag from './pages/edit-tag'
 import RelatedProducts from './pages/related-products'
 import AddBulk from './pages/add-bulk'
 import EditBulk from './pages/edit-bulk'
@@ -104,6 +101,7 @@ import PermissionList from './pages/permission-list'
 import ArchivedStockTrans from './pages/archived-stock-trans'
 import ArchivedProducts from './pages/archived-products'
 import DebitRequests from './pages/debit-requests'
+import ReturnBasket from './pages/return-basket'
 
 export default [
   {
@@ -438,18 +436,6 @@ export default [
     component: SellStore
   },
   {
-    path: '/tags/',
-    component: Tags
-  },
-  {
-    path: '/add-tag/',
-    component: AddTag
-  },
-  {
-    path: '/edit-tag/:name',
-    component: EditTag
-  },
-  {
     path: '/related-products/:id',
     component: RelatedProducts
   },
@@ -544,6 +530,10 @@ export default [
   {
     path: '/debit-requests/',
     component: DebitRequests
+  },
+  {
+    path: '/return-basket/',
+    component: ReturnBasket
   },
   {
     path: '(.*)',

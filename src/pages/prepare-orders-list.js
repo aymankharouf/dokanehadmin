@@ -41,7 +41,7 @@ const PrepareOrdersList = props => {
   const handleAllocate = async order => {
     try{
       setInprocess(true)
-      await allocateOrderPack(order, pack, state.users, state.stores)
+      await allocateOrderPack(order, pack, state.stores)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

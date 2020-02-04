@@ -52,13 +52,12 @@ export const storeTypes = [
 
 export const stockTransTypes = [
   {id: 'p', name: 'شراء'},
-  {id: 'r', name: 'بيع تجزئة'},
+  {id: 'o', name: 'بيع تجزئة'},
   {id: 'i', name: 'استيداع'},
   {id: 'd', name: 'اتلاف'},
   {id: 'g', name: 'تبرع'},
   {id: 'r', name: 'ارجاع'},
   {id: 's', name: 'بيع'},
-  {id: 'w', name: 'سحب'}
 ]
 
 export const spendingTypes = [
@@ -102,15 +101,9 @@ export const deliveryIntervals = [
 ]
 
 export const callTypes = [
-  {id: 'p', name: 'اتصال هاتفي'},
-  {id: 's', name: 'رسالة نصية'},
-  {id: 'w', name: 'واتساب'}
-]
-
-export const callResults = [
-  {id: 'r', name: 'تم التواصل'},
-  {id: 'n', name: 'لا استجابة'},
-  {id: 'p', name: 'تم تأجيل الاستلام'}
+  {id: 'p', name: 'الاتصال هاتفيا'},
+  {id: 's', name: 'ارسال رسالة نصية'},
+  {id: 'w', name: 'ارسال رسالة واتساب'}
 ]
 
 export const orderRequestTypes = [
@@ -128,4 +121,11 @@ export const permissionSections = [
   {id: 's', name: 'اصحاب المحلات'},
   {id: 'n', name: 'مستخدمين جدد'},
   {id: 'd', name: 'موصلي الطلبات'}
+]
+
+export const purchaseTypes = [
+  {id: 'p', name: 'شراء'},
+  {id: 'c', name: 'الغاء شراء'},
+  {id: 'r', name: 'ارجاع'},
+  {id: 's', name: 'بيع'}
 ]

@@ -27,9 +27,8 @@ const EditCountry = props => {
 
   const handleEdit = async () => {
     try{
-      const countries = state.lookups.find(l => l.id === 'c')?.values
       setInprocess(true)
-      await editCountry(name, props.name, countries, state.products, state.packs)
+      await editCountry(name, props.name, state.products, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

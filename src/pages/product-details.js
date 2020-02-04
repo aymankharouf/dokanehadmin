@@ -38,13 +38,6 @@ const ProductDetails = props => {
           value={product.country}
           readonly
         />
-        <ListInput 
-          name="tag" 
-          label={labels.tag}
-          type="text" 
-          value={product.tag}
-          readonly
-        />
         <img src={product.imageUrl} className="img-card" alt={product.name} />
       </List>
       <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-product/${props.id}`}>

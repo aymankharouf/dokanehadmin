@@ -41,10 +41,6 @@ const CustomerDetails = props => {
           readonly
         />
         <ListItem>
-          <span>{labels.isOldAge}</span>
-          <Toggle color="blue" checked={customer.isOldAge} disabled />
-        </ListItem>
-        <ListItem>
           <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={customer.isBlocked} disabled />
         </ListItem>
@@ -69,7 +65,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="locationName" 
           label={labels.location}
-          value={state.locations.find(l => l.id === customer.locationId).name}
+          value={state.lookups.find(l => l.id === 'l').values.find(l => l.id === customer.locationId).name}
           type="text"
           readonly
         />
@@ -82,8 +78,8 @@ const CustomerDetails = props => {
         />
         <ListInput 
           name="deliveryFees"
-          label={labels.deliveryDiscount}
-          value={(customer.deliveryDiscount / 1000).toFixed(3)}
+          label={labels.deliveryFees}
+          value={(customer.deliveryFees / 1000).toFixed(3)}
           type="number"
           readonly
         />

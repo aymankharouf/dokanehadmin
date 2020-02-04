@@ -11,9 +11,7 @@ const EditOrder = props => {
   const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
-  const [urgent, setUrgent] = useState(order.urgent)
   const [customer] = useState(() => state.customers.find(c => c.id === order.userId))
-  const [customerLocation] = useState(() => state.locations.find(l => l.id === customer.locationId))
   const [orderBasket, setOrderBasket] = useState([])
   const [total, setTotal] = useState('')
   useEffect(() => {
@@ -70,10 +68,9 @@ const EditOrder = props => {
       const newOrder = {
         ...order,
         withDelivery,
-        urgent
       }
       setInprocess(true)
-      await editOrder(newOrder, state.orderBasket, state.storePacks, state.packs, state.locations, state.customers)
+      await editOrder(newOrder, state.orderBasket, state.storePacks, state.packs, state.customers)
       setInprocess(false)
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -116,16 +113,7 @@ const EditOrder = props => {
               color="green" 
               checked={withDelivery} 
               onToggleChange={() => setWithDelivery(!withDelivery)}
-              disabled={customerLocation ? !customerLocation.hasDelivery : false}
-            />
-          </ListItem>
-          <ListItem>
-            <span>{labels.urgent}</span>
-            <Toggle 
-              name="urgent" 
-              color="green" 
-              checked={urgent} 
-              onToggleChange={() => setUrgent(!urgent)}
+              disabled={customer.locationFees === 0}
             />
           </ListItem>
         </List>

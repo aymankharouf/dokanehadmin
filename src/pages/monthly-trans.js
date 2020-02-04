@@ -31,7 +31,6 @@ const MonthlyTrans = props => {
   const [stockTrans, setStockTrans] = useState([])
   const [donations, setDonations] = useState('')
   const [damages, setDamages] = useState('')
-  const [withdraws, setWithdraws] = useState('')
   const [cashing, setCashing] = useState('')
   const [withdrawals, setWithdrawals] = useState('')
   const [expenses, setExpenses] = useState('')
@@ -79,7 +78,6 @@ const MonthlyTrans = props => {
   useEffect(() => {
     setDonations(() => monthlyTrans?.donations ?? stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0))
     setDamages(() => monthlyTrans?.damages ?? stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0))
-    setWithdraws(() => monthlyTrans?.withdraws ?? stockTrans.reduce((sum, t) => sum + (t.type === 'w' ? t.total : 0), 0))
     setCashing(() => monthlyTrans?.cashing ?? stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].cost * t.basket[0].quantity): 0), 0))
   }, [stockTrans, monthlyTrans])
   useEffect(() => {
@@ -134,7 +132,6 @@ const MonthlyTrans = props => {
         expenses,
         donations,
         damages,
-        withdraws,
         deliveryDiscounts
       }
       setInprocess(true)
@@ -231,11 +228,6 @@ const MonthlyTrans = props => {
             link="#"
             title={labels.damages}
             after={(damages / 1000).toFixed(3)}
-          />
-          <ListItem
-            link="#"
-            title={labels.withdraws}
-            after={(withdraws / 1000).toFixed(3)}
           />
           <ListItem
             link="#"

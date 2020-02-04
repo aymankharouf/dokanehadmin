@@ -17,12 +17,10 @@ const EditStore = props => {
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
   const [discount, setDiscount] = useState(store.discount * 100)
-  const [locationId, setLocationId] = useState(store.locationId)
   const [mapPosition, setMapPosition] = useState(store.mapPosition)
   const [allowReturn, setAllowReturn] = useState(store.allowReturn)
   const [openTime, setOpenTime] = useState(store.openTime)
   const [hasChanged, setHasChanged] = useState(false)
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const [storeOwners] = useState(() => state.customers.filter(c => c.storeId === props.id))
   useEffect(() => {
     const patterns = {
@@ -43,12 +41,11 @@ const EditStore = props => {
     || mobile !== store.mobile
     || discount !== store.discount * 100
     || address !== store.address
-    || locationId !== store.locationId
     || mapPosition !== store.mapPosition
     || allowReturn !== store.allowReturn
     || openTime !== store.openTime) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, discount, address, locationId, mapPosition, allowReturn, openTime])
+  }, [store, name, mobile, discount, address, mapPosition, allowReturn, openTime])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -75,7 +72,6 @@ const EditStore = props => {
         discount: discount / 100,
         allowReturn,
         mobile,
-        locationId,
         address,
         mapPosition,
         openTime
@@ -153,24 +149,6 @@ const EditStore = props => {
             onToggleChange={() => setAllowReturn(!allowReturn)}
           />
         </ListItem>
-        <ListItem
-          title={labels.location}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
-            <option value=""></option>
-            {locations.map(l => 
-              <option key={l.id} value={l.id}>{l.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListInput
           name="openTime"
           label={labels.openTime}
@@ -207,7 +185,7 @@ const EditStore = props => {
           after={storeOwners.length}
         />
       </List>
-      {!name || !type || !locationId || mobileErrorMessage || !hasChanged ? '' :
+      {!name || !type || mobileErrorMessage || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -69,7 +69,7 @@ const AlarmDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.storePacks, state.packs, state.users)
+      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.storePacks, state.packs)
       setInprocess(false)
       showMessage(labels.approveSuccess)
 			props.f7router.back()

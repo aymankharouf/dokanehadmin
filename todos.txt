@@ -23,8 +23,6 @@
 *lazy loading
 *first time discount
 *friends discount
-*urgent flag in order (urgent fixed fees percent)
-*urgent delivery fees per location
 *offers first (ordering products)
 *ordering products by type (product)
 *invitations
@@ -141,7 +139,6 @@
 *create admin users & security for delivery person
 *store opening times
 *manage endoffer when approve alarm
-*activetime and time & urgent flag
 *add image product & pack names to basket
 *add all for every category
 *delete unimportant data
@@ -149,13 +146,11 @@
 *duplicate password request by local storage
 *add note for change price in basket
 *prevent purchase pack return if any affacted order has been delivered
-*change request for only delivery type or urgent
+*change request for only delivery type
 *handle realtime & useref
 *read archive by period
 *add stock trans archive, products & packs
-*debit
+*hints & help
 return purchase discount
-hints & help
-use cashing
+debit
 pwa
-favorites icons

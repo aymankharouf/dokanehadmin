@@ -27,9 +27,8 @@ const EditTrademark = props => {
 
   const handleEdit = async () => {
     try{
-      const trademarks = state.lookups.find(l => l.id === 'm')?.values
       setInprocess(true)
-      await editTrademark(name, props.name, trademarks, state.products, state.packs)
+      await editTrademark(name, props.name, state.products, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -47,8 +46,10 @@ const EditTrademark = props => {
           label={labels.name}
           value={name}
           floatingLabel 
+          clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
       {!name || (name === props.name) ? '' :

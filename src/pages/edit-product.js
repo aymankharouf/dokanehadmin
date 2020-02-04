@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, FabButtons, FabButton, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { editProduct, showMessage, showError, getMessage, addTrademark, addCountry, addTag, addCategory } from '../data/actions'
+import { editProduct, showMessage, showError, getMessage, addTrademark, addCountry, addCategory } from '../data/actions'
 import labels from '../data/labels'
 
 const EditProduct = props => {
@@ -13,23 +13,18 @@ const EditProduct = props => {
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademark, setTrademark] = useState(product.trademark)
   const [country, setCountry] = useState(product.country)
-  const [tag, setTag] = useState(product.tag)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState('')
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  const [trademarks] = useState(() => {
-    const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+  const [trademarks, setTrademarks] = useState(() => {
+    const trademarks = state.lookups.find(l => l.id === 't')?.values || []
     return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
   })
-  const [countries] = useState(() => {
+  const [countries, setCountries] = useState(() => {
     const countries = state.lookups.find(l => l.id === 'c')?.values || []
     return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-  })
-  const [tags] = useState(() => {
-    const tags = state.lookups.find(l => l.id === 't')?.values || []
-    return tags.sort((t1, t2) => t1 > t2 ? 1 : -1)
   })
   const actionsList = useRef('')
   const handleFileChange = e => {
@@ -51,10 +46,9 @@ const EditProduct = props => {
     || country !== product.country
     || categoryId !== product.categoryId
     || trademark !== product.trademark
-    || tag !== product.tag
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, country, categoryId, trademark, tag, imageUrl])
+  }, [product, name, country, categoryId, trademark, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -77,7 +71,6 @@ const EditProduct = props => {
         name,
         trademark,
         country,
-        tag,
         imageUrl
       }
       setInprocess(true)
@@ -93,9 +86,13 @@ const EditProduct = props => {
   const handleAddTrademark = () => {
     f7.dialog.prompt(labels.enterName, labels.newTrademark, async name => {
       try{
-        const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+        if (!name) {
+          throw new Error('invalidValue')
+        }
+        const trademarks = state.lookups.find(l => l.id === 't')?.values || []
         setInprocess(true)
-        await addTrademark(name, trademarks)
+        await addTrademark(name)
+        setTrademarks(trademarks.concat(name))
         setInprocess(false)
         showMessage(labels.addSuccess)
       } catch(err) {
@@ -107,23 +104,13 @@ const EditProduct = props => {
   const handleAddCountry = () => {
     f7.dialog.prompt(labels.enterName, labels.newCountry, async name => {
       try{
+        if (!name) {
+          throw new Error('invalidValue')
+        }
         const countries = state.lookups.find(l => l.id === 'c')?.values || []
         setInprocess(true)
-        await addCountry(name, countries)
-        setInprocess(false)
-        showMessage(labels.addSuccess)
-      } catch(err) {
-        setInprocess(false)
-			  setError(getMessage(props, err))
-      }
-    })    
-  }
-  const handleAddTag = () => {
-    f7.dialog.prompt(labels.enterName, labels.newTag, async name => {
-      try{
-        const tags = state.lookups.find(l => l.id === 't')?.values || []
-        setInprocess(true)
-        await addTag(name, tags)
+        await addCountry(name)
+        setCountries(countries.concat(name))
         setInprocess(false)
         showMessage(labels.addSuccess)
       } catch(err) {
@@ -135,6 +122,9 @@ const EditProduct = props => {
   const handleAddCategory = () => {
     f7.dialog.prompt(labels.enterName, labels.newCategory, async name => {
       try{
+        if (!name) {
+          throw new Error('invalidValue')
+        }
         setInprocess(true)
         await addCategory('0', name, 0)
         setInprocess(false)
@@ -214,24 +204,6 @@ const EditProduct = props => {
             )}
           </select>
         </ListItem>
-        <ListItem
-          title={labels.tag}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="tag" value={tag} onChange={e => setTag(e.target.value)}>
-            <option value=""></option>
-            {tags.map(t => 
-              <option key={t} value={t}>{t}</option>
-            )}
-          </select>
-        </ListItem>
         <ListInput 
           name="image" 
           label="Image" 
@@ -261,7 +233,6 @@ const EditProduct = props => {
         <ActionsButton onClick={() => handleAddCategory()}>{labels.newCategory}</ActionsButton>
         <ActionsButton onClick={() => handleAddTrademark()}>{labels.newTrademark}</ActionsButton>
         <ActionsButton onClick={() => handleAddCountry()}>{labels.newCountry}</ActionsButton>
-        <ActionsButton onClick={() => handleAddTag()}>{labels.newTag}</ActionsButton>
       </Actions>
 
     </Page>

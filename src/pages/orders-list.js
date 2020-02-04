@@ -60,7 +60,7 @@ const OrdersList = props => {
                 footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 key={o.id}
               >
-                {o.withDelivery || o.urgent ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''} {o.withDelivery && o.urgent ? '/' : ''} {o.urgent ? labels.urgent : ''}</div> : ''}
+                {o.withDelivery ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''}</div> : ''}
               </ListItem>
             )
           }

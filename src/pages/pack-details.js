@@ -11,7 +11,7 @@ const PackDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [pack, setPack] = useState(() => state.packs.find(p => p.id === props.id))
   const [packStores, setPackStores] = useState([])
   useEffect(() => {
     setPackStores(() => {
@@ -91,6 +91,9 @@ const PackDetails = props => {
       })
     })
   }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
+  useEffect(() => {
+    setPack(() => state.packs.find(p => p.id === props.id))
+  }, [state.packs, props.id])
   useEffect(() => {
     if (error) {
       showError(error)

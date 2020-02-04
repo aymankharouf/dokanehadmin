@@ -10,7 +10,7 @@ const Trademarks = props => {
   const [trademarks, setTrademarks] = useState([])
   useEffect(() => {
     setTrademarks(() => {
-      const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
+      const trademarks = state.lookups.find(l => l.id === 't')?.values || []
       return trademarks.sort((t1, t2) => t1 > t2 ? 1 : -1)
     })
   }, [state.lookups])

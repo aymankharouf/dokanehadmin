@@ -1,13 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
-import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
 const AddStore = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [type, setType] = useState('')
@@ -16,11 +14,9 @@ const AddStore = props => {
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
   const [discount, setDiscount] = useState('')
-  const [locationId, setLocationId] = useState('')
   const [mapPosition, setMapPosition] = useState('')
   const [allowReturn, setAllowReturn] = useState(false)
   const [openTime, setOpenTime] = useState('')
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
 
   useEffect(() => {
     const patterns = {
@@ -61,7 +57,6 @@ const AddStore = props => {
         type,
         discount : discount / 100,
         mobile,
-        locationId,
         mapPosition,
         allowReturn,
         openTime,
@@ -139,24 +134,6 @@ const AddStore = props => {
             onToggleChange={() => setAllowReturn(!allowReturn)}
           />
         </ListItem>
-        <ListItem
-          title={labels.location}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
-            <option value=""></option>
-            {locations.map(l => 
-              <option key={l.id} value={l.id}>{l.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListInput
           name="openTime"
           label={labels.openTime}
@@ -188,7 +165,7 @@ const AddStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || !locationId || mobileErrorMessage ? '' :
+      {!name || !type || mobileErrorMessage ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

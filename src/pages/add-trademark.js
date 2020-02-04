@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { StoreContext } from '../data/store'
+import React, { useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -7,7 +6,6 @@ import { addTrademark, showMessage, showError, getMessage } from '../data/action
 
 
 const AddTrademark = props => {
-  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
@@ -27,9 +25,8 @@ const AddTrademark = props => {
 
   const handleSubmit = async () => {
     try{
-      const trademarks = state.lookups.find(l => l.id === 'm')?.values || []
       setInprocess(true)
-      await addTrademark(name, trademarks)
+      await addTrademark(name)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

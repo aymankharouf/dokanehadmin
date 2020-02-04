@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { callTypes, callResults } from '../data/config'
+import { callTypes } from '../data/config'
 
 
 const CustomerCalls = props => {
@@ -17,11 +17,9 @@ const CustomerCalls = props => {
       let calls = orderInfo.calls || []
       calls = calls.map(c => {
         const callTypeInfo = callTypes.find(t => t.id === c.callType)
-        const callResultInfo = callResults.find(r => r.id === c.callResult)
         return {
           ...c,
           callTypeInfo,
-          callResultInfo
         }
       })
       return calls.sort((c1, c2) => c2.time.seconds - c1.time.seconds)
@@ -38,7 +36,7 @@ const CustomerCalls = props => {
           : calls.map(c => 
               <ListItem
                 title={c.callTypeInfo.name}
-                subtitle={c.callResultInfo.name}
+                subtitle={c.noAnswer ? labels.noAnswer : c.callResult}
                 text={moment(c.time.toDate()).fromNow()}
                 key={i++}
               />

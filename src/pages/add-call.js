@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
-import { callTypes, callResults } from '../data/config'
+import { callTypes } from '../data/config'
 import { addCall, showMessage, showError, getMessage } from '../data/actions'
 
 const AddCall = props => {
@@ -12,6 +12,7 @@ const AddCall = props => {
   const [inprocess, setInprocess] = useState(false)
   const [callType, setCallType] = useState('')
   const [callResult, setCallResult] = useState('')
+  const [noAnswer, setNoAnswer] = useState(true)
   const [orderInfo] = useState(() => state.orders.find(o => o.id === props.id))
   const [customerInfo, setCustomerInfo] = useState('')
   useEffect(() => {
@@ -33,7 +34,7 @@ const AddCall = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await addCall(orderInfo, callType, callResult)
+      await addCall(orderInfo, callType, noAnswer, callResult)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
@@ -78,26 +79,29 @@ const AddCall = props => {
             )}
           </select>
         </ListItem>
-        <ListItem
-          title={labels.callResult}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="callResult" value={callResult} onChange={e => setCallResult(e.target.value)}>
-            <option value=""></option>
-            {callResults.map(r => 
-              <option key={r.id} value={r.id}>{r.name}</option>
-            )}
-          </select>
+        <ListItem>
+          <span>{labels.noAnswer}</span>
+          <Toggle 
+            name="noAnswer" 
+            color="green" 
+            checked={noAnswer} 
+            onToggleChange={() => setNoAnswer(!noAnswer)}
+          />
         </ListItem>
+        {noAnswer ? '' : 
+          <ListInput 
+            name="callResult" 
+            label={labels.callResult}
+            floatingLabel 
+            clearButton
+            type="text" 
+            value={callResult} 
+            onChange={e => setCallResult(e.target.value)}
+            onInputClear={() => setCallResult('')}
+          />
+        }
       </List>
-      {!callType || !callResult ? '' :
+      {!callType || (!noAnswer && !callResult) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

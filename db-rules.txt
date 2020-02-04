@@ -52,10 +52,6 @@ service cloud.firestore {
     match /monthly-trans/{transId} {
     	allow read, write : if request.auth.token.name == 'a';
     }
-    match /locations/{locationId} {
-    	allow read: if request.auth.uid != null;
-    	allow write: if request.auth.token.name == 'a';
-    }
     match /store-packs/{storePackId} {
     	allow read: if request.auth.uid != null;
       allow write: if request.auth.token.name == 'a';

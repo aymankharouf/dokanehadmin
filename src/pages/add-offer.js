@@ -68,7 +68,6 @@ const AddOffer = props => {
         categoryId: product.categoryId,
         country: product.country,
         trademark: product.trademark,
-        tag: product.tag,
         sales: product.sales,
         rating: product.rating,
         ratingCount: product.ratingCount,

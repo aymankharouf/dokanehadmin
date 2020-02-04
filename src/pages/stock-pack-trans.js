@@ -50,17 +50,14 @@ const StockPackTrans = props => {
     }
   }, [inprocess])
 
-  const handleAddTrans = (type, storeId, cost, price) => {
+  const handleAddTrans = type => {
     f7.dialog.prompt(labels.enterQuantity, labels.quantity, async quantity => {
       try{
-        if (storeId && !state.stores.find(s => s.id === storeId).allowReturn) {
-          throw new Error('storeNotReturn')
-        }
         if (Number(quantity) === 0 || Number(quantity) > stockPackInfo.quantity) {
           throw new Error('invalidValue')
         }
         setInprocess(true)
-        await addStockTrans(type, pack.id, Number(quantity), cost || stockPackInfo.cost, price || stockPackInfo.price, state.storePacks, state.packs, storeId, state.stores)
+        await addStockTrans(type, pack.id, Number(quantity), stockPackInfo.cost, stockPackInfo.price, state.storePacks, state.packs, state.stores)
         setInprocess(false)
         showMessage(labels.addSuccess)
         props.f7router.back()
@@ -69,6 +66,13 @@ const StockPackTrans = props => {
         setError(getMessage(props, err))
       }      
     })
+  }
+  const handleReturn = async (storeId, cost, price) => {
+    try{
+
+    } catch(err) {
+      setError(getMessage(props, err))
+    }      
   }
   return(
     <Page>
@@ -86,7 +90,7 @@ const StockPackTrans = props => {
                 key={t.id}
               >
                 {t.storeInfo?.allowReturn ?
-                  <Button text={labels.return} slot="after" onClick={() => handleAddTrans('r', t.storeId, t.cost, t.price)} />
+                  <Button text={labels.return} slot="after" onClick={() => handleReturn(t.storeId, t.cost, t.price)} />
                 : ''}
               </ListItem>
             )
@@ -100,7 +104,6 @@ const StockPackTrans = props => {
         <Actions ref={actionsList}>
           <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>
           <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
-          <ActionsButton onClick={() => handleAddTrans('w')}>{labels.withdraw}</ActionsButton>
           <ActionsButton onClick={() => props.f7router.navigate(`/sell-store/${props.id}`)}>{labels.sell}</ActionsButton>
         </Actions>
       }

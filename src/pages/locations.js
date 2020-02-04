@@ -9,8 +9,11 @@ const Locations = props => {
   const { state } = useContext(StoreContext)
   const [locations, setLocations] = useState([])
   useEffect(() => {
-    setLocations(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  }, [state.locations])
+    setLocations(() => {
+      const locations = state.lookups.find(l => l.id === 'l')?.values || []
+      return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
+    })
+  }, [state.lookups])
   return (
     <Page>
       <Navbar title={labels.locations} backLink={labels.back} />
@@ -22,7 +25,7 @@ const Locations = props => {
               <ListItem
                 link={`/edit-location/${l.id}`}
                 title={l.name}
-                after={(l.deliveryFees / 1000).toFixed(3)}
+                after={(l.fees / 1000).toFixed(3)}
                 key={l.id}
               />
             )

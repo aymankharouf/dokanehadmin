@@ -131,11 +131,11 @@ const RequestedPackDetails = props => {
       }
       const packInfo = state.packs.find(p => p.id === packStore.packId)
       if (packInfo.byWeight){
-        if (state.basket.packs && state.basket.packs.find(p => p.packId === packInfo.id && p.orderId === props.orderId)) {
+        if (state.basket.packs?.find(p => p.packId === packInfo.id && p.orderId === props.orderId)) {
           throw new Error('alreadyInBasket')
         }
       } else {
-        if (state.basket.packs && state.basket.packs.find(p => p.packId === packInfo.id)) {
+        if (state.basket.packs?.find(p => p.packId === packInfo.id)) {
           throw new Error('alreadyInBasket')
         }
       }

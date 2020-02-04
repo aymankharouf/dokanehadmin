@@ -42,7 +42,7 @@ const InvitationDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveInvitation(userInfo.current, props.mobile, mobileCheck, state.users)
+      await approveInvitation(userInfo.current, props.mobile, mobileCheck)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()

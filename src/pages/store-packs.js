@@ -92,9 +92,6 @@ const StorePacks = props => {
 			if (state.basket.storeId && state.basket.storeId !== currentStorePack.storeId){
 				throw new Error('twoDiffStores')
       }
-      if (state.basket.packs && state.basket.packs.find(p => p.packId === currentStorePack.packId)) {
-        throw new Error('duplicatePacKInBasket')
-      }
       const packInfo = state.packs.find(p => p.id === currentStorePack.packId)
       let params
       if (packInfo.byWeight) {
@@ -112,6 +109,9 @@ const StorePacks = props => {
           props.f7router.back()
         })
       } else {
+        if (state.basket.packs?.find(p => p.packId === currentStorePack.packId)) {
+          throw new Error('alreadyInBasket')
+        }  
         params = {
           pack: packInfo, 
           packStore: currentStorePack,

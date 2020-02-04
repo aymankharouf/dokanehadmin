@@ -53,13 +53,6 @@ const StoreDetails = props => {
           />
         </ListItem>
         <ListInput
-          name="location"
-          label={labels.location}
-          value={state.locations.find(l => l.id === store.locationId).name}
-          type="text"
-          readonly
-        />
-        <ListInput
           name="openTime"
           label={labels.openTime}
           value={store.openTime}

@@ -10,7 +10,7 @@ const RelatedProducts = props => {
   const [relatedProducts, setRelatedProducts] = useState([])
   useEffect(() => {
     setRelatedProducts(() => {
-      let relatedProducts = state.products.filter(p => p.id !== props.id && p.tag === product.tag)
+      let relatedProducts = state.products.filter(p => p.id !== props.id && p.categoryId === product.categoryId)
       relatedProducts = relatedProducts.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {

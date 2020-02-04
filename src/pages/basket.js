@@ -11,21 +11,18 @@ const Basket = props => {
   const [totalPrice, setTotalPrice] = useState('')
   useEffect(() => {
     setBasket(() => {
-      let basket = state.basket ? state.basket.packs : []
+      let basket = state.basket?.packs || []
       basket = basket.map(p => {
-        const packInfo = state.packs.find(pa => pa.id === p.packId) || ''
         const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
         return {
           ...p,
-          packInfo,
           weightText
         }
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotalPrice(() => state.basket?.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
+    setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket, state.packs])
-  let i = 0
   useEffect(() => {
     if (!state.basket) props.f7router.navigate('/home/', {reloadAll: true})
   }, [state.basket, props])
@@ -37,16 +34,16 @@ const Basket = props => {
     }
     dispatch({type: 'INCREASE_QUANTITY', pack})
   }
-  
+  let i = 0  
   return (
     <Page>
-      <Navbar title={`${labels.basket_from} ${store?.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.basketFrom} ${store?.name}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {basket.map(p => 
             <ListItem
-              title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
+              title={p.productName}
+              subtitle={p.packName}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
               footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++}

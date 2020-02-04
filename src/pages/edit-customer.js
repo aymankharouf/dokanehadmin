@@ -15,33 +15,39 @@ const EditCustomer = props => {
   const [name, setName] = useState(customer.name)
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(customer.locationId)
-  const [isOldAge, setIsOldAge] = useState(customer.isOldAge)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [withDelivery, setWithDelivery] = useState(customer.withDelivery)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
-  const [deliveryDiscount, setDeliveryDiscount] = useState((customer.deliveryDiscount / 1000).toFixed(3))
+  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval)
   const [hasChanged, setHasChanged] = useState(false)
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
+  const [locations] = useState(() => {
+    const locations = state.lookups.find(l => l.id === 'l').values.slice()
+    return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
+  })
+  useEffect(() => {
+    if (locationId !== customer.locationId && customer.deliveryFees === customer.locationFees) {
+      setDeliveryFees((locations.find(l => l.id === locationId).fees / 1000).toFixed(3))
+    }
+  }, [locationId, customer, locations])
   useEffect(() => {
     if (name !== customer.name
     || address !== customer.address
     || locationId !== customer.locationId
-    || isOldAge !== customer.isOldAge
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
     || withDelivery !== customer.withDelivery
     || otherMobile !== customer.otherMobile
     || exceedPrice !== customer.exceedPrice
-    || deliveryDiscount * 1000 !== customer.deliveryDiscount
+    || deliveryFees * 1000 !== customer.deliveryFees
     || orderLimit * 1000 !== customer.orderLimit
     || deliveryInterval !== customer.deliveryInterval) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, name, address, locationId, isOldAge, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryDiscount, orderLimit, deliveryInterval])
+  }, [customer, name, address, locationId, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -71,17 +77,24 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
+      const locationFees = locations.find(l => l.id === locationId).fees
+      if (locationFees === 0 && deliveryFees > 0) {
+        throw new Error('noDelivery')
+      }
+      if (locationFees > 0 && (!deliveryFees || deliveryFees === 0)) {
+        throw new Error('invalidDeliveryFees')
+      }
       const newCustomer = {
         ...customer,
         name,
         address,
         locationId,
-        isOldAge,
+        locationFees,
         mapPosition,
         isBlocked,
         otherMobile,
         exceedPrice,
-        deliveryDiscount: deliveryDiscount * 1000,
+        deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
         deliveryInterval,
         withDelivery
@@ -129,10 +142,6 @@ const EditCustomer = props => {
           </select>
         </ListItem>
         <ListItem>
-          <span>{labels.isOldAge}</span>
-          <Toggle color="blue" checked={isOldAge} onToggleChange={() => setIsOldAge(!isOldAge)} />
-        </ListItem>
-        <ListItem>
           <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
@@ -146,13 +155,13 @@ const EditCustomer = props => {
         </ListItem>
         <ListInput 
           name="deliveryFees" 
-          label={labels.deliveryDiscount}
-          value={deliveryDiscount}
+          label={labels.deliveryFees}
+          value={deliveryFees}
           floatingLabel 
           clearButton
           type="number" 
-          onChange={e => setDeliveryDiscount(e.target.value)}
-          onInputClear={() => setDeliveryDiscount('')}
+          onChange={e => setDeliveryFees(e.target.value)}
+          onInputClear={() => setDeliveryFees('')}
         />
         <ListItem
           title={labels.deliveryInterval}

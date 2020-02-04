@@ -13,7 +13,6 @@ const Store = props => {
     lookups: [], 
     stores: [], 
     basket, 
-    trademarks: [], 
     users: [],
     purchases: [],
     orders: [],
@@ -24,10 +23,8 @@ const Store = props => {
     customers: [],
     spendings: [],
     monthlyTrans: [],
-    locations: [],
     storePacks: [],
     logs: [],
-    tags: [],
     archivedOrders: [],
     adverts: [],
     archivedPurchases: [],
@@ -64,15 +61,6 @@ const Store = props => {
     }, err => {
       unsubscribePasswordRequests()
     })
-    const unsubscribeLocations = firebase.firestore().collection('locations').onSnapshot(docs => {
-      let locations = []
-      docs.forEach(doc => {
-        locations.push({...doc.data(), id:doc.id})
-      })
-      dispatch({type: 'SET_LOCATIONS', locations})
-    }, err => {
-      unsubscribeLocations()
-    }) 
     const unsubscribeAdverts = firebase.firestore().collection('adverts').onSnapshot(docs => {
       let adverts = []
       docs.forEach(doc => {
