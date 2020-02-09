@@ -109,7 +109,6 @@
 *prevent new order until approving the previous one
 *approve for invitations
 *diff in delivery fees as special discount
-*delivery intervals
 *user name and customer name
 *firebase security
 *navigation & performance
@@ -154,3 +153,5 @@
 return purchase discount
 debit
 pwa
+notification for offers & change price
+weight in return basket

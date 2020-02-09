@@ -11,7 +11,11 @@ const EditOrder = props => {
   const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
   const [withDelivery, setWithDelivery] = useState(order.withDelivery)
-  const [customer] = useState(() => state.customers.find(c => c.id === order.userId))
+  const [locationFees] = useState(() => {
+    const userLocation = state.users.find(u => u.id === order.userId).locationId
+    const locations = state.lookups.find(l => l.id === 'l').values
+    return locations.find(l => l.id === userLocation).fees
+  })
   const [orderBasket, setOrderBasket] = useState([])
   const [total, setTotal] = useState('')
   useEffect(() => {
@@ -70,7 +74,7 @@ const EditOrder = props => {
         withDelivery,
       }
       setInprocess(true)
-      await editOrder(newOrder, state.orderBasket, state.storePacks, state.packs, state.customers)
+      await editOrder(newOrder, state.orderBasket, state.storePacks, state.packs, state.customers, state.users, state.lookups)
       setInprocess(false)
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -113,7 +117,7 @@ const EditOrder = props => {
               color="green" 
               checked={withDelivery} 
               onToggleChange={() => setWithDelivery(!withDelivery)}
-              disabled={customer.locationFees === 0}
+              disabled={locationFees === 0}
             />
           </ListItem>
         </List>

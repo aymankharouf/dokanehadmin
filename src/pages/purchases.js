@@ -5,7 +5,6 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { purchaseTypes } from '../data/config'
 
 const Purchases = props => {
   const { state, user } = useContext(StoreContext)
@@ -38,8 +37,7 @@ const Purchases = props => {
               <ListItem
                 link={`/purchase-details/${p.id}/type/n`}
                 title={p.storeInfo.name}
-                subtitle={purchaseTypes.find(t => t.id === p.type).name}
-                text={moment(p.time.toDate()).fromNow()}
+                subtitle={moment(p.time.toDate()).fromNow()}
                 after={((p.total - p.discount) / 1000).toFixed(3)}
                 key={p.id}
               />

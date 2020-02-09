@@ -121,50 +121,39 @@ const Reducer = (state, action) => {
         return {...state, orderBasket: packs}
       case 'ADD_TO_RETURN_BASKET':
         pack = {
-          packId: action.params.pack.packId,
-          cost: action.params.pack.cost,
-          price: action.params.pack.cost,
-          weight: action.params.pack.weight,
-          purchasedQuantity: action.params.pack.quantity,
-          remainQuantity: action.params.pack.quantity - (action.params.pack.returnedQuantity || 0),
-          returnedQuantity: action.params.pack.quantity - (action.params.pack.returnedQuantity || 0),
-          purchase: action.params.purchase
+          packId: action.params.packId,
+          cost: action.params.cost,
+          price: action.params.price,
+          quantity: action.params.quantity,
         }
-        if (!state.returnBasket?.storeId) {
-          return {...state, returnBasket: {storeId: action.params.purchase.storeId, packs: [pack]}}
+        if (!state.returnBasket?.type) {
+          return {
+            ...state, 
+            returnBasket: {
+              storeId: action.params.storeId, 
+              type: action.params.type, 
+              purchaseId: action.params.purchaseId, 
+              packs: [pack]
+            }
+          }
         } else {
           return {...state, returnBasket: {...state.returnBasket, packs: [...state.returnBasket.packs, pack]}}
         }
-      case 'INCREASE_RETURN_QUANTITY':
-        pack = {
-          ...action.pack,
-          returnedQuantity: action.pack.returnedQuantity + 1
-        }
-        packs = state.returnBasket.packs.slice()
-        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
-        packs.splice(packIndex, 1, pack)
-        return {...state, returnBasket: {...state.returnBasket, packs}}
-      case 'DECREASE_RETURN_QUANTITY':
-        if (action.pack.packInfo.isDivided) {
-          nextQuantity = 0
-        } else {
-          nextQuantity = action.pack.returnedQuantity - 1
-        }
-        packs = state.returnBasket.packs.slice()
-        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
-        if (nextQuantity === 0) {
-          packs.splice(packIndex, 1)
-          if (packs.length === 0){
-            return {...state, returnBasket: ''}
+      case 'REMOVE_FROM_RETURN_BASKET':
+        const basket = state.returnBasket.packs.slice()
+        packIndex = basket.findIndex(p => p.packId === action.pack.packId)
+        basket.splice(packIndex, 1)
+        if (basket.length === 0) {
+          return {
+            ...state,
+            returnBasket: ''
           }
         } else {
-          pack = {
-            ...action.pack,
-            returnedQuantity: nextQuantity
-          }
-          packs.splice(packIndex, 1, pack)
+          return {
+            ...state,
+            returnBasket: {...state.returnBasket, packs: basket}
+          }  
         }
-        return {...state, returnBasket: {...state.returnBasket, packs}}
       case 'CLEAR_RETURN_BASKET':
         return {
           ...state,

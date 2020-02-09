@@ -9,7 +9,6 @@ const AddBulk = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
   const [product] = useState(() => state.products.find(p => p.id === props.id))
@@ -53,7 +52,6 @@ const AddBulk = props => {
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        orderLimit: Number(orderLimit),
         isArchived: false,
         time: new Date()
       }
@@ -108,16 +106,6 @@ const AddBulk = props => {
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}
-        />
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
         />
       </List>
       {!name || !subPackId || !subQuantity  ? '' :

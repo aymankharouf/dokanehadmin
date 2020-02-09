@@ -15,12 +15,14 @@ const EditLocation = props => {
   })
   const [name, setName] = useState(location.name)
   const [fees, setFees] = useState((location.fees / 1000).toFixed(3))
+  const [ordering, setOrdering] = useState(location.ordering)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     if (name !== location.name
-    || fees * 1000 !== location.fees) setHasChanged(true)
+    || fees * 1000 !== location.fees
+    || ordering !== location.ordering) setHasChanged(true)
     else setHasChanged(false)
-  }, [location, name, fees])
+  }, [location, name, fees, ordering])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -40,10 +42,11 @@ const EditLocation = props => {
       const newLocation = {
         ...location,
         name,
-        fees: fees * 1000
+        fees: fees * 1000,
+        ordering
       }
       setInprocess(true)
-      await editLocation(newLocation, location.fees, state.lookups, state.customers)
+      await editLocation(newLocation, state.lookups)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()  
@@ -76,8 +79,18 @@ const EditLocation = props => {
           onChange={e => setFees(e.target.value)}
           onInputClear={() => setFees('')}
         />
+        <ListInput 
+          name="ordering" 
+          label={labels.ordering}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={ordering} 
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
+        />
       </List>
-      {!name || !fees || !hasChanged ? '' :
+      {!name || !fees || !ordering || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

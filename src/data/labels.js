@@ -348,7 +348,10 @@ const labels = {
   returnBasketFrom: 'سلة المرتجع من',
   noAnswer: 'لا اجابة',
   noDelivery: 'خدمة التوصيل غير متوفرة لهذه المنطقة',
-  invalidDeliveryFees: 'رسوم خدمة التوصيل يجب ان تكون اكبر من صفر'
+  invalidDeliveryFees: 'رسوم خدمة التوصيل يجب ان تكون اكبر من صفر',
+  basket: 'سلة',
+  diffTypeInReturnBasket: 'عملية مختلفة يتم تنفيذها حاليا',
+  diffPurchaseInReturnBasket: 'عملية شراء مختلفة يتم معالجتها حاليا'
 }
 
 export default labels

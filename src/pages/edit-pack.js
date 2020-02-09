@@ -13,7 +13,6 @@ const EditPack = props => {
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [bonusUnits, setBonusUnits] = useState(pack.bonusUnits)
-  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
@@ -21,11 +20,10 @@ const EditPack = props => {
     if (name !== pack.name
     || unitsCount !== pack.unitsCount
     || bonusUnits !== pack.bonusUnits
-    || orderLimit !== pack.orderLimit
     || isDivided !== pack.isDivided
     || byWeight !== pack.byWeight) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, orderLimit, isDivided, byWeight, bonusUnits])
+  }, [pack, name, unitsCount, isDivided, byWeight, bonusUnits])
   useEffect(() => {
     if (isDivided) {
       setByWeight(true)
@@ -52,7 +50,6 @@ const EditPack = props => {
         name,
         unitsCount: Number(unitsCount),
         bonusUnits: Number(bonusUnits),
-        orderLimit: Number(orderLimit),
         isDivided,
         byWeight
       }
@@ -102,16 +99,6 @@ const EditPack = props => {
             onInputClear={() => setBonusUnits('')}
           />
         }          
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
-        />
         <ListItem>
           <span>{labels.isDivided}</span>
           <Toggle 

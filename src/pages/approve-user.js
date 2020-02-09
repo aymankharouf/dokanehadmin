@@ -10,18 +10,15 @@ const ApproveUser = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
-  const [name, setName] = useState('')
-  const [locationId, setLocationId] = useState('')
+  const [name, setName] = useState(userInfo.name)
+  const [locationId, setLocationId] = useState(userInfo.locationId)
   const [address, setAddress] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [locations] = useState(() => {
     const locations = state.lookups.find(l => l.id === 'l').values.slice()
-    return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
+    return locations.sort((l1, l2) => l1.ordering - l2.ordering)
   })
-  useEffect(() => {
-    setName(userInfo.name)
-  }, [userInfo])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -59,9 +56,8 @@ const ApproveUser = props => {
       if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
         throw new Error('otherUserMobile')
       }
-      const locationFees = locations.find(l => l.id === locationId).fees
       setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, locationId, locationFees, otherMobile, userInfo.storeName || '', address)
+      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName || '', address)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  

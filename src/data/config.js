@@ -10,7 +10,6 @@ export const setup = {
   alarmDiscount: 100,
   firstOrderDiscount: 200,
   ratingDiscount: 50,
-  deliveryFees: 200
 }
 
 export const randomColors = [
@@ -93,13 +92,6 @@ export const alarmTypes = [
   {id: '7', name: 'الابلاغ عن عرض على شكل مجموعة', actor: 'o', isAvailable: true},
 ]
 
-export const deliveryIntervals = [
-  {id: 'm', name: 'صباحا'},
-  {id: 'a', name: 'بعد الظهر'},
-  {id: 'n', name: 'مساءا'},
-  {id: 'u', name: 'اي وقت'}
-]
-
 export const callTypes = [
   {id: 'p', name: 'الاتصال هاتفيا'},
   {id: 's', name: 'ارسال رسالة نصية'},
@@ -121,11 +113,4 @@ export const permissionSections = [
   {id: 's', name: 'اصحاب المحلات'},
   {id: 'n', name: 'مستخدمين جدد'},
   {id: 'd', name: 'موصلي الطلبات'}
-]
-
-export const purchaseTypes = [
-  {id: 'p', name: 'شراء'},
-  {id: 'c', name: 'الغاء شراء'},
-  {id: 'r', name: 'ارجاع'},
-  {id: 's', name: 'بيع'}
 ]

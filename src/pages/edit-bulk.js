@@ -10,18 +10,16 @@ const EditBulk = props => {
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [name, setName] = useState(pack.name)
-  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
   const [hasChanged, setHasChanged] = useState(false)
   const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
   useEffect(() => {
     if (name !== pack.name
-    || orderLimit !== pack.orderLimit
     || subPackId !== pack.subPackId
     || subQuantity !== pack.subQuantity) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, orderLimit, subPackId, subQuantity])
+  }, [pack, name, subPackId, subQuantity])
 
   useEffect(() => {
     if (error) {
@@ -49,7 +47,6 @@ const EditBulk = props => {
         subPackId,
         subQuantity: Number(subQuantity),
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
-        orderLimit: Number(orderLimit)
       }
       setInprocess(true)
       await editPack(newPack)
@@ -102,16 +99,6 @@ const EditBulk = props => {
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}
-        />
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
         />
       </List>
       {!name || !subPackId || !subQuantity || !hasChanged ? '' :

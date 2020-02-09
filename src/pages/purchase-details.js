@@ -10,11 +10,15 @@ import { showMessage, showError, getMessage, quantityText } from '../data/action
 const PurchaseDetails = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [purchase] = useState(() => props.type === 'a' ? state.archivedPurchases.find(p => p.id === props.id) : state.purchases.find(p => p.id === props.id))
+  const [purchase, setPurchase] = useState('')
   const [purchaseBasket, setPurchaseBasket] = useState([])
   useEffect(() => {
+    setPurchase(() => props.type === 'a' ? state.archivedPurchases.find(p => p.id === props.id) : state.purchases.find(p => p.id === props.id))
+  }, [state.purchases, state.archivedPurchases, props.id, props.type])
+  useEffect(() => {
     setPurchaseBasket(() => {
-      return purchase ? purchase.basket.map(p => {
+      const purchaseBasket =  purchase ? purchase.basket.filter(p => !state.returnBasket?.packs?.find(bp => bp.packId === p.packId)) : []
+      return purchaseBasket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
         const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
         return {
@@ -22,28 +26,35 @@ const PurchaseDetails = props => {
           packInfo,
           weightText
         }
-      }) : []
+      })
     })
-  }, [state.packs, purchase])
+  }, [state.packs, state.returnBasket, purchase])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  const handleReturn = async pack => {
+  const handleReturn = pack => {
     try{
-      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.lastPurchaseId === purchase.id) && ['d', 'p', 't', 'f'].includes(o.status))
+      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 't', 'f'].includes(o.status))
       if (affectedOrders.length > 0) {
         throw new Error('finishedOrdersAffected')
       }
+      if (state.returnBasket && state.returnBasket.purchase !== purchase) {
+        throw new Error('diffPurchaseInReturnBasket')
+      }
       const params = {
-        pack,
-        purchase
+        type: 'r',
+        packId: pack.packId,
+        cost: pack.cost,
+        price: pack.price,
+        quantity: pack.quantity,
+        storeId: purchase.storeId,
+        purchaseId: purchase.id
       }
       dispatch({type: 'ADD_TO_RETURN_BASKET', params})
       showMessage(labels.addToBasketSuccess)
-      props.f7router.back()
     } catch(err) {
 			setError(getMessage(props, err))
 		}
@@ -53,7 +64,9 @@ const PurchaseDetails = props => {
       <Navbar title={labels.purchaseDetails} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {purchaseBasket.map(p => 
+          {purchaseBasket.length === 0 ? 
+            <ListItem title={labels.noData} /> 
+          : purchaseBasket.map(p => 
             <ListItem 
               title={p.packInfo.productName}
               subtitle={p.packInfo.name}
@@ -63,8 +76,7 @@ const PurchaseDetails = props => {
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />
               <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
-              {p.returnedQuantity ? <div className="list-subtext2">{`${labels.returned}: ${quantityText(p.returnedQuantity)}`}</div> : ''}
-              {p.returnedQuantity === p.quantity ? '' : <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} />}
+              {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}
             </ListItem>
           )}
         </List>

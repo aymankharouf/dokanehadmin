@@ -9,7 +9,6 @@ const AddOffer = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
   const [subPercent, setSubPercent] = useState(100)
@@ -80,7 +79,6 @@ const AddOffer = props => {
         unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        orderLimit: Number(orderLimit),
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100,
@@ -160,16 +158,6 @@ const AddOffer = props => {
             onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
-        />
       </List>
       <BlockTitle>
         {labels.bonusProduct}

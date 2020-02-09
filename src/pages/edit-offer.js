@@ -10,7 +10,6 @@ const EditOffer = props => {
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [name, setName] = useState(pack.name)
-  const [orderLimit, setOrderLimit] = useState(pack.orderLimit)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
   const [subPercent, setSubPercent] = useState(pack.subPercent)
@@ -32,7 +31,6 @@ const EditOffer = props => {
   }) 
   useEffect(() => {
     if (name !== pack.name
-    || orderLimit !== pack.orderLimit
     || subPackId !== pack.subPackId
     || subQuantity !== pack.subQuantity
     || subPercent !== pack.subPercent * 100
@@ -41,7 +39,7 @@ const EditOffer = props => {
     || bonusPercent !== pack.bonusPercent
     || closeExpired !== pack.closeExpired) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, orderLimit, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
+  }, [pack, name, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -68,7 +66,6 @@ const EditOffer = props => {
         subPackId,
         subQuantity: Number(subQuantity),
         unitsCount: subQuantity * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
-        orderLimit: Number(orderLimit),
         subPercent: subPercent / 100,
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),
@@ -146,16 +143,6 @@ const EditOffer = props => {
             onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
-        />
       </List>
       <BlockTitle>
         {labels.bonusProduct}

@@ -72,7 +72,6 @@ import ReturnOrder from './pages/return-order'
 import ReturnOrderPack from './pages/return-order-pack'
 import FollowupOrders from './pages/followup-orders'
 import FollowupOrdersList from './pages/followup-orders-list'
-import SellStore from './pages/sell-store'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
@@ -430,10 +429,6 @@ export default [
   {
     path: '/followup-orders-list/:id',
     component: FollowupOrdersList
-  },
-  {
-    path: '/sell-store/:id',
-    component: SellStore
   },
   {
     path: '/related-products/:id',

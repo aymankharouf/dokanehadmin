@@ -3,15 +3,16 @@ import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } f
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
-import { deliveryIntervals } from '../data/config'
 
 const CustomerDetails = props => {
   const { state } = useContext(StoreContext)
   const [customer, setCustomer] = useState(() => state.customers.find(c => c.id === props.id))
+  const [userInfo, setUserInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [storeName] = useState(() => state.stores.find(s => s.id === customer.storeId)?.name || '')
   useEffect(() => {
     setCustomer(() => state.customers.find(c => c.id === props.id))
-  }, [state.customers, props.id])
+    setUserInfo(() => state.users.find(u => u.id === props.id))
+  }, [state.customers, state.users, props.id])
   return (
     <Page>
       <Navbar title={labels.customerDetails} backLink={labels.back} />
@@ -65,7 +66,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="locationName" 
           label={labels.location}
-          value={state.lookups.find(l => l.id === 'l').values.find(l => l.id === customer.locationId).name}
+          value={state.lookups.find(l => l.id === 'l').values.find(l => l.id === userInfo.locationId).name}
           type="text"
           readonly
         />
@@ -95,13 +96,6 @@ const CustomerDetails = props => {
           label={labels.otherMobile}
           value={customer.otherMobile}
           type="number"
-          readonly
-        />
-        <ListInput 
-          name="deliveryInterval" 
-          label={labels.deliveryInterval}
-          value={deliveryIntervals.find(i => i.id === customer.deliveryInterval)?.name || ''}
-          type="text"
           readonly
         />
         <ListInput 

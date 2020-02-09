@@ -10,6 +10,7 @@ const AddLocation = props => {
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [fees, setFees] = useState('')
+  const [ordering, setOrdering] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -30,7 +31,8 @@ const AddLocation = props => {
       await addLocation({
         id: Math.random().toString(),
         name,
-        fees: fees * 1000
+        fees: fees * 1000,
+        ordering
       })
       setInprocess(false)
       showMessage(labels.addSuccess)
@@ -55,7 +57,7 @@ const AddLocation = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="deliveryFees" 
+          name="fees" 
           label={labels.deliveryFees}
           floatingLabel 
           clearButton
@@ -64,8 +66,18 @@ const AddLocation = props => {
           onChange={e => setFees(e.target.value)}
           onInputClear={() => setFees('')}
         />
+        <ListInput 
+          name="ordering" 
+          label={labels.ordering}
+          floatingLabel 
+          clearButton
+          type="number" 
+          value={ordering} 
+          onChange={e => setOrdering(e.target.value)}
+          onInputClear={() => setOrdering('')}
+        />
       </List>
-      {!name || !fees ? '' :
+      {!name || !fees || !ordering ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

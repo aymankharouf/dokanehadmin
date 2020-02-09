@@ -11,7 +11,6 @@ const AddPack = props => {
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [bonusUnits, setBonusUnits] = useState('')
-  const [orderLimit, setOrderLimit] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
@@ -54,7 +53,6 @@ const AddPack = props => {
         name,
         unitsCount: Number(unitsCount),
         bonusUnits: Number(bonusUnits),
-        orderLimit: Number(orderLimit),
         isDivided,
         closeExpired: false,
         byWeight,
@@ -109,16 +107,6 @@ const AddPack = props => {
             onInputClear={() => setBonusUnits('')}
           />
         }
-        <ListInput 
-          name="orderLimit" 
-          label={labels.packLimit}
-          floatingLabel 
-          clearButton
-          type="number" 
-          value={orderLimit} 
-          onChange={e => setOrderLimit(e.target.value)}
-          onInputClear={() => setOrderLimit('')}
-        />
         <ListItem>
           <span>{labels.isDivided}</span>
           <Toggle 

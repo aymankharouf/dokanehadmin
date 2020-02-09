@@ -11,7 +11,7 @@ const Locations = props => {
   useEffect(() => {
     setLocations(() => {
       const locations = state.lookups.find(l => l.id === 'l')?.values || []
-      return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
+      return locations.sort((l1, l2) => l1.ordering - l2.ordering)
     })
   }, [state.lookups])
   return (

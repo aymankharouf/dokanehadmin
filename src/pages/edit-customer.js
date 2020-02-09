@@ -4,7 +4,6 @@ import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { deliveryIntervals } from '../data/config'
 
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
@@ -14,7 +13,7 @@ const EditCustomer = props => {
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [name, setName] = useState(customer.name)
   const [address, setAddress] = useState(customer.address)
-  const [locationId, setLocationId] = useState(customer.locationId)
+  const [locationId, setLocationId] = useState(userInfo.locationId)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
@@ -23,31 +22,24 @@ const EditCustomer = props => {
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
-  const [deliveryInterval, setDeliveryInterval] = useState(customer.deliveryInterval)
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => {
     const locations = state.lookups.find(l => l.id === 'l').values.slice()
     return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
   })
   useEffect(() => {
-    if (locationId !== customer.locationId && customer.deliveryFees === customer.locationFees) {
-      setDeliveryFees((locations.find(l => l.id === locationId).fees / 1000).toFixed(3))
-    }
-  }, [locationId, customer, locations])
-  useEffect(() => {
     if (name !== customer.name
     || address !== customer.address
-    || locationId !== customer.locationId
+    || locationId !== userInfo.locationId
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
     || withDelivery !== customer.withDelivery
     || otherMobile !== customer.otherMobile
     || exceedPrice !== customer.exceedPrice
     || deliveryFees * 1000 !== customer.deliveryFees
-    || orderLimit * 1000 !== customer.orderLimit
-    || deliveryInterval !== customer.deliveryInterval) setHasChanged(true)
+    || orderLimit * 1000 !== customer.orderLimit) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, name, address, locationId, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryFees, orderLimit, deliveryInterval])
+  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryFees, orderLimit])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -96,7 +88,6 @@ const EditCustomer = props => {
         exceedPrice,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
-        deliveryInterval,
         withDelivery
       }
       setInprocess(true)
@@ -163,24 +154,6 @@ const EditCustomer = props => {
           onChange={e => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
         />
-        <ListItem
-          title={labels.deliveryInterval}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="deliveryInterval" value={deliveryInterval} onChange={e => setDeliveryInterval(e.target.value)}>
-            <option value=""></option>
-            {deliveryIntervals.map(i => 
-              <option key={i.id} value={i.id}>{i.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListInput 
           name="orderLimit" 
           label={labels.orderLimit}

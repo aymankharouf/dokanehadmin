@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, ListInput } from 'framework7-react'
+import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, ListInput } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { confirmReturnBasket, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { stockTransTypes } from '../data/config'
 
 const ReturnBasket = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -12,6 +13,9 @@ const ReturnBasket = props => {
   const [basket, setBasket] = useState([])
   const [totalPrice, setTotalPrice] = useState('')
   const [discount, setDiscount] = useState('')
+  const [storeId, setStoreId] = useState('')
+  const [netPrice, setNetPrice] = useState('')
+  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   useEffect(() => {
     setBasket(() => {
       let basket = state.returnBasket?.packs || []
@@ -26,14 +30,21 @@ const ReturnBasket = props => {
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.returnedQuantity)), 0) || 0)
+    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.returnBasket, state.packs])
   useEffect(() => {
     setDiscount(() => {
-      const storeInfo = state.stores.find(s => s.id === state.returnBasket.storeId) || ''
-      return (totalPrice * storeInfo.discount / 1000).toFixed(3)
+      if (state.returnBasket.type === 'r') {
+        const storeInfo = state.stores.find(s => s.id === state.returnBasket.storeId) || ''
+        return (totalPrice * storeInfo.discount / 1000).toFixed(3)  
+      } else {
+        return 0
+      }
     })
   }, [state.returnBasket, state.stores, totalPrice])
+  useEffect(() => {
+    setNetPrice(totalPrice - (discount * 1000 || 0))
+  }, [totalPrice, discount])
   useEffect(() => {
     if (!state.returnBasket) props.f7router.navigate('/home/', {reloadAll: true})
   }, [state.returnBasket, props])
@@ -50,26 +61,23 @@ const ReturnBasket = props => {
       f7.dialog.close()
     }
   }, [inprocess])
-  const handleAdd = pack => {
-    if (pack.returnedQuantity < pack.remainQuantity) {
-      dispatch({type: 'INCREASE_RETURN_QUANTITY', pack})
-    }
-  }
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await confirmReturnBasket(state.returnBasket, discount, state.orders, state.stockTrans, state.storePacks, state.packs, state.stores)
+      await confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.storePacks, state.packs, state.purchases)
       setInprocess(false)
-      showMessage(labels.addToBasketSuccess)
+      dispatch({type: 'CLEAR_RETURN_BASKET'})
+      showMessage(labels.executeSuccess)
       props.f7router.back()
     } catch(err) {
+      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   let i = 0  
   return (
     <Page>
-      <Navbar title={`${labels.returnBasketFrom} ${store?.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.basket} ${stockTransTypes.find(t => t.id === state.returnBasket.type)?.name} ${store?.name || ''}`} backLink={labels.back} />
       <Block>
         <List mediaList>
           {basket.map(p => 
@@ -77,36 +85,55 @@ const ReturnBasket = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-              footer={`${labels.grossPrice}: ${(parseInt(p.cost * p.returnedQuantity) / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}`}
               key={i++}
             >
-              <div className="list-subtext1">{`${labels.purchased}: ${quantityText(p.purchasedQuantity)} ${p.weightText}`}</div>
-              <div className="list-subtext2">{`${labels.returned}: ${quantityText(p.returnedQuantity)}`}</div>
-              <Stepper
-                slot="after"
-                fill
-                buttonsOnly
-                onStepperPlusClick={() => handleAdd(p)}
-                onStepperMinusClick={() => dispatch({type: 'DECREASE_RETURN_QUANTITY', pack: p})}
-              />
+              <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <Link slot="after" iconMaterial="delete" iconColor="red" onClick={()=> dispatch({type: 'REMOVE_FROM_RETURN_BASKET', pack: p})}/>
             </ListItem>
           )}
-          <ListInput 
-            name="discount" 
-            label={labels.discount}
-            value={discount}
-            clearButton
-            floatingLabel 
-            type="number" 
-            onChange={e => setDiscount(e.target.value)}
-            onInputClear={() => setDiscount('')}
-          />
+        </List>
+        <List form>
+          {state.returnBasket.type === 's' ? 
+            <ListItem
+              title={labels.store}
+              smartSelect
+              smartSelectParams={{
+                openIn: "popup", 
+                closeOnSelect: true, 
+                searchbar: true, 
+                searchbarPlaceholder: labels.search,
+                popupCloseLinkText: labels.close
+              }}
+            >
+              <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
+                <option value=""></option>
+                {stores.map(s => 
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                )}
+              </select>
+            </ListItem>
+          : ''}
+
+          {['r', 's'].includes(state.returnBasket.type) ? 
+            <ListInput 
+              name="discount" 
+              label={labels.discount}
+              value={discount}
+              clearButton
+              floatingLabel 
+              type="number" 
+              onChange={e => setDiscount(e.target.value)}
+              onInputClear={() => setDiscount('')}
+            />
+          : ''}
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
-        <Icon material="done"></Icon>
-      </Fab>
-
+      {state.returnBasket.type === 's' && !storeId ? '' :
+        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(netPrice / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+          <Icon material="done"></Icon>
+        </Fab>
+      }
       <Toolbar bottom>
         <Link href='/home/' iconMaterial="home" />
         <Link href='#' iconMaterial="delete" onClick={() => dispatch({type: 'CLEAR_RETURN_BASKET'})} />
