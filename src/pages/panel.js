@@ -17,7 +17,8 @@ const Panel = props => {
     const invitations = state.users.filter(u => u.invitations?.find(i => i.status === 'n')).length
     const debitRequests = state.users.filter(u => u.debitRequestStatus === 'n').length
     const passwordRequests = state.passwordRequests.filter(r => r.status === 'n').length
-    setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + debitRequests + passwordRequests)
+    const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
+    setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + debitRequests + passwordRequests + newStoresOwners)
   }, [state.orders, state.users, state.customers, state.passwordRequests])
   useEffect(() => {
     const today = (new Date()).setHours(0, 0, 0, 0)
@@ -44,13 +45,11 @@ const Panel = props => {
         {user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/purchase-plan/" title={labels.purchasePlan} view="#main-view" panelClose /> : ''}
-        {user ? <ListItem link="/prepare-orders/" title={labels.prepareOrders} view="#main-view" panelClose /> : ''}
-        {user ? <ListItem link="/followup-orders/" title={labels.followupOrders} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/offers/" title={labels.offers} badge={offersCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/profits/" title={labels.profits} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
-        {user ? <ListItem link="/permissions/" title={labels.permissions} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/permission-list/s" title={labels.storesOwners} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

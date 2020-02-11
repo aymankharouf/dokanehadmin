@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^7.8.0",
-    "framework7": "^5.4.0",
-    "framework7-react": "^5.4.0",
+    "firebase": "^7.8.1",
+    "framework7": "^5.4.1",
+    "framework7-react": "^5.4.1",
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
     "react": "^16.12.0",

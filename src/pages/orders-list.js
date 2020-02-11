@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { orderStatus, orderPositions } from '../data/config'
+import { orderStatus } from '../data/config'
 
 const OrdersList = props => {
   const { state } = useContext(StoreContext)
@@ -17,15 +17,13 @@ const OrdersList = props => {
       orders = orders.map(o => {
         const userInfo = state.users.find(u => u.id === o.userId)
         const customerInfo = state.customers.find(c => c.id === o.userId)
-        const positionInfo = orderPositions.find(p => p.id === o.position)
         return {
           ...o,
           userInfo,
           customerInfo,
-          positionInfo
         }
       })
-      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
+      return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
     })
   }, [state.orders, state.users, state.customers, props.id])
 
@@ -55,13 +53,10 @@ const OrdersList = props => {
               <ListItem
                 link={`/order-details/${o.id}/type/n`}
                 title={o.customerInfo?.fullName || o.userInfo.name}
-                subtitle={o.positionInfo?.name || ''}
-                text={moment(o.activeTime.toDate()).fromNow()}
-                footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
+                subtitle={moment(o.time.toDate()).fromNow()}
+                text={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 key={o.id}
-              >
-                {o.withDelivery ? <div className="list-subtext1">{o.withDelivery ? labels.withDeliveryNote : ''}</div> : ''}
-              </ListItem>
+              />
             )
           }
         </List>

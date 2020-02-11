@@ -37,7 +37,7 @@ const PurchaseDetails = props => {
   }, [error])
   const handleReturn = pack => {
     try{
-      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 't', 'f'].includes(o.status))
+      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 'f'].includes(o.status))
       if (affectedOrders.length > 0) {
         throw new Error('finishedOrdersAffected')
       }
@@ -71,7 +71,7 @@ const PurchaseDetails = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-              footer={`${labels.price}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+              footer={`${labels.price}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={p.packId} 
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />

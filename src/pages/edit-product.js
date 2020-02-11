@@ -10,6 +10,7 @@ const EditProduct = props => {
   const [inprocess, setInprocess] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
   const [name, setName] = useState(product.name)
+  const [alias, setAlias] = useState(product.alias)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademark, setTrademark] = useState(product.trademark)
   const [country, setCountry] = useState(product.country)
@@ -43,12 +44,13 @@ const EditProduct = props => {
   }
   useEffect(() => {
     if (name !== product.name
+    || alias !== product.alias
     || country !== product.country
     || categoryId !== product.categoryId
     || trademark !== product.trademark
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, country, categoryId, trademark, imageUrl])
+  }, [product, name, alias, country, categoryId, trademark, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -69,12 +71,13 @@ const EditProduct = props => {
         ...product,
         categoryId,
         name,
+        alias,
         trademark,
         country,
         imageUrl
       }
       setInprocess(true)
-      await editProduct(newProduct, image, state.packs)
+      await editProduct(newProduct, product.name, image, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -149,6 +152,16 @@ const EditProduct = props => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
+        />
+        <ListInput 
+          name="alias" 
+          label={labels.alias}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={alias} 
+          onChange={e => setAlias(e.target.value)}
+          onInputClear={() => setAlias('')}
         />
         <ListItem
           title={labels.category}

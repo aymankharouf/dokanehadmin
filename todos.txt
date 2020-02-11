@@ -41,7 +41,6 @@
 *resolve forget password from the system
 *request to cancel an order
 *old age flag for customers
-*position info into customers table
 *image size
 *rate product discounts
 *withdrawals
@@ -150,7 +149,7 @@
 *read archive by period
 *add stock trans archive, products & packs
 *hints & help
-return purchase discount
+*return purchase discount
 debit
 pwa
 notification for offers & change price

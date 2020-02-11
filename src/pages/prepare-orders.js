@@ -9,7 +9,7 @@ import labels from '../data/labels'
 const PrepareOrders = props => {
   const { state } = useContext(StoreContext)
 	const [packs, setPacks] = useState([])
-	const [finishedOrders] = useState(() => state.orders.filter(o => o.status === 'd'))
+	const [finishedOrders] = useState(() => state.orders.filter(o => o.status === 'f'))
 	useEffect(() => {
 		let packsArray = []
 		finishedOrders.forEach(o => {

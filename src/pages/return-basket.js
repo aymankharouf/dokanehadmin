@@ -30,7 +30,7 @@ const ReturnBasket = props => {
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
+    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.returnBasket, state.packs])
   useEffect(() => {
     setDiscount(() => {
@@ -85,7 +85,7 @@ const ReturnBasket = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-              footer={`${labels.grossPrice}: ${(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}`}
               key={i++}
             >
               <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>

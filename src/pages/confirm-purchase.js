@@ -27,7 +27,7 @@ const ConfirmPurchase = props => {
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotal(() => state.basket.packs.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0))
+    setTotal(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
   }, [state.basket, state.packs])
   useEffect(() => {
     setDiscount((total * (store.discount || 0) / 1000).toFixed(3))

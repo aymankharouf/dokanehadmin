@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Toggle } from 'framework7-react'
+import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails } from '../data/actions'
 import PackImage from './pack-image'
@@ -10,12 +10,6 @@ const EditOrder = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
-  const [withDelivery, setWithDelivery] = useState(order.withDelivery)
-  const [locationFees] = useState(() => {
-    const userLocation = state.users.find(u => u.id === order.userId).locationId
-    const locations = state.lookups.find(l => l.id === 'l').values
-    return locations.find(l => l.id === userLocation).fees
-  })
   const [orderBasket, setOrderBasket] = useState([])
   const [total, setTotal] = useState('')
   useEffect(() => {
@@ -54,7 +48,7 @@ const EditOrder = props => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
-        const type = ['d', 'p', 'e'].includes(order.status) ? 'i' : 'c'
+        const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         setInprocess(true)
         await updateOrderStatus(order, type, state.storePacks, state.packs)
         setInprocess(false)
@@ -69,12 +63,8 @@ const EditOrder = props => {
   }
   const handleSubmit = async () => {
     try{
-      const newOrder = {
-        ...order,
-        withDelivery,
-      }
       setInprocess(true)
-      await editOrder(newOrder, state.orderBasket, state.storePacks, state.packs, state.customers, state.users, state.lookups)
+      await editOrder(order, state.orderBasket, state.storePacks, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -108,18 +98,6 @@ const EditOrder = props => {
               />
             </ListItem>
           )}
-        </List>
-        <List form>
-          <ListItem>
-            <span>{labels.withDelivery}</span>
-            <Toggle 
-              name="withDelivery" 
-              color="green" 
-              checked={withDelivery} 
-              onToggleChange={() => setWithDelivery(!withDelivery)}
-              disabled={locationFees === 0}
-            />
-          </ListItem>
         </List>
       </Block>
       <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>

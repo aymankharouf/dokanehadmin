@@ -18,10 +18,10 @@ const EditCustomer = props => {
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [withDelivery, setWithDelivery] = useState(customer.withDelivery)
   const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
+  const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 1000).toFixed(3))
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => {
     const locations = state.lookups.find(l => l.id === 'l').values.slice()
@@ -33,13 +33,13 @@ const EditCustomer = props => {
     || locationId !== userInfo.locationId
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
-    || withDelivery !== customer.withDelivery
     || otherMobile !== customer.otherMobile
     || exceedPrice !== customer.exceedPrice
     || deliveryFees * 1000 !== customer.deliveryFees
+    || specialDiscount * 1000 !== customer.specialDiscount
     || orderLimit * 1000 !== customer.orderLimit) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, withDelivery, otherMobile, exceedPrice, deliveryFees, orderLimit])
+  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, specialDiscount])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -69,26 +69,18 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
-      const locationFees = locations.find(l => l.id === locationId).fees
-      if (locationFees === 0 && deliveryFees > 0) {
-        throw new Error('noDelivery')
-      }
-      if (locationFees > 0 && (!deliveryFees || deliveryFees === 0)) {
-        throw new Error('invalidDeliveryFees')
-      }
       const newCustomer = {
         ...customer,
         name,
         address,
         locationId,
-        locationFees,
         mapPosition,
         isBlocked,
         otherMobile,
         exceedPrice,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
-        withDelivery
+        specialDiscount: specialDiscount * 1000
       }
       setInprocess(true)
       await editCustomer(newCustomer, userInfo.mobile, customer.storeId, state.stores)
@@ -137,10 +129,6 @@ const EditCustomer = props => {
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
         <ListItem>
-          <span>{labels.withDelivery}</span>
-          <Toggle color="blue" checked={withDelivery} onToggleChange={() => setWithDelivery(!withDelivery)} />
-        </ListItem>
-        <ListItem>
           <span>{labels.exceedPrice}</span>
           <Toggle color="blue" checked={exceedPrice} onToggleChange={() => setExceedPrice(!exceedPrice)} />
         </ListItem>
@@ -153,6 +141,16 @@ const EditCustomer = props => {
           type="number" 
           onChange={e => setDeliveryFees(e.target.value)}
           onInputClear={() => setDeliveryFees('')}
+        />
+        <ListInput 
+          name="specialDiscount" 
+          label={labels.specialDiscount}
+          value={specialDiscount}
+          floatingLabel 
+          clearButton
+          type="number" 
+          onChange={e => setSpecialDiscount(e.target.value)}
+          onInputClear={() => setSpecialDiscount('')}
         />
         <ListInput 
           name="orderLimit" 

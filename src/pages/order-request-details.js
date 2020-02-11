@@ -78,26 +78,17 @@ const OrderRequestDetails = props => {
           <ListItem 
             title={labels.fixedFees} 
             className="fees" 
-            after={(order.fixedFees / 1000).toFixed(3)} 
+            after={((order.fixedFees + order.deliveryFees) / 1000).toFixed(3)} 
           />
-          {order.deliveryFees > 0 ? 
-            <ListItem 
-              title={labels.deliveryFees}
-              className="fees" 
-              after={(order.deliveryFees / 1000).toFixed(3)} 
-            /> 
-          : ''}
-          {order.discount > 0 ? 
-            <ListItem 
-              title={labels.discount} 
-              className="discount" 
-              after={(order.discount / 1000).toFixed(3)} 
-            /> 
-          : ''}
+          <ListItem 
+            title={labels.discount} 
+            className="discount" 
+            after={((order.discount.value + order.fraction) / 1000).toFixed(3)} 
+          /> 
           <ListItem 
             title={labels.net} 
             className="net" 
-            after={((order.total + order.fixedFees + (order.deliveryFees || 0) - (order.discount || 0)) / 1000).toFixed(3)} 
+            after={((order.total + order.fixedFees + order.deliveryFees - order.discount.value - order.fraction) / 1000).toFixed(3)} 
           />
         </List>
       </Block>

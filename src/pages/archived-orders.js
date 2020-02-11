@@ -26,7 +26,7 @@ const ArchivedOrders = props => {
           statusInfo
         }
       })
-      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)  
+      return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)  
     })
   }, [state.archivedOrders, state.customers])
   useEffect(() => {
@@ -87,7 +87,7 @@ const ArchivedOrders = props => {
                 link={`/order-details/${o.id}/type/a`}
                 title={o.customerInfo.fullName}
                 subtitle={o.statusInfo.name}
-                text={moment(o.activeTime.toDate()).fromNow()}
+                text={moment(o.time.toDate()).fromNow()}
                 key={o.id}
               />
             )

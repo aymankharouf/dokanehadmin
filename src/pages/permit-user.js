@@ -3,7 +3,6 @@ import { f7, Page, Navbar, List, ListItem, Button } from 'framework7-react'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
-import { orderPositions } from '../data/config'
 
 const PermitUser = props => {
   const { state } = useContext(StoreContext)
@@ -12,7 +11,6 @@ const PermitUser = props => {
   const [userId, setUserId] = useState(props.id === '0' ? '' : props.id)
   const [customerInfo] = useState(() => state.customers.find(c => c.id === props.id))
   const [storeId, setStoreId] = useState('')
-  const [position, setPosition] = useState('')
   const [users] = useState(() => {
     const users = state.users.map(u => {
       return {
@@ -28,7 +26,6 @@ const PermitUser = props => {
   }) 
   useEffect(() => {
     setStoreId(props.id === '0' ? '' : (customerInfo.storeId || ''))
-    setPosition(props.id === '0' ? '' : (customerInfo.permissionType || ''))
   }, [customerInfo, props.id])
   useEffect(() => {
     if (error) {
@@ -45,17 +42,15 @@ const PermitUser = props => {
   }, [inprocess])
   useEffect(() => {
     if (userId) {
-      setPosition(state.customers.find(c => c.id === userId).permissionType || '')
       setStoreId(state.customers.find(c => c.id === userId).storeId || '')
     } else {
-      setPosition('')
       setStoreId('')
     }
   }, [userId, state.customers])
   const handlePermit = async () => {
     try{
       setInprocess(true)
-      await permitUser(userId, storeId, position, state.users, state.stores)
+      await permitUser(userId, storeId, state.users, state.stores)
       setInprocess(false)
       showMessage(labels.permitSuccess)
       props.f7router.back()
@@ -103,25 +98,6 @@ const PermitUser = props => {
             <option value=""></option>
             {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
-
-        <ListItem
-          title={labels.position}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="position" value={position} onChange={e => setPosition(e.target.value)}>
-            <option value=""></option>
-            {orderPositions.map(p => 
-              <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
         </ListItem>

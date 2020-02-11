@@ -30,7 +30,7 @@ const StockTransDetails = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.name}
               text={`${labels.quantity}: ${quantityText(p.quantity)}`}
-              after={(parseInt(p.cost * p.quantity) / 1000).toFixed(3)}
+              after={(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}
               key={p.packId}
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />

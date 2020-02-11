@@ -23,7 +23,7 @@ const AddOffer = props => {
     packs = packs.map(p => {
       return {
         id: p.id,
-        name: `${p.setErrorproductName} ${p.name}`
+        name: `${p.productName} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -60,6 +60,7 @@ const AddOffer = props => {
         throw new Error('invalidPercents')
       }
       const subPackInfo = state.packs.find(p => p.id === subPackId)
+      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
       const pack = {
         productId: props.id,
         productName: product.name,
@@ -74,12 +75,15 @@ const AddOffer = props => {
         isOffer: true,
         closeExpired,
         subPackId,
+        subPackName: subPackInfo.name,
         subQuantity: Number(subQuantity),
         subPercent: subPercent / 100,
-        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
+        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.extraUnits || 0)),
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
         bonusPackId,
+        bonusProductName: bonusPackInfo?.productName || '',
+        bonusPackName: bonusPackInfo?.name || '',
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100,
         price: 0,

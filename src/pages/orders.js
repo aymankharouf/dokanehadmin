@@ -10,6 +10,7 @@ const Orders = props => {
   const { state, user } = useContext(StoreContext)
   const [orderStatuses, setOrderStatuses] = useState([])
   const [orderRequests, setOrderRequests] = useState([])
+  const [finishedOrders, setFinishedOrders] = useState([])
   useEffect(() => {
     setOrderStatuses(() => orderStatus.map(s => {
       const orders = state.orders.filter(o => o.status === s.id)
@@ -19,6 +20,7 @@ const Orders = props => {
       }
     }))
     setOrderRequests(() => state.orders.filter(r => r.requestStatus === 'n'))
+    setFinishedOrders(() => state.orders.filter(o => o.status === 'f'))
   }, [state.orders])
   let i = 0
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
@@ -34,6 +36,12 @@ const Orders = props => {
             link="/order-requests/" 
             title={labels.orderRequests} 
             badge={orderRequests.length} 
+            badgeColor={randomColors[i++ % 10].name} 
+          />
+          <ListItem 
+            link="/prepare-orders/" 
+            title={labels.prepareOrders} 
+            badge={finishedOrders.length} 
             badgeColor={randomColors[i++ % 10].name} 
           />
           {orderStatuses.map(s => 

@@ -21,7 +21,7 @@ const Basket = props => {
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + parseInt(p.cost * (p.weight || p.quantity)), 0) || 0)
+    setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket, state.packs])
   useEffect(() => {
     if (!state.basket) props.f7router.navigate('/home/', {reloadAll: true})
@@ -45,7 +45,7 @@ const Basket = props => {
               title={p.productName}
               subtitle={p.packName}
               text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-              footer={`${labels.grossPrice}: ${(parseInt(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++}
             >
               <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>

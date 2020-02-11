@@ -70,8 +70,6 @@ import PrepareOrders from './pages/prepare-orders'
 import PrepareOrdersList from './pages/prepare-orders-list'
 import ReturnOrder from './pages/return-order'
 import ReturnOrderPack from './pages/return-order-pack'
-import FollowupOrders from './pages/followup-orders'
-import FollowupOrdersList from './pages/followup-orders-list'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
@@ -95,7 +93,6 @@ import OrderRequestDetails from './pages/order-request-details'
 import PermitUser from './pages/permit-user'
 import Register from './pages/register'
 import ArchivedPurchases from './pages/archived-purchases'
-import Permissions from './pages/permissions'
 import PermissionList from './pages/permission-list'
 import ArchivedStockTrans from './pages/archived-stock-trans'
 import ArchivedProducts from './pages/archived-products'
@@ -423,14 +420,6 @@ export default [
     component: ReturnOrderPack
   },
   {
-    path: '/followup-orders/',
-    component: FollowupOrders
-  },
-  {
-    path: '/followup-orders-list/:id',
-    component: FollowupOrdersList
-  },
-  {
     path: '/related-products/:id',
     component: RelatedProducts
   },
@@ -505,10 +494,6 @@ export default [
   {
     path: '/archived-purchases/',
     component: ArchivedPurchases
-  },
-  {
-    path: '/permissions/',
-    component: Permissions
   },
   {
     path: '/permission-list/:id',

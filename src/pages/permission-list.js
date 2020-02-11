@@ -3,7 +3,6 @@ import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, 
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { permissionSections, orderPositions } from '../data/config'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 
 const PermissionList = props => {
@@ -13,16 +12,14 @@ const PermissionList = props => {
   const [customers, setCustomers] = useState([])
   useEffect(() => {
     setCustomers(() => {
-      const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId) || (props.id === 'd' && c.permission_type))
+      const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
       return customers.map(c => {
         const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
-        const permissionTypeName = orderPositions.find(p => p.id === c.permissionType)?.name || ''
         const userInfo = state.users.find(u => u.id === c.id)
         return {
           ...c,
           name: `${c.name}:${userInfo.mobile}`,
-          storeName,
-          permissionTypeName
+          storeName
         }
       })
     })
@@ -45,8 +42,7 @@ const PermissionList = props => {
       try{
         setInprocess(true)
         const storeId = props.id === 's' ? '' : customer.storeId
-        const position = props.id === 'd' ? '' : customer.permissionType
-        await permitUser(customer.id, storeId, position, state.users, state.stores)
+        await permitUser(customer.id, storeId, state.users, state.stores)
         setInprocess(false)
         showMessage(labels.unPermitSuccess)
         props.f7router.back()
@@ -58,7 +54,7 @@ const PermissionList = props => {
   }
   return(
     <Page>
-      <Navbar title={permissionSections.find(s => s.id === props.id).name} backLink={labels.back}>
+      <Navbar title={props.id === 's' ? labels.storesOwners : labels.newOwners} backLink={labels.back}>
       <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -85,7 +81,6 @@ const PermissionList = props => {
               <ListItem
                 title={c.name}
                 subtitle={c.storeName}
-                text={c.permissionTypeName}
                 key={c.id}
               >
                 {props.id === 'n' ?

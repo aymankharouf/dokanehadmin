@@ -10,7 +10,7 @@ const AddPack = props => {
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
-  const [bonusUnits, setBonusUnits] = useState('')
+  const [extraUnits, setExtraUnits] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
@@ -27,7 +27,7 @@ const AddPack = props => {
   }, [isDivided])
   useEffect(() => {
     if (byWeight) {
-      setBonusUnits('')
+      setExtraUnits('')
     }
   }, [byWeight])
   useEffect(() => {
@@ -52,7 +52,7 @@ const AddPack = props => {
         ratingCount: product.ratingCount,
         name,
         unitsCount: Number(unitsCount),
-        bonusUnits: Number(bonusUnits),
+        extraUnits: Number(extraUnits),
         isDivided,
         closeExpired: false,
         byWeight,
@@ -97,14 +97,14 @@ const AddPack = props => {
         />
         {byWeight ? '' : 
           <ListInput 
-            name="bonusUnits" 
-            label={labels.bonusUnits}
+            name="extraUnits" 
+            label={labels.extraUnits}
             floatingLabel 
             clearButton
             type="number" 
-            value={bonusUnits} 
-            onChange={e => setBonusUnits(e.target.value)}
-            onInputClear={() => setBonusUnits('')}
+            value={extraUnits} 
+            onChange={e => setExtraUnits(e.target.value)}
+            onInputClear={() => setExtraUnits('')}
           />
         }
         <ListItem>

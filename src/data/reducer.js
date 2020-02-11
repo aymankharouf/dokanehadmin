@@ -82,7 +82,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.pack,
           quantity: nextQuantity,
-          gross: parseInt(action.pack.price * nextQuantity)
+          gross: Math.trunc(action.pack.price * nextQuantity)
         }
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)
@@ -113,7 +113,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.pack,
           quantity: nextQuantity,
-          gross: parseInt(action.pack.price * nextQuantity)
+          gross: Math.trunc(action.pack.price * nextQuantity)
         }  
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)

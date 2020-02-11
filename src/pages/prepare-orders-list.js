@@ -13,7 +13,7 @@ const PrepareOrdersList = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   useEffect(() => {
     setOrders(() => {
-      let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'd' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
+      let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
       orders = orders.map(o => {
         const customerInfo = state.customers.find(c => c.id === o.userId)
         return {
@@ -21,7 +21,7 @@ const PrepareOrdersList = props => {
           customerInfo,
         }
       })
-      return orders.sort((o1, o2) => o2.activeTime.seconds - o1.activeTime.seconds)
+      return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
     })
   }, [state.orders, state.customers, props.orderId, props.packId])
   useEffect(() => {

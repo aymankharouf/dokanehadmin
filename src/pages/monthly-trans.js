@@ -11,9 +11,9 @@ const MonthlyTrans = props => {
   const [inprocess, setInprocess] = useState(false)
   const [buttonVisisble, setButtonVisible] = useState(false)
   const month = (Number(props.id) % 100) - 1
-  const year = parseInt(Number(props.id) / 100)
+  const year = Math.trunc(Number(props.id) / 100)
   const [monthlyTrans] = useState(() => state.monthlyTrans.find(t => t.id === props.id))
-  const [orders] = useState(() => state.orders.filter(o => ['a', 'e', 'd', 'p', 't', 'f'].includes(o.status) && (o.activeTime.toDate()).getFullYear() === year && (o.activeTime.toDate()).getMonth() === month))
+  const [orders] = useState(() => state.orders.filter(o => ['a', 'e', 'f', 'p', 'd'].includes(o.status) && (o.time.toDate()).getFullYear() === year && (o.time.toDate()).getMonth() === month))
   const [finishedOrders, setFinishedOrders] = useState([])
   const [deliveredOrders, setDeliveredOrders] = useState([])
   const [ordersCount, setOrdersCount] = useState('')
@@ -31,12 +31,12 @@ const MonthlyTrans = props => {
   const [stockTrans, setStockTrans] = useState([])
   const [donations, setDonations] = useState('')
   const [damages, setDamages] = useState('')
-  const [cashing, setCashing] = useState('')
+  const [sellings, setSellings] = useState('')
   const [withdrawals, setWithdrawals] = useState('')
   const [expenses, setExpenses] = useState('')
   useEffect(() => {
-    setFinishedOrders(() => orders.filter(o => ['d', 'p'].includes(o.status)))
-    setDeliveredOrders(() => orders.filter(o => ['t', 'f'].includes(o.status)))
+    setFinishedOrders(() => orders.filter(o => ['f', 'p'].includes(o.status)))
+    setDeliveredOrders(() => orders.filter(o => o.status === 'd'))
   }, [orders])
   useEffect(() => {
     setOrdersCount(() => monthlyTrans?.ordersCount ?? orders.length)
@@ -51,7 +51,7 @@ const MonthlyTrans = props => {
     setStorePacks(() => {
       if (monthlyTrans) return monthlyTrans.storePacks
       const storePacks = state.storePacks.filter(p => p.storeId === 's' && p.quantity > 0)
-      const storeValue = storePacks.reduce((sum, p) => sum + parseInt(p.cost * p.quantity), 0)
+      const storeValue = storePacks.reduce((sum, p) => sum + Math.trunc(p.cost * p.quantity), 0)
       return storeValue
     })
   }, [state.storePacks, monthlyTrans])
@@ -78,7 +78,7 @@ const MonthlyTrans = props => {
   useEffect(() => {
     setDonations(() => monthlyTrans?.donations ?? stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0))
     setDamages(() => monthlyTrans?.damages ?? stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0))
-    setCashing(() => monthlyTrans?.cashing ?? stockTrans.reduce((sum, t) => sum + (t.type === 'c' ? t.total - parseInt(t.basket[0].cost * t.basket[0].quantity): 0), 0))
+    setSellings(() => monthlyTrans?.sellings ?? stockTrans.reduce((sum, t) => sum + (t.type === 's' ? t.total - Math.trunc(t.basket[0].cost * t.basket[0].quantity): 0), 0))
   }, [stockTrans, monthlyTrans])
   useEffect(() => {
     setWithdrawals(() => {
@@ -132,6 +132,7 @@ const MonthlyTrans = props => {
         expenses,
         donations,
         damages,
+        sellings,
         deliveryDiscounts
       }
       setInprocess(true)
@@ -231,8 +232,8 @@ const MonthlyTrans = props => {
           />
           <ListItem
             link="#"
-            title={labels.cashing}
-            after={(cashing / 1000).toFixed(3)}
+            title={labels.sellings}
+            after={(sellings / 1000).toFixed(3)}
           />
         </List>
       </Block>

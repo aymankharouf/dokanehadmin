@@ -31,10 +31,9 @@ export const orderStatus = [
   {id: 's', name: 'معلق'},
   {id: 'r', name: 'مرفوض'},
   {id: 'e', name: 'قيد التجهيز'},
-  {id: 'd', name: 'مكتمل'},
+  {id: 'f', name: 'مكتمل'},
   {id: 'p', name: 'جاهز'},
-  {id: 't', name: 'مستلم'},
-  {id: 'f', name: 'منتهي'},
+  {id: 'd', name: 'مستلم'},
   {id: 'c', name: 'ملغي'},
   {id: 'u', name: 'غير متوفر'},
   {id: 'i', name: 'استيداع'},
@@ -66,12 +65,6 @@ export const spendingTypes = [
   {id: 'f', name: 'فرق اسعار'}
 ]
 
-export const orderPositions = [
-  {id: 's', name: 'المستودع'},
-  {id: 'c', name: 'مركز التوزيع'},
-  {id: 'd', name: 'سيارة التوزيع'},
-]
-
 export const orderPackStatus = [
   {id: 'n', name: 'جديد'},
   {id: 'p', name: 'شراء جزئي'},
@@ -83,13 +76,14 @@ export const orderPackStatus = [
 ]
 
 export const alarmTypes = [
-  {id: '1', name: 'الابلاغ عن سعر أقل', actor: 'c'},
-  {id: '2', name: 'الابلاغ عن تغيير السعر', actor: 'o', isAvailable: true},
-  {id: '3', name: 'الابلاغ عن توفر هذا المنتج/العرض', actor: 'o', isAvailable: false},
-  {id: '4', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', actor: 'o', isAvailable: true},
-  {id: '5', name: 'الابلاغ عن توفر بديل', actor: 'a'},
-  {id: '6', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: true},
-  {id: '7', name: 'الابلاغ عن عرض على شكل مجموعة', actor: 'o', isAvailable: true},
+  {id: 'lp', name: 'الابلاغ عن سعر أقل', actor: 'c'},
+  {id: 'cp', name: 'الابلاغ عن تغيير السعر', actor: 'o', isAvailable: 1},
+  {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', actor: 'o', isAvailable: -1},
+  {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', actor: 'o', isAvailable: 1},
+  {id: 'la', name: 'الابلاغ عن توفر بديل بسعر اقل', actor: 'c'},
+  {id: 'aa', name: 'الابلاغ عن توفر بديل', actor: 'o', isAvailable: 0},
+  {id: 'eo', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: 0},
+  {id: 'go', name: 'الابلاغ عن عرض لمجموعة', actor: 'o', isAvailable: 0},
 ]
 
 export const callTypes = [
@@ -107,10 +101,4 @@ export const orderRequestTypes = [
 export const advertType = [
   {id: 'a', name: 'اعلان'},
   {id: 'n', name: 'تنويه'}
-]
-
-export const permissionSections = [
-  {id: 's', name: 'اصحاب المحلات'},
-  {id: 'n', name: 'مستخدمين جدد'},
-  {id: 'd', name: 'موصلي الطلبات'}
 ]
