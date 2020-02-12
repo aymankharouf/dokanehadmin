@@ -150,7 +150,9 @@
 *add stock trans archive, products & packs
 *hints & help
 *return purchase discount
+*archive store packs
 debit
 pwa
 notification for offers & change price
 weight in return basket
+return packs by loading order packs

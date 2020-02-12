@@ -10,7 +10,6 @@ const AddPack = props => {
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
-  const [extraUnits, setExtraUnits] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
@@ -26,11 +25,6 @@ const AddPack = props => {
     }
   }, [isDivided])
   useEffect(() => {
-    if (byWeight) {
-      setExtraUnits('')
-    }
-  }, [byWeight])
-  useEffect(() => {
     if (inprocess) {
       f7.dialog.preloader(labels.inprocess)
     } else {
@@ -43,6 +37,8 @@ const AddPack = props => {
       const pack = {
         productId: props.id,
         productName: product.name,
+        productAlias: product.alias,
+        productDescription: product.description,
         imageUrl: product.imageUrl,
         categoryId: product.categoryId,
         country: product.country,
@@ -52,7 +48,6 @@ const AddPack = props => {
         ratingCount: product.ratingCount,
         name,
         unitsCount: Number(unitsCount),
-        extraUnits: Number(extraUnits),
         isDivided,
         closeExpired: false,
         byWeight,
@@ -95,18 +90,6 @@ const AddPack = props => {
           onChange={e => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
         />
-        {byWeight ? '' : 
-          <ListInput 
-            name="extraUnits" 
-            label={labels.extraUnits}
-            floatingLabel 
-            clearButton
-            type="number" 
-            value={extraUnits} 
-            onChange={e => setExtraUnits(e.target.value)}
-            onInputClear={() => setExtraUnits('')}
-          />
-        }
         <ListItem>
           <span>{labels.isDivided}</span>
           <Toggle 

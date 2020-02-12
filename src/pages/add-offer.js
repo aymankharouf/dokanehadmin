@@ -64,6 +64,8 @@ const AddOffer = props => {
       const pack = {
         productId: props.id,
         productName: product.name,
+        productAlias: product.alias,
+        productDescription: product.description,
         imageUrl: product.imageUrl,
         categoryId: product.categoryId,
         country: product.country,
@@ -78,7 +80,7 @@ const AddOffer = props => {
         subPackName: subPackInfo.name,
         subQuantity: Number(subQuantity),
         subPercent: subPercent / 100,
-        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.extraUnits || 0)),
+        unitsCount: Number(subQuantity) * subPackInfo.unitsCount,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
         bonusPackId,

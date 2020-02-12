@@ -217,6 +217,11 @@
   color:deeppink;
 }
 
+.list-subtext3 {
+  font-size: 0.8rem;
+  color:teal;
+}
+
 .actions-button-text {
   font-size: 1rem;
 }
@@ -237,4 +242,9 @@
 
 .toolbar-inner .link {
   font-size: 0.8rem;
+}
+
+.card-footer {
+  padding-top: 0;
+  height: 2rem;
 }

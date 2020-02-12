@@ -10,20 +10,23 @@ const OrderDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [order] = useState(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id))
+  const [order, setOrder] = useState(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id))
   const [orderBasket, setOrderBasket] = useState([])
   const [statusActions, setStatusActions] = useState([])
   const [lastOrder, setLastOrder] = useState('')
   const actionsList = useRef('')
   useEffect(() => {
+    setOrder(() => state.orders.find(o => o.id === props.id))
+  }, [state.orders, props.id])
+  useEffect(() => {
     setOrderBasket(() => order.basket.map(p => {
       const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
-      const changePriceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : ''
+      const priceNote = p.actual && p.actual !== p.price ? `${labels.orderPrice}: ${(p.price / 1000).toFixed(3)}, ${labels.currentPrice}: ${(p.actual / 1000).toFixed(3)}` : `${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`
       const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
       return {
         ...p,
         storeName,
-        changePriceNote,
+        priceNote,
         statusNote
       }
     }))
@@ -65,14 +68,14 @@ const OrderDetails = props => {
     }
   }, [inprocess])
 
-  const handleAction = async type => {
+  const handleAction = async action => {
     try{
-      if (type.path) {
-        props.f7router.navigate(type.path)
+      if (action.path) {
+        props.f7router.navigate(action.path)
       } else {
-        if (type === 'a' && !state.customers.find(c => c.id === order.userId)){
+        if (action.id === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
-        } else if (type === 'a' && lastOrder) {
+        } else if (action.id === 'a' && lastOrder) {
           f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, async () => {
             try{
               let found
@@ -97,7 +100,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -106,11 +109,11 @@ const OrderDetails = props => {
               setError(getMessage(props, err))
             }
           })
-        } else if (type === 'i') {
+        } else if (action.id === 'i') {
           f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, true)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, true)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -121,7 +124,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -130,7 +133,7 @@ const OrderDetails = props => {
               setError(getMessage(props, err))
             }
           })
-        } else if (type === 'd') {
+        } else if (action.id === 'd') {
           setInprocess(true)
           await deliverOrder(order, state.storePacks, state.packs, state.users)
           setInprocess(false)
@@ -138,7 +141,7 @@ const OrderDetails = props => {
           props.f7router.back()
         } else {
           setInprocess(true)
-          await updateOrderStatus(order, type, state.storePacks, state.packs, state.users, false)
+          await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()
@@ -158,13 +161,14 @@ const OrderDetails = props => {
             <ListItem 
               key={p.packId} 
               title={p.productName}
-              subtitle={p.packName}
-              text={p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}
-              footer={quantityDetails(p)}
+              subtitle={p.productAlias}
+              text={p.packName}
+              footer={`${labels.status}: ${p.statusNote}`}
               after={(p.gross / 1000).toFixed(3)}
             >
-              {p.changePriceNote ? <div className="list-subtext1">{p.changePriceNote}</div> : ''}
-              <div className="list-subtext2">{`${labels.status}: ${p.statusNote}`}</div>
+              <div className="list-subtext1">{p.priceNote}</div>
+              <div className="list-subtext2">{quantityDetails(p)}</div>
+              <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
             </ListItem>
           )}
           <ListItem 
@@ -201,7 +205,7 @@ const OrderDetails = props => {
       <Actions ref={actionsList}>
         <ActionsButton onClick={() => props.f7router.navigate(`/customer-details/${order.userId}`)}>{labels.customerInfo}</ActionsButton>
         {props.type === 'n' && statusActions.map(a => 
-          <ActionsButton key={a.id} onClick={() => handleAction(a.id)}>{a.name}</ActionsButton>
+          <ActionsButton key={a.id} onClick={() => handleAction(a)}>{a.name}</ActionsButton>
         )}
       </Actions>
       <Toolbar bottom>

@@ -36,7 +36,7 @@ const OrdersList = props => {
         <Searchbar
           className="searchbar"
           searchContainer=".search-list"
-          searchIn=".item-title, .item-subtitle"
+          searchIn=".item-inner"
           clearButton
           expandable
           placeholder={labels.search}
@@ -55,6 +55,7 @@ const OrdersList = props => {
                 title={o.customerInfo?.fullName || o.userInfo.name}
                 subtitle={moment(o.time.toDate()).fromNow()}
                 text={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
+                after={(o.total / 1000).toFixed(3)}
                 key={o.id}
               />
             )

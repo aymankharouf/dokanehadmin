@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
 import BottomToolbar from './bottom-toolbar'
-import { archiveProduct, showMessage, getMessage, showError } from '../data/actions'
+import { archiveProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
 
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
@@ -41,7 +41,7 @@ const ProductPacks = props => {
   const handleArchive = async () => {
     try{
       setInprocess(true)
-      await archiveProduct(product, state.packs)
+      await archiveProduct(product, state.packs, state.storePacks)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()
@@ -52,13 +52,13 @@ const ProductPacks = props => {
   }
   return (
     <Page>
-      <Navbar title={product.name} backLink={labels.back} />
+      <Navbar title={`${product.name}${product.alias ? '-' + product.alias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <img src={product.imageUrl} className="img-card" alt={product.name} />
         </CardContent>
         <CardFooter>
-          <p>{`${labels.productOf} ${product.trademark ? labels.company + ' ' + product.trademark + '-' : ''}${product.country}`}</p>
+          <p>{productOfText(product.trademark, product.country)}</p>
           {product.trademark ? <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> : ''}
         </CardFooter>
       </Card>

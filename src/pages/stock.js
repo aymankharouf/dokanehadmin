@@ -32,7 +32,7 @@ const Stock = props => {
         <Searchbar
           className="searchbar"
           searchContainer=".search-list"
-          searchIn=".item-title, .item-subtitle"
+          searchIn=".item-inner"
           clearButton
           expandable
           placeholder={labels.search}

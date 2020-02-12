@@ -133,7 +133,10 @@ export default [
   },
   {
     path: '/register/',
-    component: Register
+    component: Register,
+    options: {
+      reloadCurrent: true,
+    },
   },
   {
     path: '/search/',

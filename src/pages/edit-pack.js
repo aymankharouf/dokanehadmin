@@ -12,18 +12,16 @@ const EditPack = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
-  const [extraUnits, setExtraUnits] = useState(pack.extraUnits)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     if (name !== pack.name
     || unitsCount !== pack.unitsCount
-    || extraUnits !== pack.extraUnits
     || isDivided !== pack.isDivided
     || byWeight !== pack.byWeight) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, isDivided, byWeight, extraUnits])
+  }, [pack, name, unitsCount, isDivided, byWeight])
   useEffect(() => {
     if (isDivided) {
       setByWeight(true)
@@ -49,7 +47,6 @@ const EditPack = props => {
         ...pack,
         name,
         unitsCount: Number(unitsCount),
-        extraUnits: Number(extraUnits),
         isDivided,
         byWeight
       }
@@ -87,18 +84,6 @@ const EditPack = props => {
           onChange={e => setUnitsCount(e.target.value)}
           onInputClear={() => setUnitsCount('')}
         />
-        {byWeight ? '' : 
-          <ListInput 
-            name="extraUnits" 
-            label={labels.extraUnits}
-            floatingLabel 
-            clearButton
-            type="number" 
-            value={extraUnits} 
-            onChange={e => setExtraUnits(e.target.value)}
-            onInputClear={() => setExtraUnits('')}
-          />
-        }          
         <ListItem>
           <span>{labels.isDivided}</span>
           <Toggle 

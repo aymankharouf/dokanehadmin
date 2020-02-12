@@ -81,14 +81,15 @@ const EditOrder = props => {
         <List mediaList>
           {orderBasket.map(p =>
             <ListItem
-              title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
-              text={`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}
-              footer={quantityDetails(p)}
+              title={p.productName}
+              subtitle={p.productAlias}
+              text={p.packName}
+              footer={`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}
               key={p.packId}
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />
-              <div className="list-subtext1">{`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext2">{quantityDetails(p)}</div>
               <Stepper
                 slot="after"
                 fill

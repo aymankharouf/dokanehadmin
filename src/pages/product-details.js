@@ -28,6 +28,13 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
+          name="description" 
+          label={labels.description}
+          type="text" 
+          value={product.description}
+          readonly
+        />
+        <ListInput 
           name="categoryId" 
           label={labels.category}
           type="text" 

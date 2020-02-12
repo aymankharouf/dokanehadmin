@@ -180,9 +180,8 @@ const RequestedPackDetails = props => {
           <PackImage pack={pack} type="card" />
         </CardContent>
         <CardFooter>
-          <p>{`${labels.orderPrice}: ${(props.price / 1000).toFixed(3)}`}<br />
-          {`${labels.currentPrice}: ${(pack.price / 1000).toFixed(3)}`}<br />
-          {`${labels.quantity}: ${props.quantity}`}</p>
+          <p>{`${labels.orderPrice}: ${(props.price / 1000).toFixed(3)}, ${labels.current}: ${(pack.price / 1000).toFixed(3)}`}</p>
+          <p>{`${labels.quantity}: ${props.quantity}`}</p>
         </CardFooter>
       </Card>
       <List mediaList>

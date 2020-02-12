@@ -121,7 +121,7 @@ const PackDetails = props => {
   }
   return (
     <Page>
-      <Navbar title={pack.productName} backLink={labels.back} />
+      <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <div className="card-title">{pack.name}</div>

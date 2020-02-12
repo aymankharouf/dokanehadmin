@@ -3,6 +3,7 @@ import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper 
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
+import PackImage from './pack-image'
 
 const Basket = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -10,12 +11,17 @@ const Basket = props => {
   const [basket, setBasket] = useState([])
   const [totalPrice, setTotalPrice] = useState('')
   useEffect(() => {
+    if (!state.basket.packs) props.f7router.navigate('/home/', {reloadAll: true})
+  }, [state.basket, props.f7router])
+  useEffect(() => {
     setBasket(() => {
       let basket = state.basket?.packs || []
       basket = basket.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
         const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
         return {
           ...p,
+          packInfo,
           weightText
         }
       })
@@ -23,9 +29,6 @@ const Basket = props => {
     })
     setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket, state.packs])
-  useEffect(() => {
-    if (!state.basket) props.f7router.navigate('/home/', {reloadAll: true})
-  }, [state.basket, props])
   const handleAdd = pack => {
     if (store.id === 's') {
       const stock = state.storePacks.find(p => p.packId === pack.packId && p.storeId === 's')
@@ -42,13 +45,15 @@ const Basket = props => {
         <List mediaList>
           {basket.map(p => 
             <ListItem
-              title={p.productName}
-              subtitle={p.packName}
-              text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+              title={p.packInfo.productName}
+              subtitle={p.packInfo.productAlias}
+              text={p.packInfo.name}
               footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++}
             >
-              <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
               <Stepper
                 slot="after"
                 fill

@@ -16,7 +16,6 @@ const labels = {
   orderDetails: 'تفاصيل الطلب',
   productOf: 'انتاج',
   basketFrom: 'سلة المشتريات من',
-  stock:'المستودع',
   purchaseDetails: 'تفاصيل المشتريات',
   purchases: 'المشتريات',
   category: 'الصنف',
@@ -130,7 +129,7 @@ const labels = {
   purchaseSuccess: 'تم الشراء',
   unavailable: 'غير متوفر',
   executeSuccess: 'تم التنفيذ',
-  storePacks: 'موجودات المستودع',
+  stock: 'موجودات المستودع',
   sales: 'المبيعات',
   ordersCount: 'الطلبات',
   fixedFees: 'الرسوم',
@@ -221,7 +220,6 @@ const labels = {
   details: 'تفاصيل',
   productDetails: 'تفاصيل المنتج',
   bonusProduct: 'المنتج اﻻضافي',
-  extraUnits: 'وحدات اضافية',
   editOffer: 'تعديل عرض',
   invalidPercents: 'الرجاء التأكد من النسب المدخلة',
   relatedProducts: 'المنتجات ذات العلاقة',
@@ -348,8 +346,15 @@ const labels = {
   storesOwners: 'اصحاب المحلات',
   newOwners: 'اصحاب محلات جدد',
   alias: 'اسم اخر',
-  noImage: 'الصورة غير متوفرة'
-
+  noImage: 'الصورة غير متوفرة',
+  productFrom: 'منتج من',
+  fractions: 'خصم التقريب',
+  donationsBalance: 'رصيد التبرع',
+  propertyBalance: 'رصيد الملكية',
+  grossProfit: 'اجمالي الربح',
+  sellingLoss: 'خسائر البيع',
+  grossLoss: 'اجمالي المصروفات',
+  current: 'الحالي'
 }
 
 export default labels

@@ -8,10 +8,10 @@ import labels from '../data/labels'
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
+	const [approvedOrders] = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
 	const [requestedPacks, setRequestedPacks] = useState([])
 	
 	useEffect(() => {
-		const approvedOrders = state.orders.filter(o => ['a', 'e'].includes(o.status))
 		let packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
 		if (props.id){
 			packs = packs.filter(p => {
@@ -21,7 +21,7 @@ const RequestedPacks = props => {
 			})	
 		}
 		setRequestedPacks(packs)
-	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.storePacks])
+	}, [props.id, state.basket, approvedOrders, state.packs, state.customers, state.stores, state.storePacks])
 	let i = 0
 	return(
     <Page>

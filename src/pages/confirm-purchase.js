@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput, Link } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -11,24 +10,20 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
-  const [basket, setBasket] = useState([])
-  const [total, setTotal] = useState('')
-  const [discount, setDiscount] = useState('')
-  useEffect(() => {
-    setBasket(() => {
-      const basket = state.basket.packs.map(p => {
-        const packInfo = state.packs.find(pa => pa.id === p.packId)
-        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
-        return {
-          ...p,
-          packInfo,
-          weightText
-        }
-      })
-      return basket.sort((p1, p2) => p1.time - p2.time)
+  const [basket] = useState(() => {
+    const basket = state.basket.packs.map(p => {
+      const packInfo = state.packs.find(pa => pa.id === p.packId)
+      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
+      return {
+        ...p,
+        packInfo,
+        weightText
+      }
     })
-    setTotal(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
-  }, [state.basket, state.packs])
+    return basket.sort((p1, p2) => p1.time - p2.time)
+  })
+  const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
+  const [discount, setDiscount] = useState('')
   useEffect(() => {
     setDiscount((total * (store.discount || 0) / 1000).toFixed(3))
   }, [total, store])
@@ -67,6 +62,10 @@ const ConfirmPurchase = props => {
       setInprocess(false)
 			setError(getMessage(props, err))
 		}
+  }
+  const handleDelete = () => {
+    props.f7router.navigate('/home/', {reloadAll: true})
+    dispatch({type: 'CLEAR_BASKET'})  
   }
   let i = 0
   return(
@@ -112,7 +111,8 @@ const ConfirmPurchase = props => {
       <Icon material="done"></Icon>
     </Fab>
     <Toolbar bottom>
-      <BottomToolbar/>
+      <Link href='/home/' iconMaterial="home" />
+      <Link href='#' iconMaterial="delete" onClick={() => handleDelete()} />
     </Toolbar>
   </Page>
   )

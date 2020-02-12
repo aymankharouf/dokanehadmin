@@ -3,7 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { getCategoryName } from '../data/actions'
+import { getCategoryName, productOfText } from '../data/actions'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
@@ -31,7 +31,7 @@ const Products = props => {
         <Searchbar
           className="searchbar"
           searchContainer=".search-list"
-          searchIn=".item-title, .item-subtitle"
+          searchIn=".item-inner"
           clearButton
           expandable
           placeholder={labels.search}
@@ -48,11 +48,13 @@ const Products = props => {
                 <ListItem
                   link={`/product-packs/${p.id}/type/n`}
                   title={p.name}
-                  subtitle={getCategoryName(p.categoryInfo, state.categories)}
-                  text={`${labels.productOf} ${p.trademark ? labels.company + ' ' + p.trademark + '-' : ''}${p.country}`}
+                  subtitle={p.alias}
+                  text={p.description}
+                  footer={productOfText(p.trademark, p.country)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
+                  <div className="list-subtext1">{getCategoryName(p.categoryInfo, state.categories)}</div>
                 </ListItem>
               )
             }

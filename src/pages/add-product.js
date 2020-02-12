@@ -10,6 +10,7 @@ const AddProduct = props => {
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [alias, setAlias] = useState('')
+  const [description, setDescription] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [trademark, setTrademark] = useState('')
   const [country, setCountry] = useState('')
@@ -78,6 +79,7 @@ const AddProduct = props => {
       const product = {
         name,
         alias,
+        description,
         categoryId,
         trademark,
         country,
@@ -174,6 +176,16 @@ const AddProduct = props => {
           value={alias} 
           onChange={e => setAlias(e.target.value)}
           onInputClear={() => setAlias('')}
+        />
+        <ListInput 
+          name="description" 
+          label={labels.description}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={description} 
+          onChange={e => setDescription(e.target.value)}
+          onInputClear={() => setDescription('')}
         />
         <ListItem
           title={labels.category}

@@ -11,6 +11,7 @@ const EditProduct = props => {
   const [product] = useState(() => state.products.find(p => p.id === props.id))
   const [name, setName] = useState(product.name)
   const [alias, setAlias] = useState(product.alias)
+  const [description, setDescription] = useState(product.description)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademark, setTrademark] = useState(product.trademark)
   const [country, setCountry] = useState(product.country)
@@ -45,12 +46,13 @@ const EditProduct = props => {
   useEffect(() => {
     if (name !== product.name
     || alias !== product.alias
+    || description !== product.description
     || country !== product.country
     || categoryId !== product.categoryId
     || trademark !== product.trademark
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, alias, country, categoryId, trademark, imageUrl])
+  }, [product, name, alias, description, country, categoryId, trademark, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -72,6 +74,7 @@ const EditProduct = props => {
         categoryId,
         name,
         alias,
+        description,
         trademark,
         country,
         imageUrl
@@ -162,6 +165,16 @@ const EditProduct = props => {
           value={alias} 
           onChange={e => setAlias(e.target.value)}
           onInputClear={() => setAlias('')}
+        />
+        <ListInput 
+          name="description" 
+          label={labels.description}
+          floatingLabel 
+          clearButton
+          type="text" 
+          value={description} 
+          onChange={e => setDescription(e.target.value)}
+          onInputClear={() => setDescription('')}
         />
         <ListItem
           title={labels.category}
