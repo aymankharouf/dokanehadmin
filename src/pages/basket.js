@@ -18,11 +18,9 @@ const Basket = props => {
       let basket = state.basket?.packs || []
       basket = basket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
-        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
         return {
           ...p,
           packInfo,
-          weightText
         }
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
@@ -53,7 +51,7 @@ const Basket = props => {
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
-              <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               <Stepper
                 slot="after"
                 fill

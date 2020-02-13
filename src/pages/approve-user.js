@@ -57,7 +57,7 @@ const ApproveUser = props => {
         throw new Error('otherUserMobile')
       }
       setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName || '', address)
+      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName || '', address, state.users)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()  

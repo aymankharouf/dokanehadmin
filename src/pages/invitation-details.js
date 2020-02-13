@@ -14,15 +14,15 @@ const InvitationDetails = props => {
   useEffect(() => {
     setMobileCheck(() => {
       if (state.users.find(u => u.mobile === props.mobile)) {
-        return '1'
+        return 'r'
       }
       if (state.customers.find(c => c.otherMobile === props.mobile)) {
-        return '1'
+        return 'r'
       }
-      if (state.users.find(u => u.id !== props.userId && u.invitations?.find(i => i.mobile === props.mobile))) {
-        return '2'
+      if (state.users.find(u => u.id !== props.userId && u.friends?.find(f => f.mobile === props.mobile))) {
+        return 'o'
       }
-      return '0'
+      return 's'
     })
   }, [state.users, state.customers, props.mobile, props.userId])
   useEffect(() => {
@@ -42,7 +42,7 @@ const InvitationDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveInvitation(userInfo.current, props.mobile, mobileCheck)
+      await approveInvitation(userInfo, props.mobile, mobileCheck)
       setInprocess(false)
       showMessage(labels.approveSuccess)
       props.f7router.back()
@@ -62,14 +62,14 @@ const InvitationDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={userInfo.current.fullName}
+          value={`${userInfo.name}: ${userInfo.mobile}`}
           type="text"
           readonly
         />
         <ListInput 
           name="friendName" 
           label={labels.friendName}
-          value={userInfo.current.invitations.find(i => i.mobile === props.mobile).name}
+          value={userInfo.friends.find(f => f.mobile === props.mobile).name}
           type="text"
           readonly
         />
@@ -83,7 +83,7 @@ const InvitationDetails = props => {
         <ListInput 
           name="mobileCheck" 
           label={labels.mobileCheck}
-          value={mobileCheck === '0' ? labels.notUsedMobile : (mobileCheck === '1' ? labels.alreadyUser : labels.invitedByOther)}
+          value={mobileCheck === 's' ? labels.notUsedMobile : (mobileCheck === 'r' ? labels.alreadyUser : labels.invitedByOther)}
           type="text"
           readonly
         />

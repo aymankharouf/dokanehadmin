@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { addNotification, showMessage, showError, getMessage } from '../data/actions'
+import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -31,7 +31,7 @@ const AddNotification = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await addNotification(userId, title, message)
+      await sendNotification(userId, title, message)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

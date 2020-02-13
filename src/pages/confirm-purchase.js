@@ -13,11 +13,9 @@ const ConfirmPurchase = props => {
   const [basket] = useState(() => {
     const basket = state.basket.packs.map(p => {
       const packInfo = state.packs.find(pa => pa.id === p.packId)
-      const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
       return {
         ...p,
         packInfo,
-        weightText
       }
     })
     return basket.sort((p1, p2) => p1.time - p2.time)
@@ -25,7 +23,7 @@ const ConfirmPurchase = props => {
   const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
   const [discount, setDiscount] = useState('')
   useEffect(() => {
-    setDiscount((total * (store.discount || 0) / 1000).toFixed(3))
+    setDiscount((Math.trunc(total * (store.discount || 0)) / 1000).toFixed(3))
   }, [total, store])
   useEffect(() => {
     if (error) {
@@ -52,7 +50,7 @@ const ConfirmPurchase = props => {
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
         setInprocess(true)
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount * 1000)
         setInprocess(false)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
@@ -77,11 +75,13 @@ const ConfirmPurchase = props => {
           <ListItem 
             key={i++} 
             title={p.packInfo.productName}
-            subtitle={p.packInfo.name}
-            text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
-            footer={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}
+            subtitle={p.packInfo.productAlias}
+            text={p.packInfo.name}
+            footer={`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}
             after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
-          />
+          >
+            <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+          </ListItem>
         )}
         <ListItem 
           title={labels.total} 

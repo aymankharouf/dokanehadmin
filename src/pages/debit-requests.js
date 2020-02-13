@@ -42,7 +42,7 @@ const DebitRequests = props => {
   }
   return(
     <Page>
-      <Navbar title={labels.approveDebitRequests} backLink={labels.back} />
+      <Navbar title={labels.debitRequests} backLink={labels.back} />
       <Block>
         <List mediaList>
           {debitRequests.length === 0 ? 

@@ -21,11 +21,9 @@ const ReturnBasket = props => {
       let basket = state.returnBasket?.packs || []
       basket = basket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId) || ''
-        const weightText = p.weight && p.weight !== p.purchasedQuantity ? `(${quantityText(p.weight)})` : '' 
         return {
           ...p,
-          packInfo,
-          weightText
+          packInfo
         }
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
@@ -35,8 +33,8 @@ const ReturnBasket = props => {
   useEffect(() => {
     setDiscount(() => {
       if (state.returnBasket.type === 'r') {
-        const storeInfo = state.stores.find(s => s.id === state.returnBasket.storeId) || ''
-        return (totalPrice * storeInfo.discount / 1000).toFixed(3)  
+        const storeInfo = state.stores.find(s => s.id === state.returnBasket.storeId)
+        return (Math.trunc(totalPrice * (storeInfo.discount || 0)) / 1000).toFixed(3)  
       } else {
         return 0
       }
@@ -83,12 +81,13 @@ const ReturnBasket = props => {
           {basket.map(p => 
             <ListItem
               title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
-              text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+              subtitle={p.packInfo.productAlias}
+              text={p.packInfo.name}
               footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}`}
               key={i++}
             >
-              <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               <Link slot="after" iconMaterial="delete" iconColor="red" onClick={()=> dispatch({type: 'REMOVE_FROM_RETURN_BASKET', pack: p})}/>
             </ListItem>
           )}

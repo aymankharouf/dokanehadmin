@@ -119,7 +119,6 @@
 *notifications
 *add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 *customer follow-up
-*finished orders calling & feed back
 *prevent archive order before monthly trans
 *modify owner page to categorize his products
 *purchase history by category for the user
@@ -150,9 +149,10 @@
 *add stock trans archive, products & packs
 *hints & help
 *return purchase discount
-*archive store packs
+*friends
 debit
 pwa
 notification for offers & change price
 weight in return basket
 return packs by loading order packs
+store balance

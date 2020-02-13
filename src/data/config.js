@@ -6,7 +6,7 @@ export const setup = {
   orderLimit: 50000,
   exceedPricePercent: 0.05,
   returnPenalty: 100,
-  invitationDiscount: 100,
+  invitationDiscount: 50,
   alarmDiscount: 100,
   firstOrderDiscount: 200,
   ratingDiscount: 50,
@@ -26,8 +26,8 @@ export const randomColors = [
 ]
 
 export const orderStatus = [
-  {id: 'n', name: 'غير معتمد'},
-  {id: 'a', name: 'معتمد'},
+  {id: 'n', name: 'قيد الموافقة'},
+  {id: 'a', name: 'تمت الموافقة'},
   {id: 's', name: 'معلق'},
   {id: 'r', name: 'مرفوض'},
   {id: 'e', name: 'قيد التنفيذ'},
@@ -66,7 +66,7 @@ export const spendingTypes = [
 ]
 
 export const orderPackStatus = [
-  {id: 'n', name: 'لم يتم الشراء'},
+  {id: 'n', name: 'قيد الشراء'},
   {id: 'p', name: 'شراء جزئي'},
   {id: 'f', name: 'تم الشراء'},
   {id: 'u', name: 'غير متوفر'},
@@ -86,12 +86,6 @@ export const alarmTypes = [
   {id: 'go', name: 'الابلاغ عن عرض لمجموعة', actor: 'o', isAvailable: 0},
 ]
 
-export const callTypes = [
-  {id: 'p', name: 'الاتصال هاتفيا'},
-  {id: 's', name: 'ارسال رسالة نصية'},
-  {id: 'w', name: 'ارسال رسالة واتساب'}
-]
-
 export const orderRequestTypes = [
   {id: 'e', name: 'تعديل'},
   {id: 'm', name: 'دمج'},
@@ -101,4 +95,11 @@ export const orderRequestTypes = [
 export const advertType = [
   {id: 'a', name: 'اعلان'},
   {id: 'n', name: 'تنويه'}
+]
+
+export const friendStatus = [
+  {id: 'n', name: 'قيد الموافقة'},
+  {id: 's', name: 'ارسلت الدعوة'},
+  {id: 'o', name: 'مدعو سابقا'},
+  {id: 'r', name: 'مسجل'}
 ]

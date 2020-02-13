@@ -24,7 +24,7 @@ const Products = props => {
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
-      <Navbar title={labels.allProducts} backLink={labels.back}>
+      <Navbar title={labels.products} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

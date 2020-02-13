@@ -3,31 +3,28 @@ import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framew
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { approveRating, showMessage, showError, getMessage } from '../data/actions'
+import { approveNotifyFriends, showMessage, showError, getMessage } from '../data/actions'
 
-const Ratings = props => {
+const NotifyFriends = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [ratings, setRatings] = useState([])
+  const [notifyFriends, setNotifyFriends] = useState([])
   useEffect(() => {
-    setRatings(() => {
-      let ratings = []
-      let users = state.users.filter(u => u.ratings?.find(r => r.status === 'n'))
+    setNotifyFriends(() => {
+      let notifyFriends = []
+      let users = state.users.filter(u => u.notifyFriends)
       users.forEach(u => {
-        u.ratings.forEach(r => {
-          if (r.status === 'n') {
-            ratings.push({
-              userInfo: u,
-              productInfo: state.products.find(p => p.id === r.productId),
-              value: r.value
-            })
-          }
+        u.notifyFriends.forEach(n => {
+          notifyFriends.push({
+            userInfo: u,
+            packInfo: state.packs.find(p => p.id === n),
+          })
         })
       })
-      return ratings
+      return notifyFriends
     })
-  }, [state.users, state.products])
+  }, [state.users, state.packs])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -42,10 +39,10 @@ const Ratings = props => {
     }
   }, [inprocess])
 
-  const handleApprove = async rating => {
+  const handleApprove = async (userInfo, pack) => {
     try{
       setInprocess(true)
-      await approveRating(rating, state.packs)
+      await approveNotifyFriends(userInfo, pack, state.users)
       setInprocess(false)
       showMessage(labels.approveSuccess)
     } catch(err) {
@@ -56,19 +53,19 @@ const Ratings = props => {
   let i = 0
   return(
     <Page>
-      <Navbar title={labels.ratings} backLink={labels.back} />
+      <Navbar title={labels.notifyFriends} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {ratings.length === 0 ? 
+          {notifyFriends.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : ratings.map(r => 
+          : notifyFriends.map(n => 
               <ListItem
-                title={r.productInfo.name}
-                subtitle={`${r.userInfo.name}:${r.userInfo.mobile}`}
+                title={n.packInfo.productName}
+                subtitle={`${n.userInfo.name}:${n.userInfo.mobile}`}
                 key={i++}
               >
-                <img slot="media" src={r.productInfo.imageUrl} className="img-list" alt={r.productInfo.name} />
-                <Button text={labels.approve} slot="after" onClick={() => handleApprove(r)} />
+                <img slot="media" src={n.packInfo.imageUrl} className="img-list" alt={n.packInfo.productName} />
+                <Button text={labels.approve} slot="after" onClick={() => handleApprove(n.userInfo, n.packInfo)} />
               </ListItem>
             )
           }
@@ -81,4 +78,4 @@ const Ratings = props => {
   )
 }
 
-export default Ratings
+export default NotifyFriends

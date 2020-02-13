@@ -50,7 +50,7 @@ const EditOrder = props => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         setInprocess(true)
-        await updateOrderStatus(order, type, state.storePacks, state.packs)
+        await updateOrderStatus(order, type, state.storePacks, state.packs, false)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})

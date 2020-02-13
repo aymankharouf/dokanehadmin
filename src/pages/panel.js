@@ -14,11 +14,12 @@ const Panel = props => {
     const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id)).length
     const alarms = state.users.filter(u => u.alarms?.find(i => i.status === 'n')).length
     const ratings = state.users.filter(u => u.ratings?.find(r => r.status === 'n')).length
-    const invitations = state.users.filter(u => u.invitations?.find(i => i.status === 'n')).length
+    const invitations = state.users.filter(u => u.friends?.find(f => f.status === 'n')).length
     const debitRequests = state.users.filter(u => u.debitRequestStatus === 'n').length
     const passwordRequests = state.passwordRequests.filter(r => r.status === 'n').length
     const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
-    setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + debitRequests + passwordRequests + newStoresOwners)
+    const notifyFriends = state.users.filter(u => u.notifyFriends).length
+    setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + debitRequests + passwordRequests + newStoresOwners + notifyFriends)
   }, [state.orders, state.users, state.customers, state.passwordRequests])
   useEffect(() => {
     const today = (new Date()).setHours(0, 0, 0, 0)

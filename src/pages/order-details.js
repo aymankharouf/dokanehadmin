@@ -41,8 +41,7 @@ const OrderDetails = props => {
         {id: 'i', name: 'استيداع', status: ['f', 'e', 'p']},
         {id: 'd', name: 'تسليم', status: ['p']},
         {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], path: `/edit-order/${order.id}`},
-        {id: 'ro', name: 'ارجاع', status: ['p'], path: `/return-order/${props.id}`},
-        {id: 'cc', name: 'الاتصال بالعميل', status: ['p'], path: `/customer-calls/${props.id}`}
+        {id: 'b', name: 'ارجاع', status: ['p'], path: `/return-order/${props.id}`}
       ]
       return statusActions.filter(a => a.status.find(s => s === order.status))
     })
@@ -100,7 +99,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -113,7 +112,7 @@ const OrderDetails = props => {
           f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, true)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, true)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -124,7 +123,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
+              await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -135,13 +134,13 @@ const OrderDetails = props => {
           })
         } else if (action.id === 'd') {
           setInprocess(true)
-          await deliverOrder(order, state.storePacks, state.packs, state.users)
+          await deliverOrder(order, state.storePacks, state.packs)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()
         } else {
           setInprocess(true)
-          await updateOrderStatus(order, action.id, state.storePacks, state.packs, state.users, false)
+          await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()

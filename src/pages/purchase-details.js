@@ -17,14 +17,12 @@ const PurchaseDetails = props => {
   }, [state.purchases, state.archivedPurchases, props.id, props.type])
   useEffect(() => {
     setPurchaseBasket(() => {
-      const purchaseBasket =  purchase ? purchase.basket.filter(p => !state.returnBasket?.packs?.find(bp => bp.packId === p.packId)) : []
+      const purchaseBasket =  purchase ? purchase.basket.filter(p => !state.returnBasket?.packs?.find(bp => bp.packId === p.packId && (!bp.weight || bp.weight === p.weight))) : []
       return purchaseBasket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
-        const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
         return {
           ...p,
           packInfo,
-          weightText
         }
       })
     })
@@ -37,7 +35,7 @@ const PurchaseDetails = props => {
   }, [error])
   const handleReturn = pack => {
     try{
-      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 'f'].includes(o.status))
+      const affectedOrders = state.orders.filter(o => o.basket.find(p => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 'd'].includes(o.status))
       if (affectedOrders.length > 0) {
         throw new Error('finishedOrdersAffected')
       }
@@ -50,6 +48,7 @@ const PurchaseDetails = props => {
         cost: pack.cost,
         price: pack.price,
         quantity: pack.quantity,
+        weight: pack.weight,
         storeId: purchase.storeId,
         purchaseId: purchase.id
       }
@@ -59,6 +58,7 @@ const PurchaseDetails = props => {
 			setError(getMessage(props, err))
 		}
   }
+  let i = 0
   return(
     <Page>
       <Navbar title={labels.purchaseDetails} backLink={labels.back} />
@@ -69,13 +69,14 @@ const PurchaseDetails = props => {
           : purchaseBasket.map(p => 
             <ListItem 
               title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
-              text={`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}
+              subtitle={p.packInfo.productAlias}
+              text={p.packInfo.name}
               footer={`${labels.price}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
-              key={p.packId} 
+              key={i++} 
             >
               <PackImage slot="media" pack={p.packInfo} type="list" />
-              <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}
             </ListItem>
           )}

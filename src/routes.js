@@ -81,8 +81,6 @@ import InvitationDetails from './pages/invitation-details'
 import Notifications from './pages/notifications'
 import AddNotification from './pages/add-notification'
 import ArchivedOrders from './pages/archived-orders'
-import CustomerCalls from './pages/customer-calls'
-import AddCall from './pages/add-call'
 import StoreTrans from './pages/store-trans'
 import PurchasePlan from './pages/purchase-plan'
 import Adverts from './pages/adverts'
@@ -98,6 +96,7 @@ import ArchivedStockTrans from './pages/archived-stock-trans'
 import ArchivedProducts from './pages/archived-products'
 import DebitRequests from './pages/debit-requests'
 import ReturnBasket from './pages/return-basket'
+import NotifyFriends from './pages/notify-friends'
 
 export default [
   {
@@ -455,14 +454,6 @@ export default [
     component: ArchivedOrders
   },
   {
-    path: '/customer-calls/:id',
-    component: CustomerCalls
-  },
-  {
-    path: '/add-call/:id',
-    component: AddCall
-  },
-  {
     path: '/store-trans/:id',
     component: StoreTrans
   },
@@ -517,6 +508,10 @@ export default [
   {
     path: '/return-basket/',
     component: ReturnBasket
+  },
+  {
+    path: '/notify-friends/',
+    component: NotifyFriends
   },
   {
     path: '(.*)',

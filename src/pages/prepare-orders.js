@@ -35,12 +35,10 @@ const PrepareOrders = props => {
 		packsArray = packsArray.map(p => {
 			const packInfo = state.packs.find(pa => pa.id === p.packId)
 			const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-			const weightText = p.weight && p.weight !== p.quantity ? `(${quantityText(p.weight)})` : '' 
 			return {
 				...p,
 				packInfo,
 				productInfo,
-				weightText
 			}
 		})
 		setPacks(packsArray)
@@ -58,7 +56,7 @@ const PrepareOrders = props => {
 								link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
 								title={p.productInfo.name}
 								subtitle={p.packInfo.name}
-								text={`${labels.quantity}: ${quantityText(p.quantity)} ${p.weightText}`}
+								text={`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}
 								key={i++}
 							>
 								<PackImage slot="media" pack={p.packInfo} type="list" />

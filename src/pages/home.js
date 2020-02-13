@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { randomColors } from '../data/config'
-
+import labels from '../data/labels'
 
 const Home = props => {
   const [mainPages] = useState(() => [
-    {id: '1', name: 'الطلبات', path: '/orders/'},
-    {id: '2', name: 'المحلات', path: '/stores/'},
-    {id: '3', name: 'المنتجات', path: '/products/'},
-    {id: '4', name: 'المشتريات', path: '/purchases/'},
-    {id: '5', name: 'العملاء', path: '/customers/'},
-    {id: '6', name: 'المستودع', path: '/stock/'},
-    {id: '7', name: 'المصاريف', path: '/spendings/'},
-    {id: '8', name: 'التنبيهات', path: '/notifications/'}
+    {id: '1', name: labels.orders, path: '/orders/'},
+    {id: '2', name: labels.stores, path: '/stores/'},
+    {id: '3', name: labels.products, path: '/products/'},
+    {id: '4', name: labels.purchases, path: '/purchases/'},
+    {id: '5', name: labels.customers, path: '/customers/'},
+    {id: '6', name: labels.stock, path: '/stock/'},
+    {id: '7', name: labels.spendings, path: '/spendings/'},
+    {id: '8', name: labels.notifications, path: '/notifications/'}
   ])
   let i = 0
   return (

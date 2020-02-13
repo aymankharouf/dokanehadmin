@@ -11,14 +11,14 @@ const Invitations = props => {
   useEffect(() => {
     setInvitations(() => {
       let invitations = []
-      let users = state.users.filter(u => u.invitations?.find(i => i.status === 'n'))
+      let users = state.users.filter(u => u.friends?.find(f => f.status === 'n'))
       users.forEach(u => {
-        u.invitations.forEach(i => {
-          if (i.status === 'n') {
+        u.friends.forEach(f => {
+          if (f.status === 'n') {
             invitations.push({
               userInfo: u,
-              name: i.name,
-              mobile: i.mobile
+              name: f.name,
+              mobile: f.mobile
             })
           }
         })
@@ -37,7 +37,7 @@ const Invitations = props => {
           : invitations.map(i => 
               <ListItem
                 link={`/invitation-details/${i.userInfo.id}/mobile/${i.mobile}`}
-                title={`${i.userInfo.name}:${i.userInfo.mobile}`}
+                title={`${i.userInfo.name}: ${i.userInfo.mobile}`}
                 subtitle={`${i.name}: ${i.mobile}`}
                 key={j++}
               />                
