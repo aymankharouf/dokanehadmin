@@ -39,11 +39,10 @@ const AddCategory = props => {
   return (
     <Page>
       <Navbar title={labels.addCategory} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
@@ -52,7 +51,6 @@ const AddCategory = props => {
         <ListInput 
           name="ordering" 
           label={labels.ordering}
-          floatingLabel 
           clearButton
           type="number" 
           onChange={e => setOrdering(e.target.value)}

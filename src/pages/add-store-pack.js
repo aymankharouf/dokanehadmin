@@ -87,7 +87,7 @@ const AddStorePack = props => {
   return (
     <Page>
       <Navbar title={`${labels.addProduct} ${store.name}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.product}
           smartSelect
@@ -112,7 +112,6 @@ const AddStorePack = props => {
             label={labels.cost}
             value={cost}
             clearButton
-            floatingLabel 
             type="number" 
             onChange={e => setCost(e.target.value)}
             onInputClear={() => setCost('')}
@@ -124,7 +123,6 @@ const AddStorePack = props => {
           label={labels.price}
           value={price}
           clearButton 
-          floatingLabel 
           type="number" 
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
@@ -134,7 +132,6 @@ const AddStorePack = props => {
           label={labels.offerDays}
           value={offerDays}
           clearButton 
-          floatingLabel 
           type="number" 
           onChange={e => setOfferDays(e.target.value)}
           onInputClear={() => setOfferDays('')}

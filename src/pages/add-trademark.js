@@ -38,13 +38,15 @@ const AddTrademark = props => {
   return (
     <Page>
       <Navbar title={labels.addTrademark} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           type="text" 
+          clearButton
+          value={name}
           onChange={e => setName(e.target.value)}
+          onInputClear={() => setName('')}
         />
       </List>
       {!name ? '' : 

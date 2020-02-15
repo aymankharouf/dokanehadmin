@@ -13,7 +13,7 @@ const PrepareOrdersList = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   useEffect(() => {
     setOrders(() => {
-      let orders = state.orders.filter(o => (props.orderId === '0' && o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)) || o.id === props.orderId)
+      let orders = state.orders.filter(o => o.id === props.orderId || (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)))
       orders = orders.map(o => {
         const customerInfo = state.customers.find(c => c.id === o.userId)
         return {

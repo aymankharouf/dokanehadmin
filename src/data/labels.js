@@ -95,7 +95,7 @@ const labels = {
   customerDetails: 'تفاصيل العميل',
   orderLimit: 'سقف الطلبات',
   totalOrders: 'عدد الطلبات',
-  totalDeliveredOrders: 'عدد الطلبات المستلمة',
+  totalDeliveredOrders: 'الطلبات المستلمة',
   totalPayments: 'مجموع الدفعات',
   editCustomer: 'تعديل بيانات عميل',
   type: 'التصنيف',
@@ -184,7 +184,6 @@ const labels = {
   refreshSuccess: 'تم التحديث',
   customerInfo: 'معلومات العميل',
   isDivided: 'يجزأ؟',
-  gram: 'غ',
   quantityNotAvaliable: 'الكمية غير متوفرة',
   enterWeight: 'ادخل الوزن الفعلي',
   actualWeight: 'الوزن الفعلي',
@@ -309,7 +308,7 @@ const labels = {
   permitSuccess: 'تم تعديل الصلاحية',
   unPermitSuccess: 'تم سحب الصلاحية',
   registerSuccess: 'تم التسجيل',
-  mapPosition: 'الموقع على الخريطة',
+  mapPosition: 'الموقع',
   openTime: 'اوقات الدوام',
   archivedPurchases: 'ارشيف المشتريات',
   resolved: 'تم الارسال',
@@ -353,7 +352,13 @@ const labels = {
   notifyFriends: 'ابلاغ الاصدقاء',
   notifyFromFriend: 'تنبيه من صديقك',
   offerAvailableFor: 'هناك عرض على منتج',
-  withPrice: 'بسعر'
+  withPrice: 'بسعر',
+  balance: 'الرصيد',
+  amount: 'الدفعة',
+  enterAmount: 'ادخل المبلغ',
+  balanceTrans: 'الحركات المالية',
+  payment: 'دفعة',
+  sale: 'بيع'
 }
 
 export default labels

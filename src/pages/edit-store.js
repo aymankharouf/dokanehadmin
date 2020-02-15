@@ -89,12 +89,11 @@ const EditStore = props => {
   return (
     <Page>
       <Navbar title={labels.editStore} backLink={labels.back} />
-      <List>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel
           clearButton 
           type="text" 
           onChange={e => setName(e.target.value)}
@@ -104,7 +103,6 @@ const EditStore = props => {
           name="mobile"
           label={labels.mobile}
           value={mobile}
-          floatingLabel
           clearButton
           type="number"
           errorMessage={mobileErrorMessage}
@@ -134,7 +132,6 @@ const EditStore = props => {
           name="discount"
           label={labels.discount}
           value={discount}
-          floatingLabel
           clearButton
           type="number"
           onChange={e => setDiscount(e.target.value)}
@@ -153,7 +150,6 @@ const EditStore = props => {
           name="openTime"
           label={labels.openTime}
           value={openTime}
-          floatingLabel
           clearButton
           type="text"
           onChange={e => setOpenTime(e.target.value)}
@@ -163,7 +159,6 @@ const EditStore = props => {
           name="mapPosition"
           label={labels.mapPosition}
           value={mapPosition}
-          floatingLabel
           clearButton
           type="text"
           onChange={e => setMapPosition(e.target.value)}
@@ -173,7 +168,6 @@ const EditStore = props => {
           name="address" 
           label={labels.address}
           value={address}
-          floatingLabel
           clearButton 
           type="textarea" 
           onChange={e => setAddress(e.target.value)}

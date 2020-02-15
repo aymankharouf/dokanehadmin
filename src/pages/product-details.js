@@ -12,7 +12,7 @@ const ProductDetails = props => {
   return (
     <Page>
       <Navbar title={labels.productDetails} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
@@ -38,7 +38,7 @@ const ProductDetails = props => {
           name="categoryId" 
           label={labels.category}
           type="text" 
-          value={state.categories.find(c => c.id === product.categoryId).name}
+          value={state.categories.find(c => c.id === product.categoryId)?.name || ''}
           readonly
         />
         <ListInput 

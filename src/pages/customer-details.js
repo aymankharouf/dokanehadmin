@@ -19,7 +19,7 @@ const CustomerDetails = props => {
       <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-customer/${props.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
@@ -103,6 +103,13 @@ const CustomerDetails = props => {
           label={labels.otherMobile}
           value={customer.otherMobile}
           type="number"
+          readonly
+        />
+        <ListInput 
+          name="mapPosition" 
+          label={labels.mapPosition}
+          value={customer.mapPosition}
+          type="text" 
           readonly
         />
         <ListInput 

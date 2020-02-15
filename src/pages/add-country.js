@@ -38,11 +38,10 @@ const AddCountry = props => {
   return (
     <Page>
       <Navbar title={labels.addCountry} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name} 
-          floatingLabel
           clearButton
           type="text"
           value={name}

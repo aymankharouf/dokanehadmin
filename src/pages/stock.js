@@ -49,8 +49,8 @@ const Stock = props => {
               <ListItem
                 link={`/stock-pack-trans/${p.packId}`}
                 title={p.packInfo.productName}
-                subtitle={p.packInfo.name}
-                text={`${labels.productOf} ${p.packInfo.trademark ? labels.company + ' ' + p.packInfo.trademark + '-' : ''}${p.packInfo.country}`}
+                subtitle={p.packInfo.productAlias}
+                text={p.packInfo.name}
                 footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
                 after={(p.cost / 1000).toFixed(3)}
                 key={p.id}

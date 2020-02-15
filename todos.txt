@@ -150,9 +150,9 @@
 *hints & help
 *return purchase discount
 *friends
+*store balance
+*return packs by loading order packs
 debit
 pwa
-notification for offers & change price
 weight in return basket
-return packs by loading order packs
-store balance
+delivery time

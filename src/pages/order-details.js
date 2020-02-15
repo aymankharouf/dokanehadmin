@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, deliverOrder, mergeOrder } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -40,8 +40,8 @@ const OrderDetails = props => {
         {id: 'c', name: 'الغاء', status: ['n', 's', 'a']},
         {id: 'i', name: 'استيداع', status: ['f', 'e', 'p']},
         {id: 'd', name: 'تسليم', status: ['p']},
-        {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], path: `/edit-order/${order.id}`},
-        {id: 'b', name: 'ارجاع', status: ['p'], path: `/return-order/${props.id}`}
+        {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], path: `/edit-order/${order.id}/type/e`},
+        {id: 'b', name: 'ارجاع', status: ['p'], path: `/edit-order/${props.id}/type/r`}
       ]
       return statusActions.filter(a => a.status.find(s => s === order.status))
     })
@@ -134,7 +134,7 @@ const OrderDetails = props => {
           })
         } else if (action.id === 'd') {
           setInprocess(true)
-          await deliverOrder(order, state.storePacks, state.packs)
+          await updateOrderStatus(order, 'd', state.storePacks, state.packs, false)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()

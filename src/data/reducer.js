@@ -14,8 +14,7 @@ const Reducer = (state, action) => {
           weight: action.params.weight,
           isOffer: action.params.packStore.isOffer,
           exceedPriceType: action.params.exceedPriceType,
-          isDivided: action.params.pack.isDivided,
-          time: new Date()
+          isDivided: action.params.pack.isDivided
         }
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.params.packStore.storeId, packs: [pack]}}
@@ -65,7 +64,12 @@ const Reducer = (state, action) => {
       case 'LOAD_ORDER_BASKET':
         return {
           ...state,
-          orderBasket: action.order.basket
+          orderBasket: action.params.order.basket.map(p => {
+            return {
+              ...p,
+              oldQuantity: action.params.type === 'e' ? p.quantity : p.purchased
+            }
+          })
         }
       case 'CLEAR_ORDER_BASKET':
         return {
@@ -90,34 +94,30 @@ const Reducer = (state, action) => {
         packs.splice(packIndex, 1, pack)  
         return {...state, orderBasket: packs}
       case 'DECREASE_ORDER_QUANTITY':
-        if (action.pack.weight) {
-          if (action.pack.packInfo.isDivided) {
-            if (action.pack.quantity > action.pack.weight) {
-              nextQuantity = action.pack.weight
-            } else {
-              nextQuantity = 0
-            }  
+        if (action.params.pack.weight) {
+          if (action.params.type === 'r') {
+            nextQuantity = 0
           } else {
-            if (action.pack.quantity > action.pack.purchased) {
-              nextQuantity = action.pack.purchased
+            if (action.params.pack.quantity > action.params.pack.purchased) {
+              nextQuantity = action.params.pack.purchased
             } else {
               nextQuantity = 0
             }  
           }
-        } else if (action.pack.packInfo.isDivided) {
-          nextQuantity = increment.filter(i => i < action.pack.quantity)
+        } else if (action.params.pack.packInfo.isDivided) {
+          nextQuantity = increment.filter(i => i < action.params.pack.quantity)
           nextQuantity = Math.max(...nextQuantity)
           nextQuantity = nextQuantity === -Infinity ? 0 : nextQuantity
         } else {
-          nextQuantity = action.pack.quantity - 1
+          nextQuantity = action.params.pack.quantity - 1
         }
         pack = {
-          ...action.pack,
+          ...action.params.pack,
           quantity: nextQuantity,
-          gross: Math.trunc(action.pack.price * nextQuantity)
+          gross: Math.trunc(action.params.pack.price * nextQuantity)
         }  
         packs = state.orderBasket.slice()
-        packIndex = packs.findIndex(p => p.packId === action.pack.packId)
+        packIndex = packs.findIndex(p => p.packId === action.params.pack.packId)
         packs.splice(packIndex, 1, pack)  
         return {...state, orderBasket: packs}
       case 'ADD_TO_RETURN_BASKET':

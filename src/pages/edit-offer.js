@@ -85,11 +85,10 @@ const EditOffer = props => {
   return (
     <Page>
       <Navbar title={`${labels.editOffer} ${pack.productName}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -119,7 +118,6 @@ const EditOffer = props => {
           label={labels.quantity}
           value={subQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}
@@ -129,7 +127,6 @@ const EditOffer = props => {
           label={labels.percent}
           value={subPercent}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubPercent(e.target.value)}
           onInputClear={() => setSubPercent('')}
@@ -171,7 +168,6 @@ const EditOffer = props => {
           label={labels.quantity}
           value={bonusQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setBonusQuantity(e.target.value)}
           onInputClear={() => setBonusQuantity('')}
@@ -181,7 +177,6 @@ const EditOffer = props => {
           label={labels.percent}
           value={bonusPercent}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setBonusPercent(e.target.value)}
           onInputClear={() => setBonusPercent('')}

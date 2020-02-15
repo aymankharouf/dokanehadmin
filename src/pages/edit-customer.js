@@ -95,12 +95,11 @@ const EditCustomer = props => {
   return (
     <Page>
       <Navbar title={labels.editCustomer} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
@@ -136,7 +135,6 @@ const EditCustomer = props => {
           name="deliveryFees" 
           label={labels.deliveryFees}
           value={deliveryFees}
-          floatingLabel 
           clearButton
           type="number" 
           onChange={e => setDeliveryFees(e.target.value)}
@@ -146,7 +144,6 @@ const EditCustomer = props => {
           name="specialDiscount" 
           label={labels.specialDiscount}
           value={specialDiscount}
-          floatingLabel 
           clearButton
           type="number" 
           onChange={e => setSpecialDiscount(e.target.value)}
@@ -156,17 +153,15 @@ const EditCustomer = props => {
           name="orderLimit" 
           label={labels.orderLimit}
           value={orderLimit}
-          floatingLabel 
           clearButton
           type="number" 
           onChange={e => setOrderLimit(e.target.value)}
           onInputClear={() => setOrderLimit('')}
         />
         <ListInput
-          label={labels.otherMobile}
-          floatingLabel
-          type="number"
           name="otherMobile"
+          label={labels.otherMobile}
+          type="number"
           clearButton
           value={otherMobile}
           errorMessage={otherMobileErrorMessage}
@@ -178,7 +173,6 @@ const EditCustomer = props => {
           name="mapPosition" 
           label={labels.mapPosition}
           value={mapPosition}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setMapPosition(e.target.value)}
@@ -188,7 +182,6 @@ const EditCustomer = props => {
           name="address" 
           label={labels.address}
           value={address}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setAddress(e.target.value)}

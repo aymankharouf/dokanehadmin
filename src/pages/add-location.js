@@ -45,11 +45,10 @@ const AddLocation = props => {
   return (
     <Page>
       <Navbar title={labels.addLocation} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name} 
-          floatingLabel
           clearButton
           type="text"
           value={name}
@@ -59,7 +58,6 @@ const AddLocation = props => {
         <ListInput 
           name="fees" 
           label={labels.deliveryFees}
-          floatingLabel 
           clearButton
           type="number" 
           value={fees} 
@@ -69,7 +67,6 @@ const AddLocation = props => {
         <ListInput 
           name="ordering" 
           label={labels.ordering}
-          floatingLabel 
           clearButton
           type="number" 
           value={ordering} 

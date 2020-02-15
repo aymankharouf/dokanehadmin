@@ -2,8 +2,6 @@ import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
-import moment from 'moment'
-import 'moment/locale/ar'
 import labels from '../data/labels'
 import BottomToolbar from './bottom-toolbar'
 import { archiveProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
@@ -55,7 +53,7 @@ const ProductPacks = props => {
       <Navbar title={`${product.name}${product.alias ? '-' + product.alias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={product.name} />
+          <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
           <p>{productOfText(product.trademark, product.country)}</p>
@@ -67,7 +65,6 @@ const ProductPacks = props => {
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}
-            subtitle={moment(p.time.toDate()).fromNow()}
             after={p.price ? (p.price / 1000).toFixed(3) : ''} 
             key={p.id} 
           >
@@ -85,7 +82,6 @@ const ProductPacks = props => {
         <ActionsButton onClick={() => props.f7router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>
         <ActionsButton onClick={() => props.f7router.navigate(`/add-bulk/${props.id}`)}>{labels.addBulk}</ActionsButton>
-        <ActionsButton onClick={() => props.f7router.navigate(`/related-products/${props.id}`)}>{labels.relatedProducts}</ActionsButton>
         {activePacks.length === 0 ? 
           <ActionsButton onClick={() => handleArchive()}>{labels.archive}</ActionsButton>
         : ''}

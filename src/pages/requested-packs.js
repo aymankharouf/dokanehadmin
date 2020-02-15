@@ -8,20 +8,20 @@ import labels from '../data/labels'
 
 const RequestedPacks = props => {
 	const { state } = useContext(StoreContext)
-	const [approvedOrders] = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
 	const [requestedPacks, setRequestedPacks] = useState([])
-	
 	useEffect(() => {
-		let packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
-		if (props.id){
-			packs = packs.filter(p => {
-				const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-				const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
-				return packStores.find(ps => ps.storeId === props.id)
-			})	
-		}
-		setRequestedPacks(packs)
-	}, [props.id, state.basket, approvedOrders, state.packs, state.customers, state.stores, state.storePacks])
+		setRequestedPacks(() => {
+			let packs = getRequestedPacks(state.orders, state.basket, state.customers, state.packs)
+			if (props.id){
+				packs = packs.filter(p => {
+					const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
+					const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
+					return packStores.find(ps => ps.storeId === props.id)
+				})	
+			}
+			return packs
+		})
+	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.storePacks])
 	let i = 0
 	return(
     <Page>
@@ -34,12 +34,13 @@ const RequestedPacks = props => {
 							<ListItem
 								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed/${p.exceedPriceQuantity}`}
 								title={p.packInfo.productName}
-								subtitle={p.packInfo.name}
-								text={`${labels.requested}: ${quantityText(p.quantity)}`}
+								subtitle={p.packInfo.productAlias}
+								text={p.packInfo.name}
 								after={(p.price / 1000).toFixed(3)}
 								key={i++}
 							>
 								<PackImage slot="media" pack={p.packInfo} type="list" />
+								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
 							</ListItem>
 						)
 					}

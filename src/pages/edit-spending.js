@@ -88,12 +88,11 @@ const EditSpending = props => {
   return (
     <Page>
       <Navbar title={labels.editSpending} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
       <ListInput 
           name="spendingAmount" 
           label={labels.spendingAmount}
           value={spendingAmount}
-          floatingLabel
           clearButton 
           type="number" 
           onChange={e => setSpendingAmount(e.target.value)}
@@ -121,7 +120,6 @@ const EditSpending = props => {
           name="description" 
           label={labels.description}
           value={description}
-          floatingLabel
           clearButton 
           type="text" 
           onChange={e => setDescription(e.target.value)}

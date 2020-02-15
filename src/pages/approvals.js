@@ -29,7 +29,7 @@ const Approvals = props => {
     setInvitations(() => state.users.filter(u => u.friends?.find(f => f.status === 'n')))
     setDebitRequests(() => state.users.filter(u => u.debitRequestStatus === 'n'))
     setNewOwners(() => state.customers.filter(c => c.storeName && !c.storeId))
-    setNotifyFriends(() => state.users.filter(u => u.notifyFriends))
+    setNotifyFriends(() => state.users.filter(u => u.notifyFriends?.length > 0))
   }, [state.users, state.customers])
   useEffect(() => {
     setPasswordRequests(() => state.passwordRequests.filter(r => r.status === 'n'))

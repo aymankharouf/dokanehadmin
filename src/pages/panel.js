@@ -18,7 +18,7 @@ const Panel = props => {
     const debitRequests = state.users.filter(u => u.debitRequestStatus === 'n').length
     const passwordRequests = state.passwordRequests.filter(r => r.status === 'n').length
     const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
-    const notifyFriends = state.users.filter(u => u.notifyFriends).length
+    const notifyFriends = state.users.filter(u => u.notifyFriends?.length > 0).length
     setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + debitRequests + passwordRequests + newStoresOwners + notifyFriends)
   }, [state.orders, state.users, state.customers, state.passwordRequests])
   useEffect(() => {

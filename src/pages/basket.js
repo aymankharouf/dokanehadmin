@@ -15,15 +15,14 @@ const Basket = props => {
   }, [state.basket, props.f7router])
   useEffect(() => {
     setBasket(() => {
-      let basket = state.basket?.packs || []
-      basket = basket.map(p => {
+      const basket = state.basket?.packs || []
+      return basket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
         return {
           ...p,
           packInfo,
         }
       })
-      return basket.sort((p1, p2) => p1.time - p2.time)
     })
     setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket, state.packs])

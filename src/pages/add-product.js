@@ -11,11 +11,14 @@ const AddProduct = props => {
   const [name, setName] = useState('')
   const [alias, setAlias] = useState('')
   const [description, setDescription] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [categoryId, setCategoryId] = useState(props.id === '0' ? '' : props.id)
   const [trademark, setTrademark] = useState('')
   const [country, setCountry] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
+  const [packName, setPackName] = useState('')
+  const [storeId, setStoreId] = useState('')
+  const [price, setPrice] = useState('')
   const [categories, setCategories] = useState(() => {
     let categories = state.categories.filter(c => c.isLeaf)
     categories = categories.map(c => {
@@ -34,6 +37,7 @@ const AddProduct = props => {
     const countries = state.lookups.find(l => l.id === 'c')?.values || []
     return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
   })
+  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   const actionsList = useRef('')
   useEffect(() => {
     setCategories(() => {
@@ -76,6 +80,9 @@ const AddProduct = props => {
   }
   const handleSubmit = async () => {
     try{
+      if (storeId && Number(price) <= 0) {
+        throw new Error('invalidPrice')
+      }
       const product = {
         name,
         alias,
@@ -87,11 +94,10 @@ const AddProduct = props => {
         rating: 0,
         ratingCount: 0,
         imageUrl,
-        isArchived: false,
-        time: new Date()
+        isArchived: false
       }
       setInprocess(true)
-      await addProduct(product, image)
+      await addProduct(product, packName, storeId, price * 1000, image)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
@@ -152,15 +158,13 @@ const AddProduct = props => {
       }
     })    
   }
-
   return (
     <Page>
       <Navbar title={labels.addProduct} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -170,7 +174,6 @@ const AddProduct = props => {
         <ListInput 
           name="alias" 
           label={labels.alias}
-          floatingLabel 
           clearButton
           type="text" 
           value={alias} 
@@ -180,7 +183,6 @@ const AddProduct = props => {
         <ListInput 
           name="description" 
           label={labels.description}
-          floatingLabel 
           clearButton
           type="text" 
           value={description} 
@@ -241,8 +243,44 @@ const AddProduct = props => {
             )}
           </select>
         </ListItem>
+        <ListInput 
+          name="packName" 
+          label={labels.pack}
+          clearButton
+          type="text" 
+          value={packName} 
+          onChange={e => setPackName(e.target.value)}
+          onInputClear={() => setPackName('')}
+        />
+        <ListItem
+          title={labels.store}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
+            <option value=""></option>
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListInput 
+          name="price" 
+          label={labels.price}
+          value={price}
+          clearButton 
+          type="number" 
+          onChange={e => setPrice(e.target.value)}
+          onInputClear={() => setPrice('')}
+        />
         <ListInput name="image" label={labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
-        <img src={imageUrl} className="img-card" alt={name} />
+        <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
@@ -251,7 +289,7 @@ const AddProduct = props => {
           <FabButton color="blue" onClick={() => actionsList.current.open()}>
             <Icon material="build"></Icon>
           </FabButton>
-          {!name || !country || !categoryId || !imageUrl ? '' :
+          {!name ? '' :
             <FabButton color="green" onClick={() => handleSubmit()}>
               <Icon material="done"></Icon>
             </FabButton>

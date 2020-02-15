@@ -58,12 +58,11 @@ const EditLocation = props => {
   return (
     <Page>
       <Navbar title={labels.editLocation} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
@@ -72,7 +71,6 @@ const EditLocation = props => {
         <ListInput 
           name="fees" 
           label={labels.fees}
-          floatingLabel 
           clearButton
           type="number" 
           value={fees} 
@@ -82,7 +80,6 @@ const EditLocation = props => {
         <ListInput 
           name="ordering" 
           label={labels.ordering}
-          floatingLabel 
           clearButton
           type="number" 
           value={ordering} 

@@ -68,12 +68,9 @@ import Logs from './pages/logs'
 import StoreDetails from './pages/store-details'
 import PrepareOrders from './pages/prepare-orders'
 import PrepareOrdersList from './pages/prepare-orders-list'
-import ReturnOrder from './pages/return-order'
-import ReturnOrderPack from './pages/return-order-pack'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
-import RelatedProducts from './pages/related-products'
 import AddBulk from './pages/add-bulk'
 import EditBulk from './pages/edit-bulk'
 import Invitations from './pages/invitations'
@@ -97,6 +94,7 @@ import ArchivedProducts from './pages/archived-products'
 import DebitRequests from './pages/debit-requests'
 import ReturnBasket from './pages/return-basket'
 import NotifyFriends from './pages/notify-friends'
+import StoreBalance from './pages/store-balance'
 
 export default [
   {
@@ -138,11 +136,7 @@ export default [
     },
   },
   {
-    path: '/search/',
-    component: Products
-  },
-  {
-    path: '/products/',
+    path: '/products/:id',
     component: Products,
   },
   {
@@ -282,7 +276,7 @@ export default [
     component: AddPackStore
   },
   {
-    path: '/add-product/',
+    path: '/add-product/:id',
     component: AddProduct
   },
   {
@@ -322,7 +316,7 @@ export default [
     component: OrderDetails
   },
   {
-    path: '/edit-order/:id',
+    path: '/edit-order/:id/type/:type',
     component: EditOrder
   },
   {
@@ -414,18 +408,6 @@ export default [
     component: PrepareOrdersList
   },
   {
-    path: '/return-order/:id',
-    component: ReturnOrder
-  },
-  {
-    path: '/return-order-pack/:orderId/pack/:packId',
-    component: ReturnOrderPack
-  },
-  {
-    path: '/related-products/:id',
-    component: RelatedProducts
-  },
-  {
     path: '/add-bulk/:id',
     component: AddBulk
   },
@@ -512,6 +494,10 @@ export default [
   {
     path: '/notify-friends/',
     component: NotifyFriends
+  },
+  {
+    path: '/store-balance/:id',
+    component: StoreBalance
   },
   {
     path: '(.*)',

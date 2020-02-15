@@ -77,7 +77,7 @@ const EditCategory = props => {
   return (
     <Page>
       <Navbar title={labels.editCategory} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.mainCategory}
           smartSelect
@@ -100,7 +100,6 @@ const EditCategory = props => {
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}
@@ -109,7 +108,6 @@ const EditCategory = props => {
         <ListInput 
           name="ordering" 
           label={labels.ordering}
-          floatingLabel 
           clearButton
           type="number" 
           value={ordering}

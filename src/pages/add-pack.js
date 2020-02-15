@@ -53,8 +53,7 @@ const AddPack = props => {
         byWeight,
         isOffer: false,
         isArchived: false,
-        price: 0,
-        time: new Date()
+        price: 0
       }
       setInprocess(true)
       await addPack(pack)

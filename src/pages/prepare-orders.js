@@ -9,40 +9,39 @@ import labels from '../data/labels'
 const PrepareOrders = props => {
   const { state } = useContext(StoreContext)
 	const [packs, setPacks] = useState([])
-	const [finishedOrders] = useState(() => state.orders.filter(o => o.status === 'f'))
 	useEffect(() => {
-		let packsArray = []
-		finishedOrders.forEach(o => {
-			o.basket.forEach(p => {
-				if (p.purchased > 0 && !p.isAllocated) {
-					const found = packsArray.findIndex(pa => pa.packId === p.packId)
-					if (!p.weight && found > -1) {
-						packsArray.splice(found, 1, {
-							packId: p.packId,
-							quantity: p.purchased + packsArray[found].quantity
-						})
-					} else {
-						packsArray.push({
-							packId: p.packId,
-							quantity: p.purchased,
-							weight: p.weight,
-							orderId: o.id
-						})
+		setPacks(() => {
+			const finishedOrders = state.orders.filter(o => o.status === 'f')
+			let packsArray = []
+			finishedOrders.forEach(o => {
+				o.basket.forEach(p => {
+					if (p.purchased > 0 && !p.isAllocated) {
+						const found = packsArray.findIndex(pa => pa.packId === p.packId)
+						if (!p.weight && found > -1) {
+							packsArray.splice(found, 1, {
+								packId: p.packId,
+								quantity: p.purchased + packsArray[found].quantity
+							})
+						} else {
+							packsArray.push({
+								packId: p.packId,
+								quantity: p.purchased,
+								weight: p.weight,
+								orderId: o.id
+							})
+						}
 					}
+				})
+			})
+			return packsArray.map(p => {
+				const packInfo = state.packs.find(pa => pa.id === p.packId)
+				return {
+					...p,
+					packInfo,
 				}
 			})
 		})
-		packsArray = packsArray.map(p => {
-			const packInfo = state.packs.find(pa => pa.id === p.packId)
-			const productInfo = state.products.find(pr => pr.id === packInfo.productId)
-			return {
-				...p,
-				packInfo,
-				productInfo,
-			}
-		})
-		setPacks(packsArray)
-	}, [finishedOrders, state.packs, state.products])
+	}, [state.orders, state.packs, state.products])
 	let i = 0
   return(
     <Page>
@@ -54,12 +53,13 @@ const PrepareOrders = props => {
 					: packs.map(p => 
 							<ListItem
 								link={`/prepare-orders-list/${p.packId}/order/${p.orderId || 0}`}
-								title={p.productInfo.name}
-								subtitle={p.packInfo.name}
-								text={`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}
+								title={p.packInfo.productName}
+								subtitle={p.packInfo.productAlias}
+								text={p.packInfo.name}
 								key={i++}
 							>
 								<PackImage slot="media" pack={p.packInfo} type="list" />
+								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
 							</ListItem>
 						)
 					}

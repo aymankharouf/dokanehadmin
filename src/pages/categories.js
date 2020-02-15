@@ -56,14 +56,14 @@ const Categories = props => {
 
   return (
     <Page>
-      <Navbar title={`${labels.categories} ${currentCategory?.name || ''}`} backLink={labels.back} />
+      <Navbar title={currentCategory?.name || labels.categories} backLink={labels.back} />
       <Block>
         <List mediaList>
           {categories.length === 0 ? 
             <ListItem title={labels.noData} /> 
           : categories.map(c =>
               <ListItem 
-                link={`/categories/${c.id}`} 
+                link={c.childrenCount > 0 ? `/categories/${c.id}` : `/products/${c.id}`} 
                 title={c.name}
                 subtitle={`${labels.childrenCount}: ${c.childrenCount} ${c.childrenCount > 0 && c.isLeaf ? 'X' : ''}`}
                 text={`${labels.attachedProducts}: ${c.productsCount} ${c.productsCount > 0 && !c.isLeaf ? 'X': ''}`}

@@ -11,15 +11,23 @@ const StoreDetails = props => {
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === props.id))
   }, [state.stores, props.id])
+
   return (
     <Page>
       <Navbar title={labels.storeDetails} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={store.name}
           type="text" 
+          readonly
+        />
+        <ListInput
+          name="balance"
+          label={labels.balance}
+          value={(store.balance / 1000).toFixed(3)}
+          type="number"
           readonly
         />
         <ListInput
@@ -82,6 +90,9 @@ const StoreDetails = props => {
           </FabButton>
           <FabButton color="red" onClick={() => props.f7router.navigate(`/store-owners/${store.id}`)}>
             <Icon material="perm_identity"></Icon>
+          </FabButton>
+          <FabButton color="orange" onClick={() => props.f7router.navigate(`/store-balance/${store.id}`)}>
+            <Icon material="attach_money"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

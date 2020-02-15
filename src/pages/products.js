@@ -7,24 +7,26 @@ import { getCategoryName, productOfText } from '../data/actions'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
+  const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [products, setProducts] = useState([])
   useEffect(() => {
     setProducts(() => {
-      const products = state.products.map(p => {
+      let products = state.products.filter(p => props.id === '0' || p.categoryId === props.id)
+      products = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {
           ...p,
           categoryInfo
         }
       })
-      return products.sort((p1, p2) => p1.sales - p2.sales)
+      return products.sort((p1, p2) => p2.sales - p1.sales)
     })
-  }, [state.products, state.categories])
+  }, [state.products, state.categories, props.id])
   
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
-      <Navbar title={labels.products} backLink={labels.back}>
+      <Navbar title={props.id === '0' ? labels.products : category?.name || ''} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -53,8 +55,8 @@ const Products = props => {
                   footer={productOfText(p.trademark, p.country)}
                   key={p.id}
                 >
-                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
-                  <div className="list-subtext1">{getCategoryName(p.categoryInfo, state.categories)}</div>
+                  <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />
+                  <div className="list-subtext1">{p.categoryInfo ? getCategoryName(p.categoryInfo, state.categories) : ''}</div>
                 </ListItem>
               )
             }
@@ -64,7 +66,7 @@ const Products = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => props.f7router.navigate('/add-product/')}>
+          <FabButton color="green" onClick={() => props.f7router.navigate(`/add-product/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
           <FabButton color="blue" onClick={() => props.f7router.navigate('/archived-products/')}>

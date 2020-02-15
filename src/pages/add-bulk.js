@@ -55,8 +55,7 @@ const AddBulk = props => {
         unitsCount: Number(subQuantity) * subPackInfo.unitsCount,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        isArchived: false,
-        time: new Date()
+        isArchived: false
       }
       setInprocess(true)
       await addPack(pack)
@@ -71,11 +70,10 @@ const AddBulk = props => {
   return (
     <Page>
       <Navbar title={`${labels.addBulk} ${product.name}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -105,7 +103,6 @@ const AddBulk = props => {
           label={labels.quantity}
           value={subQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}

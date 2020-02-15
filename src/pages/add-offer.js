@@ -89,8 +89,7 @@ const AddOffer = props => {
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100,
         price: 0,
-        isArchived: false,
-        time: new Date()
+        isArchived: false
       }
       setInprocess(true)
       await addPack(pack)
@@ -105,11 +104,10 @@ const AddOffer = props => {
   return (
     <Page>
       <Navbar title={`${labels.addOffer} ${product.name}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -139,7 +137,6 @@ const AddOffer = props => {
           label={labels.quantity}
           value={subQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}
@@ -150,7 +147,6 @@ const AddOffer = props => {
           label={labels.percent}
           value={subPercent}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubPercent(e.target.value)}
           onInputClear={() => setSubPercent('')}
@@ -192,7 +188,6 @@ const AddOffer = props => {
           label={labels.quantity}
           value={bonusQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setBonusQuantity(e.target.value)}
           onInputClear={() => setBonusQuantity('')}
@@ -203,7 +198,6 @@ const AddOffer = props => {
           label={labels.percent}
           value={bonusPercent}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setBonusPercent(e.target.value)}
           onInputClear={() => setBonusPercent('')}

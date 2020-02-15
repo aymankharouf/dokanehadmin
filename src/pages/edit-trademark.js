@@ -40,12 +40,11 @@ const EditTrademark = props => {
   return (
     <Page>
       <Navbar title={labels.editTrademark} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}

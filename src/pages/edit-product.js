@@ -145,11 +145,10 @@ const EditProduct = props => {
   return (
     <Page>
       <Navbar title={labels.editProduct} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -159,7 +158,6 @@ const EditProduct = props => {
         <ListInput 
           name="alias" 
           label={labels.alias}
-          floatingLabel 
           clearButton
           type="text" 
           value={alias} 
@@ -169,7 +167,6 @@ const EditProduct = props => {
         <ListInput 
           name="description" 
           label={labels.description}
-          floatingLabel 
           clearButton
           type="text" 
           value={description} 
@@ -239,7 +236,7 @@ const EditProduct = props => {
           errorMessageForce
           onChange={e => handleFileChange(e)}
         />
-        <img src={imageUrl} className="img-card" alt={name} />
+        <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
@@ -248,7 +245,7 @@ const EditProduct = props => {
           <FabButton color="blue" onClick={() => actionsList.current.open()}>
             <Icon material="build"></Icon>
           </FabButton>
-          {!name || !country || !categoryId || !imageUrl || !hasChanged ? '' :
+          {!name || !hasChanged ? '' :
             <FabButton color="green" onClick={() => handleSubmit()}>
               <Icon material="done"></Icon>
             </FabButton>

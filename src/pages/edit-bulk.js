@@ -61,11 +61,10 @@ const EditBulk = props => {
   return (
     <Page>
       <Navbar title={`${labels.editBulk} ${pack.productName}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -95,7 +94,6 @@ const EditBulk = props => {
           label={labels.quantity}
           value={subQuantity}
           clearButton
-          floatingLabel 
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}

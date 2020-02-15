@@ -8,7 +8,7 @@ const Home = props => {
   const [mainPages] = useState(() => [
     {id: '1', name: labels.orders, path: '/orders/'},
     {id: '2', name: labels.stores, path: '/stores/'},
-    {id: '3', name: labels.products, path: '/products/'},
+    {id: '3', name: labels.products, path: '/products/0'},
     {id: '4', name: labels.purchases, path: '/purchases/'},
     {id: '5', name: labels.customers, path: '/customers/'},
     {id: '6', name: labels.stock, path: '/stock/'},
@@ -39,7 +39,7 @@ const Home = props => {
         )}
       </Block>
       <Toolbar bottom>
-        <BottomToolbar isHome="1"/>
+        <BottomToolbar />
       </Toolbar>
 
     </Page>

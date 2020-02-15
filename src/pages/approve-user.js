@@ -69,11 +69,10 @@ const ApproveUser = props => {
   return (
     <Page>
       <Navbar title={labels.approveUser} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
@@ -112,7 +111,6 @@ const ApproveUser = props => {
         </ListItem>
         <ListInput
           label={labels.otherMobile}
-          floatingLabel
           type="number"
           name="otherMobile"
           clearButton
@@ -125,10 +123,11 @@ const ApproveUser = props => {
         <ListInput 
           name="address" 
           label={labels.address}
-          floatingLabel 
           type="text" 
+          clearButton
           value={address}
           onChange={e => setAddress(e.target.value)}
+          onInputClear={() => setAddress('')}
         />
       </List>
       {!name || !locationId ? '' :

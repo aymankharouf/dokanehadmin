@@ -10,16 +10,13 @@ const ConfirmPurchase = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
-  const [basket] = useState(() => {
-    const basket = state.basket.packs.map(p => {
-      const packInfo = state.packs.find(pa => pa.id === p.packId)
-      return {
-        ...p,
-        packInfo,
-      }
-    })
-    return basket.sort((p1, p2) => p1.time - p2.time)
-  })
+  const [basket] = useState(() => state.basket.packs.map(p => {
+    const packInfo = state.packs.find(pa => pa.id === p.packId)
+    return {
+      ...p,
+      packInfo,
+    }
+  }))
   const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
   const [discount, setDiscount] = useState('')
   useEffect(() => {

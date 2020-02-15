@@ -40,12 +40,11 @@ const EditCountry = props => {
   return (
     <Page>
       <Navbar title={labels.editCountry} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           value={name}
-          floatingLabel 
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}

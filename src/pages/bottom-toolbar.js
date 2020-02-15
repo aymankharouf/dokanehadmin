@@ -4,7 +4,6 @@ import { StoreContext } from '../data/store'
 
 const BottomToolbar = props => {
   const { state } = useContext(StoreContext)
-  const searchHome = props.isHome === '1' ? 'search' : 'home'
   const [basketLink, setBasketLink] = useState('')
   const [basketCount, setBasketCount] = useState('')
   useEffect(() => {
@@ -23,7 +22,7 @@ const BottomToolbar = props => {
   }, [state.basket, state.returnBasket])
   return (
     <React.Fragment>
-      <Link href={`/${searchHome}/`} iconMaterial={searchHome} />
+      <Link href="/home/" iconMaterial="home" />
       <Link href={basketLink}>
         <Icon material='shopping_cart' >
           {basketCount > 0 ? <Badge color="red">{basketCount}</Badge> : ''}
