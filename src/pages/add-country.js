@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
+import { StoreContext } from '../data/store'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -6,6 +7,7 @@ import { addCountry, showMessage, showError, getMessage } from '../data/actions'
 
 
 const AddCountry = props => {
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
@@ -25,6 +27,10 @@ const AddCountry = props => {
 
   const handleSubmit = async () => {
     try{
+      const countries = state.lookups.find(l => l.id === 'c')?.values || []
+      if (countries.includes(name)) {
+        throw new Error('duplicateValue')
+      }
       setInprocess(true)
       await addCountry(name)
       setInprocess(false)

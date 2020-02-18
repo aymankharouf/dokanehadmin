@@ -63,7 +63,7 @@ const Categories = props => {
             <ListItem title={labels.noData} /> 
           : categories.map(c =>
               <ListItem 
-                link={c.childrenCount > 0 ? `/categories/${c.id}` : `/products/${c.id}`} 
+                link={`/categories/${c.id}`} 
                 title={c.name}
                 subtitle={`${labels.childrenCount}: ${c.childrenCount} ${c.childrenCount > 0 && c.isLeaf ? 'X' : ''}`}
                 text={`${labels.attachedProducts}: ${c.productsCount} ${c.productsCount > 0 && !c.isLeaf ? 'X': ''}`}
@@ -93,6 +93,10 @@ const Categories = props => {
               <Icon material="delete"></Icon>
             </FabButton>
           : ''}
+          <FabButton color="orange" onClick={() => props.f7router.navigate(`/products/${props.id}`)}>
+            <Icon material="shopping_cart"></Icon>
+          </FabButton>
+
         </FabButtons>
       </Fab>
 

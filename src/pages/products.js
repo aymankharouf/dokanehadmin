@@ -3,7 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { getCategoryName, productOfText } from '../data/actions'
+import { productOfText } from '../data/actions'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
@@ -56,7 +56,7 @@ const Products = props => {
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />
-                  <div className="list-subtext1">{p.categoryInfo ? getCategoryName(p.categoryInfo, state.categories) : ''}</div>
+                  <div className="list-subtext1">{p.categoryInfo.name}</div>
                 </ListItem>
               )
             }

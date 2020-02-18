@@ -65,7 +65,7 @@ const EditOffer = props => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: subQuantity * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
+        unitsCount: subQuantity * subPackInfo.unitsCount,
         subPercent: subPercent / 100,
         bonusPackId,
         bonusQuantity: Number(bonusQuantity),

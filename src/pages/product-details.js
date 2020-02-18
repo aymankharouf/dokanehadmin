@@ -38,7 +38,7 @@ const ProductDetails = props => {
           name="categoryId" 
           label={labels.category}
           type="text" 
-          value={state.categories.find(c => c.id === product.categoryId)?.name || ''}
+          value={state.categories.find(c => c.id === product.categoryId).name}
           readonly
         />
         <ListInput 
@@ -55,7 +55,7 @@ const ProductDetails = props => {
           value={product.country}
           readonly
         />
-        <img src={product.imageUrl} className="img-card" alt={product.name} />
+        <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-product/${props.id}`}>
         <Icon material="edit"></Icon>

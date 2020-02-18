@@ -5,7 +5,7 @@ export const setup = {
   weightErrorMargin: 10,
   orderLimit: 50000,
   exceedPricePercent: 0.05,
-  returnPenalty: 50,
+  returnPenalty: 100,
   invitationDiscount: 50,
   alarmDiscount: 100,
   firstOrderDiscount: 100,

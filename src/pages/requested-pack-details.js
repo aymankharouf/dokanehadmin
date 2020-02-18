@@ -70,7 +70,7 @@ const RequestedPackDetails = props => {
       if (packInfo.byWeight) {
         f7.dialog.prompt(labels.enterWeight, labels.actualWeight, weight => {
           try{
-            if (packInfo.isDivided && Math.trunc(Math.abs(addQuantity(Number(props.quantity), -1 * Number(weight))) / Number(props.quantity) * 100) > setup.weightErrorMargin) {
+            if (packInfo.isDivided && Math.trunc(Math.abs(addQuantity(props.quantity, -1 * weight)) / props.quantity * 100) > setup.weightErrorMargin) {
               throw new Error('invalidWeight')
             }
             if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
@@ -141,7 +141,7 @@ const RequestedPackDetails = props => {
       }
       if (packStore.unitPrice > Number(props.price)){
         if (Number(props.price) < pack.price) { 
-          if (packStore.unitPrice === pack.price && Math.trunc(Number(props.price) * (1 + setup.exceedPricePercent)) >= packStore.price && Number(props.exceed) > 0) {
+          if (packStore.unitPrice === pack.price && Math.trunc(props.price * (1 + setup.exceedPricePercent)) >= packStore.price && Number(props.exceed) > 0) {
             f7.dialog.confirm(labels.exceedPricePurchase, labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceed), 'p'))
           } else {
             throw new Error('noPurchase')
@@ -207,6 +207,7 @@ const RequestedPackDetails = props => {
             footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
             key={s.id}
           >
+            {s.cost === s.price ? '' : <div className="list-subtext1">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}`}</div>}
             <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} />
           </ListItem>
         )}

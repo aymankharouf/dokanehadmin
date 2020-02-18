@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { editCountry, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
+import { editCountry, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 
@@ -37,6 +37,20 @@ const EditCountry = props => {
 			setError(getMessage(props, err))
 		}
   }
+  const handleDelete = () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        setInprocess(true)
+        await deleteCountry(name)
+        setInprocess(false)
+        showMessage(labels.deleteSuccess)
+        props.f7router.back()
+      } catch(err) {
+        setInprocess(false)
+        setError(getMessage(props, err))
+      }
+    })
+  }
   return (
     <Page>
       <Navbar title={labels.editCountry} backLink={labels.back} />
@@ -51,11 +65,20 @@ const EditCountry = props => {
           onInputClear={() => setName('')}
         />
       </List>
-      {!name || (name === props.name) ? '' :
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
+      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
+          {!name || (name === props.name) ? '' :
+            <FabButton color="green" onClick={() => handleEdit()}>
+              <Icon material="done"></Icon>
+            </FabButton>
+          }
+          <FabButton color="red" onClick={() => handleDelete()}>
+            <Icon material="delete"></Icon>
+          </FabButton>
+        </FabButtons>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

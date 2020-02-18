@@ -4,7 +4,7 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 
-var config = {
+const devConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
@@ -13,6 +13,19 @@ var config = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 }
-firebase.initializeApp(config)
+
+const prodConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_KEY_PROD,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN_PROD,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL_PROD,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID_PROD,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET_PROD,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID_PROD,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID_PROD,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID_PROD
+}
+
+
+firebase.initializeApp(window.location.hostname === 'localhost' ? devConfig : prodConfig)
 firebase.firestore().enablePersistence()
 export default firebase

@@ -19,8 +19,6 @@ import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
 import Categories from './pages/categories'
 import AddCategory from './pages/add-category'
-import Trademarks from './pages/trademarks'
-import AddTrademark from './pages/add-trademark'
 import Orders from './pages/orders'
 import RequestedPacks from './pages/requested-packs'
 import RequestedPackDetails from './pages/requested-pack-details'
@@ -38,7 +36,6 @@ import PackDetails from './pages/pack-details'
 import EditPack from './pages/edit-pack'
 import EditCountry from './pages/edit-country'
 import EditCategory from './pages/edit-category'
-import EditTrademark from './pages/edit-trademark'
 import EditStore from './pages/edit-store'
 import CustomerDetails from './pages/customer-details'
 import EditCustomer from './pages/edit-customer'
@@ -246,18 +243,6 @@ export default [
   {
     path: '/edit-category/:id',
     component: EditCategory
-  },
-  {
-    path: '/trademarks/',
-    component: Trademarks
-  },
-  {
-    path: '/add-trademark/',
-    component: AddTrademark,
-  },
-  {
-    path: '/edit-trademark/:name',
-    component: EditTrademark,
   },
   {
     path: '/store-packs/:id',

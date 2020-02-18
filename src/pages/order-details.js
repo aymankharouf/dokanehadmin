@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder, SetDeliveryTime } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -39,6 +39,7 @@ const OrderDetails = props => {
         {id: 'r', name: 'رفض', status: ['n', 's']},
         {id: 'c', name: 'الغاء', status: ['n', 's', 'a']},
         {id: 'i', name: 'استيداع', status: ['f', 'e', 'p']},
+        {id: 't', name: 'تحديد موعد التسليم', status: ['p']},
         {id: 'd', name: 'تسليم', status: ['p']},
         {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], path: `/edit-order/${order.id}/type/e`},
         {id: 'b', name: 'ارجاع', status: ['p'], path: `/edit-order/${props.id}/type/r`}
@@ -138,6 +139,19 @@ const OrderDetails = props => {
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()
+        } else if (action.id === 't') {
+          f7.dialog.prompt(labels.enterDeliveryTime, labels.deliveryTimeTitle, async value => {
+            try{
+              setInprocess(true)
+              await SetDeliveryTime(order.id, value)
+              setInprocess(false)
+              showMessage(labels.editSuccess)
+              props.f7router.back()
+            } catch(err) {
+              setInprocess(false)
+              setError(getMessage(props, err))
+            }
+          })
         } else {
           setInprocess(true)
           await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)

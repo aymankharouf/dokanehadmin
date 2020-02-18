@@ -86,7 +86,7 @@ const EditOrder = props => {
 		}
   }
   const handleIncrease = pack => {
-    if (props.type === 'n' || (props.type === 'r' && pack.quantity < pack.oldQuantity)) {
+    if (props.type === 'e' || (props.type === 'r' && pack.quantity < pack.oldQuantity)) {
       dispatch({type: 'INCREASE_ORDER_QUANTITY', pack})
     }
   }

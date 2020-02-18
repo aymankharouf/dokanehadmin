@@ -152,7 +152,8 @@
 *friends
 *store balance
 *return packs by loading order packs
+*delivery time
+*weight in return basket
 debit
 pwa
-weight in return basket
-delivery time
+return after purchase

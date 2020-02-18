@@ -13,12 +13,14 @@ const PrepareOrdersList = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   useEffect(() => {
     setOrders(() => {
-      let orders = state.orders.filter(o => o.id === props.orderId || (o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)))
+      let orders = state.orders.filter(o => o.id === props.orderId || (props.orderId === '0' && o.status === 'f' && o.basket.find(p => p.packId === props.packId && !p.isAllocated)))
       orders = orders.map(o => {
         const customerInfo = state.customers.find(c => c.id === o.userId)
+        const basketInfo = o.basket.find(p => p.packId === props.packId)
         return {
           ...o,
           customerInfo,
+          basketInfo
         }
       })
       return orders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
@@ -60,7 +62,7 @@ const PrepareOrdersList = props => {
           : orders.map(o => 
               <ListItem
                 title={o.customerInfo.fullName}
-                subtitle={`${labels.quantity}: ${o.basket.find(p => p.packId === props.packId).quantity}`}
+                subtitle={`${labels.quantity}: ${o.basketInfo.weight || o.basketInfo.quantity}`}
                 key={o.id}
               >
                 <Button text={labels.allocate} slot="after" onClick={() => handleAllocate(o)} />

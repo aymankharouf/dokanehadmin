@@ -46,7 +46,7 @@ const EditBulk = props => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: Number(subQuantity) * (subPackInfo.unitsCount + (subPackInfo.bonusUnits || 0)),
+        unitsCount: subQuantity * subPackInfo.unitsCount,
       }
       setInprocess(true)
       await editPack(newPack)

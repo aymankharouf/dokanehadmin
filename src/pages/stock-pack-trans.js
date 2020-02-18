@@ -27,6 +27,7 @@ const StockPackTrans = props => {
           ...transPack,
           id: t.id,
           storeId: t.storeId,
+          purchaseId: t.purchaseId,
           type: t.type,
           time: t.time,
           storeInfo,
@@ -56,7 +57,7 @@ const StockPackTrans = props => {
         if (state.returnBasket?.packs?.find(p => p.packId === pack.id)) {
           throw new Error('alreadyInBasket')
         }
-        if (Number(quantity) === 0 || Number(quantity) > (type === 'r' ? packTrans[0].quantity : stockPackInfo.quantity)) {
+        if (Number(quantity) === 0 || (type === 'r' && Number(quantity) !== packTrans[0].quantity) || (type !== 'r' && Number(quantity) > stockPackInfo.quantity)) {
           throw new Error('invalidValue')
         }
         if (state.returnBasket && state.returnBasket.type !== type) {
@@ -74,6 +75,7 @@ const StockPackTrans = props => {
           storeId: type === 'r' ? packTrans[0].storeId : '',
           purchaseId: type === 'r' ? packTrans[0].purchaseId : ''
         }
+        if (pack.byWeight) params['weight'] = Number(quantity)
         dispatch({type: 'ADD_TO_RETURN_BASKET', params})
         showMessage(labels.addToBasketSuccess)
       } catch(err) {

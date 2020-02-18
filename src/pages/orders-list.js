@@ -53,8 +53,9 @@ const OrdersList = props => {
               <ListItem
                 link={`/order-details/${o.id}/type/n`}
                 title={o.customerInfo?.fullName || o.userInfo.name}
-                subtitle={moment(o.time.toDate()).fromNow()}
-                text={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
+                subtitle={o.deliveryTime}
+                text={moment(o.time.toDate()).fromNow()}
+                footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
                 after={(o.total / 1000).toFixed(3)}
                 key={o.id}
               />

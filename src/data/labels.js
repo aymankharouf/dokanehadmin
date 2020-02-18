@@ -168,7 +168,7 @@ const labels = {
   isBlocked: 'محظور',
   overPriceLimit: 'سقف الزيادة في قيمة الطلب',
   permission_denied: 'ليس لك صلاحية لاتمام هذه العملية',
-  unknownError: 'خدث خطأ، يرجى المحاولة مرة أخرى',
+  unknownError: 'حدث خطأ، يرجى المحاولة مرة أخرى',
   invalidPeriod: 'الرجاء التأكد من مدة العرض',
   offerDays: 'عرض لمدة',
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
@@ -358,7 +358,10 @@ const labels = {
   enterAmount: 'ادخل المبلغ',
   balanceTrans: 'الحركات المالية',
   payment: 'دفعة',
-  sale: 'بيع'
+  sale: 'بيع',
+  deliveryTimeTitle: 'موعد التسليم',
+  enterDeliveryTime: 'ادخل وقت التسليم',
+  duplicateValue: 'القيمة موجودة سابقا'
 }
 
 export default labels
