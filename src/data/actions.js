@@ -564,6 +564,17 @@ export const addProduct = async (product, packName, storeId, price, image) => {
   }
 }
 
+export const deleteProduct = async product => {
+  if (product.imageUrl) {
+    try{
+      await firebase.storage().ref().child('products/' + product.id + '.jpg').delete()
+    } catch {
+      await firebase.storage().ref().child('products/' + product.id + '.jpeg').delete()
+    }  
+  }
+  return firebase.firestore().collection('products').doc(product.id).delete()
+}
+
 export const editProduct = async (product, oldName, image, packs) => {
   const batch = firebase.firestore().batch()
   const { id, ...others } = product
@@ -894,6 +905,10 @@ export const addPack = pack => {
   return firebase.firestore().collection('packs').add(pack)
 }
 
+export const deletePack = packId => {
+  return firebase.firestore().collection('packs').doc(packId).delete()
+}
+
 export const editPack = (newPack, oldPack, packs) => {
   const batch = firebase.firestore().batch()
   const { id, ...others } = newPack
@@ -937,14 +952,14 @@ export const editCustomer = (customer, mobile, storeId, stores) => {
   return batch.commit()
 }
 
-export const approveUser = (id, name, mobile, locationId, otherMobile, storeName, address, users) => {
+export const approveUser = (id, name, mobile, mobileCheck, locationId, otherMobile, storeName, address, users) => {
   const batch = firebase.firestore().batch()
   const customerRef = firebase.firestore().collection('customers').doc(id)
   batch.set(customerRef, {
     name,
     fullName: `${name}:${mobile}`,
     orderLimit: '',
-    isBlocked: false,
+    isBlocked: mobileCheck ? true : false,
     storeName,
     address,
     deliveryFees: '',
@@ -952,7 +967,6 @@ export const approveUser = (id, name, mobile, locationId, otherMobile, storeName
     discounts: 0,
     mapPosition: '',
     otherMobile,
-    exceedPrice: false,
     ordersCount: 0,
     deliveredOrdersCount: 0,
     returnedCount: 0,
@@ -1247,10 +1261,10 @@ export const approveRating = (rating, packs) => {
   return batch.commit()
 }
 
-export const returnOrder = (order, orderBasket, storePacks, packs) => {
+export const returnOrder = (order, orderBasket, locationFees, storePacks, packs) => {
   const batch = firebase.firestore().batch()
   const returnBasket = orderBasket.filter(p => p.quantity < p.oldQuantity)
-  const basket = order.basket.slice()
+  let basket = order.basket.slice()
   returnBasket.forEach(p => {
     let status, gross
     const orderPackIndex = basket.findIndex(bp => bp.packId === p.packId)
@@ -1259,13 +1273,13 @@ export const returnOrder = (order, orderBasket, storePacks, packs) => {
       gross = 0
     } else {
       status = 'pr'
-      gross = Math.trunc(p.actual * addQuantity(p.purchased, -1 * (p.oldQuantity - p.quantity)))
+      gross = Math.trunc(p.actual * addQuantity(p.purchased, -1 * p.oldQuantity, p.quantity))
     }
     basket.splice(orderPackIndex, 1, {
       ...basket[orderPackIndex],
       status,
       gross,
-      returned: p.oldQuantity - p.quantity,
+      returned: addQuantity(p.oldQuantity, -1 * p.quantity),
       quantity: basket[orderPackIndex].quantity // keep original quantity
     })
   })
@@ -1279,16 +1293,43 @@ export const returnOrder = (order, orderBasket, storePacks, packs) => {
     total,
     profit,
     fixedFees,
-    fraction
+    fraction,
+    returnPenalty: order.status === 'd' ? locationFees : 0
   })
   if (total === 0) {
     updateOrderStatus(order, 'i', storePacks, packs, false, batch)
+  } else if (order.status === 'd') {
+    basket = basket.map(p => {
+      return {
+        ...p,
+        quantity: p.returned
+      }
+    })
+    basket = basket.filter(p => p.returned > 0)
+    stockIn(batch, 'i', basket, storePacks, packs)  
   }
-    const customerRef = firebase.firestore().collection('customers').doc(order.userId)
+  const customerRef = firebase.firestore().collection('customers').doc(order.userId)
+  if (order.status === 'd') {
+    if (total === 0) {
+      batch.update(customerRef, {
+        deliveredOrdersCount: firebase.firestore.FieldValue.increment(-1),
+        deliveredOrdersTotal: firebase.firestore.FieldValue.increment(order.total),
+        discounts: firebase.firestore.FieldValue.increment(-1 * setup.returnPenalty),
+        returnedCount: firebase.firestore.FieldValue.increment(1)
+      })  
+    } else {
+      batch.update(customerRef, {
+        deliveredOrdersTotal: firebase.firestore.FieldValue.increment(total - order.total),
+        discounts: firebase.firestore.FieldValue.increment(-1 * setup.returnPenalty),
+        returnedCount: firebase.firestore.FieldValue.increment(1)
+      })
+    }
+  } else {
     batch.update(customerRef, {
-    discounts: firebase.firestore.FieldValue.increment(-1 * setup.returnPenalty),
-    returnedCount: firebase.firestore.FieldValue.increment(1)
-    })    
+      discounts: firebase.firestore.FieldValue.increment(-1 * setup.returnPenalty),
+      returnedCount: firebase.firestore.FieldValue.increment(1)
+    })  
+  }
   return batch.commit()
 }
 
@@ -1424,29 +1465,31 @@ export const getRequestedPacks = (orders, basket, customers, packs) => {
   const approvedOrders = orders.filter(o => ['a', 'e'].includes(o.status))
   let packsArray = []
   approvedOrders.forEach(o => {
-    const customerInfo = customers.find(c => c.id === o.userId)
+    //const customerInfo = customers.find(c => c.id === o.userId)
     o.basket.forEach(p => {
-      let exceedPriceQuantity = 0
+      //let exceedPriceQuantity = 0
       if (['n', 'p'].includes(p.status)) {
         const packInfo = packs.find(pa => pa.id === p.packId)
-        const found = packsArray.findIndex(pa => pa.packId === p.packId && pa.price === p.price)
-        if (p.price < packInfo.price && Math.trunc(p.price * (1 + setup.exceedPricePercent)) >= packInfo.price && customerInfo.exceedPrice) {
+        const price = p.withBestPrice ? 0 : p.price
+        const found = packsArray.findIndex(pa => pa.packId === p.packId && pa.price === price)
+        /*if (p.price < packInfo.price && Math.trunc(p.price * (1 + setup.exceedPricePercent)) >= packInfo.price && customerInfo.exceedPrice) {
           exceedPriceQuantity = addQuantity(p.quantity, -1 * p.purchased)
-        }
+        }*/
         if (!packInfo.byWeight && found > -1) {
           packsArray.splice(found, 1, {
             ...packsArray[found], 
             quantity: addQuantity(packsArray[found].quantity, p.quantity, -1 * p.purchased),
-            exceedPriceQuantity: addQuantity(packsArray[found].exceedPriceQuantity, exceedPriceQuantity)
+            //exceedPriceQuantity: addQuantity(packsArray[found].exceedPriceQuantity, exceedPriceQuantity)
           })
         } else {
           packsArray.push({
             packId: p.packId,
-            price: p.price, 
+            price: price, 
             quantity: addQuantity(p.quantity, -1 * p.purchased),
-            exceedPriceQuantity,
+            //exceedPriceQuantity,
             orderId: o.id,
             packInfo,
+            withBestPrice: p.withBestPrice
           })
         }
       }
@@ -1483,7 +1526,7 @@ export const getRequestedPacks = (orders, basket, customers, packs) => {
         return {
           ...p,
           quantity: addQuantity(p.quantity, -1 * inBasketQuantity),
-          exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity),
+          //exceedPriceQuantity: addQuantity(p.exceedPriceQuantity, -1 * inBasketQuantity),
         }
       } else {
         return {

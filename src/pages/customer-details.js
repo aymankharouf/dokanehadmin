@@ -45,10 +45,6 @@ const CustomerDetails = props => {
           <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={customer.isBlocked} disabled />
         </ListItem>
-        <ListItem>
-          <span>{labels.exceedPrice}</span>
-          <Toggle color="blue" checked={customer.exceedPrice} disabled />
-        </ListItem>
         <ListInput 
           name="totalOrders" 
           label={labels.totalOrders}
@@ -109,7 +105,7 @@ const CustomerDetails = props => {
           name="mapPosition" 
           label={labels.mapPosition}
           value={customer.mapPosition}
-          type="text" 
+          type="text"
           readonly
         />
         <ListInput 

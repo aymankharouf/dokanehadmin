@@ -3,7 +3,7 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { productOfText } from '../data/actions'
+import { productOfText, getCategoryName } from '../data/actions'
 
 const Products = props => {
   const { state, user } = useContext(StoreContext)
@@ -14,12 +14,13 @@ const Products = props => {
       let products = state.products.filter(p => props.id === '0' || p.categoryId === props.id)
       products = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+        const categoryName = getCategoryName(categoryInfo, state.categories)
         return {
           ...p,
-          categoryInfo
+          categoryName
         }
       })
-      return products.sort((p1, p2) => p2.sales - p1.sales)
+      return products.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryName > p2.categoryName ? 1 : -1))
     })
   }, [state.products, state.categories, props.id])
   
@@ -56,7 +57,7 @@ const Products = props => {
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />
-                  <div className="list-subtext1">{p.categoryInfo.name}</div>
+                  <div className="list-subtext1">{p.categoryName}</div>
                 </ListItem>
               )
             }

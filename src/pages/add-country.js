@@ -29,7 +29,7 @@ const AddCountry = props => {
     try{
       const countries = state.lookups.find(l => l.id === 'c')?.values || []
       if (countries.includes(name)) {
-        throw new Error('duplicateValue')
+        throw new Error('duplicateName')
       }
       setInprocess(true)
       await addCountry(name)

@@ -42,7 +42,7 @@ const OrderDetails = props => {
         {id: 't', name: 'تحديد موعد التسليم', status: ['p']},
         {id: 'd', name: 'تسليم', status: ['p']},
         {id: 'e', name: 'تعديل', status: ['n', 'a', 'e', 's', 'f'], path: `/edit-order/${order.id}/type/e`},
-        {id: 'b', name: 'ارجاع', status: ['p'], path: `/edit-order/${props.id}/type/r`}
+        {id: 'b', name: 'ارجاع', status: ['p', 'd'], path: `/edit-order/${props.id}/type/r`}
       ]
       return statusActions.filter(a => a.status.find(s => s === order.status))
     })

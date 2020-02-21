@@ -1,5 +1,6 @@
 /* Your app styles here */
 /* Your app styles here */
+
 .sections {
     margin: 1rem;
 }
@@ -81,15 +82,15 @@
 
 .img-card {
   max-width: 100%;
-  height: 250px;
+  height: 18rem;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
 .img-list {
-  width: 100px;
-  height: 100px;
+  width: 4.5rem;
+  height: 6rem;
   display: block;
   margin-left: auto;
   margin-right: auto;

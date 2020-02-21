@@ -7,7 +7,7 @@ export const setup = {
   exceedPricePercent: 0.05,
   returnPenalty: 100,
   invitationDiscount: 50,
-  alarmDiscount: 100,
+  alarmDiscount: 50,
   firstOrderDiscount: 100,
   ratingDiscount: 50,
 }

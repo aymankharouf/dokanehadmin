@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { refreshPackPrice, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { refreshPackPrice, deletePack, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
 import PackImage from './pack-image'
 import moment from 'moment'
@@ -11,7 +11,15 @@ const PackDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [pack, setPack] = useState(() => state.packs.find(p => p.id === props.id))
+  const [pack, setPack] = useState(() => {
+    const pack = state.packs.find(p => p.id === props.id)
+    let detailsCount = state.storePacks.filter(p => p.packId === pack.id).length
+    detailsCount = detailsCount === 0 ? state.orders.filter(o => o.basket.find(p => p.packId === pack.id)).length : detailsCount
+    return {
+      ...pack,
+      detailsCount
+    }
+  })
   const [packStores, setPackStores] = useState([])
   useEffect(() => {
     setPackStores(() => {
@@ -92,8 +100,16 @@ const PackDetails = props => {
     })
   }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
   useEffect(() => {
-    setPack(() => state.packs.find(p => p.id === props.id))
-  }, [state.packs, props.id])
+    setPack(() => {
+      const pack = state.packs.find(p => p.id === props.id) || ''
+      let detailsCount = state.storePacks.filter(p => p.packId === pack.id).length
+      detailsCount = detailsCount === 0 ? state.orders.filter(o => o.basket.find(p => p.packId === pack.id)).length : detailsCount
+      return {
+        ...pack,
+        detailsCount
+      }
+    })
+  }, [state.packs, state.storePacks, state.orders, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -119,6 +135,20 @@ const PackDetails = props => {
 			setError(getMessage(props, err))
 		}
   }
+  const handleDelete = () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        setInprocess(true)
+        await deletePack(pack.id)
+        setInprocess(false)
+        showMessage(labels.deleteSuccess)
+        props.f7router.back()
+      } catch(err) {
+        setInprocess(false)
+        setError(getMessage(props, err))
+      }
+    })
+  }
   return (
     <Page>
       <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
@@ -129,6 +159,7 @@ const PackDetails = props => {
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
+          <p>{pack.unitsCount}</p>
         </CardFooter>
       </Card>
       <List mediaList>
@@ -160,9 +191,14 @@ const PackDetails = props => {
           <FabButton color="yellow" onClick={() => handleRefreshPrice()}>
             <Icon material="cached"></Icon>
           </FabButton>
-          <FabButton color="red" onClick={() => props.f7router.navigate(`/pack-trans/${props.id}`)}>
+          <FabButton color="pink" onClick={() => props.f7router.navigate(`/pack-trans/${props.id}`)}>
             <Icon material="import_export"></Icon>
           </FabButton>
+          {pack.detailsCount === 0 ? 
+            <FabButton color="red" onClick={() => handleDelete()}>
+              <Icon material="delete"></Icon>
+            </FabButton>
+          : ''}
         </FabButtons>
       </Fab>
       <Toolbar bottom>

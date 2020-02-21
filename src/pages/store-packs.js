@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import PackImage from './pack-image'
 import labels from '../data/labels'
-import { deleteStorePack, haltOffer, showMessage, getMessage, showError } from '../data/actions'
+import { deleteStorePack, haltOffer, getCategoryName, showMessage, getMessage, showError } from '../data/actions'
 
 const StorePacks = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -21,14 +21,17 @@ const StorePacks = props => {
       let storePacks = state.storePacks.filter(p => p.storeId === props.id)
       storePacks = storePacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
+        const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
+        const categoryName = getCategoryName(categoryInfo, state.categories)
         return {
           ...p,
-          packInfo
+          packInfo,
+          categoryName
         }
       })
-      return storePacks.sort((p1, p2) => p2.time.seconds - p1.time.seconds)
+      return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryName > p2.categoryName ? 1 : -1))
     })
-  }, [state.storePacks, state.packs, props.id])
+  }, [state.storePacks, state.packs, state.categories, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -158,11 +161,12 @@ const StorePacks = props => {
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.name}
                 text={(p.price / 1000).toFixed(3)}
-                footer={p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd.toDate()).format('Y/M/D')}` : ''}
+                footer={moment(p.time.toDate()).fromNow()}
                 key={p.id}
                 className={currentStorePack && currentStorePack.id === p.id ? 'selected' : ''}
               >
-                <div className="list-subtext1">{moment(p.time.toDate()).fromNow()}</div>
+                <div className="list-subtext1">{p.categoryName}</div>
+                <div className="list-subtext2">{p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd.toDate()).format('Y/M/D')}` : ''}</div>
                 <PackImage slot="media" pack={p.packInfo} type="list" />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
                 <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(p)}/>

@@ -34,6 +34,9 @@ const AddPack = props => {
 
   const handleSubmit = async () => {
     try{
+      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
+        throw new Error('duplicateName')
+      }
       const pack = {
         productId: props.id,
         productName: product.name,

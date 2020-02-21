@@ -139,7 +139,7 @@ const RequestedPackDetails = props => {
           throw new Error('alreadyInBasket')
         }
       }
-      if (packStore.unitPrice > Number(props.price)){
+      if (Number(props.price) < packStore.unitPrice){
         if (Number(props.price) < pack.price) { 
           if (packStore.unitPrice === pack.price && Math.trunc(props.price * (1 + setup.exceedPricePercent)) >= packStore.price && Number(props.exceed) > 0) {
             f7.dialog.confirm(labels.exceedPricePurchase, labels.confirmationTitle, () => addToBasket(packStore, Number(props.exceed), 'p'))

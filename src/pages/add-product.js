@@ -57,6 +57,9 @@ const AddProduct = props => {
   }
   const handleSubmit = async () => {
     try{
+      if (state.products.find(p => p.categoryId === categoryId && p.country === country && p.name === name)) {
+        throw new Error('duplicateName')
+      }
       const product = {
         name,
         alias,

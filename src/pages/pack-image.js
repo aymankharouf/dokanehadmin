@@ -4,7 +4,7 @@ import labels from '../data/labels'
 const PackImage = props => {
   return (
     <div className="relative">
-      <img src={props.pack.imageUrl} className={`img-${props.type}`} alt={labels.noImage} />
+      <img src={window.location.hostname === 'localhost' ? props.pack.imageUrl : ''} className={`img-${props.type}`} alt={labels.noImage} />
       {props.pack.subQuantity > 1 ? 
         <span className={`offer-quantity-${props.type}`}>{`× ${props.pack.subQuantity}`}</span> 
       : ''}

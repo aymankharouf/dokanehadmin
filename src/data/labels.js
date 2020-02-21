@@ -238,7 +238,6 @@ const labels = {
   invalidQuantity: 'الرجاء التأكد من الكمية المدخلة',
   currentPrice: 'السعر الحالي',
   allocate: 'وضع',
-  exceedPrice: 'تجاوز السعر',
   exceedPricePurchase: 'سيتم الشراء للعملاء الذين يسمحون بتجاوز السعر',
   noPurchase: 'لا يوجد ما يتم شراؤه بسبب ارتفاع السعر',
   offerUpTo: 'عرض حتى تاريخ',
@@ -248,7 +247,7 @@ const labels = {
   invitationDetails: 'تفاصيل الدعوة',
   otherUserMobile: 'رقم الموبايل البديل يعود لمستخدم اخر',
   friendName: 'اسم الصديق',
-  mobileCheck: 'التحقق من الموبايل',
+  mobileCheck: 'التحقق',
   notUsedMobile: 'رقم الموبايل غير مستخدم',
   alternative: 'اسم البديل',
   deliveryInterval: 'فترة التسليم',
@@ -313,7 +312,7 @@ const labels = {
   archivedPurchases: 'ارشيف المشتريات',
   resolved: 'تم الارسال',
   invitedByOther: 'تم دعوته من مستخدم آخر',
-  alreadyUser: 'رقم الموبايل يعود لمستخدم فعلي',
+  alreadyUser: 'رقم الموبايل لمستخدم فعلي',
   approval: 'موافقة',
   notice: 'تبليغ',
   newProduct: 'المنتج الجديد',
@@ -361,7 +360,9 @@ const labels = {
   sale: 'بيع',
   deliveryTimeTitle: 'موعد التسليم',
   enterDeliveryTime: 'ادخل وقت التسليم',
-  duplicateValue: 'القيمة موجودة سابقا'
+  duplicateName: 'اﻻسم مكرر',
+  alreadyRegistered: 'رقم الموبايل مستخدم من قبل مستخدم آخر',
+  blockingUser: 'تم حظر هذا المستخدم'
 }
 
 export default labels

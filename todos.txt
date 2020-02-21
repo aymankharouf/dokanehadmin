@@ -154,6 +154,8 @@
 *return packs by loading order packs
 *delivery time
 *weight in return basket
+*return after purchase
+*pwa
 debit
-pwa
-return after purchase
+alternative pack & best price flag & delete exceed price flag & change the way to handle weight
+offline

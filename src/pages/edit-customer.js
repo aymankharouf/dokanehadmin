@@ -18,7 +18,6 @@ const EditCustomer = props => {
   const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [exceedPrice, setExceedPrice] = useState(customer.exceedPrice)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 1000).toFixed(3))
@@ -34,12 +33,11 @@ const EditCustomer = props => {
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
     || otherMobile !== customer.otherMobile
-    || exceedPrice !== customer.exceedPrice
     || deliveryFees * 1000 !== customer.deliveryFees
     || specialDiscount * 1000 !== customer.specialDiscount
     || orderLimit * 1000 !== customer.orderLimit) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, otherMobile, exceedPrice, deliveryFees, orderLimit, specialDiscount])
+  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, otherMobile, deliveryFees, orderLimit, specialDiscount])
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -69,6 +67,15 @@ const EditCustomer = props => {
 
   const handleSubmit = async () => {
     try{
+      if (otherMobile === userInfo.mobile) {
+        throw new Error('sameMobile')
+      }
+      if (otherMobile && state.users.find(u => u.mobile === otherMobile)) {
+        throw new Error('otherUserMobile')
+      }
+      if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
+        throw new Error('otherUserMobile')
+      }
       const newCustomer = {
         ...customer,
         name,
@@ -77,7 +84,6 @@ const EditCustomer = props => {
         mapPosition,
         isBlocked,
         otherMobile,
-        exceedPrice,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
         specialDiscount: specialDiscount * 1000
@@ -126,10 +132,6 @@ const EditCustomer = props => {
         <ListItem>
           <span>{labels.isBlocked}</span>
           <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
-        </ListItem>
-        <ListItem>
-          <span>{labels.exceedPrice}</span>
-          <Toggle color="blue" checked={exceedPrice} onToggleChange={() => setExceedPrice(!exceedPrice)} />
         </ListItem>
         <ListInput 
           name="deliveryFees" 

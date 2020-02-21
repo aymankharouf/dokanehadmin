@@ -74,7 +74,9 @@ const EditOrder = props => {
       if (props.type === 'e') {
         await editOrder(order, state.orderBasket, state.storePacks, state.packs)
       } else {
-        await returnOrder(order, state.orderBasket, state.storePacks, state.packs)
+        const userLocation = state.users.find(c => c.id === order.userId).locationId
+        const locationFees = state.lookups.find(l => l.id === 'l').values.find(l => l.id === userLocation).fees
+        await returnOrder(order, state.orderBasket, locationFees, state.storePacks, state.packs)
       }
       setInprocess(false)
       showMessage(labels.editSuccess)

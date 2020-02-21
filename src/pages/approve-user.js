@@ -19,6 +19,11 @@ const ApproveUser = props => {
     const locations = state.lookups.find(l => l.id === 'l').values.slice()
     return locations.sort((l1, l2) => l1.ordering - l2.ordering)
   })
+  const [mobileCheck, setMobileCheck] = useState('')
+  useEffect(() => {
+    setMobileCheck(() => state.customers.find(c => c.otherMobile === userInfo.mobile))
+  }, [userInfo, state.customers])
+
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -57,9 +62,9 @@ const ApproveUser = props => {
         throw new Error('otherUserMobile')
       }
       setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, locationId, otherMobile, userInfo.storeName || '', address, state.users)
+      await approveUser(props.id, name, userInfo.mobile, mobileCheck, locationId, otherMobile, userInfo.storeName || '', address, state.users)
       setInprocess(false)
-      showMessage(labels.approveSuccess)
+      showMessage(mobileCheck ? labels.blockingUser : labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
       setInprocess(false)
@@ -84,6 +89,14 @@ const ApproveUser = props => {
           value={userInfo.mobile}
           readonly
         />
+        <ListInput 
+          name="mobileCheck" 
+          label={labels.mobileCheck}
+          value={mobileCheck ? labels.alreadyUser : labels.notUsedMobile}
+          type="text"
+          readonly
+        />
+
         <ListInput 
           name="storeName" 
           label={labels.storeName}

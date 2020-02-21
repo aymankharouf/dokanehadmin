@@ -4,7 +4,7 @@ import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import BottomToolbar from './bottom-toolbar'
-import { archiveProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
+import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
 
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
@@ -48,6 +48,21 @@ const ProductPacks = props => {
 			setError(getMessage(props, err))
 		}
   }
+  const handleDelete = () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        setInprocess(true)
+        await deleteProduct(product)
+        setInprocess(false)
+        showMessage(labels.deleteSuccess)
+        props.f7router.back()
+      } catch(err) {
+        setInprocess(false)
+        setError(getMessage(props, err))
+      }
+    })
+  }
+
   return (
     <Page>
       <Navbar title={`${product.name}${product.alias ? '-' + product.alias : ''}`} backLink={labels.back} />
@@ -84,6 +99,9 @@ const ProductPacks = props => {
         <ActionsButton onClick={() => props.f7router.navigate(`/add-bulk/${props.id}`)}>{labels.addBulk}</ActionsButton>
         {activePacks.length === 0 ? 
           <ActionsButton onClick={() => handleArchive()}>{labels.archive}</ActionsButton>
+        : ''}
+        {packs.length === 0 ? 
+          <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
         : ''}
       </Actions>
       <Toolbar bottom>
