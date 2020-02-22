@@ -22,10 +22,7 @@ const EditCustomer = props => {
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
   const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 1000).toFixed(3))
   const [hasChanged, setHasChanged] = useState(false)
-  const [locations] = useState(() => {
-    const locations = state.lookups.find(l => l.id === 'l').values.slice()
-    return locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)
-  })
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
     if (name !== customer.name
     || address !== customer.address

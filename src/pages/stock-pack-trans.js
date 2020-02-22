@@ -13,7 +13,7 @@ const StockPackTrans = props => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
-  const [stockPackInfo] = useState(() => state.storePacks.find(p => p.storeId === 's' && p.packId === props.id))
+  const [stockPackInfo] = useState(() => state.packPrices.find(p => p.storeId === 's' && p.packId === props.id))
   const [packTrans, setPackTrans] = useState([])
   const actionsList = useRef('')
   useEffect(() => {

@@ -50,7 +50,7 @@ const EditPrice = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
-      const storePack = state.storePacks.find(p => p.packId === props.packId && p.storeId === props.storeId)
+      const storePack = state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)
       const newStorePack = {
         ...storePack,
         price: price * 1000,
@@ -59,7 +59,7 @@ const EditPrice = props => {
         time: new Date()
       }
       setInprocess(true)
-      await editPrice(newStorePack, storePack.price, pack, state.storePacks, state.packs)
+      await editPrice(newStorePack, storePack.price, pack, state.packPrices, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

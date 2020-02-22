@@ -15,10 +15,7 @@ const ApproveUser = props => {
   const [address, setAddress] = useState('')
   const [otherMobile, setOtherMobile] = useState('')
   const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
-  const [locations] = useState(() => {
-    const locations = state.lookups.find(l => l.id === 'l').values.slice()
-    return locations.sort((l1, l2) => l1.ordering - l2.ordering)
-  })
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
   const [mobileCheck, setMobileCheck] = useState('')
   useEffect(() => {
     setMobileCheck(() => state.customers.find(c => c.otherMobile === userInfo.mobile))

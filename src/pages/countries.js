@@ -7,13 +7,10 @@ import labels from '../data/labels'
 
 const Countries = props => {
   const { state } = useContext(StoreContext)
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
   useEffect(() => {
-    setCountries(() => {
-      const countries = state.lookups.find(l => l.id === 'c')?.values || []
-      return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-    })
-  }, [state.lookups])
+    setCountries(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
+  }, [state.countries])
   let i = 0
   return (
     <Page>

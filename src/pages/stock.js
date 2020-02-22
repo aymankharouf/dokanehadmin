@@ -7,20 +7,20 @@ import labels from '../data/labels'
 
 const Stock = props => {
   const { state, user } = useContext(StoreContext)
-  const [storePacks, setStorePacks] = useState([])
+  const [stockPacks, setStockPacks] = useState([])
   useEffect(() => {
-    setStorePacks(() => {
-      let storePacks = state.storePacks.filter(p => p.storeId === 's')
-      storePacks = storePacks.map(p => {
+    setStockPacks(() => {
+      let stockPacks = state.packPrices.filter(p => p.storeId === 's')
+      stockPacks = stockPacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
         return {
           ...p,
           packInfo
         }
       })
-      return storePacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
+      return stockPacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     })
-  }, [state.storePacks, state.packs])
+  }, [state.packPrices, state.packs])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
@@ -43,9 +43,9 @@ const Stock = props => {
           <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {storePacks.length === 0 ? 
+          {stockPacks.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storePacks.map(p => 
+          : stockPacks.map(p => 
               <ListItem
                 link={`/stock-pack-trans/${p.packId}`}
                 title={p.packInfo.productName}

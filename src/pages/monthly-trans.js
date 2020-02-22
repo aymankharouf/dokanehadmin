@@ -21,7 +21,7 @@ const MonthlyTrans = props => {
   const [finishedOrdersCount] = useState(() => monthlyTrans?.finishedOrdersCount ?? finishedOrders.length)
   const [stock] = useState(() => {
     if (monthlyTrans) return monthlyTrans.stock
-    const stockPacks = state.storePacks.filter(p => p.storeId === 's' && p.quantity > 0)
+    const stockPacks = state.packPrices.filter(p => p.storeId === 's' && p.quantity > 0)
     return stockPacks.reduce((sum, p) => sum + Math.trunc(p.cost * p.quantity), 0)
   })
   const [sales] = useState(() => monthlyTrans?.sales ?? deliveredOrders.reduce((sum, o) => sum + o.total, 0))

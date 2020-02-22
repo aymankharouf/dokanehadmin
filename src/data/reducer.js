@@ -167,10 +167,35 @@ const Reducer = (state, action) => {
           ...state,
           returnBasket: ''
         }  
-      case 'SET_LOOKUPS':
+      case 'SET_LOCATIONS':
         return {
           ...state,
-          lookups: action.lookups
+          locations: action.locations
+        }
+      case 'SET_COUNTRIES':
+        return {
+          ...state,
+          countries: action.countries
+        }
+      case 'SET_NOTIFICATIONS':
+        return {
+          ...state,
+          notifications: action.notifications
+        }
+      case 'SET_ALARMS':
+        return {
+          ...state,
+          alarms: action.alarms
+        }
+      case 'SET_RATINGS':
+        return {
+          ...state,
+          ratings: action.ratings
+        }
+      case 'SET_INVITATIONS':
+        return {
+          ...state,
+          invitations: action.invitations
         }
       case 'SET_STORES':
         return {
@@ -232,10 +257,10 @@ const Reducer = (state, action) => {
           ...state,
           monthlyTrans: action.monthlyTrans
         }
-      case 'SET_STORE_PACKS':
+      case 'SET_PACK_PRICES':
         return {
           ...state,
-          storePacks: action.storePacks
+          packPrices: action.packPrices
         }
       case 'SET_LOGS':
         return {

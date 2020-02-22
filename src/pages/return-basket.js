@@ -62,7 +62,7 @@ const ReturnBasket = props => {
   const handleSubmit = async () => {
     try{
       setInprocess(true)
-      await confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.storePacks, state.packs, state.purchases)
+      await confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
       setInprocess(false)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)

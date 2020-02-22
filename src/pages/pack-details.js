@@ -13,7 +13,7 @@ const PackDetails = props => {
   const [inprocess, setInprocess] = useState(false)
   const [pack, setPack] = useState(() => {
     const pack = state.packs.find(p => p.id === props.id)
-    let detailsCount = state.storePacks.filter(p => p.packId === pack.id).length
+    let detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
     detailsCount = detailsCount === 0 ? state.orders.filter(o => o.basket.find(p => p.packId === pack.id)).length : detailsCount
     return {
       ...pack,
@@ -23,7 +23,7 @@ const PackDetails = props => {
   const [packStores, setPackStores] = useState([])
   useEffect(() => {
     setPackStores(() => {
-      let packStores = state.storePacks.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
+      let packStores = state.packPrices.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
       packStores = packStores.map(s => {
         let packId, unitPrice, quantity, offerInfo, isOffer, price
         if (s.packId === pack.id) {
@@ -98,18 +98,18 @@ const PackDetails = props => {
         }
       })
     })
-  }, [pack, state.stores, state.storePacks, state.purchases, state.packs])
+  }, [pack, state.stores, state.packPrices, state.purchases, state.packs])
   useEffect(() => {
     setPack(() => {
       const pack = state.packs.find(p => p.id === props.id) || ''
-      let detailsCount = state.storePacks.filter(p => p.packId === pack.id).length
+      let detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
       detailsCount = detailsCount === 0 ? state.orders.filter(o => o.basket.find(p => p.packId === pack.id)).length : detailsCount
       return {
         ...pack,
         detailsCount
       }
     })
-  }, [state.packs, state.storePacks, state.orders, props.id])
+  }, [state.packs, state.packPrices, state.orders, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -127,7 +127,7 @@ const PackDetails = props => {
   const handleRefreshPrice = async () => {
     try{
       setInprocess(true)
-      await refreshPackPrice(pack, state.storePacks, state.packs)
+      await refreshPackPrice(pack, state.packPrices, state.packs)
       setInprocess(false)
       showMessage(labels.refreshSuccess)
     } catch(err) {

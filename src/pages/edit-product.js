@@ -20,10 +20,7 @@ const EditProduct = props => {
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  const [countries] = useState(() => {
-    const countries = state.lookups.find(l => l.id === 'c')?.values || []
-    return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-  })
+  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name

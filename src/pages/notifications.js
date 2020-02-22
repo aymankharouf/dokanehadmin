@@ -14,19 +14,16 @@ const Notifications = props => {
   const [notifications, setNotifications] = useState([])
   useEffect(() => {
     setNotifications(() => {
-      let notifications = []
-      let users = state.users.filter(u => u.notifications)
-      users.forEach(u => {
-        u.notifications.forEach(n => {
-          notifications.push({
-            ...n,
-            userInfo: u
-          })
-        })
+      const notifications = state.notifications.map(n => {
+        const userInfo = state.users.find(u => u.id === n.userId)
+        return {
+          ...n,
+          userInfo
+        }
       })
       return notifications.sort((n1, n2) => n2.time.seconds - n1.time.seconds)
     })
-  }, [state.users])
+  }, [state.users, state.notifications])
   useEffect(() => {
     if (error) {
       showError(error)

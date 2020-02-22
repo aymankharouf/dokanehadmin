@@ -24,13 +24,13 @@ const Approvals = props => {
   }, [state.orders])
   useEffect(() => {
     setNewUsers(() => state.users.filter(u => !state.customers.find(c => c.id === u.id)))
-    setAlarms(() => state.users.filter(u => u.alarms?.find(i => i.status === 'n')))
-    setRatings(() => state.users.filter(u => u.ratings?.find(r => r.status === 'n')))
-    setInvitations(() => state.users.filter(u => u.friends?.find(f => f.status === 'n')))
+    setAlarms(() => state.alarms.filter(a => a.status === 'n'))
+    setRatings(() => state.ratings.filter(r => r.status === 'n'))
+    setInvitations(() => state.invitations.filter(i => i.status === 'n'))
     setDebitRequests(() => state.users.filter(u => u.debitRequestStatus === 'n'))
     setNewOwners(() => state.customers.filter(c => c.storeName && !c.storeId))
     setNotifyFriends(() => state.users.filter(u => u.notifyFriends?.length > 0))
-  }, [state.users, state.customers])
+  }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
   useEffect(() => {
     setPasswordRequests(() => state.passwordRequests.filter(r => r.status === 'n'))
   }, [state.passwordRequests]) 

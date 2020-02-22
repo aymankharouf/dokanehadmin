@@ -100,7 +100,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
+              await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -113,7 +113,7 @@ const OrderDetails = props => {
           f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, true)
+              await updateOrderStatus(order, action.id, state.packPrices, state.packs, true)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -124,7 +124,7 @@ const OrderDetails = props => {
           }, async () => {
             try{
               setInprocess(true)
-              await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
+              await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
               setInprocess(false)
               showMessage(labels.editSuccess)
               props.f7router.back()
@@ -135,7 +135,7 @@ const OrderDetails = props => {
           })
         } else if (action.id === 'd') {
           setInprocess(true)
-          await updateOrderStatus(order, 'd', state.storePacks, state.packs, false)
+          await updateOrderStatus(order, 'd', state.packPrices, state.packs, false)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()
@@ -154,7 +154,7 @@ const OrderDetails = props => {
           })
         } else {
           setInprocess(true)
-          await updateOrderStatus(order, action.id, state.storePacks, state.packs, false)
+          await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
           setInprocess(false)
           showMessage(labels.editSuccess)
           props.f7router.back()

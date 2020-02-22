@@ -11,22 +11,22 @@ const Offers = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [storePacks, setStorePacks] = useState([])
+  const [offers, setOffers] = useState([])
   useEffect(() => {
-    setStorePacks(() => {
-      let storePacks = state.storePacks.filter(p => p.offerEnd)
-      storePacks = storePacks.map(p => {
-        const packInfo = state.packs.find(pa => pa.id === p.packId)
-        const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
+    setOffers(() => {
+      let offers = state.packPrices.filter(p => p.offerEnd)
+      offers = offers.map(o => {
+        const packInfo = state.packs.find(p => p.id === o.packId)
+        const storeName = o.storeId ? (o.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === o.storeId).name) : ''
         return {
-          ...p,
+          ...o,
           packInfo,
           storeName
         }
       })
-      return storePacks.sort((p1, p2) => p1.offerEnd.seconds - p2.offerEnd.seconds)
+      return offers.sort((o1, o2) => o1.offerEnd.seconds - o2.offerEnd.seconds)
     })
-  }, [state.storePacks, state.packs, state.stores])
+  }, [state.packPrices, state.packs, state.stores])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -49,7 +49,7 @@ const Offers = props => {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
-            await haltOffer(storePack, state.storePacks, state.packs)
+            await haltOffer(storePack, state.packPrices, state.packs)
             setInprocess(false)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
@@ -60,7 +60,7 @@ const Offers = props => {
         })
       } else {
         setInprocess(true)
-        await haltOffer(storePack, state.storePacks, state.packs)
+        await haltOffer(storePack, state.packPrices, state.packs)
         setInprocess(false)
         showMessage(labels.haltSuccess)
       }
@@ -74,9 +74,9 @@ const Offers = props => {
       <Navbar title={labels.offers} backLink={labels.back} />
       <Block>
         <List mediaList>
-          {storePacks.length === 0 ? 
+          {offers.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storePacks.map(p => 
+          : offers.map(p => 
               <ListItem
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.name}

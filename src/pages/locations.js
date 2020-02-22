@@ -7,13 +7,10 @@ import labels from '../data/labels'
 
 const Locations = props => {
   const { state } = useContext(StoreContext)
-  const [locations, setLocations] = useState([])
+  const [locations, setLocations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
   useEffect(() => {
-    setLocations(() => {
-      const locations = state.lookups.find(l => l.id === 'l')?.values || []
-      return locations.sort((l1, l2) => l1.ordering - l2.ordering)
-    })
-  }, [state.lookups])
+    setLocations(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  }, [state.locations])
   return (
     <Page>
       <Navbar title={labels.locations} backLink={labels.back} />

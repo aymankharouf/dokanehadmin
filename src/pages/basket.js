@@ -28,7 +28,7 @@ const Basket = props => {
   }, [state.basket, state.packs])
   const handleAdd = pack => {
     if (store.id === 's') {
-      const stock = state.storePacks.find(p => p.packId === pack.packId && p.storeId === 's')
+      const stock = state.packPrices.find(p => p.packId === pack.packId && p.storeId === 's')
       if (pack.quantity === pack.requested) return
       if (pack.quantity === stock.quantity) return
     }

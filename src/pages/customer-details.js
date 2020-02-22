@@ -62,7 +62,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="locationName" 
           label={labels.location}
-          value={state.lookups.find(l => l.id === 'l').values.find(l => l.id === userInfo.locationId).name}
+          value={state.locations.find(l => l.id === userInfo.locationId).name}
           type="text"
           readonly
         />

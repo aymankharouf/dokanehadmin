@@ -18,7 +18,7 @@ const StorePacks = props => {
   const actionsList = useRef('')
   useEffect(() => {
     setStorePacks(() => {
-      let storePacks = state.storePacks.filter(p => p.storeId === props.id)
+      let storePacks = state.packPrices.filter(p => p.storeId === props.id)
       storePacks = storePacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
         const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
@@ -31,7 +31,7 @@ const StorePacks = props => {
       })
       return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryName > p2.categoryName ? 1 : -1))
     })
-  }, [state.storePacks, state.packs, state.categories, props.id])
+  }, [state.packPrices, state.packs, state.categories, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -50,7 +50,7 @@ const StorePacks = props => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        await deleteStorePack(currentStorePack, state.storePacks, state.packs)
+        await deleteStorePack(currentStorePack, state.packPrices, state.packs)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
       } catch(err) {
@@ -67,7 +67,7 @@ const StorePacks = props => {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
           try{
             setInprocess(true)
-            await haltOffer(currentStorePack, state.storePacks, state.packs)
+            await haltOffer(currentStorePack, state.packPrices, state.packs)
             setInprocess(false)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
@@ -78,7 +78,7 @@ const StorePacks = props => {
         })
       } else {
         setInprocess(true)
-        await haltOffer(currentStorePack, state.storePacks, state.packs)
+        await haltOffer(currentStorePack, state.packPrices, state.packs)
         setInprocess(false)
         showMessage(labels.haltSuccess)
       }

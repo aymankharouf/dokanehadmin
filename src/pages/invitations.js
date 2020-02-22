@@ -10,22 +10,16 @@ const Invitations = props => {
   const [invitations, setInvitations] = useState([])
   useEffect(() => {
     setInvitations(() => {
-      let invitations = []
-      let users = state.users.filter(u => u.friends?.find(f => f.status === 'n'))
-      users.forEach(u => {
-        u.friends.forEach(f => {
-          if (f.status === 'n') {
-            invitations.push({
-              userInfo: u,
-              name: f.name,
-              mobile: f.mobile
-            })
-          }
-        })
+      const invitations = state.invitations.filter(i => i.status === 'n')
+      return invitations.map(i => {
+        const userInfo = state.users.find(u => u.id === i.userId)
+        return {
+          ...i,
+          userInfo
+        }
       })
-      return invitations
     })
-  }, [state.users])
+  }, [state.users, state.invitations])
   let j = 0
   return(
     <Page>

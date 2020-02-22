@@ -12,22 +12,18 @@ const Ratings = props => {
   const [ratings, setRatings] = useState([])
   useEffect(() => {
     setRatings(() => {
-      let ratings = []
-      let users = state.users.filter(u => u.ratings?.find(r => r.status === 'n'))
-      users.forEach(u => {
-        u.ratings.forEach(r => {
-          if (r.status === 'n') {
-            ratings.push({
-              userInfo: u,
-              productInfo: state.products.find(p => p.id === r.productId),
-              value: r.value
-            })
-          }
-        })
+      const ratings = state.ratings.filter(r => r.status === 'n')
+      return ratings.map(r => {
+        const userInfo = state.users.find(u => u.id === r.userId)
+        const productInfo = state.products.find(p => p.id === r.productId)
+        return {
+          ...r,
+          userInfo,
+          productInfo
+        }
       })
-      return ratings
     })
-  }, [state.users, state.products])
+  }, [state.users, state.products, state.ratings])
   useEffect(() => {
     if (error) {
       showError(error)

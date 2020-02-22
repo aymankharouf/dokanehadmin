@@ -38,20 +38,20 @@ const AlarmDetails = props => {
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   })
-  const [storePacks, setStorePacks] = useState([])
+  const [prices, setPrices] = useState([])
   useEffect(() => {
-    setStorePacks(() => {
-      let storePacks = state.storePacks.filter(p => p.packId === (newPackId || pack.id))
-      storePacks = storePacks.map(p => {
+    setPrices(() => {
+      let prices = state.packPrices.filter(p => p.packId === (newPackId || pack.id))
+      prices = prices.map(p => {
         const currentStore = state.stores.find(st => st.id === p.storeId)
         return {
           ...p,
           currentStore
         }
       })
-      return storePacks.sort((p1, p2) => p1.price - p2.price)
+      return prices.sort((p1, p2) => p1.price - p2.price)
     })
-  }, [state.storePacks, state.stores, pack, newPackId])
+  }, [state.packPrices, state.stores, pack, newPackId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -69,7 +69,7 @@ const AlarmDetails = props => {
   const handleApprove = async () => {
     try{
       setInprocess(true)
-      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.storePacks, state.packs)
+      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.packPrices, state.packs)
       setInprocess(false)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
@@ -222,7 +222,7 @@ const AlarmDetails = props => {
         {labels.prices}
       </BlockTitle>
         <List mediaList>
-        {storePacks.map(p => 
+        {prices.map(p => 
           <ListItem 
             title={p.currentStore.name}
             subtitle={p.quantity ? `${labels.quantity}: ${p.quantity}` : ''}

@@ -19,12 +19,12 @@ const InvitationDetails = props => {
       if (state.customers.find(c => c.otherMobile === props.mobile)) {
         return 'r'
       }
-      if (state.users.find(u => u.id !== props.userId && u.friends?.find(f => f.mobile === props.mobile))) {
+      if (state.invitations.find(i => i.userId !== props.userId && i.mobile === props.mobile)) {
         return 'o'
       }
       return 's'
     })
-  }, [state.users, state.customers, props.mobile, props.userId])
+  }, [state.users, state.customers, state.invitations, props.mobile, props.userId])
   useEffect(() => {
     if (error) {
       showError(error)

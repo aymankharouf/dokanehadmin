@@ -40,14 +40,14 @@ const ConfirmPurchase = props => {
     try{
       if (store.id === 's') {
         setInprocess(true)
-        await stockOut(state.basket.packs, state.orders, state.storePacks, state.packs, state.customers)
+        await stockOut(state.basket.packs, state.orders, state.packPrices, state.packs, state.customers)
         setInprocess(false)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
         setInprocess(true)
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.storePacks, state.packs, state.customers, total, discount * 1000)
+        await confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, state.customers, total, discount * 1000)
         setInprocess(false)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})

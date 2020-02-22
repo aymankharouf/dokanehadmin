@@ -39,7 +39,7 @@ const ProductPacks = props => {
   const handleArchive = async () => {
     try{
       setInprocess(true)
-      await archiveProduct(product, state.packs, state.storePacks)
+      await archiveProduct(product, state.packs)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()

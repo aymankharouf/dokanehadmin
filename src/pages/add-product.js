@@ -23,10 +23,7 @@ const AddProduct = props => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
-  const [countries] = useState(() => {
-    const countries = state.lookups.find(l => l.id === 'c')?.values || []
-    return countries.sort((c1, c2) => c1 > c2 ? 1 : -1)
-  })
+  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
   const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   useEffect(() => {
     if (error) {

@@ -15,13 +15,13 @@ const RequestedPacks = props => {
 			if (props.id){
 				packs = packs.filter(p => {
 					const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-					const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
+					const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.packPrices, state.stores, state.packs, p.price)
 					return packStores.find(ps => ps.storeId === props.id)
 				})	
 			}
 			return packs
 		})
-	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.storePacks])
+	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.packPrices])
 	let i = 0
 	return(
     <Page>

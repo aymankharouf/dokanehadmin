@@ -22,7 +22,7 @@ const RequestedPackDetails = props => {
   }, [state.basket, props.packId])
   useEffect(() => {
     setPackStores(() => {
-      const packStores = getRequestedPackStores(pack, basketStockQuantity, state.storePacks, state.stores, state.packs)
+      const packStores = getRequestedPackStores(pack, basketStockQuantity, state.packPrices, state.stores, state.packs)
       const today = new Date()
       today.setDate(today.getDate() - 30)
       return packStores.sort((s1, s2) => 
@@ -48,7 +48,7 @@ const RequestedPackDetails = props => {
         }
       })
     })
-  }, [pack, state.stores, state.storePacks, state.purchases, basketStockQuantity, state.packs])
+  }, [pack, state.stores, state.packPrices, state.purchases, basketStockQuantity, state.packs])
   useEffect(() => {
     if (error) {
       showError(error)

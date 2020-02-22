@@ -13,27 +13,23 @@ const Alarms = props => {
   const [alarms, setAlarms] = useState([])
   useEffect(() => {
     setAlarms(() => {
-      let alarms = []
-      let users = state.users.filter(u => u.alarms?.find(a => a.status === 'n'))
-      users.forEach(u => {
-        u.alarms.forEach(a => {
-          if (a.status === 'n') {
-            const alarmTypeInfo = alarmTypes.find(t => t.id === a.type)
-            const packInfo = state.packs.find(p => p.id === a.packId)
-            const customerInfo = state.customers.find(c => c.id === u.id)
-            alarms.push({
-              ...a,
-              packInfo,
-              userInfo: u,
-              customerInfo,
-              alarmTypeInfo
-            })
-          }
-        })
+      let alarms = state.alarms.filter(a => a.status === 'n')
+      alarms = alarms.map(a => {
+        const userInfo = state.users.find(u => u.id === a.userId)
+        const alarmTypeInfo = alarmTypes.find(t => t.id === a.type)
+        const packInfo = state.packs.find(p => p.id === a.packId)
+        const customerInfo = state.customers.find(c => c.id === a.userId)
+        return {
+          ...a,
+          userInfo,
+          customerInfo,
+          packInfo,
+          alarmTypeInfo
+        }
       })
       return alarms.sort((a1, a2) => a1.time.seconds - a2.time.seconds)
     })
-  }, [state.packs, state.users, state.customers])
+  }, [state.alarms, state.packs, state.users, state.customers])
   return(
     <Page>
       <Navbar title={labels.alarms} backLink={labels.back} />

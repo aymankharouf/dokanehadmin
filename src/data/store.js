@@ -10,7 +10,8 @@ const Store = props => {
   const [user, setUser] = useState(null)
   const initState = {
     categories: [], 
-    lookups: [], 
+    locations: [], 
+    countrie: [],
     stores: [], 
     basket, 
     users: [],
@@ -23,14 +24,18 @@ const Store = props => {
     customers: [],
     spendings: [],
     monthlyTrans: [],
-    storePacks: [],
+    packPrices: [],
     logs: [],
     archivedOrders: [],
     adverts: [],
     archivedPurchases: [],
     archivedStockTrans: [],
     archivedProducts: [],
-    archivedPacks: []
+    archivedPacks: [],
+    notifications: [],
+    alarms: [],
+    ratings: [],
+    invitations: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -45,10 +50,17 @@ const Store = props => {
     })
     const unsubscribePacks = firebase.firestore().collection('packs').where('isArchived', '==', false).onSnapshot(docs => {
       let packs = []
+      let packPrices = []
       docs.forEach(doc => {
         packs.push({...doc.data(), id: doc.id})
+        if (doc.data().prices) {
+          doc.data().prices.forEach(p => {
+            packPrices.push({...p, packId: doc.id})
+          })
+        }
       })
       dispatch({type: 'SET_PACKS', packs})
+      dispatch({type: 'SET_PACK_PRICES', packPrices})
     }, err => {
       unsubscribePacks()
     })
@@ -73,15 +85,16 @@ const Store = props => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user)
       if (user){
-        const unsubscribeLookups = firebase.firestore().collection('lookups').onSnapshot(docs => {
-          let lookups = []
-          docs.forEach(doc => {
-            lookups.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_LOOKUPS', lookups})
+        const unsubscribeLocations = firebase.firestore().collection('lookups').doc('l').onSnapshot(doc => {
+          dispatch({type: 'SET_LOCATIONS', locations: doc.data().values})
         }, err => {
-          unsubscribeLookups()
+          unsubscribeLocations()
         })  
+        const unsubscribeCountries = firebase.firestore().collection('lookups').doc('c').onSnapshot(doc => {
+          dispatch({type: 'SET_COUNTRIES', countries: doc.data().values})
+        }, err => {
+          unsubscribeCountries()
+        })
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products = []
           docs.forEach(doc => {
@@ -102,10 +115,38 @@ const Store = props => {
         })  
         const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
           let users = []
+          let notifications = []
+          let alarms = []
+          let ratings = []
+          let invitations = []
           docs.forEach(doc => {
             users.push({...doc.data(), id:doc.id})
+            if (doc.data().notifications) {
+              doc.data().notifications.forEach(n => {
+                notifications.push({...n, userId: doc.id})
+              })
+            }
+            if (doc.data().alarms) {
+              doc.data().alarms.forEach(a => {
+                alarms.push({...a, userId: doc.id})
+              })
+            }
+            if (doc.data().ratings) {
+              doc.data().ratings.forEach(r => {
+                ratings.push({...r, userId: doc.id})
+              })
+            }
+            if (doc.data().friends) {
+              doc.data().friends.forEach(f => {
+                invitations.push({...f, userId: doc.id})
+              })
+            }
           })
           dispatch({type: 'SET_USERS', users})
+          dispatch({type: 'SET_NOTIFICATIONS', notifications})
+          dispatch({type: 'SET_ALARMS', alarms})
+          dispatch({type: 'SET_RATINGS', ratings})
+          dispatch({type: 'SET_INVITATIONS', invitations})
         }, err => {
           unsubscribeUsers()
         })  
@@ -162,15 +203,6 @@ const Store = props => {
           dispatch({type: 'SET_MONTHLY_TRANS', monthlyTrans})
         }, err => {
           unsubscribeMonthlyTrans()
-        })  
-        const unsubscribeStorePacks = firebase.firestore().collection('store-packs').onSnapshot(docs => {
-          let storePacks = []
-          docs.forEach(doc => {
-            storePacks.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_STORE_PACKS', storePacks})
-        }, err => {
-          unsubscribeStorePacks()
         })  
         const unsubscribeLogs = firebase.firestore().collection('logs').onSnapshot(docs => {
           let logs = []

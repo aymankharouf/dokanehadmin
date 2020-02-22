@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { addStorePack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { setup } from '../data/config'
+import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
 
 const AddPackStore = props => {
   const { state } = useContext(StoreContext)
@@ -46,7 +46,7 @@ const AddPackStore = props => {
   }
   const handleSubmit = async () => {
     try{
-      if (state.storePacks.find(p => p.packId === pack.id && p.storeId === storeId)) {
+      if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(price) <= 0) {
@@ -61,7 +61,6 @@ const AddPackStore = props => {
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
       const storePack = {
-        packId: pack.id, 
         storeId,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
@@ -69,7 +68,7 @@ const AddPackStore = props => {
         time: new Date()
       }
       setInprocess(true)
-      await addStorePack(storePack, pack, state.storePacks, state.packs)
+      await addPackPrice(storePack, pack, state.packPrices, state.packs)
       setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()

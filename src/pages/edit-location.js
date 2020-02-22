@@ -9,10 +9,7 @@ const EditLocation = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [location] = useState(() => {
-    const locations = state.lookups.find(l => l.id === 'l').values
-    return locations.find(l => l.id === props.id)
-  })
+  const [location] = useState(() => state.locations.find(l => l.id === props.id))
   const [name, setName] = useState(location.name)
   const [fees, setFees] = useState((location.fees / 1000).toFixed(3))
   const [ordering, setOrdering] = useState(location.ordering)
@@ -46,7 +43,7 @@ const EditLocation = props => {
         ordering
       }
       setInprocess(true)
-      await editLocation(newLocation, state.lookups)
+      await editLocation(newLocation, state.locations)
       setInprocess(false)
       showMessage(labels.editSuccess)
       props.f7router.back()  

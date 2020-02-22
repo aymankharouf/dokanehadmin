@@ -17,7 +17,7 @@ const PurchasePlan = props => {
 		const packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
 		packs.forEach(p => {
 			const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.storePacks, state.stores, state.packs, p.price)
+			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.packPrices, state.stores, state.packs, p.price)
 			packStores.forEach(ps => {
 				const found = storesArray.findIndex(s => s.store.id === ps.storeId)
 				if (found > -1) {
@@ -52,7 +52,7 @@ const PurchasePlan = props => {
 			}
 		})
 		setStores(storesArray)
-	}, [state.basket, approvedOrders, state.stores, state.packs, state.customers, state.storePacks, state.purchases])
+	}, [state.basket, approvedOrders, state.stores, state.packs, state.customers, state.packPrices, state.purchases])
 	let i = 0
 	return(
     <Page>

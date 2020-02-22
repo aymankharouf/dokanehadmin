@@ -57,7 +57,7 @@ const EditOrder = props => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
         setInprocess(true)
-        await updateOrderStatus(order, type, state.storePacks, state.packs, false)
+        await updateOrderStatus(order, type, state.packPrices, state.packs, false)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
@@ -72,11 +72,11 @@ const EditOrder = props => {
     try{
       setInprocess(true)
       if (props.type === 'e') {
-        await editOrder(order, state.orderBasket, state.storePacks, state.packs)
+        await editOrder(order, state.orderBasket, state.packPrices, state.packs)
       } else {
         const userLocation = state.users.find(c => c.id === order.userId).locationId
-        const locationFees = state.lookups.find(l => l.id === 'l').values.find(l => l.id === userLocation).fees
-        await returnOrder(order, state.orderBasket, locationFees, state.storePacks, state.packs)
+        const locationFees = state.locations.find(l => l.id === userLocation).fees
+        await returnOrder(order, state.orderBasket, locationFees, state.packPrices, state.packs)
       }
       setInprocess(false)
       showMessage(labels.editSuccess)
