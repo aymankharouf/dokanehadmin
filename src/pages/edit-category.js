@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -9,7 +9,6 @@ import { editCategory, showMessage, showError, getMessage, getCategoryName } fro
 const EditCategory = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [name, setName] = useState(category.name)
   const [ordering, setOrdering] = useState(category.ordering)
@@ -33,28 +32,13 @@ const EditCategory = props => {
     || isActive !== category.isActive) setHasChanged(true)
     else setHasChanged(false)
   }, [category, name, ordering, parentId, isActive])
-
-  useEffect(() => {
-    setName(category.name)
-    setOrdering(category.ordering)
-    setParentId(category.parentId)
-    setIsActive(category.isActive)
-  }, [category])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleEdit = async () => {
+  const handleEdit = () => {
     try{
       const newCategory = {
         ...category,
@@ -63,13 +47,10 @@ const EditCategory = props => {
         ordering,
         isActive
       }
-      setInprocess(true)
-      await editCategory(newCategory, category.parentId, state.categories)
-      setInprocess(false)
+      editCategory(newCategory, category.parentId, state.categories)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -8,7 +8,6 @@ import { approveNotifyFriends, showMessage, showError, getMessage } from '../dat
 const NotifyFriends = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [notifyFriends, setNotifyFriends] = useState([])
   useEffect(() => {
     setNotifyFriends(() => {
@@ -31,22 +30,11 @@ const NotifyFriends = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleApprove = async (userInfo, pack) => {
+  const handleApprove = (userInfo, pack) => {
     try{
-      setInprocess(true)
-      await approveNotifyFriends(userInfo, pack, state.users)
-      setInprocess(false)
+      approveNotifyFriends(userInfo, pack, state.users)
       showMessage(labels.approveSuccess)
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

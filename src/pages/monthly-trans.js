@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/actions'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const MonthlyTrans = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [buttonVisisble, setButtonVisible] = useState(false)
   const month = (Number(props.id) % 100) - 1
   const year = Math.trunc(Number(props.id) / 100)
@@ -65,15 +64,7 @@ const MonthlyTrans = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleMonthlyTrans = async () => {
+  const handleMonthlyTrans = () => {
     try{
       const trans = {
         id: props.id,
@@ -96,13 +87,10 @@ const MonthlyTrans = props => {
         specialDiscounts,
         netProfit
       }
-      setInprocess(true)
-      await addMonthlyTrans(trans, state.orders, state.purchases, state.stockTrans)
-      setInprocess(false)
+      addMonthlyTrans(trans, state.orders, state.purchases, state.stockTrans)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

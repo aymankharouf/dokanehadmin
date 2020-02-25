@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { allocateOrderPack, showMessage, getMessage, showError } from '../data/actions'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const PrepareOrdersList = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] =useState(false)
   const [orders, setOrders] = useState([])
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   useEffect(() => {
@@ -32,23 +31,12 @@ const PrepareOrdersList = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleAllocate = async order => {
+  const handleAllocate = order => {
     try{
-      setInprocess(true)
-      await allocateOrderPack(order, pack, state.stores)
-      setInprocess(false)
+      allocateOrderPack(order, pack, state.stores)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

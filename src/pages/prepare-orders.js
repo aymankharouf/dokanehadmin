@@ -3,7 +3,6 @@ import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 
 const PrepareOrders = props => {
@@ -58,7 +57,7 @@ const PrepareOrders = props => {
 								text={p.packInfo.name}
 								key={i++}
 							>
-								<PackImage slot="media" pack={p.packInfo} type="list" />
+								<img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
 							</ListItem>
 						)

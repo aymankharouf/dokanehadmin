@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -7,7 +7,6 @@ import labels from '../data/labels'
 const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [alias, setAlias] = useState('')
   const [description, setDescription] = useState('')
@@ -31,13 +30,6 @@ const AddProduct = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -54,8 +46,8 @@ const AddProduct = props => {
   }
   const handleSubmit = async () => {
     try{
-      if (state.products.find(p => p.categoryId === categoryId && p.country === country && p.name === name)) {
-        throw new Error('duplicateName')
+      if (state.products.find(p => p.categoryId === categoryId && p.country === country && p.name === name && p.alias === alias)) {
+        throw new Error('duplicateProduct')
       }
       const product = {
         name,
@@ -67,16 +59,12 @@ const AddProduct = props => {
         sales: 0,
         rating: 0,
         ratingCount: 0,
-        imageUrl,
         isArchived: false
       }
-      setInprocess(true)
-      await addProduct(product, packName, storeId, price * 1000, image)
-      setInprocess(false)
+      addProduct(product, packName, storeId, price * 1000, image)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -192,7 +180,13 @@ const AddProduct = props => {
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice('')}
         />
-        <ListInput name="image" label={labels.image} type="file" accept="image/*" onChange={e => handleFileChange(e)}/>
+        <ListInput 
+          name="image" 
+          label={labels.image} 
+          type="file" 
+          accept="image/*" 
+          onChange={e => handleFileChange(e)}
+        />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {!name || !categoryId || !country || !packName || !storeId || !price ? '' :

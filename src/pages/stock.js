@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import PackImage from './pack-image'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
 
@@ -10,19 +9,13 @@ const Stock = props => {
   const [stockPacks, setStockPacks] = useState([])
   useEffect(() => {
     setStockPacks(() => {
-      let stockPacks = state.packPrices.filter(p => p.storeId === 's')
-      stockPacks = stockPacks.map(p => {
-        const packInfo = state.packs.find(pa => pa.id === p.packId)
-        return {
-          ...p,
-          packInfo
-        }
-      })
+      const stockPacks = state.packPrices.filter(p => p.storeId === 's')
       return stockPacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     })
-  }, [state.packPrices, state.packs])
+  }, [state.packPrices])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
+  let i = 0
   return(
     <Page>
       <Navbar title={labels.stock} backLink={labels.back}>
@@ -53,9 +46,9 @@ const Stock = props => {
                 text={p.packInfo.name}
                 footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
                 after={(p.cost / 1000).toFixed(3)}
-                key={p.id}
+                key={i++}
               >
-                <PackImage slot="media" pack={p.packInfo} type="list" />
+                <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               </ListItem>
             )
           }

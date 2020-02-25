@@ -2,13 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails, returnOrder } from '../data/actions'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 
 const EditOrder = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
   const [orderBasket, setOrderBasket] = useState([])
   const [total, setTotal] = useState('')
@@ -44,46 +42,32 @@ const EditOrder = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         const type = ['f', 'p', 'e'].includes(order.status) ? 'i' : 'c'
-        setInprocess(true)
-        await updateOrderStatus(order, type, state.packPrices, state.packs, false)
-        setInprocess(false)
+        updateOrderStatus(order, type, state.packPrices, state.packs, false)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
         props.f7router.back()
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  
   }
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
-      setInprocess(true)
       if (props.type === 'e') {
-        await editOrder(order, state.orderBasket, state.packPrices, state.packs)
+        editOrder(order, state.orderBasket, state.packPrices, state.packs)
       } else {
         const userLocation = state.users.find(c => c.id === order.userId).locationId
         const locationFees = state.locations.find(l => l.id === userLocation).fees
-        await returnOrder(order, state.orderBasket, locationFees, state.packPrices, state.packs)
+        returnOrder(order, state.orderBasket, locationFees, state.packPrices, state.packs)
       }
-      setInprocess(false)
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -114,7 +98,7 @@ const EditOrder = props => {
               footer={`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}
               key={p.packId}
             >
-              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <Stepper

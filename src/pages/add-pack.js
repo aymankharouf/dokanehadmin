@@ -1,18 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 const AddPack = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
+  const [specialImage, setSpecialImage] = useState(false)
+  const [image, setImage] = useState(null)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
+  const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -24,31 +26,26 @@ const AddPack = props => {
       setByWeight(true)
     }
   }, [isDivided])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
+  const handleFileChange = e => {
+    const files = e.target.files
+    const filename = files[0].name
+    if (filename.lastIndexOf('.') <= 0) {
+      setError(labels.invalidFile)
+      return
     }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', () => {
+      setImageUrl(fileReader.result)
+    })
+    fileReader.readAsDataURL(files[0])
+    setImage(files[0])
+  }
+  const handleSubmit = () => {
     try{
       if (state.packs.find(p => p.productId === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       const pack = {
-        productId: props.id,
-        productName: product.name,
-        productAlias: product.alias,
-        productDescription: product.description,
-        imageUrl: product.imageUrl,
-        categoryId: product.categoryId,
-        country: product.country,
-        trademark: product.trademark,
-        sales: product.sales,
-        rating: product.rating,
-        ratingCount: product.ratingCount,
         name,
         unitsCount: Number(unitsCount),
         isDivided,
@@ -58,13 +55,10 @@ const AddPack = props => {
         isArchived: false,
         price: 0
       }
-      setInprocess(true)
-      await addPack(pack)
-      setInprocess(false)
+      addPack(pack, product, image)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -111,6 +105,25 @@ const AddPack = props => {
             disabled={isDivided}
           />
         </ListItem>
+        <ListItem>
+          <span>{labels.specialImage}</span>
+          <Toggle 
+            name="specialImage" 
+            color="green" 
+            checked={specialImage} 
+            onToggleChange={() => setSpecialImage(!specialImage)}
+          />
+        </ListItem>
+        {specialImage ? 
+          <ListInput 
+            name="image" 
+            label={labels.image} 
+            type="file" 
+            accept="image/*" 
+            onChange={e => handleFileChange(e)}
+          />
+        : ''}
+        <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {!name || !unitsCount ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>

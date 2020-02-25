@@ -11,7 +11,6 @@ import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
 const Logs = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [logs, setLogs] = useState([])
   useEffect(() => {
     setLogs(() => {
@@ -31,23 +30,12 @@ const Logs = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleDelete = log => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deleteLog(log)
-        setInprocess(false)
+        deleteLog(log)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  

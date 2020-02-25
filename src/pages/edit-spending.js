@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { editSpending, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -9,7 +9,6 @@ import { spendingTypes } from '../data/config'
 const EditSpending = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [spending] = useState(() => state.spendings.find(s => s.id === props.id))
   const [type, setType] = useState(spending.type)
   const [spendingAmount, setSpendingAmount] = useState((spending.spendingAmount / 1000).toFixed(3))
@@ -47,15 +46,7 @@ const EditSpending = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleEdit = async () => {
+  const handleEdit = () => {
     try{
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
       const newSpending = {
@@ -65,13 +56,10 @@ const EditSpending = props => {
         spendingDate: formatedDate,
         description
       }
-      setInprocess(true)
-      await editSpending(newSpending)
-      setInprocess(false)
+      editSpending(newSpending)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}    
   }

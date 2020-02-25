@@ -12,7 +12,6 @@ const Adverts = props => {
   const { state } = useContext(StoreContext)
   const [currentAdvert, setCurrentAdvert] = useState('')
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [adverts, setAdverts] = useState([])
   const actionsList = useRef('')
   useEffect(() => {
@@ -24,39 +23,26 @@ const Adverts = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
   const handleAction = advert => {
     setCurrentAdvert(advert)
     actionsList.current.open()
   }
   const handleUpdate = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await updateAdvertStatus(currentAdvert, state.adverts)
-        setInprocess(false)
+        updateAdvertStatus(currentAdvert, state.adverts)
         showMessage(labels.editSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  
   }
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deleteAdvert(currentAdvert)
-        setInprocess(false)
+        deleteAdvert(currentAdvert)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  

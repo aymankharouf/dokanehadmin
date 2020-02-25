@@ -3,72 +3,55 @@ import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framew
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 import { haltOffer, showMessage, getMessage, showError } from '../data/actions'
 
 const Offers = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [offers, setOffers] = useState([])
   useEffect(() => {
     setOffers(() => {
       let offers = state.packPrices.filter(p => p.offerEnd)
       offers = offers.map(o => {
-        const packInfo = state.packs.find(p => p.id === o.packId)
         const storeName = o.storeId ? (o.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === o.storeId).name) : ''
         return {
           ...o,
-          packInfo,
           storeName
         }
       })
       return offers.sort((o1, o2) => o1.offerEnd.seconds - o2.offerEnd.seconds)
     })
-  }, [state.packPrices, state.packs, state.stores])
+  }, [state.packPrices, state.stores])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleHaltOffer = async storePack => {
+  const handleHaltOffer = storePack => {
     try{
       const offerEndDate = storePack.offerEnd.toDate().setHours(0, 0, 0, 0)
       const today = (new Date()).setHours(0, 0, 0, 0)
       if (offerEndDate > today) {
-        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
           try{
-            setInprocess(true)
-            await haltOffer(storePack, state.packPrices, state.packs)
-            setInprocess(false)
+            haltOffer(storePack, state.packPrices, state.packs)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
-            setInprocess(false)
             setError(getMessage(props, err))
           }
         })
       } else {
-        setInprocess(true)
-        await haltOffer(storePack, state.packPrices, state.packs)
-        setInprocess(false)
+        haltOffer(storePack, state.packPrices, state.packs)
         showMessage(labels.haltSuccess)
       }
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
+  let i = 0
   return(
     <Page>
       <Navbar title={labels.offers} backLink={labels.back} />
@@ -82,9 +65,9 @@ const Offers = props => {
                 subtitle={p.packInfo.name}
                 text={`${labels.productOf} ${p.packInfo.trademark ? labels.company + ' ' + p.packInfo.trademark + '-' : ''}${p.packInfo.country}`}
                 footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
-                key={p.id}
+                key={i++}
               >
-                <PackImage slot="media" pack={p.packInfo} type="list" />
+                <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 {p.storeName ? <div className="list-subtext1">{`${labels.storeName}: ${p.storeName}`}</div> : ''}
                 <div className="list-subtext2">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
                 {p.price === 0 ? '' : 

@@ -69,7 +69,6 @@ const EditProduct = props => {
         description,
         trademark,
         country,
-        imageUrl
       }
       setInprocess(true)
       await editProduct(newProduct, product.name, image, state.packs)

@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
-import PackImage from './pack-image'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
@@ -33,7 +32,7 @@ const StockTransDetails = props => {
               after={(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}
               key={p.packId}
             >
-              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
             </ListItem>
           )}
         </List>

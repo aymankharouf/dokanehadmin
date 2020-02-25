@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
 const AddStore = props => {
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [type, setType] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
@@ -38,21 +37,12 @@ const AddStore = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (discount && discount <= 0) {
       throw new Error('invalidValue')
     }
     try{
-      setInprocess(true)
-      await addStore({
+      addStore({
         name,
         type,
         discount : discount / 100,
@@ -64,11 +54,9 @@ const AddStore = props => {
         balance: 0,
         time: new Date()
       })
-      setInprocess(false)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

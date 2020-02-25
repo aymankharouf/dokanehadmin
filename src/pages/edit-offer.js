@@ -1,13 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 const EditOffer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
@@ -18,6 +17,9 @@ const EditOffer = props => {
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent * 100)
   const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
+  const [specialImage, setSpecialImage] = useState(pack.specialImage)
+  const [image, setImage] = useState(null)
+  const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
   const [bonusPacks] = useState(() => {
     let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
@@ -37,24 +39,33 @@ const EditOffer = props => {
     || bonusPackId !== pack.bonusPackId
     || bonusQuantity !== pack.bonusQuantity * 100
     || bonusPercent !== pack.bonusPercent
-    || closeExpired !== pack.closeExpired) setHasChanged(true)
+    || closeExpired !== pack.closeExpired
+    || specialImage !== pack.specialImage
+    || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired])
+  }, [pack, name, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
+  const handleFileChange = e => {
+    const files = e.target.files
+    const filename = files[0].name
+    if (filename.lastIndexOf('.') <= 0) {
+      setError(labels.invalidFile)
+      return
     }
-  }, [inprocess])
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', () => {
+      setImageUrl(fileReader.result)
+    })
+    fileReader.readAsDataURL(files[0])
+    setImage(files[0])
+  }
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
         throw new Error('invalidPercents')
@@ -72,13 +83,10 @@ const EditOffer = props => {
         bonusPercent: bonusPercent / 100,
         closeExpired
       }
-      setInprocess(true)
-      await editPack(newPack)
-      setInprocess(false)
+      editPack(newPack, pack, image, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -140,6 +148,25 @@ const EditOffer = props => {
             onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
+        <ListItem>
+          <span>{labels.specialImage}</span>
+          <Toggle 
+            name="specialImage" 
+            color="green" 
+            checked={specialImage} 
+            onToggleChange={() => setSpecialImage(!specialImage)}
+          />
+        </ListItem>
+        {specialImage ? 
+          <ListInput 
+            name="image" 
+            label={labels.image} 
+            type="file" 
+            accept="image/*" 
+            onChange={e => handleFileChange(e)}
+          />
+        : ''}
+        <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       <BlockTitle>
         {labels.bonusProduct}

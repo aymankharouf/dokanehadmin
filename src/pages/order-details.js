@@ -9,7 +9,6 @@ import BottomToolbar from './bottom-toolbar'
 const OrderDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [order, setOrder] = useState(() => props.type === 'a' ? state.archivedOrders.find(o => o.id === props.id) : state.orders.find(o => o.id === props.id))
   const [orderBasket, setOrderBasket] = useState([])
   const [statusActions, setStatusActions] = useState([])
@@ -60,15 +59,7 @@ const OrderDetails = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleAction = async action => {
+  const handleAction = action => {
     try{
       if (action.path) {
         props.f7router.navigate(action.path)
@@ -76,7 +67,7 @@ const OrderDetails = props => {
         if (action.id === 'a' && !state.customers.find(c => c.id === order.userId)){
           throw new Error('notApprovedUser')
         } else if (action.id === 'a' && lastOrder) {
-          f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, async () => {
+          f7.dialog.confirm(labels.confirmMergeText, labels.confirmationTitle, () => {
             try{
               let found
               for (let p of order.basket) {
@@ -88,80 +79,60 @@ const OrderDetails = props => {
                   throw new Error('samePackPurchasedByWeight')
                 }
               }
-              setInprocess(true)
-              await mergeOrder(lastOrder, order.basket, order.id)
-              setInprocess(false)
+              mergeOrder(lastOrder, order.basket, order.id)
               showMessage(labels.mergeSuccess)
               props.f7router.back()
             } catch(err) {
-              setInprocess(false)
               setError(getMessage(props, err))
             }
-          }, async () => {
+          }, () => {
             try{
-              setInprocess(true)
-              await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
-              setInprocess(false)
+              updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
               showMessage(labels.editSuccess)
               props.f7router.back()
-                } catch(err) {
-              setInprocess(false)
+            } catch(err) {
               setError(getMessage(props, err))
             }
           })
         } else if (action.id === 'i') {
-          f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+          f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
             try{
-              setInprocess(true)
-              await updateOrderStatus(order, action.id, state.packPrices, state.packs, true)
-              setInprocess(false)
+              updateOrderStatus(order, action.id, state.packPrices, state.packs, true)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
-              setInprocess(false)
               setError(getMessage(props, err))
             }
-          }, async () => {
+          }, () => {
             try{
-              setInprocess(true)
-              await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
-              setInprocess(false)
+              updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
-              setInprocess(false)
               setError(getMessage(props, err))
             }
           })
         } else if (action.id === 'd') {
-          setInprocess(true)
-          await updateOrderStatus(order, 'd', state.packPrices, state.packs, false)
-          setInprocess(false)
+          updateOrderStatus(order, 'd', state.packPrices, state.packs, false)
           showMessage(labels.editSuccess)
           props.f7router.back()
         } else if (action.id === 't') {
-          f7.dialog.prompt(labels.enterDeliveryTime, labels.deliveryTimeTitle, async value => {
+          f7.dialog.prompt(labels.enterDeliveryTime, labels.deliveryTimeTitle, value => {
             try{
-              setInprocess(true)
-              await SetDeliveryTime(order.id, value)
-              setInprocess(false)
+              SetDeliveryTime(order.id, value)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {
-              setInprocess(false)
               setError(getMessage(props, err))
             }
           })
         } else {
-          setInprocess(true)
-          await updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
-          setInprocess(false)
+          updateOrderStatus(order, action.id, state.packPrices, state.packs, false)
           showMessage(labels.editSuccess)
           props.f7router.back()
         }  
       }
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -182,6 +153,7 @@ const OrderDetails = props => {
               <div className="list-subtext1">{p.priceNote}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              <div className="list-subtext4">{`${labels.priceIncrease}: ${p.withBestPrice ? labels.withBestPrice : labels.noPurchase}`}</div>
             </ListItem>
           )}
           <ListItem 

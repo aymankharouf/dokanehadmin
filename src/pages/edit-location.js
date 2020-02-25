@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const EditLocation = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [location] = useState(() => state.locations.find(l => l.id === props.id))
   const [name, setName] = useState(location.name)
   const [fees, setFees] = useState((location.fees / 1000).toFixed(3))
@@ -26,15 +25,7 @@ const EditLocation = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleEdit = async () => {
+  const handleEdit = () => {
     try{
       const newLocation = {
         ...location,
@@ -42,13 +33,10 @@ const EditLocation = props => {
         fees: fees * 1000,
         ordering
       }
-      setInprocess(true)
-      await editLocation(newLocation, state.locations)
-      setInprocess(false)
+      editLocation(newLocation, state.locations)
       showMessage(labels.editSuccess)
       props.f7router.back()  
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

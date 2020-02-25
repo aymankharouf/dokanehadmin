@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput, Link } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const ConfirmPurchase = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
   const [basket] = useState(() => state.basket.packs.map(p => {
     const packInfo = state.packs.find(pa => pa.id === p.packId)
@@ -28,33 +27,20 @@ const ConfirmPurchase = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handlePurchase = async () => {
+  const handlePurchase = () => {
     try{
       if (store.id === 's') {
-        setInprocess(true)
-        await stockOut(state.basket.packs, state.orders, state.packPrices, state.packs, state.customers)
-        setInprocess(false)
+        stockOut(state.basket.packs, state.orders, state.packPrices, state.packs)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        setInprocess(true)
-        await confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, state.customers, total, discount * 1000)
-        setInprocess(false)
+        confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, total, discount * 1000)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       }  
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

@@ -3,7 +3,6 @@ import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { quantityText, getRequestedPacks, getRequestedPackStores } from '../data/actions'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 
 const RequestedPacks = props => {
@@ -11,7 +10,7 @@ const RequestedPacks = props => {
 	const [requestedPacks, setRequestedPacks] = useState([])
 	useEffect(() => {
 		setRequestedPacks(() => {
-			let packs = getRequestedPacks(state.orders, state.basket, state.customers, state.packs)
+			let packs = getRequestedPacks(state.orders, state.basket, state.packs)
 			if (props.id){
 				packs = packs.filter(p => {
 					const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
@@ -32,14 +31,14 @@ const RequestedPacks = props => {
 						<ListItem title={labels.noData} /> 
 					: requestedPacks.map(p => 
 							<ListItem
-								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}/exceed/${p.exceedPriceQuantity}`}
+								link={`/requested-pack-details/${p.packId}/quantity/${p.quantity}/price/${p.price}/order/${p.orderId}`}
 								title={p.packInfo.productName}
 								subtitle={p.packInfo.productAlias}
 								text={p.packInfo.name}
 								after={(p.price / 1000).toFixed(3)}
 								key={i++}
 							>
-								<PackImage slot="media" pack={p.packInfo} type="list" />
+								<img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
 							</ListItem>
 						)

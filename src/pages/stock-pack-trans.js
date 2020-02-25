@@ -11,7 +11,6 @@ import BottomToolbar from './bottom-toolbar'
 const StockPackTrans = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [stockPackInfo] = useState(() => state.packPrices.find(p => p.storeId === 's' && p.packId === props.id))
   const [packTrans, setPackTrans] = useState([])
@@ -43,16 +42,8 @@ const StockPackTrans = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleAddTrans = type => {
-    f7.dialog.prompt(labels.enterQuantity, labels.quantity, async quantity => {
+    f7.dialog.prompt(labels.enterQuantity, labels.quantity, quantity => {
       try{
         if (state.returnBasket?.packs?.find(p => p.packId === pack.id)) {
           throw new Error('alreadyInBasket')
@@ -79,7 +70,6 @@ const StockPackTrans = props => {
         dispatch({type: 'ADD_TO_RETURN_BASKET', params})
         showMessage(labels.addToBasketSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }      
     })

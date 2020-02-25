@@ -4,7 +4,6 @@ import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
-import PackImage from './pack-image'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
 
@@ -46,7 +45,7 @@ const Alarms = props => {
                   footer={moment(a.time.toDate()).fromNow()}
                   key={a.id}
                 >
-                  <PackImage slot="media" pack={a.packInfo} type="list" />
+                  <img src={a.packInfo.imageUrl} className="img-list" alt={labels.noImage} />
                 </ListItem>
               )
             }

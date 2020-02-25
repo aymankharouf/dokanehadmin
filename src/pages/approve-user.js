@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { approveUser, showMessage, showError, getMessage } from '../data/actions'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState(userInfo.locationId)
@@ -40,14 +39,7 @@ const ApproveUser = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try {
       if (otherMobile === userInfo.mobile) {
         throw new Error('sameMobile')
@@ -58,13 +50,10 @@ const ApproveUser = props => {
       if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
         throw new Error('otherUserMobile')
       }
-      setInprocess(true)
-      await approveUser(props.id, name, userInfo.mobile, mobileCheck, locationId, otherMobile, userInfo.storeName || '', address, state.users)
-      setInprocess(false)
+      approveUser(props.id, name, userInfo.mobile, mobileCheck, locationId, otherMobile, userInfo.storeName || '', address, state.users)
       showMessage(mobileCheck ? labels.blockingUser : labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

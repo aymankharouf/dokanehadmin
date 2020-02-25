@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { showMessage, showError, getMessage, quantityDetails, approveOrderRequest } from '../data/actions'
 import labels from '../data/labels'
@@ -9,20 +9,22 @@ import BottomToolbar from './bottom-toolbar'
 const OrderRequestDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
   const [orderBasket, setOrderBasket] = useState([])
   useEffect(() => {
     setOrderBasket(() => order.basket.map(p => {
       const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
       const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-      const newQuantity = order.requestBasket ? order.requestBasket.find(bp => bp.packId === p.packId).quantity : ''
-      const changeNote = !newQuantity || newQuantity === p.quantity ? '' : newQuantity > p.quantity ? `${labels.increase} ${newQuantity - p.quantity}` : `${labels.decrease} ${p.quantity - newQuantity}`
+      const newQuantity = order.requestBasket.find(bp => bp.packId === p.packId).quantity
+      const changeQuantityNote = newQuantity === p.quantity ? '' : newQuantity > p.quantity ? `${labels.increase} ${newQuantity - p.quantity}` : `${labels.decrease} ${p.quantity - newQuantity}`
+      const newWithBestPrice = order.requestBasket.find(bp => bp.packId === p.packId).newWithBestPrice
+      const changeWithBestPrice = newWithBestPrice === p.withBestPrice ? '' : labels.changeWithBestPrice
       return {
         ...p,
         storeName,
         statusNote,
-        changeNote
+        changeQuantityNote,
+        changeWithBestPrice
       }
     }))
   }, [order, state.stores])
@@ -32,23 +34,12 @@ const OrderRequestDetails = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleApprove = async () => {
+  const handleApprove = () => {
     try{
-      setInprocess(true)
-      await approveOrderRequest(order, state.orders, state.packPrices, state.packs)
-      setInprocess(false)
+      approveOrderRequest(order, state.orders, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
       setError(getMessage(props, err))
     }
   }
@@ -66,8 +57,9 @@ const OrderRequestDetails = props => {
               footer={`${labels.status}: ${p.statusNote}`}
               after={(p.gross / 1000).toFixed(3)}
             >
-              {p.changeNote ? <div className="list-subtext1">{`${labels.requestedChange}: ${p.changeNote}`}</div> : ''}
-              <div className="list-subtext2">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              {p.changeQuantityNote ? <div className="list-subtext1">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
+              {p.changeWithBestPrice ? <div className="list-subtext2">{labels.changeWithBestPrice}</div> : ''}
+              <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
             </ListItem>
           )}
           <ListItem 

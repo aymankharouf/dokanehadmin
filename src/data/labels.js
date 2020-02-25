@@ -238,8 +238,6 @@ const labels = {
   invalidQuantity: 'الرجاء التأكد من الكمية المدخلة',
   currentPrice: 'السعر الحالي',
   allocate: 'وضع',
-  exceedPricePurchase: 'سيتم الشراء للعملاء الذين يسمحون بتجاوز السعر',
-  noPurchase: 'لا يوجد ما يتم شراؤه بسبب ارتفاع السعر',
   offerUpTo: 'عرض حتى تاريخ',
   addBrother: 'اضافة صنف بنفس المستوى',
   addChild: 'اضافة صنف فرعي',
@@ -362,7 +360,15 @@ const labels = {
   enterDeliveryTime: 'ادخل وقت التسليم',
   duplicateName: 'اﻻسم مكرر',
   alreadyRegistered: 'رقم الموبايل مستخدم من قبل مستخدم آخر',
-  blockingUser: 'تم حظر هذا المستخدم'
+  blockingUser: 'تم حظر هذا المستخدم',
+  withBestPrice: 'الشراء بأفضل سعر',
+  noPurchase: 'عدم الشراء',
+  priceIncrease: 'اذا ارتفع السعر',
+  changeWithBestPrice: 'تغيير طريقة الشراء في حال ارتفاع السعر',
+  canNotPurchaseDueOverPrice: 'لا يمكن الشراء بسبب ارتفاع السعر',
+  notAvailableQuantityInStock: 'لا يوجد كمية كافية في المستودع',
+  specialImage: 'صورة خاصة',
+  duplicateProduct: 'المنتج مكرر'
 }
 
 export default labels

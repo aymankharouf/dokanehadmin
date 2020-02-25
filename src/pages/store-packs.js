@@ -4,86 +4,57 @@ import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import 'moment/locale/ar'
-import PackImage from './pack-image'
 import labels from '../data/labels'
-import { deleteStorePack, haltOffer, getCategoryName, showMessage, getMessage, showError } from '../data/actions'
+import { deleteStorePack, haltOffer, showMessage, getMessage, showError } from '../data/actions'
 
 const StorePacks = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [currentStorePack, setCurrentStorePack] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id))
   const [storePacks, setStorePacks] = useState([])
   const actionsList = useRef('')
   useEffect(() => {
     setStorePacks(() => {
-      let storePacks = state.packPrices.filter(p => p.storeId === props.id)
-      storePacks = storePacks.map(p => {
-        const packInfo = state.packs.find(pa => pa.id === p.packId)
-        const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
-        const categoryName = getCategoryName(categoryInfo, state.categories)
-        return {
-          ...p,
-          packInfo,
-          categoryName
-        }
-      })
-      return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryName > p2.categoryName ? 1 : -1))
+      const storePacks = state.packPrices.filter(p => p.storeId === props.id)
+      return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
-  }, [state.packPrices, state.packs, state.categories, props.id])
+  }, [state.packPrices, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deleteStorePack(currentStorePack, state.packPrices, state.packs)
-        setInprocess(false)
+        deleteStorePack(currentStorePack, state.packPrices, state.packs)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })
   }
-  const handleHaltOffer = async () => {
+  const handleHaltOffer = () => {
     try{
       const offerEndDate = new Date(currentStorePack.offerEnd)
       const today = (new Date()).setHours(0, 0, 0, 0)
       if (offerEndDate > today) {
-        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
           try{
-            setInprocess(true)
-            await haltOffer(currentStorePack, state.packPrices, state.packs)
-            setInprocess(false)
+            haltOffer(currentStorePack, state.packPrices, state.packs)
             showMessage(labels.haltSuccess)
             props.f7router.back()  
           } catch(err) {
-            setInprocess(false)
             setError(getMessage(props, err))
           }
         })
       } else {
-        setInprocess(true)
-        await haltOffer(currentStorePack, state.packPrices, state.packs)
-        setInprocess(false)
+        haltOffer(currentStorePack, state.packPrices, state.packs)
         showMessage(labels.haltSuccess)
       }
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -101,7 +72,7 @@ const StorePacks = props => {
       const packInfo = state.packs.find(p => p.id === currentStorePack.packId)
       let params
       if (packInfo.byWeight) {
-        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, async weight => {
+        f7.dialog.prompt(labels.enterWeight, labels.actualWeight, weight => {
           params = {
             pack: packInfo,
             packStore: currentStorePack,
@@ -134,9 +105,10 @@ const StorePacks = props => {
     setCurrentStorePack(storePack)
     actionsList.current.open()
   }
+  let i = 0
   return(
     <Page>
-      <Navbar title={`${store.name}`} backLink={labels.back}>
+      <Navbar title={store.name} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -162,12 +134,12 @@ const StorePacks = props => {
                 subtitle={p.packInfo.name}
                 text={(p.price / 1000).toFixed(3)}
                 footer={moment(p.time.toDate()).fromNow()}
-                key={p.id}
-                className={currentStorePack && currentStorePack.id === p.id ? 'selected' : ''}
+                key={i++}
+                className={currentStorePack?.packId === p.packId ? 'selected' : ''}
               >
-                <div className="list-subtext1">{p.categoryName}</div>
+                <div className="list-subtext1">{p.categoryInfo.name}</div>
                 <div className="list-subtext2">{p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd.toDate()).format('Y/M/D')}` : ''}</div>
-                <PackImage slot="media" pack={p.packInfo} type="list" />
+                <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
                 <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(p)}/>
               </ListItem>

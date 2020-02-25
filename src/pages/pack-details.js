@@ -1,16 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { refreshPackPrice, deletePack, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
-import PackImage from './pack-image'
 import moment from 'moment'
 import labels from '../data/labels'
 
 const PackDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [pack, setPack] = useState(() => {
     const pack = state.packs.find(p => p.id === props.id)
     let detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
@@ -116,46 +114,33 @@ const PackDetails = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleRefreshPrice = async () => {
+  const handleRefreshPrice = () => {
     try{
-      setInprocess(true)
-      await refreshPackPrice(pack, state.packPrices, state.packs)
-      setInprocess(false)
+      refreshPackPrice(pack, state.packPrices, state.packs)
       showMessage(labels.refreshSuccess)
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deletePack(pack.id)
-        setInprocess(false)
+        deletePack(pack.id)
         showMessage(labels.deleteSuccess)
         props.f7router.back()
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })
   }
+  let i = 0
   return (
     <Page>
       <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <div className="card-title">{pack.name}</div>
-          <PackImage pack={pack} type="card" />
+          <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
           <p>{(pack.price / 1000).toFixed(3)}</p>
@@ -169,7 +154,7 @@ const PackDetails = props => {
           subtitle={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
           text={`${labels.price}: ${(s.price / 1000).toFixed(3)}`}
           footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
-          key={s.id}
+          key={i++}
         >
           {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
           {s.isOffer ? 
@@ -178,6 +163,7 @@ const PackDetails = props => {
         </ListItem>
       )}
       </List>
+      <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>

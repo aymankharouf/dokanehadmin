@@ -9,7 +9,6 @@ import { archiveProduct, deleteProduct, showMessage, getMessage, showError, prod
 const ProductPacks = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] =useState(false)
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find(p => p.id === props.id) : state.products.find(p => p.id === props.id))
   const [packs, setPacks] = useState([])
   const [activePacks, setActivePacks] = useState([])
@@ -29,35 +28,22 @@ const ProductPacks = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleArchive = async () => {
+  const handleArchive = () => {
     try{
-      setInprocess(true)
-      await archiveProduct(product, state.packs)
-      setInprocess(false)
+      archiveProduct(product, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deleteProduct(product)
-        setInprocess(false)
+        deleteProduct(product)
         showMessage(labels.deleteSuccess)
         props.f7router.back()
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })

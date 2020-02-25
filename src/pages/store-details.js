@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle, FabButton, FabButtons } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -73,8 +73,8 @@ const StoreDetails = props => {
           value={store.address}
           type="text"
         />
-
       </List>
+      <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>

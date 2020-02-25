@@ -27,11 +27,10 @@ const Panel = props => {
   }, [state.packPrices])
 
   const handleLogout = () => {
-    logout().then(() => {
-      f7.views.main.router.navigate('/home/', {reloadAll: true})
-      f7.panel.close('right') 
-      dispatch({type: 'CLEAR_BASKET'})
-    })
+    logout()
+    f7.views.main.router.navigate('/home/', {reloadAll: true})
+    f7.panel.close('right') 
+    dispatch({type: 'CLEAR_BASKET'})
   }
 
   return(

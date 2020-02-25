@@ -10,7 +10,6 @@ import 'moment/locale/ar'
 const StoreBalance = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id))
   const [trans, setTrans] = useState([])
   useEffect(() => {
@@ -51,26 +50,15 @@ const StoreBalance = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handlePayment = () => {
-    f7.dialog.prompt(labels.enterAmount, labels.amount, async amount => {
+    f7.dialog.prompt(labels.enterAmount, labels.amount, amount => {
       try{
         if (Number(amount) <= 0) {
           throw new Error('invalidValue')
         }
-        setInprocess(true)
-        await addStorePayment(store.id, amount * 1000)
-        setInprocess(false)
+        addStorePayment(store.id, amount * 1000)
         showMessage(labels.addSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })

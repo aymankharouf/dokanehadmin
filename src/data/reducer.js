@@ -1,10 +1,14 @@
 const Reducer = (state, action) => {
-    let pack, packIndex, packs, nextQuantity, i
+    let pack, packIndex, packs, data, nextQuantity, i
     const increment = [0.125, 0.25, 0.5, 0.75, 1]
     switch (action.type){
       case 'ADD_TO_BASKET':
         pack = {
           packId: action.params.pack.id,
+          productName: action.params.pack.productName,
+          productAlias: action.params.pack.productAlias,
+          packName: action.params.pack.name,
+          imageUrl: action.params.pack.imageUrl,
           price: action.params.price,
           quantity: action.params.quantity,
           actual: action.params.packStore.price,
@@ -205,7 +209,7 @@ const Reducer = (state, action) => {
       case 'SET_CATEGORIES':
         return {
           ...state,
-          categories: action.categories
+          categories: action.categories,
         }
       case 'SET_USERS':
         return {
@@ -235,7 +239,21 @@ const Reducer = (state, action) => {
       case 'SET_PRODUCTS':
         return {
           ...state,
-          products: action.products
+          products: action.products,
+          productsStatus: 'u'
+        }
+      case 'FINISH_PRODUCTS':
+        data = state.products.map(p => {
+          const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+          return {
+            ...p,
+            categoryInfo
+          }
+        })
+        return {
+          ...state,
+          products: data,
+          productsStatus: 'f'
         }
       case 'SET_PACKS':
         return {
@@ -260,7 +278,21 @@ const Reducer = (state, action) => {
       case 'SET_PACK_PRICES':
         return {
           ...state,
-          packPrices: action.packPrices
+          packPrices: action.packPrices,
+          packPricesStatus: 'u'
+        }
+      case 'FINISH_PACK_PRICES':
+        data = state.packPrices.map(p => {
+          const categoryInfo = state.categories.find(c => c.id === p.packInfo.categoryId)
+          return {
+            ...p,
+            categoryInfo
+          }
+        })
+        return {
+          ...state,
+          packPrices: data,
+          packPriceStatus: 'f'
         }
       case 'SET_LOGS':
         return {

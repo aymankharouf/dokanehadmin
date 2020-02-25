@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, ListInput } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, ListInput } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { confirmReturnBasket, showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -8,7 +8,6 @@ import { stockTransTypes } from '../data/config'
 const ReturnBasket = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [store] = useState(() => state.stores.find(s => s.id === state.returnBasket.storeId))
   const [basket, setBasket] = useState([])
   const [totalPrice, setTotalPrice] = useState('')
@@ -52,23 +51,13 @@ const ReturnBasket = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
-      setInprocess(true)
-      await confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
-      setInprocess(false)
+      confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
@@ -113,7 +102,6 @@ const ReturnBasket = props => {
               </select>
             </ListItem>
           : ''}
-
           {['r', 's'].includes(state.returnBasket.type) ? 
             <ListInput 
               name="discount" 

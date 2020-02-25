@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
 import { addAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { advertType } from '../data/config'
 
 const AddAdvert = props => {
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [type, setType] = useState('')
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
@@ -32,15 +31,7 @@ const AddAdvert = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       const advert = {
         type,
@@ -49,13 +40,10 @@ const AddAdvert = props => {
         isActive: false,
         time: new Date()
       }
-      setInprocess(true)
-      await addAdvert(advert, image)
-      setInprocess(false)
+      addAdvert(advert, image)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

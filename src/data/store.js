@@ -35,7 +35,9 @@ const Store = props => {
     notifications: [],
     alarms: [],
     ratings: [],
-    invitations: []
+    invitations: [],
+    packPricesStatus: '',
+    productsStatus: ''
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -55,7 +57,7 @@ const Store = props => {
         packs.push({...doc.data(), id: doc.id})
         if (doc.data().prices) {
           doc.data().prices.forEach(p => {
-            packPrices.push({...p, packId: doc.id})
+            packPrices.push({...p, packId: doc.id, packInfo: doc.data()})
           })
         }
       })
@@ -216,6 +218,16 @@ const Store = props => {
       }
     })
   }, [])
+  useEffect(() => {
+    if (state.categories.length > 0) {
+      if (state.packPricesStatus === 'u') {
+        dispatch({type: 'FINISH_PACK_PRICES'})
+      }
+      /*if (state.productsStatus === 'u') {
+        dispatch({type: 'FINISH_PRODUCTS'})
+      }*/
+    }
+  }, [state.categories, state.packPricesStatus, state.productsStatus])
   return (
     <StoreContext.Provider value={{state, user, dispatch}}>
       {props.children}

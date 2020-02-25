@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, Icon, Fab, Toolbar, FabButton, FabButtons, ListInput, BlockTitle } from 'framework7-react'
+import { Page, Navbar, List, ListItem, Icon, Fab, Toolbar, FabButton, FabButtons, ListInput, BlockTitle, FabBackdrop } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -11,7 +11,6 @@ import { alarmTypes } from '../data/config'
 const AlarmDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [storeId, setStoreId] = useState('')
   const [newPackId, setNewPackId] = useState('')
   const [userInfo] = useState(() => state.users.find(u => u.id === props.userId))
@@ -58,41 +57,28 @@ const AlarmDetails = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleApprove = async () => {
+  const handleApprove = () => {
     try{
-      setInprocess(true)
-      await approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.packPrices, state.packs)
-      setInprocess(false)
+      approveAlarm(userInfo, alarm, pack, storeId, newPackId, customerInfo, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
-  const handleReject = async () => {
+  const handleReject = () => {
     try{
-      setInprocess(true)
-      await rejectAlarm(userInfo, alarm.id)
-      setInprocess(false)
+      rejectAlarm(userInfo, alarm.id)
       showMessage(labels.rejectSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
   return (
     <Page>
       <Navbar title={alarmTypes.find(t => t.id === alarm.type).name} backLink={labels.back} />
+      <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="blue" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="keyboard_arrow_up"></Icon>

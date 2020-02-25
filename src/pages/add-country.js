@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { StoreContext } from '../data/store'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { addCountry, showMessage, showError, getMessage } from '../data/actions'
@@ -9,7 +9,6 @@ import { addCountry, showMessage, showError, getMessage } from '../data/actions'
 const AddCountry = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [name, setName] = useState('')
   useEffect(() => {
     if (error) {
@@ -17,26 +16,15 @@ const AddCountry = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       if (state.countries.includes(name)) {
         throw new Error('duplicateName')
       }
-      setInprocess(true)
-      await addCountry(name)
-      setInprocess(false)
+      addCountry(name)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

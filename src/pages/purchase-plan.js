@@ -14,7 +14,7 @@ const PurchasePlan = props => {
 		let storesArray = []
 		const today = new Date()
     today.setDate(today.getDate() - 30)
-		const packs = getRequestedPacks(approvedOrders, state.basket, state.customers, state.packs)
+		const packs = getRequestedPacks(approvedOrders, state.basket, state.packs)
 		packs.forEach(p => {
 			const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
 			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.packPrices, state.stores, state.packs, p.price)

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons, Badge } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import BottomToolbar from './bottom-toolbar'
@@ -8,7 +8,6 @@ import { deleteCategory, showMessage, showError, getMessage } from '../data/acti
 const Categories = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [categories, setCategories] = useState([])
   const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id) || '')
   const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory.id).length)
@@ -34,22 +33,12 @@ const Categories = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleDelete = async () => {
+  const handleDelete = () => {
     try{
-      setInprocess(true)
-      await deleteCategory(currentCategory, state.categories)
-      setInprocess(false)
+      deleteCategory(currentCategory, state.categories)
       showMessage(labels.deleteSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
       setError(getMessage(props, err))
     }
   }
@@ -76,6 +65,7 @@ const Categories = props => {
           }
         </List>
       </Block>
+      <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>

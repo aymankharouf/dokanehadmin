@@ -3,7 +3,6 @@ import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import PackImage from './pack-image'
 import { showMessage, showError, getMessage, quantityText } from '../data/actions'
 
 
@@ -74,7 +73,7 @@ const PurchaseDetails = props => {
               footer={`${labels.price}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++} 
             >
-              <PackImage slot="media" pack={p.packInfo} type="list" />
+              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}

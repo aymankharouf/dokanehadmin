@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -7,7 +7,6 @@ import labels from '../data/labels'
 const EditAdvert = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
   const [title, setTitle] = useState(advert.title)
   const [text, setText] = useState(advert.text)
@@ -41,15 +40,7 @@ const EditAdvert = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       const newAdvert = {
         ...advert,
@@ -57,13 +48,10 @@ const EditAdvert = props => {
         text,
         imageUrl
       }
-      setInprocess(true)
-      await editAdvert(newAdvert, image)
-      setInprocess(false)
+      editAdvert(newAdvert, image)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

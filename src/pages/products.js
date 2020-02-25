@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -14,15 +14,14 @@ const Products = props => {
       let products = state.products.filter(p => props.id === '0' || p.categoryId === props.id)
       products = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
-        const categoryName = getCategoryName(categoryInfo, state.categories)
         return {
           ...p,
-          categoryName
+          categoryInfo
         }
       })
-      return products.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryName > p2.categoryName ? 1 : -1))
+      return products.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
-  }, [state.products, state.categories, props.id])
+  }, [state.products, props.id])
   
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
@@ -57,12 +56,13 @@ const Products = props => {
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />
-                  <div className="list-subtext1">{p.categoryName}</div>
+                  <div className="list-subtext1">{getCategoryName(p.categoryInfo, state.categories)}</div>
                 </ListItem>
               )
             }
           </List>
       </Block>
+      <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -8,7 +8,6 @@ import { approveRating, showMessage, showError, getMessage } from '../data/actio
 const Ratings = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [ratings, setRatings] = useState([])
   useEffect(() => {
     setRatings(() => {
@@ -30,22 +29,11 @@ const Ratings = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleApprove = async rating => {
+  const handleApprove = rating => {
     try{
-      setInprocess(true)
-      await approveRating(rating, state.packs)
-      setInprocess(false)
+      approveRating(rating, state.packs)
       showMessage(labels.approveSuccess)
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

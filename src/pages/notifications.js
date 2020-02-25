@@ -10,7 +10,6 @@ import { deleteNotification, showMessage, showError, getMessage } from '../data/
 const Notifications = props => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [notifications, setNotifications] = useState([])
   useEffect(() => {
     setNotifications(() => {
@@ -30,23 +29,12 @@ const Notifications = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleDelete = (userInfo, notificationId) => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        setInprocess(true)
-        await deleteNotification(userInfo, notificationId,)
-        setInprocess(false)
+        deleteNotification(userInfo, notificationId,)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setInprocess(false)
         setError(getMessage(props, err))
       }
     })  

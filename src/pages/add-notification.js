@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
@@ -9,7 +9,6 @@ import { StoreContext } from '../data/store'
 const AddNotification = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [userId, setUserId] = useState('')
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('')
@@ -20,23 +19,12 @@ const AddNotification = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
-      setInprocess(true)
-      await sendNotification(userId, title, message)
-      setInprocess(false)
+      sendNotification(userId, title, message)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

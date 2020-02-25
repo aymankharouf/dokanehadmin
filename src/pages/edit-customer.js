@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const EditCustomer = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [customer] = useState(() => state.customers.find(c => c.id === props.id))
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [name, setName] = useState(customer.name)
@@ -54,15 +53,7 @@ const EditCustomer = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       if (otherMobile === userInfo.mobile) {
         throw new Error('sameMobile')
@@ -85,13 +76,10 @@ const EditCustomer = props => {
         orderLimit: orderLimit * 1000,
         specialDiscount: specialDiscount * 1000
       }
-      setInprocess(true)
-      await editCustomer(newCustomer, userInfo.mobile, customer.storeId, state.stores)
-      setInprocess(false)
+      editCustomer(newCustomer, userInfo.mobile, customer.storeId, state.stores)
       showMessage(labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }
