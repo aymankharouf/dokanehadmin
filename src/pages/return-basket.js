@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, ListInput } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { confirmReturnBasket, showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -11,9 +11,7 @@ const ReturnBasket = props => {
   const [store] = useState(() => state.stores.find(s => s.id === state.returnBasket.storeId))
   const [basket, setBasket] = useState([])
   const [totalPrice, setTotalPrice] = useState('')
-  const [discount, setDiscount] = useState('')
   const [storeId, setStoreId] = useState('')
-  const [netPrice, setNetPrice] = useState('')
   const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   useEffect(() => {
     setBasket(() => {
@@ -30,19 +28,6 @@ const ReturnBasket = props => {
     setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.returnBasket, state.packs])
   useEffect(() => {
-    setDiscount(() => {
-      if (state.returnBasket.type === 'r') {
-        const storeInfo = state.stores.find(s => s.id === state.returnBasket.storeId)
-        return (Math.trunc(totalPrice * (storeInfo.discount || 0)) / 1000).toFixed(3)  
-      } else {
-        return 0
-      }
-    })
-  }, [state.returnBasket, state.stores, totalPrice])
-  useEffect(() => {
-    setNetPrice(totalPrice - (discount * 1000 || 0))
-  }, [totalPrice, discount])
-  useEffect(() => {
     if (!state.returnBasket) props.f7router.navigate('/home/', {reloadAll: true})
   }, [state.returnBasket, props])
   useEffect(() => {
@@ -53,7 +38,7 @@ const ReturnBasket = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, discount, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
+      confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)
       props.f7router.back()
@@ -102,22 +87,10 @@ const ReturnBasket = props => {
               </select>
             </ListItem>
           : ''}
-          {['r', 's'].includes(state.returnBasket.type) ? 
-            <ListInput 
-              name="discount" 
-              label={labels.discount}
-              value={discount}
-              clearButton
-              floatingLabel 
-              type="number" 
-              onChange={e => setDiscount(e.target.value)}
-              onInputClear={() => setDiscount('')}
-            />
-          : ''}
         </List>
       </Block>
       {state.returnBasket.type === 's' && !storeId ? '' :
-        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(netPrice / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

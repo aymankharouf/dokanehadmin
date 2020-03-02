@@ -60,6 +60,15 @@ const StoreDetails = props => {
             disabled
           />
         </ListItem>
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={store.isActive} 
+            disabled
+          />
+        </ListItem>
         <ListInput
           name="openTime"
           label={labels.openTime}

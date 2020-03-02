@@ -1,15 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { addStorePayment, showMessage, showError, getMessage } from '../data/actions'
 import moment from 'moment'
 import 'moment/locale/ar'
+import { paymentTypes } from '../data/config'
 
 const StoreBalance = props => {
   const { state } = useContext(StoreContext)
-  const [error, setError] = useState('')
   const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id))
   const [trans, setTrans] = useState([])
   useEffect(() => {
@@ -17,17 +16,19 @@ const StoreBalance = props => {
   }, [state.stores, props.id])
   useEffect(() => {
     setTrans(() => {
-      let payments = store.payments?.slice() || []
-      payments = payments.map(p => {
+      let storePayments = state.storePayments.filter(p => p.storeId === props.id)
+      storePayments = storePayments.map(p => {
+        const paymentTypeInfo = paymentTypes.find(t => t.id === p.type)
         return {
-          ...p,
-          name: labels.payment
+          amount: p.amount,
+          time: p.time,
+          name: paymentTypeInfo.name
         }
       })
       let purchases = state.purchases.filter(p => p.storeId === props.id)
       purchases = purchases.map(p => {
         return {
-          amount: p.total - p.discount,
+          amount: p.total,
           time: p.time,
           name: labels.purchase
         }
@@ -35,39 +36,20 @@ const StoreBalance = props => {
       let stockTrans = state.stockTrans.filter(t => t.storeId === props.id && t.type === 's')
       stockTrans = stockTrans.map(t => {
         return {
-          amount: t.total - t.discount,
+          amount: t.total,
           time: t.time,
           name: labels.sale
         }
       })
-      const trans = [...payments, ...purchases, ...stockTrans]
+      const trans = [...storePayments, ...purchases, ...stockTrans]
       return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
     })
-  }, [store, state.purchases, state.stockTrans, props.id])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  const handlePayment = () => {
-    f7.dialog.prompt(labels.enterAmount, labels.amount, amount => {
-      try{
-        if (Number(amount) <= 0) {
-          throw new Error('invalidValue')
-        }
-        addStorePayment(store.id, amount * 1000)
-        showMessage(labels.addSuccess)
-      } catch(err) {
-        setError(getMessage(props, err))
-      }
-    })
-  }
+  }, [store, state.purchases, state.stockTrans, state.storePayments, props.id])
   let i = 0
   return(
     <Page>
       <Navbar title={`${labels.balanceTrans} ${store.name}`} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handlePayment()}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => props.f7router.navigate(`/add-store-payment/${props.id}`)}>
         <Icon material="add"></Icon>
       </Fab>
       <Block>

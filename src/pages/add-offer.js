@@ -30,18 +30,6 @@ const AddOffer = props => {
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   })
-  const generateName = () => {
-    let suggestedName
-    if (subPackId && subQuantity) {
-      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''} ${state.packs.find(p => p.id === subPackId).name}`
-      if (!name) setName(suggestedName)
-    }
-    if (name === suggestedName && bonusPackId && bonusQuantity) {
-      const bonusPackInfo = bonusPacks.find(p => p.id === bonusPackId)
-      suggestedName += ` + ${bonusQuantity > 1 ? bonusQuantity + '×' : ''} ${bonusPackInfo.name}`
-      setName(suggestedName)
-    }
-  }
   useEffect(() => {
     if (error) {
       showError(error)
@@ -50,7 +38,19 @@ const AddOffer = props => {
   }, [error])
   useEffect(() => {
     setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl || '')
-  }, [subPackId])
+  }, [state.packs, subPackId])
+  const generateName = () => {
+    let suggestedName
+    if (subPackId && subQuantity) {
+      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId).name}`
+      if (!name) setName(suggestedName)
+    }
+    if (name === suggestedName && bonusPackId && bonusQuantity) {
+      const bonusPackInfo = bonusPacks.find(p => p.id === bonusPackId)
+      suggestedName += ` + ${bonusQuantity > 1 ? bonusQuantity + '×' : ''}${bonusPackInfo.name}`
+      setName(suggestedName)
+    }
+  }
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name

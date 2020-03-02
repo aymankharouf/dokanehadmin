@@ -21,7 +21,7 @@ const Products = props => {
       })
       return products.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
-  }, [state.products, props.id])
+  }, [state.products, state.categories, props.id])
   
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(

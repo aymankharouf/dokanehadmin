@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -10,7 +10,6 @@ import { getArchivedPurchases, getMessage, showError } from '../data/actions'
 const ArchivedPurchases = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [purchases, setPurchases] = useState([])
   const [monthlyTrans] = useState(() => [...state.monthlyTrans.sort((t1, t2) => t2.id - t1.id)])
   const lastMonth = useRef(0)
@@ -32,28 +31,18 @@ const ArchivedPurchases = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleRetreive = async () => {
+  const handleRetreive = () => {
     try{
       const id = monthlyTrans[lastMonth.current]?.id
       if (!id) {
         throw new Error('noMoreArchive')
       }
-      setInprocess(true)
-      const purchases = await getArchivedPurchases(id)
-      setInprocess(false)  
+      const purchases = getArchivedPurchases(id)
       if (purchases.length > 0) {
         dispatch({type: 'ADD_ARCHIVED_PURCHASES', purchases})
       }
       lastMonth.current++
   } catch(err) {
-      setInprocess(false)
       setError(getMessage(props, err))
     }
   }

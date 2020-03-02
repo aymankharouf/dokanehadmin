@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, ListInput, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -17,10 +17,6 @@ const ConfirmPurchase = props => {
     }
   }))
   const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
-  const [discount, setDiscount] = useState('')
-  useEffect(() => {
-    setDiscount((Math.trunc(total * (store.discount || 0)) / 1000).toFixed(3))
-  }, [total, store])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -35,7 +31,7 @@ const ConfirmPurchase = props => {
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, total, discount * 1000)
+        confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, total)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
@@ -71,22 +67,10 @@ const ConfirmPurchase = props => {
           className="total" 
           after={(total / 1000).toFixed(3)} 
         />
-        {store.id === 's' ? '' :
-          <ListInput 
-            name="discount" 
-            label={labels.discount}
-            value={discount}
-            clearButton
-            floatingLabel 
-            type="number" 
-            onChange={e => setDiscount(e.target.value)}
-            onInputClear={() => setDiscount('')}
-          />
-        }
         <ListItem 
           title={labels.net} 
           className="net" 
-          after={((total - (discount * 1000)) / 1000).toFixed(3)} 
+          after={(total / 1000).toFixed(3)} 
         />
       </List>
     </Block>

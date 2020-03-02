@@ -15,21 +15,18 @@ const AddProduct = props => {
   const [country, setCountry] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
-  const [packName, setPackName] = useState('')
-  const [storeId, setStoreId] = useState('')
-  const [price, setPrice] = useState('')
   const [categories] = useState(() => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
-  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
+
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -61,7 +58,7 @@ const AddProduct = props => {
         ratingCount: 0,
         isArchived: false
       }
-      addProduct(product, packName, storeId, price * 1000, image)
+      addProduct(product, image)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -145,42 +142,6 @@ const AddProduct = props => {
           </select>
         </ListItem>
         <ListInput 
-          name="packName" 
-          label={labels.pack}
-          clearButton
-          type="text" 
-          value={packName} 
-          onChange={e => setPackName(e.target.value)}
-          onInputClear={() => setPackName('')}
-        />
-        <ListItem
-          title={labels.store}
-          smartSelect
-          smartSelectParams={{
-            openIn: "popup", 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="price" 
-          label={labels.price}
-          value={price}
-          clearButton 
-          type="number" 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
-        />
-        <ListInput 
           name="image" 
           label={labels.image} 
           type="file" 
@@ -189,7 +150,7 @@ const AddProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !categoryId || !country || !packName || !storeId || !price ? '' :
+      {!name || !categoryId || !country ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

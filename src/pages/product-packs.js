@@ -58,7 +58,7 @@ const ProductPacks = props => {
         </CardContent>
         <CardFooter>
           <p>{productOfText(product.trademark, product.country)}</p>
-          {product.trademark ? <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> : ''}
+          <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> 
         </CardFooter>
       </Card>
       <List mediaList>

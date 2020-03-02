@@ -15,6 +15,7 @@ const AddStore = props => {
   const [discount, setDiscount] = useState('')
   const [mapPosition, setMapPosition] = useState('')
   const [allowReturn, setAllowReturn] = useState(false)
+  const [isActive, setIsActive] = useState(false)
   const [openTime, setOpenTime] = useState('')
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const AddStore = props => {
         mobile,
         mapPosition,
         allowReturn,
+        isActive,
         openTime,
         address,
         balance: 0,
@@ -118,6 +120,15 @@ const AddStore = props => {
             color="green" 
             checked={allowReturn} 
             onToggleChange={() => setAllowReturn(!allowReturn)}
+          />
+        </ListItem>
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(!isActive)}
           />
         </ListItem>
         <ListInput

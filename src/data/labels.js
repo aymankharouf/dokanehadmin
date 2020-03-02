@@ -174,7 +174,7 @@ const labels = {
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
   confirmationTitle: 'تأكيد العملية',
   haltOffer: 'تعليق العرض',
-  purchaseDiscounts: 'خصومات المشتريات',
+  storesBalance: 'ارصدة المحلات',
   discountBalance: 'رصيد الخصومات',
   discounts: 'الخصومات',
   orderPrice: 'السعر عند الطلب',
@@ -368,7 +368,12 @@ const labels = {
   canNotPurchaseDueOverPrice: 'لا يمكن الشراء بسبب ارتفاع السعر',
   notAvailableQuantityInStock: 'لا يوجد كمية كافية في المستودع',
   specialImage: 'صورة خاصة',
-  duplicateProduct: 'المنتج مكرر'
+  duplicateProduct: 'المنتج مكرر',
+  addPayment: 'اضافة دفعة',
+  transProfit: 'الربح من العمليات',
+  storesProfit: 'الربح من المحلات',
+  storeTransNet: 'صافي عمليات المحلات',
+  deactivate: 'ايقاف التفعيل',
 }
 
 export default labels

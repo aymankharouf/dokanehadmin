@@ -157,8 +157,12 @@
 *return after purchase
 *pwa
 *alternative pack & best price flag & delete exceed price flag & change the way to handle weight
-*cashing
 *offline
+*special image for packs
+*rating & alarm bonus 1% of item price 
+*delete discount from purchase
+preloader for home page until loading data finished
+products without packs or all packs have 0 price
 debit
-special image for packs
-current store in state
+logo cache
+active flag for price

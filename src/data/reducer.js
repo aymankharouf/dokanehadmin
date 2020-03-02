@@ -1,5 +1,5 @@
 const Reducer = (state, action) => {
-    let pack, packIndex, packs, data, nextQuantity, i
+    let pack, packIndex, packs, nextQuantity, i
     const increment = [0.125, 0.25, 0.5, 0.75, 1]
     switch (action.type){
       case 'ADD_TO_BASKET':
@@ -240,20 +240,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           products: action.products,
-          productsStatus: 'u'
-        }
-      case 'FINISH_PRODUCTS':
-        data = state.products.map(p => {
-          const categoryInfo = state.categories.find(c => c.id === p.categoryId)
-          return {
-            ...p,
-            categoryInfo
-          }
-        })
-        return {
-          ...state,
-          products: data,
-          productsStatus: 'f'
         }
       case 'SET_PACKS':
         return {
@@ -279,20 +265,6 @@ const Reducer = (state, action) => {
         return {
           ...state,
           packPrices: action.packPrices,
-          packPricesStatus: 'u'
-        }
-      case 'FINISH_PACK_PRICES':
-        data = state.packPrices.map(p => {
-          const categoryInfo = state.categories.find(c => c.id === p.packInfo.categoryId)
-          return {
-            ...p,
-            categoryInfo
-          }
-        })
-        return {
-          ...state,
-          packPrices: data,
-          packPriceStatus: 'f'
         }
       case 'SET_LOGS':
         return {
@@ -328,6 +300,11 @@ const Reducer = (state, action) => {
         return {
           ...state,
           archivedPacks: action.archivedPacks
+        }
+      case 'SET_STORE_PAYMENTS':
+        return {
+          ...state,
+          storePayments: action.storePayments
         }
       default:
         return state

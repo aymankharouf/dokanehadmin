@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -7,7 +7,6 @@ import labels from '../data/labels'
 const EditProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
   const [name, setName] = useState(product.name)
   const [alias, setAlias] = useState(product.alias)
@@ -51,16 +50,11 @@ const EditProduct = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
+      if (state.products.find(p => p.id !== product.id && p.categoryId === categoryId && p.country === country && p.name === name && p.alias === alias)) {
+        throw new Error('duplicateProduct')
+      }
       const newProduct = {
         ...product,
         categoryId,
@@ -70,13 +64,10 @@ const EditProduct = props => {
         trademark,
         country,
       }
-      setInprocess(true)
-      await editProduct(newProduct, product.name, image, state.packs)
-      setInprocess(false)
+      editProduct(newProduct, product.name, image, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

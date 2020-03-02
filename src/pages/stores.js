@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { addStock, showMessage, showError, getMessage } from '../data/actions'
@@ -56,7 +56,9 @@ const Stores = props => {
                 link={`/store-details/${s.id}`} 
                 title={s.name} 
                 key={s.id} 
-              />
+              >
+                {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
+              </ListItem>
             )
           }
         </List>

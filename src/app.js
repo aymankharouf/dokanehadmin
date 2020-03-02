@@ -7,7 +7,7 @@ const app = props => {
   const f7params = {
     id: 'io.framework7.dokaneh',
     name: 'دكانة نت',
-    theme: 'ios', 
+    theme: 'auto', 
     routes,
   }
 

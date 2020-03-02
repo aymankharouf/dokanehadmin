@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editPrice, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -8,7 +8,6 @@ import { setup } from '../data/config'
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [cost, setCost] = useState('')
@@ -20,14 +19,6 @@ const EditPrice = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const getDefaultPrice = () => {
     if (cost) {
       if (pack.subQuantity > 1) {
@@ -37,7 +28,7 @@ const EditPrice = props => {
       }
     }
   }
-  const handleEdit = async () => {
+  const handleEdit = () => {
     try{
       if (Number(price) <= 0) {
         throw new Error('invalidPrice')
@@ -58,13 +49,10 @@ const EditPrice = props => {
         offerEnd,
         time: new Date()
       }
-      setInprocess(true)
-      await editPrice(newStorePack, storePack.price, pack, state.packPrices, state.packs)
-      setInprocess(false)
+      editPrice(newStorePack, storePack.price, pack, state.packPrices, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
-      setInprocess(false)
 			setError(getMessage(props, err))
 		}
   }

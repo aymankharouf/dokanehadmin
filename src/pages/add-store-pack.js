@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { setup } from '../data/config'
@@ -13,11 +13,12 @@ const AddStorePack = props => {
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id))
+  const [isActive, setIsActive] = useState(store.isActive)
   const [packs] = useState(() => {
     const packs = state.packs.map(p => {
       return {
         id: p.id,
-        name: `${p.productName} ${p.name}`
+        name: `${p.productName}-${p.productAlias} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -56,14 +57,15 @@ const AddStorePack = props => {
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
       const storePack = {
+        packId,
         storeId: store.id,
         cost: store.type === '5' ? cost * 1000 : price * 1000,
         price: price * 1000,
         offerEnd,
+        isActive,
         time: new Date()
       }
-      const pack = state.packs.find(p => p.id === packId)
-      addPackPrice(storePack, pack, state.packPrices, state.packs)
+      addPackPrice(storePack, state.packPrices, state.packs)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -123,6 +125,16 @@ const AddStorePack = props => {
           onChange={e => setOfferDays(e.target.value)}
           onInputClear={() => setOfferDays('')}
         />
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive}
+            onToggleChange={() => setIsActive(!isActive)}
+            disabled={!store.isActive}
+          />
+        </ListItem>
       </List>
       {!packId || !price || (store.type === '5' && !cost) ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>

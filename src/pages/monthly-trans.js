@@ -24,21 +24,22 @@ const MonthlyTrans = props => {
     return stockPacks.reduce((sum, p) => sum + Math.trunc(p.cost * p.quantity), 0)
   })
   const [sales] = useState(() => monthlyTrans?.sales ?? deliveredOrders.reduce((sum, o) => sum + o.total, 0))
-  const [profit] = useState(() => () => monthlyTrans?.profit ?? deliveredOrders.reduce((sum, o) => sum + o.profit, 0))
+  const [transProfit] = useState(() => () => monthlyTrans?.transProfit ?? deliveredOrders.reduce((sum, o) => sum + o.profit, 0))
   const [fixedFees] = useState(() => monthlyTrans?.fixedFees ?? deliveredOrders.reduce((sum, o) => sum + o.fixedFees, 0))
   const [deliveryFees] = useState(() => monthlyTrans?.deliveryFees ?? deliveredOrders.reduce((sum, o) => sum + o.deliveryFees, 0))
   const [fractions] = useState(() => monthlyTrans?.fractions ?? deliveredOrders.reduce((sum, o) => sum + o.fractions, 0))
   const [discounts] = useState(() => monthlyTrans?.discounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount.type === 's' ? 0 : o.discount.value), 0))
   const [specialDiscounts] = useState(() => monthlyTrans?.specialDiscounts ?? deliveredOrders.reduce((sum, o) => sum + (o.discount.type === 's' ? o.discount.value : 0), 0))
-  const [purchaseDiscounts] = useState(() => {
-    const purchases = state.purchases.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
-    return monthlyTrans?.purchasesDiscounts ?? purchases.reduce((sum, p) => sum + p.discount, 0)
+  const [storesBalance] = useState(() => {
+    return monthlyTrans?.storesBalance ?? state.stores.reduce((sum, p) => sum + p.balance, 0)
   })
+  const [storePayments] = useState(() => state.storePayments.filter(p => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month))
   const [spendings] = useState(() => state.spendings.filter(s => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month))
   const [stockTrans] = useState(() => state.stockTrans.filter(t => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month))
   const [donations] = useState(() => monthlyTrans?.donations ?? stockTrans.reduce((sum, t) => sum + (t.type === 'g' ? t.total : 0), 0))
   const [damages] = useState(() => monthlyTrans?.damages ?? stockTrans.reduce((sum, t) => sum + (t.type === 'd' ? t.total : 0), 0))
-  const [sellingLoss] = useState(() => monthlyTrans?.sellingLoss ?? stockTrans.reduce((sum, t) => sum + (t.type === 's' ? t.discount : 0), 0))
+  const [storesProfit] = useState(() => monthlyTrans?.storesProfit ?? storePayments.reduce((sum, p) => sum + (p.type === 'c' ? p.amount : 0), 0))
+  const [storeTransNet] = useState(() => monthlyTrans?.storeTransNet ?? storePayments.reduce((sum, p) => sum + ['pp', 'sp', 'rp'].includes(p.type) ? p.amount : (['pl', 'sl', 'rl'].includes(p.type) ? -1 * p.amount : 0), 0))
   const [withdrawals] = useState(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals
     const withdrawals = spendings.filter(s => s.type === 'w')
@@ -49,7 +50,7 @@ const MonthlyTrans = props => {
     const expenses = spendings.filter(s => s.type !== 'w')
     return expenses.reduce((sum, s) => sum + s.spendingAmount, 0)
   })
-  const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (profit + fixedFees + deliveryFees + purchaseDiscounts) - (discounts + expenses + damages + sellingLoss + fractions))
+  const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) - (discounts + expenses + damages + fractions))
   useEffect(() => {
     const today = new Date()
     if ((today.getFullYear() * 100 + Number(today.getMonth())) > year * 100 + month) {
@@ -73,17 +74,18 @@ const MonthlyTrans = props => {
         deliveredOrdersCount,
         stock,
         sales,
-        profit,
+        transProfit,
         fixedFees,
         deliveryFees,
         fractions,
-        purchaseDiscounts,
+        storesBalance,
         discounts,
         withdrawals,
         expenses,
         donations,
         damages,
-        sellingLoss,
+        storesProfit,
+        storeTransNet,
         specialDiscounts,
         netProfit
       }
@@ -120,8 +122,12 @@ const MonthlyTrans = props => {
             after={(sales / 1000).toFixed(3)}
           />
           <ListItem
-            title={labels.profit}
-            after={(profit / 1000).toFixed(3)}
+            title={labels.transProfit}
+            after={(transProfit / 1000).toFixed(3)}
+          />
+          <ListItem
+            title={labels.storesProfit}
+            after={(storesProfit / 1000).toFixed(3)}
           />
           <ListItem
             title={labels.fixedFees}
@@ -132,12 +138,12 @@ const MonthlyTrans = props => {
             after={(deliveryFees / 1000).toFixed(3)}
           />
           <ListItem
-            title={labels.purchaseDiscounts}
-            after={(purchaseDiscounts / 1000).toFixed(3)}
+            title={labels.storesBalance}
+            after={(storesBalance / 1000).toFixed(3)}
           />
           <ListItem
             title={labels.grossProfit}
-            after={((profit + fixedFees + deliveryFees + purchaseDiscounts) / 1000).toFixed(3)}
+            after={((transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) / 1000).toFixed(3)}
           />
           <ListItem
             title={labels.discounts}
@@ -156,12 +162,12 @@ const MonthlyTrans = props => {
             after={(damages / 1000).toFixed(3)}
           />
           <ListItem
-            title={labels.sellingLoss}
-            after={(sellingLoss / 1000).toFixed(3)}
+            title={labels.storeTransNet}
+            after={(storeTransNet / 1000).toFixed(3)}
           />
           <ListItem
             title={labels.grossLoss}
-            after={((discounts + expenses + damages + sellingLoss + fractions) / 1000).toFixed(3)}
+            after={((discounts + expenses + damages + fractions) / 1000).toFixed(3)}
           />
           <ListItem
             title={labels.netProfit}

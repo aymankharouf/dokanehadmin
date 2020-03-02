@@ -36,8 +36,7 @@ const Store = props => {
     alarms: [],
     ratings: [],
     invitations: [],
-    packPricesStatus: '',
-    productsStatus: ''
+    storePayments: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -163,10 +162,17 @@ const Store = props => {
         })  
         const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores = []
+          let storePayments = []
           docs.forEach(doc => {
             stores.push({...doc.data(), id:doc.id})
+            if (doc.data().payments) {
+              doc.data().payments.forEach(p => {
+                storePayments.push({...p, storeId: doc.id, storeInfo: doc.data()})
+              })
+            }
           })
           dispatch({type: 'SET_STORES', stores})
+          dispatch({type: 'SET_STORE_PAYMENTS', storePayments})
         }, err => {
           unsubscribeStores()
         })  
@@ -218,16 +224,6 @@ const Store = props => {
       }
     })
   }, [])
-  useEffect(() => {
-    if (state.categories.length > 0) {
-      if (state.packPricesStatus === 'u') {
-        dispatch({type: 'FINISH_PACK_PRICES'})
-      }
-      /*if (state.productsStatus === 'u') {
-        dispatch({type: 'FINISH_PRODUCTS'})
-      }*/
-    }
-  }, [state.categories, state.packPricesStatus, state.productsStatus])
   return (
     <StoreContext.Provider value={{state, user, dispatch}}>
       {props.children}

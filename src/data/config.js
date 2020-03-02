@@ -4,10 +4,9 @@ export const setup = {
   profit: 0.1,
   orderLimit: 50000,
   returnPenalty: 100,
-  invitationDiscount: 50,
-  alarmDiscount: 50,
+  invitationDiscount: 100,
   firstOrderDiscount: 100,
-  ratingDiscount: 50,
+  discountPercent: 0.01
 }
 
 export const randomColors = [
@@ -74,14 +73,12 @@ export const orderPackStatus = [
 ]
 
 export const alarmTypes = [
-  {id: 'lp', name: 'الابلاغ عن سعر أقل', actor: 'c'},
-  {id: 'cp', name: 'الابلاغ عن تغيير السعر', actor: 'o', isAvailable: 1},
-  {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', actor: 'o', isAvailable: -1},
-  {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', actor: 'o', isAvailable: 1},
-  {id: 'la', name: 'الابلاغ عن توفر بديل بسعر اقل', actor: 'c'},
-  {id: 'aa', name: 'الابلاغ عن توفر بديل', actor: 'o', isAvailable: 0},
-  {id: 'eo', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', actor: 'o', isAvailable: 0},
-  {id: 'go', name: 'الابلاغ عن عرض لمجموعة', actor: 'o', isAvailable: 0},
+  {id: 'cp', name: 'الابلاغ عن تغيير السعر', isAvailable: 1},
+  {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', isAvailable: -1},
+  {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', isAvailable: 1},
+  {id: 'aa', name: 'الابلاغ عن توفر بديل', isAvailable: 0},
+  {id: 'eo', name: 'الابلاغ عن عرض لقرب انتهاء الصلاحية', isAvailable: 0},
+  {id: 'go', name: 'الابلاغ عن عرض لمجموعة', isAvailable: 0},
 ]
 
 export const orderRequestTypes = [
@@ -100,4 +97,16 @@ export const friendStatus = [
   {id: 's', name: 'ارسلت الدعوة'},
   {id: 'o', name: 'مدعو سابقا'},
   {id: 'r', name: 'مسجل'}
+]
+
+export const paymentTypes = [
+  {id: 'p', name: 'دفعة'},
+  {id: 'pl', name: 'خسارة شراء'},
+  {id: 'pp', name: 'ربح شراء'},
+  {id: 'r', name: 'عائد'},
+  {id: 'c', name: 'مطالبة'},
+  {id: 'sl', name: 'خسارة بيع'},
+  {id: 'sp', name: 'ربح بيع'},
+  {id: 'rl', name: 'خسارة ارجاع'},
+  {id: 'rp', name: 'ربح ارجاع'}
 ]

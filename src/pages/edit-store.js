@@ -18,6 +18,7 @@ const EditStore = props => {
   const [discount, setDiscount] = useState(store.discount * 100)
   const [mapPosition, setMapPosition] = useState(store.mapPosition)
   const [allowReturn, setAllowReturn] = useState(store.allowReturn)
+  const [isActive, setIsActive] = useState(store.isActive)
   const [openTime, setOpenTime] = useState(store.openTime)
   const [hasChanged, setHasChanged] = useState(false)
   const [storeOwners] = useState(() => state.customers.filter(c => c.storeId === props.id))
@@ -42,9 +43,10 @@ const EditStore = props => {
     || address !== store.address
     || mapPosition !== store.mapPosition
     || allowReturn !== store.allowReturn
+    || isActive !== store.isActive
     || openTime !== store.openTime) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, discount, address, mapPosition, allowReturn, openTime])
+  }, [store, name, mobile, discount, address, mapPosition, allowReturn, isActive, openTime])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -62,6 +64,7 @@ const EditStore = props => {
         type,
         discount: discount / 100,
         allowReturn,
+        isActive,
         mobile,
         address,
         mapPosition,
@@ -132,6 +135,15 @@ const EditStore = props => {
             color="green" 
             checked={allowReturn} 
             onToggleChange={() => setAllowReturn(!allowReturn)}
+          />
+        </ListItem>
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(!isActive)}
           />
         </ListItem>
         <ListInput

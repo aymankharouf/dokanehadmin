@@ -45,7 +45,7 @@ const Alarms = props => {
                   footer={moment(a.time.toDate()).fromNow()}
                   key={a.id}
                 >
-                  <img src={a.packInfo.imageUrl} className="img-list" alt={labels.noImage} />
+                  <img src={a.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 </ListItem>
               )
             }

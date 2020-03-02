@@ -21,6 +21,14 @@ const AddBulk = props => {
       setError('')
     }
   }, [error])
+  const generateName = () => {
+    let suggestedName
+    if (subPackId && subQuantity) {
+      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId).name}`
+      if (!name) setName(suggestedName)
+    }
+  }
+
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -55,7 +63,7 @@ const AddBulk = props => {
         byWeight: subPackInfo.byWeight,
         isArchived: false
       }
-      addPack(pack, product, image)
+      addPack(pack, product, image, subPackInfo)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -86,7 +94,7 @@ const AddBulk = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -101,6 +109,7 @@ const AddBulk = props => {
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity('')}
+          onBlur={() => generateName()}
         />
         <ListItem>
           <span>{labels.specialImage}</span>

@@ -38,7 +38,7 @@ const Basket = props => {
               footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++}
             >
-              <img src={p.imageUrl} className="img-list" alt={labels.noImage} />
+              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               <Stepper

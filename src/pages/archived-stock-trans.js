@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
@@ -11,7 +11,6 @@ import { getArchivedStockTrans, getMessage, showError } from '../data/actions'
 const ArchivedStockTrans = props => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [stockTrans, setStockTrans] = useState([])
   const [monthlyTrans] = useState(() => [...state.monthlyTrans.sort((t1, t2) => t2.id - t1.id)])
   const lastMonth = useRef(0)
@@ -35,28 +34,18 @@ const ArchivedStockTrans = props => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleRetreive = async () => {
+  const handleRetreive = () => {
     try{
       const id = monthlyTrans[lastMonth.current]?.id
       if (!id) {
         throw new Error('noMoreArchive')
       }
-      setInprocess(true)
-      const trans = await getArchivedStockTrans(id)
-      setInprocess(false)  
+      const trans = getArchivedStockTrans(id)
       if (trans.length > 0) {
         dispatch({type: 'ADD_ARCHIVED_STOCK_TRANS', trans})
       }
       lastMonth.current++
   } catch(err) {
-      setInprocess(false)
       setError(getMessage(props, err))
     }
   }
