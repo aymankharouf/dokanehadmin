@@ -50,7 +50,7 @@ const AddAdvert = props => {
   return (
     <Page>
       <Navbar title={labels.addAdvert} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.type}
           smartSelect
@@ -72,7 +72,6 @@ const AddAdvert = props => {
         <ListInput 
           name="title" 
           label={labels.title}
-          floatingLabel 
           clearButton
           type="text" 
           value={title} 
@@ -82,7 +81,6 @@ const AddAdvert = props => {
         <ListInput 
           name="text" 
           label={labels.text}
-          floatingLabel 
           clearButton
           type="textarea" 
           value={text} 

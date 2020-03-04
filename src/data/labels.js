@@ -319,7 +319,6 @@ const labels = {
   noMoreArchive: 'لا يوجد ارشيف اضافي',
   archivedStockTrans: 'ارشيف حركات المستودع',
   archivedProducts: 'ارشيف المنتجات',
-  debitRequests: 'طلبات الدفع لاحقا',
   newTrademark: 'علامة تجارية جديدة',
   enterName: 'ادخل الاسم',
   newCountry: 'دولة جديدة',
@@ -361,10 +360,9 @@ const labels = {
   duplicateName: 'اﻻسم مكرر',
   alreadyRegistered: 'رقم الموبايل مستخدم من قبل مستخدم آخر',
   blockingUser: 'تم حظر هذا المستخدم',
-  withBestPrice: 'الشراء بأفضل سعر',
   noPurchase: 'عدم الشراء',
   priceIncrease: 'اذا ارتفع السعر',
-  changeWithBestPrice: 'تغيير طريقة الشراء في حال ارتفاع السعر',
+  changePriceLimit: 'تغيير طريقة الشراء في حال ارتفاع السعر',
   canNotPurchaseDueOverPrice: 'لا يمكن الشراء بسبب ارتفاع السعر',
   notAvailableQuantityInStock: 'لا يوجد كمية كافية في المستودع',
   specialImage: 'صورة خاصة',
@@ -374,6 +372,7 @@ const labels = {
   storesProfit: 'الربح من المحلات',
   storeTransNet: 'صافي عمليات المحلات',
   deactivate: 'ايقاف التفعيل',
+  priceLimit: 'الشراء بسقف',
 }
 
 export default labels

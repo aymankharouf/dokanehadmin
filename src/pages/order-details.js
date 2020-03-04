@@ -152,8 +152,8 @@ const OrderDetails = props => {
             >
               <div className="list-subtext1">{p.priceNote}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
-              <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
-              <div className="list-subtext4">{`${labels.priceIncrease}: ${p.withBestPrice ? labels.withBestPrice : labels.noPurchase}`}</div>
+              <div className="list-subtext3">{p.storeId ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              <div className="list-subtext4">{`${labels.priceIncrease}: ${p.priceLimit === p.price ? labels.noPurchase : labels.priceLimit + ' ' + (p.priceLimit / 1000).toFixed(3)}`}</div>
             </ListItem>
           )}
           <ListItem 

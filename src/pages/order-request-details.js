@@ -17,14 +17,14 @@ const OrderRequestDetails = props => {
       const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
       const newQuantity = order.requestBasket.find(bp => bp.packId === p.packId).quantity
       const changeQuantityNote = newQuantity === p.quantity ? '' : newQuantity > p.quantity ? `${labels.increase} ${newQuantity - p.quantity}` : `${labels.decrease} ${p.quantity - newQuantity}`
-      const newWithBestPrice = order.requestBasket.find(bp => bp.packId === p.packId).newWithBestPrice
-      const changeWithBestPrice = newWithBestPrice === p.withBestPrice ? '' : labels.changeWithBestPrice
+      const newPriceLimit = order.requestBasket.find(bp => bp.packId === p.packId).priceLimit
+      const changePriceLimit = newPriceLimit === p.priceLimit ? '' : labels.changePriceLimit
       return {
         ...p,
         storeName,
         statusNote,
         changeQuantityNote,
-        changeWithBestPrice
+        changePriceLimit
       }
     }))
   }, [order, state.stores])
@@ -58,7 +58,7 @@ const OrderRequestDetails = props => {
               after={(p.gross / 1000).toFixed(3)}
             >
               {p.changeQuantityNote ? <div className="list-subtext1">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
-              {p.changeWithBestPrice ? <div className="list-subtext2">{labels.changeWithBestPrice}</div> : ''}
+              {p.changePriceLimit ? <div className="list-subtext2">{labels.changePriceLimit}</div> : ''}
               <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
             </ListItem>
           )}

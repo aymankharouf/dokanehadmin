@@ -14,7 +14,6 @@ const Approvals = props => {
   const [passwordRequests, setPasswordRequests] = useState([])
   const [ratings, setRatings] = useState([])
   const [invitations, setInvitations] = useState([])
-  const [debitRequests, setDebitRequests] = useState([])
   const [sections, setSections] = useState([])
   const [newOwners, setNewOwners] = useState([])
   const [notifyFriends, setNotifyFriends] = useState([])
@@ -27,7 +26,6 @@ const Approvals = props => {
     setAlarms(() => state.alarms.filter(a => a.status === 'n'))
     setRatings(() => state.ratings.filter(r => r.status === 'n'))
     setInvitations(() => state.invitations.filter(i => i.status === 'n'))
-    setDebitRequests(() => state.users.filter(u => u.debitRequestStatus === 'n'))
     setNewOwners(() => state.customers.filter(c => c.storeName && !c.storeId))
     setNotifyFriends(() => state.users.filter(u => u.notifyFriends?.length > 0))
   }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
@@ -43,11 +41,10 @@ const Approvals = props => {
       {id: '5', name: labels.passwordRequests, path: '/password-requests/', count: passwordRequests.length},
       {id: '6', name: labels.ratings, path: '/ratings/', count: ratings.length},
       {id: '7', name: labels.invitations, path: '/invitations/', count: invitations.length},
-      {id: '8', name: labels.debitRequests, path: '/debit-requests/', count: debitRequests.length},
-      {id: '9', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
-      {id: '10', name: labels.notifyFriends, path: '/notify-friends/', count: notifyFriends.length},
+      {id: '8', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '9', name: labels.notifyFriends, path: '/notify-friends/', count: notifyFriends.length},
     ])
-  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations, debitRequests, newOwners, notifyFriends])
+  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations, newOwners, notifyFriends])
   let i = 0
   return(
     <Page>

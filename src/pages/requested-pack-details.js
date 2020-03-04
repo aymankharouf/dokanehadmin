@@ -125,7 +125,7 @@ const RequestedPackDetails = props => {
           throw new Error('alreadyInBasket')
         }
       }
-      if (Number(props.price) === 0 || Number(props.price) >= packStore.price) {
+      if (Number(props.price) >= packStore.price) {
         addToBasket(packStore, Number(props.quantity), 'n')
       } else {
         if (Number(props.price) >= pack.price) {
@@ -165,7 +165,7 @@ const RequestedPackDetails = props => {
         </CardFooter>
       </Card>
       <List mediaList>
-        {packStores.length === 0 ? 
+        {pack.price === 0 ? 
           <ListItem 
             link="#"
             title={labels.unavailable}
@@ -188,7 +188,7 @@ const RequestedPackDetails = props => {
             key={i++}
           >
             {s.cost === s.price ? '' : <div className="list-subtext1">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}`}</div>}
-            <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} />
+            {s.isActive ? <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} /> : ''}
           </ListItem>
         )}
       </List>

@@ -57,7 +57,7 @@ const PrepareOrders = props => {
 								text={p.packInfo.name}
 								key={i++}
 							>
-								<img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+								<img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
 							</ListItem>
 						)

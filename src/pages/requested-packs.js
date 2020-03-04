@@ -38,7 +38,7 @@ const RequestedPacks = props => {
 								after={(p.price / 1000).toFixed(3)}
 								key={i++}
 							>
-								<img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+								<img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
 							</ListItem>
 						)

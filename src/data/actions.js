@@ -358,7 +358,7 @@ export const confirmPurchase = (basket, orders, storeId, packPrices, packs, tota
         packsIn.push(p)
       }
     } else {
-      packOrders = approvedOrders.filter(o => o.basket.find(op => op.packId === p.packId && (p.price === 0 || p.price === op.price) && ['n', 'p'].includes(op.status)))
+      packOrders = approvedOrders.filter(o => o.basket.find(op => op.packId === p.packId && op.priceLimit === p.price && ['n', 'p'].includes(op.status)))
       packOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
       remaining = updateOrders(batch, storeId, packOrders, p, purchaseRef.id)
       if (remaining > 0) {
@@ -1241,11 +1241,6 @@ export const approveRating = (rating, packs) => {
       ratingCount: ratingCount + 1
     })
   })
-  const discount = Math.trunc(ratings[ratingIndex].price * setup.discountPercent)
-  const customerRef = firebase.firestore().collection('customers').doc(rating.userInfo.id)
-  batch.update(customerRef, {
-    discounts: firebase.firestore.FieldValue.increment(discount)
-  })
   batch.commit()
 }
 
@@ -1350,8 +1345,7 @@ export const allocateOrderPack = (order, pack, stores) => {
   const orderPackIndex = basket.findIndex(p => p.packId === pack.id)
   basket.splice(orderPackIndex, 1, {
     ...basket[orderPackIndex],
-    isAllocated: true,
-    storeName: basket[orderPackIndex].storeId === 'm' ? labels.multipleStores : (stores.find(s => s.id === basket[orderPackIndex].storeId)?.name || '')
+    isAllocated: true
   })
   const isFinished = basket.filter(p => p.purchased > 0).length === basket.filter(p => p.purchased > 0 && p.isAllocated).length
   const orderRef = firebase.firestore().collection('orders').doc(order.id)
@@ -1454,8 +1448,7 @@ export const getRequestedPacks = (orders, basket, packs) => {
     o.basket.forEach(p => {
       if (['n', 'p'].includes(p.status)) {
         const packInfo = packs.find(pa => pa.id === p.packId)
-        const price = p.withBestPrice ? 0 : p.price
-        const found = packsArray.findIndex(pa => pa.packId === p.packId && pa.price === price)
+        const found = packsArray.findIndex(pa => pa.packId === p.packId && pa.price === p.priceLimit)
         if (!packInfo.byWeight && found > -1) {
           packsArray.splice(found, 1, {
             ...packsArray[found], 
@@ -1464,11 +1457,10 @@ export const getRequestedPacks = (orders, basket, packs) => {
         } else {
           packsArray.push({
             packId: p.packId,
-            price, 
+            price: p.priceLimit, 
             quantity: addQuantity(p.quantity, -1 * p.purchased),
             orderId: o.id,
-            packInfo,
-            withBestPrice: p.withBestPrice
+            packInfo
           })
         }
       }
@@ -1574,7 +1566,7 @@ export const getRequestedPackStores = (pack, basketStockQuantity, packPrices, st
       packInfo
     }
   })
-  return packStores.filter(s => s.packId && (leastPrice ? s.unitPrice <= leastPrice : true))
+  return packStores.filter(s => s.packId && (!leastPrice || s.unitPrice <= leastPrice))
 }
 
 export const addAdvert = async (advert, image) => {
@@ -1889,12 +1881,6 @@ export const getArchivedPacks = async () => {
     })
   })
   return packs
-}
-
-export const approveDebitRequest = userId => {
-  firebase.firestore().collection('users').doc(userId).update({
-    debitRequestStatus: 'a',
-  })
 }
 
 export const approveNotifyFriends = (userInfo, pack, users) => {

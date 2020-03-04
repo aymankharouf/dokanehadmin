@@ -49,7 +49,7 @@ const EditPrice = props => {
         offerEnd,
         time: new Date()
       }
-      editPrice(newStorePack, storePack.price, pack, state.packPrices, state.packs)
+      editPrice(newStorePack, storePack.price, state.packPrices, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

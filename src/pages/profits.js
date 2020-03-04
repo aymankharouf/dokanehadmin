@@ -10,11 +10,10 @@ const Profits = props => {
   return (
     <Page>
       <Navbar title={labels.profits} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="month" 
           label={labels.month} 
-          floatingLabel
           clearButton
           type="number"
           value={month}
@@ -24,7 +23,6 @@ const Profits = props => {
         <ListInput 
           name="year" 
           label={labels.year} 
-          floatingLabel
           clearButton
           type="number"
           value={year}

@@ -58,11 +58,10 @@ const EditAdvert = props => {
   return (
     <Page>
       <Navbar title={labels.editAdvert} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
       <ListInput 
           name="title" 
           label={labels.title}
-          floatingLabel 
           clearButton
           type="text" 
           value={title} 
@@ -72,7 +71,6 @@ const EditAdvert = props => {
         <ListInput 
           name="text" 
           label={labels.text}
-          floatingLabel 
           clearButton
           type="textarea" 
           value={text} 

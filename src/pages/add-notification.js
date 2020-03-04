@@ -31,7 +31,7 @@ const AddNotification = props => {
   return (
     <Page>
       <Navbar title={labels.addNotification} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.toCustomer}
           smartSelect
@@ -53,7 +53,6 @@ const AddNotification = props => {
         <ListInput 
           name="title" 
           label={labels.title} 
-          floatingLabel
           clearButton
           type="text"
           value={title}
@@ -63,7 +62,6 @@ const AddNotification = props => {
         <ListInput 
           name="message" 
           label={labels.message} 
-          floatingLabel
           clearButton
           type="text"
           value={message}

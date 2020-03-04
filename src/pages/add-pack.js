@@ -65,11 +65,10 @@ const AddPack = props => {
   return (
     <Page>
       <Navbar title={`${labels.addPack} ${product.name}`} backLink={labels.back} />
-      <List form>
+      <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
-          floatingLabel 
           clearButton
           type="text" 
           value={name} 
@@ -79,7 +78,6 @@ const AddPack = props => {
         <ListInput 
           name="unitsCount" 
           label={labels.unitsCount}
-          floatingLabel 
           clearButton
           type="number" 
           value={unitsCount} 

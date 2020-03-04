@@ -88,7 +88,6 @@ import ArchivedPurchases from './pages/archived-purchases'
 import PermissionList from './pages/permission-list'
 import ArchivedStockTrans from './pages/archived-stock-trans'
 import ArchivedProducts from './pages/archived-products'
-import DebitRequests from './pages/debit-requests'
 import ReturnBasket from './pages/return-basket'
 import NotifyFriends from './pages/notify-friends'
 import StoreBalance from './pages/store-balance'
@@ -467,10 +466,6 @@ export default [
   {
     path: '/archived-products/',
     component: ArchivedProducts
-  },
-  {
-    path: '/debit-requests/',
-    component: DebitRequests
   },
   {
     path: '/return-basket/',
