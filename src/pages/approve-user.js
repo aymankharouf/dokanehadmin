@@ -12,27 +12,7 @@ const ApproveUser = props => {
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [address, setAddress] = useState('')
-  const [otherMobile, setOtherMobile] = useState('')
-  const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
-  const [mobileCheck, setMobileCheck] = useState('')
-  useEffect(() => {
-    setMobileCheck(() => state.customers.find(c => c.otherMobile === userInfo.mobile))
-  }, [userInfo, state.customers])
-
-  useEffect(() => {
-    const patterns = {
-      mobile: /^07[7-9][0-9]{7}$/
-    }
-    const validateMobile = value => {
-      if (patterns.mobile.test(value)){
-        setOtherMobileErrorMessage('')
-      } else {
-        setOtherMobileErrorMessage(labels.invalidMobile)
-      }
-    }
-    if (otherMobile) validateMobile(otherMobile)
-  }, [otherMobile])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -41,17 +21,8 @@ const ApproveUser = props => {
   }, [error])
   const handleSubmit = () => {
     try {
-      if (otherMobile === userInfo.mobile) {
-        throw new Error('sameMobile')
-      }
-      if (otherMobile && state.users.find(u => u.mobile === otherMobile)) {
-        throw new Error('otherUserMobile')
-      }
-      if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
-        throw new Error('otherUserMobile')
-      }
-      approveUser(props.id, name, userInfo.mobile, mobileCheck, locationId, otherMobile, userInfo.storeName || '', address, state.users)
-      showMessage(mobileCheck ? labels.blockingUser : labels.approveSuccess)
+      approveUser(props.id, name, userInfo.mobile, locationId, userInfo.storeName || '', address, state.users)
+      showMessage(labels.approveSuccess)
       props.f7router.back()  
     } catch(err) {
 			setError(getMessage(props, err))
@@ -75,14 +46,6 @@ const ApproveUser = props => {
           value={userInfo.mobile}
           readonly
         />
-        <ListInput 
-          name="mobileCheck" 
-          label={labels.mobileCheck}
-          value={mobileCheck ? labels.alreadyUser : labels.notUsedMobile}
-          type="text"
-          readonly
-        />
-
         <ListInput 
           name="storeName" 
           label={labels.storeName}
@@ -108,17 +71,6 @@ const ApproveUser = props => {
             )}
           </select>
         </ListItem>
-        <ListInput
-          label={labels.otherMobile}
-          type="number"
-          name="otherMobile"
-          clearButton
-          value={otherMobile}
-          errorMessage={otherMobileErrorMessage}
-          errorMessageForce
-          onChange={e => setOtherMobile(e.target.value)}
-          onInputClear={() => setOtherMobile('')}
-        />
         <ListInput 
           name="address" 
           label={labels.address}

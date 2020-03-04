@@ -14,15 +14,17 @@ const StorePacks = props => {
     setStorePacks(() => {
       let storePacks = state.packPrices.filter(p => p.storeId === props.id)
       storePacks = storePacks.map(p => {
-        const categoryInfo = state.categories.find(c => c.id === p.packInfo.categoryId)
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
         return {
           ...p,
+          packInfo,
           categoryInfo
         } 
       })
       return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
-  }, [state.packPrices, state.categories, props.id])
+  }, [state.packPrices, state.packs, state.categories, props.id])
   let i = 0
   return(
     <Page>

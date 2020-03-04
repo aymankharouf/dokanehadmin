@@ -95,13 +95,6 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="otherMobile" 
-          label={labels.otherMobile}
-          value={customer.otherMobile}
-          type="number"
-          readonly
-        />
-        <ListInput 
           name="mapPosition" 
           label={labels.mapPosition}
           value={customer.mapPosition}

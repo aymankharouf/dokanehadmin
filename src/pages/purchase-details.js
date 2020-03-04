@@ -16,7 +16,7 @@ const PurchaseDetails = props => {
   }, [state.purchases, state.archivedPurchases, props.id, props.type])
   useEffect(() => {
     setPurchaseBasket(() => {
-      const purchaseBasket =  purchase ? purchase.basket.filter(p => !state.returnBasket?.packs?.find(bp => bp.packId === p.packId && (!bp.weight || bp.weight === p.weight))) : []
+      const purchaseBasket =  purchase ? purchase.basket.filter(p => !(state.returnBasket?.purchaseId === purchase.id && state.returnBasket?.packs?.find(bp => bp.packId === p.packId && (!bp.weight || bp.weight === p.weight)))) : []
       return purchaseBasket.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)
         return {
@@ -73,7 +73,7 @@ const PurchaseDetails = props => {
               footer={`${labels.price}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
               key={i++} 
             >
-              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+              <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}

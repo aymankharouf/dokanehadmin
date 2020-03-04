@@ -9,10 +9,17 @@ const Stock = props => {
   const [stockPacks, setStockPacks] = useState([])
   useEffect(() => {
     setStockPacks(() => {
-      const stockPacks = state.packPrices.filter(p => p.storeId === 's')
+      let stockPacks = state.packPrices.filter(p => p.storeId === 's')
+      stockPacks = stockPacks.map(p => {
+        const packInfo = state.packs.find(pa => pa.id === p.packId)
+        return {
+          ...p,
+          packInfo
+        }
+      })
       return stockPacks.sort((p1, p2) => p1.time.seconds - p2.time.seconds)
     })
-  }, [state.packPrices])
+  }, [state.packPrices, state.packs])
 
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   let i = 0
@@ -48,7 +55,7 @@ const Stock = props => {
                 after={(p.cost / 1000).toFixed(3)}
                 key={i++}
               >
-                <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+                <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               </ListItem>
             )
           }

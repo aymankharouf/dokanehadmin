@@ -73,7 +73,7 @@ const PackDetails = props => {
           isActive: s.isActive
         }
       })
-      packStores = packStores.filter(s => s.packId)
+      packStores = packStores.filter(s => s.packId && (s.storeId !== 's' || (s.storeId === 's' && s.quantity > 0)))
       const today = new Date()
       today.setDate(today.getDate() - 30)
       return packStores.sort((s1, s2) => 
@@ -222,6 +222,7 @@ const PackDetails = props => {
       storeId: storePackInfo.storeId,
       price: storePackInfo.price,
       cost: storePackInfo.cost,
+      quantity: storePackInfo.quantity,
       offerEnd: storePackInfo.offerEnd,
       isActive: storePackInfo.isActive,
       time: storePackInfo.time
@@ -256,7 +257,7 @@ const PackDetails = props => {
             {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.isOffer ? <Badge slot="text" color='green'>{labels.offer}</Badge> : ''}
-            {s.isActive ? <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/> : ''}
+            <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/>
           </ListItem>
         )}
       </List>
@@ -285,7 +286,9 @@ const PackDetails = props => {
         </FabButtons>
       </Fab>
       <Actions ref={actionsList}>
-        <ActionsButton onClick={() => handleChangeStatus()}>{currentStorePack.isActive ? labels.deactivate : labels.activate}</ActionsButton>
+        {state.stores.find(s => s.id === currentStorePack.storeId)?.isActive ? 
+          <ActionsButton onClick={() => handleChangeStatus()}>{currentStorePack.isActive ? labels.deactivate : labels.activate}</ActionsButton>
+        : ''}
         {currentStorePack.storeId === 's' && currentStorePack.quantity === 0 ? '' : 
           <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.packId}/store/${currentStorePack.storeId}`)}>{labels.editPrice}</ActionsButton>
         }

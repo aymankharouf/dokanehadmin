@@ -15,9 +15,6 @@ const InvitationDetails = props => {
       if (state.users.find(u => u.mobile === props.mobile)) {
         return 'r'
       }
-      if (state.customers.find(c => c.otherMobile === props.mobile)) {
-        return 'r'
-      }
       if (state.invitations.find(i => i.userId !== props.userId && i.mobile === props.mobile)) {
         return 'o'
       }

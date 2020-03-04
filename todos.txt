@@ -1,9 +1,7 @@
-*split to app and admin
 *configure security
 *forget password
 *product status => stopped, active
 *add quantity in a store & offers
-*customer status => active, blacklist, vip, special
 *customer limit
 *order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
 *pick an order
@@ -17,11 +15,8 @@
 *offers: packages, discounts for group, extra
 *cost types & costs
 *localstorage for basket
-*moving functions to admin
 *edit product : name, section
 *order unit
-*lazy loading
-*first time discount
 *friends discount
 *offers first (ordering products)
 *ordering products by type (product)
@@ -44,15 +39,11 @@
 *image size
 *rate product discounts
 *withdrawals
-*comments when rating
 *show ratings count
 *edit orders
 *purchase discounts
 *forEach instead of for loop
-*realtime listeners on app store
 *in pack detail page show a button if there is offers of the same product
-*change admin password
-*contact info in home page
 *delivery fees by region not customer
 *products with weight
 *resolve page freeze when relogin

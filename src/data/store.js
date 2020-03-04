@@ -56,7 +56,7 @@ const Store = props => {
         packs.push({...doc.data(), id: doc.id})
         if (doc.data().prices) {
           doc.data().prices.forEach(p => {
-            packPrices.push({...p, packId: doc.id, packInfo: doc.data()})
+            packPrices.push({...p, packId: doc.id})
           })
         }
       })

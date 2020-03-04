@@ -14,15 +14,17 @@ const Offers = props => {
     setOffers(() => {
       let offers = state.packPrices.filter(p => p.offerEnd)
       offers = offers.map(o => {
+        const packInfo = state.packs.find(p => p.id === o.packId)
         const storeName = o.storeId ? (o.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === o.storeId).name) : ''
         return {
           ...o,
+          packInfo,
           storeName
         }
       })
       return offers.sort((o1, o2) => o1.offerEnd.seconds - o2.offerEnd.seconds)
     })
-  }, [state.packPrices, state.stores])
+  }, [state.packPrices, state.packs, state.stores])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -67,7 +69,7 @@ const Offers = props => {
                 footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
                 key={i++}
               >
-                <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+                <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 {p.storeName ? <div className="list-subtext1">{`${labels.storeName}: ${p.storeName}`}</div> : ''}
                 <div className="list-subtext2">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
                 {p.price === 0 ? '' : 

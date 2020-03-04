@@ -14,8 +14,6 @@ const EditCustomer = props => {
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
-  const [otherMobile, setOtherMobile] = useState(customer.otherMobile)
-  const [otherMobileErrorMessage, setOtherMobileErrorMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
   const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
@@ -28,25 +26,11 @@ const EditCustomer = props => {
     || locationId !== userInfo.locationId
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
-    || otherMobile !== customer.otherMobile
     || deliveryFees * 1000 !== customer.deliveryFees
     || specialDiscount * 1000 !== customer.specialDiscount
     || orderLimit * 1000 !== customer.orderLimit) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, otherMobile, deliveryFees, orderLimit, specialDiscount])
-  useEffect(() => {
-    const patterns = {
-      mobile: /^07[7-9][0-9]{7}$/
-    }
-    const validateMobile = value => {
-      if (patterns.mobile.test(value)){
-        setOtherMobileErrorMessage('')
-      } else {
-        setOtherMobileErrorMessage(labels.invalidMobile)
-      }
-    }
-    if (otherMobile) validateMobile(otherMobile)
-  }, [otherMobile])
+  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, deliveryFees, orderLimit, specialDiscount])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -55,15 +39,6 @@ const EditCustomer = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (otherMobile === userInfo.mobile) {
-        throw new Error('sameMobile')
-      }
-      if (otherMobile && state.users.find(u => u.mobile === otherMobile)) {
-        throw new Error('otherUserMobile')
-      }
-      if (otherMobile && state.customers.find(c => c.otherMobile === otherMobile)) {
-        throw new Error('otherUserMobile')
-      }
       const newCustomer = {
         ...customer,
         name,
@@ -71,7 +46,6 @@ const EditCustomer = props => {
         locationId,
         mapPosition,
         isBlocked,
-        otherMobile,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
         specialDiscount: specialDiscount * 1000
@@ -144,17 +118,6 @@ const EditCustomer = props => {
           type="number" 
           onChange={e => setOrderLimit(e.target.value)}
           onInputClear={() => setOrderLimit('')}
-        />
-        <ListInput
-          name="otherMobile"
-          label={labels.otherMobile}
-          type="number"
-          clearButton
-          value={otherMobile}
-          errorMessage={otherMobileErrorMessage}
-          errorMessageForce
-          onChange={e => setOtherMobile(e.target.value)}
-          onInputClear={() => setOtherMobile('')}
         />
         <ListInput 
           name="mapPosition" 
