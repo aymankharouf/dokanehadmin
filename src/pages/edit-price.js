@@ -3,15 +3,14 @@ import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editPrice, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { setup } from '../data/config'
 
 const EditPrice = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
+  const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId))
   const [cost, setCost] = useState('')
-  const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
     if (error) {
@@ -19,20 +18,8 @@ const EditPrice = props => {
       setError('')
     }
   }, [error])
-  const getDefaultPrice = () => {
-    if (cost) {
-      if (pack.subQuantity > 1) {
-        setPrice((cost / pack.subQuantity * (1 + setup.profit)).toFixed(3))
-      } else {
-        setPrice((cost * (1 + setup.profit)).toFixed(3))
-      }
-    }
-  }
   const handleEdit = () => {
     try{
-      if (Number(price) <= 0) {
-        throw new Error('invalidPrice')
-      }
       if (offerDays && Number(offerDays) <= 0) {
         throw new Error('invalidPeriod')
       }
@@ -41,15 +28,25 @@ const EditPrice = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
-      const storePack = state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)
+      const packCategory = state.categories.find(c => c.id === pack.categoryId)
+      let price
+      if (storePack.isActive) {
+        if (store.type === '5' || !store.isActive) {
+          price = Math.trunc(cost * 1000 * (1 + (store.type === '5' ? packCategory.maxProfit : packCategory.minProfit)))
+        } else {
+          price = cost * 1000
+        }
+      } else {
+        price = 0
+      }
       const newStorePack = {
         ...storePack,
-        price: price * 1000,
-        cost: store.type === '5' ? cost * 1000 : price * 1000,
+        price,
+        cost: cost * 1000,
         offerEnd,
         time: new Date()
       }
-      editPrice(newStorePack, storePack.price, state.packPrices, state.packs)
+      editPrice(newStorePack, storePack.price, state.packPrices, state.packs, state.stores)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -74,26 +71,21 @@ const EditPrice = props => {
           type="text" 
           readonly
         />
-        {store.type === '5' ? 
-          <ListInput 
-            name="cost" 
-            label={labels.cost}
-            clearButton 
-            type="number" 
-            value={cost}
-            onChange={e => setCost(e.target.value)}
-            onInputClear={() => setCost('')}
-            onBlur={() => getDefaultPrice()}
-          />
-        : ''}
         <ListInput 
-          name="price" 
-          label={labels.price}
+          name="oldCost" 
+          label={labels.oldCost}
+          value={(storePack.cost / 1000).toFixed(3)}
+          type="text" 
+          readonly
+        />
+        <ListInput 
+          name="cost" 
+          label={labels.cost}
           clearButton 
           type="number" 
-          value={price} 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
+          value={cost}
+          onChange={e => setCost(e.target.value)}
+          onInputClear={() => setCost('')}
         />
         <ListInput 
           name="offerDays" 
@@ -105,7 +97,7 @@ const EditPrice = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!price || (store.type === '5' && !cost) ? '' :
+      {!cost || Number(cost) <= 0 || cost * 1000 === storePack.cost ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

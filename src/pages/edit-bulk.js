@@ -13,17 +13,19 @@ const EditBulk = props => {
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
+  const [forSale, setForSale] = useState(pack.forSale)
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
-  const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
+  const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight))
   useEffect(() => {
     if (name !== pack.name
     || subPackId !== pack.subPackId
     || subQuantity !== pack.subQuantity
     || specialImage !== pack.specialImage
+    || forSale !== pack.forSale
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, subPackId, subQuantity, specialImage, imageUrl])
+  }, [pack, name, subPackId, subQuantity, specialImage, forSale, imageUrl])
 
   useEffect(() => {
     if (error) {
@@ -31,6 +33,9 @@ const EditBulk = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (!forSale) setSpecialImage(false)
+  }, [forSale])
   const handleFileChange = e => {
     const files = e.target.files
     const filename = files[0].name
@@ -58,6 +63,7 @@ const EditBulk = props => {
         subPackId,
         subQuantity: Number(subQuantity),
         unitsCount: subQuantity * subPackInfo.unitsCount,
+        forSale
       }
       editPack(newPack, pack, image, state.packs)
       showMessage(labels.addSuccess)
@@ -107,14 +113,25 @@ const EditBulk = props => {
           onInputClear={() => setSubQuantity('')}
         />
         <ListItem>
-          <span>{labels.specialImage}</span>
+          <span>{labels.forSale}</span>
           <Toggle 
-            name="specialImage" 
+            name="forSale" 
             color="green" 
-            checked={specialImage} 
-            onToggleChange={() => setSpecialImage(!specialImage)}
+            checked={forSale} 
+            onToggleChange={() => setForSale(!forSale)}
           />
         </ListItem>
+        {forSale ? 
+          <ListItem>
+            <span>{labels.specialImage}</span>
+            <Toggle 
+              name="specialImage" 
+              color="green" 
+              checked={specialImage} 
+              onToggleChange={() => setSpecialImage(!specialImage)}
+            />
+          </ListItem>
+        : ''}
         {specialImage ? 
           <ListInput 
             name="image" 

@@ -163,7 +163,6 @@ const labels = {
   relogin: 'عليك تسجيل الدخول أوﻻ',
   offerEnded: 'لا يمكن الشراء، انتهى العرض',
   isBlocked: 'محظور',
-  overPriceLimit: 'سقف الزيادة في قيمة الطلب',
   permission_denied: 'ليس لك صلاحية لاتمام هذه العملية',
   unknownError: 'حدث خطأ، يرجى المحاولة مرة أخرى',
   invalidPeriod: 'الرجاء التأكد من مدة العرض',
@@ -355,10 +354,6 @@ const labels = {
   enterDeliveryTime: 'ادخل وقت التسليم',
   duplicateName: 'اﻻسم مكرر',
   alreadyRegistered: 'رقم الموبايل مستخدم من قبل مستخدم آخر',
-  noPurchase: 'عدم الشراء',
-  priceIncrease: 'اذا ارتفع السعر',
-  changePriceLimit: 'تغيير طريقة الشراء في حال ارتفاع السعر',
-  canNotPurchaseDueOverPrice: 'لا يمكن الشراء بسبب ارتفاع السعر',
   notAvailableQuantityInStock: 'لا يوجد كمية كافية في المستودع',
   specialImage: 'صورة خاصة',
   duplicateProduct: 'المنتج مكرر',
@@ -367,7 +362,12 @@ const labels = {
   storesProfit: 'الربح من المحلات',
   storeTransNet: 'صافي عمليات المحلات',
   deactivate: 'ايقاف التفعيل',
-  priceLimit: 'الشراء بسقف',
+  forSale: 'معد للبيع',
+  permissionTitle: 'تأكيد موافقة',
+  overPricedPermission: 'هل تم تأكيد الموافقة على تجاوز السعر؟',
+  minProfit: 'الحد الادنى للربح',
+  maxProfit: 'الحد الاعلى للربح',
+  oldCost: 'القيمة السابقة',
 }
 
 export default labels

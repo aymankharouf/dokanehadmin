@@ -18,7 +18,9 @@ const Reducer = (state, action) => {
           weight: action.params.weight,
           isOffer: action.params.packStore.isOffer,
           exceedPriceType: action.params.exceedPriceType,
-          isDivided: action.params.pack.isDivided
+          isDivided: action.params.pack.isDivided,
+          refPackId: action.params.packStore.packId,
+          refPackQuantity: action.params.packStore.storeId === 's' || !action.params.packStore.quantity ? 1 : action.params.packStore.quantity
         }
         if (!state.basket.storeId) {
           return {...state, basket: {storeId: action.params.packStore.storeId, packs: [pack]}}

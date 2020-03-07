@@ -11,9 +11,10 @@ const AddBulk = props => {
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
   const [specialImage, setSpecialImage] = useState(false)
+  const [forSale, setForSale] = useState(true)
   const [image, setImage] = useState(null)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
+  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -21,6 +22,9 @@ const AddBulk = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (!forSale) setSpecialImage(false)
+  }, [forSale])
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
@@ -61,7 +65,8 @@ const AddBulk = props => {
         unitsCount: Number(subQuantity) * subPackInfo.unitsCount,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        isArchived: false
+        forSale,
+        isArchived: false,
       }
       addPack(pack, product, image, subPackInfo)
       showMessage(labels.addSuccess)
@@ -112,14 +117,25 @@ const AddBulk = props => {
           onBlur={() => generateName()}
         />
         <ListItem>
-          <span>{labels.specialImage}</span>
+          <span>{labels.forSale}</span>
           <Toggle 
-            name="specialImage" 
+            name="forSale" 
             color="green" 
-            checked={specialImage} 
-            onToggleChange={() => setSpecialImage(!specialImage)}
+            checked={forSale} 
+            onToggleChange={() => setForSale(!forSale)}
           />
         </ListItem>
+        {forSale ? 
+          <ListItem>
+            <span>{labels.specialImage}</span>
+            <Toggle 
+              name="specialImage" 
+              color="green" 
+              checked={specialImage} 
+              onToggleChange={() => setSpecialImage(!specialImage)}
+            />
+          </ListItem>
+        : ''}
         {specialImage ? 
           <ListInput 
             name="image" 

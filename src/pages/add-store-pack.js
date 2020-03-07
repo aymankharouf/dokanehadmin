@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { setup } from '../data/config'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
 
 const AddStorePack = props => {
@@ -10,7 +9,6 @@ const AddStorePack = props => {
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
   const [cost, setCost] = useState('')
-  const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id))
   const [isActive, setIsActive] = useState(store.isActive)
@@ -29,23 +27,13 @@ const AddStorePack = props => {
       setError('')
     }
   }, [error])
-  const getDefaultPrice = () => {
-    if (cost && packId) {
-      const pack = state.packs.find(p => p.id === packId)
-      if (pack.subQuantity > 1) {
-        setPrice((cost / pack.subQuantity * (1 + setup.profit)).toFixed(3))
-      } else {
-        setPrice((cost * (1 + setup.profit)).toFixed(3))
-      }
-    }
-  }
 
   const handleSubmit = async () => {
     try{
       if (state.packPrices.find(p => p.packId === packId && p.storeId === store.id)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(price) <= 0) {
+      if (Number(cost) <= 0) {
         throw new Error('invalidPrice')
       }
       if (offerDays && Number(offerDays) <= 0) {
@@ -56,16 +44,28 @@ const AddStorePack = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
+      const pack = state.packs.find(p => p.id === packId)
+      const packCategory = state.categories.find(c => c.id === pack.categoryId)
+      let price
+      if (isActive) {
+        if (store.type === '5' || !store.isActive) {
+          price = Math.trunc(cost * 1000 * (1 + (store.type === '5' ? packCategory.maxProfit : packCategory.minProfit)))
+        } else {
+          price = cost * 1000
+        }
+      } else {
+        price = 0
+      }
       const storePack = {
         packId,
         storeId: store.id,
-        cost: store.type === '5' ? cost * 1000 : price * 1000,
-        price: price * 1000,
+        cost: cost * 1000,
+        price,
         offerEnd,
         isActive,
         time: new Date()
       }
-      addPackPrice(storePack, state.packPrices, state.packs)
+      addPackPrice(storePack, state.packPrices, state.packs, state.stores)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -95,26 +95,14 @@ const AddStorePack = props => {
             )}
           </select>
         </ListItem>
-        {store.type === '5' ? 
-          <ListInput 
-            name="cost" 
-            label={labels.cost}
-            value={cost}
-            clearButton
-            type="number" 
-            onChange={e => setCost(e.target.value)}
-            onInputClear={() => setCost('')}
-            onBlur={() => getDefaultPrice()}
-          />
-        : ''}
         <ListInput 
-          name="price" 
-          label={labels.price}
-          value={price}
-          clearButton 
+          name="cost" 
+          label={labels.cost}
+          value={cost}
+          clearButton
           type="number" 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
+          onChange={e => setCost(e.target.value)}
+          onInputClear={() => setCost('')}
         />
         <ListInput 
           name="offerDays" 
@@ -136,7 +124,7 @@ const AddStorePack = props => {
           />
         </ListItem>
       </List>
-      {!packId || !price || (store.type === '5' && !cost) ? '' :
+      {!packId || !cost ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

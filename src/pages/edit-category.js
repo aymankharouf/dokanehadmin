@@ -11,6 +11,8 @@ const EditCategory = props => {
   const [error, setError] = useState('')
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [name, setName] = useState(category.name)
+  const [minProfit, setMinProfit] = useState(category.minProfit * 100)
+  const [maxProfit, setMaxProfit] = useState(category.maxProfit * 100)
   const [ordering, setOrdering] = useState(category.ordering)
   const [parentId, setParentId] = useState(category.parentId)
   const [isActive, setIsActive] = useState(category.isActive)
@@ -27,11 +29,13 @@ const EditCategory = props => {
   })
   useEffect(() => {
     if (name !== category.name
+    || minProfit !== category.minProfit * 100
+    || maxProfit !== category.maxProfit * 100
     || ordering !== category.ordering
     || parentId !== category.parentId
     || isActive !== category.isActive) setHasChanged(true)
     else setHasChanged(false)
-  }, [category, name, ordering, parentId, isActive])
+  }, [category, name, minProfit, maxProfit, ordering, parentId, isActive])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -44,10 +48,12 @@ const EditCategory = props => {
         ...category,
         parentId,
         name,
+        minProfit: minProfit / 100,
+        maxProfit: maxProfit / 100,
         ordering,
         isActive
       }
-      editCategory(newCategory, category.parentId, state.categories)
+      editCategory(newCategory, category, state.categories)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -87,6 +93,26 @@ const EditCategory = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
+          name="minProfit" 
+          label={labels.minProfit}
+          clearButton
+          type="number" 
+          value={minProfit}
+          onChange={e => setMinProfit(e.target.value)}
+          onInputClear={() => props.id === '0' ? setMinProfit('') : ''}
+          readonly={props.id !== '0'}
+        />
+        <ListInput 
+          name="maxProfit" 
+          label={labels.maxProfit}
+          clearButton
+          type="number" 
+          value={maxProfit}
+          onChange={e => setMaxProfit(e.target.value)}
+          onInputClear={() => props.id === '0' ? setMaxProfit('') : ''}
+          readonly={props.id !== '0'}
+        />
+        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
@@ -105,7 +131,7 @@ const EditCategory = props => {
           />
         </ListItem>
       </List>
-      {!name || !ordering || !hasChanged ? '' :
+      {!name || !ordering || !minProfit || !maxProfit || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

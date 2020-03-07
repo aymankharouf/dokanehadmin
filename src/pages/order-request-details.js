@@ -17,14 +17,11 @@ const OrderRequestDetails = props => {
       const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
       const newQuantity = order.requestBasket.find(bp => bp.packId === p.packId).quantity
       const changeQuantityNote = newQuantity === p.quantity ? '' : newQuantity > p.quantity ? `${labels.increase} ${newQuantity - p.quantity}` : `${labels.decrease} ${p.quantity - newQuantity}`
-      const newPriceLimit = order.requestBasket.find(bp => bp.packId === p.packId).priceLimit
-      const changePriceLimit = newPriceLimit === p.priceLimit ? '' : labels.changePriceLimit
       return {
         ...p,
         storeName,
         statusNote,
         changeQuantityNote,
-        changePriceLimit
       }
     }))
   }, [order, state.stores])
@@ -36,7 +33,7 @@ const OrderRequestDetails = props => {
   }, [error])
   const handleApprove = () => {
     try{
-      approveOrderRequest(order, state.orders, state.packPrices, state.packs)
+      approveOrderRequest(order, state.orders, state.packPrices, state.packs, state.categories)
       showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
@@ -58,8 +55,7 @@ const OrderRequestDetails = props => {
               after={(p.gross / 1000).toFixed(3)}
             >
               {p.changeQuantityNote ? <div className="list-subtext1">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
-              {p.changePriceLimit ? <div className="list-subtext2">{labels.changePriceLimit}</div> : ''}
-              <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              <div className="list-subtext2">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
             </ListItem>
           )}
           <ListItem 

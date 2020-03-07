@@ -21,7 +21,7 @@ const AddOffer = props => {
   const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [bonusPacks] = useState(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+    let packs = state.packs.filter(p => p.productId !== props.id && !p.isOffer && !p.byWeight && p.forSale)
     packs = packs.map(p => {
       return {
         id: p.id,
@@ -89,7 +89,8 @@ const AddOffer = props => {
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100,
         price: 0,
-        isArchived: false
+        forSale: true,
+        isArchived: false,
       }
       addPack(pack, product, image, subPackInfo)
       showMessage(labels.addSuccess)

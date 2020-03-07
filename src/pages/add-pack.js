@@ -52,8 +52,9 @@ const AddPack = props => {
         closeExpired: false,
         byWeight,
         isOffer: false,
+        price: 0,
+        forSale: true,
         isArchived: false,
-        price: 0
       }
       addPack(pack, product, image)
       showMessage(labels.addSuccess)

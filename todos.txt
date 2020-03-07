@@ -16,8 +16,6 @@
 *cost types & costs
 *localstorage for basket
 *edit product : name, section
-*order unit
-*friends discount
 *offers first (ordering products)
 *ordering products by type (product)
 *invitations
@@ -35,14 +33,10 @@
 *change password
 *resolve forget password from the system
 *request to cancel an order
-*old age flag for customers
 *image size
 *rate product discounts
-*withdrawals
 *show ratings count
 *edit orders
-*purchase discounts
-*forEach instead of for loop
 *in pack detail page show a button if there is offers of the same product
 *delivery fees by region not customer
 *products with weight
@@ -55,15 +49,11 @@
 *edit stock price
 *prevent multi input in forget password
 *rounding ratings
-*adjust other offers and comments buttons in pack details page
 *add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
-*add alternative mobile for customer
 *add link to customer info in order details page and others
-*add rating count to rating component
 *add discount value to customer info
 *prevent adding price alarms before approving previous one
 *modify edit price as add store pack
-*fixed fees percent
 *add store discount & location
 *add order limit for each pack 
 *add button to refresh price for pack
@@ -106,7 +96,6 @@
 *note for stop the service
 *blacklist customer who did not pick his order
 *archive data
-*offline db
 *notifications
 *add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
 *customer follow-up
@@ -124,7 +113,6 @@
 *merging orders
 *cancel a purchase or part of it
 *add hint to pack detail page as basket
-*create admin users & security for delivery person
 *store opening times
 *manage endoffer when approve alarm
 *add image product & pack names to basket
@@ -135,7 +123,6 @@
 *add note for change price in basket
 *prevent purchase pack return if any affacted order has been delivered
 *change request for only delivery type
-*handle realtime & useref
 *read archive by period
 *add stock trans archive, products & packs
 *hints & help
@@ -152,6 +139,9 @@
 *delete discount from purchase
 *active flag for price
 *alternative pack & best price flag & delete exceed price flag & change the way to handle weight
+*cost defer than price for any store
+*profit per category, for purchase from inactive stores & for each offer parts
+bulk in stock
 preloader for home page until loading data finished
 products without packs or all packs have 0 price
 logo cache

@@ -52,29 +52,21 @@ const RequestedPackDetails = props => {
       setError('')
     }
   }, [error])
-  const addToBasket = (packStore, requested, exceedPriceType) => {
+  const addToBasket = (packStore, exceedPriceType) => {
     try {
-      const packInfo = state.packs.find(p => p.id === packStore.packId)
       let quantity, params
-      if (packInfo.byWeight) {
+      if (packStore.packInfo.byWeight) {
         f7.dialog.prompt(labels.enterWeight, labels.actualWeight, weight => {
           try{
-            if (packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
+            if (packStore.packInfo.isDivided && packStore.storeId === 's' && packStore.quantity < Number(weight)) {
               throw new Error('notAvailableQuantityInStock')
             }
-            if (packStore.storeId === 's') {
-              quantity = Math.min(Number(requested), packStore.quantity)
-            } else if (packStore.quantity) {
-              quantity = Math.ceil(Number(requested) / packStore.quantity)
-            } else {
-              quantity = Number(requested)
-            }  
             params = {
-              pack: packInfo,
+              pack: packStore.packInfo,
               packStore,
-              quantity: pack.isDivided ? Number(weight) : quantity,
+              quantity: pack.isDivided ? Number(weight) : Number(props.quantity),
               price: Number(props.price),
-              requested,
+              requested: Number(props.quantity),
               orderId: props.orderId,
               weight: Number(weight),
               exceedPriceType
@@ -88,18 +80,18 @@ const RequestedPackDetails = props => {
         })
       } else {
         if (packStore.storeId === 's') {
-          quantity = Math.min(Number(requested), packStore.quantity)
+          quantity = Math.min(Number(props.quantity), packStore.quantity)
         } else if (packStore.quantity) {
-          quantity = Math.ceil(Number(requested) / packStore.quantity)
+          quantity = Math.ceil(Number(props.quantity) / packStore.quantity)
         } else {
-          quantity = Number(requested)
+          quantity = Number(props.quantity)
         }
         params = {
-          pack: packInfo,
+          pack: packStore.packInfo,
           packStore,
           quantity,
           price: Number(props.price),
-          requested,
+          requested: Number(props.quantity),
           exceedPriceType
         }
         dispatch({type: 'ADD_TO_BASKET', params})
@@ -125,13 +117,13 @@ const RequestedPackDetails = props => {
           throw new Error('alreadyInBasket')
         }
       }
-      if (Number(props.price) >= packStore.price) {
-        addToBasket(packStore, Number(props.quantity), 'n')
+      if (Number(props.price) >= packStore.unitPrice) {
+        addToBasket(packStore, 'n')
       } else {
         if (Number(props.price) >= pack.price) {
-          f7.dialog.confirm(labels.priceHigherThanRequested, labels.confirmationTitle, () => addToBasket(packStore, Number(props.quantity), 'o'))
+          f7.dialog.confirm(labels.priceHigherThanRequested, labels.confirmationTitle, () => addToBasket(packStore, 'o'))
         } else {
-          throw new Error('canNotPurchaseDueOverPrice')
+          f7.dialog.confirm(labels.overPricedPermission, labels.permissionTitle, () => addToBasket(packStore, 'p'))
         }
       }
     } catch(err) {
@@ -183,11 +175,11 @@ const RequestedPackDetails = props => {
           <ListItem 
             title={s.storeInfo.name}
             subtitle={`${s.packInfo.productName} ${s.packInfo.name}`}
-            text={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
+            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}${s.price === s.unitPrice ? '' : '(' + (s.unitPrice / 1000).toFixed(3) + ')'}`}
             footer={addQuantity(s.quantity, -1 * basketStockQuantity) > 0 ? `${labels.quantity}: ${addQuantity(s.quantity, -1 * basketStockQuantity)}` : ''}
             key={i++}
           >
-            {s.cost === s.price ? '' : <div className="list-subtext1">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}`}</div>}
+            <div className="list-subtext1">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}${s.cost === s.unitCost ? '' : '(' + (s.unitCost / 1000).toFixed(3) + ')'}`}</div>
             {s.isActive ? <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} /> : ''}
           </ListItem>
         )}

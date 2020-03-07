@@ -25,36 +25,23 @@ const PackDetails = props => {
     setPackStores(() => {
       let packStores = state.packPrices.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
       packStores = packStores.map(s => {
-        let packId, unitPrice, quantity, offerInfo, isOffer, price
+        let packId, unitPrice, quantity, offerInfo, isOffer
         if (s.packId === pack.id) {
           packId = s.packId
-          if (s.cost === s.price || s.storeId === 's') { // for type 5 get total price not unit price
-            price = s.price
-          } else {
-            price = s.cost
-          }
-          unitPrice = s.price 
+          unitPrice = s.price
           quantity = s.quantity
           isOffer = false
         } else {
-          offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id)
+          offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id && p.isOffer)
           if (offerInfo) {
             packId = offerInfo.id
-            if (s.cost === s.price || s.storeId === 's') { // for type 5 get cost as total price not unit price
-              unitPrice = Math.trunc(s.price / offerInfo.subQuantity * offerInfo.subPercent)
-              price = s.price
-              isOffer = true
-            } else {
-              unitPrice = s.price
-              price = s.cost
-              isOffer = false
-            }
+            unitPrice = Math.trunc(s.price * offerInfo.subPercent / offerInfo.subQuantity)
             quantity = offerInfo.subQuantity
+            isOffer = true
           } else {
             offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
             if (offerInfo) {
               packId = offerInfo.id
-              price = s.price
               unitPrice = Math.trunc(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent)
               quantity = offerInfo.bonusQuantity
               isOffer = true
@@ -67,10 +54,8 @@ const PackDetails = props => {
           storeInfo,
           packId,
           quantity,
-          price,
           unitPrice,
           isOffer,
-          isActive: s.isActive
         }
       })
       packStores = packStores.filter(s => s.packId && (s.storeId !== 's' || (s.storeId === 's' && s.quantity > 0)))
@@ -139,7 +124,7 @@ const PackDetails = props => {
   const handleDeletePrice = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        deleteStorePack(currentStorePack, state.packPrices, state.packs)
+        deleteStorePack(currentStorePack, state.packPrices, state.packs, state.stores)
         showMessage(labels.deleteSuccess)
       } catch(err) {
         setError(getMessage(props, err))
@@ -209,7 +194,8 @@ const PackDetails = props => {
   }
   const handleChangeStatus = () => {
     try{
-      changeStorePackStatus(currentStorePack, state.packPrices, state.packs)
+      const store = state.stores.find(s => s.id === currentStorePack.storeId)
+      changeStorePackStatus(currentStorePack, state.packPrices, state.packs, store)
       showMessage(labels.editSuccess)
     } catch(err) {
       setError(getMessage(props, err))
@@ -248,8 +234,8 @@ const PackDetails = props => {
         {packStores.map(s => 
           <ListItem 
             title={s.storeInfo.name}
-            subtitle={`${labels.unitPrice}: ${(s.unitPrice / 1000).toFixed(3)}`}
-            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}`}
+            subtitle={`${labels.cost}: ${(s.cost / 1000).toFixed(3)}`}
+            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}${s.unitPrice === s.price ? '' : '(' + (s.price / 1000).toFixed(3) + ')'}`}
             footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
             key={i++}
             className={currentStorePack?.storeId === s.storeId ? 'selected' : ''}
@@ -257,7 +243,7 @@ const PackDetails = props => {
             {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.isOffer ? <Badge slot="text" color='green'>{labels.offer}</Badge> : ''}
-            <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/>
+            {s.isAuto ? '' : <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/>}
           </ListItem>
         )}
       </List>
