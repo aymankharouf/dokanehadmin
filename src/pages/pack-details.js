@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { deleteStorePack, haltOffer, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { getPackStores, deleteStorePack, haltOffer, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import labels from '../data/labels'
@@ -23,61 +23,24 @@ const PackDetails = props => {
   const [packStores, setPackStores] = useState([])
   useEffect(() => {
     setPackStores(() => {
-      let packStores = state.packPrices.filter(p => (p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))))
-      packStores = packStores.map(s => {
-        let packId, unitPrice, quantity, offerInfo, isOffer
-        if (s.packId === pack.id) {
-          packId = s.packId
-          unitPrice = s.price
-          quantity = s.quantity
-          isOffer = false
-        } else {
-          offerInfo = state.packs.find(p => p.id === s.packId && p.subPackId === pack.id && p.isOffer)
-          if (offerInfo) {
-            packId = offerInfo.id
-            unitPrice = Math.trunc(s.price * offerInfo.subPercent / offerInfo.subQuantity)
-            quantity = offerInfo.subQuantity
-            isOffer = true
-          } else {
-            offerInfo = state.packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
-            if (offerInfo) {
-              packId = offerInfo.id
-              unitPrice = Math.trunc(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent)
-              quantity = offerInfo.bonusQuantity
-              isOffer = true
-            }
-          }
-        }
-        const storeInfo = state.stores.find(st => st.id === s.storeId)
-        return {
-          ...s,
-          storeInfo,
-          packId,
-          quantity,
-          unitPrice,
-          isOffer,
-        }
-      })
-      packStores = packStores.filter(s => s.packId && (s.storeId !== 's' || (s.storeId === 's' && s.quantity > 0)))
+      const packStores = getPackStores(pack, state.packPrices, state.stores, state.packs)
       const today = new Date()
       today.setDate(today.getDate() - 30)
       return packStores.sort((s1, s2) => 
       {
         if (s1.unitPrice === s2.unitPrice) {
-          const store1 = state.stores.find(s => s.id === s1.storeId)
-          const store2 = state.stores.find(s => s.id === s2.storeId)
-          if (store1.type === store2.type){
-            if (store2.discount === store1.discount) {
+          if (s1.storeInfo.type === s2.storeInfo.type){
+            if (s2.storeInfo.discount === s1.storeInfo.discount) {
               const store1Purchases = state.purchases.filter(p => p.storeId === s1.storeId && p.time.toDate() < today)
               const store2Purchases = state.purchases.filter(p => p.storeId === s2.storeId && p.time.toDate() < today)
               const store1Sales = store1Purchases.reduce((sum, p) => sum + p.total, 0)
               const store2Sales = store2Purchases.reduce((sum, p) => sum + p.total, 0)
               return store1Sales - store2Sales
             } else {
-              return Number(store2.discount) - Number(store1.discount)
+              return Number(s2.storeInfo.discount) - Number(s1.storeInfo.discount)
             }
           } else {
-            return Number(store1.type) - Number(store2.type)
+            return Number(s1.storeInfo.type) - Number(s2.storeInfo.type)
           }
         } else {
           return s1.unitPrice - s2.unitPrice
@@ -124,7 +87,7 @@ const PackDetails = props => {
   const handleDeletePrice = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        deleteStorePack(currentStorePack, state.packPrices, state.packs, state.stores)
+        deleteStorePack(currentStorePack, state.packPrices, state.packs)
         showMessage(labels.deleteSuccess)
       } catch(err) {
         setError(getMessage(props, err))
@@ -194,8 +157,7 @@ const PackDetails = props => {
   }
   const handleChangeStatus = () => {
     try{
-      const store = state.stores.find(s => s.id === currentStorePack.storeId)
-      changeStorePackStatus(currentStorePack, state.packPrices, state.packs, store)
+      changeStorePackStatus(currentStorePack, state.packPrices, state.packs)
       showMessage(labels.editSuccess)
     } catch(err) {
       setError(getMessage(props, err))
@@ -208,11 +170,11 @@ const PackDetails = props => {
       storeId: storePackInfo.storeId,
       price: storePackInfo.price,
       cost: storePackInfo.cost,
-      quantity: storePackInfo.quantity,
       offerEnd: storePackInfo.offerEnd,
       isActive: storePackInfo.isActive,
       time: storePackInfo.time
     }
+    if (storePackInfo.quantity) storePack['quantity'] = storePackInfo.quantity
     setCurrentStorePack(storePack)
     actionsList.current.open()
   }
@@ -234,16 +196,18 @@ const PackDetails = props => {
         {packStores.map(s => 
           <ListItem 
             title={s.storeInfo.name}
-            subtitle={`${labels.cost}: ${(s.cost / 1000).toFixed(3)}`}
-            text={`${labels.price}: ${(s.price / 1000).toFixed(3)}${s.unitPrice === s.price ? '' : '(' + (s.price / 1000).toFixed(3) + ')'}`}
+            subtitle={s.packId === pack.id ? '' : `${s.packInfo.productName}${s.packInfo.productAlias ? '-' + s.packInfo.productAlias : ''}`}
+            text={s.packId === pack.id ? '' : s.packInfo.name}
             footer={s.quantity > 0 ? `${labels.quantity}: ${quantityText(s.quantity)}` : ''}
             key={i++}
-            className={currentStorePack?.storeId === s.storeId ? 'selected' : ''}
+            className={currentStorePack?.storeId === s.storeId && currentStorePack?.packId === s.packId ? 'selected' : ''}
           >
-            {s.offerEnd ? <div className="list-subtext1">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
+            <div className="list-subtext1">{`${labels.price}: ${(s.price / 1000).toFixed(3)}${s.price === s.unitPrice ? '' : '(' + (s.unitPrice / 1000).toFixed(3) + ')'}`}</div>
+            <div className="list-subtext2">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}${s.cost === s.unitCost ? '' : '(' + (s.unitCost / 1000).toFixed(3) + ')'}`}</div>
+            {s.offerEnd ? <div className="list-subtext3">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
-            {s.isOffer ? <Badge slot="text" color='green'>{labels.offer}</Badge> : ''}
-            {s.isAuto ? '' : <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/>}
+            {s.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
+            {s.packId === pack.id && !s.isAuto ? <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/> : ''}
           </ListItem>
         )}
       </List>
@@ -272,9 +236,9 @@ const PackDetails = props => {
         </FabButtons>
       </Fab>
       <Actions ref={actionsList}>
-        {state.stores.find(s => s.id === currentStorePack.storeId)?.isActive ? 
+        {currentStorePack.storeId === 's' ? '' :
           <ActionsButton onClick={() => handleChangeStatus()}>{currentStorePack.isActive ? labels.deactivate : labels.activate}</ActionsButton>
-        : ''}
+        }
         {currentStorePack.storeId === 's' && currentStorePack.quantity === 0 ? '' : 
           <ActionsButton onClick={() => props.f7router.navigate(`/edit-price/${currentStorePack.packId}/store/${currentStorePack.storeId}`)}>{labels.editPrice}</ActionsButton>
         }

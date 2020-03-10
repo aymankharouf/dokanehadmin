@@ -41,7 +41,7 @@ const AddProduct = props => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       if (state.products.find(p => p.categoryId === categoryId && p.country === country && p.name === name && p.alias === alias)) {
         throw new Error('duplicateProduct')

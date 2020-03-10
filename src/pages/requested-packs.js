@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
-import { quantityText, getRequestedPacks, getRequestedPackStores } from '../data/actions'
+import { quantityText, getRequestedPacks, getPackStores } from '../data/actions'
 import labels from '../data/labels'
 
 const RequestedPacks = props => {
@@ -13,8 +13,9 @@ const RequestedPacks = props => {
 			let packs = getRequestedPacks(state.orders, state.basket, state.packs)
 			if (props.id){
 				packs = packs.filter(p => {
-					const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-					const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.packPrices, state.stores, state.packs)
+					const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId || state.packs.find(pa => pa.id === bp.packId && (pa.subPackId === p.packId || pa.bonusPackId === p.packId)))
+					const basketStockQuantity = (basketStock?.quantity * basketStock?.refQuantity) || 0
+					const packStores = getPackStores(p.packInfo, state.packPrices, state.stores, state.packs, basketStockQuantity)
 					return packStores.find(ps => ps.storeId === props.id)
 				})	
 			}

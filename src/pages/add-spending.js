@@ -41,10 +41,10 @@ const AddSpending = props => {
       setError('')
     }
   }, [error])
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try{
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
-      await addSpending({
+      addSpending({
         type,
         spendingAmount: spendingAmount * 1000,
         spendingDate: formatedDate,

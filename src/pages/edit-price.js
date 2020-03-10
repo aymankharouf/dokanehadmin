@@ -11,6 +11,7 @@ const EditPrice = props => {
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId))
   const [cost, setCost] = useState('')
+  const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
     if (error) {
@@ -18,8 +19,21 @@ const EditPrice = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (cost) {
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(3))
+    } else {
+      setPrice(0)
+    }
+  }, [cost, store])
   const handleEdit = () => {
     try{
+      if (Number(cost) <= 0) {
+        throw new Error('invalidPrice')
+      }
+      if (Number(price) < Number(cost)) {
+        throw new Error('invalidPrice')
+      }
       if (offerDays && Number(offerDays) <= 0) {
         throw new Error('invalidPeriod')
       }
@@ -28,25 +42,14 @@ const EditPrice = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
-      const packCategory = state.categories.find(c => c.id === pack.categoryId)
-      let price
-      if (storePack.isActive) {
-        if (store.type === '5' || !store.isActive) {
-          price = Math.trunc(cost * 1000 * (1 + (store.type === '5' ? packCategory.maxProfit : packCategory.minProfit)))
-        } else {
-          price = cost * 1000
-        }
-      } else {
-        price = 0
-      }
       const newStorePack = {
         ...storePack,
-        price,
         cost: cost * 1000,
+        price : price * 1000,
         offerEnd,
         time: new Date()
       }
-      editPrice(newStorePack, storePack.price, state.packPrices, state.packs, state.stores)
+      editPrice(newStorePack, storePack.price, state.packPrices, state.packs)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {
@@ -79,6 +82,13 @@ const EditPrice = props => {
           readonly
         />
         <ListInput 
+          name="oldPrice" 
+          label={labels.oldPrice}
+          value={(storePack.price / 1000).toFixed(3)}
+          type="text" 
+          readonly
+        />
+        <ListInput 
           name="cost" 
           label={labels.cost}
           clearButton 
@@ -86,6 +96,15 @@ const EditPrice = props => {
           value={cost}
           onChange={e => setCost(e.target.value)}
           onInputClear={() => setCost('')}
+        />
+        <ListInput 
+          name="price" 
+          label={labels.price}
+          clearButton 
+          type="number" 
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+          onInputClear={() => setPrice('')}
         />
         <ListInput 
           name="offerDays" 
@@ -97,7 +116,7 @@ const EditPrice = props => {
           onInputClear={() => setOfferDays('')}
         />
       </List>
-      {!cost || Number(cost) <= 0 || cost * 1000 === storePack.cost ? '' :
+      {!cost ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

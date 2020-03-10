@@ -22,6 +22,8 @@ const Basket = props => {
       if (pack.quantity === pack.requested) return
       if (pack.quantity === stock.quantity) return
     }
+    if (pack.isDivided) return
+    if (pack.orderId && pack.quantity === pack.requested) return
     dispatch({type: 'INCREASE_QUANTITY', pack})
   }
   let i = 0  

@@ -3,7 +3,7 @@ import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, A
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
-import { showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { showMessage, showError, getMessage, quantityText, openStockPack } from '../data/actions'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -74,6 +74,15 @@ const StockPackTrans = props => {
       }      
     })
   }
+  const handleOpen = () => {
+    try{
+      openStockPack(stockPackInfo, state.packPrices, state.packs)
+      showMessage(labels.executeSuccess)
+      props.f7router.back()
+    } catch(err) {
+      setError(getMessage(props, err))
+    }      
+  }
   return(
     <Page>
       <Navbar title={`${pack.productName} ${pack.name}`} backLink={labels.back} />
@@ -93,20 +102,21 @@ const StockPackTrans = props => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => actionsList.current.open()}>
-        <Icon material="build"></Icon>
-      </Fab>
+      {stockPackInfo.quantity === 0 ? '' :
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => actionsList.current.open()}>
+          <Icon material="build"></Icon>
+        </Fab>
+      }
       <Actions ref={actionsList}>
-        {stockPackInfo.quantity === 0 ? '' :
-          <React.Fragment>
-            {packTrans[0]?.storeInfo?.allowReturn ? 
-              <ActionsButton onClick={() => handleAddTrans('r')}>{labels.return}</ActionsButton>
-            : ''}
-            <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>
-            <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
-            <ActionsButton onClick={() => handleAddTrans('s')}>{labels.sell}</ActionsButton>
-          </React.Fragment>
-        }
+        {pack.subPackId ? 
+          <ActionsButton onClick={() => handleOpen()}>{labels.open}</ActionsButton>
+        : ''}
+        {packTrans[0]?.storeInfo?.allowReturn ? 
+          <ActionsButton onClick={() => handleAddTrans('r')}>{labels.return}</ActionsButton>
+        : ''}
+        <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>
+        <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
+        <ActionsButton onClick={() => handleAddTrans('s')}>{labels.sell}</ActionsButton>
       </Actions>
       <Toolbar bottom>
         <BottomToolbar/>

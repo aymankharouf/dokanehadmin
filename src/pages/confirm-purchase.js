@@ -31,7 +31,7 @@ const ConfirmPurchase = props => {
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    
       } else {
-        confirmPurchase(state.basket.packs, state.orders, store, state.packPrices, state.packs, state.categories, total)
+        confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, total)
         showMessage(labels.purchaseSuccess)
         props.f7router.navigate('/home/', {reloadAll: true})
         dispatch({type: 'CLEAR_BASKET'})    

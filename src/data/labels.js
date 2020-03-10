@@ -354,7 +354,6 @@ const labels = {
   enterDeliveryTime: 'ادخل وقت التسليم',
   duplicateName: 'اﻻسم مكرر',
   alreadyRegistered: 'رقم الموبايل مستخدم من قبل مستخدم آخر',
-  notAvailableQuantityInStock: 'لا يوجد كمية كافية في المستودع',
   specialImage: 'صورة خاصة',
   duplicateProduct: 'المنتج مكرر',
   addPayment: 'اضافة دفعة',
@@ -367,7 +366,9 @@ const labels = {
   overPricedPermission: 'هل تم تأكيد الموافقة على تجاوز السعر؟',
   minProfit: 'الحد الادنى للربح',
   maxProfit: 'الحد الاعلى للربح',
-  oldCost: 'القيمة السابقة',
+  oldCost: 'التكلفة السابقة',
+  oldPrice: 'السعر السابق',
+  open: 'فتح'
 }
 
 export default labels

@@ -54,7 +54,7 @@ const AlarmDetails = props => {
   }, [error])
   const handleApprove = () => {
     try{
-      approveAlarm(userInfo, alarm, newPackId, customerInfo, state.packPrices, state.packs, state.stores)
+      approveAlarm(userInfo, alarm, newPackId, customerInfo, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
 			props.f7router.back()
     } catch(err) {

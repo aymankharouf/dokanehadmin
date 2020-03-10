@@ -5,6 +5,7 @@ export const setup = {
   returnPenalty: 100,
   invitationDiscount: 50,
   firstOrderDiscount: 100,
+  profit: 0.05
 }
 
 export const randomColors = [
@@ -51,6 +52,7 @@ export const stockTransTypes = [
   {id: 'g', name: 'تبرع'},
   {id: 'r', name: 'ارجاع'},
   {id: 's', name: 'بيع'},
+  {id: 'c', name: 'فتح'}
 ]
 
 export const spendingTypes = [

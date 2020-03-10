@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
-import { getRequestedPacks, getRequestedPackStores } from '../data/actions'
+import { getRequestedPacks, getPackStores } from '../data/actions'
 import labels from '../data/labels'
 
 const PurchasePlan = props => {
@@ -17,7 +17,7 @@ const PurchasePlan = props => {
 		const packs = getRequestedPacks(approvedOrders, state.basket, state.packs)
 		packs.forEach(p => {
 			const basketStock = state.basket.storeId === 's' && state.basket.packs.find(bp => bp.packId === p.packId)
-			const packStores = getRequestedPackStores(p.packInfo, (basketStock?.quantity || 0), state.packPrices, state.stores, state.packs)
+			const packStores = getPackStores(p.packInfo, state.packPrices, state.stores, state.packs, (basketStock?.quantity || 0))
 			packStores.forEach(ps => {
 				const found = storesArray.findIndex(s => s.store.id === ps.storeId)
 				if (found > -1) {

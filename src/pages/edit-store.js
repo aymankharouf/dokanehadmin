@@ -70,7 +70,7 @@ const EditStore = props => {
         mapPosition,
         openTime
       }
-      editStore(newStore, store.isActive, state.packPrices, state.packs)
+      editStore(newStore)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

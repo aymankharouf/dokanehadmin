@@ -58,11 +58,11 @@ const EditOrder = props => {
   const handleSubmit = () => {
     try{
       if (props.type === 'e') {
-        editOrder(order, state.orderBasket, state.packPrices, state.packs, state.categories)
+        editOrder(order, state.orderBasket, state.packPrices, state.packs)
       } else {
         const userLocation = state.users.find(c => c.id === order.userId).locationId
         const locationFees = state.locations.find(l => l.id === userLocation).fees
-        returnOrder(order, state.orderBasket, locationFees, state.packPrices, state.packs, state.categories)
+        returnOrder(order, state.orderBasket, locationFees, state.packPrices, state.packs)
       }
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})

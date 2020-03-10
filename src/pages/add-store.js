@@ -39,11 +39,11 @@ const AddStore = props => {
     }
   }, [error])
   const handleSubmit = () => {
-    if (discount && discount <= 0) {
-      throw new Error('invalidValue')
-    }
     try{
-      addStore({
+      if (Number(discount) <= 0) {
+        throw new Error('invalidValue')
+      }
+      const store = {
         name,
         type,
         discount : discount / 100,
@@ -55,7 +55,8 @@ const AddStore = props => {
         address,
         balance: 0,
         time: new Date()
-      })
+      }
+      addStore(store)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -159,7 +160,7 @@ const AddStore = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage ? '' :
+      {!name || !discount || !type || mobileErrorMessage ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

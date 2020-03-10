@@ -141,7 +141,7 @@
 *alternative pack & best price flag & delete exceed price flag & change the way to handle weight
 *cost defer than price for any store
 *profit per category, for purchase from inactive stores & for each offer parts
-bulk in stock
+*bulk in stock & open pack action
 preloader for home page until loading data finished
 products without packs or all packs have 0 price
 logo cache

@@ -8,6 +8,7 @@ const AddPackStore = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [cost, setCost] = useState('')
+  const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [storeId, setStoreId] = useState('')
@@ -28,12 +29,22 @@ const AddPackStore = props => {
   useEffect(() => {
     setIsActive(store.isActive || false)
   }, [store])
+  useEffect(() => {
+    if (cost) {
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(3))
+    } else {
+      setPrice(0)
+    }
+  }, [cost, store])
   const handleSubmit = () => {
     try{
       if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(cost) <= 0) {
+        throw new Error('invalidPrice')
+      }
+      if (Number(price) < Number(cost)) {
         throw new Error('invalidPrice')
       }
       if (offerDays && Number(offerDays) <= 0) {
@@ -44,27 +55,16 @@ const AddPackStore = props => {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
-      const packCategory = state.categories.find(c => c.id === pack.categoryId)
-      let price
-      if (isActive) {
-        if (store.type === '5' || !store.isActive) {
-          price = Math.trunc(cost * 1000 * (1 + (store.type === '5' ? packCategory.maxProfit : packCategory.minProfit)))
-        } else {
-          price = cost * 1000
-        }
-      } else {
-        price = 0
-      }
       const storePack = {
         packId: pack.id,
         storeId,
         cost: cost * 1000,
-        price,
+        price: price * 1000,
         offerEnd,
         isActive,
         time: new Date()
       }
-      addPackPrice(storePack, state.packPrices, state.packs, state.stores)
+      addPackPrice(storePack, state.packPrices, state.packs)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -102,6 +102,15 @@ const AddPackStore = props => {
           type="number" 
           onChange={e => setCost(e.target.value)}
           onInputClear={() => setCost('')}
+        />
+        <ListInput 
+          name="price" 
+          label={labels.price}
+          value={price}
+          clearButton
+          type="number" 
+          onChange={e => setPrice(e.target.value)}
+          onInputClear={() => setPrice('')}
         />
         <ListInput 
           name="offerDays" 

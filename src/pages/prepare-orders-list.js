@@ -33,7 +33,7 @@ const PrepareOrdersList = props => {
   }, [error])
   const handleAllocate = order => {
     try{
-      allocateOrderPack(order, pack, state.stores)
+      allocateOrderPack(order, pack)
       showMessage(labels.editSuccess)
       props.f7router.back()
     } catch(err) {

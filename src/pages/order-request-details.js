@@ -33,7 +33,7 @@ const OrderRequestDetails = props => {
   }, [error])
   const handleApprove = () => {
     try{
-      approveOrderRequest(order, state.orders, state.packPrices, state.packs, state.categories)
+      approveOrderRequest(order, state.orders, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
       props.f7router.back()
     } catch(err) {
