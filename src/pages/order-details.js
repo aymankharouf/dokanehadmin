@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder, SetDeliveryTime } from '../data/actions'
 import labels from '../data/labels'
@@ -153,6 +153,7 @@ const OrderDetails = props => {
               <div className="list-subtext1">{p.priceNote}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <div className="list-subtext3">{p.storeId ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              {p.closeExpired ? <Badge slot="title" color="red">{labels.closeExpired}</Badge> : ''}
             </ListItem>
           )}
           <ListItem 

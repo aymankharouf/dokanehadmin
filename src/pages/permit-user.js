@@ -102,7 +102,7 @@ const PermitUser = props => {
           </select>
         </ListItem>
       </List>
-      {!userId ? '' :
+      {!userId || !storeId ? '' :
         <Button text={labels.permit} href="#" large onClick={() => handlePermit()} />
       }
     </Page>

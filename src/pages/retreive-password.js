@@ -10,17 +10,11 @@ const RetreivePassword = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === props.id))
-  const [userInfo, setUserInfo] = useState('')
-  const [password, setPassword] = useState('')
-  useEffect(() => {
-    setUserInfo(() => state.users.find(u => u.mobile === passwordRequest.mobile))
-  }, [state.users, passwordRequest])
-  useEffect(() => {
-    setPassword(() => {
-      const password = userInfo.colors.map(c => randomColors.find(rc => rc.name === c).id)
-      return password.join('')
-    })
-  }, [userInfo])
+  const [userInfo] = useState(() => state.users.find(u => u.mobile === passwordRequest.mobile))
+  const [password] = useState(() => {
+    const password = userInfo?.colors?.map(c => randomColors.find(rc => rc.name === c).id)
+    return password?.join('')
+  })
   useEffect(() => {
     if (error) {
       showError(error)
@@ -43,21 +37,21 @@ const RetreivePassword = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          value={userInfo.name}
+          value={userInfo?.name || labels.unknown}
           type="text" 
           readonly
         />
         <ListInput 
           name="mobile" 
           label={labels.mobile}
-          value={userInfo.mobile}
+          value={passwordRequest.mobile}
           type="number"
           readonly
         />
         <ListInput 
           name="password" 
           label={labels.password}
-          value={password}
+          value={password || ''}
           type="number"
           readonly
         />

@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import labels from '../data/labels'
-import { haltOffer, showMessage, getMessage, showError } from '../data/actions'
+import { changeStorePackStatus, showMessage, getMessage, showError } from '../data/actions'
 
 const Offers = props => {
   const { state } = useContext(StoreContext)
@@ -38,15 +38,14 @@ const Offers = props => {
       if (offerEndDate > today) {
         f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
           try{
-            haltOffer(storePack, state.packPrices, state.packs)
+            changeStorePackStatus(storePack, state.packPrices, state.packs)
             showMessage(labels.haltSuccess)
-            props.f7router.back()  
           } catch(err) {
             setError(getMessage(props, err))
           }
         })
       } else {
-        haltOffer(storePack, state.packPrices, state.packs)
+        changeStorePackStatus(storePack, state.packPrices, state.packs)
         showMessage(labels.haltSuccess)
       }
     } catch(err) {
@@ -65,16 +64,14 @@ const Offers = props => {
               <ListItem
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.name}
-                text={`${labels.productOf} ${p.packInfo.trademark ? labels.company + ' ' + p.packInfo.trademark + '-' : ''}${p.packInfo.country}`}
+                text={`${labels.storeName}: ${p.storeName}`}
                 footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
                 key={i++}
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-                {p.storeName ? <div className="list-subtext1">{`${labels.storeName}: ${p.storeName}`}</div> : ''}
-                <div className="list-subtext2">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
-                {p.price === 0 ? '' : 
-                  <Button text={labels.haltOffer} slot="after" onClick={() => handleHaltOffer(p)} />
-                }
+                <div className="list-subtext1">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
+                {p.isActive ? '' : <Badge slot="text" color='red'>{labels.inActive}</Badge>}
+                {p.isActive ? <Button text={labels.haltOffer} slot="after" onClick={() => handleHaltOffer(p)} /> : ''}
               </ListItem>
             )
           }

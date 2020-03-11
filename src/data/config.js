@@ -2,7 +2,7 @@ export const setup = {
   fixedFees: 0.01,
   maxDiscount: 100,
   orderLimit: 50000,
-  returnPenalty: 100,
+  returnPenalty: 50,
   invitationDiscount: 50,
   firstOrderDiscount: 100,
   profit: 0.05
@@ -38,10 +38,10 @@ export const orderStatus = [
 
 export const storeTypes = [
   {id: '1', name: 'المستودع'},
-  {id: '2', name: 'دكانة'},
-  {id: '3', name: 'محل'},
-  {id: '4', name: 'سوبرماركت'},
-  {id: '5', name: 'محل جملة'}
+  {id: '2', name: 'صغير'},
+  {id: '3', name: 'متوسط'},
+  {id: '4', name: 'كبير'},
+  {id: '5', name: 'جملة'}
 ]
 
 export const stockTransTypes = [
@@ -96,7 +96,7 @@ export const friendStatus = [
   {id: 'n', name: 'قيد الموافقة'},
   {id: 's', name: 'ارسلت الدعوة'},
   {id: 'o', name: 'مدعو سابقا'},
-  {id: 'r', name: 'مسجل'}
+  {id: 'r', name: 'مستخدم فعلي'}
 ]
 
 export const paymentTypes = [

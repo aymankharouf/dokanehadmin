@@ -95,7 +95,8 @@ const labels = {
   customerDetails: 'تفاصيل العميل',
   orderLimit: 'سقف الطلبات',
   totalOrders: 'عدد الطلبات',
-  totalDeliveredOrders: 'الطلبات المستلمة',
+  deliveredOrdersCount: 'الطلبات المستلمة',
+  deliveredOrdersTotal: 'مجموع التعاملات',
   totalPayments: 'مجموع الدفعات',
   editCustomer: 'تعديل بيانات عميل',
   type: 'التصنيف',
@@ -136,7 +137,6 @@ const labels = {
   netProfit: 'صافي الربح',
   month: 'الشهر',
   year: 'السنة',
-  deliveredOrdersCount: 'الطلبات المستلمة',
   finishedOrdersCount: 'الطلبات الجاهزة',
   monthlyTrans: 'العمليات الشهرية',
   withdrawals: 'السحوبات',
@@ -154,7 +154,6 @@ const labels = {
   approvals: 'الموافقات',
   ratingDetails: 'تفاصيل التقييم',
   user: 'المستخدم',
-  comment: 'التعليق',
   notApprovedUser: 'يجب اعتماد صاحب الطلب اوﻻ',
   isActive: 'فعال',
   inActive: 'غير فعال',
@@ -368,7 +367,10 @@ const labels = {
   maxProfit: 'الحد الاعلى للربح',
   oldCost: 'التكلفة السابقة',
   oldPrice: 'السعر السابق',
-  open: 'فتح'
+  open: 'فتح',
+  notUsedProducts: 'منتجات غير مستخدمة',
+  unknown: 'غير معروف',
+  returnedCount: 'مرات اﻻرجاع'
 }
 
 export default labels

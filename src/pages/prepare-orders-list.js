@@ -49,7 +49,7 @@ const PrepareOrdersList = props => {
             <ListItem title={labels.noData} /> 
           : orders.map(o => 
               <ListItem
-                title={o.customerInfo.fullName}
+                title={o.customerInfo.name}
                 subtitle={`${labels.quantity}: ${o.basketInfo.weight || o.basketInfo.quantity}`}
                 key={o.id}
               >

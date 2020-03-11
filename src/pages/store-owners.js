@@ -32,7 +32,7 @@ const StoreOwners = props => {
           : storeOwners.map(o => 
               <ListItem 
                 link="#"
-                title={o.customerInfo.fullName} 
+                title={o.customerInfo.name} 
                 key={o.id} 
               />
             )

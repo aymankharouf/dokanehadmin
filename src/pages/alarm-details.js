@@ -72,7 +72,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={customerInfo.fullName}
+          value={customerInfo.name}
           type="text" 
           readonly
         />

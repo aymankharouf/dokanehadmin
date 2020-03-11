@@ -30,7 +30,7 @@ const Approvals = props => {
     setNotifyFriends(() => state.users.filter(u => u.notifyFriends?.length > 0))
   }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
   useEffect(() => {
-    setPasswordRequests(() => state.passwordRequests.filter(r => r.status === 'n'))
+    setPasswordRequests(() => state.passwordRequests)
   }, [state.passwordRequests]) 
   useEffect(() => {
     setSections(() => [

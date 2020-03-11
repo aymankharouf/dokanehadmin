@@ -51,6 +51,20 @@ export function register(config) {
         registerValidSW(swUrl, config);
       }
     });
+    window.addEventListener('install', function(event) {
+      event.waitUntil(
+        caches.open('logo').then(function(cache) {
+          return cache.addAll(
+            [
+              '/dokaneh_logo.png'
+            ]
+          )
+        })
+      )
+    })
+    window.addEventListener('fetch', function(event) {
+      event.respondWith(caches.match(event.request))
+    })
   }
 }
 

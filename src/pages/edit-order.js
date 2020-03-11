@@ -99,7 +99,7 @@ const EditOrder = props => {
               key={p.packId}
             >
               <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.price / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${((p.actual || p.price) / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <Stepper
                 slot="after"

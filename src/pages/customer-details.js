@@ -23,15 +23,22 @@ const CustomerDetails = props => {
         <ListInput 
           name="name" 
           label={labels.name}
-          value={customer.name}
+          value={userInfo.name}
           type="text" 
           readonly
         />
         <ListInput 
           name="fullName" 
           label={labels.fullName}
-          value={customer.fullName}
+          value={customer.name}
           type="text" 
+          readonly
+        />
+        <ListInput 
+          name="locationName" 
+          label={labels.location}
+          value={state.locations.find(l => l.id === userInfo.locationId).name}
+          type="text"
           readonly
         />
         <ListInput 
@@ -41,10 +48,6 @@ const CustomerDetails = props => {
           type="number"
           readonly
         />
-        <ListItem>
-          <span>{labels.isBlocked}</span>
-          <Toggle color="blue" checked={customer.isBlocked} disabled />
-        </ListItem>
         <ListInput 
           name="totalOrders" 
           label={labels.totalOrders}
@@ -53,17 +56,24 @@ const CustomerDetails = props => {
           readonly
         />
         <ListInput 
-          name="totalDeliveredOrders" 
-          label={labels.totalDeliveredOrders}
+          name="deliveredOrdersCount" 
+          label={labels.deliveredOrdersCount}
           value={customer.deliveredOrdersCount}
           type="number"
           readonly
         />
         <ListInput 
-          name="locationName" 
-          label={labels.location}
-          value={state.locations.find(l => l.id === userInfo.locationId).name}
-          type="text"
+          name="deliveredOrdersTotal" 
+          label={labels.deliveredOrdersTotal}
+          value={(customer.deliveredOrdersTotal / 1000).toFixed(3)}
+          type="number"
+          readonly
+        />
+        <ListInput 
+          name="returnedCount" 
+          label={labels.returnedCount}
+          value={customer.returnedCount}
+          type="number"
           readonly
         />
         <ListInput 
@@ -108,6 +118,10 @@ const CustomerDetails = props => {
           type="text" 
           readonly
         />
+        <ListItem>
+          <span>{labels.isBlocked}</span>
+          <Toggle color="blue" checked={customer.isBlocked} disabled />
+        </ListItem>
       </List>
       <Toolbar bottom>
         <BottomToolbar />

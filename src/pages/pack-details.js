@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Toolbar, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { getPackStores, deleteStorePack, haltOffer, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import labels from '../data/labels'
@@ -93,27 +93,6 @@ const PackDetails = props => {
         setError(getMessage(props, err))
       }
     })
-  }
-  const handleHaltOffer = () => {
-    try{
-      const offerEndDate = new Date(currentStorePack.offerEnd)
-      const today = (new Date()).setHours(0, 0, 0, 0)
-      if (offerEndDate > today) {
-        f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
-          try{
-            haltOffer(currentStorePack, state.packPrices, state.packs)
-            showMessage(labels.haltSuccess)
-          } catch(err) {
-            setError(getMessage(props, err))
-          }
-        })
-      } else {
-        haltOffer(currentStorePack, state.packPrices, state.packs)
-        showMessage(labels.haltSuccess)
-      }
-    } catch(err) {
-			setError(getMessage(props, err))
-		}
   }
   const handlePurchase = () => {
 		try{
@@ -248,9 +227,6 @@ const PackDetails = props => {
         {currentStorePack.storeId === 's' ? '' :
           <ActionsButton onClick={() => handlePurchase()}>{labels.purchase}</ActionsButton>
         }
-        {currentStorePack.offerEnd && currentStorePack.price > 0 ?
-          <ActionsButton onClick={() => handleHaltOffer()}>{labels.haltOffer}</ActionsButton>
-        : ''}
       </Actions>
       <Toolbar bottom>
         <BottomToolbar/>

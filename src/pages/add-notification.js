@@ -46,7 +46,7 @@ const AddNotification = props => {
           <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
             {customers.map(c => 
-              <option key={c.id} value={c.id}>{c.fullName}</option>
+              <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>
         </ListItem>

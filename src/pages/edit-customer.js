@@ -10,7 +10,7 @@ const EditCustomer = props => {
   const [error, setError] = useState('')
   const [customer] = useState(() => state.customers.find(c => c.id === props.id))
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
-  const [name, setName] = useState(customer.name)
+  const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
@@ -21,7 +21,7 @@ const EditCustomer = props => {
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
-    if (name !== customer.name
+    if (name !== userInfo.name
     || address !== customer.address
     || locationId !== userInfo.locationId
     || mapPosition !== customer.mapPosition
@@ -41,16 +41,14 @@ const EditCustomer = props => {
     try{
       const newCustomer = {
         ...customer,
-        name,
         address,
-        locationId,
         mapPosition,
         isBlocked,
         deliveryFees: deliveryFees * 1000,
         orderLimit: orderLimit * 1000,
         specialDiscount: specialDiscount * 1000
       }
-      editCustomer(newCustomer, userInfo.mobile, customer.storeId, state.stores)
+      editCustomer(newCustomer, name, locationId, userInfo.mobile, customer.storeId, state.stores)
       showMessage(labels.editSuccess)
       props.f7router.back()    
     } catch(err) {
@@ -87,10 +85,6 @@ const EditCustomer = props => {
               <option key={l.id} value={l.id}>{l.name}</option>
             )}
           </select>
-        </ListItem>
-        <ListItem>
-          <span>{labels.isBlocked}</span>
-          <Toggle color="blue" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
         <ListInput 
           name="deliveryFees" 
@@ -137,6 +131,10 @@ const EditCustomer = props => {
           onChange={e => setAddress(e.target.value)}
           onInputClear={() => setAddress('')}
         />
+        <ListItem>
+          <span>{labels.isBlocked}</span>
+          <Toggle color="red" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
+        </ListItem>
       </List>
       <Toolbar bottom>
         <BottomToolbar/>

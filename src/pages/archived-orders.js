@@ -74,7 +74,7 @@ const ArchivedOrders = props => {
           : orders.map(o => 
               <ListItem
                 link={`/order-details/${o.id}/type/a`}
-                title={o.customerInfo.fullName}
+                title={o.customerInfo.name}
                 subtitle={o.statusInfo.name}
                 text={moment(o.time.toDate()).fromNow()}
                 key={o.id}

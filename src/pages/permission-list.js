@@ -15,10 +15,8 @@ const PermissionList = props => {
       const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
       return customers.map(c => {
         const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
-        const userInfo = state.users.find(u => u.id === c.id)
         return {
           ...c,
-          name: `${c.name}:${userInfo.mobile}`,
           storeName
         }
       })

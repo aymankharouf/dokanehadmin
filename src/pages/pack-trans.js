@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
+import { quantityText } from '../data/actions'
 
 
 const PackTrans = props => {
@@ -37,12 +38,11 @@ const PackTrans = props => {
           : packTrans.map(t => 
               <ListItem
                 title={t.storeInfo.name}
-                subtitle={moment(t.time.toDate()).fromNow()}
+                subtitle={`${labels.quantity}: ${quantityText(t.quantity, t.weight)}`}
+                footer={moment(t.time.toDate()).fromNow()}
                 after={(t.cost / 1000).toFixed(3)}
                 key={t.id}
-              >
-                <Badge slot="title" color="red">{t.quantity}</Badge>
-              </ListItem>
+              />
             )
           }
         </List>

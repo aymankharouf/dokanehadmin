@@ -37,7 +37,7 @@ const OrderRequests = props => {
           : orderRequests.map(r => 
               <ListItem
                 link={`/order-request-details/${r.id}`}
-                title={r.customerInfo.fullName}
+                title={r.customerInfo.name}
                 subtitle={r.orderStatusInfo.name}
                 text={r.requestTypeInfo.name}
                 footer={moment(r.time.toDate()).fromNow()}

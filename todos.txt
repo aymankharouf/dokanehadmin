@@ -1,140 +1,104 @@
 *configure security
 *forget password
-*product status => stopped, active
-*add quantity in a store & offers
 *customer limit
 *order status => active, postpond, rejected, in-execution, ready, canceled, delayed, in stoke
+*edit product : name, section
 *pick an order
 *cancel an order
 *finished orders
-*not picked orders
-*net profit & sales (daily, weekly, monthly, yearly)
 *cancel part of an order(prices changing or not avaliable)
 *dokaneh stores - purshasing & not picked orders
-*in stoke (quantity & net value)
-*offers: packages, discounts for group, extra
-*cost types & costs
 *localstorage for basket
-*edit product : name, section
 *offers first (ordering products)
-*ordering products by type (product)
-*invitations
+*offers: packages, discounts for group, extra
 *user as store admin
+*invitations
 *categorize stores, ordering stores for equity : oldest trans, less purchase, most active
-*outdated offers
 *rounding
 *offerend in price alarm
+*outdated offers
+*offer end date to user
+*add page for logs
+*update minprice after each purchase to stock, offers expired, edit price
+*prevent multi input in forget password
+*add store discount & location
 *prevent blacklist users from login or do any action
+*show ratings count
+*add button to refresh price for pack
+*favorites
+*notifications
+*friends
+*manage endoffer when approve alarm
+*store opening times
+*most wanted products
+*add all for every category
+*image size
+*change password
+*edit orders
+*add link to customer info in order details page and others
+*edit stock price
+*add heirarcy to categories and delete sections
+*add note for change price in basket
+*modify owner page to categorize his products
+*purchase history by category for the user
+*delivery fees by region not customer
+*add delivery fees for customer
+*user name and customer name
+*in pack detail page show a button if there is offers of the same product
+*prevent adding price alarms before approving previous one
+*offline
+*add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
+*customer follow-up
+*advertisements
+*note for stop the service
+*expiration flag on pack
+*distribute purchased packs to prepared orders
+*before confirm order check if there is new prices or not
+
+*net profit & sales (daily, weekly, monthly, yearly)
+*in stoke (quantity & net value)
+*cost types & costs
 *from more than one store
 *stock trans (in & out)
-*prevent purchase with price above requested price
-*purchase from the lowest price always
 *average price for purchase pack in order
-*change password
-*resolve forget password from the system
 *request to cancel an order
-*image size
-*rate product discounts
-*show ratings count
-*edit orders
-*in pack detail page show a button if there is offers of the same product
-*delivery fees by region not customer
 *products with weight
-*resolve page freeze when relogin
-*update minprice after each purchase to stock
-*update minprice for offers expired tonight
-*update minprice after edit price
-*delete customer types and add flags
-*seperate store prices in different table
-*edit stock price
-*prevent multi input in forget password
-*rounding ratings
-*add new page to show purchase trans for each pack and replace it when calling pack trans from pack details page
-*add link to customer info in order details page and others
-*add discount value to customer info
-*prevent adding price alarms before approving previous one
-*modify edit price as add store pack
-*add store discount & location
-*add order limit for each pack 
-*add button to refresh price for pack
-*add page for logs
 *last month sales in store ordering
 *warning order limit earlier when adding to basket
-*distribute purchases packs to prepared orders
 *deduction for returned quantity which get from any discount
-*add user friendly pages for delivery center & delivery car
 *donate from stock
 *destroy patch in stock
 *return to a store except type 5
-*send to delivery center trans and get back
 *sell stock packs to another store
-*before confirm order check if there is new prices or not
-*two images for composite pack
-*expiration flag on pack
-*product flags: fresh, frozen, cold
 *related products
-*no rating for non trademarks products
 *handle delete operation store pack
-*overpriced text
 *partial purchase from offer
-*max discount for first order
-*over price limit for each customer (default 0)
 *force purchase with price above requested price (loss)
-*add delivery fees for customer
-*test if firebase can handle max value for element (order limit an examlple)
-*offer end date to user
-*request for new products or packs
-*add heirarcy to categories and delete sections
-*add ordering for sections & categories
-*prevent new order until approving the previous one
-*approve for invitations
-*diff in delivery fees as special discount
-*user name and customer name
-*firebase security
 *navigation & performance
-*most wanted products
-*note for stop the service
 *blacklist customer who did not pick his order
 *archive data
-*notifications
 *add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
-*customer follow-up
 *prevent archive order before monthly trans
-*modify owner page to categorize his products
-*purchase history by category for the user
 *store trans --purchases & returns
 *smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
-*favorites
 *stores last month trans & requested packs that can be purchased from
 *check for page permissions (admin & app)
 *auto archive orders & purchases after monthly trans
-*advertisements
 *request for edit order partially 
 *merging orders
 *cancel a purchase or part of it
-*add hint to pack detail page as basket
-*store opening times
-*manage endoffer when approve alarm
 *add image product & pack names to basket
-*add all for every category
-*delete unimportant data
 *add new pack to approve alarms
-*duplicate password request by local storage
-*add note for change price in basket
 *prevent purchase pack return if any affacted order has been delivered
-*change request for only delivery type
 *read archive by period
 *add stock trans archive, products & packs
 *hints & help
-*return purchase discount
-*friends
 *store balance
 *return packs by loading order packs
 *delivery time
 *weight in return basket
 *return after purchase
 *pwa
-*offline
 *special image for packs
 *delete discount from purchase
 *active flag for price
@@ -142,6 +106,5 @@
 *cost defer than price for any store
 *profit per category, for purchase from inactive stores & for each offer parts
 *bulk in stock & open pack action
-preloader for home page until loading data finished
-products without packs or all packs have 0 price
-logo cache
+*preloader for home page until loading data finished
+*products without packs or all packs have 0 price

@@ -203,6 +203,7 @@ const RequestedPackDetails = props => {
             <div className="list-subtext3">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
             {s.offerEnd ? <div className="list-subtext4">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isOffer ? <Badge slot="text" color='green'>{labels.offer}</Badge> : ''}
+            {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.isActive ? <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} /> : ''}
           </ListItem>
         )}

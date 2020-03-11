@@ -38,6 +38,7 @@ const EditStore = props => {
   }, [mobile])
   useEffect(() => {
     if (name !== store.name
+    || type !== store.type
     || mobile !== store.mobile
     || discount !== store.discount * 100
     || address !== store.address
@@ -46,7 +47,7 @@ const EditStore = props => {
     || isActive !== store.isActive
     || openTime !== store.openTime) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, discount, address, mapPosition, allowReturn, isActive, openTime])
+  }, [store, name, type, mobile, discount, address, mapPosition, allowReturn, isActive, openTime])
   useEffect(() => {
     if (error) {
       showError(error)

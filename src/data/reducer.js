@@ -92,7 +92,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.pack,
           quantity: nextQuantity,
-          gross: Math.trunc(action.pack.price * nextQuantity)
+          gross: Math.trunc((action.pack.actual || action.pack.price) * nextQuantity)
         }
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)
@@ -110,10 +110,10 @@ const Reducer = (state, action) => {
             }  
           }
         } else if (action.params.pack.packInfo.isDivided) {
-          if (action.pack.quantity > 1) {
-            nextQuantity = action.pack.quantity - 0.5
+          if (action.params.pack.quantity > 1) {
+            nextQuantity = action.params.pack.quantity - 0.5
           } else {
-            i = increment.indexOf(action.pack.quantity)
+            i = increment.indexOf(action.params.pack.quantity)
             nextQuantity = i === 0 ? increment[0] : increment[--i]  
           }
         } else {
@@ -122,7 +122,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.params.pack,
           quantity: nextQuantity,
-          gross: Math.trunc(action.params.pack.price * nextQuantity)
+          gross: Math.trunc((action.params.pack.actual || action.params.pack.price) * nextQuantity)
         }  
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.params.pack.packId)

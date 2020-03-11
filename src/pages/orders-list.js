@@ -52,7 +52,7 @@ const OrdersList = props => {
           : orders.map(o => 
               <ListItem
                 link={`/order-details/${o.id}/type/n`}
-                title={o.customerInfo?.fullName || o.userInfo.name}
+                title={o.customerInfo?.name || o.userInfo.name}
                 subtitle={o.deliveryTime}
                 text={moment(o.time.toDate()).fromNow()}
                 footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
