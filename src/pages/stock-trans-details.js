@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
@@ -27,12 +27,14 @@ const StockTransDetails = props => {
           {stockTransBasket.map(p => 
             <ListItem 
               title={p.packInfo.productName}
-              subtitle={p.packInfo.name}
-              text={`${labels.quantity}: ${quantityText(p.quantity)}`}
+              subtitle={p.packInfo.productAlias}
+              text={p.packInfo.name}
+              footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
               after={(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}
               key={p.packId}
             >
-              <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+              <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+              {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
             </ListItem>
           )}
         </List>

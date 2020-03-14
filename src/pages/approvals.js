@@ -19,7 +19,7 @@ const Approvals = props => {
   const [notifyFriends, setNotifyFriends] = useState([])
   useEffect(() => {
     setNewOrders(() => state.orders.filter(o => o.status === 'n'))
-    setOrderRequests(() => state.orders.filter(r => r.requestStatus === 'n'))
+    setOrderRequests(() => state.orders.filter(r => r.requestType))
   }, [state.orders])
   useEffect(() => {
     setNewUsers(() => state.users.filter(u => !state.customers.find(c => c.id === u.id)))

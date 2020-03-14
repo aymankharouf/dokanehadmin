@@ -12,7 +12,7 @@ const OrderRequests = props => {
   const [orderRequests, setOrderRequests] = useState([])
   useEffect(() => {
     setOrderRequests(() => {
-      let requests = state.orders.filter(r => r.requestStatus === 'n')
+      let requests = state.orders.filter(r => r.requestType)
       requests = requests.map(r => {
         const customerInfo = state.customers.find(c => c.id === r.userId)
         const orderStatusInfo = orderStatus.find(s => s.id === r.status)
@@ -39,7 +39,7 @@ const OrderRequests = props => {
                 link={`/order-request-details/${r.id}`}
                 title={r.customerInfo.name}
                 subtitle={r.orderStatusInfo.name}
-                text={r.requestTypeInfo.name}
+                text={`${labels.type}: ${r.requestTypeInfo.name}`}
                 footer={moment(r.time.toDate()).fromNow()}
                 after={(r.total / 1000).toFixed(3)}
                 key={r.id}

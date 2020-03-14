@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -43,6 +43,7 @@ const Basket = props => {
               <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
+              {p.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               <Stepper
                 slot="after"
                 fill

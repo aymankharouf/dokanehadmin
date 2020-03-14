@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, Toolbar, List, ListItem } from 'framework7-react'
+import { Block, Page, Navbar, Toolbar, List, ListItem, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
@@ -59,6 +59,7 @@ const PrepareOrders = props => {
 							>
 								<img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
+								{p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
 							</ListItem>
 						)
 					}

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Button, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -42,7 +42,7 @@ const PurchaseDetails = props => {
         throw new Error('diffPurchaseInReturnBasket')
       }
       const params = {
-        type: 'r',
+        type: 'c',
         packId: pack.packId,
         cost: pack.cost,
         price: pack.price,
@@ -76,6 +76,7 @@ const PurchaseDetails = props => {
               <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
+              {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}
             </ListItem>
           )}

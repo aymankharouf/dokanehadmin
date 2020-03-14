@@ -42,7 +42,7 @@ const StoreTrans = props => {
             <ListItem title={labels.noData} /> 
           : trans.map(t => 
               <ListItem
-                link={t.type === 'p' ? `/purchase-details/${t.id}` : `/stock-trans-details/${t.id}`}
+                link={t.type === 'p' ? `/purchase-details/${t.id}/type/n` : `/stock-trans-details/${t.id}/type/n`}
                 title={t.stockTransTypeInfo.name}
                 subtitle={`${labels.total}: ${(t.total / 1000).toFixed(3)}`}
                 text={moment(t.time.toDate()).fromNow()}

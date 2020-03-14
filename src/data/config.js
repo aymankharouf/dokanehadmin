@@ -52,7 +52,7 @@ export const stockTransTypes = [
   {id: 'g', name: 'تبرع'},
   {id: 'r', name: 'ارجاع'},
   {id: 's', name: 'بيع'},
-  {id: 'c', name: 'فتح'}
+  {id: 'u', name: 'فتح'},
 ]
 
 export const spendingTypes = [

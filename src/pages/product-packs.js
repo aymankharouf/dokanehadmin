@@ -66,10 +66,11 @@ const ProductPacks = props => {
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}
-            after={p.price ? (p.price / 1000).toFixed(3) : ''} 
+            after={p.isOffer || p.offerEnd || p.price === 0 ? '' : (p.price / 1000).toFixed(3)} 
             key={p.id} 
           >
-            {p.isOffer ? <Badge slot="title" color={p.closeExpired ? 'red' : 'green'}>{p.closeExpired ? labels.closeExpired : labels.offer}</Badge> : ''}
+            {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price > 0 ? (p.price / 1000).toFixed(3) : labels.offer}</Badge> : ''}
+            {p.closeExpired ? <Badge slot="title" color="red">{labels.closeExpired}</Badge> : ''}
           </ListItem>
         )}
       </List>

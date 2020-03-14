@@ -13,6 +13,7 @@ const EditPack = props => {
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
+  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState(null)
@@ -22,10 +23,11 @@ const EditPack = props => {
     || unitsCount !== pack.unitsCount
     || isDivided !== pack.isDivided
     || byWeight !== pack.byWeight
+    || closeExpired !== pack.closeExpired
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, isDivided, byWeight, specialImage, imageUrl])
+  }, [pack, name, unitsCount, isDivided, byWeight, closeExpired, specialImage, imageUrl])
   useEffect(() => {
     if (isDivided) {
       setByWeight(true)
@@ -53,12 +55,16 @@ const EditPack = props => {
   }
   const handleSubmit = () => {
     try{
+      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
+        throw new Error('duplicateName')
+      }
       const newPack = {
         ...pack,
         name,
         unitsCount: Number(unitsCount),
         isDivided,
-        byWeight
+        byWeight,
+        closeExpired
       }
       editPack(newPack, pack, image, state.packs)
       showMessage(labels.editSuccess)
@@ -105,6 +111,15 @@ const EditPack = props => {
             color="green" 
             checked={byWeight} 
             onToggleChange={() => setByWeight(!byWeight)}
+          />
+        </ListItem>
+        <ListItem>
+          <span>{labels.closeExpired}</span>
+          <Toggle 
+            name="closeExpired" 
+            color="green" 
+            checked={closeExpired} 
+            onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
         <ListItem>

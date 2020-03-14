@@ -10,7 +10,7 @@ const Panel = props => {
   const [offersCount, setOffersAcount] = useState('')
   useEffect(() => {
     const newOrders = state.orders.filter(o => o.status === 'n').length
-    const orderRequests = state.orders.filter(r => r.requestStatus === 'n').length
+    const orderRequests = state.orders.filter(r => r.requestType).length
     const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id)).length
     const alarms = state.alarms.filter(a => a.status === 'n').length
     const ratings = state.ratings.filter(r => r.status === 'n').length

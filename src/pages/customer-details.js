@@ -120,7 +120,7 @@ const CustomerDetails = props => {
         />
         <ListItem>
           <span>{labels.isBlocked}</span>
-          <Toggle color="blue" checked={customer.isBlocked} disabled />
+          <Toggle color="red" checked={customer.isBlocked} disabled />
         </ListItem>
       </List>
       <Toolbar bottom>

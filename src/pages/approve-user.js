@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
-import { approveUser, showMessage, showError, getMessage } from '../data/actions'
+import { approveUser, deleteUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
 const ApproveUser = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
+  const [inprocess, setInprocess] = useState(false)
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState(userInfo.locationId)
@@ -19,6 +20,13 @@ const ApproveUser = props => {
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (inprocess) {
+      f7.dialog.preloader(labels.inprocess)
+    } else {
+      f7.dialog.close()
+    }
+  }, [inprocess])
   const handleSubmit = () => {
     try {
       approveUser(props.id, name, userInfo.mobile, locationId, userInfo.storeName || '', address, state.users)
@@ -27,6 +35,20 @@ const ApproveUser = props => {
     } catch(err) {
 			setError(getMessage(props, err))
 		}
+  }
+  const handleDelete = () => {
+    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
+      try{
+        setInprocess(true)
+        await deleteUser(userInfo, state.orders)
+        setInprocess(false)
+        showMessage(labels.deleteSuccess)
+        props.f7router.back()
+      } catch(err) {
+        setInprocess(false)
+        setError(getMessage(props, err))
+      }
+    })
   }
   return (
     <Page>
@@ -81,11 +103,21 @@ const ApproveUser = props => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !locationId ? '' :
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
+      <FabBackdrop slot="fixed" />
+      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
+          {!name || !locationId ? '' :
+            <FabButton color="green" onClick={() => handleSubmit()}>
+              <Icon material="done"></Icon>
+            </FabButton>
+          }
+          <FabButton color="red" onClick={() => handleDelete()}>
+            <Icon material="delete"></Icon>
+          </FabButton>
+        </FabButtons>
+      </Fab>
       <Toolbar bottom>
         <BottomToolbar/>
       </Toolbar>

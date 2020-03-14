@@ -15,18 +15,25 @@ const EditOffer = props => {
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
   const [bonusPercent, setBonusPercent] = useState(pack.bonusPercent * 100)
-  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
-  const [packs] = useState(() => state.packs.filter(p => p.productId === pack.productId && !p.subPackId && !p.byWeight))
+  const [packs] = useState(() => {
+    const packs = state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
+      }
+    })
+  })
   const [bonusPacks] = useState(() => {
-    let packs = state.packs.filter(p => p.productId !== props.id && !p.subPackId && !p.byWeight)
+    let packs = state.packs.filter(p => p.productId !== pack.productId && !p.subPackId && !p.byWeight)
     packs = packs.map(p => {
       return {
         id: p.id,
-        name: `${p.productName} ${p.name}`
+        name: `${p.productName} ${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -39,11 +46,10 @@ const EditOffer = props => {
     || bonusPackId !== pack.bonusPackId
     || bonusQuantity !== pack.bonusQuantity * 100
     || bonusPercent !== pack.bonusPercent
-    || closeExpired !== pack.closeExpired
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, closeExpired, specialImage, imageUrl])
+  }, [pack, name, subPackId, subQuantity, subPercent, bonusPackId, bonusQuantity, bonusPercent, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -67,10 +73,23 @@ const EditOffer = props => {
 
   const handleSubmit = () => {
     try{
+      const subPackInfo = state.packs.find(p => p.id === subPackId)
+      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
+      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+        throw new Error('duplicateName')
+      }
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
         throw new Error('invalidPercents')
       }
-      const subPackInfo = state.packs.find(p => p.id === subPackId)
+      if (bonusPackInfo && Number(bonusPercent) === 0) {
+        throw new Error('invalidPercents')
+      }
+      if (bonusPackInfo && Number(bonusQuantity) === 0) {
+        throw new Error('invalidQuantity')
+      }
+      if (!bonusPackInfo && Number(subQuantity) <= 1) {
+        throw new Error('invalidQuantity')
+      }
       const newPack = {
         ...pack,
         name,
@@ -78,10 +97,15 @@ const EditOffer = props => {
         subQuantity: Number(subQuantity),
         unitsCount: subQuantity * subPackInfo.unitsCount,
         subPercent: subPercent / 100,
+        subPackName: subPackInfo.name,
+        isDivided: subPackInfo.isDivided,
+        byWeight: subPackInfo.byWeight,
+        closeExpired: subPackInfo.closeExpired,
         bonusPackId,
+        bonusProductName: bonusPackInfo?.productName || '',
+        bonusPackName: bonusPackInfo?.name || '',
         bonusQuantity: Number(bonusQuantity),
-        bonusPercent: bonusPercent / 100,
-        closeExpired
+        bonusPercent: bonusPercent / 100
       }
       editPack(newPack, pack, image, state.packs)
       showMessage(labels.editSuccess)
@@ -140,15 +164,6 @@ const EditOffer = props => {
           onInputClear={() => setSubPercent('')}
         />
         <ListItem>
-          <span>{labels.closeExpired}</span>
-          <Toggle 
-            name="closeExpired" 
-            color="green" 
-            checked={closeExpired} 
-            onToggleChange={() => setCloseExpired(!closeExpired)}
-          />
-        </ListItem>
-        <ListItem>
           <span>{labels.specialImage}</span>
           <Toggle 
             name="specialImage" 
@@ -171,7 +186,7 @@ const EditOffer = props => {
       <BlockTitle>
         {labels.bonusProduct}
       </BlockTitle>
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.pack}
           smartSelect

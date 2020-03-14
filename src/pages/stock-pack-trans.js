@@ -3,7 +3,7 @@ import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, A
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
-import { showMessage, showError, getMessage, quantityText, openStockPack } from '../data/actions'
+import { showMessage, showError, getMessage, quantityText, unfoldStockPack } from '../data/actions'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -14,6 +14,22 @@ const StockPackTrans = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [stockPackInfo] = useState(() => state.packPrices.find(p => p.storeId === 's' && p.packId === props.id))
   const [packTrans, setPackTrans] = useState([])
+  const [lastPurchase] = useState(() => {
+    let purchases = state.purchases.filter(p => p.basket.find(bp => bp.packId === pack.id))
+    purchases = purchases.map(p => {
+      const transPack = p.basket.find(bp => bp.packId === pack.id)
+      const storeInfo = state.stores.find(s => s.id === p.storeId)
+      return {
+        ...transPack,
+        storeInfo,
+        storeId: p.storeId,
+        purchaseId: p.id,
+        time: p.time
+      }
+    })
+    purchases.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
+    return purchases[0]
+  })
   const actionsList = useRef('')
   useEffect(() => {
     setPackTrans(() => {
@@ -48,23 +64,23 @@ const StockPackTrans = props => {
         if (state.returnBasket?.packs?.find(p => p.packId === pack.id)) {
           throw new Error('alreadyInBasket')
         }
-        if (Number(quantity) === 0 || (type === 'r' && Number(quantity) !== packTrans[0].quantity) || (type !== 'r' && Number(quantity) > stockPackInfo.quantity)) {
+        if (Number(quantity) > stockPackInfo.quantity) {
           throw new Error('invalidValue')
         }
         if (state.returnBasket && state.returnBasket.type !== type) {
           throw new Error('diffTypeInReturnBasket')
         }
-        if (type === 'r' && state.returnBasket && state.returnBasket.purchaseId !== packTrans[0].purchaseId) {
+        if (type === 'r' && state.returnBasket && state.returnBasket.purchaseId !== lastPurchase.purchaseId) {
           throw new Error('diffPurchaseInReturnBasket')
         }
         const params = {
           type,
           packId: pack.id,
-          cost: type === 'r' ? packTrans[0].cost : stockPackInfo.cost,
-          price: type === 'r' ? packTrans[0].price : stockPackInfo.price,
+          cost: type === 'r' ? lastPurchase.cost : stockPackInfo.cost,
+          price: type === 'r' ? lastPurchase.price : stockPackInfo.price,
           quantity: Number(quantity),
-          storeId: type === 'r' ? packTrans[0].storeId : '',
-          purchaseId: type === 'r' ? packTrans[0].purchaseId : ''
+          storeId: type === 'r' ? lastPurchase.storeId : '',
+          purchaseId: type === 'r' ? lastPurchase.purchaseId : ''
         }
         if (pack.byWeight) params['weight'] = Number(quantity)
         dispatch({type: 'ADD_TO_RETURN_BASKET', params})
@@ -76,7 +92,7 @@ const StockPackTrans = props => {
   }
   const handleOpen = () => {
     try{
-      openStockPack(stockPackInfo, state.packPrices, state.packs)
+      unfoldStockPack(stockPackInfo, state.packPrices, state.packs)
       showMessage(labels.executeSuccess)
       props.f7router.back()
     } catch(err) {
@@ -111,7 +127,7 @@ const StockPackTrans = props => {
         {pack.subPackId ? 
           <ActionsButton onClick={() => handleOpen()}>{labels.open}</ActionsButton>
         : ''}
-        {packTrans[0]?.storeInfo?.allowReturn ? 
+        {lastPurchase?.storeInfo?.allowReturn ? 
           <ActionsButton onClick={() => handleAddTrans('r')}>{labels.return}</ActionsButton>
         : ''}
         <ActionsButton onClick={() => handleAddTrans('g')}>{labels.donate}</ActionsButton>

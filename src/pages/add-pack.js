@@ -11,6 +11,7 @@ const AddPack = props => {
   const [unitsCount, setUnitsCount] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
+  const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState(null)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
@@ -42,14 +43,14 @@ const AddPack = props => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
+      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
         throw new Error('duplicateName')
       }
       const pack = {
         name,
         unitsCount: Number(unitsCount),
         isDivided,
-        closeExpired: false,
+        closeExpired,
         byWeight,
         isOffer: false,
         price: 0,
@@ -102,6 +103,15 @@ const AddPack = props => {
             checked={byWeight} 
             onToggleChange={() => setByWeight(!byWeight)}
             disabled={isDivided}
+          />
+        </ListItem>
+        <ListItem>
+          <span>{labels.closeExpired}</span>
+          <Toggle 
+            name="closeExpired" 
+            color="green" 
+            checked={closeExpired} 
+            onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
         <ListItem>

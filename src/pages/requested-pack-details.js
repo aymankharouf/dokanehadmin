@@ -167,7 +167,7 @@ const RequestedPackDetails = props => {
       <Navbar title={pack.productName} backLink={labels.back} />
       <Card>
         <CardContent>
-          <div className="card-title">{pack.name}</div>
+          <div className="card-title">{`${pack.name} ${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`}</div>
           <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
@@ -202,7 +202,6 @@ const RequestedPackDetails = props => {
             <div className="list-subtext2">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}${s.cost === s.unitCost ? '' : '(' + (s.unitCost / 1000).toFixed(3) + ')'}`}</div>
             <div className="list-subtext3">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
             {s.offerEnd ? <div className="list-subtext4">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
-            {s.isOffer ? <Badge slot="text" color='green'>{labels.offer}</Badge> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.isActive ? <Button text={labels.purchase} slot="after" onClick={() => handlePurchase(s)} /> : ''}
           </ListItem>

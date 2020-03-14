@@ -163,7 +163,7 @@ const PackDetails = props => {
       <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
-          <div className="card-title">{pack.name}</div>
+          <div className="card-title">{`${pack.name} ${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`}</div>
           <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -60,6 +60,7 @@ const ConfirmPurchase = props => {
             after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
           >
             <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+            {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
           </ListItem>
         )}
         <ListItem 

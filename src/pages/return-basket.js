@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon } from 'framework7-react'
+import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { confirmReturnBasket, showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -38,7 +38,17 @@ const ReturnBasket = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      confirmReturnBasket(state.returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
+      let packs = state.returnBasket.packs.slice()
+      packs = packs.map(p => {
+        const { weight, ...others } = p
+        if (weight) others['weight'] = weight
+        return others
+      })
+      const returnBasket = {
+        ...state.returnBasket,
+        packs
+      }
+      confirmReturnBasket(returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)
       props.f7router.back()
@@ -62,6 +72,7 @@ const ReturnBasket = props => {
             >
               <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
+              {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               <Link slot="after" iconMaterial="delete" iconColor="red" onClick={()=> dispatch({type: 'REMOVE_FROM_RETURN_BASKET', pack: p})}/>
             </ListItem>
           )}

@@ -17,8 +17,6 @@
 *rounding
 *offerend in price alarm
 *outdated offers
-*offer end date to user
-*add page for logs
 *update minprice after each purchase to stock, offers expired, edit price
 *prevent multi input in forget password
 *add store discount & location
@@ -51,60 +49,50 @@
 *customer follow-up
 *advertisements
 *note for stop the service
-*expiration flag on pack
 *distribute purchased packs to prepared orders
 *before confirm order check if there is new prices or not
-
-*net profit & sales (daily, weekly, monthly, yearly)
-*in stoke (quantity & net value)
-*cost types & costs
+*last month sales in store ordering
 *from more than one store
 *stock trans (in & out)
-*average price for purchase pack in order
-*request to cancel an order
-*products with weight
-*last month sales in store ordering
-*warning order limit earlier when adding to basket
-*deduction for returned quantity which get from any discount
+*in stoke (quantity & net value)
+*partial purchase from offer
 *donate from stock
 *destroy patch in stock
-*return to a store except type 5
-*sell stock packs to another store
-*related products
-*handle delete operation store pack
-*partial purchase from offer
-*force purchase with price above requested price (loss)
-*navigation & performance
-*blacklist customer who did not pick his order
-*archive data
-*add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
-*prevent archive order before monthly trans
-*store trans --purchases & returns
-*smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
-*stores last month trans & requested packs that can be purchased from
-*check for page permissions (admin & app)
-*auto archive orders & purchases after monthly trans
-*request for edit order partially 
-*merging orders
-*cancel a purchase or part of it
 *add image product & pack names to basket
-*add new pack to approve alarms
-*prevent purchase pack return if any affacted order has been delivered
-*read archive by period
-*add stock trans archive, products & packs
 *hints & help
-*store balance
-*return packs by loading order packs
-*delivery time
-*weight in return basket
-*return after purchase
-*pwa
+*stores last month trans & requested packs that can be purchased from
 *special image for packs
-*delete discount from purchase
+*related products
+*request to cancel an order
 *active flag for price
-*alternative pack & best price flag & delete exceed price flag & change the way to handle weight
+*request for edit order partially 
+*delivery time
 *cost defer than price for any store
-*profit per category, for purchase from inactive stores & for each offer parts
-*bulk in stock & open pack action
 *preloader for home page until loading data finished
+*merging orders
+*blacklist customer who did not pick his order
+*average price for purchase pack in order
+*warning order limit earlier when adding to basket
+*add new pack to approve alarms
+*force purchase with price above requested price (loss)
+*add stock pack details page which handle pack trans (destroy, return to specific store, change price, counting)
+*cancel a purchase or part of it
+*smart basket when confirm order (packs with more value from the same product, alternative products with more rating, offers for other alternatives)
+*return packs by loading order packs
+*return to a store
+*sell stock packs to another store
+*store trans --purchases & returns
+*store balance
+*deduction for returned quantity which get from any discount
+*prevent purchase pack return if any affacted order has been delivered
 *products without packs or all packs have 0 price
+*bulk in stock & open pack action
+*return after receive order
+*expiration flag on pack
+*weight in return basket
+*check for page permissions (admin & app)
+*net profit & sales (daily, weekly, monthly, yearly)
+*auto archive orders & purchases after monthly trans
+*add archive to products & packs
+*read archive by period
+*navigation & performance

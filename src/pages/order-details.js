@@ -48,7 +48,7 @@ const OrderDetails = props => {
   }, [order, props.id])
   useEffect(() => {
     setLastOrder(() => {
-      const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId)
+      const userOrders = state.orders.filter(o => o.id !== order.id && o.userId === order.userId && !['c', 'm', 'r'].includes(o.status))
       userOrders.sort((o1, o2) => o2.time.seconds - o1.time.seconds)
       return ['a', 'e'].includes(userOrders[0]?.status) ? userOrders[0] : ''
     })
@@ -95,7 +95,7 @@ const OrderDetails = props => {
             }
           })
         } else if (action.id === 'i') {
-          f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
+          f7.dialog.confirm(labels.confirmationBlockUser, labels.confirmationTitle, () => {
             try{
               updateOrderStatus(order, action.id, state.packPrices, state.packs, true)
               showMessage(labels.editSuccess)
@@ -153,7 +153,7 @@ const OrderDetails = props => {
               <div className="list-subtext1">{p.priceNote}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <div className="list-subtext3">{p.storeId ? `${labels.storeName}: ${p.storeName}` : ''}</div>
-              {p.closeExpired ? <Badge slot="title" color="red">{labels.closeExpired}</Badge> : ''}
+              {p.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
             </ListItem>
           )}
           <ListItem 

@@ -14,18 +14,25 @@ const AddOffer = props => {
   const [bonusPackId, setBonusPackId] = useState('')
   const [bonusQuantity, setBonusQuantity] = useState('')
   const [bonusPercent, setBonusPercent] = useState('')
-  const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState(null)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.subPackId && !p.byWeight))
+  const [packs] = useState(() => {
+    const packs = state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
+      }
+    })
+  })
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [bonusPacks] = useState(() => {
     let packs = state.packs.filter(p => p.productId !== props.id && !p.isOffer && !p.byWeight && p.forSale)
     packs = packs.map(p => {
       return {
         id: p.id,
-        name: `${p.productName} ${p.name}`
+        name: `${p.productName} ${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -67,22 +74,31 @@ const AddOffer = props => {
   }
   const handleSubmit = () => {
     try{
+      const subPackInfo = state.packs.find(p => p.id === subPackId)
+      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
+      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+        throw new Error('duplicateName')
+      }
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
         throw new Error('invalidPercents')
       }
-      const subPackInfo = state.packs.find(p => p.id === subPackId)
-      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
+      if (bonusPackInfo && Number(bonusPercent) === 0) {
+        throw new Error('invalidPercents')
+      }
+      if (!bonusPackInfo && Number(subQuantity) <= 1) {
+        throw new Error('invalidQuantity')
+      }
       const pack = {
         name,
         isOffer: true,
-        closeExpired,
         subPackId,
         subQuantity: Number(subQuantity),
         subPercent: subPercent / 100,
-        unitsCount: Number(subQuantity) * subPackInfo.unitsCount,
+        unitsCount: subQuantity * subPackInfo.unitsCount,
         subPackName: subPackInfo.name,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
+        closeExpired: subPackInfo.closeExpired,
         bonusPackId,
         bonusProductName: bonusPackInfo?.productName || '',
         bonusPackName: bonusPackInfo?.name || '',
@@ -149,20 +165,11 @@ const AddOffer = props => {
           onChange={e => setSubPercent(e.target.value)}
           onInputClear={() => setSubPercent('')}
         />
-        <ListItem>
-          <span>{labels.closeExpired}</span>
-          <Toggle 
-            name="closeExpired" 
-            color="green" 
-            checked={closeExpired} 
-            onToggleChange={() => setCloseExpired(!closeExpired)}
-          />
-        </ListItem>
       </List>
       <BlockTitle>
         {labels.bonusProduct}
       </BlockTitle>
-      <List form>
+      <List form inlineLabels>
         <ListItem
           title={labels.pack}
           smartSelect

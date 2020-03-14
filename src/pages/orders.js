@@ -19,7 +19,7 @@ const Orders = props => {
         orders
       }
     }))
-    setOrderRequests(() => state.orders.filter(r => r.requestStatus === 'n'))
+    setOrderRequests(() => state.orders.filter(o => o.requestType))
     setFinishedOrders(() => state.orders.filter(o => o.status === 'f'))
   }, [state.orders])
   let i = 0

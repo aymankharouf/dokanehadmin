@@ -285,7 +285,7 @@ const labels = {
   confirmMergeText: 'هناك طلب آخر لهذا العميل لم يتم تنفيذه بعد، هل تود دمجهما',
   mergeSuccess: 'تم الدمج',
   request: 'طلب',
-  requestedChange: 'التغيرر المطلوب',
+  requestedChange: 'التغيير المطلوب',
   increase: 'زيادة',
   decrease: 'انقاص',
   changeDeliveryToOff: 'الغاء التوصيل',
@@ -370,7 +370,9 @@ const labels = {
   open: 'فتح',
   notUsedProducts: 'منتجات غير مستخدمة',
   unknown: 'غير معروف',
-  returnedCount: 'مرات اﻻرجاع'
+  returnedCount: 'مرات اﻻرجاع',
+  gross: 'اﻻجمالي',
+  confirmationBlockUser: 'هل ترغب بحظر التعامل مع هذا المستخدم؟'
 }
 
 export default labels

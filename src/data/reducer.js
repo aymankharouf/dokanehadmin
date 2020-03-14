@@ -19,6 +19,7 @@ const Reducer = (state, action) => {
           isOffer: action.params.packStore.isOffer,
           exceedPriceType: action.params.exceedPriceType,
           isDivided: action.params.pack.isDivided,
+          closeExpired: action.params.pack.closeExpired,
           refPackId: action.params.refPackId,
           refPackQuantity: action.params.refPackQuantity
         }

@@ -14,7 +14,15 @@ const AddBulk = props => {
   const [forSale, setForSale] = useState(true)
   const [image, setImage] = useState(null)
   const [product] = useState(() => state.products.find(p => p.id === props.id))
-  const [packs] = useState(() => state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale))
+  const [packs] = useState(() => {
+    const packs = state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
+      return {
+        id: p.id,
+        name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
+      }
+    })
+  })
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -49,22 +57,25 @@ const AddBulk = props => {
   }
   const handleSubmit = () => {
     try{
-      if (Number(subQuantity) < 1) {
+      const subPackInfo = state.packs.find(p => p.id === subPackId)
+      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+        throw new Error('duplicateName')
+      }
+      if (Number(subQuantity) <= 1) {
         throw new Error('invalidQuantity')
       }
-      const subPackInfo = state.packs.find(p => p.id === subPackId)
       const pack = {
         name,
         isOffer: false,
-        closeExpired: false,
         price: 0,
         subPackId,
         subPackName: subPackInfo.name,
         subQuantity: Number(subQuantity),
         subPercent: 1,
-        unitsCount: Number(subQuantity) * subPackInfo.unitsCount,
+        unitsCount: subQuantity * subPackInfo.unitsCount,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
+        closeExpired: subPackInfo.closeExpired,
         forSale,
         isArchived: false,
       }

@@ -1,30 +1,53 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { showMessage, showError, getMessage, quantityDetails, approveOrderRequest } from '../data/actions'
+import { showMessage, showError, getMessage, quantityDetails, approveOrderRequest, addQuantity } from '../data/actions'
 import labels from '../data/labels'
-import { orderPackStatus, orderRequestTypes } from '../data/config'
+import { orderPackStatus, orderRequestTypes, setup } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
 
 const OrderRequestDetails = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [order] = useState(() => state.orders.find(o => o.id === props.id))
-  const [orderBasket, setOrderBasket] = useState([])
-  useEffect(() => {
-    setOrderBasket(() => order.basket.map(p => {
+  const [orderBasket] = useState(() => {
+    let basket = order.basket.slice()
+    basket = basket.map(p => {
+      return {
+        ...p,
+        change: 0
+      }
+    })
+    order.requestBasket.forEach(p => {
+      const index = basket.findIndex(bp => bp.packId === p.packId)
+      if (index === -1) {
+        basket.push({
+          ...p,
+          change: p.quantity
+        })
+      } else {
+        basket.splice(index, 1, {
+          ...basket[index],
+          quantity: p.quantity,
+          change: addQuantity(p.quantity, -1 * basket[index].quantity)
+        })
+      }
+    })
+    return basket.map(p => {
       const storeName = p.storeId ? (p.storeId === 'm' ? labels.multipleStores : state.stores.find(s => s.id === p.storeId).name) : ''
       const statusNote = `${orderPackStatus.find(s => s.id === p.status).name} ${p.overPriced ? labels.overPricedNote : ''}`
-      const newQuantity = order.requestBasket.find(bp => bp.packId === p.packId).quantity
-      const changeQuantityNote = newQuantity === p.quantity ? '' : newQuantity > p.quantity ? `${labels.increase} ${newQuantity - p.quantity}` : `${labels.decrease} ${p.quantity - newQuantity}`
+      const changeQuantityNote = p.change === 0 ? '' : p.change > 0 ? `${labels.increase} ${p.change}` : `${labels.decrease} ${-1 * p.change}`
       return {
         ...p,
         storeName,
         statusNote,
         changeQuantityNote,
       }
-    }))
-  }, [order, state.stores])
+    })
+  })
+  const [total] = useState(() => orderBasket.reduce((sum, p) => sum + p.price * p.quantity, 0))
+  const [fixedFees] = useState(() => Math.trunc(setup.fixedFees * total))
+  const [fraction] = useState(() => (total + fixedFees) - Math.floor((total + fixedFees) / 50) * 50)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -49,34 +72,36 @@ const OrderRequestDetails = props => {
             <ListItem 
               key={p.packId} 
               title={p.productName}
-              subtitle={p.packName}
-              text={quantityDetails(p)}
+              subtitle={p.productAlias}
+              text={p.packName}
               footer={`${labels.status}: ${p.statusNote}`}
               after={(p.gross / 1000).toFixed(3)}
             >
-              {p.changeQuantityNote ? <div className="list-subtext1">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
-              <div className="list-subtext2">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              <div className="list-subtext1">{quantityDetails(p)}</div>
+              {p.changeQuantityNote ? <div className="list-subtext2">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
+              <div className="list-subtext3">{p.storeName ? `${labels.storeName}: ${p.storeName}` : ''}</div>
+              {p.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
             </ListItem>
           )}
           <ListItem 
             title={labels.total} 
             className="total"
-            after={(order.total / 1000).toFixed(3)} 
+            after={(total / 1000).toFixed(3)} 
           />
           <ListItem 
             title={labels.fixedFees} 
             className="fees" 
-            after={((order.fixedFees + order.deliveryFees) / 1000).toFixed(3)} 
+            after={((fixedFees + order.deliveryFees) / 1000).toFixed(3)} 
           />
           <ListItem 
             title={labels.discount} 
             className="discount" 
-            after={((order.discount.value + order.fraction) / 1000).toFixed(3)} 
+            after={((order.discount.value + fraction) / 1000).toFixed(3)} 
           /> 
           <ListItem 
             title={labels.net} 
             className="net" 
-            after={((order.total + order.fixedFees + order.deliveryFees - order.discount.value - order.fraction) / 1000).toFixed(3)} 
+            after={((total + fixedFees + order.deliveryFees - order.discount.value - fraction) / 1000).toFixed(3)} 
           />
         </List>
       </Block>

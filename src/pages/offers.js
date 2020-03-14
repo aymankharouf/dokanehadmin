@@ -63,14 +63,16 @@ const Offers = props => {
           : offers.map(p => 
               <ListItem
                 title={p.packInfo.productName}
-                subtitle={p.packInfo.name}
-                text={`${labels.storeName}: ${p.storeName}`}
+                subtitle={p.packInfo.productAlias}
+                text={p.packInfo.name}
                 footer={moment(p.offerEnd.toDate()).format('Y/M/D')}
                 key={i++}
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+                <div className="list-subtext1">{`${labels.storeName}: ${p.storeName}`}</div>
                 <div className="list-subtext1">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
                 {p.isActive ? '' : <Badge slot="text" color='red'>{labels.inActive}</Badge>}
+                {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
                 {p.isActive ? <Button text={labels.haltOffer} slot="after" onClick={() => handleHaltOffer(p)} /> : ''}
               </ListItem>
             )

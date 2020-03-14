@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link } from 'framework7-react'
+import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
@@ -51,11 +51,13 @@ const Stock = props => {
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.productAlias}
                 text={p.packInfo.name}
-                footer={`${labels.quantity}: ${quantityText(p.quantity)}`}
+                footer={`${labels.gross}: ${(p.cost * p.quantity / 1000).toFixed(3)}`}
                 after={(p.cost / 1000).toFixed(3)}
                 key={i++}
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+                <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
+                {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               </ListItem>
             )
           }
