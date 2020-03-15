@@ -51,12 +51,12 @@ const Stock = props => {
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.productAlias}
                 text={p.packInfo.name}
-                footer={`${labels.gross}: ${(p.cost * p.quantity / 1000).toFixed(3)}`}
+                footer={`${labels.gross}: ${(p.cost * (p.weight || p.quantity)/ 1000).toFixed(3)}`}
                 after={(p.cost / 1000).toFixed(3)}
                 key={i++}
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-                <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
+                <div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
                 {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               </ListItem>
             )

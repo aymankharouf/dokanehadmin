@@ -70,6 +70,7 @@ const Reducer = (state, action) => {
           orderBasket: action.params.order.basket.map(p => {
             return {
               ...p,
+              quantity: action.params.type === 'e' ? p.quantity : p.purchased,
               oldQuantity: action.params.type === 'e' ? p.quantity : p.purchased
             }
           })

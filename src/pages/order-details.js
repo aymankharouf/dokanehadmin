@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder, SetDeliveryTime } from '../data/actions'
+import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder, setDeliveryTime } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus } from '../data/config'
 import BottomToolbar from './bottom-toolbar'
@@ -119,7 +119,7 @@ const OrderDetails = props => {
         } else if (action.id === 't') {
           f7.dialog.prompt(labels.enterDeliveryTime, labels.deliveryTimeTitle, value => {
             try{
-              SetDeliveryTime(order.id, value)
+              setDeliveryTime(order.id, value)
               showMessage(labels.editSuccess)
               props.f7router.back()
             } catch(err) {

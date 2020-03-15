@@ -110,7 +110,6 @@ const AddSpending = props => {
           onCalendarChange={value => setSpendingDate(value)}
           onInputClear={() => setSpendingDate([])}
         />
-
       </List>
       {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addStorePayment, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -12,6 +12,19 @@ const AddStorePayment = props => {
   const [amount, setAmount] = useState('')
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
+  const [paymentDate, setPaymentDate] = useState([new Date()])
+  const [paymentDateErrorMessage, setPaymentDateErrorMessage] = useState('')
+  useEffect(() => {
+    const validateDate = value => {
+      if (new Date(value) > new Date()){
+        setPaymentDateErrorMessage(labels.invalidSpendingDate)
+      } else {
+        setPaymentDateErrorMessage('')
+      }
+    }
+    if (paymentDate.length > 0) validateDate(paymentDate)
+    else setPaymentDateErrorMessage('')
+  }, [paymentDate])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -23,13 +36,15 @@ const AddStorePayment = props => {
       if (Number(amount) <= 0) {
         throw new Error('invalidValue')
       }
+      const formatedDate = paymentDate.length > 0 ? new Date(paymentDate) : ''
       const payment = {
         type,
         description,
         amount: amount * 1000,
+        paymentDate: formatedDate,
         time: new Date()
       }
-      addStorePayment(store.id, payment)
+      addStorePayment(store.id, payment, state.stores)
       showMessage(labels.addSuccess)
       props.f7router.back()
     } catch(err) {
@@ -76,8 +91,19 @@ const AddStorePayment = props => {
           onChange={e => setDescription(e.target.value)}
           onInputClear={() => setDescription('')}
         />
+        <ListInput
+          name="paymentDate"
+          label={labels.paymentDate}
+          type="datepicker"
+          value={paymentDate} 
+          clearButton
+          errorMessage={paymentDateErrorMessage}
+          errorMessageForce
+          onCalendarChange={value => setPaymentDate(value)}
+          onInputClear={() => setPaymentDate([])}
+        />
       </List>
-      {!amount || !type ? '' :
+      {!amount || !type || !paymentDate || paymentDateErrorMessage? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

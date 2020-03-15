@@ -116,7 +116,7 @@ const labels = {
   newSpending: 'اضافة مصروف',
   spendingAmount: 'القيمة',
   spendingDate: 'التاريخ',
-  profits: 'اﻻرباح والمبيعات',
+  monthlyTrans: 'الحركات الشهرية',
   addToBasketSuccess: 'تمت الاضافة الى السلة',
   retreivePassword: 'استرجاع كلمة السر',
   sendSuccess: 'تم الارسال',
@@ -138,7 +138,6 @@ const labels = {
   month: 'الشهر',
   year: 'السنة',
   finishedOrdersCount: 'الطلبات الجاهزة',
-  monthlyTrans: 'العمليات الشهرية',
   withdrawals: 'السحوبات',
   expenses: 'المصاريف',
   confirmationText: 'هل انت متأكد من تنفيذ العملية؟',
@@ -372,7 +371,8 @@ const labels = {
   unknown: 'غير معروف',
   returnedCount: 'مرات اﻻرجاع',
   gross: 'اﻻجمالي',
-  confirmationBlockUser: 'هل ترغب بحظر التعامل مع هذا المستخدم؟'
+  confirmationBlockUser: 'هل ترغب بحظر التعامل مع هذا المستخدم؟',
+  paymentDate: 'تاريخ الدفعة'
 }
 
 export default labels

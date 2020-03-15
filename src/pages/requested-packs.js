@@ -36,12 +36,13 @@ const RequestedPacks = props => {
 								title={p.packInfo.productName}
 								subtitle={p.packInfo.productAlias}
 								text={p.packInfo.name}
-								after={(p.price / 1000).toFixed(3)}
+								after={p.offerId ? '' : (p.price / 1000).toFixed(3)}
 								key={i++}
 							>
 								<img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
 								<div className="list-subtext1">{`${labels.quantity}: ${quantityText(p.quantity)}`}</div>
 								{p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
+								{p.offerId ? <Badge slot="after" color="green">{(p.price / 1000).toFixed(3)}</Badge> : ''}
 							</ListItem>
 						)
 					}

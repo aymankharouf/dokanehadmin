@@ -28,4 +28,6 @@ const prodConfig = {
 
 firebase.initializeApp(window.location.hostname === 'localhost' ? devConfig : prodConfig)
 firebase.firestore().enablePersistence()
+
+export const prodApp = firebase.initializeApp(prodConfig, "prod")
 export default firebase

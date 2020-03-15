@@ -51,6 +51,7 @@ export const stockTransTypes = [
   {id: 'd', name: 'اتلاف'},
   {id: 'g', name: 'تبرع'},
   {id: 'r', name: 'ارجاع'},
+  {id: 'c', name: 'الغاء شراء'},
   {id: 's', name: 'بيع'},
   {id: 'u', name: 'فتح'},
 ]

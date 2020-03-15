@@ -54,7 +54,8 @@ const Stores = props => {
           : stores.map(s =>
               <ListItem 
                 link={`/store-details/${s.id}`} 
-                title={s.name} 
+                title={s.name}
+                after={s.discount * 100}
                 key={s.id} 
               >
                 {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}

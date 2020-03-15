@@ -95,4 +95,6 @@
 *auto archive orders & purchases after monthly trans
 *add archive to products & packs
 *read archive by period
+*transfer data from prod to dev
 *navigation & performance
+*store trans per month

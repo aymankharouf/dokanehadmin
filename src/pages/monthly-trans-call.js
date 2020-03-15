@@ -4,7 +4,7 @@ import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
 
 
-const Profits = props => {
+const MonthlyTransCall = props => {
   const [month, setMonth] = useState('')
   const [year, setYear] = useState('')
   return (
@@ -41,4 +41,4 @@ const Profits = props => {
     </Page>
   )
 }
-export default Profits
+export default MonthlyTransCall

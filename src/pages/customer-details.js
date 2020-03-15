@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'
@@ -16,8 +16,18 @@ const CustomerDetails = props => {
   return (
     <Page>
       <Navbar title={labels.customerDetails} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-customer/${props.id}`}>
-        <Icon material="edit"></Icon>
+      <FabBackdrop slot="fixed" />
+      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
+        <Icon material="keyboard_arrow_down"></Icon>
+        <Icon material="close"></Icon>
+        <FabButtons position="bottom">
+          <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-customer/${props.id}`)}>
+            <Icon material="edit"></Icon>
+          </FabButton>
+          <FabButton color="pink" onClick={() => props.f7router.navigate(`/orders-list/${props.id}/type/u`)}>
+            <Icon material="import_export"></Icon>
+          </FabButton>
+        </FabButtons>
       </Fab>
       <List form inlineLabels>
         <ListInput 

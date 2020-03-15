@@ -21,7 +21,6 @@ const EditStore = props => {
   const [isActive, setIsActive] = useState(store.isActive)
   const [openTime, setOpenTime] = useState(store.openTime)
   const [hasChanged, setHasChanged] = useState(false)
-  const [storeOwners] = useState(() => state.customers.filter(c => c.storeId === props.id))
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -173,11 +172,6 @@ const EditStore = props => {
           type="textarea" 
           onChange={e => setAddress(e.target.value)}
           onInputClear={() => setAddress('')}
-        />
-        <ListItem
-          link={`/store-owners/${store.id}`}
-          title={labels.storeOwners}
-          after={storeOwners.length}
         />
       </List>
       {!name || !type || mobileErrorMessage || !hasChanged ? '' :

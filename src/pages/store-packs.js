@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
+import { f7, Block, Fab, Icon, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -25,6 +25,14 @@ const StorePacks = props => {
       return storePacks.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? p2.time.seconds - p1.time.seconds : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
   }, [state.packPrices, state.packs, state.categories, props.id])
+  useEffect(() => {
+    if (storePacks.length === 0) {
+      f7.dialog.preloader('')
+    } else {
+      f7.dialog.close()
+    }
+  }, [storePacks])
+
   let i = 0
   return(
     <Page>

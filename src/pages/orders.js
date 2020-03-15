@@ -46,7 +46,7 @@ const Orders = props => {
           />
           {orderStatuses.map(s => 
             <ListItem 
-              link={`/orders-list/${s.id}/`} 
+              link={`/orders-list/${s.id}/type/s`} 
               title={s.name} 
               badge={s.orders.length} 
               badgeColor={randomColors[i++ % 10].name} 

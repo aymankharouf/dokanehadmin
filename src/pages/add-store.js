@@ -53,7 +53,6 @@ const AddStore = props => {
         isActive,
         openTime,
         address,
-        balance: 0,
         time: new Date()
       }
       addStore(store)

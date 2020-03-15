@@ -109,7 +109,7 @@ const StockPackTrans = props => {
           : packTrans.map(t => 
               <ListItem
                 title={`${t.stockTransTypeInfo.name} ${t.storeInfo?.name || ''}`}
-                subtitle={`${labels.quantity}: ${quantityText(t.quantity)}`}
+                subtitle={`${labels.quantity}: ${quantityText(t.quantity, t.weight)}`}
                 text={`${labels.price}: ${(t.cost / 1000).toFixed(3)}`}
                 footer={moment(t.time.toDate()).fromNow()}
                 key={t.id}

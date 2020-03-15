@@ -48,7 +48,7 @@ const ReturnBasket = props => {
         ...state.returnBasket,
         packs
       }
-      confirmReturnBasket(returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases)
+      confirmReturnBasket(returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases, state.stores)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)
       props.f7router.back()

@@ -8,6 +8,7 @@ import Basket from './pages/basket'
 import Stores from './pages/stores'
 import StorePacks from './pages/store-packs'
 import AddStorePack from './pages/add-store-pack'
+import AddStorePayment from './pages/add-store-payment'
 import AddProduct from './pages/add-product'
 import OrdersList from './pages/orders-list'
 import OrderDetails from './pages/order-details'
@@ -47,7 +48,7 @@ import Offers from './pages/offers'
 import Spendings from './pages/spendings'
 import AddSpending from './pages/add-spending'
 import EditSpending from './pages/edit-spending'
-import Profits from './pages/profits'
+import MonthlyTransCall from './pages/monthly-trans-call'
 import MonthlyTrans from './pages/monthly-trans'
 import RetreivePassword from './pages/retreive-password'
 import StoreOwners from './pages/store-owners'
@@ -91,6 +92,7 @@ import ArchivedProducts from './pages/archived-products'
 import ReturnBasket from './pages/return-basket'
 import NotifyFriends from './pages/notify-friends'
 import StoreBalance from './pages/store-balance'
+import StoreBalanceTrans from './pages/store-balance-trans'
 
 export default [
   {
@@ -256,6 +258,10 @@ export default [
     component: AddStorePack
   },
   {
+    path: '/add-store-payment/:id',
+    component: AddStorePayment
+  },
+  {
     path: '/add-pack-store/:id',
     component: AddPackStore
   },
@@ -292,7 +298,7 @@ export default [
     component: Orders,
   },
   {
-    path: '/orders-list/:id',
+    path: '/orders-list/:id/type/:type',
     component: OrdersList,
   },
   {
@@ -336,8 +342,8 @@ export default [
     component: StockTransDetails
   },
   {
-    path: '/profits/',
-    component: Profits,
+    path: '/monthly-trans-call/',
+    component: MonthlyTransCall,
   },
   {
     path: '/monthly-trans/:id',
@@ -478,6 +484,10 @@ export default [
   {
     path: '/store-balance/:id',
     component: StoreBalance
+  },
+  {
+    path: '/store-balance-trans/:storeId/month/:month',
+    component: StoreBalanceTrans
   },
   {
     path: '(.*)',

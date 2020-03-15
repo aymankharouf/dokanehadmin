@@ -36,17 +36,14 @@ const Panel = props => {
     <Page>
       <Navbar title={labels.mainPanelTitle} />
       <List>
-        {user ? 
-          <ListItem link="#" title={labels.logout} onClick={() => handleLogout()} />
-        : 
-          <ListItem link="/panel-login/" title={labels.login} />
-        }
+        {user ? <ListItem link="#" title={labels.logout} onClick={() => handleLogout()} />
+        : <ListItem link="/panel-login/" title={labels.login} />}
         {user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/purchase-plan/" title={labels.purchasePlan} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/offers/" title={labels.offers} badge={offersCount} badgeColor="red" view="#main-view" panelClose /> : ''}
-        {user ? <ListItem link="/profits/" title={labels.profits} view="#main-view" panelClose /> : ''}
+        {user ? <ListItem link="/monthly-trans-call/" title={labels.monthlyTrans} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
         {user ? <ListItem link="/permission-list/s" title={labels.storesOwners} view="#main-view" panelClose /> : ''}
       </List>
