@@ -31,7 +31,7 @@ const AddPackStore = props => {
   }, [store])
   useEffect(() => {
     if (cost) {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(3))
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(2))
     } else {
       setPrice(0)
     }
@@ -41,7 +41,10 @@ const AddPackStore = props => {
       if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(cost) <= 0) {
+      if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
+        throw new Error('invalidPrice')
+      }
+      if (Number(price) !== Number(Number(price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
       if (Number(price) < Number(cost)) {
@@ -58,8 +61,8 @@ const AddPackStore = props => {
       const storePack = {
         packId: pack.id,
         storeId,
-        cost: cost * 1000,
-        price: price * 1000,
+        cost: cost * 100,
+        price: price * 100,
         offerEnd,
         isActive,
         time: new Date()
@@ -74,7 +77,7 @@ const AddPackStore = props => {
 
   return (
     <Page>
-      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListItem
           title={labels.store}

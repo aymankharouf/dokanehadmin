@@ -94,7 +94,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.pack,
           quantity: nextQuantity,
-          gross: Math.trunc((action.pack.actual || action.pack.price) * nextQuantity)
+          gross: Math.round((action.pack.actual || action.pack.price) * nextQuantity)
         }
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.pack.packId)
@@ -124,7 +124,7 @@ const Reducer = (state, action) => {
         pack = {
           ...action.params.pack,
           quantity: nextQuantity,
-          gross: Math.trunc((action.params.pack.actual || action.params.pack.price) * nextQuantity)
+          gross: Math.round((action.params.pack.actual || action.params.pack.price) * nextQuantity)
         }  
         packs = state.orderBasket.slice()
         packIndex = packs.findIndex(p => p.packId === action.params.pack.packId)

@@ -40,7 +40,7 @@ const StockTrans = props => {
                 link={`/stock-trans-details/${t.id}/type/n`}
                 title={`${t.stockTransTypeInfo.name} ${t.storeId ? t.storeInfo.name : ''}`}
                 subtitle={moment(t.time.toDate()).fromNow()}
-                after={(t.total / 1000).toFixed(3)}
+                after={(t.total / 100).toFixed(2)}
                 key={t.id}
               />
             )

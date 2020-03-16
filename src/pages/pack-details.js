@@ -163,11 +163,11 @@ const PackDetails = props => {
       <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
-          <div className="card-title">{`${pack.name} ${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`}</div>
+          <div className="card-title">{`${pack.name}${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`}</div>
           <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{(pack.price / 1000).toFixed(3)}</p>
+          <p>{(pack.price / 100).toFixed(2)}</p>
           <p>{pack.unitsCount}</p>
         </CardFooter>
       </Card>
@@ -181,8 +181,8 @@ const PackDetails = props => {
             key={i++}
             className={currentStorePack?.storeId === s.storeId && currentStorePack?.packId === s.packId ? 'selected' : ''}
           >
-            <div className="list-subtext1">{`${labels.price}: ${(s.price / 1000).toFixed(3)}${s.price === s.unitPrice ? '' : '(' + (s.unitPrice / 1000).toFixed(3) + ')'}`}</div>
-            <div className="list-subtext2">{`${labels.cost}: ${(s.cost / 1000).toFixed(3)}${s.cost === s.unitCost ? '' : '(' + (s.unitCost / 1000).toFixed(3) + ')'}`}</div>
+            <div className="list-subtext1">{`${labels.price}: ${(s.price / 100).toFixed(2)}${s.price === s.unitPrice ? '' : '(' + (s.unitPrice / 100).toFixed(2) + ')'}`}</div>
+            <div className="list-subtext2">{`${labels.cost}: ${(s.cost / 100).toFixed(2)}${s.cost === s.unitCost ? '' : '(' + (s.unitCost / 100).toFixed(2) + ')'}`}</div>
             <div className="list-subtext3">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
             {s.offerEnd ? <div className="list-subtext4">{labels.offerUpTo}: {moment(s.offerEnd.toDate()).format('Y/M/D')}</div> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}

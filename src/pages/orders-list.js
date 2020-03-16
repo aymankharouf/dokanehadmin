@@ -57,7 +57,7 @@ const OrdersList = props => {
                 subtitle={o.deliveryTime}
                 text={moment(o.time.toDate()).fromNow()}
                 footer={o.lastUpdate ? moment(o.lastUpdate.toDate()).fromNow() : ''}
-                after={(o.total / 1000).toFixed(3)}
+                after={(o.total / 100).toFixed(2)}
                 key={o.id}
               />
             )

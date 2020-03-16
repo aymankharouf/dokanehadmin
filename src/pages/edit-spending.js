@@ -11,24 +11,11 @@ const EditSpending = props => {
   const [error, setError] = useState('')
   const [spending] = useState(() => state.spendings.find(s => s.id === props.id))
   const [type, setType] = useState(spending.type)
-  const [spendingAmount, setSpendingAmount] = useState((spending.spendingAmount / 1000).toFixed(3))
-  const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
+  const [amount, setAmount] = useState((spending.amount / 100).toFixed(2))
   const [spendingDate, setSpendingDate] = useState(() => spending.spendingDate ? [spending.spendingDate.toDate()] : '')
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState(spending.description)
   const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    const validateAmount = value => {
-      if (value > 0){
-        setSpendingAmountErrorMessage('')
-      } else {
-        setSpendingAmountErrorMessage(labels.invalidValue)
-      }
-    }
-    if (spendingAmount) validateAmount(spendingAmount)
-    else setSpendingAmountErrorMessage('')
-  }, [spendingAmount])
-
   useEffect(() => {
     const validateDate = value => {
       if (new Date(value) > new Date()){
@@ -48,11 +35,14 @@ const EditSpending = props => {
   }, [error])
   const handleEdit = () => {
     try{
+      if (Number(amount) <= 0 || Number(amount) !== Number(Number(amount).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
       const newSpending = {
         ...spending,
         type,
-        spendingAmount: spendingAmount,
+        amount: amount * 100,
         spendingDate: formatedDate,
         description
       }
@@ -64,27 +54,27 @@ const EditSpending = props => {
 		}    
   }
   useEffect(() => {
-    if (spendingAmount * 1000 !== spending.spendingAmount
+    if (amount * 100 !== spending.amount
     || type !== spending.type
     || description !== spending.description
     || (!spending.spendingDate && spendingDate.length > 0)
     || (spending.spendingDate && spendingDate.length === 0)
     || (spending.spendingDate.toDate()).toString() !== (new Date(spendingDate)).toString()) setHasChanged(true)
     else setHasChanged(false)
-  }, [spending, spendingAmount, spendingDate, type, description])
+  }, [spending, amount, spendingDate, type, description])
 
   return (
     <Page>
       <Navbar title={labels.editSpending} backLink={labels.back} />
       <List form inlineLabels>
       <ListInput 
-          name="spendingAmount" 
-          label={labels.spendingAmount}
-          value={spendingAmount}
+          name="amount" 
+          label={labels.amount}
+          value={amount}
           clearButton 
           type="number" 
-          onChange={e => setSpendingAmount(e.target.value)}
-          onInputClear={() => setSpendingAmount('')}
+          onChange={e => setAmount(e.target.value)}
+          onInputClear={() => setAmount('')}
         />
         <ListItem
           title={labels.type}
@@ -125,7 +115,7 @@ const EditSpending = props => {
           onInputClear={() => setSpendingDate([])}
         />
       </List>
-      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage || !hasChanged ? '' :
+      {!amount || !type || !spendingDate || spendingDateErrorMessage || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

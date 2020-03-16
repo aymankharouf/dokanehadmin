@@ -40,7 +40,7 @@ const PackTrans = props => {
                 title={t.storeInfo.name}
                 subtitle={`${labels.quantity}: ${quantityText(t.quantity, t.weight)}`}
                 footer={moment(t.time.toDate()).fromNow()}
-                after={(t.cost / 1000).toFixed(3)}
+                after={(t.cost / 100).toFixed(2)}
                 key={t.id}
               />
             )

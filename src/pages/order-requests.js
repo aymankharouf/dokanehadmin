@@ -41,7 +41,7 @@ const OrderRequests = props => {
                 subtitle={r.orderStatusInfo.name}
                 text={`${labels.type}: ${r.requestTypeInfo.name}`}
                 footer={moment(r.time.toDate()).fromNow()}
-                after={(r.total / 1000).toFixed(3)}
+                after={(r.total / 100).toFixed(2)}
                 key={r.id}
               />
             )

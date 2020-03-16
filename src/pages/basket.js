@@ -14,7 +14,7 @@ const Basket = props => {
   }, [state.basket, props.f7router])
   useEffect(() => {
     setBasket(() => state.basket?.packs || [])
-    setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
+    setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.round(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.basket])
   const handleAdd = pack => {
     if (store.id === 's') {
@@ -37,11 +37,11 @@ const Basket = props => {
               title={p.productName}
               subtitle={p.productAlias}
               text={p.packName}
-              footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(Math.round(p.cost * (p.weight || p.quantity)) / 100).toFixed(2)}`}
               key={i++}
             >
               <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 100).toFixed(2)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {p.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               <Stepper
@@ -55,7 +55,7 @@ const Basket = props => {
           )}
         </List>
       </Block>
-      <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" href="/confirm-purchase/">
+      <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 100).toFixed(2)}`} color="green" href="/confirm-purchase/">
         <Icon material="done"></Icon>
       </Fab>
 

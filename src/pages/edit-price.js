@@ -10,7 +10,7 @@ const EditPrice = props => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId))
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId))
-  const [cost, setCost] = useState(props.storeId === 's' ? storePack.cost / 1000 : '')
+  const [cost, setCost] = useState(props.storeId === 's' ? (storePack.cost / 100).toFixed(2) : '')
   const [price, setPrice] = useState('')
   const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
@@ -21,14 +21,17 @@ const EditPrice = props => {
   }, [error])
   useEffect(() => {
     if (cost && store.id !== 's') {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(3))
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(2))
     } else {
       setPrice(0)
     }
   }, [cost, store])
   const handleEdit = () => {
     try{
-      if (Number(cost) <= 0) {
+      if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
+        throw new Error('invalidPrice')
+      }
+      if (Number(price) !== Number(Number(price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
       if (Number(price) < Number(cost)) {
@@ -44,8 +47,8 @@ const EditPrice = props => {
       }
       const newStorePack = {
         ...storePack,
-        cost: cost * 1000,
-        price : price * 1000,
+        cost: cost * 100,
+        price : price * 100,
         offerEnd,
         time: new Date()
       }
@@ -77,14 +80,14 @@ const EditPrice = props => {
         <ListInput 
           name="oldCost" 
           label={labels.oldCost}
-          value={(storePack.cost / 1000).toFixed(3)}
+          value={(storePack.cost / 100).toFixed(2)}
           type="text" 
           readonly
         />
         <ListInput 
           name="oldPrice" 
           label={labels.oldPrice}
-          value={(storePack.price / 1000).toFixed(3)}
+          value={(storePack.price / 100).toFixed(2)}
           type="text" 
           readonly
         />

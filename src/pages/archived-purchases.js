@@ -74,7 +74,7 @@ const ArchivedPurchases = props => {
                 link={`/purchase-details/${p.id}/type/a`}
                 title={p.storeInfo.name}
                 subtitle={moment(p.time.toDate()).fromNow()}
-                after={((p.total - p.discount) / 1000).toFixed(3)}
+                after={(p.total / 100).toFixed(2)}
                 key={p.id}
               />
             )

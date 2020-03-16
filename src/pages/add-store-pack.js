@@ -30,7 +30,7 @@ const AddStorePack = props => {
   }, [error])
   useEffect(() => {
     if (cost) {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(3))
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(2))
     } else {
       setPrice(0)
     }
@@ -40,7 +40,10 @@ const AddStorePack = props => {
       if (state.packPrices.find(p => p.packId === packId && p.storeId === store.id)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(cost) <= 0) {
+      if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
+        throw new Error('invalidPrice')
+      }
+      if (Number(price) !== Number(Number(price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
       if (Number(price) < Number(cost)) {
@@ -57,8 +60,8 @@ const AddStorePack = props => {
       const storePack = {
         packId,
         storeId: store.id,
-        cost: cost * 1000,
-        price: price * 1000,
+        cost: cost * 100,
+        price: price * 100,
         offerEnd,
         isActive,
         time: new Date()

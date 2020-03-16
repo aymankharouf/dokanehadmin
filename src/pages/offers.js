@@ -70,7 +70,7 @@ const Offers = props => {
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 <div className="list-subtext1">{`${labels.storeName}: ${p.storeName}`}</div>
-                <div className="list-subtext1">{`${labels.price}: ${(p.price / 1000).toFixed(3)}`}</div>
+                <div className="list-subtext1">{`${labels.price}: ${(p.price / 100).toFixed(2)}`}</div>
                 {p.isActive ? '' : <Badge slot="text" color='red'>{labels.inActive}</Badge>}
                 {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
                 {p.isActive ? <Button text={labels.haltOffer} slot="after" onClick={() => handleHaltOffer(p)} /> : ''}

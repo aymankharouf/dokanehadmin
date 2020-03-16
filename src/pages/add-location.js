@@ -18,10 +18,13 @@ const AddLocation = props => {
   }, [error])
   const handleSubmit = () => {
     try{
+      if (Number(fees) < 0 || Number(fees) !== Number(Number(fees).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
       addLocation({
         id: Math.random().toString(),
         name,
-        fees: fees * 1000,
+        fees: fees * 100,
         ordering
       })
       showMessage(labels.addSuccess)

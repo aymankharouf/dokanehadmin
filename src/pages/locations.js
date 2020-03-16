@@ -22,7 +22,7 @@ const Locations = props => {
               <ListItem
                 link={`/edit-location/${l.id}`}
                 title={l.name}
-                after={(l.fees / 1000).toFixed(3)}
+                after={(l.fees / 100).toFixed(2)}
                 key={l.id}
               />
             )

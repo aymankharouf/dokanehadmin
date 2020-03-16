@@ -16,7 +16,7 @@ const ConfirmPurchase = props => {
       packInfo,
     }
   }))
-  const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0))
+  const [total] = useState(() => state.basket.packs.reduce((sum, p) => sum + Math.round(p.cost * (p.weight || p.quantity)), 0))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -57,21 +57,21 @@ const ConfirmPurchase = props => {
             subtitle={p.packInfo.productAlias}
             text={p.packInfo.name}
             footer={`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}
-            after={((p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
+            after={((p.cost * (p.weight || p.quantity)) / 100).toFixed(2)}
           >
-            <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+            <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 100).toFixed(2)}`}</div>
             {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
           </ListItem>
         )}
         <ListItem 
           title={labels.total} 
           className="total" 
-          after={(total / 1000).toFixed(3)} 
+          after={(total / 100).toFixed(2)} 
         />
         <ListItem 
           title={labels.net} 
           className="net" 
-          after={(total / 1000).toFixed(3)} 
+          after={(total / 100).toFixed(2)} 
         />
       </List>
     </Block>

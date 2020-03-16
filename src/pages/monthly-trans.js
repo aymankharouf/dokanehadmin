@@ -21,7 +21,7 @@ const MonthlyTrans = props => {
   const [stock] = useState(() => {
     if (monthlyTrans) return monthlyTrans.stock
     const stockPacks = state.packPrices.filter(p => p.storeId === 's' && p.quantity > 0)
-    return stockPacks.reduce((sum, p) => sum + Math.trunc(p.cost * p.quantity), 0)
+    return stockPacks.reduce((sum, p) => sum + Math.round(p.cost * p.quantity), 0)
   })
   const [sales] = useState(() => monthlyTrans?.sales ?? deliveredOrders.reduce((sum, o) => sum + o.total, 0))
   const [transProfit] = useState(() => monthlyTrans?.transProfit ?? deliveredOrders.reduce((sum, o) => sum + o.profit, 0))
@@ -47,12 +47,12 @@ const MonthlyTrans = props => {
   const [withdrawals] = useState(() => {
     if (monthlyTrans) return monthlyTrans.withdrawals
     const withdrawals = spendings.filter(s => s.type === 'w')
-    return withdrawals.reduce((sum, s) => sum + s.spendingAmount, 0)
+    return withdrawals.reduce((sum, s) => sum + s.amount, 0)
   })
   const [expenses] = useState(() => {
     if (monthlyTrans) return monthlyTrans.expenses
     const expenses = spendings.filter(s => s.type !== 'w')
-    return expenses.reduce((sum, s) => sum + s.spendingAmount, 0)
+    return expenses.reduce((sum, s) => sum + s.amount, 0)
   })
   const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) - (discounts + expenses + damages + fractions))
   useEffect(() => {
@@ -119,83 +119,83 @@ const MonthlyTrans = props => {
           />
           <ListItem
             title={labels.stock}
-            after={(stock / 1000).toFixed(3)}
+            after={(stock / 100).toFixed(2)}
           />
           <ListItem
             title={labels.sales}
-            after={(sales / 1000).toFixed(3)}
+            after={(sales / 100).toFixed(2)}
           />
           <ListItem
             title={labels.transProfit}
-            after={(transProfit / 1000).toFixed(3)}
+            after={(transProfit / 100).toFixed(2)}
           />
           <ListItem
             title={labels.storesProfit}
-            after={(storesProfit / 1000).toFixed(3)}
+            after={(storesProfit / 100).toFixed(2)}
           />
           <ListItem
             title={labels.fixedFees}
-            after={(fixedFees / 1000).toFixed(3)}
+            after={(fixedFees / 100).toFixed(2)}
           />
           <ListItem
             title={labels.deliveryFees}
-            after={(deliveryFees / 1000).toFixed(3)}
+            after={(deliveryFees / 100).toFixed(2)}
           />
           <ListItem
             title={labels.storesBalance}
-            after={(storesBalance / 1000).toFixed(3)}
+            after={(storesBalance / 100).toFixed(2)}
           />
           <ListItem
             title={labels.grossProfit}
-            after={((transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) / 1000).toFixed(3)}
+            after={((transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) / 100).toFixed(2)}
           />
           <ListItem
             title={labels.discounts}
-            after={(discounts / 1000).toFixed(3)}
+            after={(discounts / 100).toFixed(2)}
           />
           <ListItem
             title={labels.fractions}
-            after={(fractions / 1000).toFixed(3)}
+            after={(fractions / 100).toFixed(2)}
           />
           <ListItem
             title={labels.expenses}
-            after={(expenses / 1000).toFixed(3)}
+            after={(expenses / 100).toFixed(2)}
           />
           <ListItem
             title={labels.damages}
-            after={(damages / 1000).toFixed(3)}
+            after={(damages / 100).toFixed(2)}
           />
           <ListItem
             title={labels.storeTransNet}
-            after={(storeTransNet / 1000).toFixed(3)}
+            after={(storeTransNet / 100).toFixed(2)}
           />
           <ListItem
             title={labels.grossLoss}
-            after={((discounts + expenses + damages + fractions) / 1000).toFixed(3)}
+            after={((discounts + expenses + damages + fractions) / 100).toFixed(2)}
           />
           <ListItem
             title={labels.netProfit}
-            after={(netProfit / 1000).toFixed(3)}
+            after={(netProfit / 100).toFixed(2)}
           />
           <ListItem
             title={labels.specialDiscount}
-            after={(specialDiscounts / 1000).toFixed(3)}
+            after={(specialDiscounts / 100).toFixed(2)}
           />
           <ListItem
             title={labels.donations}
-            after={(donations / 1000).toFixed(3)}
+            after={(donations / 100).toFixed(2)}
           />
           <ListItem
             title={labels.donationsBalance}
-            after={((Math.trunc(netProfit * 0.2) - donations - specialDiscounts) / 1000).toFixed(3)}
+            after={((Math.round(netProfit * 0.2) - donations - specialDiscounts) / 100).toFixed(2)}
           />
           <ListItem
             title={labels.withdrawals}
-            after={(withdrawals / 1000).toFixed(3)}
+            after={(withdrawals / 100).toFixed(2)}
           />
           <ListItem
             title={labels.propertyBalance}
-            after={((Math.trunc(netProfit * 0.8) - withdrawals) / 1000).toFixed(3)}
+            after={((Math.round(netProfit * 0.8) - withdrawals) / 100).toFixed(2)}
           />
         </List>
       </Block>

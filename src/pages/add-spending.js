@@ -7,23 +7,10 @@ import { addSpending, showMessage, showError, getMessage } from '../data/actions
 const AddSpending = props => {
   const [error, setError] = useState('')
   const [type, setType] = useState('')
-  const [spendingAmount, setSpendingAmount] = useState('')
-  const [spendingAmountErrorMessage, setSpendingAmountErrorMessage] = useState('')
+  const [amount, setAmount] = useState('')
   const [spendingDate, setSpendingDate] = useState([new Date()])
   const [spendingDateErrorMessage, setSpendingDateErrorMessage] = useState('')
   const [description, setDescription] = useState('')
-  useEffect(() => {
-    const validateAmount = value => {
-      if (value > 0){
-        setSpendingAmountErrorMessage('')
-      } else {
-        setSpendingAmountErrorMessage(labels.invalidValue)
-      }
-    }
-    if (spendingAmount) validateAmount(spendingAmount)
-    else setSpendingAmountErrorMessage('')
-  }, [spendingAmount])
-
   useEffect(() => {
     const validateDate = value => {
       if (new Date(value) > new Date()){
@@ -43,10 +30,13 @@ const AddSpending = props => {
   }, [error])
   const handleSubmit = () => {
     try{
+      if (Number(amount) <= 0 || Number(amount) !== Number(Number(amount).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
       const formatedDate = spendingDate.length > 0 ? new Date(spendingDate) : ''
       addSpending({
         type,
-        spendingAmount: spendingAmount * 1000,
+        amount: amount * 100,
         spendingDate: formatedDate,
         description,
         time: new Date()
@@ -62,15 +52,13 @@ const AddSpending = props => {
       <Navbar title={labels.newSpending} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
-          name="spendingAmount" 
-          label={labels.spendingAmount}
-          value={spendingAmount}
+          name="amount" 
+          label={labels.amount}
+          value={amount}
           clearButton 
           type="number" 
-          errorMessage={spendingAmountErrorMessage}
-          errorMessageForce
-          onChange={e => setSpendingAmount(e.target.value)}
-          onInputClear={() => setSpendingAmount('')}
+          onChange={e => setAmount(e.target.value)}
+          onInputClear={() => setAmount('')}
         />
         <ListItem
           title={labels.type}
@@ -111,7 +99,7 @@ const AddSpending = props => {
           onInputClear={() => setSpendingDate([])}
         />
       </List>
-      {!spendingAmount || !type || !spendingDate || spendingAmountErrorMessage || spendingDateErrorMessage ? '' :
+      {!amount || !type || !spendingDate || spendingDateErrorMessage ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

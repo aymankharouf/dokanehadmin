@@ -66,7 +66,7 @@ const PurchasePlan = props => {
 								link={`/purchase-plan-details/${s.store.id}`}
 								title={s.store.name}
 								subtitle={s.store.id === 's' ? '' : `${labels.discount}: ${s.store.discount}`}
-								text={s.store.id === 's' ? '' : `${labels.sales}: ${(s.sales / 1000).toFixed(3)}`}
+								text={s.store.id === 's' ? '' : `${labels.sales}: ${(s.sales / 100).toFixed(2)}`}
 								after={s.packsCount}
 								key={i++}
 							/>

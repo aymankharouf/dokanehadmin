@@ -25,7 +25,7 @@ const ReturnBasket = props => {
       })
       return basket.sort((p1, p2) => p1.time - p2.time)
     })
-    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + Math.trunc(p.cost * (p.weight || p.quantity)), 0) || 0)
+    setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + Math.round(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.returnBasket, state.packs])
   useEffect(() => {
     if (!state.returnBasket) props.f7router.navigate('/home/', {reloadAll: true})
@@ -67,10 +67,10 @@ const ReturnBasket = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.productAlias}
               text={p.packInfo.name}
-              footer={`${labels.grossPrice}: ${(Math.trunc(p.cost * p.quantity) / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(Math.round(p.cost * p.quantity) / 100).toFixed(2)}`}
               key={i++}
             >
-              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 100).toFixed(2)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               <Link slot="after" iconMaterial="delete" iconColor="red" onClick={()=> dispatch({type: 'REMOVE_FROM_RETURN_BASKET', pack: p})}/>
@@ -101,7 +101,7 @@ const ReturnBasket = props => {
         </List>
       </Block>
       {state.returnBasket.type === 's' && !storeId ? '' :
-        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(totalPrice / 100).toFixed(2)}`} color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }

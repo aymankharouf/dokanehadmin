@@ -26,7 +26,7 @@ const StoreDetails = props => {
         <ListInput
           name="balance"
           label={labels.balance}
-          value={((store.balances?.reduce((sum, b) => sum + b.balance, 0) || 0) / 1000).toFixed(3)}
+          value={((store.balances?.reduce((sum, b) => sum + b.balance, 0) || 0) / 100).toFixed(2)}
           type="number"
           readonly
         />

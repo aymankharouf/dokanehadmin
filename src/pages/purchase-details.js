@@ -70,11 +70,11 @@ const PurchaseDetails = props => {
               title={p.packInfo.productName}
               subtitle={p.packInfo.productAlias}
               text={p.packInfo.name}
-              footer={`${labels.price}: ${(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}`}
+              footer={`${labels.price}: ${(Math.round(p.cost * (p.weight || p.quantity)) / 100).toFixed(2)}`}
               key={i++} 
             >
               <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${(p.cost / 100).toFixed(2)}`}</div>
               <div className="list-subtext2">{`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}</div>
               {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               {props.type === 'n' ? <Button text={labels.return} slot="after" onClick={() => handleReturn(p)} /> : ''}

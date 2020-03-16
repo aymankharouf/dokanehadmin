@@ -33,14 +33,14 @@ const AddStorePayment = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (Number(amount) <= 0) {
+      if (Number(amount) <= 0 || Number(amount) !== Number(Number(amount).toFixed(2))) {
         throw new Error('invalidValue')
       }
       const formatedDate = paymentDate.length > 0 ? new Date(paymentDate) : ''
       const payment = {
         type,
         description,
-        amount: amount * 1000,
+        amount: amount * 100,
         paymentDate: formatedDate,
         time: new Date()
       }

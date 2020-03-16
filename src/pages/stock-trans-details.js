@@ -30,7 +30,7 @@ const StockTransDetails = props => {
               subtitle={p.packInfo.productAlias}
               text={p.packInfo.name}
               footer={`${labels.quantity}: ${quantityText(p.quantity, p.weight)}`}
-              after={(Math.trunc(p.cost * (p.weight || p.quantity)) / 1000).toFixed(3)}
+              after={(Math.round(p.cost * (p.weight || p.quantity)) / 100).toFixed(2)}
               key={p.packId}
             >
               <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />

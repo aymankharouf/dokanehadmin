@@ -95,11 +95,11 @@ const EditOrder = props => {
               title={p.productName}
               subtitle={p.productAlias}
               text={p.packName}
-              footer={`${labels.grossPrice}: ${(p.gross / 1000).toFixed(3)}`}
+              footer={`${labels.grossPrice}: ${(p.gross / 100).toFixed(2)}`}
               key={p.packId}
             >
               <img src={p.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-              <div className="list-subtext1">{`${labels.unitPrice}: ${((p.actual || p.price) / 1000).toFixed(3)}`}</div>
+              <div className="list-subtext1">{`${labels.unitPrice}: ${((p.actual || p.price) / 100).toFixed(2)}`}</div>
               <div className="list-subtext2">{quantityDetails(p)}</div>
               <Stepper
                 slot="after"
@@ -113,7 +113,7 @@ const EditOrder = props => {
         </List>
       </Block>
       {hasChanged ? 
-        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(total / 1000).toFixed(3)}`} color="green" onClick={() => handleSubmit()}>
+        <Fab position="center-bottom" slot="fixed" text={`${labels.submit} ${(total / 100).toFixed(2)}`} color="green" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       : ''}

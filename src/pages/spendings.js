@@ -37,7 +37,7 @@ const Spendings = props => {
                   link={`/edit-spending/${s.id}`}
                   title={s.spendingTypeInfo.name}
                   subtitle={moment(s.time.toDate()).fromNow()}
-                  after={(s.spendingAmount / 1000).toFixed(3)}
+                  after={(s.amount / 100).toFixed(2)}
                   key={s.id}
                 />
               )

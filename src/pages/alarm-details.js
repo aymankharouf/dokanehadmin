@@ -93,7 +93,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="currentPrice" 
           label={labels.currentPrice}
-          value={(pack.price / 1000).toFixed(3)}
+          value={(pack.price / 100).toFixed(2)}
           type="number" 
           readonly
         />
@@ -109,7 +109,7 @@ const AlarmDetails = props => {
         <ListInput 
           name="newPrice"
           label={labels.price}
-          value={(alarm.price / 1000).toFixed(3)}
+          value={(alarm.price / 100).toFixed(2)}
           type="number" 
           readonly
         />
@@ -166,7 +166,7 @@ const AlarmDetails = props => {
             title={p.storeInfo.name}
             subtitle={p.quantity ? `${labels.quantity}: ${p.quantity}` : ''}
             text={moment(p.time.toDate()).fromNow()} 
-            after={(p.price / 1000).toFixed(3)} 
+            after={(p.price / 100).toFixed(2)} 
             key={i++} 
           />
         )}

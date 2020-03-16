@@ -51,8 +51,8 @@ const Stock = props => {
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.productAlias}
                 text={p.packInfo.name}
-                footer={`${labels.gross}: ${(p.cost * (p.weight || p.quantity)/ 1000).toFixed(3)}`}
-                after={(p.cost / 1000).toFixed(3)}
+                footer={`${labels.gross}: ${(p.cost * (p.weight || p.quantity)/ 100).toFixed(2)}`}
+                after={(p.cost / 100).toFixed(2)}
                 key={i++}
               >
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />

@@ -61,7 +61,7 @@ const StorePacks = props => {
                 link={`/pack-details/${p.packId}`}
                 title={p.packInfo.productName}
                 subtitle={p.packInfo.name}
-                text={(p.price / 1000).toFixed(3)}
+                text={(p.price / 100).toFixed(2)}
                 footer={moment(p.time.toDate()).fromNow()}
                 key={i++}
               >

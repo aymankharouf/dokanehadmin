@@ -15,9 +15,9 @@ const EditCustomer = props => {
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [mapPosition, setMapPosition] = useState(customer.mapPosition)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 1000).toFixed(3))
-  const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 1000).toFixed(3))
-  const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 1000).toFixed(3))
+  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 100).toFixed(2))
+  const [orderLimit, setOrderLimit] = useState((customer.orderLimit / 100).toFixed(2))
+  const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 100).toFixed(2))
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
@@ -26,9 +26,9 @@ const EditCustomer = props => {
     || locationId !== userInfo.locationId
     || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
-    || deliveryFees * 1000 !== customer.deliveryFees
-    || specialDiscount * 1000 !== customer.specialDiscount
-    || orderLimit * 1000 !== customer.orderLimit) setHasChanged(true)
+    || deliveryFees * 100 !== customer.deliveryFees
+    || specialDiscount * 100 !== customer.specialDiscount
+    || orderLimit * 100 !== customer.orderLimit) setHasChanged(true)
     else setHasChanged(false)
   }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, deliveryFees, orderLimit, specialDiscount])
   useEffect(() => {
@@ -39,14 +39,23 @@ const EditCustomer = props => {
   }, [error])
   const handleSubmit = () => {
     try{
+      if (Number(deliveryFees) < 0 || Number(deliveryFees) !== Number(Number(deliveryFees).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
+      if (Number(orderLimit) < 0 || Number(orderLimit) !== Number(Number(orderLimit).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
+      if (Number(specialDiscount) < 0 || Number(specialDiscount) !== Number(Number(specialDiscount).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
       const newCustomer = {
         ...customer,
         address,
         mapPosition,
         isBlocked,
-        deliveryFees: deliveryFees * 1000,
-        orderLimit: orderLimit * 1000,
-        specialDiscount: specialDiscount * 1000
+        deliveryFees: deliveryFees * 100,
+        orderLimit: orderLimit * 100,
+        specialDiscount: specialDiscount * 100
       }
       editCustomer(newCustomer, name, locationId, userInfo.mobile, customer.storeId, state.stores)
       showMessage(labels.editSuccess)

@@ -12,7 +12,7 @@ const StoreBalanceTrans = props => {
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [trans, setTrans] = useState([])
   const month = (Number(props.month) % 100) - 1
-  const year = Math.trunc(Number(props.month) / 100)
+  const year = Math.round(Number(props.month) / 100)
   useEffect(() => {
     setTrans(() => {
       let storePayments = state.storePayments.filter(p => p.storeId === props.storeId && p.paymentDate.getFullYear() === year && p.paymentDate.getMonth() === month)
@@ -59,7 +59,7 @@ const StoreBalanceTrans = props => {
               <ListItem
                 title={t.name}
                 subtitle={moment(t.time.toDate()).fromNow()}
-                after={(t.amount / 1000).toFixed(3)}
+                after={(t.amount / 100).toFixed(2)}
                 key={i++}
               />
             )

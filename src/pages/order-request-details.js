@@ -46,8 +46,8 @@ const OrderRequestDetails = props => {
     })
   })
   const [total] = useState(() => orderBasket.reduce((sum, p) => sum + p.price * p.quantity, 0))
-  const [fixedFees] = useState(() => Math.trunc(setup.fixedFees * total))
-  const [fraction] = useState(() => (total + fixedFees) - Math.floor((total + fixedFees) / 50) * 50)
+  const [fixedFees] = useState(() => Math.round(setup.fixedFees * total))
+  const [fraction] = useState(() => (total + fixedFees) - Math.floor((total + fixedFees) / 5) * 5)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -75,7 +75,7 @@ const OrderRequestDetails = props => {
               subtitle={p.productAlias}
               text={p.packName}
               footer={`${labels.status}: ${p.statusNote}`}
-              after={(p.gross / 1000).toFixed(3)}
+              after={(p.gross / 100).toFixed(2)}
             >
               <div className="list-subtext1">{quantityDetails(p)}</div>
               {p.changeQuantityNote ? <div className="list-subtext2">{`${labels.requestedChange}: ${p.changeQuantityNote}`}</div> : ''}
@@ -86,22 +86,22 @@ const OrderRequestDetails = props => {
           <ListItem 
             title={labels.total} 
             className="total"
-            after={(total / 1000).toFixed(3)} 
+            after={(total / 100).toFixed(2)} 
           />
           <ListItem 
             title={labels.fixedFees} 
             className="fees" 
-            after={((fixedFees + order.deliveryFees) / 1000).toFixed(3)} 
+            after={((fixedFees + order.deliveryFees) / 100).toFixed(2)} 
           />
           <ListItem 
             title={labels.discount} 
             className="discount" 
-            after={((order.discount.value + fraction) / 1000).toFixed(3)} 
+            after={((order.discount.value + fraction) / 100).toFixed(2)} 
           /> 
           <ListItem 
             title={labels.net} 
             className="net" 
-            after={((total + fixedFees + order.deliveryFees - order.discount.value - fraction) / 1000).toFixed(3)} 
+            after={((total + fixedFees + order.deliveryFees - order.discount.value - fraction) / 100).toFixed(2)} 
           />
         </List>
       </Block>

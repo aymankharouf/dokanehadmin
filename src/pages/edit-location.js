@@ -10,12 +10,12 @@ const EditLocation = props => {
   const [error, setError] = useState('')
   const [location] = useState(() => state.locations.find(l => l.id === props.id))
   const [name, setName] = useState(location.name)
-  const [fees, setFees] = useState((location.fees / 1000).toFixed(3))
+  const [fees, setFees] = useState((location.fees / 100).toFixed(2))
   const [ordering, setOrdering] = useState(location.ordering)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     if (name !== location.name
-    || fees * 1000 !== location.fees
+    || fees * 100 !== location.fees
     || ordering !== location.ordering) setHasChanged(true)
     else setHasChanged(false)
   }, [location, name, fees, ordering])
@@ -27,10 +27,13 @@ const EditLocation = props => {
   }, [error])
   const handleEdit = () => {
     try{
+      if (Number(fees) < 0 || Number(fees) !== Number(Number(fees).toFixed(2))) {
+        throw new Error('invalidValue')
+      }
       const newLocation = {
         ...location,
         name,
-        fees: fees * 1000,
+        fees: fees * 100,
         ordering
       }
       editLocation(newLocation, state.locations)

@@ -37,7 +37,7 @@ const StoreBalance = props => {
                 <ListItem
                   link={`/store-balance-trans/${props.id}/month/${b.month}`}
                   title={b.monthDesc}
-                  after={(b.balance / 1000).toFixed(3)}
+                  after={(b.balance / 100).toFixed(2)}
                   key={b.month}
                 />
               )

@@ -38,7 +38,7 @@ const Purchases = props => {
                 link={`/purchase-details/${p.id}/type/n`}
                 title={p.storeInfo.name}
                 subtitle={moment(p.time.toDate()).fromNow()}
-                after={(p.total / 1000).toFixed(3)}
+                after={(p.total / 100).toFixed(2)}
                 key={p.id}
               />
             )

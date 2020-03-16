@@ -54,7 +54,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="orderLimit" 
           label={labels.orderLimit}
-          value={(customer.orderLimit / 1000).toFixed(3)}
+          value={(customer.orderLimit / 100).toFixed(2)}
           type="number"
           readonly
         />
@@ -75,7 +75,7 @@ const CustomerDetails = props => {
         <ListInput 
           name="deliveredOrdersTotal" 
           label={labels.deliveredOrdersTotal}
-          value={(customer.deliveredOrdersTotal / 1000).toFixed(3)}
+          value={(customer.deliveredOrdersTotal / 100).toFixed(2)}
           type="number"
           readonly
         />
@@ -89,21 +89,21 @@ const CustomerDetails = props => {
         <ListInput 
           name="discounts" 
           label={labels.discountBalance}
-          value={(customer.discounts / 1000).toFixed(3)}
+          value={(customer.discounts / 100).toFixed(2)}
           type="number"
           readonly
         />
         <ListInput 
           name="deliveryFees"
           label={labels.deliveryFees}
-          value={(customer.deliveryFees / 1000).toFixed(3)}
+          value={(customer.deliveryFees / 100).toFixed(2)}
           type="number"
           readonly
         />
         <ListInput 
           name="specialDiscount"
           label={labels.specialDiscount}
-          value={(customer.specialDiscount / 1000).toFixed(3)}
+          value={(customer.specialDiscount / 100).toFixed(2)}
           type="number"
           readonly
         />
