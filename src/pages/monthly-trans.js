@@ -195,7 +195,7 @@ const MonthlyTrans = props => {
           />
           <ListItem
             title={labels.propertyBalance}
-            after={((Math.round(netProfit * 0.8) - withdrawals) / 100).toFixed(2)}
+            after={((netProfit - Math.round(netProfit * 0.2) - withdrawals) / 100).toFixed(2)}
           />
         </List>
       </Block>

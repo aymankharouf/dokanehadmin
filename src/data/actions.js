@@ -34,7 +34,7 @@ export const showError = messageText => {
 }
 
 export const quantityText = (quantity, weight) => {
-  return weight && weight !== quantity ? `${quantityText(quantity)}(${quantityText(weight)})` : quantity === Math.round(quantity) ? quantity.toString() : quantity.toFixed(3)
+  return weight && weight !== quantity ? `${quantityText(quantity)}(${quantityText(weight)})` : quantity === Math.trunc(quantity) ? quantity.toString() : quantity.toFixed(3)
 }
 
 export const quantityDetails = basketPack => {
@@ -49,7 +49,7 @@ export const quantityDetails = basketPack => {
 }
 
 export const addQuantity = (q1, q2, q3 = 0) => {
-  return Math.round(q1 * 1000 + q2 * 1000 + q3 * 1000) / 1000
+  return Math.trunc(q1 * 1000 + q2 * 1000 + q3 * 1000) / 1000
   }
 
 export const productOfText = (trademark, country) => {
@@ -118,7 +118,7 @@ export const updateOrder = (batch, storeId, order, basketPack, purchaseId) => {
 export const updateOrders = (batch, storeId, orders, basketPack, purchaseId) => {
   let remaining = basketPack.quantity
   let orderPack, orderPackIndex, purchased, orderStatus, avgCost, avgActual, status
-  let basket, profit, total, fixedFees, fraction, orderRef, actual
+  let basket, profit, total, fixedFees, fraction, orderRef, actual, gross
   for (let o of orders){
     if (remaining <= 0) break
     basket = o.basket.slice()
@@ -138,13 +138,14 @@ export const updateOrders = (batch, storeId, orders, basketPack, purchaseId) => 
     avgCost = orderPack.purchased === 0 ? basketPack.cost : Math.round((orderPack.cost * orderPack.purchased + basketPack.cost * purchased) / addQuantity(orderPack.purchased, purchased))
     avgActual = orderPack.purchased === 0 ? actual : Math.round((orderPack.actual * orderPack.purchased + actual * purchased) / addQuantity(orderPack.purchased, purchased))
     status = orderPack.quantity === addQuantity(orderPack.purchased, purchased) ? 'f' : 'p'
+    gross = status === 'f' ? Math.round(avgActual * addQuantity(orderPack.purchased, purchased)) : Math.round(avgActual * addQuantity(orderPack.purchased, purchased)) + Math.round(orderPack.price * addQuantity(orderPack.quantity, -1 * orderPack.purchased, -1 * purchased))
     basket.splice(orderPackIndex, 1, {
       ...orderPack, 
       purchased: addQuantity(orderPack.purchased, purchased),
       storeId: orderPack.storeId && orderPack.storeId !== storeId ? 'm' : storeId,
       cost: avgCost,
       actual: avgActual,
-      gross: status === 'f' ? Math.round(avgActual * addQuantity(orderPack.purchased, purchased)) : Math.round(avgActual * addQuantity(orderPack.purchased, purchased)) + Math.round(orderPack.price * addQuantity(orderPack.quantity, -1 * orderPack.purchased, -1 * purchased)),
+      gross,
       status,
       lastPurchaseId: purchaseId || '',
       lastPurchased: purchased,
@@ -407,32 +408,36 @@ export const confirmPurchase = (basket, orders, storeId, packPrices, packs, stor
             packId: packInfo.subPackId,
             quantity: remaining * packInfo.subQuantity,
             cost: Math.round(pack.cost / packInfo.subQuantity * packInfo.subPercent),
-            actual: Math.round(pack.actual / packInfo.subQuantity * packInfo.subPercent),
+            actual: Math.round(pack.actual / packInfo.subQuantity * packInfo.subPercent * (1 + setup.profit)),
             exceedPriceType: pack.exceedPriceType
           }
           packOrders = approvedOrders.filter(o => o.basket.find(op => op.packId === subPack.packId && op.price === p.price && ['n', 'p'].includes(op.status)))
           packOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
           quantity = updateOrders(batch, storeId, packOrders, subPack, purchaseRef.id)
           if (quantity > 0) {
-            mainRemaining = Math.min(mainRemaining, Math.round(quantity / packInfo.subQuantity))
+            mainRemaining = Math.min(mainRemaining, Math.trunc(quantity / packInfo.subQuantity))
             quantity = quantity % packInfo.subQuantity
-            packsIn.push({...subPack, quantity})
+            if (quantity > 0) {
+              packsIn.push({...subPack, quantity})
+            }
           }
           if (packInfo.bonusPackId){
             subPack = {
               packId: packInfo.bonusPackId,
               quantity: remaining * packInfo.bonusQuantity,
               cost: Math.round(p.cost / packInfo.bonusQuantity * packInfo.bonusPercent),
-              actual: Math.round(p.actual / packInfo.bonusQuantity * packInfo.bonusPercent),
+              actual: Math.round(p.actual / packInfo.bonusQuantity * packInfo.bonusPercent * (1 + setup.profit)),
               exceedPriceType: p.exceedPriceType
             }
             packOrders = approvedOrders.filter(o => o.basket.find(op => op.packId === subPack.packId && op.price === p.price && ['n', 'p'].includes(op.status)))
             packOrders.sort((o1, o2) => o1.time.seconds - o2.time.seconds)
             quantity = updateOrders(batch, storeId, packOrders, subPack, purchaseRef.id)
             if (quantity > 0) {
-              mainRemaining = Math.min(mainRemaining, Math.round(quantity / packInfo.subQuantity))
+              mainRemaining = Math.min(mainRemaining, Math.trunc(quantity / packInfo.subQuantity))
               quantity = quantity % packInfo.subQuantity
-              packsIn.push({...subPack, quantity})
+              if (quantity > 0) {
+                packsIn.push({...subPack, quantity})
+              }
             }
           }
         }

@@ -12,7 +12,7 @@ const StoreBalanceTrans = props => {
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId))
   const [trans, setTrans] = useState([])
   const month = (Number(props.month) % 100) - 1
-  const year = Math.round(Number(props.month) / 100)
+  const year = Math.trunc(Number(props.month) / 100)
   useEffect(() => {
     setTrans(() => {
       let storePayments = state.storePayments.filter(p => p.storeId === props.storeId && p.paymentDate.getFullYear() === year && p.paymentDate.getMonth() === month)

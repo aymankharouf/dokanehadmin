@@ -218,7 +218,7 @@ const labels = {
   closeExpired: 'صلاحية قصيرة',
   purchase: 'شراء',
   offerToExpire: 'عرض لقرب الصلاحية',
-  overPricedNote: 'بسبب ارتفاع الاسعار',
+  overPricedNote: 'بسبب ارتفاع السعر',
   requested: 'الكمية المطلوبة',
   purchased: 'ما تم شراؤه',
   weight: 'الوزن',
