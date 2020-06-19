@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^7.10.0",
+    "@types/jest": "^26.0.0",
+    "@types/node": "^14.0.13",
+    "@types/react": "^16.9.38",
+    "@types/react-dom": "^16.9.8",
+    "firebase": "^7.15.2",
     "framework7": "^5.5.0",
     "framework7-react": "^5.5.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "^3.4.0"
+    "react-scripts": "^3.4.0",
+    "typescript": "^3.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
