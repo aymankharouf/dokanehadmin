@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^7.15.5",
-    "framework7": "^5.7.8",
-    "framework7-react": "^5.7.8",
+    "firebase": "^7.23.0",
+    "framework7": "^5.7.13",
+    "framework7-react": "^5.7.13",
     "material-design-icons": "^3.0.1",
-    "moment": "^2.27.0",
+    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "start": "react-scripts start",
