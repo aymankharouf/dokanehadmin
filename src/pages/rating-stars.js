@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Icon } from 'framework7-react'
 
 const RatingStars = props => {
@@ -34,9 +34,9 @@ const RatingStars = props => {
     return stars
   }, [props.rating])
   return(
-    <React.Fragment>
+    <>
       {Number(props.count) > 0 ? '(' + props.count + ')' : ''}{stars}
-    </React.Fragment>
+    </>
   )
 }
 

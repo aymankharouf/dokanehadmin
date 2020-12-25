@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
 import labels from '../data/labels'

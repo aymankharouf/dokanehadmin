@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect, useState } from 'react'
+import { createContext, useReducer, useEffect, useState } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
 

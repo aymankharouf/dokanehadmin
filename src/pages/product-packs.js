@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Toolbar, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'

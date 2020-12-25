@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { StoreContext } from '../data/store'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'

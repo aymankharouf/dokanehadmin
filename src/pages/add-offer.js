@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'

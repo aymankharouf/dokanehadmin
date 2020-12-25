@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, Button } from 'framework7-react'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'

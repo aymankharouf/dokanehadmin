@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
 import { addAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'

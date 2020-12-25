@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { spendingTypes } from '../data/config'

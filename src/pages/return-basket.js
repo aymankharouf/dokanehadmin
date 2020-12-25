@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'

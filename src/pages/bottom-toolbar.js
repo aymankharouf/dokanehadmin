@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Icon, Link, Badge} from 'framework7-react'
 import { StoreContext } from '../data/store'
 
@@ -21,14 +21,14 @@ const BottomToolbar = props => {
     })
   }, [state.basket, state.returnBasket])
   return (
-    <React.Fragment>
+    <>
       <Link href="/home/" iconMaterial="home" />
       <Link href={basketLink}>
         <Icon material='shopping_cart' >
           {basketCount > 0 ? <Badge color="red">{basketCount}</Badge> : ''}
         </Icon>
       </Link>
-    </React.Fragment>
+    </>
   )
 }
 

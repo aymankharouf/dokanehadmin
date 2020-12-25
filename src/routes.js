@@ -94,7 +94,7 @@ import NotifyFriends from './pages/notify-friends'
 import StoreBalance from './pages/store-balance'
 import StoreBalanceTrans from './pages/store-balance-trans'
 
-export default [
+const routes = [
   {
     path: '/',
     component: Home,
@@ -493,5 +493,6 @@ export default [
     path: '(.*)',
     component: NotFoundPage,
   },
-
 ]
+
+export default routes

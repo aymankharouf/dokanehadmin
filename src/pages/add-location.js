@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { addLocation, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'

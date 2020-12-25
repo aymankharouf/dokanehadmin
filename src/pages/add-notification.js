@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
 import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
 import BottomToolbar from './bottom-toolbar'
