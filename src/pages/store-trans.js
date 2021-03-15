@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 
 const StoreTrans = props => {
   const { state } = useContext(StoreContext)
@@ -52,9 +52,7 @@ const StoreTrans = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

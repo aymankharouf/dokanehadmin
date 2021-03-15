@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError } from '../data/actions'
 
-const ArchivedProducts = props => {
+const ArchivedProducts = () => {
   const { state, user, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
@@ -49,7 +49,7 @@ const ArchivedProducts = props => {
       setInprocess(false)
     } catch(err) {
       setInprocess(false)
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
   if (!user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
@@ -92,9 +92,7 @@ const ArchivedProducts = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
         <Icon material="cached"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

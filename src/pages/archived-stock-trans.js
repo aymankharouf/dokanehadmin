@@ -1,14 +1,14 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
 import { getArchivedStockTrans, getMessage, showError } from '../data/actions'
 
-const ArchivedStockTrans = props => {
+const ArchivedStockTrans = () => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [stockTrans, setStockTrans] = useState([])
@@ -46,7 +46,7 @@ const ArchivedStockTrans = props => {
       }
       lastMonth.current++
   } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
 
@@ -72,9 +72,7 @@ const ArchivedStockTrans = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
         <Icon material="cached"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

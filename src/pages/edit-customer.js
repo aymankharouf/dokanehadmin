@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -59,9 +59,9 @@ const EditCustomer = props => {
       }
       editCustomer(newCustomer, name, locationId, userInfo.mobile, customer.storeId, state.stores)
       showMessage(labels.editSuccess)
-      props.f7router.back()    
+      f7.views.current.router.back()    
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -145,14 +145,12 @@ const EditCustomer = props => {
           <Toggle color="red" checked={isBlocked} onToggleChange={() => setIsBlocked(!isBlocked)} />
         </ListItem>
       </List>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
       {!name || !locationId || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
+      <Footer/>
     </Page>
   )
 }

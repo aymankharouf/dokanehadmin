@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { getArchivedPurchases, getMessage, showError } from '../data/actions'
 
-const ArchivedPurchases = props => {
+const ArchivedPurchases = () => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [purchases, setPurchases] = useState([])
@@ -43,7 +43,7 @@ const ArchivedPurchases = props => {
       }
       lastMonth.current++
   } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
 
@@ -84,9 +84,7 @@ const ArchivedPurchases = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
         <Icon material="cached"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

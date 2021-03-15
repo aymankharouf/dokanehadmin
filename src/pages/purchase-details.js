@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button, Badge } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Button, Badge } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { showMessage, showError, getMessage, quantityText } from '../data/actions'
@@ -54,7 +54,7 @@ const PurchaseDetails = props => {
       dispatch({type: 'ADD_TO_RETURN_BASKET', params})
       showMessage(labels.addToBasketSuccess)
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   let i = 0
@@ -82,9 +82,7 @@ const PurchaseDetails = props => {
           )}
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

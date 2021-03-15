@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { getRequestedPacks, getPackStores } from '../data/actions'
 import labels from '../data/labels'
 
-const PurchasePlan = props => {
+const PurchasePlan = () => {
 	const { state } = useContext(StoreContext)
 	const [stores, setStores] = useState([])
 	const [approvedOrders] = useState(() => state.orders.filter(o => ['a', 'e'].includes(o.status)))
@@ -74,9 +74,7 @@ const PurchasePlan = props => {
 					}
 				</List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+			<Footer/>
     </Page>
   )
 }

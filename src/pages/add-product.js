@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -8,11 +8,11 @@ const AddProduct = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [alias, setAlias] = useState('')
+  const [ename, setEname] = useState('')
   const [description, setDescription] = useState('')
   const [categoryId, setCategoryId] = useState(props.id === '0' ? '' : props.id)
-  const [trademark, setTrademark] = useState('')
-  const [country, setCountry] = useState('')
+  const [trademarkId, setTrademarkId] = useState('')
+  const [countryId, setCountryId] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState(null)
   const [categories] = useState(() => {
@@ -20,6 +20,7 @@ const AddProduct = props => {
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
+  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1 > t2 ? 1 : -1))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -43,16 +44,16 @@ const AddProduct = props => {
   }
   const handleSubmit = () => {
     try{
-      if (state.products.find(p => p.categoryId === categoryId && p.country === country && p.name === name && p.alias === alias)) {
+      if (state.products.find(p => p.categoryId === categoryId && p.countryId === countryId && p.name === name && p.ename === ename)) {
         throw new Error('duplicateProduct')
       }
       const product = {
         name,
-        alias,
+        ename,
         description,
         categoryId,
-        trademark,
-        country,
+        trademarkId,
+        countryId,
         sales: 0,
         rating: 0,
         ratingCount: 0,
@@ -60,9 +61,9 @@ const AddProduct = props => {
       }
       addProduct(product, image)
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -79,13 +80,13 @@ const AddProduct = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="alias" 
-          label={labels.alias}
+          name="ename" 
+          label={labels.ename}
           clearButton
           type="text" 
-          value={alias} 
-          onChange={e => setAlias(e.target.value)}
-          onInputClear={() => setAlias('')}
+          value={ename} 
+          onChange={e => setEname(e.target.value)}
+          onInputClear={() => setEname('')}
         />
         <ListInput 
           name="description" 
@@ -96,15 +97,24 @@ const AddProduct = props => {
           onChange={e => setDescription(e.target.value)}
           onInputClear={() => setDescription('')}
         />
-        <ListInput 
-          name="trademark" 
-          label={labels.trademark}
-          clearButton
-          type="text" 
-          value={trademark} 
-          onChange={e => setTrademark(e.target.value)}
-          onInputClear={() => setTrademark('')}
-        />
+        <ListItem
+          title={labels.trademark}
+          smartSelect
+          smartSelectParams={{
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
+            <option value=""></option>
+            {trademarks.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListItem
           title={labels.category}
           smartSelect
@@ -134,10 +144,10 @@ const AddProduct = props => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="country" value={country} onChange={e => setCountry(e.target.value)}>
+          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
             <option value=""></option>
             {countries.map(c => 
-              <option key={c} value={c}>{c}</option>
+              <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>
         </ListItem>
@@ -150,7 +160,7 @@ const AddProduct = props => {
         />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !categoryId || !country ? '' :
+      {!name || !categoryId || !countryId ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import { approveUser, deleteUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -31,9 +31,9 @@ const ApproveUser = props => {
     try {
       approveUser(props.id, name, userInfo.mobile, locationId, userInfo.storeName || '', address, state.users)
       showMessage(labels.approveSuccess)
-      props.f7router.back()  
+      f7.views.current.router.back()  
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   const handleDelete = () => {
@@ -43,10 +43,10 @@ const ApproveUser = props => {
         await deleteUser(userInfo, state.orders)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
-        props.f7router.back()
+        f7.views.current.router.back()
       } catch(err) {
         setInprocess(false)
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })
   }
@@ -118,9 +118,7 @@ const ApproveUser = props => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

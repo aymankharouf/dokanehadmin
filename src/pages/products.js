@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
@@ -50,7 +50,7 @@ const Products = props => {
                 <ListItem
                   link={`/product-packs/${p.id}/type/n`}
                   title={p.name}
-                  subtitle={p.alias}
+                  subtitle={p.ename}
                   text={p.description}
                   footer={productOfText(p.trademark, p.country)}
                   key={p.id}
@@ -67,21 +67,19 @@ const Products = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => props.f7router.navigate(`/add-product/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => props.f7router.navigate('/archived-products/')}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate('/archived-products/')}>
             <Icon material="backup"></Icon>
           </FabButton>
-          <FabButton color="red" onClick={() => props.f7router.navigate('/products/-1')}>
+          <FabButton color="red" onClick={() => f7.views.current.router.navigate('/products/-1')}>
             <Icon material="remove_shopping_cart"></Icon>
           </FabButton>
 
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

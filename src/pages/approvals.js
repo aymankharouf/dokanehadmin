@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, Button } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
-const Approvals = props => {
+const Approvals = () => {
   const { state } = useContext(StoreContext)
   const [newOrders, setNewOrders] = useState([])
   const [orderRequests, setOrderRequests] = useState([])
@@ -62,9 +62,7 @@ const Approvals = props => {
           />
         )}
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

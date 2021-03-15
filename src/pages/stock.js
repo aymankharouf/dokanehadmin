@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, Toolbar, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
 
-const Stock = props => {
+const Stock = () => {
   const { state, user } = useContext(StoreContext)
   const [stockPacks, setStockPacks] = useState([])
   useEffect(() => {

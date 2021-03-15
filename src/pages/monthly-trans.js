@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7,Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -95,9 +95,9 @@ const MonthlyTrans = props => {
       }
       addMonthlyTrans(trans, state.orders, state.purchases, state.stockTrans)
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return(
@@ -204,9 +204,7 @@ const MonthlyTrans = props => {
           <Icon material="done"></Icon>
         </Fab>
       : ''}
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

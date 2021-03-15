@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { f7, Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
+import { f7, Page, Block, Fab, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, editOrder, showMessage, showError, getMessage, quantityDetails, returnOrder } from '../data/actions'
 import labels from '../data/labels'
@@ -49,9 +49,9 @@ const EditOrder = props => {
         updateOrderStatus(order, type, state.packPrices, state.packs, false)
         showMessage(labels.deleteSuccess)
         dispatch({type: 'CLEAR_ORDER_BASKET'})
-        props.f7router.back()
+        f7.views.current.router.back()
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })  
   }
@@ -66,9 +66,9 @@ const EditOrder = props => {
       }
       showMessage(labels.editSuccess)
       dispatch({type: 'CLEAR_ORDER_BASKET'})
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   const handleIncrease = pack => {

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
-const AddStore = props => {
+const AddStore = () => {
   const [error, setError] = useState('')
   const [type, setType] = useState('')
   const [name, setName] = useState('')
@@ -57,9 +57,9 @@ const AddStore = props => {
       }
       addStore(store)
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -164,9 +164,7 @@ const AddStore = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

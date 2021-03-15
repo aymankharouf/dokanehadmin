@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 import { editCategory, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 
@@ -11,13 +11,14 @@ const EditCategory = props => {
   const [error, setError] = useState('')
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [name, setName] = useState(category.name)
+  const [ename, setEname] = useState(category.ename)
   const [ordering, setOrdering] = useState(category.ordering)
   const [parentId, setParentId] = useState(category.parentId)
   const [isActive, setIsActive] = useState(category.isActive)
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => {
-    let categories = state.categories.filter(c => c.id !== props.id)
-    categories = categories.map(c => {
+    let otherCategories = state.categories.filter(c => c.id !== props.id)
+    let categories = otherCategories.map(c => {
       return {
         id: c.id,
         name: getCategoryName(c, state.categories)
@@ -27,11 +28,12 @@ const EditCategory = props => {
   })
   useEffect(() => {
     if (name !== category.name
+    || ename !== category.ename
     || ordering !== category.ordering
     || parentId !== category.parentId
     || isActive !== category.isActive) setHasChanged(true)
     else setHasChanged(false)
-  }, [category, name, ordering, parentId, isActive])
+  }, [category, name, ename, ordering, parentId, isActive])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -44,17 +46,17 @@ const EditCategory = props => {
         ...category,
         parentId,
         name,
+        ename,
         ordering,
         isActive
       }
       editCategory(newCategory, category, state.categories)
       showMessage(labels.editSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
-
   return (
     <Page>
       <Navbar title={labels.editCategory} backLink={labels.back} />
@@ -87,6 +89,15 @@ const EditCategory = props => {
           onInputClear={() => setName('')}
         />
         <ListInput 
+          name="ename" 
+          label={labels.ename}
+          value={ename}
+          clearButton
+          type="text" 
+          onChange={e => setEname(e.target.value)}
+          onInputClear={() => setEname('')}
+        />
+        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
@@ -110,10 +121,7 @@ const EditCategory = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
-
+      <Footer/>
     </Page>
   )
 }

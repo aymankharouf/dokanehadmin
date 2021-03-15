@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
-import { Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toolbar, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 import { editStore, showMessage, showError, getMessage } from '../data/actions'
@@ -72,9 +72,9 @@ const EditStore = props => {
       }
       editStore(newStore)
       showMessage(labels.editSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -179,9 +179,7 @@ const EditStore = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

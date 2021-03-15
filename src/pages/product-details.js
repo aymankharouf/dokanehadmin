@@ -21,10 +21,10 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
-          name="alias" 
-          label={labels.alias}
+          name="ename" 
+          label={labels.ename}
           type="text" 
-          value={product.alias}
+          value={product.ename}
           readonly
         />
         <ListInput 
@@ -42,17 +42,17 @@ const ProductDetails = props => {
           readonly
         />
         <ListInput 
-          name="trademark" 
+          name="trademarkId" 
           label={labels.trademark}
           type="text" 
-          value={product.trademark}
+          value={state.trademarks.find(t => t.id === product.trademarkId).name}
           readonly
         />
         <ListInput 
-          name="country" 
+          name="countryId" 
           label={labels.country}
           type="text" 
-          value={product.country}
+          value={state.countries.find(c => c.id === product.countryId).name}
           readonly
         />
         <img src={product.imageUrl} className="img-card" alt={labels.noImage} />

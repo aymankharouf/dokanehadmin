@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
+import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
@@ -8,7 +8,7 @@ import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
 
 
-const Logs = props => {
+const Logs = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [logs, setLogs] = useState([])
@@ -36,7 +36,7 @@ const Logs = props => {
         deleteLog(log)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })  
   }
@@ -63,9 +63,7 @@ const Logs = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

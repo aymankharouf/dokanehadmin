@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, NavRight, Link, Searchbar } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, List, ListItem, NavRight, Link, Searchbar } from 'framework7-react'
+import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const Customers = props => {
+const Customers = () => {
   const { state, user } = useContext(StoreContext)
   const [customers, setCustomers] = useState([])
   useEffect(() => {
@@ -49,9 +49,7 @@ const Customers = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

@@ -4,13 +4,13 @@ import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
 
-export const getMessage = (props, error) => {
+export const getMessage = (path, error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
   if (!labels[errorCode]) {
     firebase.firestore().collection('logs').add({
       userId: firebase.auth().currentUser.uid,
       error: error.code,
-      page: props.f7route.route.component.name,
+      page: path,
       time: new Date()
     })
   }
@@ -623,7 +623,7 @@ export const editProduct = async (product, oldName, image, packs) => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     const packInfo = {
       productName: product.name,
-      productAlias: product.alias,
+      productEname: product.ename,
       productDescription: product.description,
       categoryId: product.categoryId,
       country: product.country,
@@ -834,42 +834,28 @@ export const editSpending = spending => {
   firebase.firestore().collection('spendings').doc(id).update(others)
 }
 
-export const addCountry = name => {
+export const addCountry = country => {
   firebase.firestore().collection('lookups').doc('c').set({
-    values: firebase.firestore.FieldValue.arrayUnion(name)
+    values: firebase.firestore.FieldValue.arrayUnion(country)
   }, {merge: true})
 }
 
-export const deleteCountry = name => {
-  firebase.firestore().collection('lookups').doc('c').set({
-    values: firebase.firestore.FieldValue.arrayRemove(name)
-  }, {merge: true})
+export const deleteCountry = (countryId, countries) => {
+  const values = countries.slice()
+  const countryIndex = values.findIndex(l => l.id === countryId)
+  values.splice(countryIndex, 1)
+  firebase.firestore().collection('lookups').doc('c').update({
+    values
+  })
 }
 
-export const editCountry = (name, oldName, products, packs) => {
-  const batch = firebase.firestore().batch()
-  const countriesRef = firebase.firestore().collection('lookups').doc('c')
-  batch.update(countriesRef, {
-    values: firebase.firestore.FieldValue.arrayRemove(oldName)
+export const editCountry = (country, countries) => {
+  const values = countries.slice()
+  const countryIndex = values.findIndex(c => c.id === country.id)
+  values.splice(countryIndex, 1, country)
+  firebase.firestore().collection('lookups').doc('c').update({
+    values
   })
-  batch.update(countriesRef, {
-    values: firebase.firestore.FieldValue.arrayUnion(name)
-  })
-  const affectedProducts = products.filter(p => p.country === oldName)
-  affectedProducts.forEach(p => {
-    const productRef = firebase.firestore().collection('products').doc(p.id)
-    batch.update(productRef, {
-      country: name
-    })
-    const affectedPacks = packs.filter(pa => pa.productId === p.id)
-    affectedPacks.forEach(pa => {
-      const packRef = firebase.firestore().collection('packs').doc(pa.id)
-      batch.update(packRef, {
-        country: name
-      })
-    })
-  })
-  batch.commit()
 }
 
 export const addLocation = location => {
@@ -887,7 +873,31 @@ export const editLocation = (location, locations) => {
   })
 }
 
-export const addCategory = (parentId, name, ordering) => {
+export const addTrademark = (trademark) => {
+  firebase.firestore().collection('lookups').doc('t').set({
+    values: firebase.firestore.FieldValue.arrayUnion(trademark)
+  }, {merge: true})
+}
+
+export const editTrademark = (trademark, trademarks) => {
+  const values = trademarks.slice()
+  const trademarkIndex = values.findIndex(t => t.id === trademark.id)
+  values.splice(trademarkIndex, 1, trademark)
+  firebase.firestore().collection('lookups').doc('t').update({
+    values
+  })
+}
+
+export const deleteTrademark = (trademarkId, trademarks) => {
+  const values = trademarks.slice()
+  const trademarkIndex = values.findIndex(t => t.id === trademarkId)
+  values.splice(trademarkIndex, 1)
+  firebase.firestore().collection('lookups').doc('t').update({
+    values
+  })
+}
+
+export const addCategory = (parentId, name, ename, ordering) => {
   const batch = firebase.firestore().batch()
   let categoryRef
   if (parentId !== '0') {
@@ -900,6 +910,7 @@ export const addCategory = (parentId, name, ordering) => {
   batch.set(categoryRef, {
     parentId,
     name,
+    ename,
     ordering,
     isLeaf: true,
     isActive: false
@@ -1903,10 +1914,10 @@ export const getArchivedProducts = async () => {
   await firebase.firestore().collection('products')
           .where('isArchived', '==', true)
           .get().then(docs => {
-    docs.forEach(doc => {
-      products.push({...doc.data(), id:doc.id})
-    })
-  })
+            docs.forEach(doc => {
+              products.push({...doc.data(), id:doc.id})
+            })
+          })
   return products
 }
 
@@ -1915,10 +1926,10 @@ export const getArchivedPacks = async () => {
   await firebase.firestore().collection('packs')
           .where('isArchived', '==', true)
           .get().then(docs => {
-    docs.forEach(doc => {
-      packs.push({...doc.data(), id:doc.id})
-    })
-  })
+            docs.forEach(doc => {
+              packs.push({...doc.data(), id:doc.id})
+            })
+          })
   return packs
 }
 
@@ -1960,9 +1971,19 @@ export const getProdData = async () => {
   let categories = []
   await prodApp.firestore().collection('categories')
           .get().then(docs => {
-    docs.forEach(doc => {
-      categories.push({...doc.data(), id:doc.id})
-    })
-  })
+            docs.forEach(doc => {
+              categories.push({...doc.data(), id:doc.id})
+            })
+          })
   return categories
+}
+
+export const categoryChildren = (categoryId, categories) => {
+  let result = [categoryId]
+  const children = categories.filter(c => c.parentId === categoryId)
+  for (let child of children) {
+    const childrenArray = categoryChildren(child.id, categories)
+    result.push(...childrenArray)
+  }
+  return result
 }

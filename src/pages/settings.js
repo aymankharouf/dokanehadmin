@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import { Block, Page, Navbar, Toolbar, Button} from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, Button } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
 
-const Settings = props => {
+const Settings = () => {
   const [sections] = useState(() => [
     {id: '1', name: labels.countries, path: '/countries/'},
-    {id: '2', name: labels.categories, path: '/categories/0'},
-    {id: '3', name: labels.locations, path: '/locations/'},
-    {id: '4', name: labels.adverts, path: '/adverts/'}
+    {id: '2', name: labels.trademarks, path: '/trademarks/'},
+    {id: '3', name: labels.categories, path: '/categories/0'},
+    {id: '4', name: labels.locations, path: '/locations/'},
+    {id: '5', name: labels.adverts, path: '/adverts/'}
   ])
   let i = 0
   return(
@@ -29,9 +30,7 @@ const Settings = props => {
           />
         )}
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

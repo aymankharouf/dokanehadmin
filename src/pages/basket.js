@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
+import { f7, Page, Block, Fab, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
 
-const Basket = props => {
+const Basket = () => {
   const { state, dispatch } = useContext(StoreContext)
   const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId))
   const [basket, setBasket] = useState([])
   const [totalPrice, setTotalPrice] = useState('')
   useEffect(() => {
-    if (!state.basket.packs) props.f7router.navigate('/home/', {reloadAll: true})
-  }, [state.basket, props.f7router])
+    if (!state.basket.packs) f7.views.current.router.navigate('/home/', {reloadAll: true})
+  }, [state.basket])
   useEffect(() => {
     setBasket(() => state.basket?.packs || [])
     setTotalPrice(() => state.basket.packs?.reduce((sum, p) => sum + Math.round(p.cost * (p.weight || p.quantity)), 0) || 0)

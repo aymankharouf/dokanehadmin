@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Toolbar, Button, Badge } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Button, Badge } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { packUnavailable, showMessage, showError, getMessage, addQuantity, getPackStores } from '../data/actions'
 import labels from '../data/labels'
@@ -74,9 +74,9 @@ const RequestedPackDetails = props => {
             }
             dispatch({type: 'ADD_TO_BASKET', params})
             showMessage(labels.addToBasketSuccess)
-            props.f7router.back()
+            f7.views.current.router.back()
           } catch(err) {
-            setError(getMessage(props, err))
+            setError(getMessage(f7.views.current.router.currentRoute.path, err))
           }      
         })
       } else if (packStore.isAuto) {
@@ -94,7 +94,7 @@ const RequestedPackDetails = props => {
         }
         dispatch({type: 'ADD_TO_BASKET', params})
         showMessage(labels.addToBasketSuccess)
-        props.f7router.back()
+        f7.views.current.router.back()
       } else {
         if (packStore.subQuantity) {
           quantity = Math.ceil(Number(props.quantity) / packStore.subQuantity)
@@ -115,10 +115,10 @@ const RequestedPackDetails = props => {
         }
         dispatch({type: 'ADD_TO_BASKET', params})
         showMessage(labels.addToBasketSuccess)
-        props.f7router.back()  
+        f7.views.current.router.back()  
       }
     } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
 	const handlePurchase = packStore => {
@@ -146,7 +146,7 @@ const RequestedPackDetails = props => {
         }
       }
     } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
   const handleUnavailable = overPriced => {
@@ -155,9 +155,9 @@ const RequestedPackDetails = props => {
         const approvedOrders = state.orders.filter(o => ['a', 'e'].includes(o.status))
         packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
         showMessage(labels.executeSuccess)
-        props.f7router.back()
+        f7.views.current.router.back()
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })
   }
@@ -207,9 +207,7 @@ const RequestedPackDetails = props => {
           </ListItem>
         )}
       </List>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

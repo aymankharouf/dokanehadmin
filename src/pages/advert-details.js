@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, Toolbar, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 
 const AdvertDetails = props => {
   const { state } = useContext(StoreContext)
@@ -22,9 +22,7 @@ const AdvertDetails = props => {
           <p>{advert.text}</p>
         </CardFooter>
       </Card>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

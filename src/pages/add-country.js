@@ -1,15 +1,16 @@
 import { useContext, useState, useEffect } from 'react'
 import { StoreContext } from '../data/store'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
 import { addCountry, showMessage, showError, getMessage } from '../data/actions'
 
 
-const AddCountry = props => {
+const AddCountry = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
+  const [ename, setEname] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -18,14 +19,18 @@ const AddCountry = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.countries.includes(name)) {
+      if (state.countries.filter(c => c.name === name).length > 0) {
         throw new Error('duplicateName')
       }
-      addCountry(name)
+      addCountry({
+        id: Math.random().toString(),
+        name,
+        ename
+      })
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -41,15 +46,22 @@ const AddCountry = props => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListInput 
+          name="ename" 
+          label={labels.ename} 
+          clearButton
+          type="text"
+          value={ename}
+          onChange={e => setEname(e.target.value)}
+          onInputClear={() => setEname('')}
+        />
       </List>
       {!name ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

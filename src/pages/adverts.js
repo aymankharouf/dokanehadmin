@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import moment from 'moment'
@@ -8,7 +8,7 @@ import 'moment/locale/ar'
 import { updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert } from '../data/actions'
 import { advertType } from '../data/config'
 
-const Adverts = props => {
+const Adverts = () => {
   const { state } = useContext(StoreContext)
   const [currentAdvert, setCurrentAdvert] = useState('')
   const [error, setError] = useState('')
@@ -33,7 +33,7 @@ const Adverts = props => {
         updateAdvertStatus(currentAdvert, state.adverts)
         showMessage(labels.editSuccess)
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })  
   }
@@ -43,7 +43,7 @@ const Adverts = props => {
         deleteAdvert(currentAdvert)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })  
   }
@@ -74,14 +74,11 @@ const Adverts = props => {
         <Icon material="add"></Icon>
       </Fab>
       <Actions ref={actionsList}>
-        <ActionsButton onClick={() => props.f7router.navigate(`/advert-details/${currentAdvert.id}`)}>{labels.details}</ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/advert-details/${currentAdvert.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
         <ActionsButton onClick={() => handleUpdate()}>{currentAdvert.isActive ? labels.stop : labels.activate}</ActionsButton>
       </Actions>
-
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

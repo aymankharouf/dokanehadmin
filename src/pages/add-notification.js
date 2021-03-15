@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
 
 
-const AddNotification = props => {
+const AddNotification = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [userId, setUserId] = useState('')
@@ -23,9 +23,9 @@ const AddNotification = props => {
     try{
       sendNotification(userId, title, message)
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -74,9 +74,7 @@ const AddNotification = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

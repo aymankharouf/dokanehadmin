@@ -1,15 +1,15 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon} from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, List, ListItem, Fab, Icon} from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 
-const Countries = props => {
+const Countries = () => {
   const { state } = useContext(StoreContext)
-  const [countries, setCountries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
+  const [countries, setCountries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   useEffect(() => {
-    setCountries(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
+    setCountries(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   }, [state.countries])
   let i = 0
   return (
@@ -21,8 +21,8 @@ const Countries = props => {
             <ListItem title={labels.noData} />
           : countries.map(c =>
               <ListItem
-                link={`/edit-country/${c}`}
-                title={c} 
+                link={`/edit-country/${c.id}`}
+                title={c.name} 
                 key={i++}
               />
             )
@@ -32,9 +32,7 @@ const Countries = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-country/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

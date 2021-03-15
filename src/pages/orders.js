@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, Toolbar, List, ListItem, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { randomColors, orderStatus } from '../data/config'
 
 
-const Orders = props => {
+const Orders = () => {
   const { state, user } = useContext(StoreContext)
   const [orderStatuses, setOrderStatuses] = useState([])
   const [orderRequests, setOrderRequests] = useState([])
@@ -27,7 +27,7 @@ const Orders = props => {
   return(
     <Page>
       <Navbar title={labels.orders} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => props.f7router.navigate('/archived-orders/')}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.views.current.router.navigate('/archived-orders/')}>
         <Icon material="backup"></Icon>
       </Fab>
       <Block>
@@ -55,9 +55,7 @@ const Orders = props => {
           )}
 				</List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

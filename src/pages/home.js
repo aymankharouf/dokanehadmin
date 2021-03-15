@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Toolbar, Button} from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Button} from 'framework7-react'
+import Footer from './footer'
 import { randomColors } from '../data/config'
 import labels from '../data/labels'
 
-const Home = props => {
+const Home = () => {
   const [mainPages] = useState(() => [
     {id: '1', name: labels.orders, path: '/orders/'},
     {id: '2', name: labels.stores, path: '/stores/'},
@@ -38,10 +38,7 @@ const Home = props => {
           />
         )}
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar />
-      </Toolbar>
-
+      <Footer />
     </Page>
   )
 }

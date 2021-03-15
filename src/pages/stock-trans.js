@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
 
-const StockTrans = props => {
+const StockTrans = () => {
   const { state } = useContext(StoreContext)
   const [stockTrans, setStockTrans] = useState([])
   useEffect(() => {
@@ -27,7 +27,7 @@ const StockTrans = props => {
   return(
     <Page>
       <Navbar title={labels.stockTrans} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => props.f7router.navigate('/archived-stock-trans/')}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => f7.views.current.router.navigate('/archived-stock-trans/')}>
         <Icon material="backup"></Icon>
       </Fab>
 
@@ -47,9 +47,7 @@ const StockTrans = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

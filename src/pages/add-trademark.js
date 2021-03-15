@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
+import { StoreContext } from '../data/store'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
-import { addCategory, showMessage, showError, getMessage } from '../data/actions'
+import { addTrademark, showMessage, showError, getMessage } from '../data/actions'
 
 
-const AddCategory = props => {
+const AddTrademark = () => {
+  const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [ename, setEname] = useState('')
-  const [ordering, setOrdering] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -17,21 +19,27 @@ const AddCategory = props => {
   }, [error])
   const handleSubmit = () => {
     try{
-      addCategory(props.id, name, ename, Number(ordering))
+      if (state.trademarks.filter(t => t.name === name).length > 0) {
+        throw new Error('duplicateName')
+      }
+      addTrademark({
+        id: Math.random().toString(),
+        name,
+        ename
+      })
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
 			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
-  
   return (
     <Page>
-      <Navbar title={labels.addCategory} backLink={labels.back} />
+      <Navbar title={labels.addTrademark} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 
-          label={labels.name}
+          label={labels.name} 
           clearButton
           type="text"
           value={name}
@@ -40,29 +48,21 @@ const AddCategory = props => {
         />
         <ListInput 
           name="ename" 
-          label={labels.ename}
+          label={labels.ename} 
           clearButton
           type="text"
           value={ename}
           onChange={e => setEname(e.target.value)}
           onInputClear={() => setEname('')}
         />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          clearButton
-          type="number" 
-          value={ordering}
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
-        />
       </List>
-      {!name || !ordering ? '' :
+      {!name ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
+      <Footer/>
     </Page>
   )
 }
-export default AddCategory
+export default AddTrademark

@@ -11,7 +11,8 @@ const Store = props => {
   const initState = {
     categories: [], 
     locations: [], 
-    countrie: [],
+    countries: [],
+    trademarks: [],
     stores: [], 
     basket, 
     users: [],
@@ -87,14 +88,19 @@ const Store = props => {
       setUser(user)
       if (user){
         const unsubscribeLocations = firebase.firestore().collection('lookups').doc('l').onSnapshot(doc => {
-          dispatch({type: 'SET_LOCATIONS', locations: doc.data().values})
+          if (doc.data()) dispatch({type: 'SET_LOCATIONS', locations: doc.data().values})
         }, err => {
           unsubscribeLocations()
         })  
         const unsubscribeCountries = firebase.firestore().collection('lookups').doc('c').onSnapshot(doc => {
-          dispatch({type: 'SET_COUNTRIES', countries: doc.data().values})
+          if (doc.data()) dispatch({type: 'SET_COUNTRIES', countries: doc.data().values})
         }, err => {
           unsubscribeCountries()
+        })
+        const unsubscribeTrademarks = firebase.firestore().collection('lookups').doc('t').onSnapshot(doc => {
+          if (doc.data()) dispatch({type: 'SET_TRADEMARKS', trademarks: doc.data().values})
+        }, err => {
+          unsubscribeTrademarks()
         })
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products = []

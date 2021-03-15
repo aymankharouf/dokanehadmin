@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import BottomToolbar from './bottom-toolbar'
-import { deleteCategory, showMessage, showError, getMessage } from '../data/actions'
+import Footer from './footer'
+import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
 
 const Categories = props => {
   const { state } = useContext(StoreContext)
@@ -14,10 +14,11 @@ const Categories = props => {
   const [categoryProductsCount] = useState(() => state.products.filter(p => p.categoryId === currentCategory.id).length)
   useEffect(() => {
     setCategories(() => {
-      let categories = state.categories.filter(c => c.parentId === props.id)
-      categories = categories.map(c => {
+      const children = state.categories.filter(c => c.parentId === props.id)
+      let categories = children.map(c => {
         const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
-        const productsCount = state.products.filter(p => p.categoryId === c.id).length
+        const categoryChildrens = categoryChildren(c.id, state.categories)
+        const productsCount = state.products.filter(p => categoryChildrens.includes(p.categoryId)).length
         return {
           ...c,
           childrenCount,
@@ -37,9 +38,9 @@ const Categories = props => {
     try{
       deleteCategory(currentCategory, state.categories)
       showMessage(labels.deleteSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
 
@@ -54,8 +55,9 @@ const Categories = props => {
               <ListItem 
                 link={`/categories/${c.id}`} 
                 title={c.name}
-                subtitle={`${labels.childrenCount}: ${c.childrenCount} ${c.childrenCount > 0 && c.isLeaf ? 'X' : ''}`}
-                text={`${labels.attachedProducts}: ${c.productsCount} ${c.productsCount > 0 && !c.isLeaf ? 'X': ''}`}
+                subtitle={c.ename}
+                text={`${labels.childrenCount}: ${c.childrenCount}`}
+                footer={`${labels.attachedProducts}: ${c.productsCount}`}
                 after={c.ordering}
                 key={c.id} 
               >
@@ -70,11 +72,11 @@ const Categories = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => props.f7router.navigate(`/add-category/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-category/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
           {props.id === '0' ? '' :
-            <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-category/${props.id}`)}>
+            <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-category/${props.id}`)}>
               <Icon material="edit"></Icon>
             </FabButton>
           }
@@ -83,16 +85,13 @@ const Categories = props => {
               <Icon material="delete"></Icon>
             </FabButton>
           : ''}
-          <FabButton color="orange" onClick={() => props.f7router.navigate(`/products/${props.id}`)}>
+          <FabButton color="orange" onClick={() => f7.views.current.router.navigate(`/products/${props.id}`)}>
             <Icon material="shopping_cart"></Icon>
           </FabButton>
 
         </FabButtons>
       </Fab>
-
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

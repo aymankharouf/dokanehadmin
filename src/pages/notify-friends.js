@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { approveNotifyFriends, showMessage, showError, getMessage } from '../data/actions'
 
-const NotifyFriends = props => {
+const NotifyFriends = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [notifyFriends, setNotifyFriends] = useState([])
@@ -35,7 +35,7 @@ const NotifyFriends = props => {
       approveNotifyFriends(userInfo, pack, state.users)
       showMessage(labels.approveSuccess)
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   let i = 0
@@ -59,9 +59,7 @@ const NotifyFriends = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

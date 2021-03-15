@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Button } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { allocateOrderPack, showMessage, getMessage, showError } from '../data/actions'
 import labels from '../data/labels'
@@ -35,9 +35,9 @@ const PrepareOrdersList = props => {
     try{
       allocateOrderPack(order, pack)
       showMessage(labels.editSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return(
@@ -59,9 +59,7 @@ const PrepareOrdersList = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

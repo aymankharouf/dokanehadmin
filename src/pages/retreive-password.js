@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Toolbar, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { resolvePasswordRequest, showMessage, showError, getMessage } from '../data/actions'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
@@ -25,9 +25,9 @@ const RetreivePassword = props => {
     try{
       resolvePasswordRequest(props.id)
       showMessage(labels.sendSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return(
@@ -59,9 +59,7 @@ const RetreivePassword = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleResolve()}>
         <Icon material="done"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

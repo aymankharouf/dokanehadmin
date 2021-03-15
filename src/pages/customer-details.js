@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar, ListItem, Toggle, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 
 const CustomerDetails = props => {
@@ -21,10 +21,10 @@ const CustomerDetails = props => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="blue" onClick={() => props.f7router.navigate(`/edit-customer/${props.id}`)}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-customer/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
-          <FabButton color="pink" onClick={() => props.f7router.navigate(`/orders-list/${props.id}/type/u`)}>
+          <FabButton color="pink" onClick={() => f7.views.current.router.navigate(`/orders-list/${props.id}/type/u`)}>
             <Icon material="import_export"></Icon>
           </FabButton>
         </FabButtons>
@@ -133,9 +133,7 @@ const CustomerDetails = props => {
           <Toggle color="red" checked={customer.isBlocked} disabled />
         </ListItem>
       </List>
-      <Toolbar bottom>
-        <BottomToolbar />
-      </Toolbar>
+      <Footer />
     </Page>
   )
 }

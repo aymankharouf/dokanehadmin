@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { Block, Fab, Page, Navbar, List, ListItem, Toolbar, Link, Icon, Badge } from 'framework7-react'
+import { f7, Page, Block, Fab, Navbar, List, ListItem, Toolbar, Link, Icon, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { confirmReturnBasket, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import { stockTransTypes } from '../data/config'
 
-const ReturnBasket = props => {
+const ReturnBasket = () => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === state.returnBasket.storeId))
@@ -28,8 +28,8 @@ const ReturnBasket = props => {
     setTotalPrice(() => state.returnBasket.packs?.reduce((sum, p) => sum + Math.round(p.cost * (p.weight || p.quantity)), 0) || 0)
   }, [state.returnBasket, state.packs])
   useEffect(() => {
-    if (!state.returnBasket) props.f7router.navigate('/home/', {reloadAll: true})
-  }, [state.returnBasket, props])
+    if (!state.returnBasket) f7.views.current.router.navigate('/home/', {reloadAll: true})
+  }, [state.returnBasket])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -51,9 +51,9 @@ const ReturnBasket = props => {
       confirmReturnBasket(returnBasket, storeId || state.returnBasket.storeId, state.orders, state.stockTrans, state.packPrices, state.packs, state.purchases, state.stores)
       dispatch({type: 'CLEAR_RETURN_BASKET'})
       showMessage(labels.executeSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   let i = 0  

@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Button, Badge } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Button, Badge } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
 import labels from '../data/labels'
 import { changeStorePackStatus, showMessage, getMessage, showError } from '../data/actions'
 
-const Offers = props => {
+const Offers = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [offers, setOffers] = useState([])
@@ -41,7 +41,7 @@ const Offers = props => {
             changeStorePackStatus(storePack, state.packPrices, state.packs)
             showMessage(labels.haltSuccess)
           } catch(err) {
-            setError(getMessage(props, err))
+            setError(getMessage(f7.views.current.router.currentRoute.path, err))
           }
         })
       } else {
@@ -49,7 +49,7 @@ const Offers = props => {
         showMessage(labels.haltSuccess)
       }
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   let i = 0
@@ -79,9 +79,7 @@ const Offers = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

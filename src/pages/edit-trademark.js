@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { editCountry, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
+import { editTrademark, showMessage, showError, getMessage, deleteTrademark } from '../data/actions'
 import Footer from './footer'
 import labels from '../data/labels'
 
@@ -9,14 +9,14 @@ import labels from '../data/labels'
 const EditCountry = props => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [country] = useState(() => state.countries.find(c => c.id === props.id))
-  const [name, setName] = useState(country.name)
-  const [ename, setEname] = useState(country.ename)
+  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id))
+  const [name, setName] = useState(trademark.name)
+  const [ename, setEname] = useState(trademark.ename)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== country.name || ename !== country.ename) setHasChanged(true)
+    if (name !== trademark.name || ename !== trademark.ename) setHasChanged(true)
     else setHasChanged(false)
-  }, [country, name, ename])
+  }, [trademark, name, ename])
 
   useEffect(() => {
     if (error) {
@@ -26,12 +26,12 @@ const EditCountry = props => {
   }, [error])
   const handleEdit = () => {
     try{
-      const newCountry = {
-        ...country,
+      const newTrademark = {
+        ...trademark,
         name,
         ename
       }
-      editCountry(newCountry, state.countries)
+      editTrademark(newTrademark, state.trademarks)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -41,9 +41,9 @@ const EditCountry = props => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        const countryProducts = state.products.filter(p => p.countryId === props.id)
-        if (countryProducts.length > 0) throw new Error('countryProductsFound') 
-        deleteCountry(props.id, state.countries)
+        const trademarkProducts = state.products.filter(p => p.trademarkId === props.id)
+        if (trademarkProducts.length > 0) throw new Error('trademarkProductsFound') 
+        deleteTrademark(props.id, state.trademartks)
         showMessage(labels.deleteSuccess)
         f7.views.current.router.back()
       } catch(err) {
@@ -53,7 +53,7 @@ const EditCountry = props => {
   }
   return (
     <Page>
-      <Navbar title={labels.editCountry} backLink={labels.back} />
+      <Navbar title={labels.editTrademark} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 

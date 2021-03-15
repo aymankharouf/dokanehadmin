@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { spendingTypes } from '../data/config'
 
-const Spendings = props => {
+const Spendings = () => {
   const { state, user } = useContext(StoreContext)
   const [spendings, setSpendings] = useState([])
   useEffect(() => {
@@ -48,9 +48,7 @@ const Spendings = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-spending/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

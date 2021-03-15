@@ -181,6 +181,11 @@ const Reducer = (state, action) => {
           ...state,
           countries: action.countries
         }
+      case 'SET_TRADEMARKS':
+        return {
+          ...state,
+          trademarks: action.trademarks
+        }
       case 'SET_NOTIFICATIONS':
         return {
           ...state,

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { addLocation, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import Footer from './footer'
 import labels from '../data/labels'
 
 
-const AddLocation = props => {
+const AddLocation = () => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [fees, setFees] = useState('')
@@ -28,9 +28,9 @@ const AddLocation = props => {
         ordering
       })
       showMessage(labels.addSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -70,9 +70,7 @@ const AddLocation = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

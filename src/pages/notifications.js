@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Button } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { deleteNotification, showMessage, showError, getMessage } from '../data/actions'
 
-const Notifications = props => {
+const Notifications = () => {
   const { state, user } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [notifications, setNotifications] = useState([])
@@ -35,7 +35,7 @@ const Notifications = props => {
         deleteNotification(userInfo, notificationId,)
         showMessage(labels.deleteSuccess)
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }
     })  
   }
@@ -66,9 +66,7 @@ const Notifications = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-notification/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

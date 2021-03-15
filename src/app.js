@@ -16,7 +16,7 @@ const app = props => {
         <Panel right reveal themeDark>
           <View url="/panel/"/>
         </Panel>
-          <View id="main-view" url="/" main className="safe-areas"/>
+          <View id="main-view" url="/" main className="safe-areas" pushState={true}/>
       </App>
     </Store>
   )

@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import BottomToolbar from './bottom-toolbar'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
+import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
 
-const Invitations = props => {
+const Invitations = () => {
   const { state } = useContext(StoreContext)
   const [invitations, setInvitations] = useState([])
   useEffect(() => {
@@ -39,9 +39,7 @@ const Invitations = props => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
-import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 import labels from '../data/labels'
 
 const EditLocation = props => {
@@ -38,9 +38,9 @@ const EditLocation = props => {
       }
       editLocation(newLocation, state.locations)
       showMessage(labels.editSuccess)
-      props.f7router.back()  
+      f7.views.current.router.back()  
     } catch(err) {
-			setError(getMessage(props, err))
+			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
   }
   return (
@@ -80,10 +80,7 @@ const EditLocation = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
-
+      <Footer/>
     </Page>
   )
 }

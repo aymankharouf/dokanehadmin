@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import { showMessage, showError, getMessage, quantityText, unfoldStockPack } from '../data/actions'
 import labels from '../data/labels'
 import { stockTransTypes } from '../data/config'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 
 const StockPackTrans = props => {
   const { state, dispatch } = useContext(StoreContext)
@@ -86,7 +86,7 @@ const StockPackTrans = props => {
         dispatch({type: 'ADD_TO_RETURN_BASKET', params})
         showMessage(labels.addToBasketSuccess)
       } catch(err) {
-        setError(getMessage(props, err))
+        setError(getMessage(f7.views.current.router.currentRoute.path, err))
       }      
     })
   }
@@ -94,9 +94,9 @@ const StockPackTrans = props => {
     try{
       unfoldStockPack(stockPackInfo, state.packPrices, state.packs)
       showMessage(labels.executeSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }      
   }
   return(
@@ -134,9 +134,7 @@ const StockPackTrans = props => {
         <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
         <ActionsButton onClick={() => handleAddTrans('s')}>{labels.sell}</ActionsButton>
       </Actions>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

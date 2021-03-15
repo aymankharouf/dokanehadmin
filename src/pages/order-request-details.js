@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react'
-import { Block, Page, Navbar, List, ListItem, Toolbar, Fab, Icon, Badge } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { showMessage, showError, getMessage, quantityDetails, approveOrderRequest, addQuantity } from '../data/actions'
 import labels from '../data/labels'
 import { orderPackStatus, orderRequestTypes, setup } from '../data/config'
-import BottomToolbar from './bottom-toolbar'
+import Footer from './footer'
 
 const OrderRequestDetails = props => {
   const { state } = useContext(StoreContext)
@@ -58,9 +58,9 @@ const OrderRequestDetails = props => {
     try{
       approveOrderRequest(order, state.orders, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
-      props.f7router.back()
+      f7.views.current.router.back()
     } catch(err) {
-      setError(getMessage(props, err))
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
   return(
@@ -108,9 +108,7 @@ const OrderRequestDetails = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <BottomToolbar/>
-      </Toolbar>
+      <Footer/>
     </Page>
   )
 }

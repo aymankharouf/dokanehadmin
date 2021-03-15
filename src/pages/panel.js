@@ -4,7 +4,7 @@ import { StoreContext } from '../data/store'
 import { logout } from '../data/actions'
 import labels from '../data/labels'
 
-const Panel = props => {
+const Panel = () => {
   const { state, user, dispatch } = useContext(StoreContext)
   const [approvalsCount, setApprovalsAcount] = useState('')
   const [offersCount, setOffersAcount] = useState('')

@@ -93,6 +93,9 @@ import ReturnBasket from './pages/return-basket'
 import NotifyFriends from './pages/notify-friends'
 import StoreBalance from './pages/store-balance'
 import StoreBalanceTrans from './pages/store-balance-trans'
+import Trademarks from './pages/trademarks'
+import AddTrademark from './pages/add-trademark'
+import EditTrademark from './pages/edit-trademark'
 
 const routes = [
   {
@@ -218,8 +221,20 @@ const routes = [
     component: AddCountry
   },
   {
-    path: '/edit-country/:name',
+    path: '/edit-country/:id',
     component: EditCountry
+  },
+  {
+    path: '/trademarks/',
+    component: Trademarks,
+  },
+  {
+    path: '/add-trademark/',
+    component: AddTrademark
+  },
+  {
+    path: '/edit-trademark/:id',
+    component: EditTrademark
   },
   {
     path: '/spendings/',
