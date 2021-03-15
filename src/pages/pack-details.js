@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import Footer from './footer'
@@ -228,7 +228,9 @@ const PackDetails = props => {
           <ActionsButton onClick={() => handlePurchase()}>{labels.purchase}</ActionsButton>
         }
       </Actions>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

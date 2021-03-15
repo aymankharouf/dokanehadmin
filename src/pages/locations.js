@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -32,7 +32,9 @@ const Locations = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-location/">
         <Icon material="add"></Icon>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

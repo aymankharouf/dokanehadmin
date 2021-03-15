@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Button, Badge } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Button, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -79,7 +79,9 @@ const Offers = () => {
           }
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

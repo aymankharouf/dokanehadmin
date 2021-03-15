@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Actions, ActionsButton } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Actions, ActionsButton, Toolbar } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
@@ -134,7 +134,9 @@ const StockPackTrans = props => {
         <ActionsButton onClick={() => handleAddTrans('d')}>{labels.destroy}</ActionsButton>
         <ActionsButton onClick={() => handleAddTrans('s')}>{labels.sell}</ActionsButton>
       </Actions>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

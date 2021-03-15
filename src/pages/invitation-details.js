@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import Footer from './footer'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
@@ -73,7 +73,9 @@ const InvitationDetails = props => {
           readonly
         />
       </List>
-      <Footer />
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

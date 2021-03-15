@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Button, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -59,7 +59,9 @@ const NotifyFriends = () => {
           }
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

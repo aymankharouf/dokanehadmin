@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link, Badge } from 'framework7-react'
+import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -82,7 +82,9 @@ const StorePacks = props => {
           <Icon material="add"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

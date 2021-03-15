@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Button, Badge } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Button, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { packUnavailable, showMessage, showError, getMessage, addQuantity, getPackStores } from '../data/actions'
@@ -207,7 +207,9 @@ const RequestedPackDetails = props => {
           </ListItem>
         )}
       </List>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

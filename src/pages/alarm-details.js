@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, Icon, Fab, ListInput, BlockTitle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, Icon, Fab, ListInput, BlockTitle, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import moment from 'moment'
@@ -171,7 +171,9 @@ const AlarmDetails = props => {
           />
         )}
       </List>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

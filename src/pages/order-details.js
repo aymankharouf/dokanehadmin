@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Actions, ActionsButton, Badge } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Actions, ActionsButton, Badge, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { updateOrderStatus, showMessage, showError, getMessage, quantityDetails, mergeOrder, setDeliveryTime } from '../data/actions'
 import labels from '../data/labels'
@@ -193,7 +193,9 @@ const OrderDetails = props => {
           <ActionsButton key={a.id} onClick={() => handleAction(a)}>{a.name}</ActionsButton>
         )}
       </Actions>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import Footer from './footer'
 import labels from '../data/labels'
@@ -133,7 +133,9 @@ const CustomerDetails = props => {
           <Toggle color="red" checked={customer.isBlocked} disabled />
         </ListItem>
       </List>
-      <Footer />
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

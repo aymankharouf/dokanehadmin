@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Icon, Link, Badge, Toolbar } from 'framework7-react'
+import { Icon, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
 
 const Footer = () => {
@@ -21,14 +21,14 @@ const Footer = () => {
     })
   }, [state.basket, state.returnBasket])
   return (
-    <Toolbar bottom>
+    <>
       <Link href="/home/" iconMaterial="home" />
       <Link href={basketLink}>
         <Icon material='shopping_cart' >
           {basketCount > 0 ? <Badge color="red">{basketCount}</Badge> : ''}
         </Icon>
       </Link>
-    </Toolbar>
+    </>
   )
 }
 

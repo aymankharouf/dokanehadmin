@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
@@ -72,7 +72,9 @@ const ArchivedStockTrans = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
         <Icon material="cached"></Icon>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

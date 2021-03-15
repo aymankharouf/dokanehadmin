@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -35,7 +35,9 @@ const NewUsers = () => {
           }
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

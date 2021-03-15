@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button, Fab, Icon } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -91,7 +91,9 @@ const PermissionList = props => {
           }
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

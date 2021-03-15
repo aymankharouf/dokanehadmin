@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { StoreContext } from '../data/store'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import labels from '../data/labels'
 import { addCountry, showMessage, showError, getMessage } from '../data/actions'
@@ -61,7 +61,9 @@ const AddCountry = () => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

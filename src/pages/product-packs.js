@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Actions, ActionsButton, Fab, Icon, Toolbar } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -85,7 +85,9 @@ const ProductPacks = props => {
         {activePacks.length === 0 && <ActionsButton onClick={() => handleArchive()}>{labels.archive}</ActionsButton>}
         {packs.length === 0 && <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>}
       </Actions>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import { Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import labels from '../data/labels'
 
@@ -35,7 +35,9 @@ const MonthlyTransCall = () => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

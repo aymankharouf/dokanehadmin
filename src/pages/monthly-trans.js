@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7,Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
+import { f7,Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { addMonthlyTrans, showMessage, showError, getMessage } from '../data/actions'
@@ -204,7 +204,9 @@ const MonthlyTrans = props => {
           <Icon material="done"></Icon>
         </Fab>
       : ''}
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

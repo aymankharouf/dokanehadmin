@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
+import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -78,7 +78,9 @@ const Adverts = () => {
         <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
         <ActionsButton onClick={() => handleUpdate()}>{currentAdvert.isActive ? labels.stop : labels.activate}</ActionsButton>
       </Actions>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { addStock, showMessage, showError, getMessage } from '../data/actions'
@@ -72,7 +72,9 @@ const Stores = () => {
           <Icon material="add"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

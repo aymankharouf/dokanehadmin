@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -64,7 +64,9 @@ const OrdersList = props => {
           }
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

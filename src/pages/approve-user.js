@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, FabBackdrop, FabButton, FabButtons, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import Footer from './footer'
 import { approveUser, deleteUser, showMessage, showError, getMessage } from '../data/actions'
@@ -118,7 +118,9 @@ const ApproveUser = props => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { editSpending, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import Footer from './footer'
 import labels from '../data/labels'
@@ -120,7 +120,9 @@ const EditSpending = props => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
@@ -74,7 +74,9 @@ const AddNotification = () => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

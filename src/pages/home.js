@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Button} from 'framework7-react'
+import { Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Button, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { randomColors } from '../data/config'
 import labels from '../data/labels'
@@ -38,7 +38,9 @@ const Home = () => {
           />
         )}
       </Block>
-      <Footer />
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

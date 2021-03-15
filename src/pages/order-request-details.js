@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { showMessage, showError, getMessage, quantityDetails, approveOrderRequest, addQuantity } from '../data/actions'
 import labels from '../data/labels'
@@ -108,7 +108,9 @@ const OrderRequestDetails = props => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

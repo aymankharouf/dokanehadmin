@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
@@ -164,7 +164,9 @@ const AddStore = () => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

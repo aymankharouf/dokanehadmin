@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import Footer from './footer'
@@ -91,7 +91,9 @@ const Categories = props => {
 
         </FabButtons>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

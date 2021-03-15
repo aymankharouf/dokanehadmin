@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Badge } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { quantityText } from '../data/actions'
@@ -39,7 +39,9 @@ const StockTransDetails = props => {
           )}
         </List>
       </Block>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

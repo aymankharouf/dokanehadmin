@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editTrademark, showMessage, showError, getMessage, deleteTrademark } from '../data/actions'
 import Footer from './footer'
@@ -89,7 +89,9 @@ const EditCountry = props => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

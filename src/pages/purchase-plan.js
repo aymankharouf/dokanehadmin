@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
+import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import { getRequestedPacks, getPackStores } from '../data/actions'
@@ -74,7 +74,9 @@ const PurchasePlan = () => {
 					}
 				</List>
       </Block>
-			<Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }

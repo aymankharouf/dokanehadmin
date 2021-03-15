@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -66,7 +66,9 @@ const Notifications = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-notification/">
         <Icon material="add"></Icon>
       </Fab>
-      <Footer/>
+      <Toolbar bottom>
+        <Footer/>
+      </Toolbar>
     </Page>
   )
 }
