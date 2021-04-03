@@ -123,15 +123,13 @@ const AddPack = props => {
             onToggleChange={() => setSpecialImage(!specialImage)}
           />
         </ListItem>
-        {specialImage ? 
-          <ListInput 
-            name="image" 
-            label={labels.image} 
-            type="file" 
-            accept="image/*" 
-            onChange={e => handleFileChange(e)}
-          />
-        : ''}
+        {specialImage && <ListInput 
+          name="image" 
+          label={labels.image} 
+          type="file" 
+          accept="image/*" 
+          onChange={e => handleFileChange(e)}
+        />}
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {!name || !unitsCount ? '' :

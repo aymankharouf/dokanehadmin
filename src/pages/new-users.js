@@ -28,7 +28,8 @@ const NewUsers = () => {
                 link={`/approve-user/${u.id}`}
                 title={`${labels.user}: ${u.name}`}
                 subtitle={`${labels.mobile}: ${u.mobile}`}
-                text={moment(u.time.toDate()).fromNow()}
+                text={u.storeName && `${labels.storeName}: ${u.storeName}`}
+                footer={moment(u.time.toDate()).fromNow()}
                 key={u.id}
               />
             )

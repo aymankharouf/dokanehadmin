@@ -60,10 +60,7 @@ const Reducer = (state, action) => {
         }
         return {...state, basket: {...state.basket, packs}}
       case 'CLEAR_BASKET':
-        return {
-          ...state,
-          basket: ''
-        }
+        return {...state, basket: ''}
       case 'LOAD_ORDER_BASKET':
         return {
           ...state,
@@ -76,10 +73,7 @@ const Reducer = (state, action) => {
           })
         }
       case 'CLEAR_ORDER_BASKET':
-        return {
-          ...state,
-          orderBasket: []
-        }
+        return {...state, orderBasket: []}
       case 'INCREASE_ORDER_QUANTITY':
         if (action.pack.packInfo.isDivided) {
           if (action.pack.quantity >= 1) {
@@ -156,136 +150,63 @@ const Reducer = (state, action) => {
         packIndex = basket.findIndex(p => p.packId === action.pack.packId)
         basket.splice(packIndex, 1)
         if (basket.length === 0) {
-          return {
-            ...state,
-            returnBasket: ''
-          }
+          return {...state, returnBasket: ''}
         } else {
-          return {
-            ...state,
-            returnBasket: {...state.returnBasket, packs: basket}
-          }  
+          return {...state, returnBasket: {...state.returnBasket, packs: basket}}  
         }
       case 'CLEAR_RETURN_BASKET':
-        return {
-          ...state,
-          returnBasket: ''
-        }  
+        return {...state, returnBasket: ''}  
       case 'SET_LOCATIONS':
-        return {
-          ...state,
-          locations: action.locations
-        }
+        return {...state, locations: action.payload}
       case 'SET_COUNTRIES':
-        return {
-          ...state,
-          countries: action.countries
-        }
+        return {...state, countries: action.payload}
       case 'SET_TRADEMARKS':
-        return {
-          ...state,
-          trademarks: action.trademarks
-        }
+        return {...state, trademarks: action.payload}
+      case 'SET_PACK_TYPES':
+        return {...state, packTypes: action.payload}
       case 'SET_NOTIFICATIONS':
-        return {
-          ...state,
-          notifications: action.notifications
-        }
+        return {...state, notifications: action.payload}
       case 'SET_ALARMS':
-        return {
-          ...state,
-          alarms: action.alarms
-        }
+        return {...state, alarms: action.payload}
       case 'SET_RATINGS':
-        return {
-          ...state,
-          ratings: action.ratings
-        }
+        return {...state, ratings: action.payload}
       case 'SET_INVITATIONS':
-        return {
-          ...state,
-          invitations: action.invitations
-        }
+        return {...state, invitations: action.payload}
       case 'SET_STORES':
-        return {
-          ...state,
-          stores: action.stores
-        }
+        return {...state, stores: action.payload}
       case 'SET_CATEGORIES':
-        return {
-          ...state,
-          categories: action.categories,
-        }
+        return {...state, categories: action.payload}
       case 'SET_USERS':
-        return {
-          ...state,
-          users: action.users
-        }
+        return {...state, users: action.payload}
       case 'SET_PURCHASES':
-        return {
-          ...state,
-          purchases: action.purchases
-        }
+        return {...state, purchases: action.payload}
       case 'SET_ORDERS':
-        return {
-          ...state,
-          orders: action.orders
-        }
+        return {...state, orders: action.payload}
       case 'SET_STOCK_TRANS':
-        return {
-          ...state,
-          stockTrans: action.stockTrans
-        }
+        return {...state, stockTrans: action.payload}
       case 'SET_PASSWORD_REQUESTS':
-        return {
-          ...state,
-          passwordRequests: action.passwordRequests
-        }
+        return {...state, passwordRequests: action.payload}
       case 'SET_PRODUCTS':
-        return {
-          ...state,
-          products: action.products,
-        }
+        return {...state, products: action.payload}
       case 'SET_PACKS':
-        return {
-          ...state,
-          packs: action.packs
-        }
+        return {...state, packs: action.payload}
       case 'SET_CUSTOMERS':
-        return {
-          ...state,
-          customers: action.customers
-        }
+        return {...state, customers: action.payload}
       case 'SET_SPENDINGS':
-        return {
-          ...state,
-          spendings: action.spendings
-        }
+        return {...state, spendings: action.payload}
       case 'SET_MONTHLY_TRANS':
-        return {
-          ...state,
-          monthlyTrans: action.monthlyTrans
-        }
+        return {...state, monthlyTrans: action.payload}
       case 'SET_PACK_PRICES':
-        return {
-          ...state,
-          packPrices: action.packPrices,
-        }
+        return {...state, packPrices: action.payload}
       case 'SET_LOGS':
-        return {
-          ...state,
-          logs: action.logs
-        }
+        return {...state, logs: action.logs}
       case 'ADD_ARCHIVED_ORDERS':
         return {
           ...state,
           archivedOrders: [...state.archivedOrders, ...action.orders]
         }
       case 'SET_ADVERTS':
-        return {
-          ...state,
-          adverts: action.adverts
-        }
+        return {...state, adverts: action.payload}
       case 'ADD_ARCHIVED_PURCHASES':
         return {
           ...state,
@@ -307,10 +228,7 @@ const Reducer = (state, action) => {
           archivedPacks: action.archivedPacks
         }
       case 'SET_STORE_PAYMENTS':
-        return {
-          ...state,
-          storePayments: action.storePayments
-        }
+        return {...state, storePayments: action.payload}
       default:
         return state
     }

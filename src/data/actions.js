@@ -842,7 +842,7 @@ export const addCountry = country => {
 
 export const deleteCountry = (countryId, countries) => {
   const values = countries.slice()
-  const countryIndex = values.findIndex(l => l.id === countryId)
+  const countryIndex = values.findIndex(c => c.id === countryId)
   values.splice(countryIndex, 1)
   firebase.firestore().collection('lookups').doc('c').update({
     values
@@ -854,6 +854,30 @@ export const editCountry = (country, countries) => {
   const countryIndex = values.findIndex(c => c.id === country.id)
   values.splice(countryIndex, 1, country)
   firebase.firestore().collection('lookups').doc('c').update({
+    values
+  })
+}
+
+export const addPackType = packType => {
+  firebase.firestore().collection('lookups').doc('p').set({
+    values: firebase.firestore.FieldValue.arrayUnion(packType)
+  }, {merge: true})
+}
+
+export const editPackType = (packType, packTypes) => {
+  const values = packTypes.slice()
+  const packTypeIndex = values.findIndex(t => t.id === packType.id)
+  values.splice(packTypeIndex, 1, packType)
+  firebase.firestore().collection('lookups').doc('p').update({
+    values
+  })
+}
+
+export const deletePackType = (packTypeId, packTypes) => {
+  const values = packTypes.slice()
+  const packTypeIndex = values.findIndex(t => t.id === packTypeId)
+  values.splice(packTypeIndex, 1)
+  firebase.firestore().collection('lookups').doc('p').update({
     values
   })
 }
@@ -1057,15 +1081,14 @@ export const editCustomer = (customer, name, locationId, mobile, storeId, stores
   batch.commit()
 }
 
-export const approveUser = (id, name, mobile, locationId, storeName, address, users) => {
+export const approveUser = (id, name, mobile, locationId, storeId, users) => {
   const batch = firebase.firestore().batch()
   const customerRef = firebase.firestore().collection('customers').doc(id)
   batch.set(customerRef, {
     name: `${name}:${mobile}`,
     orderLimit: 0,
     isBlocked: false,
-    storeName,
-    address,
+    storeId,
     deliveryFees: 0,
     specialDiscount: 0,
     discounts: 0,

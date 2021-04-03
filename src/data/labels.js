@@ -375,7 +375,9 @@ const labels = {
   returnedCount: 'مرات اﻻرجاع',
   gross: 'اﻻجمالي',
   confirmationBlockUser: 'هل ترغب بحظر التعامل مع هذا المستخدم؟',
-  paymentDate: 'تاريخ الدفعة'
+  paymentDate: 'تاريخ الدفعة',
+  packTypes: 'الاغلفة',
+  addPackType: 'اضافة غلاف'
 }
 
 export default labels

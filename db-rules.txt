@@ -13,7 +13,8 @@ service cloud.firestore {
     }
     match /packs/{packId} {
     	allow read;
-    	allow write: if request.auth.token.name == 'a';
+    	allow create, delete: if request.auth.token.name == 'a';
+      allow update: if request.auth.token.name == 's';
     }
     match /purchases/{purshaseId} {
     	allow read, write: if request.auth.token.name == 'a';

@@ -98,3 +98,7 @@
 *transfer data from prod to dev
 *navigation & performance
 *store trans per month
+---
+maps
+vip customers for each store & special price
+alarm for false price/offer

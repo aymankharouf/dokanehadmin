@@ -12,8 +12,9 @@ const ApproveUser = props => {
   const [userInfo] = useState(() => state.users.find(u => u.id === props.id))
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState(userInfo.locationId)
-  const [address, setAddress] = useState('')
+  const [storeId, setStoreId] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [stores] = useState(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -29,7 +30,7 @@ const ApproveUser = props => {
   }, [inprocess])
   const handleSubmit = () => {
     try {
-      approveUser(props.id, name, userInfo.mobile, locationId, userInfo.storeName || '', address, state.users)
+      approveUser(props.id, name, userInfo.mobile, locationId, storeId || '', state.users)
       showMessage(labels.approveSuccess)
       f7.views.current.router.back()  
     } catch(err) {
@@ -68,18 +69,20 @@ const ApproveUser = props => {
           value={userInfo.mobile}
           readonly
         />
-        <ListInput 
+        {userInfo.storeName && <ListInput 
           name="storeName" 
           label={labels.storeName}
           type="text"
-          value={userInfo.storeName || ''}
+          value={userInfo.storeName}
           readonly
-        />
+        />}
         <ListItem
           title={labels.location}
           smartSelect
+          id="location"
           smartSelectParams={{
-            openIn: "popup", 
+            el: "#location",
+            // openIn: "popup", 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -93,15 +96,26 @@ const ApproveUser = props => {
             )}
           </select>
         </ListItem>
-        <ListInput 
-          name="address" 
-          label={labels.address}
-          type="text" 
-          clearButton
-          value={address}
-          onChange={e => setAddress(e.target.value)}
-          onInputClear={() => setAddress('')}
-        />
+        {userInfo.storeName && <ListItem
+          title={labels.store}
+          smartSelect
+          id="store"
+          smartSelectParams={{
+            el: "#store",
+            openIn: "popup", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
+            <option value=""></option>
+            {stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
+            )}
+          </select>
+        </ListItem>}
       </List>
       <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
