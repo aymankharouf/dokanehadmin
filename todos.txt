@@ -100,5 +100,6 @@
 *store trans per month
 ---
 maps
-vip customers for each store & special price
+special price for users
 alarm for false price/offer
+list of items to purchase for end user & list of requested items to store owner
