@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, Pack, PackPrice, Advert, PasswordRequest, Order } from './interfaces'
+import { State, Context } from './interfaces'
 
 export const StoreContext = createContext({} as Context)
 
@@ -87,6 +87,7 @@ const Store = (props: any) => {
     }) 
     firebase.auth().onAuthStateChanged(user => {
       if (user){
+        dispatch({type: 'LOGIN', payload: user})
         const unsubscribeLocations = firebase.firestore().collection('lookups').doc('l').onSnapshot(doc => {
           if (doc.data()) dispatch({type: 'SET_LOCATIONS', payload: doc.data()?.values})
         }, err => {
