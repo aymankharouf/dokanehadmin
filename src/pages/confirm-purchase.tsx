@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Toolbar, Fab, Icon, Link, Badge } from 'framework7-react'
 import { StoreContext } from '../data/store'
-import { confirmPurchase, stockOut, showMessage, showError, getMessage, quantityText } from '../data/actions'
+import { confirmPurchase, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import labels from '../data/labels'
 
 
@@ -25,17 +25,10 @@ const ConfirmPurchase = () => {
   }, [error])
   const handlePurchase = () => {
     try{
-      if (store.id === 's') {
-        stockOut(state.basket.packs, state.orders, state.packPrices, state.packs)
-        showMessage(labels.purchaseSuccess)
-        f7.views.current.router.navigate('/home/', {reloadAll: true})
-        dispatch({type: 'CLEAR_BASKET'})    
-      } else {
-        confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, state.stores, total)
-        showMessage(labels.purchaseSuccess)
-        f7.views.current.router.navigate('/home/', {reloadAll: true})
-        dispatch({type: 'CLEAR_BASKET'})    
-      }  
+      confirmPurchase(state.basket.packs, state.orders, store.id, state.packPrices, state.packs, state.stores, total)
+      showMessage(labels.purchaseSuccess)
+      f7.views.current.router.navigate('/home/', {reloadAll: true})
+      dispatch({type: 'CLEAR_BASKET'})    
     } catch(err) {
 			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}

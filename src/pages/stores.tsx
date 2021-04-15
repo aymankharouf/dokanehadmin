@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
-import { addStock, showMessage, showError, getMessage } from '../data/actions'
+import { showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
 const Stores = () => {
@@ -35,15 +35,6 @@ const Stores = () => {
       setError('')
     }
   }, [error])
-  const handleAddStock = () => {
-    try{
-      addStock()
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()  
-    } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
-		}
-  }
   return (
     <Page>
       <Navbar title={labels.stores} backLink={labels.back} />
@@ -67,11 +58,6 @@ const Stores = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-store/">
         <Icon material="add"></Icon>
       </Fab>
-      {stock ? '' : 
-        <Fab position="center-bottom" slot="fixed" color="red" text={labels.stockName} onClick={() => handleAddStock()}>
-          <Icon material="add"></Icon>
-        </Fab>
-      }
       <Toolbar bottom>
         <Footer/>
       </Toolbar>

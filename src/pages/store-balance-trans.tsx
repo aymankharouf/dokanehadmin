@@ -32,18 +32,10 @@ const StoreBalanceTrans = (props: any) => {
           name: labels.purchase
         }
       })
-      let stockTrans = state.stockTrans.filter((t: any) => t.storeId === props.id && t.type === 's' && (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month)
-      stockTrans = stockTrans.map((t: any) => {
-        return {
-          amount: t.total,
-          time: t.time,
-          name: labels.sale
-        }
-      })
-      const trans = [...storePayments, ...purchases, ...stockTrans]
+      const trans = [...storePayments, ...purchases]
       return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
     })
-  }, [store, state.purchases, state.stockTrans, state.storePayments, props.id, month, year, props.storeId])
+  }, [store, state.purchases, state.storePayments, props.id, month, year, props.storeId])
   let i = 0
   return(
     <Page>

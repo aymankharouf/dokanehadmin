@@ -4,7 +4,6 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
-import { stockTransTypes } from '../data/config'
 import Footer from './footer'
 
 const StoreTrans = (props: any) => {
@@ -13,25 +12,10 @@ const StoreTrans = (props: any) => {
   const [trans, setTrans] = useState<any>([])
   useEffect(() => {
     setTrans(() => {
-      const stockTrans = state.stockTrans.filter((t: any) => t.storeId === props.id && t.type !== 'p')
       let purchases = state.purchases.filter((p: any) => p.storeId === props.id)
-      purchases = purchases.map((p: any) => {
-        return {
-          ...p,
-          type: 'p'
-        }
-      })
-      let trans = [...purchases, ...stockTrans]
-      trans = trans.map(t => {
-        const stockTransTypeInfo = stockTransTypes.find(ty => ty.id === t.type)
-        return {
-          ...t,
-          stockTransTypeInfo
-        }
-      })
-      return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
+      return purchases.sort((t1: any, t2: any) => t2.time.seconds - t1.time.seconds)
     })
-  }, [state.stockTrans, state.purchases, props.id])
+  }, [state.purchases, props.id])
 
   return(
     <Page>

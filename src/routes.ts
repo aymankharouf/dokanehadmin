@@ -26,10 +26,6 @@ import RequestedPackDetails from './pages/requested-pack-details'
 import ConfirmPurchase from './pages/confirm-purchase'
 import Purchases from './pages/purchases'
 import PurchaseDetails from './pages/purchase-details'
-import Stock from './pages/stock'
-import StockPackTrans from './pages/stock-pack-trans'
-import StockTrans from './pages/stock-trans'
-import StockTransDetails from './pages/stock-trans-details'
 import Customers from './pages/customers'
 import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
@@ -84,9 +80,7 @@ import PermitUser from './pages/permit-user'
 import Register from './pages/register'
 import ArchivedPurchases from './pages/archived-purchases'
 import PermissionList from './pages/permission-list'
-import ArchivedStockTrans from './pages/archived-stock-trans'
 import ArchivedProducts from './pages/archived-products'
-import ReturnBasket from './pages/return-basket'
 import NotifyFriends from './pages/notify-friends'
 import StoreBalance from './pages/store-balance'
 import StoreBalanceTrans from './pages/store-balance-trans'
@@ -326,22 +320,6 @@ const routes = [
     component: PurchaseDetails
   },
   {
-    path: '/stock/',
-    component: Stock,
-  },
-  {
-    path: '/stock-pack-trans/:id',
-    component: StockPackTrans
-  },
-  {
-    path: '/stock-trans/',
-    component: StockTrans
-  },
-  {
-    path: '/stock-trans-details/:id/type/:type',
-    component: StockTransDetails
-  },
-  {
     path: '/monthly-trans-call/',
     component: MonthlyTransCall,
   },
@@ -466,16 +444,8 @@ const routes = [
     component: PermissionList
   },
   {
-    path: '/archived-stock-trans/',
-    component: ArchivedStockTrans
-  },
-  {
     path: '/archived-products/',
     component: ArchivedProducts
-  },
-  {
-    path: '/return-basket/',
-    component: ReturnBasket
   },
   {
     path: '/notify-friends/',

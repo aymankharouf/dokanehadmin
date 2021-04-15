@@ -44,18 +44,6 @@ export const storeTypes = [
   {id: '5', name: 'جملة'}
 ]
 
-export const stockTransTypes = [
-  {id: 'p', name: 'شراء'},
-  {id: 'o', name: 'بيع تجزئة'},
-  {id: 'i', name: 'استيداع'},
-  {id: 'd', name: 'اتلاف'},
-  {id: 'g', name: 'تبرع'},
-  {id: 'r', name: 'ارجاع'},
-  {id: 'c', name: 'الغاء شراء'},
-  {id: 's', name: 'بيع'},
-  {id: 'u', name: 'فتح'},
-]
-
 export const orderPackStatus = [
   {id: 'n', name: 'قيد الشراء'},
   {id: 'p', name: 'شراء جزئي'},

@@ -200,13 +200,11 @@ export interface State {
   archivedProducts: any,
   stores: any,
   purchases: any,
-  stockTrans: any,
   products: any,
   monthlyTrans: any,
   logs: any,
   archivedOrders: any,
   archivedPurchases: any,
-  archivedStockTrans: any,
   archivedPacks: any,
   notifications: any,
   alarms: any,
@@ -214,8 +212,7 @@ export interface State {
   invitations: any,
   storePayments: any,
   packTypes: any
-  orderBasket?: any,
-  returnBasket?: any
+  orderBasket?: any
 }
 
 export interface Action {

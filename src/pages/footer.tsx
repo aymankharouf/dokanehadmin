@@ -8,18 +8,15 @@ const Footer = () => {
   const [basketCount, setBasketCount] = useState<any>()
   useEffect(() => {
     const basketCount = state.basket.packs?.length || 0
-    const returnBasketCount = state.returnBasket?.packs?.length || 0
     setBasketLink(() => {
       if (basketCount > 0) return '/basket/'
-      if (returnBasketCount > 0 ) return '/return-basket/'
       return ''
     })
     setBasketCount(() => {
       if (basketCount > 0) return basketCount
-      if (returnBasketCount > 0 ) return returnBasketCount
       return ''
     })
-  }, [state.basket, state.returnBasket])
+  }, [state.basket])
   return (
     <>
       <Link href="/home/" iconMaterial="home" />

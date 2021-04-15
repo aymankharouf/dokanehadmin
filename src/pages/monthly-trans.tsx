@@ -38,15 +38,12 @@ const MonthlyTrans = (props: any) => {
     return monthlyTrans?.storesBalance ?? sum
   })
   const [storePayments] = useState(() => state.storePayments.filter((p: any) => (p.paymentDate.toDate()).getFullYear() === year && (p.paymentDate.toDate()).getMonth() === month))
-  const [stockTrans] = useState(() => state.stockTrans.filter((t: any) => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month))
-  const [donations] = useState(() => monthlyTrans?.donations ?? stockTrans.reduce((sum: any, t: any) => sum + (t.type === 'g' ? t.total : 0), 0))
-  const [damages] = useState(() => monthlyTrans?.damages ?? stockTrans.reduce((sum: any, t: any) => sum + (t.type === 'd' ? t.total : 0), 0))
   const [storesProfit] = useState(() => monthlyTrans?.storesProfit ?? storePayments.reduce((sum: any, p: any) => sum + (p.type === 'c' ? p.amount : 0), 0))
   const [storeTransNet] = useState(() => monthlyTrans?.storeTransNet ?? storePayments.reduce((sum: any, p: any) => sum + ['pp', 'sp', 'rp'].includes(p.type) ? -1 * p.amount : (['pl', 'sl', 'rl'].includes(p.type) ? p.amount : 0), 0))
   const [expenses] = useState(() => {
     if (monthlyTrans) return monthlyTrans.expenses
   })
-  const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) - (discounts + expenses + damages + fractions))
+  const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) - (discounts + expenses + fractions))
   useEffect(() => {
     const today = new Date()
     if ((today.getFullYear() * 100 + Number(today.getMonth())) > year * 100 + month) {
@@ -77,14 +74,12 @@ const MonthlyTrans = (props: any) => {
         storesBalance,
         discounts,
         expenses,
-        donations,
-        damages,
         storesProfit,
         storeTransNet,
         specialDiscounts,
         netProfit
       }
-      addMonthlyTrans(trans, state.orders, state.purchases, state.stockTrans)
+      addMonthlyTrans(trans, state.orders, state.purchases)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -153,16 +148,12 @@ const MonthlyTrans = (props: any) => {
             after={(expenses / 100).toFixed(2)}
           />
           <ListItem
-            title={labels.damages}
-            after={(damages / 100).toFixed(2)}
-          />
-          <ListItem
             title={labels.storeTransNet}
             after={(storeTransNet / 100).toFixed(2)}
           />
           <ListItem
             title={labels.grossLoss}
-            after={((discounts + expenses + damages + fractions) / 100).toFixed(2)}
+            after={((discounts + expenses + fractions) / 100).toFixed(2)}
           />
           <ListItem
             title={labels.netProfit}
@@ -173,12 +164,8 @@ const MonthlyTrans = (props: any) => {
             after={(specialDiscounts / 100).toFixed(2)}
           />
           <ListItem
-            title={labels.donations}
-            after={(donations / 100).toFixed(2)}
-          />
-          <ListItem
             title={labels.donationsBalance}
-            after={((Math.round(netProfit * 0.2) - donations - specialDiscounts) / 100).toFixed(2)}
+            after={((Math.round(netProfit * 0.2) - specialDiscounts) / 100).toFixed(2)}
           />
           <ListItem
             title={labels.propertyBalance}

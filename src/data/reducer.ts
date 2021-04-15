@@ -126,38 +126,6 @@ const Reducer = (state: State, action: Action) => {
         packIndex = packs.findIndex((p: any) => p.packId === action.payload.pack.packId)
         packs.splice(packIndex, 1, pack)  
         return {...state, orderBasket: packs}
-      case 'ADD_TO_RETURN_BASKET':
-        pack = {
-          packId: action.payload.packId,
-          cost: action.payload.cost,
-          price: action.payload.price,
-          quantity: action.payload.quantity,
-          weight: action.payload.weight
-        }
-        if (!state.returnBasket?.type) {
-          return {
-            ...state, 
-            returnBasket: {
-              storeId: action.payload.storeId, 
-              type: action.payload.type, 
-              purchaseId: action.payload.purchaseId, 
-              packs: [pack]
-            }
-          }
-        } else {
-          return {...state, returnBasket: {...state.returnBasket, packs: [...state.returnBasket.packs, pack]}}
-        }
-      case 'REMOVE_FROM_RETURN_BASKET':
-        const basket = state.returnBasket.packs.slice()
-        packIndex = basket.findIndex((p: any) => p.packId === action.payload.packId)
-        basket.splice(packIndex, 1)
-        if (basket.length === 0) {
-          return {...state, returnBasket: ''}
-        } else {
-          return {...state, returnBasket: {...state.returnBasket, packs: basket}}  
-        }
-      case 'CLEAR_RETURN_BASKET':
-        return {...state, returnBasket: ''}  
       case 'SET_LOCATIONS':
         return {...state, locations: action.payload}
       case 'SET_COUNTRIES':
@@ -184,8 +152,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, purchases: action.payload}
       case 'SET_ORDERS':
         return {...state, orders: action.payload}
-      case 'SET_STOCK_TRANS':
-        return {...state, stockTrans: action.payload}
       case 'SET_PASSWORD_REQUESTS':
         return {...state, passwordRequests: action.payload}
       case 'SET_PRODUCTS':
@@ -206,8 +172,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, adverts: action.payload}
       case 'ADD_ARCHIVED_PURCHASES':
         return {...state, archivedPurchases: [...state.archivedPurchases, ...action.payload]}
-      case 'ADD_ARCHIVED_STOCK_TRANS':
-        return {...state, archivedStockTrans: [...state.archivedStockTrans, ...action.payload]}
       case 'SET_ARCHIVED_PRODUCTS':
         return {...state, archivedProducts: action.payload}
       case 'SET_ARCHIVED_PACKS':

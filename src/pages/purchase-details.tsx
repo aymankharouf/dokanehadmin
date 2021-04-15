@@ -16,7 +16,7 @@ const PurchaseDetails = (props: any) => {
   }, [state.purchases, state.archivedPurchases, props.id, props.type])
   useEffect(() => {
     setPurchaseBasket(() => {
-      const purchaseBasket =  purchase ? purchase.basket.filter((p: any) => !(state.returnBasket?.purchaseId === purchase.id && state.returnBasket?.packs?.find((bp: any) => bp.packId === p.packId && (!bp.weight || bp.weight === p.weight)))) : []
+      const purchaseBasket =  purchase ? purchase.basket.slice() : []
       return purchaseBasket.map((p: any) => {
         const packInfo = state.packs.find((pa: any) => pa.id === p.packId)
         return {
@@ -25,7 +25,7 @@ const PurchaseDetails = (props: any) => {
         }
       })
     })
-  }, [state.packs, state.returnBasket, purchase])
+  }, [state.packs, purchase])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -37,9 +37,6 @@ const PurchaseDetails = (props: any) => {
       const affectedOrders = state.orders.filter((o: any) => o.basket.find((p: any) => p.packId === pack.packId && p.lastPurchaseId === purchase.id) && ['p', 'd'].includes(o.status))
       if (affectedOrders.length > 0) {
         throw new Error('finishedOrdersAffected')
-      }
-      if (state.returnBasket && state.returnBasket.purchase !== purchase) {
-        throw new Error('diffPurchaseInReturnBasket')
       }
       const params = {
         type: 'c',
