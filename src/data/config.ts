@@ -56,13 +56,6 @@ export const stockTransTypes = [
   {id: 'u', name: 'فتح'},
 ]
 
-export const spendingTypes = [
-  {id: 'w', name: 'سحب'},
-  {id: 'p', name: 'بنزين'},
-  {id: 'm', name: 'صيانة'},
-  {id: 'f', name: 'فرق اسعار'}
-]
-
 export const orderPackStatus = [
   {id: 'n', name: 'قيد الشراء'},
   {id: 'p', name: 'شراء جزئي'},

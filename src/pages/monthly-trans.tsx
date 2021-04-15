@@ -38,21 +38,13 @@ const MonthlyTrans = (props: any) => {
     return monthlyTrans?.storesBalance ?? sum
   })
   const [storePayments] = useState(() => state.storePayments.filter((p: any) => (p.paymentDate.toDate()).getFullYear() === year && (p.paymentDate.toDate()).getMonth() === month))
-  const [spendings] = useState(() => state.spendings.filter((s: any) => (s.spendingDate.toDate()).getFullYear() === year && (s.spendingDate.toDate()).getMonth() === month))
   const [stockTrans] = useState(() => state.stockTrans.filter((t: any) => (t.time.toDate()).getFullYear() === year && (t.time.toDate()).getMonth() === month))
   const [donations] = useState(() => monthlyTrans?.donations ?? stockTrans.reduce((sum: any, t: any) => sum + (t.type === 'g' ? t.total : 0), 0))
   const [damages] = useState(() => monthlyTrans?.damages ?? stockTrans.reduce((sum: any, t: any) => sum + (t.type === 'd' ? t.total : 0), 0))
   const [storesProfit] = useState(() => monthlyTrans?.storesProfit ?? storePayments.reduce((sum: any, p: any) => sum + (p.type === 'c' ? p.amount : 0), 0))
   const [storeTransNet] = useState(() => monthlyTrans?.storeTransNet ?? storePayments.reduce((sum: any, p: any) => sum + ['pp', 'sp', 'rp'].includes(p.type) ? -1 * p.amount : (['pl', 'sl', 'rl'].includes(p.type) ? p.amount : 0), 0))
-  const [withdrawals] = useState(() => {
-    if (monthlyTrans) return monthlyTrans.withdrawals
-    const withdrawals = spendings.filter((s: any) => s.type === 'w')
-    return withdrawals.reduce((sum: any, s: any) => sum + s.amount, 0)
-  })
   const [expenses] = useState(() => {
     if (monthlyTrans) return monthlyTrans.expenses
-    const expenses = spendings.filter((s: any) => s.type !== 'w')
-    return expenses.reduce((sum: any, s: any) => sum + s.amount, 0)
   })
   const [netProfit] = useState(() => monthlyTrans?.netProfit ?? (transProfit + storesProfit + storeTransNet + fixedFees + deliveryFees) - (discounts + expenses + damages + fractions))
   useEffect(() => {
@@ -84,7 +76,6 @@ const MonthlyTrans = (props: any) => {
         fractions,
         storesBalance,
         discounts,
-        withdrawals,
         expenses,
         donations,
         damages,
@@ -190,12 +181,8 @@ const MonthlyTrans = (props: any) => {
             after={((Math.round(netProfit * 0.2) - donations - specialDiscounts) / 100).toFixed(2)}
           />
           <ListItem
-            title={labels.withdrawals}
-            after={(withdrawals / 100).toFixed(2)}
-          />
-          <ListItem
             title={labels.propertyBalance}
-            after={((netProfit - Math.round(netProfit * 0.2) - withdrawals) / 100).toFixed(2)}
+            after={((netProfit - Math.round(netProfit * 0.2)) / 100).toFixed(2)}
           />
         </List>
       </Block>

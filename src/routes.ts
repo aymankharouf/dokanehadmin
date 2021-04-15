@@ -45,9 +45,6 @@ import ApproveUser from './pages/approve-user'
 import Alarms from './pages/alarms'
 import AlarmDetails from './pages/alarm-details'
 import Offers from './pages/offers'
-import Spendings from './pages/spendings'
-import AddSpending from './pages/add-spending'
-import EditSpending from './pages/edit-spending'
 import MonthlyTransCall from './pages/monthly-trans-call'
 import MonthlyTrans from './pages/monthly-trans'
 import RetreivePassword from './pages/retreive-password'
@@ -235,18 +232,6 @@ const routes = [
   {
     path: '/edit-trademark/:id',
     component: EditTrademark
-  },
-  {
-    path: '/spendings/',
-    component: Spendings
-  },
-  {
-    path: '/add-spending/',
-    component: AddSpending
-  },
-  {
-    path: '/edit-spending/:id',
-    component: EditSpending
   },
   {
     path: '/categories/:id',

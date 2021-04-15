@@ -23,7 +23,6 @@ const Store = (props: any) => {
     packs: [],
     passwordRequests: [],
     customers: [],
-    spendings: [],
     monthlyTrans: [],
     packPrices: [],
     logs: [],
@@ -205,15 +204,6 @@ const Store = (props: any) => {
           dispatch({type: 'SET_STOCK_TRANS', payload: stockTrans})
         }, err => {
           unsubscribeStockTrans()
-        })  
-        const unsubscribeSpendings = firebase.firestore().collection('spendings').onSnapshot(docs => {
-          let spendings: any = []
-          docs.forEach(doc => {
-            spendings.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_SPENDINGS', payload: spendings})
-        }, err => {
-          unsubscribeSpendings()
         })  
         const unsubscribeMonthlyTrans = firebase.firestore().collection('monthly-trans').onSnapshot(docs => {
           let monthlyTrans: any = []

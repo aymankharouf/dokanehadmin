@@ -825,15 +825,6 @@ export const addStock = () => {
   })
 }
 
-export const addSpending = (spending: any) => {
-  firebase.firestore().collection('spendings').add(spending)
-}
-
-export const editSpending = (spending: any) => {
-  const { id, ...others } = spending
-  firebase.firestore().collection('spendings').doc(id).update(others)
-}
-
 export const addCountry = (country: any) => {
   firebase.firestore().collection('lookups').doc('c').set({
     values: firebase.firestore.FieldValue.arrayUnion(country)

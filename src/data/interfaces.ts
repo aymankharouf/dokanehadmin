@@ -202,7 +202,6 @@ export interface State {
   purchases: any,
   stockTrans: any,
   products: any,
-  spendings: any,
   monthlyTrans: any,
   logs: any,
   archivedOrders: any,

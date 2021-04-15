@@ -12,8 +12,7 @@ const Home = () => {
     {id: '4', name: labels.purchases, path: '/purchases/'},
     {id: '5', name: labels.customers, path: '/customers/'},
     {id: '6', name: labels.stock, path: '/stock/'},
-    {id: '7', name: labels.spendings, path: '/spendings/'},
-    {id: '8', name: labels.notifications, path: '/notifications/'}
+    {id: '7', name: labels.notifications, path: '/notifications/'}
   ])
   let i = 0
   return (
