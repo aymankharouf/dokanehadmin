@@ -148,8 +148,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, categories: action.payload}
       case 'SET_USERS':
         return {...state, users: action.payload}
-      case 'SET_PURCHASES':
-        return {...state, purchases: action.payload}
       case 'SET_ORDERS':
         return {...state, orders: action.payload}
       case 'SET_PASSWORD_REQUESTS':
@@ -170,8 +168,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, archivedOrders: [...state.archivedOrders, ...action.payload]}
       case 'SET_ADVERTS':
         return {...state, adverts: action.payload}
-      case 'ADD_ARCHIVED_PURCHASES':
-        return {...state, archivedPurchases: [...state.archivedPurchases, ...action.payload]}
       case 'SET_ARCHIVED_PRODUCTS':
         return {...state, archivedProducts: action.payload}
       case 'SET_ARCHIVED_PACKS':

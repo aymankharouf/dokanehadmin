@@ -24,18 +24,9 @@ const StoreBalanceTrans = (props: any) => {
           name: paymentTypeInfo.name
         }
       })
-      let purchases = state.purchases.filter((p: any) => p.storeId === props.storeId && (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
-      purchases = purchases.map((p: any) => {
-        return {
-          amount: p.total,
-          time: p.time,
-          name: labels.purchase
-        }
-      })
-      const trans = [...storePayments, ...purchases]
-      return trans.sort((t1, t2) => t2.time.seconds - t1.time.seconds)
+      return storePayments.sort((t1: any, t2: any) => t2.time.seconds - t1.time.seconds)
     })
-  }, [store, state.purchases, state.storePayments, props.id, month, year, props.storeId])
+  }, [store, state.storePayments, props.id, month, year, props.storeId])
   let i = 0
   return(
     <Page>

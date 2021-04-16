@@ -24,8 +24,6 @@ import Orders from './pages/orders'
 import RequestedPacks from './pages/requested-packs'
 import RequestedPackDetails from './pages/requested-pack-details'
 import ConfirmPurchase from './pages/confirm-purchase'
-import Purchases from './pages/purchases'
-import PurchaseDetails from './pages/purchase-details'
 import Customers from './pages/customers'
 import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
@@ -52,7 +50,6 @@ import AddLocation from './pages/add-location'
 import EditLocation from './pages/edit-location'
 import Ratings from './pages/ratings'
 import Approvals from './pages/approvals'
-import PackTrans from './pages/pack-trans'
 import AddPackStore from './pages/add-pack-store'
 import OrderRequests from './pages/order-requests'
 import Logs from './pages/logs'
@@ -69,8 +66,6 @@ import InvitationDetails from './pages/invitation-details'
 import Notifications from './pages/notifications'
 import AddNotification from './pages/add-notification'
 import ArchivedOrders from './pages/archived-orders'
-import StoreTrans from './pages/store-trans'
-import PurchasePlan from './pages/purchase-plan'
 import Adverts from './pages/adverts'
 import AddAdvert from './pages/add-advert'
 import AdvertDetails from './pages/advert-details'
@@ -78,7 +73,6 @@ import EditAdvert from './pages/edit-advert'
 import OrderRequestDetails from './pages/order-request-details'
 import PermitUser from './pages/permit-user'
 import Register from './pages/register'
-import ArchivedPurchases from './pages/archived-purchases'
 import PermissionList from './pages/permission-list'
 import ArchivedProducts from './pages/archived-products'
 import NotifyFriends from './pages/notify-friends'
@@ -312,14 +306,6 @@ const routes = [
     component: RequestedPackDetails
   },
   {
-    path: '/purchases/',
-    component: Purchases,
-  },
-  {
-    path: '/purchase-details/:id/type/:type',
-    component: PurchaseDetails
-  },
-  {
     path: '/monthly-trans-call/',
     component: MonthlyTransCall,
   },
@@ -354,10 +340,6 @@ const routes = [
   {
     path: '/approvals/',
     component: Approvals
-  },
-  {
-    path: '/pack-trans/:id',
-    component: PackTrans
   },
   {
     path: '/order-requests/',
@@ -404,14 +386,6 @@ const routes = [
     component: ArchivedOrders
   },
   {
-    path: '/store-trans/:id',
-    component: StoreTrans
-  },
-  {
-    path: '/purchase-plan/',
-    component: PurchasePlan
-  },
-  {
     path: '/purchase-plan-details/:id',
     component: RequestedPacks
   },
@@ -434,10 +408,6 @@ const routes = [
   {
     path: '/order-request-details/:id',
     component: OrderRequestDetails
-  },
-  {
-    path: '/archived-purchases/',
-    component: ArchivedPurchases
   },
   {
     path: '/permission-list/:id',

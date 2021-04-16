@@ -27,15 +27,7 @@ const RequestedPackDetails = (props: any) => {
       {
         if (s1.unitPrice === s2.unitPrice) {
           if (s1.storeInfo.type === s2.storeInfo.type){
-            if (s2.storeInfo.discount === s1.storeInfo.discount) {
-              const store1Purchases = state.purchases.filter((p: any) => p.storeId === s1.storeId && p.time.toDate() >= today)
-              const store2Purchases = state.purchases.filter((p: any) => p.storeId === s2.storeId && p.time.toDate() >= today)
-              const store1Sales = store1Purchases.reduce((sum: any, p: any) => sum + p.total, 0)
-              const store2Sales = store2Purchases.reduce((sum: any, p: any) => sum + p.total, 0)
-              return store1Sales - store2Sales
-            } else {
-              return Number(s2.storeInfo.discount) - Number(s1.storeInfo.discount)
-            }
+            return Number(s2.storeInfo.discount) - Number(s1.storeInfo.discount)
           } else {
             return Number(s1.storeInfo.type) - Number(s2.storeInfo.type)
           }
@@ -44,7 +36,7 @@ const RequestedPackDetails = (props: any) => {
         }
       })
     })
-  }, [pack, state.stores, state.packPrices, state.purchases, basketStockQuantity, state.packs])
+  }, [pack, state.stores, state.packPrices, basketStockQuantity, state.packs])
   useEffect(() => {
     if (error) {
       showError(error)

@@ -94,9 +94,6 @@ const StoreDetails = (props: any) => {
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-store/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
-          <FabButton color="yellow" onClick={() => f7.views.current.router.navigate(`/store-trans/${store.id}`)}>
-            <Icon material="import_export"></Icon>
-          </FabButton>
           <FabButton color="red" onClick={() => f7.views.current.router.navigate(`/store-owners/${store.id}`)}>
             <Icon material="perm_identity"></Icon>
           </FabButton>

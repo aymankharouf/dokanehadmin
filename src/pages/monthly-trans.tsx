@@ -79,7 +79,7 @@ const MonthlyTrans = (props: any) => {
         specialDiscounts,
         netProfit
       }
-      addMonthlyTrans(trans, state.orders, state.purchases)
+      addMonthlyTrans(trans, state.orders)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {

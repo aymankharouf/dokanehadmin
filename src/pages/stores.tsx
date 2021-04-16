@@ -18,17 +18,9 @@ const Stores = () => {
       const today = new Date()
       today.setDate(today.getDate() - 30)
       let stores = state.stores.filter((s: any) => s.id !== 's')
-      stores = stores.map((s: any) => {
-        const storePurchases = state.purchases.filter((p: any) => p.storeId === s.id && p.time.toDate() >= today)
-        const sales = storePurchases.reduce((sum: any, p: any) => sum + p.total, 0)
-        return {
-          ...s,
-          sales
-        }
-      })
       return stores.sort((s1: any, s2: any) => s1.sales - s2.sales)
     })
-  }, [state.stores, state.purchases])
+  }, [state.stores])
   useEffect(() => {
     if (error) {
       showError(error)

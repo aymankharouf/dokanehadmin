@@ -1034,7 +1034,7 @@ export const packUnavailable = (pack: any, packPrice: any, orders: any, overPric
   batch.commit()
 }
 
-export const addMonthlyTrans = (trans: any, orders: any, purchases: any) => {
+export const addMonthlyTrans = (trans: any, orders: any) => {
   const batch = firebase.firestore().batch()
   const transRef = firebase.firestore().collection('monthly-trans').doc(trans.id)
   batch.set(transRef, trans)
@@ -1044,14 +1044,6 @@ export const addMonthlyTrans = (trans: any, orders: any, purchases: any) => {
   ordersToArchived.forEach((o: any) => {
     const orderRef = firebase.firestore().collection('orders').doc(o.id)
     batch.update(orderRef, {
-      isArchived: true,
-      archivedMonth: trans.id
-    })
-  })
-  const purchasesToArchived = purchases.filter((p: any) => (p.time.toDate()).getFullYear() === year && (p.time.toDate()).getMonth() === month)
-  purchasesToArchived.forEach((p: any) => {
-    const purchaseRef = firebase.firestore().collection('purchases').doc(p.id)
-    batch.update(purchaseRef, {
       isArchived: true,
       archivedMonth: trans.id
     })

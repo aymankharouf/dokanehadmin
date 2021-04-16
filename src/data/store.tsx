@@ -16,7 +16,6 @@ const Store = (props: any) => {
     stores: [], 
     basket, 
     users: [],
-    purchases: [],
     orders: [],
     products: [],
     packs: [],
@@ -27,7 +26,6 @@ const Store = (props: any) => {
     logs: [],
     archivedOrders: [],
     adverts: [],
-    archivedPurchases: [],
     archivedProducts: [],
     archivedPacks: [],
     notifications: [],
@@ -184,15 +182,6 @@ const Store = (props: any) => {
           dispatch({type: 'SET_STORE_PAYMENTS', payload: storePayments})
         }, err => {
           unsubscribeStores()
-        })  
-        const unsubscribePurchases = firebase.firestore().collection('purchases').where('isArchived', '==', false).onSnapshot(docs => {
-          let purchases: any = []
-          docs.forEach(doc => {
-            purchases.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_PURCHASES', payload: purchases})
-        }, err => {
-          unsubscribePurchases()
         })  
         const unsubscribeMonthlyTrans = firebase.firestore().collection('monthly-trans').onSnapshot(docs => {
           let monthlyTrans: any = []
