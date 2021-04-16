@@ -42,7 +42,6 @@ const Panel = () => {
         {state.user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/offers/" title={labels.offers} badge={offersCount} badgeColor="red" view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/monthly-trans-call/" title={labels.monthlyTrans} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/permission-list/s" title={labels.storesOwners} view="#main-view" panelClose /> : ''}
       </List>

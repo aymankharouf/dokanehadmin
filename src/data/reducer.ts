@@ -158,14 +158,10 @@ const Reducer = (state: State, action: Action) => {
         return {...state, packs: action.payload}
       case 'SET_CUSTOMERS':
         return {...state, customers: action.payload}
-      case 'SET_MONTHLY_TRANS':
-        return {...state, monthlyTrans: action.payload}
       case 'SET_PACK_PRICES':
         return {...state, packPrices: action.payload}
       case 'SET_LOGS':
         return {...state, logs: action.payload}
-      case 'ADD_ARCHIVED_ORDERS':
-        return {...state, archivedOrders: [...state.archivedOrders, ...action.payload]}
       case 'SET_ADVERTS':
         return {...state, adverts: action.payload}
       case 'SET_ARCHIVED_PRODUCTS':

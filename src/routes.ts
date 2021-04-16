@@ -39,8 +39,6 @@ import ApproveUser from './pages/approve-user'
 import Alarms from './pages/alarms'
 import AlarmDetails from './pages/alarm-details'
 import Offers from './pages/offers'
-import MonthlyTransCall from './pages/monthly-trans-call'
-import MonthlyTrans from './pages/monthly-trans'
 import RetreivePassword from './pages/retreive-password'
 import StoreOwners from './pages/store-owners'
 import EditOrder from './pages/edit-order'
@@ -65,7 +63,6 @@ import Invitations from './pages/invitations'
 import InvitationDetails from './pages/invitation-details'
 import Notifications from './pages/notifications'
 import AddNotification from './pages/add-notification'
-import ArchivedOrders from './pages/archived-orders'
 import Adverts from './pages/adverts'
 import AddAdvert from './pages/add-advert'
 import AdvertDetails from './pages/advert-details'
@@ -306,14 +303,6 @@ const routes = [
     component: RequestedPackDetails
   },
   {
-    path: '/monthly-trans-call/',
-    component: MonthlyTransCall,
-  },
-  {
-    path: '/monthly-trans/:id',
-    component: MonthlyTrans,
-  },
-  {
     path: '/retreive-password/:id',
     component: RetreivePassword,
   },
@@ -380,10 +369,6 @@ const routes = [
   {
     path: '/add-notification/',
     component: AddNotification
-  },
-  {
-    path: '/archived-orders/',
-    component: ArchivedOrders
   },
   {
     path: '/purchase-plan-details/:id',

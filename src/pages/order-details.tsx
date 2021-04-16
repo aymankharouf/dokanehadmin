@@ -9,7 +9,7 @@ import Footer from './footer'
 const OrderDetails = (props: any) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [order, setOrder] = useState(() => props.type === 'a' ? state.archivedOrders.find((o: any) => o.id === props.id) : state.orders.find((o: any) => o.id === props.id))
+  const [order, setOrder] = useState(() => state.orders.find((o: any) => o.id === props.id))
   const [orderBasket, setOrderBasket] = useState([])
   const [statusActions, setStatusActions] = useState<any>([])
   const [lastOrder, setLastOrder] = useState<any>('')
