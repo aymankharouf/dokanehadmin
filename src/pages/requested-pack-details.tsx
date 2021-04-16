@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, List, ListItem, CardFooter, Button, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import { StoreContext } from '../data/store'
-import { packUnavailable, showMessage, showError, getMessage, addQuantity, getPackStores } from '../data/actions'
+import { showMessage, showError, getMessage, addQuantity, getPackStores } from '../data/actions'
 import labels from '../data/labels'
 import moment from 'moment'
 
@@ -141,18 +141,6 @@ const RequestedPackDetails = (props: any) => {
       setError(getMessage(f7.views.current.router.currentRoute.path, err))
     }
   }
-  const handleUnavailable = (overPriced: any) => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
-      try{
-        const approvedOrders = state.orders.filter((o: any) => ['a', 'e'].includes(o.status))
-        packUnavailable(pack, Number(props.price), approvedOrders, overPriced)
-        showMessage(labels.executeSuccess)
-        f7.views.current.router.back()
-      } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
-      }
-    })
-  }
   let i = 0
   return (
     <Page>
@@ -168,20 +156,6 @@ const RequestedPackDetails = (props: any) => {
         </CardFooter>
       </Card>
       <List mediaList>
-        {pack.price === 0 ? 
-          <ListItem 
-            link="#"
-            title={labels.unavailable}
-            onClick={() => handleUnavailable(false)}
-          />
-        : ''}
-        {Number(props.price) > 0 && Number(props.price) < pack.price ? 
-          <ListItem 
-            link="#"
-            title={labels.overPriced}
-            onClick={() => handleUnavailable(true)}
-          />
-        : ''}
         {packStores.map((s: any) => 
           <ListItem 
             title={s.storeInfo.name}

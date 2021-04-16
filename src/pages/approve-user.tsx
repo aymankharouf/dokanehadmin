@@ -41,7 +41,7 @@ const ApproveUser = (props: any) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        await deleteUser(userInfo, state.orders)
+        await deleteUser(userInfo)
         setInprocess(false)
         showMessage(labels.deleteSuccess)
         f7.views.current.router.back()

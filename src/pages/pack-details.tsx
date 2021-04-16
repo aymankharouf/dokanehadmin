@@ -14,7 +14,6 @@ const PackDetails = (props: any) => {
   const [pack, setPack] = useState(() => {
     const pack = state.packs.find((p: any) => p.id === props.id)
     let detailsCount = state.packPrices.filter((p: any) => p.packId === pack.id).length
-    detailsCount = detailsCount === 0 ? state.orders.filter((o: any) => o.basket.find((p: any) => p.packId === pack.id)).length : detailsCount
     return {
       ...pack,
       detailsCount
@@ -44,13 +43,12 @@ const PackDetails = (props: any) => {
     setPack(() => {
       const pack = state.packs.find((p: any) => p.id === props.id) || ''
       let detailsCount = state.packPrices.filter((p: any) => p.packId === pack.id).length
-      detailsCount = detailsCount === 0 ? state.orders.filter((o: any) => o.basket.find((p: any) => p.packId === pack.id)).length : detailsCount
       return {
         ...pack,
         detailsCount
       }
     })
-  }, [state.packs, state.packPrices, state.orders, props.id])
+  }, [state.packs, state.packPrices, props.id])
   useEffect(() => {
     if (error) {
       showError(error)

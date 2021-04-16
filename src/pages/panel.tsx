@@ -9,8 +9,6 @@ const Panel = () => {
   const [approvalsCount, setApprovalsAcount] = useState('')
   const [offersCount, setOffersAcount] = useState('')
   useEffect(() => {
-    const newOrders = state.orders.filter((o: any) => o.status === 'n').length
-    const orderRequests = state.orders.filter((r: any) => r.requestType).length
     const newUsers = state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)).length
     const alarms = state.alarms.filter((a: any) => a.status === 'n').length
     const ratings = state.ratings.filter((r: any) => r.status === 'n').length
@@ -18,8 +16,8 @@ const Panel = () => {
     const passwordRequests = state.passwordRequests.length
     const newStoresOwners = state.customers.filter((c: any) => c.storeName && !c.storeId).length
     const notifyFriends = state.users.filter((u: any) => u.notifyFriends?.length > 0).length
-    setApprovalsAcount(newOrders + orderRequests + newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners + notifyFriends)
-  }, [state.orders, state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
+    setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners + notifyFriends)
+  }, [state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
   useEffect(() => {
     const today = (new Date()).setHours(0, 0, 0, 0)
     setOffersAcount(() => state.packPrices.filter((p: any) => p.offerEnd && p.offerEnd.toDate().setHours(0, 0, 0, 0) <= today).length)
@@ -41,7 +39,6 @@ const Panel = () => {
         {state.user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/offers/" title={labels.offers} badge={offersCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/permission-list/s" title={labels.storesOwners} view="#main-view" panelClose /> : ''}
       </List>

@@ -10,8 +10,6 @@ import StorePacks from './pages/store-packs'
 import AddStorePack from './pages/add-store-pack'
 import AddStorePayment from './pages/add-store-payment'
 import AddProduct from './pages/add-product'
-import OrdersList from './pages/orders-list'
-import OrderDetails from './pages/order-details'
 import AddStore from './pages/add-store'
 import EditProduct from './pages/edit-product'
 import EditPrice from './pages/edit-price'
@@ -20,10 +18,8 @@ import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
 import Categories from './pages/categories'
 import AddCategory from './pages/add-category'
-import Orders from './pages/orders'
 import RequestedPacks from './pages/requested-packs'
 import RequestedPackDetails from './pages/requested-pack-details'
-import ConfirmPurchase from './pages/confirm-purchase'
 import Customers from './pages/customers'
 import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
@@ -38,10 +34,8 @@ import NewUsers from './pages/new-users'
 import ApproveUser from './pages/approve-user'
 import Alarms from './pages/alarms'
 import AlarmDetails from './pages/alarm-details'
-import Offers from './pages/offers'
 import RetreivePassword from './pages/retreive-password'
 import StoreOwners from './pages/store-owners'
-import EditOrder from './pages/edit-order'
 import ChangePassword from './pages/change-password'
 import Locations from './pages/locations'
 import AddLocation from './pages/add-location'
@@ -49,11 +43,8 @@ import EditLocation from './pages/edit-location'
 import Ratings from './pages/ratings'
 import Approvals from './pages/approvals'
 import AddPackStore from './pages/add-pack-store'
-import OrderRequests from './pages/order-requests'
 import Logs from './pages/logs'
 import StoreDetails from './pages/store-details'
-import PrepareOrders from './pages/prepare-orders'
-import PrepareOrdersList from './pages/prepare-orders-list'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
@@ -67,7 +58,6 @@ import Adverts from './pages/adverts'
 import AddAdvert from './pages/add-advert'
 import AdvertDetails from './pages/advert-details'
 import EditAdvert from './pages/edit-advert'
-import OrderRequestDetails from './pages/order-request-details'
 import PermitUser from './pages/permit-user'
 import Register from './pages/register'
 import PermissionList from './pages/permission-list'
@@ -139,10 +129,6 @@ const routes = [
     component: Basket,
   },
   {
-    path: '/confirm-purchase/',
-    component: ConfirmPurchase
-  },
-  {
     path: '/settings/',
     component: Settings
   },
@@ -189,10 +175,6 @@ const routes = [
   {
     path: '/alarm-details/:id/user/:userId',
     component: AlarmDetails
-  },
-  {
-    path: '/offers/',
-    component: Offers
   },
   {
     path: '/countries/',
@@ -279,22 +261,6 @@ const routes = [
     component: EditPrice
   },
   {
-    path: '/orders/',
-    component: Orders,
-  },
-  {
-    path: '/orders-list/:id/type/:type',
-    component: OrdersList,
-  },
-  {
-    path: '/order-details/:id/type/:type',
-    component: OrderDetails
-  },
-  {
-    path: '/edit-order/:id/type/:type',
-    component: EditOrder
-  },
-  {
     path: '/requested-packs/',
     component: RequestedPacks
   },
@@ -331,20 +297,8 @@ const routes = [
     component: Approvals
   },
   {
-    path: '/order-requests/',
-    component: OrderRequests
-  },
-  {
     path: '/logs/',
     component: Logs
-  },
-  {
-    path: '/prepare-orders/',
-    component: PrepareOrders
-  },
-  {
-    path: '/prepare-orders-list/:packId/order/:orderId',
-    component: PrepareOrdersList
   },
   {
     path: '/add-bulk/:id',
@@ -389,10 +343,6 @@ const routes = [
   {
     path: '/edit-advert/:id',
     component: EditAdvert
-  },
-  {
-    path: '/order-request-details/:id',
-    component: OrderRequestDetails
   },
   {
     path: '/permission-list/:id',

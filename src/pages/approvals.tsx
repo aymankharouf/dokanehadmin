@@ -7,8 +7,6 @@ import { randomColors } from '../data/config'
 
 const Approvals = () => {
   const { state } = useContext(StoreContext)
-  const [newOrders, setNewOrders] = useState([])
-  const [orderRequests, setOrderRequests] = useState([])
   const [newUsers, setNewUsers] = useState([])
   const [alarms, setAlarms] = useState([])
   const [passwordRequests, setPasswordRequests] = useState([])
@@ -17,10 +15,6 @@ const Approvals = () => {
   const [sections, setSections] = useState<any>([])
   const [newOwners, setNewOwners] = useState([])
   const [notifyFriends, setNotifyFriends] = useState([])
-  useEffect(() => {
-    setNewOrders(() => state.orders.filter((o: any) => o.status === 'n'))
-    setOrderRequests(() => state.orders.filter((r: any) => r.requestType))
-  }, [state.orders])
   useEffect(() => {
     setNewUsers(() => state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)))
     setAlarms(() => state.alarms.filter((a: any) => a.status === 'n'))
@@ -34,17 +28,15 @@ const Approvals = () => {
   }, [state.passwordRequests]) 
   useEffect(() => {
     setSections(() => [
-      {id: '1', name: labels.orders, path: '/orders-list/n/type/s', count: newOrders.length},
-      {id: '2', name: labels.orderRequests, path: '/order-requests/', count: orderRequests.length},
-      {id: '3', name: labels.newUsers, path: '/new-users/', count: newUsers.length},
-      {id: '4', name: labels.alarms, path: '/alarms/', count: alarms.length},
-      {id: '5', name: labels.passwordRequests, path: '/password-requests/', count: passwordRequests.length},
-      {id: '6', name: labels.ratings, path: '/ratings/', count: ratings.length},
-      {id: '7', name: labels.invitations, path: '/invitations/', count: invitations.length},
-      {id: '8', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
-      {id: '9', name: labels.notifyFriends, path: '/notify-friends/', count: notifyFriends.length},
+      {id: '1', name: labels.newUsers, path: '/new-users/', count: newUsers.length},
+      {id: '2', name: labels.alarms, path: '/alarms/', count: alarms.length},
+      {id: '3', name: labels.passwordRequests, path: '/password-requests/', count: passwordRequests.length},
+      {id: '4', name: labels.ratings, path: '/ratings/', count: ratings.length},
+      {id: '5', name: labels.invitations, path: '/invitations/', count: invitations.length},
+      {id: '6', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '7', name: labels.notifyFriends, path: '/notify-friends/', count: notifyFriends.length},
     ])
-  }, [newOrders, newUsers, alarms, passwordRequests, ratings, orderRequests, invitations, newOwners, notifyFriends])
+  }, [newUsers, alarms, passwordRequests, ratings, invitations, newOwners, notifyFriends])
   let i = 0
   return(
     <Page>

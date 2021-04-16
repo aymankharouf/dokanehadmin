@@ -16,7 +16,6 @@ const Store = (props: any) => {
     stores: [], 
     basket, 
     users: [],
-    orders: [],
     products: [],
     packs: [],
     passwordRequests: [],
@@ -110,15 +109,6 @@ const Store = (props: any) => {
         }, err => {
           unsubscribeProducts()
         })    
-        const unsubscribeOrders = firebase.firestore().collection('orders').where('isArchived', '==', false).onSnapshot(docs => {
-          let orders: any = []
-          docs.forEach(doc => {
-            orders.push({...doc.data(), id:doc.id})
-          })
-          dispatch({type: 'SET_ORDERS', payload: orders})
-        }, err => {
-          unsubscribeOrders()
-        })  
         const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
           let users: any = []
           let notifications: any = []

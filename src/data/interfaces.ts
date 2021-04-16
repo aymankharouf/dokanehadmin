@@ -189,7 +189,6 @@ export interface State {
   customers: any,
   categories: any,
   basket: any,
-  orders: any,
   packs: any,
   packPrices: any,
   adverts: any,

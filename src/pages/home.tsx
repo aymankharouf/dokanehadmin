@@ -6,11 +6,10 @@ import labels from '../data/labels'
 
 const Home = () => {
   const [mainPages] = useState(() => [
-    {id: '1', name: labels.orders, path: '/orders/'},
-    {id: '2', name: labels.stores, path: '/stores/'},
-    {id: '3', name: labels.products, path: '/products/0'},
-    {id: '4', name: labels.customers, path: '/customers/'},
-    {id: '5', name: labels.notifications, path: '/notifications/'}
+    {id: '1', name: labels.stores, path: '/stores/'},
+    {id: '2', name: labels.products, path: '/products/0'},
+    {id: '3', name: labels.customers, path: '/customers/'},
+    {id: '4', name: labels.notifications, path: '/notifications/'}
   ])
   let i = 0
   return (

@@ -931,14 +931,10 @@ export const approveUser = (id: any, name: any, mobile: any, locationId: any, st
   batch.commit()
 }
 
-export const deleteUser = async (user: any, orders: any) => {
+export const deleteUser = async (user: any) => {
   const colors = user.colors.map((c: any) => randomColors.find(rc => rc.name === c)?.id)
   const password = colors.join('')
   await firebase.firestore().collection('users').doc(user.id).delete()
-  const userOrders = orders.filter((o: any) => o.userId === user.id)
-  for (let o of userOrders) {
-    await firebase.firestore().collection('orders').doc(o.id).delete()
-  }
   await firebase.auth().signInWithEmailAndPassword(user.mobile + '@gmail.com', user.mobile.substring(9, 2) + password)
   return firebase.auth().currentUser?.delete()
 }
@@ -983,54 +979,6 @@ export const approveAlarm = (user: any, alarm: any, newPackId: any, customer: an
     addPackPrice(newStorePack, packPrices, packs, batch)
     sendNotification(user.id, labels.approval, labels.approveOwnerAddPack, batch)
   }
-  batch.commit()
-}
-
-export const packUnavailable = (pack: any, packPrice: any, orders: any, overPriced: any) => {
-  const batch = firebase.firestore().batch()
-  const packOrders = orders.filter((o: any) => o.basket.find((p: any) => p.packId === pack.id && p.price === packPrice && ['n', 'p'].includes(p.status)))
-  packOrders.forEach((o: any) => {
-    const basket = o.basket.slice()
-    const orderPackIndex = basket.findIndex((p: any) => p.packId === pack.id)
-    let orderStatus = 'e'
-    basket.splice(orderPackIndex, 1, {
-      ...basket[orderPackIndex],
-      status: basket[orderPackIndex].purchased > 0 ? 'pu' : 'u',
-      gross: Math.round((basket[orderPackIndex].actual || 0) * (basket[orderPackIndex].weight || basket[orderPackIndex].purchased)),
-      overPriced
-    })
-    if (basket.length === basket.filter((p: any) => p.status === 'u').length) {
-      orderStatus = 'u'
-    } else if (basket.length === basket.filter((p: any) => ['f', 'u', 'pu'].includes(p.status)).length) {
-      orderStatus = 'f'
-    }
-    const total = basket.reduce((sum: any, p: any) => sum + (p.gross || 0), 0)
-    let fixedFees, fraction, profit
-    let discount = o.discount
-    if (total === 0) {
-      fixedFees = 0
-      fraction = 0
-      profit = 0
-      discount.value = 0
-      discount.type = 'n'
-    } else {
-      profit = basket.reduce((sum: any, p: any) => sum + ['p', 'f', 'pu'].includes(p.status) ? Math.round((p.actual - p.cost) * (p.weight || p.purchased)) : 0, 0)
-      fixedFees = Math.round(setup.fixedFees * total)
-      fraction = (total + fixedFees) - Math.floor((total + fixedFees) / 5) * 5
-    }
-    const lastUpdate = orderStatus === o.status ? (o.lastUpdate || o.time) : new Date()
-    const orderRef = firebase.firestore().collection('orders').doc(o.id)
-    batch.update(orderRef, {
-      basket,
-      profit,
-      total,
-      fixedFees,
-      fraction,
-      discount,
-      status: orderStatus,
-      lastUpdate
-    })
-  })
   batch.commit()
 }
 
@@ -1308,32 +1256,8 @@ export const getArchivedPurchases = (month: any) => {
   return purchases
 }
 
-export const getRequestedPacks = (orders: any, basket: any, packs: any) => {
-  const approvedOrders = orders.filter((o: any) => ['a', 'e'].includes(o.status))
+export const getRequestedPacks = (basket: any, packs: any) => {
   let packsArray: any = []
-  approvedOrders.forEach((o: any) => {
-    o.basket.forEach((p: any) => {
-      if (['n', 'p'].includes(p.status)) {
-        const packInfo = packs.find((pa: any) => pa.id === p.packId)
-        const found = packsArray.findIndex((pa: any) => pa.packId === p.packId && pa.price === p.price)
-        if (!packInfo.byWeight && found > -1) {
-          packsArray.splice(found, 1, {
-            ...packsArray[found], 
-            quantity: addQuantity(packsArray[found].quantity, p.quantity, -1 * p.purchased),
-          })
-        } else {
-          packsArray.push({
-            packId: p.packId,
-            price: p.price, 
-            quantity: addQuantity(p.quantity, -1 * p.purchased),
-            orderId: o.id,
-            offerId: p.offerId,
-            packInfo
-          })
-        }
-      }
-    })
-  })
   packsArray = packsArray.map((p: any) => {
     let inBasket, inBasketQuantity
     if (p.packInfo.byWeight) {

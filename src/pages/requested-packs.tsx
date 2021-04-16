@@ -10,7 +10,7 @@ const RequestedPacks = (props: any) => {
 	const [requestedPacks, setRequestedPacks] = useState([])
 	useEffect(() => {
 		setRequestedPacks(() => {
-			let packs = getRequestedPacks(state.orders, state.basket, state.packs)
+			let packs = getRequestedPacks(state.basket, state.packs)
 			if (props.id){
 				packs = packs.filter((p: any) => {
 					const basketStock = state.basket.storeId === 's' && state.basket.packs.find((bp: any) => bp.packId === p.packId || state.packs.find((pa: any) => pa.id === bp.packId && (pa.subPackId === p.packId || pa.bonusPackId === p.packId)))
@@ -21,7 +21,7 @@ const RequestedPacks = (props: any) => {
 			}
 			return packs
 		})
-	}, [props.id, state.basket, state.orders, state.packs, state.customers, state.stores, state.packPrices])
+	}, [props.id, state.basket, state.packs, state.customers, state.stores, state.packPrices])
 	let i = 0
 	return(
     <Page>
