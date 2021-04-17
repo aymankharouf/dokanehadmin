@@ -13,7 +13,7 @@ const ArchivedProducts = () => {
   useEffect(() => {
     setProducts(() => {
       const products = state.archivedProducts.map((p: any) => {
-        const categoryInfo = state.categories.find((c: any) => c.id === p.categoryId)
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {
           ...p,
           categoryInfo

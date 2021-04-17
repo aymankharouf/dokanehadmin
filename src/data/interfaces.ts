@@ -8,7 +8,8 @@ export interface Category {
   name: string,
   parentId: string,
   ordering: number,
-  isLeaf: boolean
+  isLeaf: boolean,
+  isActive: boolean
 }
 export interface Error {
   code: string,
@@ -78,7 +79,7 @@ export interface Alarm {
   offerDays?: number,
   status: string
 }
-export interface UserInfo {
+export interface User {
   mobile: string,
   locationId: string,
   notifications?: Notification[],
@@ -87,7 +88,7 @@ export interface UserInfo {
   favorites?: string[],
   alarms?: Alarm[]
 }
-export interface CustomerInfo {
+export interface Customer {
   storeId: string,
   isBlocked: boolean,
   deliveryFees: number,
@@ -110,15 +111,6 @@ export interface BasketPack {
   purchased?: number,
   returned?: number
 }
-export interface OrderPack extends BasketPack {
-  gross: number,
-  purchased: number,
-  status: string,
-  actual?: number,
-  overPriced?: boolean,
-  packInfo?: Pack,
-  oldQuantity?: number
-}
 export interface BigBasketPack extends BasketPack {
   packInfo?: Pack,
   totalPriceText: string,
@@ -128,17 +120,17 @@ export interface BigBasketPack extends BasketPack {
   otherPacks: number
 }
 export interface Advert {
-  id: string,
+  id?: string,
   type: string,
   title: string,
   text: string,
   isActive: boolean,
-  imageUrl?: string
+  imageUrl?: string,
+  time: Date
 }
 export interface Location {
   id: string,
   name: string,
-  fees: number,
   ordering: number
 }
 export interface Country {
@@ -149,39 +141,33 @@ export interface Trademark {
   id: string,
   name: string,
 }
+export interface PackType {
+  id: string,
+  name: string,
+}
 export interface PasswordRequest {
   id: string,
-  mobile: string
+  mobile: string,
+  status: string,
+  time: Date
 }
 export interface Discount {
   value: number,
   type: string
 }
-export interface PurchasedPack {
-  packId: string,
-  productId: string,
-  productName: string,
-  packName: string,
-  imageUrl: string,
-  bestPrice: number,
-  lastPrice: number,
-  quantity: number,
-  lastQuantity: number,
-  lastTime: Date
-}
 export interface State {
   user?: firebase.User,
   users: any,
   customers: any,
-  categories: any,
+  categories: Category[],
   basket: any,
   packs: any,
   packPrices: any,
-  adverts: any,
-  locations: any,
+  adverts: Advert[],
+  locations: Location[],
   countries: Country[],
-  trademarks: any,
-  passwordRequests: any,
+  trademarks: Trademark[],
+  passwordRequests: PasswordRequest[],
   archivedProducts: any,
   stores: any,
   products: any,
@@ -191,9 +177,7 @@ export interface State {
   alarms: any,
   ratings: any,
   invitations: any,
-  storePayments: any,
-  packTypes: any
-  orderBasket?: any
+  packTypes: PackType[]
 }
 
 export interface Action {

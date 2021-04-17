@@ -340,7 +340,6 @@ const labels: Label = {
   balance: 'الرصيد',
   amount: 'المبلغ',
   enterAmount: 'ادخل المبلغ',
-  balanceTrans: 'الحركات المالية',
   payment: 'دفعة',
   sale: 'بيع',
   deliveryTimeTitle: 'موعد التسليم',

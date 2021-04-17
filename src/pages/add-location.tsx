@@ -8,7 +8,6 @@ import labels from '../data/labels'
 const AddLocation = () => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [fees, setFees] = useState<any>()
   const [ordering, setOrdering] = useState('')
   useEffect(() => {
     if (error) {
@@ -18,13 +17,9 @@ const AddLocation = () => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (Number(fees) < 0 || Number(fees) !== Number(Number(fees).toFixed(2))) {
-        throw new Error('invalidValue')
-      }
       addLocation({
         id: Math.random().toString(),
         name,
-        fees: fees * 100,
         ordering
       })
       showMessage(labels.addSuccess)
@@ -47,15 +42,6 @@ const AddLocation = () => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="fees" 
-          label={labels.deliveryFees}
-          clearButton
-          type="number" 
-          value={fees} 
-          onChange={e => setFees(e.target.value)}
-          onInputClear={() => setFees('')}
-        />
-        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
@@ -65,7 +51,7 @@ const AddLocation = () => {
           onInputClear={() => setOrdering('')}
         />
       </List>
-      {!name || !fees || !ordering ? '' :
+      {name && ordering &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

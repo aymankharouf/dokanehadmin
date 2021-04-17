@@ -10,13 +10,13 @@ interface Props {
 }
 const Products = (props: Props) => {
   const { state } = useContext(StoreContext)
-  const [category] = useState(() => state.categories.find((c: any) => c.id === props.id))
+  const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [products, setProducts] = useState([])
   useEffect(() => {
     setProducts(() => {
       let products = state.products.filter((p: any) => props.id === '-1' ? !state.packs.find((pa: any) => pa.productId === p.id) || state.packs.filter((pa: any) => pa.productId === p.id).length === state.packs.filter((pa: any) => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
       products = products.map((p: any) => {
-        const categoryInfo = state.categories.find((c: any) => c.id === p.categoryId)
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {
           ...p,
           categoryInfo

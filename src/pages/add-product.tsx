@@ -19,11 +19,11 @@ const AddProduct = (props: Props) => {
   const [imageUrl, setImageUrl] = useState<any>()
   const [image, setImage] = useState(null)
   const [categories] = useState(() => {
-    const categories = state.categories.filter((c: any) => c.isLeaf)
-    return categories.sort((c1: any, c2: any) => c1.name > c2.name ? 1 : -1)
+    const categories = state.categories.filter(c => c.isLeaf)
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1 > t2 ? 1 : -1))
+  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -133,7 +133,7 @@ const AddProduct = (props: Props) => {
         >
           <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
             <option value=""></option>
-            {categories.map((c: any) => 
+            {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>
@@ -166,7 +166,7 @@ const AddProduct = (props: Props) => {
         />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !categoryId || !countryId ? '' :
+      {name && categoryId && countryId &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

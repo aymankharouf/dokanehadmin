@@ -61,8 +61,6 @@ import Register from './pages/register'
 import PermissionList from './pages/permission-list'
 import ArchivedProducts from './pages/archived-products'
 import NotifyFriends from './pages/notify-friends'
-import StoreBalance from './pages/store-balance'
-import StoreBalanceTrans from './pages/store-balance-trans'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
@@ -341,14 +339,6 @@ const routes = [
   {
     path: '/notify-friends/',
     component: NotifyFriends
-  },
-  {
-    path: '/store-balance/:id',
-    component: StoreBalance
-  },
-  {
-    path: '/store-balance-trans/:storeId/month/:month',
-    component: StoreBalanceTrans
   },
   {
     path: '(.*)',

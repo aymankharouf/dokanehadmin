@@ -12,9 +12,9 @@ const Categories = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<any>([])
-  const [currentCategory] = useState(() => state.categories.find((c: any) => c.id === props.id) || '')
-  const [categoryChildrenCount] = useState(() => state.categories.filter((c: any) => c.parentId === currentCategory.id).length)
-  const [categoryProductsCount] = useState(() => state.products.filter((p: any) => p.categoryId === currentCategory.id).length)
+  const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id))
+  const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
+  const [categoryProductsCount] = useState(() => state.products.filter((p: any) => p.categoryId === currentCategory?.id).length)
   useEffect(() => {
     setCategories(() => {
       const children = state.categories.filter((c: any) => c.parentId === props.id)
@@ -58,9 +58,8 @@ const Categories = (props: Props) => {
               <ListItem 
                 link={`/categories/${c.id}`} 
                 title={c.name}
-                subtitle={c.ename}
-                text={`${labels.childrenCount}: ${c.childrenCount}`}
-                footer={`${labels.attachedProducts}: ${c.productsCount}`}
+                subtitle={`${labels.childrenCount}: ${c.childrenCount}`}
+                text={`${labels.attachedProducts}: ${c.productsCount}`}
                 after={c.ordering}
                 key={c.id} 
               >

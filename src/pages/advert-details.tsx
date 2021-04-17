@@ -9,7 +9,7 @@ interface Props {
 }
 const AdvertDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
-  const [advert] = useState(() => state.adverts.find((a: any) => a.id === props.id))
+  const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
   return (
     <Page>
       <Navbar title={labels.advertDetails} backLink={labels.back} />
@@ -18,11 +18,11 @@ const AdvertDetails = (props: Props) => {
       </Fab>
       <Card>
         <CardContent>
-          <div className="card-title">{advert.title}</div>
-          <img src={advert.imageUrl} className="img-card" alt={advert.title} />
+          <div className="card-title">{advert?.title}</div>
+          <img src={advert?.imageUrl} className="img-card" alt={advert?.title} />
         </CardContent>
         <CardFooter>
-          <p>{advert.text}</p>
+          <p>{advert?.text}</p>
         </CardFooter>
       </Card>
       <Toolbar bottom>

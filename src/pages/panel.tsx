@@ -7,7 +7,6 @@ import labels from '../data/labels'
 const Panel = () => {
   const { state, dispatch } = useContext(StoreContext)
   const [approvalsCount, setApprovalsAcount] = useState('')
-  const [offersCount, setOffersAcount] = useState('')
   useEffect(() => {
     const newUsers = state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)).length
     const alarms = state.alarms.filter((a: any) => a.status === 'n').length
@@ -18,11 +17,6 @@ const Panel = () => {
     const notifyFriends = state.users.filter((u: any) => u.notifyFriends?.length > 0).length
     setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners + notifyFriends)
   }, [state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
-  useEffect(() => {
-    const today = (new Date()).setHours(0, 0, 0, 0)
-    setOffersAcount(() => state.packPrices.filter((p: any) => p.offerEnd && p.offerEnd.toDate().setHours(0, 0, 0, 0) <= today).length)
-  }, [state.packPrices])
-
   const handleLogout = () => {
     logout()
     f7.views.main.router.navigate('/home/', {reloadAll: true})

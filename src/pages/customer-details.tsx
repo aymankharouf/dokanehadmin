@@ -47,7 +47,7 @@ const CustomerDetails = (props: Props) => {
         <ListInput 
           name="locationName" 
           label={labels.location}
-          value={state.locations.find((l: any) => l.id === userInfo.locationId).name}
+          value={state.locations.find(l => l.id === userInfo.locationId)?.name}
           type="text"
           readonly
         />

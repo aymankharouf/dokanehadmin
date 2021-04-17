@@ -19,7 +19,7 @@ const AddTrademark = () => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.trademarks.filter((t: any) => t.name === name).length > 0) {
+      if (state.trademarks.filter(t => t.name === name).length > 0) {
         throw new Error('duplicateName')
       }
       addTrademark({

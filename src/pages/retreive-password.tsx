@@ -12,8 +12,8 @@ interface Props {
 const RetreivePassword = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [passwordRequest] = useState(() => state.passwordRequests.find((r: any) => r.id === props.id))
-  const [userInfo] = useState(() => state.users.find((u: any) => u.mobile === passwordRequest.mobile))
+  const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === props.id))
+  const [userInfo] = useState(() => state.users.find((u: any) => u.mobile === passwordRequest?.mobile))
   const [password] = useState(() => {
     const password = userInfo?.colors?.map((c: any) => randomColors.find(rc => rc.name === c)?.id)
     return password?.join('')
@@ -47,7 +47,7 @@ const RetreivePassword = (props: Props) => {
         <ListInput 
           name="mobile" 
           label={labels.mobile}
-          value={passwordRequest.mobile}
+          value={passwordRequest?.mobile}
           type="number"
           readonly
         />

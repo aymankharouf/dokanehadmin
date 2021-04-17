@@ -11,17 +11,15 @@ interface Props {
 const EditLocation = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [location] = useState(() => state.locations.find((l: any) => l.id === props.id))
-  const [name, setName] = useState(location.name)
-  const [fees, setFees] = useState<any>((location.fees / 100).toFixed(2))
-  const [ordering, setOrdering] = useState(location.ordering)
+  const [location] = useState(() => state.locations.find(l => l.id === props.id))
+  const [name, setName] = useState(location?.name)
+  const [ordering, setOrdering] = useState(location?.ordering)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== location.name
-    || fees * 100 !== location.fees
-    || ordering !== location.ordering) setHasChanged(true)
+    if (name !== location?.name
+    || ordering !== location?.ordering) setHasChanged(true)
     else setHasChanged(false)
-  }, [location, name, fees, ordering])
+  }, [location, name, ordering])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -30,13 +28,9 @@ const EditLocation = (props: Props) => {
   }, [error])
   const handleEdit = () => {
     try{
-      if (Number(fees) < 0 || Number(fees) !== Number(Number(fees).toFixed(2))) {
-        throw new Error('invalidValue')
-      }
       const newLocation = {
         ...location,
         name,
-        fees: fees * 100,
         ordering
       }
       editLocation(newLocation, state.locations)
@@ -60,25 +54,16 @@ const EditLocation = (props: Props) => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="fees" 
-          label={labels.fees}
-          clearButton
-          type="number" 
-          value={fees} 
-          onChange={e => setFees(e.target.value)}
-          onInputClear={() => setFees('')}
-        />
-        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
           type="number" 
           value={ordering} 
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
+          onInputClear={() => setOrdering(undefined)}
         />
       </List>
-      {!name || !fees || !ordering || !hasChanged ? '' :
+      {name && ordering && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>

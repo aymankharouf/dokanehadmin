@@ -9,19 +9,20 @@ const AddAdvert = () => {
   const [type, setType] = useState('')
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
-  const [imageUrl, setImageUrl] = useState<any>('')
-  const [image, setImage] = useState(null)
-  const handleFileChange = (e: any) => {
+  const [imageUrl, setImageUrl] = useState('')
+  const [image, setImage] = useState<File>()
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
-    })
+    // fileReader.addEventListener('load', () => {
+    //   setImageUrl(fileReader.result)
+    // })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }

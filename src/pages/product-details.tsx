@@ -41,14 +41,14 @@ const ProductDetails = (props: Props) => {
           name="categoryId" 
           label={labels.category}
           type="text" 
-          value={state.categories.find((c: any) => c.id === product.categoryId).name}
+          value={state.categories.find(c => c.id === product.categoryId)?.name}
           readonly
         />
         <ListInput 
           name="trademarkId" 
           label={labels.trademark}
           type="text" 
-          value={state.trademarks.find((t: any) => t.id === product.trademarkId).name}
+          value={state.trademarks.find(t => t.id === product.trademarkId)?.name}
           readonly
         />
         <ListInput 

@@ -18,7 +18,7 @@ const AddPackType = () => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.packTypes.filter((t: any) => t.name === name).length > 0) {
+      if (state.packTypes.filter(t => t.name === name).length > 0) {
         throw new Error('duplicateName')
       }
       addPackType({

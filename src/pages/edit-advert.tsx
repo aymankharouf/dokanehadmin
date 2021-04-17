@@ -10,31 +10,32 @@ interface Props {
 const EditAdvert = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [advert] = useState(() => state.adverts.find((a: any) => a.id === props.id))
-  const [title, setTitle] = useState(advert.title)
-  const [text, setText] = useState(advert.text)
-  const [imageUrl, setImageUrl] = useState(advert.imageUrl)
-  const [image, setImage] = useState('')
+  const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
+  const [title, setTitle] = useState(advert?.title)
+  const [text, setText] = useState(advert?.text)
+  const [imageUrl, setImageUrl] = useState(advert?.imageUrl)
+  const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setFileErrorMessage(labels.invalidFile)
       return
     }
     const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
-    })
+    // fileReader.addEventListener('load', () => {
+    //   if (fileReader.result) setImageUrl(fileReader.result)
+    // })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
   useEffect(() => {
-    if (title !== advert.title
-    || text !== advert.text
-    || imageUrl !== advert.imageUrl) setHasChanged(true)
+    if (title !== advert?.title
+    || text !== advert?.text
+    || imageUrl !== advert?.imageUrl) setHasChanged(true)
     else setHasChanged(false)
   }, [advert, title, text, imageUrl])
   useEffect(() => {

@@ -11,14 +11,13 @@ interface Props {
 const EditCountry = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [trademark] = useState(() => state.trademarks.find((t: any) => t.id === props.id))
-  const [name, setName] = useState(trademark.name)
-  const [ename, setEname] = useState(trademark.ename)
+  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id))
+  const [name, setName] = useState(trademark?.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== trademark.name || ename !== trademark.ename) setHasChanged(true)
+    if (name !== trademark?.name) setHasChanged(true)
     else setHasChanged(false)
-  }, [trademark, name, ename])
+  }, [trademark, name])
 
   useEffect(() => {
     if (error) {
@@ -30,8 +29,7 @@ const EditCountry = (props: Props) => {
     try{
       const newTrademark = {
         ...trademark,
-        name,
-        ename
+        name
       }
       editTrademark(newTrademark, state.trademarks)
       showMessage(labels.editSuccess)
@@ -65,15 +63,6 @@ const EditCountry = (props: Props) => {
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ename" 
-          label={labels.ename}
-          value={ename}
-          clearButton
-          type="text" 
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
         />
       </List>
       <FabBackdrop slot="fixed" />

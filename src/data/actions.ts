@@ -3,6 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
+import { Advert } from './interfaces'
 
 export const getMessage = (path: any, error: any) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -859,17 +860,6 @@ export const getPackStores = (pack: any, packPrices: any, stores: any, packs: an
   })
 }
 
-export const addAdvert = async (advert: any, image: any) => {
-  if (image) {
-    const advertRef = await firebase.firestore().collection('adverts').add(advert)
-    const filename = image.name
-    const ext = filename.slice(filename.lastIndexOf('.'))
-    const fileData = await firebase.storage().ref().child('adverts/' + advertRef.id + ext).put(image)
-    const url = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
-    advert['imageUrl'] = url  
-  }
-  firebase.firestore().collection('adverts').add(advert)
-}
 
 export const updateAdvertStatus = (advert: any, adverts: any) => {
   const batch = firebase.firestore().batch()
@@ -889,11 +879,26 @@ export const updateAdvertStatus = (advert: any, adverts: any) => {
   batch.commit()
 }
 
+export const addAdvert = async (advert: Advert, image?: File) => {
+  const advertRef = firebase.firestore().collection('adverts').doc()
+  let imageUrl = ''
+  if (image) {
+    const filename = image.name
+    const ext = filename.slice(filename.lastIndexOf('.'))
+    const fileData = await firebase.storage().ref().child('adverts/' + advertRef.id + ext).put(image)
+    imageUrl = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+  }
+  advertRef.set({
+    ...advert,
+    imageUrl,
+  })
+}
+
 export const deleteAdvert = (advert: any) => {
   firebase.firestore().collection('adverts').doc(advert.id).delete()
 }
 
-export const editAdvert = async (advert: any, image: any) => {
+export const editAdvert = async (advert: any, image?: File) => {
   const { id, ...others } = advert
   if (image) {
     const filename = image.name

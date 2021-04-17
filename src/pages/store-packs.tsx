@@ -18,7 +18,7 @@ const StorePacks = (props: Props) => {
       let storePacks = state.packPrices.filter((p: any) => p.storeId === props.id && !p.isAuto)
       storePacks = storePacks.map((p: any) => {
         const packInfo = state.packs.find((pa: any) => pa.id === p.packId)
-        const categoryInfo = state.categories.find((c: any) => c.id === packInfo.categoryId)
+        const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
         return {
           ...p,
           packInfo,

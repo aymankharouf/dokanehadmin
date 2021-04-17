@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert } from './interfaces'
 
 export const StoreContext = createContext({} as Context)
 
@@ -29,15 +29,21 @@ const Store = (props: any) => {
     alarms: [],
     ratings: [],
     invitations: [],
-    storePayments: [],
     packTypes: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
     const unsubscribeCategories = firebase.firestore().collection('categories').onSnapshot(docs => {
-      let categories: any = []
+      let categories: Category[] = []
       docs.forEach(doc => {
-        categories.push({...doc.data(), id:doc.id})
+        categories.push({
+          id: doc.id,
+          name: doc.data().name,
+          parentId: doc.data().parentId,
+          ordering: doc.data().ordering,
+          isLeaf: doc.data().isLeaf,
+          isActive: doc.data().isActive
+        })
       })
       dispatch({type: 'SET_CATEGORIES', payload: categories})
     }, err => {
@@ -60,18 +66,31 @@ const Store = (props: any) => {
       unsubscribePacks()
     })
     const unsubscribePasswordRequests = firebase.firestore().collection('password-requests').onSnapshot(docs => {
-      let passwordRequests: any = []
+      let passwordRequests: PasswordRequest[] = []
       docs.forEach(doc => {
-        passwordRequests.push({...doc.data(), id:doc.id})
+        passwordRequests.push({
+          id: doc.id,
+          mobile: doc.data().mobile,
+          status: doc.data().status,
+          time: doc.data().time
+        })
       })
       dispatch({type: 'SET_PASSWORD_REQUESTS', payload: passwordRequests})
     }, err => {
       unsubscribePasswordRequests()
     })
     const unsubscribeAdverts = firebase.firestore().collection('adverts').onSnapshot(docs => {
-      let adverts: any = []
+      let adverts: Advert[] = []
       docs.forEach(doc => {
-        adverts.push({...doc.data(), id:doc.id})
+        adverts.push({
+          id: doc.id,
+          type: doc.data().type,
+          text: doc.data().text,
+          title: doc.data().title,
+          isActive: doc.data().isActive,
+          imageUrl: doc.data().imageUrl,
+          time: doc.data().time.toDate()
+        })
       })
       dispatch({type: 'SET_ADVERTS', payload: adverts})
     }, err => {
@@ -157,17 +176,10 @@ const Store = (props: any) => {
         })  
         const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores: any = []
-          let storePayments: any = []
           docs.forEach(doc => {
             stores.push({...doc.data(), id:doc.id})
-            if (doc.data().payments) {
-              doc.data().payments.forEach((p: any) => {
-                storePayments.push({...p, storeId: doc.id, storeInfo: doc.data()})
-              })
-            }
           })
           dispatch({type: 'SET_STORES', payload: stores})
-          dispatch({type: 'SET_STORE_PAYMENTS', payload: storePayments})
         }, err => {
           unsubscribeStores()
         })  

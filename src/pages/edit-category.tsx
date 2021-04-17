@@ -11,15 +11,14 @@ interface Props {
 const EditCategory = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [category] = useState(() => state.categories.find((c: any) => c.id === props.id))
-  const [name, setName] = useState(category.name)
-  const [ename, setEname] = useState(category.ename)
-  const [ordering, setOrdering] = useState(category.ordering)
-  const [parentId, setParentId] = useState(category.parentId)
-  const [isActive, setIsActive] = useState(category.isActive)
+  const [category] = useState(() => state.categories.find(c => c.id === props.id))
+  const [name, setName] = useState(category?.name)
+  const [ordering, setOrdering] = useState(category?.ordering)
+  const [parentId, setParentId] = useState(category?.parentId)
+  const [isActive, setIsActive] = useState(category?.isActive)
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => {
-    let otherCategories = state.categories.filter((c: any) => c.id !== props.id)
+    let otherCategories = state.categories.filter(c => c.id !== props.id)
     let categories = otherCategories.map((c: any) => {
       return {
         id: c.id,
@@ -29,13 +28,12 @@ const EditCategory = (props: Props) => {
     return categories.sort((c1: any, c2: any) => c1.name > c2.name ? 1 : -1)
   })
   useEffect(() => {
-    if (name !== category.name
-    || ename !== category.ename
-    || ordering !== category.ordering
-    || parentId !== category.parentId
-    || isActive !== category.isActive) setHasChanged(true)
+    if (name !== category?.name
+    || ordering !== category?.ordering
+    || parentId !== category?.parentId
+    || isActive !== category?.isActive) setHasChanged(true)
     else setHasChanged(false)
-  }, [category, name, ename, ordering, parentId, isActive])
+  }, [category, name, ordering, parentId, isActive])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -48,7 +46,6 @@ const EditCategory = (props: Props) => {
         ...category,
         parentId,
         name,
-        ename,
         ordering,
         isActive
       }
@@ -92,22 +89,13 @@ const EditCategory = (props: Props) => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="ename" 
-          label={labels.ename}
-          value={ename}
-          clearButton
-          type="text" 
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
-        />
-        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
           type="number" 
           value={ordering}
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
+          onInputClear={() => setOrdering(undefined)}
         />
         <ListItem>
           <span>{labels.isActive}</span>

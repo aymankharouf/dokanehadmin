@@ -1,8 +1,7 @@
 import { Action, State } from "./interfaces"
 
 const Reducer = (state: State, action: Action) => {
-    let pack, packIndex, packs, nextQuantity, i
-    const increment = [0.125, 0.25, 0.5, 0.75, 1]
+    let pack, packIndex, packs, nextQuantity
     switch (action.type){
       case 'ADD_TO_BASKET':
         pack = {
@@ -74,58 +73,6 @@ const Reducer = (state: State, action: Action) => {
             }
           })
         }
-      case 'CLEAR_ORDER_BASKET':
-        return {...state, orderBasket: []}
-      case 'INCREASE_ORDER_QUANTITY':
-        if (action.payload.packInfo.isDivided) {
-          if (action.payload.quantity >= 1) {
-            nextQuantity = action.payload.quantity + 0.5
-          } else {
-            i = increment.indexOf(action.payload.quantity)
-            nextQuantity = increment[++i]  
-          }
-        } else {
-          nextQuantity = action.payload.quantity + 1
-        }
-        pack = {
-          ...action.payload,
-          quantity: nextQuantity,
-          gross: Math.round((action.payload.actual || action.payload.price) * nextQuantity)
-        }
-        packs = state.orderBasket.slice()
-        packIndex = packs.findIndex((p: any) => p.packId === action.payload.packId)
-        packs.splice(packIndex, 1, pack)  
-        return {...state, orderBasket: packs}
-      case 'DECREASE_ORDER_QUANTITY':
-        if (action.payload.pack.weight) {
-          if (action.payload.type === 'r') {
-            nextQuantity = 0
-          } else {
-            if (action.payload.pack.quantity > action.payload.pack.purchased) {
-              nextQuantity = action.payload.pack.purchased
-            } else {
-              nextQuantity = 0
-            }  
-          }
-        } else if (action.payload.pack.packInfo.isDivided) {
-          if (action.payload.pack.quantity > 1) {
-            nextQuantity = action.payload.pack.quantity - 0.5
-          } else {
-            i = increment.indexOf(action.payload.pack.quantity)
-            nextQuantity = i === 0 ? increment[0] : increment[--i]  
-          }
-        } else {
-          nextQuantity = action.payload.pack.quantity - 1
-        }
-        pack = {
-          ...action.payload.pack,
-          quantity: nextQuantity,
-          gross: Math.round((action.payload.pack.actual || action.payload.pack.price) * nextQuantity)
-        }  
-        packs = state.orderBasket.slice()
-        packIndex = packs.findIndex((p: any) => p.packId === action.payload.pack.packId)
-        packs.splice(packIndex, 1, pack)  
-        return {...state, orderBasket: packs}
       case 'SET_LOCATIONS':
         return {...state, locations: action.payload}
       case 'SET_COUNTRIES':
@@ -166,8 +113,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, archivedProducts: action.payload}
       case 'SET_ARCHIVED_PACKS':
         return {...state, archivedPacks: action.payload}
-      case 'SET_STORE_PAYMENTS':
-        return {...state, storePayments: action.payload}
       case 'LOGIN':
         return {...state, user: action.payload}
       default:

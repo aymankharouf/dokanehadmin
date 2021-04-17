@@ -9,7 +9,6 @@ const Approvals = () => {
   const { state } = useContext(StoreContext)
   const [newUsers, setNewUsers] = useState([])
   const [alarms, setAlarms] = useState([])
-  const [passwordRequests, setPasswordRequests] = useState([])
   const [ratings, setRatings] = useState([])
   const [invitations, setInvitations] = useState([])
   const [sections, setSections] = useState<any>([])
@@ -24,19 +23,16 @@ const Approvals = () => {
     setNotifyFriends(() => state.users.filter((u: any) => u.notifyFriends?.length > 0))
   }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
   useEffect(() => {
-    setPasswordRequests(() => state.passwordRequests)
-  }, [state.passwordRequests]) 
-  useEffect(() => {
     setSections(() => [
       {id: '1', name: labels.newUsers, path: '/new-users/', count: newUsers.length},
       {id: '2', name: labels.alarms, path: '/alarms/', count: alarms.length},
-      {id: '3', name: labels.passwordRequests, path: '/password-requests/', count: passwordRequests.length},
+      {id: '3', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
       {id: '4', name: labels.ratings, path: '/ratings/', count: ratings.length},
       {id: '5', name: labels.invitations, path: '/invitations/', count: invitations.length},
       {id: '6', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
       {id: '7', name: labels.notifyFriends, path: '/notify-friends/', count: notifyFriends.length},
     ])
-  }, [newUsers, alarms, passwordRequests, ratings, invitations, newOwners, notifyFriends])
+  }, [newUsers, alarms, state.passwordRequests, ratings, invitations, newOwners, notifyFriends])
   let i = 0
   return(
     <Page>
