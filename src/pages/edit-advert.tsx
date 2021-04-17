@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const EditAdvert = (props: any) => {
+interface Props {
+  id: string
+}
+const EditAdvert = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [advert] = useState(() => state.adverts.find((a: any) => a.id === props.id))

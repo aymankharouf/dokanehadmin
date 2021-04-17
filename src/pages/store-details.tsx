@@ -5,7 +5,10 @@ import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
-const StoreDetails = (props: any) => {
+interface Props {
+  id: string
+}
+const StoreDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [store, setStore] = useState(() => state.stores.find((s: any) => s.id === props.id))
   useEffect(() => {

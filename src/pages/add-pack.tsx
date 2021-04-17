@@ -4,7 +4,10 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const AddPack = (props: any) => {
+interface Props {
+  id: string
+}
+const AddPack = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')

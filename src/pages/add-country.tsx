@@ -19,7 +19,7 @@ const AddCountry = () => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.countries.filter((c: any) => c.name === name).length > 0) {
+      if (state.countries.filter(c => c.name === name).length > 0) {
         throw new Error('duplicateName')
       }
       addCountry({
@@ -56,7 +56,7 @@ const AddCountry = () => {
           onInputClear={() => setEname('')}
         />
       </List>
-      {!name ? '' :
+      {name &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

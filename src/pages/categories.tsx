@@ -5,7 +5,10 @@ import labels from '../data/labels'
 import Footer from './footer'
 import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
 
-const Categories = (props: any) => {
+interface Props {
+  id: string
+}
+const Categories = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<any>([])

@@ -6,7 +6,10 @@ import Footer from './footer'
 import moment from 'moment'
 import labels from '../data/labels'
 
-const PackDetails = (props: any) => {
+interface Props {
+  id: string
+}
+const PackDetails = (props: Props) => {
   const { state, dispatch } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [currentStorePack, setCurrentStorePack] = useState<any>('')

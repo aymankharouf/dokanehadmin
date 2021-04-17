@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import Footer from './footer'
 import labels from '../data/labels'
 
-const CustomerDetails = (props: any) => {
+interface Props {
+  id: string
+}
+const CustomerDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [customer, setCustomer] = useState(() => state.customers.find((c: any) => c.id === props.id))
   const [userInfo, setUserInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
@@ -23,9 +26,6 @@ const CustomerDetails = (props: any) => {
         <FabButtons position="bottom">
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-customer/${props.id}`)}>
             <Icon material="edit"></Icon>
-          </FabButton>
-          <FabButton color="pink" onClick={() => f7.views.current.router.navigate(`/orders-list/${props.id}/type/u`)}>
-            <Icon material="import_export"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>
@@ -49,41 +49,6 @@ const CustomerDetails = (props: any) => {
           label={labels.location}
           value={state.locations.find((l: any) => l.id === userInfo.locationId).name}
           type="text"
-          readonly
-        />
-        <ListInput 
-          name="orderLimit" 
-          label={labels.orderLimit}
-          value={(customer.orderLimit / 100).toFixed(2)}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="totalOrders" 
-          label={labels.totalOrders}
-          value={customer.ordersCount}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="deliveredOrdersCount" 
-          label={labels.deliveredOrdersCount}
-          value={customer.deliveredOrdersCount}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="deliveredOrdersTotal" 
-          label={labels.deliveredOrdersTotal}
-          value={(customer.deliveredOrdersTotal / 100).toFixed(2)}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="returnedCount" 
-          label={labels.returnedCount}
-          value={customer.returnedCount}
-          type="number"
           readonly
         />
         <ListInput 

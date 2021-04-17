@@ -5,8 +5,10 @@ import { editTrademark, showMessage, showError, getMessage, deleteTrademark } fr
 import Footer from './footer'
 import labels from '../data/labels'
 
-
-const EditCountry = (props: any) => {
+interface Props {
+  id: string
+}
+const EditCountry = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [trademark] = useState(() => state.trademarks.find((t: any) => t.id === props.id))

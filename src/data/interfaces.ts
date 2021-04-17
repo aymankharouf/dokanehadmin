@@ -90,7 +90,6 @@ export interface UserInfo {
 export interface CustomerInfo {
   storeId: string,
   isBlocked: boolean,
-  orderLimit: number,
   deliveryFees: number,
   discounts: number,
   specialDiscount: number
@@ -127,19 +126,6 @@ export interface BigBasketPack extends BasketPack {
   otherProducts: number,
   otherOffers: number,
   otherPacks: number
-}
-export interface Order {
-  id?: string,
-  basket: OrderPack[],
-  status: string,
-  statusName?: string,
-  total: number,
-  fixedFees: number,
-  deliveryFees: number,
-  discount?: Discount,
-  fraction: number,
-  requestType?: string,
-  time?: Date
 }
 export interface Advert {
   id: string,
@@ -193,7 +179,7 @@ export interface State {
   packPrices: any,
   adverts: any,
   locations: any,
-  countries: any,
+  countries: Country[],
   trademarks: any,
   passwordRequests: any,
   archivedProducts: any,

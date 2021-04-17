@@ -5,7 +5,10 @@ import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 
-const PermissionList = (props: any) => {
+interface Props {
+  id: string
+}
+const PermissionList = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)

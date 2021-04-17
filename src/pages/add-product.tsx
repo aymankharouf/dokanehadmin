@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const AddProduct = (props: any) => {
+interface Props {
+  id: string
+}
+const AddProduct = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
@@ -19,7 +22,7 @@ const AddProduct = (props: any) => {
     const categories = state.categories.filter((c: any) => c.isLeaf)
     return categories.sort((c1: any, c2: any) => c1.name > c2.name ? 1 : -1)
   })
-  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1 > c2 ? 1 : -1))
+  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1 > t2 ? 1 : -1))
   useEffect(() => {
     if (error) {

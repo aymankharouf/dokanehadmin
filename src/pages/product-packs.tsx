@@ -6,7 +6,11 @@ import labels from '../data/labels'
 import Footer from './footer'
 import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
 
-const ProductPacks = (props: any) => {
+interface Props {
+  id: string,
+  type: string
+}
+const ProductPacks = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find((p: any) => p.id === props.id) : state.products.find((p: any) => p.id === props.id))

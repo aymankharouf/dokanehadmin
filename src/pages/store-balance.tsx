@@ -4,7 +4,10 @@ import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const StoreBalance = (props: any) => {
+interface Props {
+  id: string
+}
+const StoreBalance = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [store, setStore] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [balances, setBalances] = useState([])

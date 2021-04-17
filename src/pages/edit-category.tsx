@@ -5,8 +5,10 @@ import Footer from './footer'
 import labels from '../data/labels'
 import { editCategory, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 
-
-const EditCategory = (props: any) => {
+interface Props {
+  id: string
+}
+const EditCategory = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [category] = useState(() => state.categories.find((c: any) => c.id === props.id))

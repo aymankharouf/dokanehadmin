@@ -3,7 +3,10 @@ import { f7, Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { registerUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const Register = (props: any) => {
+interface Props {
+  id: string
+}
+const Register = (props: Props) => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')

@@ -3,7 +3,10 @@ import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const ProductDetails = (props: any) => {
+interface Props {
+  id: string
+}
+const ProductDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [product, setProduct] = useState(() => state.products.find((p: any) => p.id === props.id))
   useEffect(() => {
@@ -52,7 +55,7 @@ const ProductDetails = (props: any) => {
           name="countryId" 
           label={labels.country}
           type="text" 
-          value={state.countries.find((c: any) => c.id === product.countryId).name}
+          value={state.countries.find(c => c.id === product.countryId)?.name}
           readonly
         />
         <img src={product.imageUrl} className="img-card" alt={labels.noImage} />

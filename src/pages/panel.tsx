@@ -37,7 +37,6 @@ const Panel = () => {
         {state.user ? <ListItem link="#" title={labels.logout} onClick={() => handleLogout()} />
         : <ListItem link="/panel-login/" title={labels.login} />}
         {state.user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/requested-packs/" title={labels.requestedPacks} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/permission-list/s" title={labels.storesOwners} view="#main-view" panelClose /> : ''}

@@ -5,7 +5,10 @@ import { addStorePayment, showMessage, showError, getMessage } from '../data/act
 import labels from '../data/labels'
 import { paymentTypes } from '../data/config'
 
-const AddStorePayment = (props: any) => {
+interface Props {
+  id: string
+}
+const AddStorePayment = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))

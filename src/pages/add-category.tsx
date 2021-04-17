@@ -3,8 +3,10 @@ import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { addCategory, showMessage, showError, getMessage } from '../data/actions'
 
-
-const AddCategory = (props: any) => {
+interface Props {
+  id: string
+}
+const AddCategory = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [ename, setEname] = useState('')

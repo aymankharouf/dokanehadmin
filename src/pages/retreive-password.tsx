@@ -6,7 +6,10 @@ import Footer from './footer'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
-const RetreivePassword = (props: any) => {
+interface Props {
+  id: string
+}
+const RetreivePassword = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [passwordRequest] = useState(() => state.passwordRequests.find((r: any) => r.id === props.id))

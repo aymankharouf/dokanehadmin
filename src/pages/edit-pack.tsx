@@ -4,8 +4,10 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-
-const EditPack = (props: any) => {
+interface Props {
+  id: string
+}
+const EditPack = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find((p: any) => p.id === props.id))

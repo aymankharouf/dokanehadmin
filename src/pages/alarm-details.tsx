@@ -8,7 +8,11 @@ import { approveAlarm, showMessage, showError, getMessage } from '../data/action
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
 
-const AlarmDetails = (props: any) => {
+interface Props {
+  id: string,
+  userId: string
+}
+const AlarmDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [newPackId, setNewPackId] = useState('')

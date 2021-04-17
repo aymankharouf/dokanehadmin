@@ -4,7 +4,10 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Tog
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-const AddOffer = (props: any) => {
+interface Props {
+  id: string
+}
+const AddOffer = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')

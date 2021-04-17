@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { Icon } from 'framework7-react'
 
-const RatingStars = (props: any) => {
+interface Props {
+  rating: number,
+  count: number
+}
+const RatingStars = (props: Props) => {
   const [stars] = useState(() => {
     const rating_round: any = Math.round(props.rating / .5 ) * .5
     const rating_int = parseInt(rating_round)

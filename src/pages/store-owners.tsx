@@ -4,8 +4,10 @@ import Footer from './footer'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 
-
-const StoreOwners = (props: any) => {
+interface Props {
+  id: string
+}
+const StoreOwners = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [storeOwners, setStoreOwners] = useState([])

@@ -3,7 +3,10 @@ import { f7, Page, Navbar, List, ListInput, Button, Toolbar, Link } from 'framew
 import { login, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const Login = (props: any) => {
+interface Props {
+  id: string
+}
+const Login = (props: Props) => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [password, setPassword] = useState('')

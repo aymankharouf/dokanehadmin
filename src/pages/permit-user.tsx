@@ -4,7 +4,10 @@ import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { StoreContext } from '../data/store'
 
-const PermitUser = (props: any) => {
+interface Props {
+  id: string
+}
+const PermitUser = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)

@@ -6,7 +6,10 @@ import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 import { editStore, showMessage, showError, getMessage } from '../data/actions'
 
-const EditStore = (props: any) => {
+interface Props {
+  id: string
+}
+const EditStore = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))

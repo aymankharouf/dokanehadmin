@@ -5,7 +5,10 @@ import Footer from './footer'
 import { approveUser, deleteUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const ApproveUser = (props: any) => {
+interface Props {
+  id: string
+}
+const ApproveUser = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)

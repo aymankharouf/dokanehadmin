@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const EditProduct = (props: any) => {
+interface Props {
+  id: string
+}
+const EditProduct = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [product] = useState(() => state.products.find((p: any) => p.id === props.id))

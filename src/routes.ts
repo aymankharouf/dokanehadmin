@@ -18,8 +18,6 @@ import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
 import Categories from './pages/categories'
 import AddCategory from './pages/add-category'
-import RequestedPacks from './pages/requested-packs'
-import RequestedPackDetails from './pages/requested-pack-details'
 import Customers from './pages/customers'
 import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
@@ -261,14 +259,6 @@ const routes = [
     component: EditPrice
   },
   {
-    path: '/requested-packs/',
-    component: RequestedPacks
-  },
-  {
-    path: '/requested-pack-details/:packId/quantity/:quantity/price/:price/order/:orderId',
-    component: RequestedPackDetails
-  },
-  {
     path: '/retreive-password/:id',
     component: RetreivePassword,
   },
@@ -323,10 +313,6 @@ const routes = [
   {
     path: '/add-notification/',
     component: AddNotification
-  },
-  {
-    path: '/purchase-plan-details/:id',
-    component: RequestedPacks
   },
   {
     path: '/adverts/',

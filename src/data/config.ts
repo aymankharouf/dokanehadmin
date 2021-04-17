@@ -1,7 +1,6 @@
 export const setup = {
   fixedFees: 0.01,
   maxDiscount: 10,
-  orderLimit: 5000,
   returnPenalty: 5,
   invitationDiscount: 5,
   firstOrderDiscount: 10,

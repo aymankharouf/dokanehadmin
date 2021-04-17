@@ -1,4 +1,6 @@
-const labels: any = {
+import { Label } from './interfaces'
+
+const labels: Label = {
   offers: 'العروض',
   registerTitle: 'تسجيل جديد',
   name: 'اﻻسم',
@@ -14,7 +16,6 @@ const labels: any = {
   auth_email_already_in_use: 'لقد سجلت سابقا برقم هذا الموبايل',
   auth_wrong_password: 'كلمة السر غير صحيحة',
   auth_invalid_email: 'الرجاء التأكد من البريد الالكتروني',
-  orderDetails: 'تفاصيل الطلب',
   productOf: 'انتاج',
   basketFrom: 'سلة المشتريات من',
   purchaseDetails: 'تفاصيل المشتريات',
@@ -37,7 +38,6 @@ const labels: any = {
   offer: 'عرض',
   editProduct: 'تعديل منتج',
   editPrice: 'تعديل السعر',
-  orders: 'الطلبات',
   confirmPurchase: 'اعتماد الشراء',
   total: 'المجموع',
   newStore: 'محل جديد',
@@ -54,7 +54,6 @@ const labels: any = {
   twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
   invalidFile: 'الرجاء التأكد من ملف الصورة',
   stockName: 'دكانة نت',
-  editOrder: 'تعديل طلب',
   passwordRequests: 'طلبات كلمة السر',
   customers: 'العملاء',
   pack: 'العبوة',
@@ -92,10 +91,6 @@ const labels: any = {
   storeName: 'اسم المحل',
   storeId: 'المحل',
   customerDetails: 'تفاصيل العميل',
-  orderLimit: 'سقف الطلبات',
-  totalOrders: 'عدد الطلبات',
-  deliveredOrdersCount: 'الطلبات المستلمة',
-  deliveredOrdersTotal: 'مجموع التعاملات',
   totalPayments: 'مجموع الدفعات',
   editCustomer: 'تعديل بيانات عميل',
   type: 'التصنيف',
@@ -374,7 +369,8 @@ const labels: any = {
   confirmationBlockUser: 'هل ترغب بحظر التعامل مع هذا المستخدم؟',
   paymentDate: 'تاريخ الدفعة',
   packTypes: 'الاغلفة',
-  addPackType: 'اضافة غلاف'
+  addPackType: 'اضافة غلاف',
+  infictedPacksFound: 'يوجد مواد تستخدم هذا النوع من التغليف'
 }
 
 export default labels

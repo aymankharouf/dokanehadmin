@@ -5,7 +5,11 @@ import Footer from './footer'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-const InvitationDetails = (props: any) => {
+interface Props {
+  userId: string,
+  mobile: string
+}
+const InvitationDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))

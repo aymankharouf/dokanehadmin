@@ -7,7 +7,12 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { paymentTypes } from '../data/config'
 
-const StoreBalanceTrans = (props: any) => {
+interface Props {
+  id: string,
+  storeId: string,
+  month: string
+}
+const StoreBalanceTrans = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.storeId))
   const [trans, setTrans] = useState<any>([])

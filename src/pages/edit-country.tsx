@@ -5,18 +5,19 @@ import { editCountry, showMessage, showError, getMessage, deleteCountry } from '
 import Footer from './footer'
 import labels from '../data/labels'
 
-
-const EditCountry = (props: any) => {
+interface Props {
+  id: string
+}
+const EditCountry = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [country] = useState(() => state.countries.find((c: any) => c.id === props.id))
-  const [name, setName] = useState(country.name)
-  const [ename, setEname] = useState(country.ename)
+  const [country] = useState(() => state.countries.find(c => c.id === props.id))
+  const [name, setName] = useState(country?.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== country.name || ename !== country.ename) setHasChanged(true)
+    if (name !== country?.name) setHasChanged(true)
     else setHasChanged(false)
-  }, [country, name, ename])
+  }, [country, name])
 
   useEffect(() => {
     if (error) {
@@ -29,7 +30,6 @@ const EditCountry = (props: any) => {
       const newCountry = {
         ...country,
         name,
-        ename
       }
       editCountry(newCountry, state.countries)
       showMessage(labels.editSuccess)
@@ -63,15 +63,6 @@ const EditCountry = (props: any) => {
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ename" 
-          label={labels.ename}
-          value={ename}
-          clearButton
-          type="text" 
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
         />
       </List>
       <FabBackdrop slot="fixed" />

@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import Footer from './footer'
 
-const AdvertDetails = (props: any) => {
+interface Props {
+  id: string
+}
+const AdvertDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [advert] = useState(() => state.adverts.find((a: any) => a.id === props.id))
   return (

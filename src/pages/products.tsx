@@ -5,7 +5,10 @@ import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
 
-const Products = (props: any) => {
+interface Props {
+  id: string
+}
+const Products = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [category] = useState(() => state.categories.find((c: any) => c.id === props.id))
   const [products, setProducts] = useState([])

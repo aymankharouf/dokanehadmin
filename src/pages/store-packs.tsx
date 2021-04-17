@@ -6,7 +6,10 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
 
-const StorePacks = (props: any) => {
+interface Props {
+  id: string
+}
+const StorePacks = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [storePacks, setStorePacks] = useState([])

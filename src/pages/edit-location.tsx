@@ -5,7 +5,10 @@ import { StoreContext } from '../data/store'
 import Footer from './footer'
 import labels from '../data/labels'
 
-const EditLocation = (props: any) => {
+interface Props {
+  id: string
+}
+const EditLocation = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [location] = useState(() => state.locations.find((l: any) => l.id === props.id))

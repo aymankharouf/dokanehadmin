@@ -4,7 +4,10 @@ import { StoreContext } from '../data/store'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
 
-const AddStorePack = (props: any) => {
+interface Props {
+  id: string
+}
+const AddStorePack = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
