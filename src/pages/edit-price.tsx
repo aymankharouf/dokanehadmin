@@ -12,7 +12,7 @@ const EditPrice = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find((p: any) => p.id === props.packId))
-  const [store] = useState(() => state.stores.find((s: any) => s.id === props.storeId))
+  const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
   const [storePack] = useState(() => state.packPrices.find((p: any) => p.packId === props.packId && p.storeId === props.storeId))
   const [cost, setCost] = useState<any>(props.storeId === 's' ? (storePack.cost / 100).toFixed(2) : '')
   const [price, setPrice] = useState<any>('')

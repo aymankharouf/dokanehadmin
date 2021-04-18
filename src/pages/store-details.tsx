@@ -10,9 +10,9 @@ interface Props {
 }
 const StoreDetails = (props: Props) => {
   const { state } = useContext(StateContext)
-  const [store, setStore] = useState(() => state.stores.find((s: any) => s.id === props.id))
+  const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id)!)
   useEffect(() => {
-    setStore(() => state.stores.find((s: any) => s.id === props.id))
+    setStore(() => state.stores.find(s => s.id === props.id)!)
   }, [state.stores, props.id])
 
   return (
@@ -24,13 +24,6 @@ const StoreDetails = (props: Props) => {
           label={labels.name}
           value={store.name}
           type="text" 
-          readonly
-        />
-        <ListInput
-          name="balance"
-          label={labels.balance}
-          value={((store.balances?.reduce((sum: any, b: any) => sum + b.balance, 0) || 0) / 100).toFixed(2)}
-          type="number"
           readonly
         />
         <ListInput

@@ -6,7 +6,7 @@ import labels from '../data/labels'
 
 const Basket = () => {
   const { state, dispatch } = useContext(StateContext)
-  const [store] = useState(() => state.stores.find((s: any) => s.id === state.basket.storeId))
+  const [store] = useState(() => state.stores.find(s => s.id === state.basket.storeId)!)
   const [basket, setBasket] = useState<any>([])
   const [totalPrice, setTotalPrice] = useState<any>()
   useEffect(() => {

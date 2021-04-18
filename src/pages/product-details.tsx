@@ -8,9 +8,9 @@ interface Props {
 }
 const ProductDetails = (props: Props) => {
   const { state } = useContext(StateContext)
-  const [product, setProduct] = useState(() => state.products.find((p: any) => p.id === props.id))
+  const [product, setProduct] = useState(() => state.products.find(p => p.id === props.id)!)
   useEffect(() => {
-    setProduct(() => state.products.find((p: any) => p.id === props.id))
+    setProduct(() => state.products.find(p => p.id === props.id)!)
   }, [state.products, props.id])
   return (
     <Page>
@@ -21,13 +21,6 @@ const ProductDetails = (props: Props) => {
           label={labels.name}
           type="text" 
           value={product.name}
-          readonly
-        />
-        <ListInput 
-          name="ename" 
-          label={labels.ename}
-          type="text" 
-          value={product.ename}
           readonly
         />
         <ListInput 

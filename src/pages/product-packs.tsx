@@ -13,7 +13,7 @@ interface Props {
 const ProductPacks = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find((p: any) => p.id === props.id) : state.products.find((p: any) => p.id === props.id))
+  const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find(p => p.id === props.id)! : state.products.find(p => p.id === props.id)!)
   const [packs, setPacks] = useState<any>([])
   const [activePacks, setActivePacks] = useState([])
   const [actionOpened, setActionOpened] = useState(false);
@@ -61,7 +61,7 @@ const ProductPacks = (props: Props) => {
           <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{productOfText(product.trademark, product.country)}</p>
+          <p>{productOfText(product.trademarkId, product.countryId)}</p>
           <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> 
         </CardFooter>
       </Card>

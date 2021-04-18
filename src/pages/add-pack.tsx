@@ -17,7 +17,7 @@ const AddPack = (props: Props) => {
   const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
-  const [product] = useState(() => state.products.find((p: any) => p.id === props.id))
+  const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -39,7 +39,7 @@ const AddPack = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])

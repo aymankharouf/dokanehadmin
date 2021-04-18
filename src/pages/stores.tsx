@@ -4,21 +4,17 @@ import Footer from './footer'
 import { StateContext } from '../data/state-provider'
 import { showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { Store } from '../data/interfaces'
 
 const Stores = () => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [stores, setStores] = useState([])
-  const [stock, setStock] = useState('')
-  useEffect(() => {
-    setStock(() => state.stores.find((s: any) => s.id === 's'))
-  }, [state.stores])
+  const [stores, setStores] = useState<Store[]>([])
   useEffect(() => {
     setStores(() => {
       const today = new Date()
       today.setDate(today.getDate() - 30)
-      let stores = state.stores.filter((s: any) => s.id !== 's')
-      return stores.sort((s1: any, s2: any) => s1.sales - s2.sales)
+      return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
     })
   }, [state.stores])
   useEffect(() => {

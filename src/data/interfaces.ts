@@ -155,6 +155,36 @@ export interface Discount {
   value: number,
   type: string
 }
+export interface Product {
+  id: string,
+  name: string,
+  alias: string,
+  description: string,
+  categoryId: string,
+  trademarkId: string,
+  countryId: string,
+  imageUrl: string,
+  rating: number,
+  ratingCount: number,
+  categoryInfo?: Category
+}
+export interface Store {
+  id: string,
+  type: string,
+  name: string,
+  isActive: boolean,
+  discount: number,
+  mobile: string,
+  address: string,
+  mapPosition: string,
+  allowReturn: boolean,
+  openTime: string
+}
+export interface Log {
+  id: string,
+  userId: string,
+  time: Date
+}
 export interface State {
   user?: firebase.User,
   users: any,
@@ -168,10 +198,10 @@ export interface State {
   countries: Country[],
   trademarks: Trademark[],
   passwordRequests: PasswordRequest[],
-  archivedProducts: any,
-  stores: any,
-  products: any,
-  logs: any,
+  archivedProducts: Product[],
+  stores: Store[],
+  products: Product[],
+  logs: Log[],
   archivedPacks: any,
   notifications: any,
   alarms: any,

@@ -20,7 +20,7 @@ const AlarmDetails = (props: Props) => {
   const [customerInfo] = useState(() => state.customers.find((c: any) => c.id === props.userId))
   const [alarm] = useState(() => userInfo.alarms.find((a: any) => a.id === props.id))
   const [pack] = useState(() => state.packs.find((p: any) => p.id === alarm.packId))
-  const [storeName] = useState(() => state.stores.find((s: any) => s.id === customerInfo.storeId).name)
+  const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name)
   const [packs] = useState(() => {
     let packs = state.packs.filter((p: any) => p.id !== pack.id)
     if (alarm.type === 'go') {

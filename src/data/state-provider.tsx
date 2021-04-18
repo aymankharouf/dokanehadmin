@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log } from './interfaces'
 
 export const StateContext = createContext({} as Context)
 
@@ -120,9 +120,20 @@ const StateProvider = (props: any) => {
           unsubscribePackTypes()
         })
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
-          let products: any = []
+          let products: Product[] = []
           docs.forEach(doc => {
-            products.push({...doc.data(), id: doc.id})
+            products.push({
+              id: doc.id,
+              name: doc.data().name,
+              alias: doc.data().alias,
+              description: doc.data().description,
+              categoryId: doc.data().categoryId,
+              trademarkId: doc.data().trademarkId,
+              countryId: doc.data().countryId,
+              imageUrl: doc.data().imageUrl,
+              rating: doc.data().rating,
+              ratingCount: doc.data().ratingCount
+            })
           })
           dispatch({type: 'SET_PRODUCTS', payload: products})
         }, err => {
@@ -184,9 +195,13 @@ const StateProvider = (props: any) => {
           unsubscribeStores()
         })  
         const unsubscribeLogs = firebase.firestore().collection('logs').onSnapshot(docs => {
-          let logs: any = []
+          let logs: Log[] = []
           docs.forEach(doc => {
-            logs.push({...doc.data(), id:doc.id})
+            logs.push({
+              id: doc.id,
+              userId: doc.data().userId,
+              time: doc.data().time.toDate()
+            })
           })
           dispatch({type: 'SET_LOGS', payload: logs})
         }, err => {

@@ -19,7 +19,7 @@ const AddOffer = (props: Props) => {
   const [bonusPercent, setBonusPercent] = useState<any>()
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
-  const [product] = useState(() => state.products.find((p: any) => p.id === props.id))
+  const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [packs] = useState(() => {
     const packs = state.packs.filter((p: any) => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
     return packs.map((p: any) => {
@@ -70,7 +70,7 @@ const AddOffer = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])

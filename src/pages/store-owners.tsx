@@ -9,7 +9,7 @@ interface Props {
 }
 const StoreOwners = (props: Props) => {
   const { state } = useContext(StateContext)
-  const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
+  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [storeOwners, setStoreOwners] = useState([])
   useEffect(() => {
     setStoreOwners(() => {

@@ -11,7 +11,7 @@ interface Props {
 }
 const StorePacks = (props: Props) => {
   const { state } = useContext(StateContext)
-  const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
+  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [storePacks, setStorePacks] = useState([])
   useEffect(() => {
     setStorePacks(() => {

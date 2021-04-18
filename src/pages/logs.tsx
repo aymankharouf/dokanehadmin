@@ -6,22 +6,23 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
+import { Log } from '../data/interfaces'
 
 
 const Logs = () => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [logs, setLogs] = useState<any>([])
+  const [logs, setLogs] = useState<Log[]>([])
   useEffect(() => {
     setLogs(() => {
-      const logs = state.logs.map((l: any) => {
+      const logs = state.logs.map(l => {
         const userInfo = state.users.find((u: any) => u.id === l.userId)
         return {
           ...l,
           userInfo
         }
       })
-      return logs.sort((l1: any, l2: any) => l2.time.seconds - l1.time.seconds)
+      return logs.sort((l1, l2) => l2.time > l1.time ? 1 : -1)
     })
   }, [state.logs, state.users])
   useEffect(() => {

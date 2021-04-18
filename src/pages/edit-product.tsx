@@ -10,9 +10,8 @@ interface Props {
 const EditProduct = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [product] = useState(() => state.products.find((p: any) => p.id === props.id))
+  const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [name, setName] = useState(product.name)
-  const [ename, setEname] = useState(product.ename)
   const [description, setDescription] = useState(product.description)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
@@ -33,21 +32,20 @@ const EditProduct = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
   useEffect(() => {
     if (name !== product.name
-    || ename !== product.ename
     || description !== product.description
     || countryId !== product.countryId
     || categoryId !== product.categoryId
     || trademarkId !== product.trademarkId
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, ename, description, countryId, categoryId, trademarkId, imageUrl])
+  }, [product, name, description, countryId, categoryId, trademarkId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -56,14 +54,13 @@ const EditProduct = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.products.find((p: any) => p.id !== product.id && p.categoryId === categoryId && p.countryId === countryId && p.name === name && p.ename === ename)) {
+      if (state.products.find((p: any) => p.id !== product.id && p.categoryId === categoryId && p.countryId === countryId && p.name === name)) {
         throw new Error('duplicateProduct')
       }
       const newProduct = {
         ...product,
         categoryId,
         name,
-        ename,
         description,
         trademarkId,
         countryId,
@@ -87,15 +84,6 @@ const EditProduct = (props: Props) => {
           value={name} 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ename" 
-          label={labels.ename}
-          clearButton
-          type="text" 
-          value={ename} 
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
         />
         <ListInput 
           name="description" 

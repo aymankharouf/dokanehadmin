@@ -14,7 +14,7 @@ const AddStorePack = (props: Props) => {
   const [cost, setCost] = useState<any>()
   const [price, setPrice] = useState<any>()
   const [offerDays, setOfferDays] = useState('')
-  const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
+  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [isActive, setIsActive] = useState(store.isActive)
   const [packs] = useState(() => {
     const packs = state.packs.map((p: any) => {
