@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
@@ -66,9 +65,6 @@ const Notifications = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-notification/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

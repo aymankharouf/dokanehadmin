@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop, Toolbar } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import Footer from './footer'
 import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
 
 interface Props {
@@ -19,7 +18,7 @@ const Categories = (props: Props) => {
     setCategories(() => {
       const children = state.categories.filter((c: any) => c.parentId === props.id)
       let categories = children.map((c: any) => {
-        const childrenCount = state.categories.filter((cc: any) => cc.parentId === c.id).length
+        const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
         const categoryChildrens = categoryChildren(c.id, state.categories)
         const productsCount = state.products.filter((p: any) => categoryChildrens.includes(p.categoryId)).length
         return {
@@ -94,9 +93,6 @@ const Categories = (props: Props) => {
 
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

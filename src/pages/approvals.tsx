@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, Button, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
+import { Customer } from '../data/interfaces'
 
 const Approvals = () => {
   const { state } = useContext(StateContext)
@@ -12,14 +12,14 @@ const Approvals = () => {
   const [ratings, setRatings] = useState([])
   const [invitations, setInvitations] = useState([])
   const [sections, setSections] = useState<any>([])
-  const [newOwners, setNewOwners] = useState([])
+  const [newOwners, setNewOwners] = useState<Customer[]>([])
   const [notifyFriends, setNotifyFriends] = useState([])
   useEffect(() => {
     setNewUsers(() => state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)))
     setAlarms(() => state.alarms.filter((a: any) => a.status === 'n'))
     setRatings(() => state.ratings.filter((r: any) => r.status === 'n'))
     setInvitations(() => state.invitations.filter((i: any) => i.status === 'n'))
-    setNewOwners(() => state.customers.filter((c: any) => c.storeName && !c.storeId))
+    setNewOwners(() => state.customers.filter(c => c.storeName && !c.storeId))
     setNotifyFriends(() => state.users.filter((u: any) => u.notifyFriends?.length > 0))
   }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
   useEffect(() => {
@@ -50,9 +50,6 @@ const Approvals = () => {
           />
         )}
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

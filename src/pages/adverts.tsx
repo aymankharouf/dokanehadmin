@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
@@ -81,9 +80,6 @@ const Adverts = () => {
         <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>
         <ActionsButton onClick={() => handleUpdate()}>{currentAdvert?.isActive ? labels.stop : labels.activate}</ActionsButton>
       </Actions>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

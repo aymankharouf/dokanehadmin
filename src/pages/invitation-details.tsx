@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -77,9 +76,6 @@ const InvitationDetails = (props: Props) => {
           readonly
         />
       </List>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, Icon, Fab, ListInput, BlockTitle, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Navbar, List, ListItem, Icon, Fab, ListInput, BlockTitle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -17,7 +16,7 @@ const AlarmDetails = (props: Props) => {
   const [error, setError] = useState('')
   const [newPackId, setNewPackId] = useState('')
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))
-  const [customerInfo] = useState(() => state.customers.find((c: any) => c.id === props.userId))
+  const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId)!)
   const [alarm] = useState(() => userInfo.alarms.find((a: any) => a.id === props.id))
   const [pack] = useState(() => state.packs.find((p: any) => p.id === alarm.packId))
   const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name)
@@ -176,9 +175,6 @@ const AlarmDetails = (props: Props) => {
           />
         )}
       </List>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

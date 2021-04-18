@@ -4,7 +4,6 @@ import Panel from './pages/panel'
 import Login from './pages/login'
 import Products from './pages/products'
 import ProductPacks from './pages/product-packs'
-import Basket from './pages/basket'
 import Stores from './pages/stores'
 import StorePacks from './pages/store-packs'
 import AddStorePack from './pages/add-store-pack'
@@ -63,6 +62,9 @@ import NotifyFriends from './pages/notify-friends'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
+import PackTypes from './pages/pack-types'
+import AddPackType from './pages/add-pack-type'
+import EditPackType from './pages/edit-pack-type'
 
 const routes = [
   {
@@ -118,10 +120,6 @@ const routes = [
   {
     path: '/edit-product/:id',
     component: EditProduct
-  },
-  {
-    path: '/basket/',
-    component: Basket,
   },
   {
     path: '/settings/',
@@ -334,6 +332,18 @@ const routes = [
   {
     path: '/notify-friends/',
     component: NotifyFriends
+  },
+  {
+    path: '/pack-types/',
+    component: PackTypes
+  },
+  {
+    path: '/add-pack-type/',
+    component: AddPackType
+  },
+  {
+    path: '/edit-pack-type/',
+    component: EditPackType
   },
   {
     path: '(.*)',

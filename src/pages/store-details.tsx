@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
@@ -98,9 +97,6 @@ const StoreDetails = (props: Props) => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

@@ -80,6 +80,7 @@ export interface Alarm {
   status: string
 }
 export interface User {
+  name: string,
   mobile: string,
   locationId: string,
   notifications?: Notification[],
@@ -89,35 +90,15 @@ export interface User {
   alarms?: Alarm[]
 }
 export interface Customer {
-  storeId: string,
+  id: string,
+  storeId?: string,
+  storeName: string,
+  name: string,
   isBlocked: boolean,
   deliveryFees: number,
   discounts: number,
-  specialDiscount: number
-}
-export interface BasketPack {
-  packId: string,
-  productId: string,
-  productName: string,
-  productDescription: string,
-  packName: string,
-  imageUrl: string,
-  price: number,
-  quantity: number,
-  offerId: string
-  closeExpired: boolean,
-  byWeight: boolean,
-  weight?: number,
-  purchased?: number,
-  returned?: number
-}
-export interface BigBasketPack extends BasketPack {
-  packInfo?: Pack,
-  totalPriceText: string,
-  priceText: string,
-  otherProducts: number,
-  otherOffers: number,
-  otherPacks: number
+  specialDiscount: number,
+  address: string
 }
 export interface Advert {
   id?: string,
@@ -182,15 +163,17 @@ export interface Store {
 }
 export interface Log {
   id: string,
+  error: string,
+  page: string,
   userId: string,
-  time: Date
+  time: Date,
+  userInfo?: User
 }
 export interface State {
   user?: firebase.User,
   users: any,
-  customers: any,
+  customers: Customer[],
   categories: Category[],
-  basket: any,
   packs: any,
   packPrices: any,
   adverts: Advert[],

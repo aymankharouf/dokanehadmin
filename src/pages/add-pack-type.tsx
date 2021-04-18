@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { StateContext } from '../data/state-provider'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { addPackType, showMessage, showError, getMessage } from '../data/actions'
 
@@ -45,14 +44,11 @@ const AddPackType = () => {
           onInputClear={() => setName('')}
         />
       </List>
-      {!name ? '' :
+      {name &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

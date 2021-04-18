@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import labels from '../data/labels'
 import { editCategory, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 
@@ -107,14 +106,11 @@ const EditCategory = (props: Props) => {
           />
         </ListItem>
       </List>
-      {!name || !ordering || !hasChanged ? '' :
+      {name && ordering && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

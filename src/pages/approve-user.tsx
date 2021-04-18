@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, FabBackdrop, FabButton, FabButtons, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import { approveUser, deleteUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -134,9 +133,6 @@ const ApproveUser = (props: Props) => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

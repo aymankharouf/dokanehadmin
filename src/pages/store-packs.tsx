@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link, Badge, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link, Badge } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -80,14 +79,9 @@ const StorePacks = (props: Props) => {
           }
         </List>
       </Block>
-      {store.id === 's' ? '' : 
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/add-store-pack/${props.id}`}>
-          <Icon material="add"></Icon>
-        </Fab>
-      }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/add-store-pack/${props.id}`}>
+        <Icon material="add"></Icon>
+      </Fab>
     </Page>
   )
 }

@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
@@ -39,9 +38,6 @@ const Invitations = () => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

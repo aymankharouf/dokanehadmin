@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button, Fab, Icon, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
+import { Customer } from '../data/interfaces'
 
 interface Props {
   id: string
@@ -12,7 +12,7 @@ const PermissionList = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [customers, setCustomers] = useState([])
+  const [customers, setCustomers] = useState<Customer[]>([])
   useEffect(() => {
     setCustomers(() => {
       const customers = state.customers.filter((c: any) => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
@@ -78,7 +78,7 @@ const PermissionList = (props: Props) => {
         <List mediaList className="search-list searchbar-found">
           {customers.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : customers.map((c: any) => 
+          : customers.map(c => 
               <ListItem
                 title={c.name}
                 subtitle={c.storeName}
@@ -94,9 +94,6 @@ const PermissionList = (props: Props) => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { sendNotification, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem } from 'framework7-react'
 import labels from '../data/labels'
 import { StateContext } from '../data/state-provider'
 
@@ -70,14 +69,11 @@ const AddNotification = () => {
           onInputClear={() => setMessage('')}
         />
       </List>
-      {!userId || !title || !message ? '' :
+      {userId && title && message &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

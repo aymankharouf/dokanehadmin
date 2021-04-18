@@ -12,7 +12,7 @@ const PermitUser = (props: Props) => {
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [userId, setUserId] = useState(props.id === '0' ? '' : props.id)
-  const [customerInfo] = useState(() => state.customers.find((c: any) => c.id === props.id))
+  const [customerInfo] = useState(() => state.customers.find(c => c.id === props.id)!)
   const [storeId, setStoreId] = useState('')
   const [users] = useState(() => {
     const users = state.users.map((u: any) => {
@@ -45,7 +45,7 @@ const PermitUser = (props: Props) => {
   }, [inprocess])
   useEffect(() => {
     if (userId) {
-      setStoreId(state.customers.find((c: any) => c.id === userId).storeId || '')
+      setStoreId(state.customers.find(c => c.id === userId)?.storeId || '')
     } else {
       setStoreId('')
     }

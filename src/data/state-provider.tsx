@@ -6,15 +6,12 @@ import { State, Context, Category, PasswordRequest, Advert, Product, Log } from 
 export const StateContext = createContext({} as Context)
 
 const StateProvider = (props: any) => {
-  const localData = localStorage.getItem('basket')
-  const basket = localData ? JSON.parse(localData) : ''
   const initState: State = {
     categories: [], 
     locations: [], 
     countries: [],
     trademarks: [],
     stores: [], 
-    basket, 
     users: [],
     products: [],
     packs: [],
@@ -199,6 +196,8 @@ const StateProvider = (props: any) => {
           docs.forEach(doc => {
             logs.push({
               id: doc.id,
+              error: doc.data().error,
+              page: doc.data().page,
               userId: doc.data().userId,
               time: doc.data().time.toDate()
             })

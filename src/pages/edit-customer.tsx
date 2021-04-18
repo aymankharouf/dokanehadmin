@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import { editCustomer, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
@@ -11,12 +10,11 @@ interface Props {
 const EditCustomer = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [customer] = useState(() => state.customers.find((c: any) => c.id === props.id))
+  const [customer] = useState(() => state.customers.find(c => c.id === props.id)!)
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
-  const [mapPosition, setMapPosition] = useState(customer.mapPosition)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
   const [deliveryFees, setDeliveryFees] = useState<any>((customer.deliveryFees / 100).toFixed(2))
   const [specialDiscount, setSpecialDiscount] = useState<any>((customer.specialDiscount / 100).toFixed(2))
@@ -26,12 +24,11 @@ const EditCustomer = (props: Props) => {
     if (name !== userInfo.name
     || address !== customer.address
     || locationId !== userInfo.locationId
-    || mapPosition !== customer.mapPosition
     || isBlocked !== customer.isBlocked
     || deliveryFees * 100 !== customer.deliveryFees
     || specialDiscount * 100 !== customer.specialDiscount) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, userInfo, name, address, locationId, mapPosition, isBlocked, deliveryFees, specialDiscount])
+  }, [customer, userInfo, name, address, locationId, isBlocked, deliveryFees, specialDiscount])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -49,7 +46,6 @@ const EditCustomer = (props: Props) => {
       const newCustomer = {
         ...customer,
         address,
-        mapPosition,
         isBlocked,
         deliveryFees: deliveryFees * 100,
         specialDiscount: specialDiscount * 100
@@ -112,15 +108,6 @@ const EditCustomer = (props: Props) => {
           onInputClear={() => setSpecialDiscount('')}
         />
         <ListInput 
-          name="mapPosition" 
-          label={labels.mapPosition}
-          value={mapPosition}
-          clearButton
-          type="text" 
-          onChange={e => setMapPosition(e.target.value)}
-          onInputClear={() => setMapPosition('')}
-        />
-        <ListInput 
           name="address" 
           label={labels.address}
           value={address}
@@ -139,9 +126,6 @@ const EditCustomer = (props: Props) => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

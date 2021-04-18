@@ -1,8 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { editCountry, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
-import Footer from './footer'
 import labels from '../data/labels'
 
 interface Props {
@@ -80,9 +79,6 @@ const EditCountry = (props: Props) => {
           </FabButton>
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

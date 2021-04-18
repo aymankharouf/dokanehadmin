@@ -1,15 +1,15 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError } from '../data/actions'
+import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText } from '../data/actions'
+import { Product } from '../data/interfaces'
 
 const ArchivedProducts = () => {
   const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [products, setProducts] = useState<any>([])
+  const [products, setProducts] = useState<Product[]>([])
   useEffect(() => {
     setProducts(() => {
       const products = state.archivedProducts.map((p: any) => {
@@ -75,12 +75,12 @@ const ArchivedProducts = () => {
           <List mediaList className="search-list searchbar-found">
             {products.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : products.map((p: any) => 
+            : products.map(p => 
                 <ListItem
                   link={`/product-packs/${p.id}/type/a`}
                   title={p.name}
-                  subtitle={getCategoryName(p.categoryInfo, state.categories)}
-                  text={`${labels.productOf} ${p.trademark ? labels.company + ' ' + p.trademark + '-' : ''}${p.country}`}
+                  subtitle={getCategoryName(p.categoryInfo!, state.categories)}
+                  text={productOfText(p.trademarkId, p.countryId)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
@@ -92,9 +92,6 @@ const ArchivedProducts = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
         <Icon material="cached"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

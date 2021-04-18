@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { addLocation, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
-
 
 const AddLocation = () => {
   const [error, setError] = useState('')
@@ -56,9 +54,6 @@ const AddLocation = () => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

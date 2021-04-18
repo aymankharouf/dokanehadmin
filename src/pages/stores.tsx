@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import { showMessage, showError, getMessage } from '../data/actions'
+import { showError } from '../data/actions'
 import labels from '../data/labels'
 import { Store } from '../data/interfaces'
 
@@ -11,11 +10,7 @@ const Stores = () => {
   const [error, setError] = useState('')
   const [stores, setStores] = useState<Store[]>([])
   useEffect(() => {
-    setStores(() => {
-      const today = new Date()
-      today.setDate(today.getDate() - 30)
-      return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-    })
+    setStores(() => [...state.stores].sort((s1, s2) => s1.name > s2.name ? 1 : -1))
   }, [state.stores])
   useEffect(() => {
     if (error) {
@@ -30,7 +25,7 @@ const Stores = () => {
         <List>
           {stores.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : stores.map((s: any) =>
+          : stores.map(s =>
               <ListItem 
                 link={`/store-details/${s.id}`} 
                 title={s.name}
@@ -46,9 +41,6 @@ const Stores = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-store/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

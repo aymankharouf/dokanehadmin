@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
+import { Customer } from '../data/interfaces'
 
 interface Props {
   id: string
@@ -10,12 +10,12 @@ interface Props {
 const StoreOwners = (props: Props) => {
   const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
-  const [storeOwners, setStoreOwners] = useState([])
+  const [storeOwners, setStoreOwners] = useState<Customer[]>([])
   useEffect(() => {
     setStoreOwners(() => {
-      let storeOwners = state.customers.filter((c: any) => c.storeId === props.id)
+      let storeOwners = state.customers.filter(c => c.storeId === props.id)
       storeOwners = storeOwners.map((o: any) => {
-        const customerInfo = state.customers.find((c: any) => c.id === o.id)
+        const customerInfo = state.customers.find(c => c.id === o.id)
         return {
           ...o,
           customerInfo,
@@ -41,9 +41,6 @@ const StoreOwners = (props: Props) => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

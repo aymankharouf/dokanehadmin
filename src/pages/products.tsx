@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
@@ -83,9 +82,6 @@ const Products = (props: Props) => {
 
         </FabButtons>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Button, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
@@ -49,12 +48,12 @@ const Logs = () => {
         <List mediaList>
           {logs.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : logs.map((l: any) => 
+          : logs.map(l => 
               <ListItem
                 title={`${labels.user}: ${l.userInfo?.name || l.userId}`}
                 subtitle={l.userInfo?.mobile ? `${labels.mobile}: ${l.userInfo.mobile}` : ''}
                 text={l.page}
-                footer={moment(l.time.toDate()).fromNow()}
+                footer={moment(l.time).fromNow()}
                 key={l.id}
               >
                 <div className="list-subtext1">{l.error}</div>
@@ -64,9 +63,6 @@ const Logs = () => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

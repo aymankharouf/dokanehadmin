@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
-import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
@@ -29,9 +28,6 @@ const PasswordRequests = () => {
           }
         </List>
       </Block>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

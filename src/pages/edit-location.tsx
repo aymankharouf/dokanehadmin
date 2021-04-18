@@ -1,8 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import labels from '../data/labels'
 
 interface Props {
@@ -68,9 +67,6 @@ const EditLocation = (props: Props) => {
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

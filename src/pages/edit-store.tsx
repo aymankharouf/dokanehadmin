@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 import { editStore, showMessage, showError, getMessage } from '../data/actions'
@@ -178,14 +177,11 @@ const EditStore = (props: Props) => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {!name || !type || mobileErrorMessage || !hasChanged ? '' :
+      {name && type && !mobileErrorMessage && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

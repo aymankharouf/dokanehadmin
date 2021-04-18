@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import Footer from './footer'
 import labels from '../data/labels'
 
 interface Props {
@@ -9,11 +8,11 @@ interface Props {
 }
 const CustomerDetails = (props: Props) => {
   const { state } = useContext(StateContext)
-  const [customer, setCustomer] = useState(() => state.customers.find((c: any) => c.id === props.id))
+  const [customer, setCustomer] = useState(() => state.customers.find(c => c.id === props.id)!)
   const [userInfo, setUserInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
-  const [storeName] = useState(() => state.stores.find((s: any) => s.id === customer.storeId)?.name || '')
+  const [storeName] = useState(() => state.stores.find(s => s.id === customer.storeId)?.name)
   useEffect(() => {
-    setCustomer(() => state.customers.find((c: any) => c.id === props.id))
+    setCustomer(() => state.customers.find(c => c.id === props.id)!)
     setUserInfo(() => state.users.find((u: any) => u.id === props.id))
   }, [state.customers, state.users, props.id])
   return (
@@ -80,13 +79,6 @@ const CustomerDetails = (props: Props) => {
           readonly
         />
         <ListInput 
-          name="mapPosition" 
-          label={labels.mapPosition}
-          value={customer.mapPosition}
-          type="text"
-          readonly
-        />
-        <ListInput 
           name="address" 
           label={labels.address}
           value={customer.address}
@@ -98,9 +90,6 @@ const CustomerDetails = (props: Props) => {
           <Toggle color="red" checked={customer.isBlocked} disabled />
         </ListItem>
       </List>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

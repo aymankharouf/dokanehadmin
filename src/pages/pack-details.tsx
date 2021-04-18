@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton, Toolbar } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
-import Footer from './footer'
 import moment from 'moment'
 import labels from '../data/labels'
 
@@ -91,12 +90,6 @@ const PackDetails = (props: Props) => {
 		try{
       if (currentStorePack.offerEnd && new Date() > currentStorePack.offerEnd.toDate()) {
         throw new Error('offerEnded')
-      }
-			if (state.basket.storeId && state.basket.storeId !== currentStorePack.storeId){
-				throw new Error('twoDiffStores')
-      }
-      if (state.basket.packs?.find((p: any) => p.packId === pack.id)) {
-        throw new Error('alreadyInBasket')
       }
       let params
       if (pack.byWeight) {
@@ -218,9 +211,6 @@ const PackDetails = (props: Props) => {
           <ActionsButton onClick={() => handlePurchase()}>{labels.purchase}</ActionsButton>
         }
       </Actions>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

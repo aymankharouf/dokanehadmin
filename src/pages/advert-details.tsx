@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, Fab, Icon, Toolbar } from 'framework7-react'
+import { Page, Navbar, Card, CardContent, CardFooter, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import Footer from './footer'
 
 interface Props {
   id: string
@@ -28,9 +27,6 @@ const AdvertDetails = (props: Props) => {
           <p>{advert?.text}</p>
         </CardFooter>
       </Card>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }

@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
-import Footer from './footer'
+import { Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
@@ -32,9 +31,6 @@ const Trademarks = () => {
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-trademark/">
         <Icon material="add"></Icon>
       </Fab>
-      <Toolbar bottom>
-        <Footer/>
-      </Toolbar>
     </Page>
   )
 }
