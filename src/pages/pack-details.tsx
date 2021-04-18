@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop, Actions, ActionsButton, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import Footer from './footer'
 import moment from 'moment'
@@ -10,7 +10,7 @@ interface Props {
   id: string
 }
 const PackDetails = (props: Props) => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
   const [currentStorePack, setCurrentStorePack] = useState<any>('')
   const [actionOpened, setActionOpened] = useState(false);

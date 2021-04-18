@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
 interface Props {
   id: string
 }
 const ProductDetails = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [product, setProduct] = useState(() => state.products.find((p: any) => p.id === props.id))
   useEffect(() => {
     setProduct(() => state.products.find((p: any) => p.id === props.id))

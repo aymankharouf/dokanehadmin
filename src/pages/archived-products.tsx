@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError } from '../data/actions'
 
 const ArchivedProducts = () => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [products, setProducts] = useState<any>([])

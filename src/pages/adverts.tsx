@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
@@ -10,7 +10,7 @@ import { advertType } from '../data/config'
 import { Advert } from '../data/interfaces'
 
 const Adverts = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [currentAdvert, setCurrentAdvert] = useState<Advert>()
   const [error, setError] = useState('')
   const [adverts, setAdverts] = useState<Advert[]>([])

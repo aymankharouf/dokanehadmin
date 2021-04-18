@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { f7, Page, Block, Fab, Navbar, List, ListItem, Toolbar, Link, Icon, Stepper, Badge } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { quantityText } from '../data/actions'
 import labels from '../data/labels'
 
 const Basket = () => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StateContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === state.basket.storeId))
   const [basket, setBasket] = useState<any>([])
   const [totalPrice, setTotalPrice] = useState<any>()

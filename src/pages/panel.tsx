@@ -1,11 +1,11 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { logout } from '../data/actions'
 import labels from '../data/labels'
 
 const Panel = () => {
-  const { state, dispatch } = useContext(StoreContext)
+  const { state, dispatch } = useContext(StateContext)
   const [approvalsCount, setApprovalsAcount] = useState('')
   useEffect(() => {
     const newUsers = state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)).length

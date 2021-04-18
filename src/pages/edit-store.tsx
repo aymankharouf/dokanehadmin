@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import Footer from './footer'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
@@ -10,7 +10,7 @@ interface Props {
   id: string
 }
 const EditStore = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [type, setType] = useState(store.type)

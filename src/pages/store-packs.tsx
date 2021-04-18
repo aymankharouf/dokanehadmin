@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
@@ -10,7 +10,7 @@ interface Props {
   id: string
 }
 const StorePacks = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [storePacks, setStorePacks] = useState([])
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, Icon, Fab, ListInput, BlockTitle, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { approveAlarm, showMessage, showError, getMessage } from '../data/actions'
@@ -13,7 +13,7 @@ interface Props {
   userId: string
 }
 const AlarmDetails = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [newPackId, setNewPackId] = useState('')
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))

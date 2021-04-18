@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
 
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 const Products = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [products, setProducts] = useState([])
   useEffect(() => {

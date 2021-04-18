@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { editPackType, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
 import Footer from './footer'
 import labels from '../data/labels'
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 const EditPackType = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [packType] = useState(() => state.packTypes.find(c => c.id === props.id)!)
   const [name, setName] = useState(packType?.name)

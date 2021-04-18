@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Actions, ActionsButton, Fab, Icon, Toolbar } from 'framework7-react'
 import RatingStars from './rating-stars'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import Footer from './footer'
 import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
@@ -11,7 +11,7 @@ interface Props {
   type: string
 }
 const ProductPacks = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find((p: any) => p.id === props.id) : state.products.find((p: any) => p.id === props.id))
   const [packs, setPacks] = useState<any>([])

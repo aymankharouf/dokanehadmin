@@ -3,13 +3,13 @@ import { f7, Page, Block, Navbar, List, ListItem, Button, Toolbar } from 'framew
 import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
 
 
 const Logs = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [logs, setLogs] = useState<any>([])
   useEffect(() => {

@@ -3,12 +3,12 @@ import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
 
 const Alarms = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [alarms, setAlarms] = useState<any>([])
   useEffect(() => {
     setAlarms(() => {

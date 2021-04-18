@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import Footer from './footer'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -10,7 +10,7 @@ interface Props {
   mobile: string
 }
 const InvitationDetails = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))
   const [mobileCheck, setMobileCheck] = useState('')

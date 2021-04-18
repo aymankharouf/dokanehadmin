@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import Footer from './footer'
 import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 const Categories = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<any>([])
   const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id))

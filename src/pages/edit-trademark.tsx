@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { editTrademark, showMessage, showError, getMessage, deleteTrademark } from '../data/actions'
 import Footer from './footer'
 import labels from '../data/labels'
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 const EditCountry = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id)!)
   const [name, setName] = useState(trademark?.name)

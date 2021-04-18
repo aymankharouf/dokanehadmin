@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import { editLocation, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import Footer from './footer'
 import labels from '../data/labels'
 
@@ -9,7 +9,7 @@ interface Props {
   id: string
 }
 const EditLocation = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [location] = useState(() => state.locations.find(l => l.id === props.id)!)
   const [name, setName] = useState(location?.name)

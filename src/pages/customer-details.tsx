@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle, FabBackdrop, FabButton, FabButtons, Toolbar } from 'framework7-react'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import Footer from './footer'
 import labels from '../data/labels'
 
@@ -8,7 +8,7 @@ interface Props {
   id: string
 }
 const CustomerDetails = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [customer, setCustomer] = useState(() => state.customers.find((c: any) => c.id === props.id))
   const [userInfo, setUserInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
   const [storeName] = useState(() => state.stores.find((s: any) => s.id === customer.storeId)?.name || '')

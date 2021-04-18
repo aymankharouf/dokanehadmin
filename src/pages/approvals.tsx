@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, Button, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
 const Approvals = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [newUsers, setNewUsers] = useState([])
   const [alarms, setAlarms] = useState([])
   const [ratings, setRatings] = useState([])

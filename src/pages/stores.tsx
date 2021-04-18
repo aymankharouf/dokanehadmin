@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Badge, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import { showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
 const Stores = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [stores, setStores] = useState([])
   const [stock, setStock] = useState('')

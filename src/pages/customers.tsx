@@ -3,11 +3,11 @@ import { Page, Block, Navbar, List, ListItem, NavRight, Link, Searchbar, Toolbar
 import Footer from './footer'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
 const Customers = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [customers, setCustomers] = useState<any>([])
   useEffect(() => {
     setCustomers(() => [...state.customers].sort((c1, c2) => c2.time.seconds - c1.time.seconds))

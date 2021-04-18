@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
 
 const PackTypes = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [packTypes, setPackTypes] = useState(() => [...state.packTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
   useEffect(() => {
     setPackTypes(() => [...state.packTypes].sort((t1, t2) => t1.name > t2.name ? 1 : -1))

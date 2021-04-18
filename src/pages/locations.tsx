@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem, Fab, Icon, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
 
 const Locations = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [locations, setLocations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
   useEffect(() => {
     setLocations(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))

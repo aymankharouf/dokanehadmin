@@ -3,9 +3,9 @@ import Reducer from './reducer'
 import firebase from './firebase'
 import { State, Context, Category, PasswordRequest, Advert } from './interfaces'
 
-export const StoreContext = createContext({} as Context)
+export const StateContext = createContext({} as Context)
 
-const Store = (props: any) => {
+const StateProvider = (props: any) => {
   const localData = localStorage.getItem('basket')
   const basket = localData ? JSON.parse(localData) : ''
   const initState: State = {
@@ -196,11 +196,11 @@ const Store = (props: any) => {
     })
   }, [])
   return (
-    <StoreContext.Provider value={{state, dispatch}}>
+    <StateContext.Provider value={{state, dispatch}}>
       {props.children}
-    </StoreContext.Provider>
+    </StateContext.Provider>
   )
 }
  
-export default Store
+export default StateProvider
 

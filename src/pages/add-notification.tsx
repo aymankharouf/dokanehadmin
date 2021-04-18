@@ -3,11 +3,11 @@ import { sendNotification, showMessage, showError, getMessage } from '../data/ac
 import { f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
 import labels from '../data/labels'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 
 
 const AddNotification = () => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [userId, setUserId] = useState('')
   const [title, setTitle] = useState('')

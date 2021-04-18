@@ -1,14 +1,14 @@
 import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem, Toolbar } from 'framework7-react'
 import Footer from './footer'
-import { StoreContext } from '../data/store'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
 interface Props {
   id: string
 }
 const StoreOwners = (props: Props) => {
-  const { state } = useContext(StoreContext)
+  const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find((s: any) => s.id === props.id))
   const [storeOwners, setStoreOwners] = useState([])
   useEffect(() => {
