@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect } from 'react'
+import {useState, useContext, useEffect, ChangeEvent } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
@@ -10,14 +10,14 @@ interface Props {
 const EditAdvert = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
+  const [advert] = useState(() => state.adverts.find(a => a.id === props.id)!)
   const [title, setTitle] = useState(advert?.title)
   const [text, setText] = useState(advert?.text)
   const [imageUrl, setImageUrl] = useState(advert?.imageUrl)
   const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
     const filename = files[0].name
@@ -26,9 +26,9 @@ const EditAdvert = (props: Props) => {
       return
     }
     const fileReader = new FileReader()
-    // fileReader.addEventListener('load', () => {
-    //   if (fileReader.result) setImageUrl(fileReader.result)
-    // })
+    fileReader.addEventListener('load', () => {
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
+    })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
@@ -50,7 +50,6 @@ const EditAdvert = (props: Props) => {
         ...advert,
         title,
         text,
-        imageUrl
       }
       editAdvert(newAdvert, image)
       showMessage(labels.editSuccess)
@@ -63,7 +62,7 @@ const EditAdvert = (props: Props) => {
     <Page>
       <Navbar title={labels.editAdvert} backLink={labels.back} />
       <List form inlineLabels>
-      <ListInput 
+        <ListInput 
           name="title" 
           label={labels.title}
           clearButton

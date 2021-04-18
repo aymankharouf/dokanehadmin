@@ -10,7 +10,6 @@ const AddCountry = () => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [ename, setEname] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -24,8 +23,7 @@ const AddCountry = () => {
       }
       addCountry({
         id: Math.random().toString(),
-        name,
-        ename
+        name
       })
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
@@ -45,15 +43,6 @@ const AddCountry = () => {
           value={name}
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ename" 
-          label={labels.ename} 
-          clearButton
-          type="text"
-          value={ename}
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
         />
       </List>
       {name &&

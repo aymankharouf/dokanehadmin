@@ -18,7 +18,7 @@ const EditProduct = (props: Props) => {
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [countryId, setCountryId] = useState(product.countryId)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
@@ -68,7 +68,7 @@ const EditProduct = (props: Props) => {
         trademarkId,
         countryId,
       }
-      editProduct(newProduct, product.name, image, state.packs)
+      editProduct(newProduct, product.name, state.packs, image)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {

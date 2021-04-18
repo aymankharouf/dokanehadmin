@@ -29,6 +29,7 @@ const Adverts = () => {
     setActionOpened(true)
   }
   const handleUpdate = () => {
+    if (!currentAdvert) return
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         updateAdvertStatus(currentAdvert, state.adverts)
@@ -39,6 +40,7 @@ const Adverts = () => {
     })  
   }
   const handleDelete = () => {
+    if (!currentAdvert) return
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteAdvert(currentAdvert)

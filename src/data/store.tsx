@@ -72,7 +72,7 @@ const Store = (props: any) => {
           id: doc.id,
           mobile: doc.data().mobile,
           status: doc.data().status,
-          time: doc.data().time
+          time: doc.data().time.toDate()
         })
       })
       dispatch({type: 'SET_PASSWORD_REQUESTS', payload: passwordRequests})

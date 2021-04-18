@@ -8,7 +8,6 @@ import Basket from './pages/basket'
 import Stores from './pages/stores'
 import StorePacks from './pages/store-packs'
 import AddStorePack from './pages/add-store-pack'
-import AddStorePayment from './pages/add-store-payment'
 import AddProduct from './pages/add-product'
 import AddStore from './pages/add-store'
 import EditProduct from './pages/edit-product'
@@ -219,10 +218,6 @@ const routes = [
   {
     path: '/add-store-pack/:id',
     component: AddStorePack
-  },
-  {
-    path: '/add-store-payment/:id',
-    component: AddStorePayment
   },
   {
     path: '/add-pack-store/:id',

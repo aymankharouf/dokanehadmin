@@ -11,7 +11,7 @@ interface Props {
 const EditPackType = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [packType] = useState(() => state.packTypes.find(c => c.id === props.id))
+  const [packType] = useState(() => state.packTypes.find(c => c.id === props.id)!)
   const [name, setName] = useState(packType?.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {

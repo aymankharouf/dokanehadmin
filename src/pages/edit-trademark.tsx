@@ -11,7 +11,7 @@ interface Props {
 const EditCountry = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id))
+  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id)!)
   const [name, setName] = useState(trademark?.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {

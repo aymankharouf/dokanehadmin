@@ -16,7 +16,7 @@ const AddPack = (props: Props) => {
   const [byWeight, setByWeight] = useState(false)
   const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find((p: any) => p.id === props.id))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {

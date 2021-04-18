@@ -11,7 +11,7 @@ interface Props {
 const EditCategory = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [category] = useState(() => state.categories.find(c => c.id === props.id))
+  const [category] = useState(() => state.categories.find(c => c.id === props.id)!)
   const [name, setName] = useState(category?.name)
   const [ordering, setOrdering] = useState(category?.ordering)
   const [parentId, setParentId] = useState(category?.parentId)
@@ -25,7 +25,7 @@ const EditCategory = (props: Props) => {
         name: getCategoryName(c, state.categories)
       }
     })
-    return categories.sort((c1: any, c2: any) => c1.name > c2.name ? 1 : -1)
+    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
   useEffect(() => {
     if (name !== category?.name
@@ -95,7 +95,7 @@ const EditCategory = (props: Props) => {
           type="number" 
           value={ordering}
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering(undefined)}
+          onInputClear={() => setOrdering(0)}
         />
         <ListItem>
           <span>{labels.isActive}</span>

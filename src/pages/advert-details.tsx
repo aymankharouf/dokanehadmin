@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, Card, CardContent, CardFooter, Fab, Icon, Toolbar } from 'framework7-react'
 import { StoreContext } from '../data/store'
 import labels from '../data/labels'
@@ -9,7 +9,10 @@ interface Props {
 }
 const AdvertDetails = (props: Props) => {
   const { state } = useContext(StoreContext)
-  const [advert] = useState(() => state.adverts.find(a => a.id === props.id))
+  const [advert, setAdvert] = useState(() => state.adverts.find(a => a.id === props.id))
+  useEffect(() => {
+    setAdvert(() => state.adverts.find(a => a.id === props.id))
+  }, [state.adverts, props.id])
   return (
     <Page>
       <Navbar title={labels.advertDetails} backLink={labels.back} />

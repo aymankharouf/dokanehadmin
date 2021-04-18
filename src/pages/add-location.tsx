@@ -8,7 +8,7 @@ import labels from '../data/labels'
 const AddLocation = () => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState('')
+  const [ordering, setOrdering] = useState(0)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -48,7 +48,7 @@ const AddLocation = () => {
           type="number" 
           value={ordering} 
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
+          onInputClear={() => setOrdering(0)}
         />
       </List>
       {name && ordering &&

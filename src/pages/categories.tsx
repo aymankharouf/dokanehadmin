@@ -39,6 +39,7 @@ const Categories = (props: Props) => {
   }, [error])
   const handleDelete = () => {
     try{
+      if (!currentCategory) return
       deleteCategory(currentCategory, state.categories)
       showMessage(labels.deleteSuccess)
       f7.views.current.router.back()

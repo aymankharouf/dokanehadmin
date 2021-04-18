@@ -17,7 +17,7 @@ const EditBulk = (props: Props) => {
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [forSale, setForSale] = useState(pack.forSale)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
     const packs = state.packs.filter((p: any) => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
@@ -83,7 +83,7 @@ const EditBulk = (props: Props) => {
         unitsCount: subQuantity * subPackInfo.unitsCount,
         forSale
       }
-      editPack(newPack, pack, image, state.packs)
+      editPack(newPack, pack, state.packs, image)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {

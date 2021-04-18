@@ -11,7 +11,7 @@ interface Props {
 const EditLocation = (props: Props) => {
   const { state } = useContext(StoreContext)
   const [error, setError] = useState('')
-  const [location] = useState(() => state.locations.find(l => l.id === props.id))
+  const [location] = useState(() => state.locations.find(l => l.id === props.id)!)
   const [name, setName] = useState(location?.name)
   const [ordering, setOrdering] = useState(location?.ordering)
   const [hasChanged, setHasChanged] = useState(false)
@@ -60,7 +60,7 @@ const EditLocation = (props: Props) => {
           type="number" 
           value={ordering} 
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering(undefined)}
+          onInputClear={() => setOrdering(0)}
         />
       </List>
       {name && ordering && hasChanged &&

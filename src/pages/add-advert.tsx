@@ -20,9 +20,9 @@ const AddAdvert = () => {
       return
     }
     const fileReader = new FileReader()
-    // fileReader.addEventListener('load', () => {
-    //   setImageUrl(fileReader.result)
-    // })
+    fileReader.addEventListener('load', () => {
+      if (fileReader.result) setImageUrl(fileReader.result?.toString())
+    })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }

@@ -9,7 +9,6 @@ interface Props {
 const AddCategory = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [ename, setEname] = useState('')
   const [ordering, setOrdering] = useState('')
   useEffect(() => {
     if (error) {
@@ -19,7 +18,7 @@ const AddCategory = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      addCategory(props.id, name, ename, Number(ordering))
+      addCategory(props.id, name, Number(ordering))
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -41,15 +40,6 @@ const AddCategory = (props: Props) => {
           onInputClear={() => setName('')}
         />
         <ListInput 
-          name="ename" 
-          label={labels.ename}
-          clearButton
-          type="text"
-          value={ename}
-          onChange={e => setEname(e.target.value)}
-          onInputClear={() => setEname('')}
-        />
-        <ListInput 
           name="ordering" 
           label={labels.ordering}
           clearButton
@@ -59,7 +49,7 @@ const AddCategory = (props: Props) => {
           onInputClear={() => setOrdering('')}
         />
       </List>
-      {!name || !ordering ? '' :
+      {name && ordering &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

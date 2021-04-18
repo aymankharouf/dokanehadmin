@@ -15,7 +15,7 @@ const AddBulk = (props: Props) => {
   const [subQuantity, setSubQuantity] = useState<any>()
   const [specialImage, setSpecialImage] = useState(false)
   const [forSale, setForSale] = useState(true)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find((p: any) => p.id === props.id))
   const [packs] = useState(() => {
     const packs = state.packs.filter((p: any) => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)

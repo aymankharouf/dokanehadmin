@@ -17,7 +17,7 @@ const AddProduct = (props: Props) => {
   const [trademarkId, setTrademarkId] = useState('')
   const [countryId, setCountryId] = useState('')
   const [imageUrl, setImageUrl] = useState<any>()
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [categories] = useState(() => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
