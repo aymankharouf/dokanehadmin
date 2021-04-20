@@ -76,26 +76,32 @@ export interface Friend {
   status: string
 }
 export interface Rating {
-  productId: string
+  productId: string,
+  status: string
 }
 export interface Alarm {
+  id: string,
   packId?: string,
   type: string,
-  price?: number,
+  price: number,
   quantity?: number,
   alternative?: string,
   offerDays?: number,
   status: string
 }
 export interface User {
+  id: string,
   name: string,
   mobile: string,
   locationId: string,
+  storeName?: string,
   notifications?: Notification[],
+  notifyFriends?: Friend[],
   friends?: Friend[],
   ratings?: Rating[],
   favorites?: string[],
-  alarms?: Alarm[]
+  alarms?: Alarm[],
+  colors?: string[]
 }
 export interface Customer {
   id: string,
@@ -179,7 +185,7 @@ export interface Log {
 }
 export interface State {
   user?: firebase.User,
-  users: any,
+  users: User[],
   customers: Customer[],
   categories: Category[],
   packs: Pack[],
@@ -194,10 +200,10 @@ export interface State {
   products: Product[],
   logs: Log[],
   archivedPacks: Pack[],
-  notifications: any,
-  alarms: any,
-  ratings: any,
-  invitations: any,
+  notifications: Notification[],
+  alarms: Alarm[],
+  ratings: Rating[],
+  invitations: Friend[],
   packTypes: PackType[]
 }
 

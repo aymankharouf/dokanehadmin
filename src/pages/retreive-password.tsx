@@ -14,7 +14,7 @@ const RetreivePassword = (props: Props) => {
   const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === props.id))
   const [userInfo] = useState(() => state.users.find((u: any) => u.mobile === passwordRequest?.mobile))
   const [password] = useState(() => {
-    const password = userInfo?.colors?.map((c: any) => randomColors.find(rc => rc.name === c)?.id)
+    const password = userInfo?.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
     return password?.join('')
   })
   useEffect(() => {

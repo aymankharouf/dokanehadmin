@@ -11,7 +11,7 @@ interface Props {
 const InvitationDetails = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.userId)!)
   const [mobileCheck, setMobileCheck] = useState('')
   useEffect(() => {
     setMobileCheck(() => {
@@ -57,7 +57,7 @@ const InvitationDetails = (props: Props) => {
         <ListInput 
           name="friendName" 
           label={labels.friendName}
-          value={userInfo.friends.find((f: any) => f.mobile === props.mobile).name}
+          value={userInfo.friends?.find(f => f.mobile === props.mobile)?.name}
           type="text"
           readonly
         />

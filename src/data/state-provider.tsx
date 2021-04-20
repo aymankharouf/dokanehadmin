@@ -1,11 +1,14 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Friend } from './interfaces'
 
 export const StateContext = createContext({} as Context)
 
-const StateProvider = (props: any) => {
+interface Props {
+  children: React.ReactElement
+}
+const StateProvider = ({ children }: Props) => {
   const initState: State = {
     categories: [], 
     locations: [], 
@@ -159,13 +162,18 @@ const StateProvider = (props: any) => {
           unsubscribeProducts()
         })    
         const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
-          let users: any = []
-          let notifications: any = []
-          let alarms: any = []
-          let ratings: any = []
-          let invitations: any = []
+          let users: User[] = []
+          let notifications: Notification[] = []
+          let alarms: Alarm[] = []
+          let ratings: Rating[] = []
+          let invitations: Friend[] = []
           docs.forEach(doc => {
-            users.push({...doc.data(), id:doc.id})
+            users.push({
+              id: doc.id,
+              locationId: doc.data().locationId,
+              mobile: doc.data().mobile,
+              name: doc.data().name,
+            })
             if (doc.data().notifications) {
               doc.data().notifications.forEach((n: any) => {
                 notifications.push({...n, userId: doc.id})
@@ -233,7 +241,7 @@ const StateProvider = (props: any) => {
   }, [])
   return (
     <StateContext.Provider value={{state, dispatch}}>
-      {props.children}
+      {children}
     </StateContext.Provider>
   )
 }

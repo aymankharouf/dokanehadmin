@@ -3,11 +3,12 @@ import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-reac
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { approveRating, showMessage, showError, getMessage } from '../data/actions'
+import { Rating } from '../data/interfaces'
 
 const Ratings = () => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [ratings, setRatings] = useState([])
+  const [ratings, setRatings] = useState<Rating[]>([])
   useEffect(() => {
     setRatings(() => {
       const ratings = state.ratings.filter((r: any) => r.status === 'n')

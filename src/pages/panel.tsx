@@ -6,15 +6,15 @@ import labels from '../data/labels'
 
 const Panel = () => {
   const { state, dispatch } = useContext(StateContext)
-  const [approvalsCount, setApprovalsAcount] = useState('')
+  const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {
-    const newUsers = state.users.filter((u: any) => !state.customers.find((c: any) => c.id === u.id)).length
-    const alarms = state.alarms.filter((a: any) => a.status === 'n').length
-    const ratings = state.ratings.filter((r: any) => r.status === 'n').length
-    const invitations = state.invitations.filter((i: any) => i.status === 'n').length
+    const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id)).length
+    const alarms = state.alarms.filter(a => a.status === 'n').length
+    const ratings = state.ratings.filter(r => r.status === 'n').length
+    const invitations = state.invitations.filter(i => i.status === 'n').length
     const passwordRequests = state.passwordRequests.length
-    const newStoresOwners = state.customers.filter((c: any) => c.storeName && !c.storeId).length
-    const notifyFriends = state.users.filter((u: any) => u.notifyFriends?.length > 0).length
+    const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
+    const notifyFriends = state.users.filter(u => (u.notifyFriends?.length ?? 0) > 0).length
     setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners + notifyFriends)
   }, [state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
   const handleLogout = () => {

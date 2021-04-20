@@ -9,11 +9,11 @@ interface Props {
 const CustomerDetails = (props: Props) => {
   const { state } = useContext(StateContext)
   const [customer, setCustomer] = useState(() => state.customers.find(c => c.id === props.id)!)
-  const [userInfo, setUserInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
+  const [userInfo, setUserInfo] = useState(() => state.users.find(u => u.id === props.id)!)
   const [storeName] = useState(() => state.stores.find(s => s.id === customer.storeId)?.name)
   useEffect(() => {
     setCustomer(() => state.customers.find(c => c.id === props.id)!)
-    setUserInfo(() => state.users.find((u: any) => u.id === props.id))
+    setUserInfo(() => state.users.find(u => u.id === props.id)!)
   }, [state.customers, state.users, props.id])
   return (
     <Page>

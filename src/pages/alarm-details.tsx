@@ -15,9 +15,9 @@ const AlarmDetails = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [newPackId, setNewPackId] = useState('')
-  const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.userId)!)
   const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId)!)
-  const [alarm] = useState(() => userInfo.alarms.find((a: any) => a.id === props.id))
+  const [alarm] = useState(() => userInfo.alarms?.find(a => a.id === props.id)!)
   const [pack] = useState(() => state.packs.find(p => p.id === alarm.packId)!)
   const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name)
   const [packs] = useState(() => {

@@ -11,7 +11,7 @@ const ApproveUser = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.id)!)
   const [name, setName] = useState(userInfo.name)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [storeId, setStoreId] = useState('')

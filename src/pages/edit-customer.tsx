@@ -11,7 +11,7 @@ const EditCustomer = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [customer] = useState(() => state.customers.find(c => c.id === props.id)!)
-  const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.id))
+  const [userInfo] = useState(() => state.users.find(u => u.id === props.id)!)
   const [name, setName] = useState(userInfo.name)
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
