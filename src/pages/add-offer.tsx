@@ -21,8 +21,8 @@ const AddOffer = (props: Props) => {
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [packs] = useState(() => {
-    const packs = state.packs.filter((p: any) => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
-    return packs.map((p: any) => {
+    const packs = state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
       return {
         id: p.id,
         name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
@@ -31,14 +31,14 @@ const AddOffer = (props: Props) => {
   })
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [bonusPacks] = useState(() => {
-    let packs = state.packs.filter((p: any) => p.productId !== props.id && !p.isOffer && !p.byWeight && p.forSale)
-    packs = packs.map((p: any) => {
+    const packs = state.packs.filter(p => p.productId !== props.id && !p.isOffer && !p.byWeight && p.forSale)
+    const bonusPacks = packs.map(p => {
       return {
         id: p.id,
         name: `${p.productName} ${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
       }
     })
-    return packs.sort((p1: any, p2: any) => p1.name > p2.name ? 1 : -1)
+    return bonusPacks.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   })
   useEffect(() => {
     if (error) {
@@ -52,11 +52,11 @@ const AddOffer = (props: Props) => {
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
-      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find((p: any) => p.id === subPackId).name}`
+      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
       if (!name) setName(suggestedName)
     }
     if (name === suggestedName && bonusPackId && bonusQuantity) {
-      const bonusPackInfo = bonusPacks.find((p: any) => p.id === bonusPackId)
+      const bonusPackInfo = bonusPacks.find(p => p.id === bonusPackId)!
       suggestedName += ` + ${bonusQuantity > 1 ? bonusQuantity + '×' : ''}${bonusPackInfo.name}`
       setName(suggestedName)
     }
@@ -77,9 +77,9 @@ const AddOffer = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      const subPackInfo = state.packs.find((p: any) => p.id === subPackId)
-      const bonusPackInfo = state.packs.find((p: any) => p.id === bonusPackId)
-      if (state.packs.find((p: any) => p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+      const subPackInfo = state.packs.find(p => p.id === subPackId)!
+      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
+      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
         throw new Error('duplicateName')
       }
       if (Number(subPercent) + Number(bonusPercent) !== 100) {

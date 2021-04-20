@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack } from './interfaces'
 
 export const StateContext = createContext({} as Context)
 
@@ -47,12 +47,33 @@ const StateProvider = (props: any) => {
       unsubscribeCategories()
     })
     const unsubscribePacks = firebase.firestore().collection('packs').where('isArchived', '==', false).onSnapshot(docs => {
-      let packs: any = []
-      let packPrices: any = []
+      let packs: Pack[] = []
+      let packPrices: PackPrice[] = []
       docs.forEach(doc => {
-        packs.push({...doc.data(), id: doc.id})
+        packs.push({
+          id: doc.id,
+          name: doc.data().name,
+          productId: doc.data().productId,
+          productName: doc.data().productName,
+          productDescription: doc.data().productDescription,
+          categoryId: doc.data().categoryId,
+          countryId: doc.data().countryId,
+          imageUrl: doc.data().imageUrl,
+          price: doc.data().price,
+          sales: doc.data().sales,
+          isDivided: doc.data().isDivided,
+          isOffer: doc.data().isOffer,
+          offerEnd: doc.data().offerEnd,
+          rating: doc.data().rating,
+          closeExpired: doc.data().closeExpired,
+          byWeight: doc.data().byWeight,
+          ratingCount: doc.data().ratingCount,
+          weightedPrice: doc.data().weightedPrice,
+          forSale: doc.data().forSale,
+          unitsCount: doc.data().unitsCount
+        })
         if (doc.data().prices) {
-          doc.data().prices.forEach((p: any) => {
+          doc.data().prices.forEach((p: PackPrice) => {
             packPrices.push({...p, packId: doc.id})
           })
         }

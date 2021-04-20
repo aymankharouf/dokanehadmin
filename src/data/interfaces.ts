@@ -46,7 +46,10 @@ export interface Pack {
   ratingCount: number,
   categoryName?: string,
   trademarkName?: string,
-  countryName?: string
+  countryName?: string,
+  byWeight: boolean,
+  forSale: boolean,
+  unitsCount: number
 }
 export interface PackPrice {
   storeId: string,
@@ -174,8 +177,8 @@ export interface State {
   users: any,
   customers: Customer[],
   categories: Category[],
-  packs: any,
-  packPrices: any,
+  packs: Pack[],
+  packPrices: PackPrice[],
   adverts: Advert[],
   locations: Location[],
   countries: Country[],
@@ -185,7 +188,7 @@ export interface State {
   stores: Store[],
   products: Product[],
   logs: Log[],
-  archivedPacks: any,
+  archivedPacks: Pack[],
   notifications: any,
   alarms: any,
   ratings: any,
