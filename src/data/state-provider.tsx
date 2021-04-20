@@ -55,6 +55,7 @@ const StateProvider = (props: any) => {
           name: doc.data().name,
           productId: doc.data().productId,
           productName: doc.data().productName,
+          productAlias: doc.data().productAlias,
           productDescription: doc.data().productDescription,
           categoryId: doc.data().categoryId,
           countryId: doc.data().countryId,

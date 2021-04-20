@@ -20,6 +20,7 @@ export interface Pack {
   name: string,
   productId: string,
   productName: string,
+  productAlias: string,
   productDescription?: string,
   imageUrl: string,
   price: number,
@@ -49,12 +50,16 @@ export interface Pack {
   countryName?: string,
   byWeight: boolean,
   forSale: boolean,
-  unitsCount: number
+  unitsCount: number,
+  specialImage?: boolean
 }
 export interface PackPrice {
   storeId: string,
   packId: string,
   price: number,
+  cost: number,
+  isActive: boolean,
+  isAuto: boolean,
   packInfo?: Pack
   time: Date
 }

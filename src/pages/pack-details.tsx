@@ -4,18 +4,19 @@ import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import moment from 'moment'
 import labels from '../data/labels'
+import { Pack } from '../data/interfaces'
 
-interface Props {
-  id: string
-}
+type Props = {id: string}
+type ExtendedPack = Pack & {detailsCount: number} 
+
 const PackDetails = (props: Props) => {
   const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
   const [currentStorePack, setCurrentStorePack] = useState<any>('')
   const [actionOpened, setActionOpened] = useState(false);
-  const [pack, setPack] = useState(() => {
-    const pack = state.packs.find((p: any) => p.id === props.id)
-    let detailsCount = state.packPrices.filter((p: any) => p.packId === pack.id).length
+  const [pack, setPack] = useState<ExtendedPack>(() => {
+    const pack = state.packs.find(p => p.id === props.id)!
+    const detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
     return {
       ...pack,
       detailsCount
@@ -43,7 +44,7 @@ const PackDetails = (props: Props) => {
   }, [pack, state.stores, state.packPrices, state.packs])
   useEffect(() => {
     setPack(() => {
-      const pack = state.packs.find((p: any) => p.id === props.id) || ''
+      const pack = state.packs.find(p => p.id === props.id)!
       let detailsCount = state.packPrices.filter((p: any) => p.packId === pack.id).length
       return {
         ...pack,

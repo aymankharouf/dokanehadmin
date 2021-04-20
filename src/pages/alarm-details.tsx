@@ -18,35 +18,35 @@ const AlarmDetails = (props: Props) => {
   const [userInfo] = useState(() => state.users.find((u: any) => u.id === props.userId))
   const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId)!)
   const [alarm] = useState(() => userInfo.alarms.find((a: any) => a.id === props.id))
-  const [pack] = useState(() => state.packs.find((p: any) => p.id === alarm.packId))
+  const [pack] = useState(() => state.packs.find(p => p.id === alarm.packId)!)
   const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name)
   const [packs] = useState(() => {
-    let packs = state.packs.filter((p: any) => p.id !== pack.id)
+    let packs = state.packs.filter(p => p.id !== pack.id)
     if (alarm.type === 'go') {
-      packs = packs.filter((p: any) => p.productId === pack.productId && p.isOffer)
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
     } else if (alarmTypes.type === 'eo') {
-      packs = packs.filter((p: any) => p.productId === pack.productId && p.isOffer && p.closeExpired)
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
     }
-    packs = packs.map((p: any) => {
+    const shortPacks = packs.map(p => {
       return {
         id: p.id,
         name: `${p.productName} ${p.name}`
       }
     })
-    return packs.sort((p1: any, p2: any) => p1.name > p2.name ? 1 : -1)
+    return shortPacks.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   })
   const [prices, setPrices] = useState<any>([])
   useEffect(() => {
     setPrices(() => {
-      let prices = state.packPrices.filter((p: any) => p.storeId !== customerInfo.storeId && p.packId === (newPackId || pack.id))
-      prices = prices.map((p: any) => {
-        const storeInfo = state.stores.find((s: any) => s.id === p.storeId)
+      const prices = state.packPrices.filter(p => p.storeId !== customerInfo.storeId && p.packId === (newPackId || pack.id))
+      const storePrices = prices.map(p => {
+        const storeInfo = state.stores.find(s => s.id === p.storeId)
         return {
           ...p,
           storeInfo
         }
       })
-      return prices.sort((p1: any, p2: any) => p1.price - p2.price)
+      return storePrices.sort((p1, p2) => p1.price - p2.price)
     })
   }, [state.packPrices, state.stores, customerInfo, pack, newPackId])
   useEffect(() => {

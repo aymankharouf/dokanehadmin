@@ -10,7 +10,7 @@ interface Props {
 const EditBulk = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [pack] = useState(() => state.packs.find((p: any) => p.id === props.id))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
@@ -20,8 +20,8 @@ const EditBulk = (props: Props) => {
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
-    const packs = state.packs.filter((p: any) => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
-    return packs.map((p: any) => {
+    const packs = state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
       return {
         id: p.id,
         name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
@@ -56,7 +56,7 @@ const EditBulk = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
@@ -64,8 +64,8 @@ const EditBulk = (props: Props) => {
 
   const handleSubmit = () => {
     try{
-      const subPackInfo = state.packs.find((p: any) => p.id === subPackId)
-      if (state.packs.find((p: any) => p.id !== pack.id && p.productId === pack.productId && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+      const subPackInfo = state.packs.find(p => p.id === subPackId)!
+      if (state.packs.find(p => p.id !== pack.id && p.productId === pack.productId && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
@@ -80,7 +80,7 @@ const EditBulk = (props: Props) => {
         byWeight: subPackInfo.byWeight,
         closeExpired: subPackInfo.closeExpired,
         subQuantity: Number(subQuantity),
-        unitsCount: subQuantity * subPackInfo.unitsCount,
+        unitsCount: (subQuantity ?? 0) * subPackInfo.unitsCount,
         forSale
       }
       editPack(newPack, pack, state.packs, image)
@@ -129,7 +129,7 @@ const EditBulk = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onInputClear={() => setSubQuantity(0)}
         />
         <ListItem>
           <span>{labels.forSale}</span>

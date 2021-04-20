@@ -10,7 +10,7 @@ interface Props {
 const EditPack = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [pack] = useState(() => state.packs.find((p: any) => p.id === props.id))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
   const [isDivided, setIsDivided] = useState(pack.isDivided)
@@ -18,7 +18,7 @@ const EditPack = (props: Props) => {
   const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   useEffect(() => {
     if (name !== pack.name
@@ -50,7 +50,7 @@ const EditPack = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
@@ -68,7 +68,7 @@ const EditPack = (props: Props) => {
         byWeight,
         closeExpired
       }
-      editPack(newPack, pack, image, state.packs)
+      editPack(newPack, pack, state.packs, image)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -95,7 +95,7 @@ const EditPack = (props: Props) => {
           type="number" 
           value={unitsCount} 
           onChange={e => setUnitsCount(e.target.value)}
-          onInputClear={() => setUnitsCount('')}
+          onInputClear={() => setUnitsCount(0)}
         />
         <ListItem>
           <span>{labels.isDivided}</span>

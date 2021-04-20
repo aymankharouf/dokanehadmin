@@ -4,6 +4,7 @@ import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
+import { PackPrice } from '../data/interfaces'
 
 interface Props {
   id: string
@@ -11,12 +12,12 @@ interface Props {
 const StorePacks = (props: Props) => {
   const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
-  const [storePacks, setStorePacks] = useState([])
+  const [storePacks, setStorePacks] = useState<PackPrice[]>([])
   useEffect(() => {
     setStorePacks(() => {
-      let storePacks = state.packPrices.filter((p: any) => p.storeId === props.id && !p.isAuto)
+      let storePacks = state.packPrices.filter(p => p.storeId === props.id && !p.isAuto)
       storePacks = storePacks.map((p: any) => {
-        const packInfo = state.packs.find((pa: any) => pa.id === p.packId)
+        const packInfo = state.packs.find(pa => pa.id === p.packId)!
         const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)
         return {
           ...p,

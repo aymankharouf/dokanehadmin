@@ -10,17 +10,17 @@ interface Props {
 const EditOffer = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [pack] = useState(() => state.packs.find((p: any) => p.id === props.id))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
-  const [subPercent, setSubPercent] = useState<any>(pack.subPercent * 100)
+  const [subPercent, setSubPercent] = useState<any>((pack.subPercent ?? 0) * 100)
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
-  const [bonusPercent, setBonusPercent] = useState<any>(pack.bonusPercent * 100)
+  const [bonusPercent, setBonusPercent] = useState<any>((pack.bonusPercent ?? 0) * 100)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
     const packs = state.packs.filter((p: any) => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
@@ -32,22 +32,22 @@ const EditOffer = (props: Props) => {
     })
   })
   const [bonusPacks] = useState(() => {
-    let packs = state.packs.filter((p: any) => p.productId !== pack.productId && !p.subPackId && !p.byWeight)
-    packs = packs.map((p: any) => {
+    const packs = state.packs.filter(p => p.productId !== pack.productId && !p.subPackId && !p.byWeight)
+    const result = packs.map(p => {
       return {
         id: p.id,
         name: `${p.productName} ${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
       }
     })
-    return packs.sort((p1: any, p2: any) => p1.name > p2.name ? 1 : -1)
+    return result.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }) 
   useEffect(() => {
     if (name !== pack.name
     || subPackId !== pack.subPackId
     || subQuantity !== pack.subQuantity
-    || subPercent !== pack.subPercent * 100
+    || subPercent !== (pack.subPercent ?? 0) * 100
     || bonusPackId !== pack.bonusPackId
-    || bonusQuantity !== pack.bonusQuantity * 100
+    || bonusQuantity !== (pack.bonusQuantity ?? 0) * 100
     || bonusPercent !== pack.bonusPercent
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
@@ -68,7 +68,7 @@ const EditOffer = (props: Props) => {
     }
     const fileReader = new FileReader()
     fileReader.addEventListener('load', () => {
-      setImageUrl(fileReader.result)
+      if (fileReader.result) setImageUrl(fileReader.result.toString())
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
@@ -76,9 +76,9 @@ const EditOffer = (props: Props) => {
 
   const handleSubmit = () => {
     try{
-      const subPackInfo = state.packs.find((p: any) => p.id === subPackId)
-      const bonusPackInfo = state.packs.find((p: any) => p.id === bonusPackId)
-      if (state.packs.find((p: any) => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+      const subPackInfo = state.packs.find(p => p.id === subPackId)!
+      const bonusPackInfo = state.packs.find(p => p.id === bonusPackId)
+      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
         throw new Error('duplicateName')
       }
       if (Number(subPercent) + Number(bonusPercent) !== 100) {
@@ -98,7 +98,7 @@ const EditOffer = (props: Props) => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: subQuantity * subPackInfo.unitsCount,
+        unitsCount: (subQuantity ?? 0) * subPackInfo.unitsCount,
         subPercent: subPercent / 100,
         subPackName: subPackInfo.name,
         isDivided: subPackInfo.isDivided,
@@ -110,7 +110,7 @@ const EditOffer = (props: Props) => {
         bonusQuantity: Number(bonusQuantity),
         bonusPercent: bonusPercent / 100
       }
-      editPack(newPack, pack, image, state.packs)
+      editPack(newPack, pack, state.packs, image)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -156,7 +156,7 @@ const EditOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onInputClear={() => setSubQuantity(0)}
         />
         <ListInput 
           name="subPercent" 
@@ -217,7 +217,7 @@ const EditOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setBonusQuantity(e.target.value)}
-          onInputClear={() => setBonusQuantity('')}
+          onInputClear={() => setBonusQuantity(0)}
         />
         <ListInput 
           name="bonusPercent" 

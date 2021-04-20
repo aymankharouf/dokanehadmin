@@ -16,8 +16,8 @@ const AddPackStore = (props: Props) => {
   const [isActive, setIsActive] = useState(false)
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState<any>()
-  const [stores] = useState(() => state.stores.filter((s: any) => s.id !== 's'))
-  const [pack] = useState(() => state.packs.find((p: any) => p.id === props.id))
+  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   useEffect(() => {
     if (error) {
       showError(error)
