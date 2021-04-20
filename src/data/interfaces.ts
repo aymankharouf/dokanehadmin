@@ -16,13 +16,13 @@ export interface Error {
   message: string
 }
 export interface Pack {
-  id: string,
+  id?: string,
   name: string,
   productId: string,
   productName: string,
   productAlias: string,
   productDescription?: string,
-  imageUrl: string,
+  imageUrl?: string,
   price: number,
   categoryId: string,
   sales: number,
@@ -36,21 +36,21 @@ export interface Pack {
   bonusPackName?: string,
   bonusQuantity?: number,
   bonusPercent?: number,
-  isOffer: boolean,
-  offerEnd: Date,
-  weightedPrice: number,
-  isDivided: boolean,
+  isOffer?: boolean,
+  offerEnd?: Date,
+  weightedPrice?: number,
+  isDivided?: boolean,
   minStoreId?: string,
   trademarkId?: string,
   countryId: string,
-  closeExpired: boolean,
-  ratingCount: number,
+  closeExpired?: boolean,
+  ratingCount?: number,
   categoryName?: string,
   trademarkName?: string,
   countryName?: string,
-  byWeight: boolean,
-  forSale: boolean,
-  unitsCount: number,
+  byWeight?: boolean,
+  forSale?: boolean,
+  unitsCount?: number,
   specialImage?: boolean
 }
 export interface PackPrice {
@@ -58,6 +58,7 @@ export interface PackPrice {
   packId: string,
   price: number,
   cost: number,
+  offerEnd?: Date,
   isActive: boolean,
   isAuto: boolean,
   packInfo?: Pack
@@ -161,7 +162,8 @@ export interface Product {
   imageUrl: string,
   rating: number,
   ratingCount: number,
-  categoryInfo?: Category
+  categoryInfo?: Category,
+  sales?: number
 }
 export interface Store {
   id: string,

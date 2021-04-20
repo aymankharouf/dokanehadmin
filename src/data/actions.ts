@@ -3,7 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
-import { Advert, Category, Country, Error, Location, Pack, PackType, Trademark } from './interfaces'
+import { Advert, Category, Country, Error, Location, Pack, PackPrice, PackType, Product, Trademark } from './interfaces'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -38,22 +38,11 @@ export const quantityText = (quantity: number, weight?: number): string => {
   return weight && weight !== quantity ? `${quantityText(quantity)}(${quantityText(weight)})` : quantity === Math.trunc(quantity) ? quantity.toString() : quantity.toFixed(3)
 }
 
-export const quantityDetails = (basketPack: any) => {
-  let text = `${labels.requested}: ${quantityText(basketPack.quantity)}`
-  if (basketPack.purchased > 0) {
-    text += `, ${labels.purchased}: ${quantityText(basketPack.purchased, basketPack.weight)}`
-  }
-  if (basketPack.returned > 0) {
-    text += `, ${labels.returned}: ${quantityText(basketPack.returned)}`
-  }
-  return text
-}
-
 export const addQuantity = (q1: number, q2: number, q3 = 0) => {
   return Math.trunc(q1 * 1000 + q2 * 1000 + q3 * 1000) / 1000
   }
 
-export const productOfText = (trademark: any, country: any) => {
+export const productOfText = (trademark: string, country: string) => {
   return trademark ? `${labels.productFrom} ${trademark}-${country}` : `${labels.productOf} ${country}`
 }
 
@@ -65,10 +54,10 @@ export const logout = () => {
   firebase.auth().signOut()
 }
 
-export const addPackPrice = (storePack: any, packPrices: any, packs: any, batch?: firebase.firestore.WriteBatch) => {
+export const addPackPrice = (storePack: PackPrice, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
   const { packId, ...others } = storePack
-  const pack = packs.find((p: any) => p.id === packId)
+  const pack = packs.find(p => p.id === packId)!
   let packRef = firebase.firestore().collection('packs').doc(pack.id)
   newBatch.update(packRef, {
     prices: firebase.firestore.FieldValue.arrayUnion(others)
@@ -84,13 +73,13 @@ export const addPackPrice = (storePack: any, packPrices: any, packs: any, batch?
     })
   }
   if (!pack.forSale) {
-    let subStorePack = packPrices.find((p: any) => p.storeId === storePack.storeId && p.packId === pack.subPackId)
+    let subStorePack = packPrices.find(p => p.storeId === storePack.storeId && p.packId === pack.subPackId)
     if (!subStorePack) {
       const subStorePack = {
-        packId: pack.subPackId,
+        packId: pack.subPackId!,
         storeId: storePack.storeId,
-        cost: Math.round(storePack.cost / pack.subQuantity),
-        price: Math.round(storePack.price / pack.subQuantity),
+        cost: Math.round(storePack.cost / (pack.subQuantity ?? 0)),
+        price: Math.round(storePack.price / (pack.subQuantity ?? 0)),
         offerEnd: storePack.offerEnd,
         isActive: storePack.isActive,
         isAuto: true,
@@ -104,7 +93,7 @@ export const addPackPrice = (storePack: any, packPrices: any, packs: any, batch?
   }
 }
 
-export const addProduct = async (product: any, image?: File) => {
+export const addProduct = async (product: Product, image?: File) => {
   const productRef = firebase.firestore().collection('products').doc()
   let imageUrl = ''
   if (image) {
@@ -117,7 +106,7 @@ export const addProduct = async (product: any, image?: File) => {
   productRef.set(product)
 }
 
-export const deleteProduct = async (product: any) => {
+export const deleteProduct = async (product: Product) => {
   if (product.imageUrl) {
     try{
       await firebase.storage().ref().child('products/' + product.id + '.jpg').delete()
@@ -128,10 +117,10 @@ export const deleteProduct = async (product: any) => {
   firebase.firestore().collection('products').doc(product.id).delete()
 }
 
-export const editProduct = async (product: any, oldName: string, packs: any, image?: File) => {
+export const editProduct = async (product: Product, oldName: string, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
   const { id, ...others } = product
-  let imageUrl: any
+  let imageUrl: string
   if (image) {
     const filename = image.name
     const ext = filename.slice(filename.lastIndexOf('.'))
@@ -141,19 +130,20 @@ export const editProduct = async (product: any, oldName: string, packs: any, ima
   }
   const productRef = firebase.firestore().collection('products').doc(id)
   batch.update(productRef, others)
-  let affectedPacks = packs.filter((p: any) => p.productId === id)
-  affectedPacks.forEach((p: any) => {
+  let affectedPacks = packs.filter(p => p.productId === id)
+  affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
-    const packInfo: any = {
+    const packInfo: Pack = {
       productName: product.name,
-      productEname: product.ename,
+      productAlias: product.alias,
       productDescription: product.description,
       categoryId: product.categoryId,
-      country: product.country,
-      trademark: product.trademark,
-      sales: product.sales,
+      countryId: product.countryId,
+      trademarkId: product.trademarkId,
+      sales: product.sales ?? 0,
       rating: product.rating,
-      ratingCount: product.ratingCount
+      ratingCount: product.ratingCount,
+      price: 0
     }
     if (image && ((!p.subPackId && !p.specialImage) || (p.subPackId && !p.specialImage && packs.find((sp: any) => sp.id === p.subPackId).specialImage === false))) {
       packInfo['imageUrl'] = imageUrl
