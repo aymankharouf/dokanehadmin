@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import { editPackType, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditPackType = (props: Props) => {

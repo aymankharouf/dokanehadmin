@@ -2,9 +2,9 @@ import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { Customer } from '../data/interfaces'
+import { Customer } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 type ExtendedCustomer = Customer & {customerInfo: Customer}

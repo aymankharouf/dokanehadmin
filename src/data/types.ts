@@ -1,9 +1,9 @@
 import firebase from './firebase'
 
-export interface Label {
+export type Label = {
     [key: string]: string
 }
-export interface Category {
+export type Category = {
   id: string,
   name: string,
   parentId: string,
@@ -11,11 +11,11 @@ export interface Category {
   isLeaf: boolean,
   isActive: boolean
 }
-export interface Error {
+export type Error = {
   code: string,
   message: string
 }
-export interface Pack {
+export type Pack = {
   id?: string,
   name: string,
   productId: string,
@@ -54,7 +54,7 @@ export interface Pack {
   specialImage?: boolean,
   packTypeId?: string
 }
-export interface PackPrice {
+export type PackPrice = {
   storeId: string,
   packId: string,
   price: number,
@@ -71,7 +71,7 @@ export interface PackPrice {
   unitPrice?: number,
   unitCost?: number
 }
-export interface Notification {
+export type Notification = {
   id: string,
   title: string,
   message: string,
@@ -79,13 +79,13 @@ export interface Notification {
   time: Date,
   userId: string
 }
-export interface Friend {
+export type Friend = {
   userId: string,
   mobile: string,
   name: string,
   status: string
 }
-export interface Rating {
+export type Rating = {
   productId: string,
   status: string,
   userId: string,
@@ -93,7 +93,7 @@ export interface Rating {
   userInfo?: User,
   productInfo?: Product
 }
-export interface Alarm {
+export type Alarm = {
   id: string,
   packId?: string,
   type: string,
@@ -107,7 +107,7 @@ export interface Alarm {
   storeId?: string,
   newPackId?: string
 }
-export interface User {
+export type User = {
   id: string,
   name: string,
   mobile: string,
@@ -121,7 +121,7 @@ export interface User {
   colors?: string[],
   time: Date
 }
-export interface Customer {
+export type Customer = {
   id: string,
   storeId: string,
   storeName: string,
@@ -133,7 +133,7 @@ export interface Customer {
   address: string,
   time?: Date
 }
-export interface Advert {
+export type Advert = {
   id?: string,
   type: string,
   title: string,
@@ -142,34 +142,30 @@ export interface Advert {
   imageUrl?: string,
   time: Date
 }
-export interface Location {
+export type Location = {
   id: string,
   name: string,
   ordering: number
 }
-export interface Country {
+export type Country = {
   id: string,
   name: string,
 }
-export interface Trademark {
+export type Trademark = {
   id: string,
   name: string,
 }
-export interface PackType {
+export type PackType = {
   id: string,
   name: string,
 }
-export interface PasswordRequest {
+export type PasswordRequest = {
   id: string,
   mobile: string,
   status: string,
   time: Date
 }
-export interface Discount {
-  value: number,
-  type: string
-}
-export interface Product {
+export type Product = {
   id?: string,
   name: string,
   alias: string,
@@ -183,7 +179,7 @@ export interface Product {
   categoryInfo?: Category,
   sales?: number
 }
-export interface Store {
+export type Store = {
   id?: string,
   type: string,
   name: string,
@@ -195,7 +191,7 @@ export interface Store {
   allowReturn: boolean,
   openTime: string
 }
-export interface Log {
+export type Log = {
   id: string,
   error: string,
   page: string,
@@ -203,12 +199,12 @@ export interface Log {
   time: Date,
   userInfo?: User
 }
-export interface AlarmType {
+export type AlarmType = {
   id: string,
   name: string,
   isAvailable: number
 }
-export interface State {
+export type State = {
   user?: firebase.User,
   users: User[],
   customers: Customer[],
@@ -232,12 +228,12 @@ export interface State {
   packTypes: PackType[]
 }
 
-export interface Action {
+export type Action = {
   type: string
   payload?: any
 }
 
-export interface Context {
+export type Context = {
   state: State;
   dispatch: React.Dispatch<Action>
 }

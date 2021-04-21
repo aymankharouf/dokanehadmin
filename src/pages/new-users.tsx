@@ -4,7 +4,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { User } from '../data/interfaces'
+import { User } from '../data/types'
 
 
 const NewUsers = () => {

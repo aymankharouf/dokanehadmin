@@ -3,7 +3,7 @@ import { Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework
 import { StateContext } from '../data/state-provider'
 import { showError } from '../data/actions'
 import labels from '../data/labels'
-import { Store } from '../data/interfaces'
+import { Store } from '../data/types'
 
 const Stores = () => {
   const { state } = useContext(StateContext)

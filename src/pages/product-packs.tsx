@@ -4,9 +4,9 @@ import RatingStars from './rating-stars'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
-import { Pack } from '../data/interfaces'
+import { Pack } from '../data/types'
 
-interface Props {
+type Props = {
   id: string,
   type: string
 }

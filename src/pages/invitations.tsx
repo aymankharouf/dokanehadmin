@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { Friend, User } from '../data/interfaces'
+import { Friend, User } from '../data/types'
 
 type ExtendedFriend = Friend & {userInfo: User}
 const Invitations = () => {

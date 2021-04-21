@@ -3,7 +3,7 @@ import { f7, Page, Navbar, List, ListInput, Button } from 'framework7-react'
 import { registerUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const Register = (props: Props) => {

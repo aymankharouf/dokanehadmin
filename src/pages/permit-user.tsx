@@ -4,7 +4,7 @@ import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { StateContext } from '../data/state-provider'
 
-interface Props {
+type Props = {
   id: string
 }
 const PermitUser = (props: Props) => {

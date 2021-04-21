@@ -4,9 +4,9 @@ import { StateContext } from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
-import { Category, Pack, PackPrice } from '../data/interfaces'
+import { Category, Pack, PackPrice } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 type ExtendedPackPrice = PackPrice & {

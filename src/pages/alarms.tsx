@@ -5,7 +5,7 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
-import { Alarm, AlarmType, Customer, Pack, User } from '../data/interfaces'
+import { Alarm, AlarmType, Customer, Pack, User } from '../data/types'
 
 type ExtendedAlarms = Alarm & {
   userInfo: User,

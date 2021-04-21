@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 
-interface Props {
+type Props = {
   id: string
 }
 const StoreDetails = (props: Props) => {

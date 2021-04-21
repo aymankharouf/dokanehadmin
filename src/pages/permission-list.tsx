@@ -3,9 +3,9 @@ import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, But
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
-import { Customer } from '../data/interfaces'
+import { Customer } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 const PermissionList = (props: Props) => {

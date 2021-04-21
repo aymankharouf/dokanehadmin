@@ -6,9 +6,9 @@ import 'moment/locale/ar'
 import { approveAlarm, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
-import { PackPrice, Store } from '../data/interfaces'
+import { PackPrice, Store } from '../data/types'
 
-interface Props {
+type Props = {
   id: string,
   userId: string
 }

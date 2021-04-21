@@ -3,9 +3,9 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
-import { Store } from '../data/interfaces'
+import { Store } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 const AddPackStore = (props: Props) => {

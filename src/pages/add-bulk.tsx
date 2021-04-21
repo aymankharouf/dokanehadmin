@@ -4,7 +4,7 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const AddBulk = (props: Props) => {

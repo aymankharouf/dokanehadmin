@@ -5,7 +5,7 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
-import { Log } from '../data/interfaces'
+import { Log } from '../data/types'
 
 const Logs = () => {
   const { state } = useContext(StateContext)

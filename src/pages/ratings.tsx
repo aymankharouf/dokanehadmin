@@ -3,7 +3,7 @@ import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-reac
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { approveRating, showMessage, showError, getMessage } from '../data/actions'
-import { Rating } from '../data/interfaces'
+import { Rating } from '../data/types'
 
 const Ratings = () => {
   const { state } = useContext(StateContext)

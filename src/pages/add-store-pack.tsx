@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
 
-interface Props {
+type Props = {
   id: string
 }
 const AddStorePack = (props: Props) => {

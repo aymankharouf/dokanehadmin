@@ -3,9 +3,9 @@ import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButto
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
-import { Category } from '../data/interfaces'
+import { Category } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 type ExtendedCategory = Category & {

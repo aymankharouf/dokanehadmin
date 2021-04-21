@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import moment from 'moment'
 import labels from '../data/labels'
-import { Pack, PackPrice } from '../data/interfaces'
+import { Pack, PackPrice } from '../data/types'
 
 type Props = {id: string}
 type ExtendedPack = Pack & {detailsCount: number} 

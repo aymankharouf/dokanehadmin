@@ -5,7 +5,7 @@ import { resolvePasswordRequest, showMessage, showError, getMessage } from '../d
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
 
-interface Props {
+type Props = {
   id: string
 }
 const RetreivePassword = (props: Props) => {

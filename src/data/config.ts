@@ -1,4 +1,4 @@
-import { AlarmType } from "./interfaces"
+import { AlarmType } from "./types"
 
 export const setup = {
   fixedFees: 0.01,

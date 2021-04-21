@@ -4,7 +4,7 @@ import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditLocation = (props: Props) => {

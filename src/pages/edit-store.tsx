@@ -5,7 +5,7 @@ import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 import { editStore, showMessage, showError, getMessage } from '../data/actions'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditStore = (props: Props) => {

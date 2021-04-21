@@ -1,11 +1,11 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Friend, Notification, Customer, Store } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Friend, Notification, Customer, Store } from './types'
 
 export const StateContext = createContext({} as Context)
 
-interface Props {
+type Props = {
   children: React.ReactElement
 }
 const StateProvider = ({ children }: Props) => {

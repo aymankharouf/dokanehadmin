@@ -1,4 +1,4 @@
-import { Label } from './interfaces'
+import { Label } from './types'
 
 const labels: Label = {
   offers: 'العروض',

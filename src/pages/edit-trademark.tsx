@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import { editTrademark, showMessage, showError, getMessage, deleteTrademark } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditCountry = (props: Props) => {

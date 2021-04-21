@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import { approveInvitation, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   userId: string,
   mobile: string
 }

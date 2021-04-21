@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditBulk = (props: Props) => {

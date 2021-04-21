@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert } from '../data/actions'
 import { advertType } from '../data/config'
-import { Advert } from '../data/interfaces'
+import { Advert } from '../data/types'
 
 const Adverts = () => {
   const { state } = useContext(StateContext)

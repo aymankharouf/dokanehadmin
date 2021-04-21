@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { editCategory, showMessage, showError, getMessage, getCategoryName } from '../data/actions'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditCategory = (props: Props) => {

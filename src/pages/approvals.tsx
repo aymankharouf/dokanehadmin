@@ -3,7 +3,7 @@ import { Page, Block, Navbar, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
-import { Alarm, Customer, Friend, Rating, User } from '../data/interfaces'
+import { Alarm, Customer, Friend, Rating, User } from '../data/types'
 
 type Section = {
   id: string,

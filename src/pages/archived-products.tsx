@@ -3,7 +3,7 @@ import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText } from '../data/actions'
-import { Product } from '../data/interfaces'
+import { Product } from '../data/types'
 
 const ArchivedProducts = () => {
   const { state, dispatch } = useContext(StateContext)

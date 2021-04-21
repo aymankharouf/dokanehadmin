@@ -3,7 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
-import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, User } from './interfaces'
+import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message

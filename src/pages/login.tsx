@@ -3,7 +3,7 @@ import { f7, Page, Navbar, List, ListInput, Button, Toolbar, Link } from 'framew
 import { login, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const Login = (props: Props) => {

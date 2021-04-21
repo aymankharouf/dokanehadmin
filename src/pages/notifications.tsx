@@ -5,7 +5,7 @@ import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { deleteNotification, showMessage, showError, getMessage } from '../data/actions'
-import { Notification, User } from '../data/interfaces'
+import { Notification, User } from '../data/types'
 
 type ExtendedNotification = Notification & {userInfo: User}
 const Notifications = () => {

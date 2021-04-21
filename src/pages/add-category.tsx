@@ -3,7 +3,7 @@ import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { addCategory, showMessage, showError, getMessage } from '../data/actions'
 
-interface Props {
+type Props = {
   id: string
 }
 const AddCategory = (props: Props) => {

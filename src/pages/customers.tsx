@@ -4,7 +4,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { Customer } from '../data/interfaces'
+import { Customer } from '../data/types'
 
 const Customers = () => {
   const { state } = useContext(StateContext)

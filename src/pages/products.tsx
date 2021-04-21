@@ -3,9 +3,9 @@ import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
-import { Product } from '../data/interfaces'
+import { Product } from '../data/types'
 
-interface Props {
+type Props = {
   id: string
 }
 const Products = (props: Props) => {

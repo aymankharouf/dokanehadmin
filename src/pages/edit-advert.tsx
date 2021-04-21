@@ -4,7 +4,7 @@ import { StateContext } from '../data/state-provider'
 import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 
-interface Props {
+type Props = {
   id: string
 }
 const EditAdvert = (props: Props) => {
