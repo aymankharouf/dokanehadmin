@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
@@ -12,14 +12,14 @@ const AddBulk = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState<any>()
+  const [subQuantity, setSubQuantity] = useState(0)
   const [specialImage, setSpecialImage] = useState(false)
   const [forSale, setForSale] = useState(true)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [packs] = useState(() => {
     const packs = state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight && p.forSale)
-    return packs.map((p: any) => {
+    return packs.map(p => {
       return {
         id: p.id,
         name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
@@ -39,13 +39,14 @@ const AddBulk = (props: Props) => {
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
-      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find((p: any) => p.id === subPackId)?.name}`
+      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
       if (!name) setName(suggestedName)
     }
   }
 
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)

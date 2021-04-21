@@ -51,7 +51,7 @@ export interface Pack {
   byWeight?: boolean,
   forSale?: boolean,
   unitsCount?: number,
-  specialImage?: boolean
+  specialImage?: boolean,
 }
 export interface PackPrice {
   storeId: string,
@@ -69,16 +69,20 @@ export interface Notification {
   title: string,
   message: string,
   status: string,
-  time: Date
+  time: Date,
+  userId: string
 }
 export interface Friend {
+  userId: string,
   mobile: string,
   name: string,
   status: string
 }
 export interface Rating {
   productId: string,
-  status: string
+  status: string,
+  userId: string,
+  userInfo?: User
 }
 export interface Alarm {
   id: string,
@@ -88,7 +92,8 @@ export interface Alarm {
   quantity?: number,
   alternative?: string,
   offerDays?: number,
-  status: string
+  status: string,
+  userId: string
 }
 export interface User {
   id: string,
@@ -106,7 +111,7 @@ export interface User {
 }
 export interface Customer {
   id: string,
-  storeId?: string,
+  storeId: string,
   storeName: string,
   name: string,
   isBlocked: boolean,

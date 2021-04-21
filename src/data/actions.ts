@@ -3,7 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
-import { Advert, Category, Country, Error, Location, Pack, PackPrice, PackType, Product, Trademark } from './interfaces'
+import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, User } from './interfaces'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -133,7 +133,7 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
   let affectedPacks = packs.filter(p => p.productId === id)
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
-    const packInfo: Pack = {
+    const packInfo = {
       productName: product.name,
       productAlias: product.alias,
       productDescription: product.description,
@@ -143,16 +143,18 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
       sales: product.sales ?? 0,
       rating: product.rating,
       ratingCount: product.ratingCount,
-      price: 0
+      imageUrl
     }
-    if (image && ((!p.subPackId && !p.specialImage) || (p.subPackId && !p.specialImage && packs.find((sp: any) => sp.id === p.subPackId).specialImage === false))) {
-      packInfo['imageUrl'] = imageUrl
+    if (image && ((!p.subPackId && !p.specialImage) || (p.subPackId && !p.specialImage && packs.find(sp => sp.id === p.subPackId)?.specialImage === false))) {
+      batch.update(packRef, packInfo)
+    } else {
+      const { imageUrl, ...others} = packInfo
+      batch.update(packRef, others)
     }
-    batch.update(packRef, packInfo)
   })
   if (product.name !== oldName) {
-    affectedPacks = packs.filter((p: any) => packs.find((bp: any) => bp.id === p.bonusPackId && bp.productId === id))
-    affectedPacks.forEach((p: any) => {
+    affectedPacks = packs.filter(p => packs.find(bp => bp.id === p.bonusPackId && bp.productId === id))
+    affectedPacks.forEach(p => {
       const packRef = firebase.firestore().collection('packs').doc(p.id)
       batch.update(packRef, {
         bonusProductName: product.name,
@@ -162,14 +164,17 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
   batch.commit()
 }
 
-export const editPrice = (storePack: any, oldPrice: number, packPrices: any, packs: any, batch?: firebase.firestore.WriteBatch) => {
+export const editPrice = (storePack: PackPrice, oldPrice: number, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
-  const { packId, ...others } = storePack
-  const pack = packs.find((p: any) => p.id === packId)
-  const prices = pack.prices.slice()
-  const storeIndex = prices.findIndex((p: any) => p.storeId === storePack.storeId)
-  prices.splice(storeIndex, 1, others)
-  let packRef = firebase.firestore().collection('packs').doc(packId)
+  const pack = packs.find(p => p.id === storePack.packId)!
+  const packStores = packPrices.filter(p => p.packId === storePack.packId)
+  const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
+  otherStores.push(storePack)
+  const prices = otherStores.map(p => {
+    const { packId, ...others } = p
+    return others
+  })
+  let packRef = firebase.firestore().collection('packs').doc(storePack.packId)
   newBatch.update(packRef, {
     prices
   })
@@ -184,13 +189,13 @@ export const editPrice = (storePack: any, oldPrice: number, packPrices: any, pac
     })
   }
   if (!pack.forSale) { 
-    let subStorePack = packPrices.find((p: any) => p.storeId === storePack.storeId && p.packId === pack.subPackId)
+    let subStorePack = packPrices.find(p => p.storeId === storePack.storeId && p.packId === pack.subPackId)
     if (subStorePack) {
       const subStorePackOldPrice = subStorePack.price
       subStorePack = {
         ...subStorePack,
-        cost: Math.round(storePack.cost / pack.subQuantity),
-        price: Math.round(storePack.price / pack.subQuantity),
+        cost: Math.round(storePack.cost / (pack.subQuantity ?? 0)),
+        price: Math.round(storePack.price / (pack.subQuantity ?? 0)),
       }
       editPrice(subStorePack, subStorePackOldPrice, packPrices, packs, newBatch)
     }
@@ -200,17 +205,20 @@ export const editPrice = (storePack: any, oldPrice: number, packPrices: any, pac
   }
 }
 
-export const changeStorePackStatus = (storePack: any, packPrices: any, packs: any, batch?: firebase.firestore.WriteBatch) => {
+export const changeStorePackStatus = (storePack: PackPrice, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
-  const { packId, ...others } = storePack
-  const pack = packs.find((p: any) => p.id === packId)
-  const prices = pack.prices.slice()
-  const storeIndex = prices.findIndex((p: any) => p.storeId === storePack.storeId)
+  const pack = packs.find(p => p.id === storePack.packId)!
+  const packStores = packPrices.filter(p => p.packId === storePack.packId)
+  const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
   const newStorePack = {
-    ...others,
+    ...storePack,
     isActive: !storePack.isActive
   }
-  prices.splice(storeIndex, 1, newStorePack)
+  otherStores.push(newStorePack)
+  const prices = otherStores.map(p => {
+    const { packId, ...others } = p
+    return others
+  })
   let packRef = firebase.firestore().collection('packs').doc(packId)
   newBatch.update(packRef, {
     prices
@@ -232,7 +240,7 @@ export const changeStorePackStatus = (storePack: any, packPrices: any, packs: an
     })
   }
   if (!pack.forSale) { 
-    const subStorePack = packPrices.find((p: any) => p.storeId === storePack.storeId && p.packId === pack.subPackId)
+    const subStorePack = packPrices.find(p => p.storeId === storePack.storeId && p.packId === pack.subPackId)
     if (subStorePack) {
       changeStorePackStatus(subStorePack, packPrices, packs, newBatch)
     }
@@ -242,44 +250,44 @@ export const changeStorePackStatus = (storePack: any, packPrices: any, packs: an
   }
 }
 
-const getMinPrice = (storePack: any, pack: any, packPrices: any, isDeletion: any) => {
-  const packStores = packPrices.filter((p: any) => p.packId === pack.id && p.storeId !== storePack.storeId && p.price > 0 && p.isActive)
+const getMinPrice = (storePack: PackPrice, pack: Pack, packPrices: PackPrice[], isDeletion: boolean) => {
+  const packStores = packPrices.filter(p => p.packId === pack.id && p.storeId !== storePack.storeId && p.price > 0 && p.isActive)
   if (!isDeletion && storePack.isActive){
     packStores.push(storePack)
   }
-  let minPrice: any, weightedPrice, offerEnd, minStoreId = ''
+  let minPrice: number, weightedPrice, offerEnd, minStoreId = ''
   if (packStores.length === 0){
     minPrice = 0
     weightedPrice = 0
     offerEnd = ''
   } else {
-    const prices = packStores.map((s: any) => s.price)
+    const prices = packStores.map(s => s.price)
     minPrice = Math.min(...prices)
-    weightedPrice = Math.round(minPrice / pack.unitsCount)
-    // packStores.sort((p1: any, p2: any) => (moment(p2.offerEnd) || moment().add(1000, 'days')) - (p1.offerEnd ? moment(p1.offerEnd) : moment().add(1000, 'days')))
-    offerEnd = packStores.find((s: any) => s.price === minPrice).offerEnd
-    if (packStores.filter((s: any) => s.price === minPrice).length === 1) {
-      minStoreId = packStores.find((s: any) => s.price === minPrice).storeId
+    weightedPrice = Math.round(minPrice / (pack.unitsCount ?? 0))
+    //packStores.sort((p1, p2) => (moment(p2.offerEnd) || moment().add(1000, 'days')) - (p1.offerEnd ? moment(p1.offerEnd) : moment().add(1000, 'days')))
+    offerEnd = packStores.find(s => s.price === minPrice)?.offerEnd
+    if (packStores.filter(s => s.price === minPrice).length === 1) {
+      minStoreId = packStores.find(s => s.price === minPrice)?.storeId || ''
     }
   }
   return {minPrice, minStoreId, weightedPrice, offerEnd}
 }
 
-export const refreshPackPrice = (pack: any, packPrices: any) => {
-  let packStores = packPrices.filter((p: any) => p.packId === pack.id && p.price > 0 && p.isActive)
-  let minPrice: any, weightedPrice, offerEnd, minStoreId = ''
+export const refreshPackPrice = (pack: Pack, packPrices: PackPrice[]) => {
+  let packStores = packPrices.filter(p => p.packId === pack.id && p.price > 0 && p.isActive)
+  let minPrice: number, weightedPrice, offerEnd, minStoreId = ''
   if (packStores.length === 0){
     minPrice = 0
     weightedPrice = 0
     offerEnd = ''
   } else {
-    const prices = packStores.map((s: any) => s.price)
+    const prices = packStores.map(s => s.price)
     minPrice = Math.min(...prices)
-    weightedPrice = Math.round(minPrice / pack.unitsCount)
+    weightedPrice = Math.round(minPrice / (pack.unitsCount ?? 0))
     // packStores.sort((p1: any, p2: any) => (p2.offerEnd ? moment(p2.offerEnd) : moment().add(1000, 'days')) - (p1.offerEnd ? moment(p1.offerEnd) : moment().add(1000, 'days')))
-    offerEnd = packStores.find((s: any) => s.price === minPrice).offerEnd
-    if (packStores.filter((s: any) => s.price === minPrice).length === 1) {
-      minStoreId = packStores.find((s: any) => s.price === minPrice).storeId
+    offerEnd = packStores.find(s => s.price === minPrice)?.offerEnd
+    if (packStores.filter(s => s.price === minPrice).length === 1) {
+      minStoreId = packStores.find(s => s.price === minPrice)?.storeId || ''
     }
   }  
   firebase.firestore().collection('packs').doc(pack.id).update({
@@ -290,12 +298,15 @@ export const refreshPackPrice = (pack: any, packPrices: any) => {
   })
 }
 
-export const deleteStorePack = (storePack: any, packPrices: any, packs: any, batch?: firebase.firestore.WriteBatch) => {
+export const deleteStorePack = (storePack: PackPrice, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
-  const pack = packs.find((p: any) => p.id === storePack.packId)
-  const prices = pack.prices.slice()
-  const storeIndex = prices.findIndex((p: any) => p.storeId === storePack.storeId)
-  prices.splice(storeIndex, 1)
+  const pack = packs.find(p => p.id === storePack.packId)!
+  const packStores = packPrices.filter(p => p.packId === storePack.packId)
+  const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
+  const prices = otherStores.map(p => {
+    const { packId, ...others } = p
+    return others
+  })
   let packRef = firebase.firestore().collection('packs').doc(pack.id)
   newBatch.update(packRef, {
     prices
@@ -311,7 +322,7 @@ export const deleteStorePack = (storePack: any, packPrices: any, packs: any, bat
     })
   }
   if (!pack.forSale) {
-    const subStorePack = packPrices.find((p: any) => p.storeId === storePack.storeId && p.packId === pack.subPackId)
+    const subStorePack = packPrices.find(p => p.storeId === storePack.storeId && p.packId === pack.subPackId)
     if (subStorePack) {
       deleteStorePack(subStorePack, packPrices, packs, newBatch)
     }
@@ -321,11 +332,11 @@ export const deleteStorePack = (storePack: any, packPrices: any, packs: any, bat
   }
 }
 
-export const addStore = (store: any) => {
+export const addStore = (store: Store) => {
   firebase.firestore().collection('stores').add(store)
 }
 
-export const editStore = (store: any) => {
+export const editStore = (store: Store) => {
   const { id, ...others } = store
   firebase.firestore().collection('stores').doc(id).update(others)
 }
@@ -460,10 +471,10 @@ export const editCategory = (category: Category, oldCategory: Category, categori
 
 export const deleteCategory = (category: Category, categories: Category[]) => {
   const batch = firebase.firestore().batch()
-  let categoryRef: any = firebase.firestore().collection('categories').doc(category.id).delete()
+  firebase.firestore().collection('categories').doc(category.id).delete()
   const childrenCount = categories.filter(c => c.id !== category.id && c.parentId === category.parentId).length
   if (childrenCount === 0) {
-    categoryRef = firebase.firestore().collection('categories').doc(category.parentId)
+    let categoryRef = firebase.firestore().collection('categories').doc(category.parentId)
     batch.update(categoryRef, {
       isLeaf: true
     })
@@ -484,7 +495,7 @@ export const resolvePasswordRequest = (requestId: string) => {
   firebase.firestore().collection('password-requests').doc(requestId).delete()
 }
 
-export const addPack = async (pack: any, product: any, image?: File, subPackInfo?: any) => {
+export const addPack = async (pack: Pack, product: Product, image?: File, subPackInfo?: Pack) => {
   const packRef = firebase.firestore().collection('packs').doc()
   let imageUrl, specialImage
   if (image) {
@@ -504,8 +515,8 @@ export const addPack = async (pack: any, product: any, image?: File, subPackInfo
     productAlias: product.alias,
     productDescription: product.description,
     categoryId: product.categoryId,
-    country: product.country,
-    trademark: product.trademark,
+    countryId: product.countryId,
+    trademarkId: product.trademarkId,
     sales: product.sales,
     rating: product.rating,
     ratingCount: product.ratingCount,
@@ -518,10 +529,10 @@ export const deletePack = (packId: string) => {
   firebase.firestore().collection('packs').doc(packId).delete()
 }
 
-export const editPack = async (newPack: any, oldPack: any, packs: any, image?: File) => {
+export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
   const { id, ...others } = newPack
-  let imageUrl: any
+  let imageUrl: string
   if (image) {
     const filename = image.name
     const ext = filename.slice(filename.lastIndexOf('.'))
@@ -532,24 +543,27 @@ export const editPack = async (newPack: any, oldPack: any, packs: any, image?: F
   } 
   const packRef = firebase.firestore().collection('packs').doc(id)
   batch.update(packRef, others)
-  let affectedPacks = packs.filter((p: any) => p.subPackId === id)
-  affectedPacks.forEach((p: any) => {
+  let affectedPacks = packs.filter(p => p.subPackId === id)
+  affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
-    const packInfo: any = {
+    const packInfo = {
       subPackName: newPack.name,
-      unitsCount: p.subQuantity * newPack.unitsCount,
+      unitsCount: (p.subQuantity ?? 0) * (newPack.unitsCount ?? 0),
       isDivided: newPack.isDivided,
       byWeight: newPack.byWeight,
-      closeExpired: newPack.closeExpired
+      closeExpired: newPack.closeExpired,
+      imageUrl
     }
     if (image && !p.specialImage) {
-      packInfo['imageUrl'] = imageUrl
+      batch.update(packRef, packInfo)
+    } else {
+      const { imageUrl, ...others } = packInfo
+      batch.update(packRef, others)
     }
-    batch.update(packRef, packInfo)
   })
   if (newPack.name !== oldPack.name) {
-    affectedPacks = packs.filter((p: any) => p.bonusPackId === id)
-    affectedPacks.forEach((p: any) => {
+    affectedPacks = packs.filter(p => p.bonusPackId === id)
+    affectedPacks.forEach(p => {
       const packRef = firebase.firestore().collection('packs').doc(p.id)
       batch.update(packRef, {
         bonusPackName: newPack.name
@@ -559,11 +573,11 @@ export const editPack = async (newPack: any, oldPack: any, packs: any, image?: F
   batch.commit()
 }
 
-export const editCustomer = (customer: any, name: any, locationId: any, mobile: any, storeId: any, stores: any) => {
+export const editCustomer = (customer: Customer, name: string, locationId: string, mobile: string, storeId: string, stores: Store[]) => {
   const batch = firebase.firestore().batch()
   const { id, ...others } = customer
   const customerRef = firebase.firestore().collection('customers').doc(id)
-  const storeName = storeId ? `-${stores.find((s: any) => s.id === storeId).name}`: ''
+  const storeName = storeId ? `-${stores.find(s => s.id === storeId)?.name}`: ''
   batch.update(customerRef, {
     ...others,
     name: `${name}${storeName}:${mobile}`,
@@ -576,7 +590,7 @@ export const editCustomer = (customer: any, name: any, locationId: any, mobile: 
   batch.commit()
 }
 
-export const approveUser = (id: string, name: string, mobile: string, locationId: string, storeId: string, users: any) => {
+export const approveUser = (id: string, name: string, mobile: string, locationId: string, storeId: string, users: User[]) => {
   const batch = firebase.firestore().batch()
   const customerRef = firebase.firestore().collection('customers').doc(id)
   batch.set(customerRef, {
@@ -595,10 +609,10 @@ export const approveUser = (id: string, name: string, mobile: string, locationId
     locationId,
     storeName: firebase.firestore.FieldValue.delete()
   })
-  const invitedBy = users.filter((u: any) => u.friends?.find((f: any) => f.mobile === mobile))
-  invitedBy.forEach((u: any) => {
+  const invitedBy = users.filter(u => u.friends?.find(f => f.mobile === mobile))
+  invitedBy.forEach(u => {
     const friends = u.friends.slice()
-    const invitationIndex = friends.findIndex((f: any) => f.mobile === mobile)
+    const invitationIndex = friends.findIndex(f => f.mobile === mobile)
     friends.splice(invitationIndex, 1, {
       ...u.friends[invitationIndex],
       status: 'r'
@@ -617,18 +631,19 @@ export const approveUser = (id: string, name: string, mobile: string, locationId
   batch.commit()
 }
 
-export const deleteUser = async (user: any) => {
-  const colors = user.colors.map((c: any) => randomColors.find(rc => rc.name === c)?.id)
+export const deleteUser = async (user: User) => {
+  const colors = user.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
+  if (!colors) return
   const password = colors.join('')
   await firebase.firestore().collection('users').doc(user.id).delete()
   await firebase.auth().signInWithEmailAndPassword(user.mobile + '@gmail.com', user.mobile.substring(9, 2) + password)
   return firebase.auth().currentUser?.delete()
 }
 
-export const approveAlarm = (user: any, alarm: any, newPackId: any, customer: any, packPrices: any, packs: any) => {
+export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, customer: Customer, packPrices: PackPrice[], packs: Pack[]) => {
   const batch = firebase.firestore().batch()
   const alarms = user.alarms.slice()
-  const alarmIndex = alarms.findIndex((a: any) => a.id === alarm.id)
+  const alarmIndex = alarms.findIndex(a => a.id === alarm.id)
   alarms.splice(alarmIndex, 1, {
     ...user.alarms[alarmIndex],
     status: 'a',
@@ -639,18 +654,19 @@ export const approveAlarm = (user: any, alarm: any, newPackId: any, customer: an
   batch.update(userRef, {
     alarms
   })
-  const storePack = packPrices.find((p: any) => p.storeId === customer.storeId && p.packId === (newPackId || alarm.packId))
+  const storePack = packPrices.find(p => p.storeId === customer.storeId && p.packId === (newPackId || alarm.packId))!
   let offerEnd
   if (alarm.offerDays) {
-    offerEnd = alarm.time.toDate()
+    offerEnd = alarm.time
     offerEnd.setDate(offerEnd.getDate() + alarm.offerDays)
   }
   const newStorePack = { 
-    packId: newPackId || alarm.packId, 
+    packId: newPackId || alarm.packId || '', 
     storeId: customer.storeId,
     cost: alarm.price,
     price: alarm.price,
     offerEnd,
+    isAuto: false,
     isActive: true,
     time: new Date()
   }
@@ -678,10 +694,11 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
   return user.updatePassword(newPassword)
 }
 
-export const approveRating = (rating: any, packs: any) => {
+export const approveRating = (rating: Rating, packs: Pack[]) => {
   const batch = firebase.firestore().batch()
-  const ratings = rating.userInfo.ratings.slice()
-  const ratingIndex = ratings.findIndex((r: any) => r.productId === rating.productInfo.id)
+  const ratings = rating.userInfo?.ratings?.slice()
+  if ()
+  const ratingIndex = ratings.findIndex(r => r.productId === rating.productInfo.id)
   ratings.splice(ratingIndex, 1, {
     ...ratings[ratingIndex],
     status: 'a'
@@ -698,8 +715,8 @@ export const approveRating = (rating: any, packs: any) => {
     rating: newRating,
     ratingCount: ratingCount + 1
   })
-  const affectedPacks = packs.filter((p: any) => p.productId === rating.productInfo.id)
-  affectedPacks.forEach((p: any) => {
+  const affectedPacks = packs.filter(p => p.productId === rating.productInfo.id)
+  affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     batch.update(packRef, {
       rating: newRating,
@@ -709,10 +726,10 @@ export const approveRating = (rating: any, packs: any) => {
   batch.commit()
 }
 
-export const approveInvitation = (user: any, mobile: any, status: any) => {
+export const approveInvitation = (user: User, mobile: string, status: string) => {
   const batch = firebase.firestore().batch()
   const friends = user.friends.slice()
-  const invitationIndex = friends.findIndex((f: any) => f.mobile === mobile)
+  const invitationIndex = friends.findIndex(f => f.mobile === mobile)
   friends.splice(invitationIndex, 1, {
     ...user.friends[invitationIndex],
     status
@@ -727,16 +744,16 @@ export const approveInvitation = (user: any, mobile: any, status: any) => {
   batch.commit()
 }
 
-export const deleteNotification = (user: any, notificationId: any) => {
+export const deleteNotification = (user: User, notificationId: string) => {
   const notifications = user.notifications.slice()
-  const notificationIndex = notifications.findIndex((n: any) => n.id === notificationId)
+  const notificationIndex = notifications.findIndex(n => n.id === notificationId)
   notifications.splice(notificationIndex, 1)
   firebase.firestore().collection('users').doc(user.id).update({
     notifications
   })
 }
 
-export const sendNotification = (userId: string, title: any, message: any, batch?: firebase.firestore.WriteBatch) => {
+export const sendNotification = (userId: string, title: string, message: string, batch?: firebase.firestore.WriteBatch) => {
   const newBatch =  batch || firebase.firestore().batch()
   const userRef = firebase.firestore().collection('users').doc(userId)
   newBatch.update(userRef, {
@@ -753,10 +770,10 @@ export const sendNotification = (userId: string, title: any, message: any, batch
   }
 }
 
-export const getPackStores = (pack: any, packPrices: any, stores: any, packs: any, basketStockQuantity?: any) => {
-  const packStores = packPrices.filter((p: any) => (p.packId === pack.id || packs.find((pa: any) => pa.id === p.packId && pa.forSale && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * (basketStockQuantity || 0)) > 0))
-  return packStores.map((s: any) => {
-    let packId: any, unitPrice, unitCost, price, cost, subQuantity, offerInfo, isOffer
+export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store[], packs: Pack[]) => {
+  const packStores = packPrices.filter(p => (p.packId === pack.id || packs.find(pa => pa.id === p.packId && pa.forSale && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * (basketStockQuantity || 0)) > 0))
+  return packStores.map(s => {
+    let packId: string, unitPrice, unitCost, price, cost, subQuantity, offerInfo, isOffer
     if (s.packId === pack.id) {
       packId = s.packId
       price = s.price
@@ -765,7 +782,7 @@ export const getPackStores = (pack: any, packPrices: any, stores: any, packs: an
       unitCost = s.cost
       isOffer = pack.isOffer
     } else {
-      offerInfo = packs.find((p: any) => p.id === s.packId && p.subPackId === pack.id)
+      offerInfo = packs.find(p => p.id === s.packId && p.subPackId === pack.id)
       price = s.price
       cost = s.cost
       if (offerInfo) {
@@ -775,7 +792,7 @@ export const getPackStores = (pack: any, packPrices: any, stores: any, packs: an
         subQuantity = offerInfo.subQuantity
         isOffer = offerInfo.isOffer
       } else {
-        offerInfo = packs.find((p: any) => p.id === s.packId && p.bonusPackId === pack.id)
+        offerInfo = packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
         if (offerInfo) {
           packId = offerInfo.id
           unitPrice = Math.round(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent * (1 + setup.profit))
@@ -785,8 +802,8 @@ export const getPackStores = (pack: any, packPrices: any, stores: any, packs: an
         }
       }
     }
-    const storeInfo = stores.find((st: any) => st.id === s.storeId)
-    const packInfo = packs.find((p: any) => p.id === packId)
+    const storeInfo = stores.find(st => st.id === s.storeId)
+    const packInfo = packs.find(p => p.id === packId)
     return {
       ...s,
       packId,
@@ -857,11 +874,11 @@ export const editAdvert = async (advert: Advert, image?: File) => {
   firebase.firestore().collection('adverts').doc(id).update(others)
 }
 
-export const permitUser = async (userId: any, storeId: any, users: any, stores: any) => {
-  const userInfo = users.find((u: any) => u.id === userId)
+export const permitUser = async (userId: string, storeId: string, users: User[], stores: Store[]) => {
+  const userInfo = users.find(u => u.id === userId)!
   let name
   if (storeId) {
-    name = `${userInfo.name}-${stores.find((s: any) => s.id === storeId).name}:${userInfo.mobile}`
+    name = `${userInfo.name}-${stores.find(s => s.id === storeId)?.name}:${userInfo.mobile}`
     await firebase.firestore().collection('customers').doc(userId).update({
       storeId,
       name
@@ -873,7 +890,8 @@ export const permitUser = async (userId: any, storeId: any, users: any, stores: 
       name
     })  
   }
-  const colors = userInfo.colors.map((c: any) => randomColors.find(rc => rc.name === c)?.id)
+  const colors = userInfo.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
+  if (!colors) return
   const password = colors.join('')
   await firebase.auth().signInWithEmailAndPassword(userInfo.mobile + '@gmail.com', userInfo.mobile.substring(9, 2) + password)
   await firebase.auth().currentUser?.updateProfile({
@@ -889,18 +907,18 @@ export const registerUser = async (email: string, password: string) => {
   })
 }
 
-export const deleteLog = (log: any) => {
+export const deleteLog = (log: Log) => {
   firebase.firestore().collection('logs').doc(log.id).delete()
 }
 
-export const archiveProduct = (product: any, packs: any) => {
+export const archiveProduct = (product: Product, packs: Pack[]) => {
   const batch = firebase.firestore().batch()
   const productRef = firebase.firestore().collection('products').doc(product.id)
   batch.update(productRef, {
     isArchived: true
   })
-  const affectedPacks = packs.filter((p: any) => p.productId === product.id)
-  affectedPacks.forEach((p: any) => {
+  const affectedPacks = packs.filter(p => p.productId === product.id)
+  affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     batch.update(packRef, {
       isArchived: true
@@ -910,35 +928,68 @@ export const archiveProduct = (product: any, packs: any) => {
 }
 
 export const getArchivedProducts = async () => {
-  let products: any = []
+  let products: Product[] = []
   await firebase.firestore().collection('products')
           .where('isArchived', '==', true)
           .get().then(docs => {
             docs.forEach(doc => {
-              products.push({...doc.data(), id:doc.id})
+              products.push({
+                id: doc.id,
+                name: doc.data().name,
+                alias: doc.data().alias,
+                description: doc.data().description,
+                categoryId: doc.data().categoryId,
+                trademarkId: doc.data().trademarkId,
+                countryId: doc.data().countryId,
+                imageUrl: doc.data().imageUrl,
+                rating: doc.data().rating,
+                ratingCount: doc.data().ratingCount
+              })
             })
           })
   return products
 }
 
 export const getArchivedPacks = async () => {
-  let packs: any = []
+  let packs: Pack[] = []
   await firebase.firestore().collection('packs')
           .where('isArchived', '==', true)
           .get().then(docs => {
             docs.forEach(doc => {
-              packs.push({...doc.data(), id:doc.id})
+              packs.push({
+                id: doc.id,
+                name: doc.data().name,
+                productId: doc.data().productId,
+                productName: doc.data().productName,
+                productAlias: doc.data().productAlias,
+                productDescription: doc.data().productDescription,
+                categoryId: doc.data().categoryId,
+                countryId: doc.data().countryId,
+                imageUrl: doc.data().imageUrl,
+                price: doc.data().price,
+                sales: doc.data().sales,
+                isDivided: doc.data().isDivided,
+                isOffer: doc.data().isOffer,
+                offerEnd: doc.data().offerEnd,
+                rating: doc.data().rating,
+                closeExpired: doc.data().closeExpired,
+                byWeight: doc.data().byWeight,
+                ratingCount: doc.data().ratingCount,
+                weightedPrice: doc.data().weightedPrice,
+                forSale: doc.data().forSale,
+                unitsCount: doc.data().unitsCount
+              })
             })
           })
   return packs
 }
 
-export const approveNotifyFriends = (userInfo: any, pack: any, users: any) => {
+export const approveNotifyFriends = (userInfo: User, pack: Pack, users: User[]) => {
   const batch = firebase.firestore().batch()
   let userFriends = userInfo.friends?.slice() || []
-  userFriends = userFriends.filter((f: any) => f.status === 'r')
-  userFriends.forEach((f: any) => {
-    const friendInfo = users.find((u: any) => u.mobile === f.mobile)
+  userFriends = userFriends.filter(f => f.status === 'r')
+  userFriends.forEach(f => {
+    const friendInfo = users.find(u => u.mobile === f.mobile)
     if (friendInfo) {
       sendNotification(friendInfo.id, `${labels.notifyFromFriend} ${userInfo.name}`, `${labels.offerAvailableFor} ${pack.productName} ${pack.name}, ${labels.withPrice}: ${(pack.price / 100).toFixed(2)}`, batch)
     }

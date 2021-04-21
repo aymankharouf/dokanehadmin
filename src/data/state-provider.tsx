@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Friend } from './interfaces'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Friend, Notification, Customer, Store } from './interfaces'
 
 export const StateContext = createContext({} as Context)
 
@@ -175,22 +175,22 @@ const StateProvider = ({ children }: Props) => {
               name: doc.data().name,
             })
             if (doc.data().notifications) {
-              doc.data().notifications.forEach((n: any) => {
+              doc.data().notifications.forEach((n: Notification) => {
                 notifications.push({...n, userId: doc.id})
               })
             }
             if (doc.data().alarms) {
-              doc.data().alarms.forEach((a: any) => {
+              doc.data().alarms.forEach((a: Alarm) => {
                 alarms.push({...a, userId: doc.id})
               })
             }
             if (doc.data().ratings) {
-              doc.data().ratings.forEach((r: any) => {
+              doc.data().ratings.forEach((r: Rating) => {
                 ratings.push({...r, userId: doc.id})
               })
             }
             if (doc.data().friends) {
-              doc.data().friends.forEach((f: any) => {
+              doc.data().friends.forEach((f: Friend) => {
                 invitations.push({...f, userId: doc.id})
               })
             }
@@ -204,18 +204,39 @@ const StateProvider = ({ children }: Props) => {
           unsubscribeUsers()
         })  
         const unsubscribeCustomers = firebase.firestore().collection('customers').onSnapshot(docs => {
-          let customers: any = []
+          let customers: Customer[] = []
           docs.forEach(doc => {
-            customers.push({...doc.data(), id:doc.id})
+            customers.push({
+              id: doc.id,
+              name: doc.data().name,
+              address: doc.data().address,
+              storeId: doc.data().storeId,
+              storeName: doc.data().storeName,
+              deliveryFees: doc.data().deliveryFees,
+              discounts: doc.data().discounts,
+              isBlocked: doc.data().isBlocked,
+              specialDiscount: doc.data().specialDiscount
+            })
           })
           dispatch({type: 'SET_CUSTOMERS', payload: customers})
         }, err => {
           unsubscribeCustomers()
         })  
         const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
-          let stores: any = []
+          let stores: Store[] = []
           docs.forEach(doc => {
-            stores.push({...doc.data(), id:doc.id})
+            stores.push({
+              id: doc.id,
+              name: doc.data().name,
+              mobile: doc.data().mobile,
+              type: doc.data().type,
+              address: doc.data().address,
+              allowReturn: doc.data().allowReturn,
+              discount: doc.data().discount,
+              isActive: doc.data().isActive,
+              mapPosition: doc.data().mapPosition,
+              openTime: doc.data().openTime
+            })
           })
           dispatch({type: 'SET_STORES', payload: stores})
         }, err => {

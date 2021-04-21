@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
 import { addAdvert, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -11,7 +11,7 @@ const AddAdvert = () => {
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
     const filename = files[0].name

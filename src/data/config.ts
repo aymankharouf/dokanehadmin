@@ -53,7 +53,7 @@ export const orderPackStatus = [
   {id: 'pr', name: 'مرتجع جزئي'}
 ]
 
-export const alarmTypes: any = [
+export const alarmTypes = [
   {id: 'cp', name: 'الابلاغ عن تغيير السعر', isAvailable: 1},
   {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', isAvailable: -1},
   {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', isAvailable: 1},
