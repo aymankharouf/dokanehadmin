@@ -12,14 +12,14 @@ const ArchivedProducts = () => {
   const [products, setProducts] = useState<Product[]>([])
   useEffect(() => {
     setProducts(() => {
-      const products = state.archivedProducts.map((p: any) => {
+      const products = state.archivedProducts.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {
           ...p,
           categoryInfo
         }
       })
-      return products.sort((p1: any, p2: any) => p1.sales - p2.sales)
+      return products.sort((p1, p2) => (p1.sales ?? 0) - (p2.sales ?? 0))
     })
   }, [state.archivedProducts, state.categories])
   useEffect(() => {

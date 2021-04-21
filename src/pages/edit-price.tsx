@@ -14,8 +14,8 @@ const EditPrice = (props: Props) => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId)!)
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
   const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)!)
-  const [cost, setCost] = useState<any>(props.storeId === 's' ? (storePack.cost / 100).toFixed(2) : '')
-  const [price, setPrice] = useState<any>('')
+  const [cost, setCost] = useState(props.storeId === 's' ? (storePack.cost / 100) : 0)
+  const [price, setPrice] = useState(0)
   const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
     if (error) {
@@ -25,7 +25,7 @@ const EditPrice = (props: Props) => {
   }, [error])
   useEffect(() => {
     if (cost && store.id !== 's') {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(2))
+      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))))
     } else {
       setPrice(0)
     }
@@ -103,7 +103,7 @@ const EditPrice = (props: Props) => {
             type="number" 
             value={cost}
             onChange={e => setCost(e.target.value)}
-            onInputClear={() => setCost('')}
+            onInputClear={() => setCost(0)}
           />
         }
         <ListInput 
@@ -113,7 +113,7 @@ const EditPrice = (props: Props) => {
           type="number" 
           value={price}
           onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
+          onInputClear={() => setPrice(0)}
         />
         <ListInput 
           name="offerDays" 

@@ -58,7 +58,6 @@ import PermitUser from './pages/permit-user'
 import Register from './pages/register'
 import PermissionList from './pages/permission-list'
 import ArchivedProducts from './pages/archived-products'
-import NotifyFriends from './pages/notify-friends'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
@@ -328,10 +327,6 @@ const routes = [
   {
     path: '/archived-products/',
     component: ArchivedProducts
-  },
-  {
-    path: '/notify-friends/',
-    component: NotifyFriends
   },
   {
     path: '/pack-types/',

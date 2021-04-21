@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
@@ -23,8 +23,9 @@ const EditProduct = (props: Props) => {
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setFileErrorMessage(labels.invalidFile)
@@ -54,7 +55,7 @@ const EditProduct = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.products.find((p: any) => p.id !== product.id && p.categoryId === categoryId && p.countryId === countryId && p.name === name)) {
+      if (state.products.find(p => p.id !== product.id && p.categoryId === categoryId && p.countryId === countryId && p.name === name)) {
         throw new Error('duplicateProduct')
       }
       const newProduct = {

@@ -6,11 +6,14 @@ import 'moment/locale/ar'
 import { approveAlarm, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
+import { PackPrice, Store } from '../data/interfaces'
 
 interface Props {
   id: string,
   userId: string
 }
+type ExtendedPackPrice = PackPrice & {storeInfo: Store}
+
 const AlarmDetails = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
@@ -24,7 +27,7 @@ const AlarmDetails = (props: Props) => {
     let packs = state.packs.filter(p => p.id !== pack.id)
     if (alarm.type === 'go') {
       packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
-    } else if (alarmTypes.type === 'eo') {
+    } else if (alarm.type === 'eo') {
       packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
     }
     const shortPacks = packs.map(p => {
@@ -35,12 +38,12 @@ const AlarmDetails = (props: Props) => {
     })
     return shortPacks.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   })
-  const [prices, setPrices] = useState<any>([])
+  const [prices, setPrices] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setPrices(() => {
       const prices = state.packPrices.filter(p => p.storeId !== customerInfo.storeId && p.packId === (newPackId || pack.id))
       const storePrices = prices.map(p => {
-        const storeInfo = state.stores.find(s => s.id === p.storeId)
+        const storeInfo = state.stores.find(s => s.id === p.storeId)!
         return {
           ...p,
           storeInfo
@@ -67,7 +70,7 @@ const AlarmDetails = (props: Props) => {
   let i = 0
   return (
     <Page>
-      <Navbar title={alarmTypes.find((t: any) => t.id === alarm.type).name} backLink={labels.back} />
+      <Navbar title={alarmTypes.find(t => t.id === alarm.type)?.name} backLink={labels.back} />
       <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleApprove()}>
         <Icon material="done"></Icon>
       </Fab>
@@ -154,7 +157,7 @@ const AlarmDetails = (props: Props) => {
           >
             <select name="newPackId" value={newPackId} onChange={e => setNewPackId(e.target.value)}>
               <option value=""></option>
-              {packs.map((p: any) => 
+              {packs.map(p => 
                 <option key={p.id} value={p.id}>{p.name}</option>
               )}
             </select>
@@ -165,11 +168,11 @@ const AlarmDetails = (props: Props) => {
         {labels.prices}
       </BlockTitle>
         <List mediaList>
-        {prices.map((p: any) => 
+        {prices.map(p => 
           <ListItem 
             title={p.storeInfo.name}
             subtitle={p.quantity ? `${labels.quantity}: ${p.quantity}` : ''}
-            text={moment(p.time.toDate()).fromNow()} 
+            text={moment(p.time).fromNow()} 
             after={(p.price / 100).toFixed(2)} 
             key={i++} 
           />

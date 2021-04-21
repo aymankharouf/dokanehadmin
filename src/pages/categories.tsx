@@ -3,31 +3,36 @@ import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButto
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
+import { Category } from '../data/interfaces'
 
 interface Props {
   id: string
 }
+type ExtendedCategory = Category & {
+  childrenCount: number,
+  productsCount: number
+}
 const Categories = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [categories, setCategories] = useState<any>([])
+  const [categories, setCategories] = useState<ExtendedCategory[]>([])
   const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id))
   const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
-  const [categoryProductsCount] = useState(() => state.products.filter((p: any) => p.categoryId === currentCategory?.id).length)
+  const [categoryProductsCount] = useState(() => state.products.filter(p => p.categoryId === currentCategory?.id).length)
   useEffect(() => {
     setCategories(() => {
-      const children = state.categories.filter((c: any) => c.parentId === props.id)
-      let categories = children.map((c: any) => {
+      const children = state.categories.filter(c => c.parentId === props.id)
+      let categories = children.map(c => {
         const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
         const categoryChildrens = categoryChildren(c.id, state.categories)
-        const productsCount = state.products.filter((p: any) => categoryChildrens.includes(p.categoryId)).length
+        const productsCount = state.products.filter(p => categoryChildrens.includes(p.categoryId)).length
         return {
           ...c,
           childrenCount,
           productsCount
         }
       })
-      return categories.sort((c1: any, c2: any) => c1.ordering - c2.ordering)
+      return categories.sort((c1, c2) => c1.ordering - c2.ordering)
     })
   }, [state.categories, state.products, props.id])
   useEffect(() => {
@@ -54,7 +59,7 @@ const Categories = (props: Props) => {
         <List mediaList>
           {categories.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : categories.map((c: any) =>
+          : categories.map(c =>
               <ListItem 
                 link={`/categories/${c.id}`} 
                 title={c.name}

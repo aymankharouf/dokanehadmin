@@ -4,10 +4,11 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
+import { Customer } from '../data/interfaces'
 
 const Customers = () => {
   const { state } = useContext(StateContext)
-  const [customers, setCustomers] = useState<any>([])
+  const [customers, setCustomers] = useState<Customer[]>([])
   useEffect(() => {
     setCustomers(() => [...state.customers].sort((c1, c2) => c2.name > c1.name ? -1 : 1))
   }, [state.customers])
@@ -35,11 +36,11 @@ const Customers = () => {
         <List mediaList className="search-list searchbar-found">
           {customers.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : customers.map((c: any) => 
+          : customers.map(c => 
               <ListItem
                 link={`/customer-details/${c.id}`}
                 title={c.name}
-                subtitle={moment(c.time.toDate()).fromNow()}
+                subtitle={moment(c.time).fromNow()}
                 badge={c.isBlocked ? labels.isBlocked : ''}
                 badgeColor="red"
                 key={c.id}

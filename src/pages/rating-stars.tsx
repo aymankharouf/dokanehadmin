@@ -7,8 +7,8 @@ interface Props {
 }
 const RatingStars = (props: Props) => {
   const [stars] = useState(() => {
-    const rating_round: any = Math.round(props.rating / .5 ) * .5
-    const rating_int = parseInt(rating_round)
+    const rating_round = Math.round(props.rating / .5 ) * .5
+    const rating_int = Math.floor(rating_round)
     const rating_fraction = rating_round - rating_int
     let color
     switch(rating_int){

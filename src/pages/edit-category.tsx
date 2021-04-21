@@ -18,7 +18,7 @@ const EditCategory = (props: Props) => {
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => {
     let otherCategories = state.categories.filter(c => c.id !== props.id)
-    let categories = otherCategories.map((c: any) => {
+    let categories = otherCategories.map(c => {
       return {
         id: c.id,
         name: getCategoryName(c, state.categories)
@@ -73,7 +73,7 @@ const EditCategory = (props: Props) => {
         >
           <select name="parentId" value={parentId} onChange={e => setParentId(e.target.value)}>
             <option value=""></option>
-            {categories.map((c: any) => 
+            {categories.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>

@@ -11,7 +11,7 @@ const AddStore = () => {
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
-  const [discount, setDiscount] = useState<any>()
+  const [discount, setDiscount] = useState(0)
   const [mapPosition, setMapPosition] = useState('')
   const [allowReturn, setAllowReturn] = useState(false)
   const [isActive, setIsActive] = useState(false)
@@ -21,7 +21,7 @@ const AddStore = () => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
     }
-    const validateMobile = (value: any) => {
+    const validateMobile = (value: string) => {
       if (patterns.mobile.test(value)){
         setMobileErrorMessage('')
       } else {
@@ -111,7 +111,7 @@ const AddStore = () => {
           clearButton
           type="number"
           onChange={e => setDiscount(e.target.value)}
-          onInputClear={() => setDiscount('')}
+          onInputClear={() => setDiscount(0)}
         />
         <ListItem>
           <span>{labels.allowReturn}</span>

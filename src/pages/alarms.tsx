@@ -5,18 +5,25 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
+import { Alarm, AlarmType, Customer, Pack, User } from '../data/interfaces'
 
+type ExtendedAlarms = Alarm & {
+  userInfo: User,
+  customerInfo: Customer,
+  packInfo: Pack,
+  alarmTypeInfo: AlarmType
+}
 const Alarms = () => {
   const { state } = useContext(StateContext)
-  const [alarms, setAlarms] = useState<any>([])
+  const [alarms, setAlarms] = useState<ExtendedAlarms[]>([])
   useEffect(() => {
     setAlarms(() => {
-      let alarms = state.alarms.filter((a: any) => a.status === 'n')
-      alarms = alarms.map((a: any) => {
-        const userInfo = state.users.find((u: any) => u.id === a.userId)
-        const alarmTypeInfo = alarmTypes.find((t: any) => t.id === a.type)
-        const packInfo = state.packs.find((p: any) => p.id === a.packId)
-        const customerInfo = state.customers.find((c: any) => c.id === a.userId)
+      const alarms = state.alarms.filter(a => a.status === 'n')
+      const results = alarms.map(a => {
+        const userInfo = state.users.find(u => u.id === a.userId)!
+        const alarmTypeInfo = alarmTypes.find(t => t.id === a.type)!
+        const packInfo = state.packs.find(p => p.id === a.packId)!
+        const customerInfo = state.customers.find(c => c.id === a.userId)!
         return {
           ...a,
           userInfo,
@@ -25,7 +32,7 @@ const Alarms = () => {
           alarmTypeInfo
         }
       })
-      return alarms.sort((a1: any, a2: any) => a1.time.seconds - a2.time.seconds)
+      return results.sort((a1, a2) => a1.time > a2.time ? -1 : 1)
     })
   }, [state.alarms, state.packs, state.users, state.customers])
   return(
@@ -35,13 +42,13 @@ const Alarms = () => {
           <List mediaList>
             {alarms.length === 0 ? 
               <ListItem title={labels.noData} /> 
-            : alarms.map((a: any) => 
+            : alarms.map(a => 
                 <ListItem
                   link={`/alarm-details/${a.id}/user/${a.userInfo.id}`}
                   title={a.alarmTypeInfo.name}
                   subtitle={a.customerInfo.name}
                   text={`${a.packInfo.productName} ${a.packInfo.name}`}
-                  footer={moment(a.time.toDate()).fromNow()}
+                  footer={moment(a.time).fromNow()}
                   key={a.id}
                 >
                   <img src={a.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />

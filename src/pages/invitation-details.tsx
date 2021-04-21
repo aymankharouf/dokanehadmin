@@ -15,10 +15,10 @@ const InvitationDetails = (props: Props) => {
   const [mobileCheck, setMobileCheck] = useState('')
   useEffect(() => {
     setMobileCheck(() => {
-      if (state.users.find((u: any) => u.mobile === props.mobile)) {
+      if (state.users.find(u => u.mobile === props.mobile)) {
         return 'r'
       }
-      if (state.invitations.find((i: any) => i.userId !== props.userId && i.mobile === props.mobile)) {
+      if (state.invitations.find(i => i.userId !== props.userId && i.mobile === props.mobile)) {
         return 'o'
       }
       return 's'

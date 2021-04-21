@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
@@ -47,8 +47,9 @@ const EditBulk = (props: Props) => {
   useEffect(() => {
     if (!forSale) setSpecialImage(false)
   }, [forSale])
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)
@@ -80,7 +81,7 @@ const EditBulk = (props: Props) => {
         byWeight: subPackInfo.byWeight,
         closeExpired: subPackInfo.closeExpired,
         subQuantity: Number(subQuantity),
-        unitsCount: (subQuantity ?? 0) * subPackInfo.unitsCount,
+        unitsCount: (subQuantity ?? 0) * (subPackInfo.unitsCount ?? 0),
         forSale
       }
       editPack(newPack, pack, state.packs, image)
@@ -117,7 +118,7 @@ const EditBulk = (props: Props) => {
         >
           <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
-            {packs.map((p: any) => 
+            {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>

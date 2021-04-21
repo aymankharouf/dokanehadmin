@@ -14,7 +14,7 @@ const Products = (props: Props) => {
   const [products, setProducts] = useState<Product[]>([])
   useEffect(() => {
     setProducts(() => {
-      let products = state.products.filter(p => props.id === '-1' ? !state.packs.find((pa: any) => pa.productId === p.id) || state.packs.filter((pa: any) => pa.productId === p.id).length === state.packs.filter((pa: any) => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
+      let products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.productId === p.id) || state.packs.filter(pa => pa.productId === p.id).length === state.packs.filter(pa => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
       products = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)
         return {

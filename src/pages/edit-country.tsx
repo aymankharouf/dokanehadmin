@@ -40,7 +40,7 @@ const EditCountry = (props: Props) => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        const countryProducts = state.products.filter((p: any) => p.countryId === props.id)
+        const countryProducts = state.products.filter(p => p.countryId === props.id)
         if (countryProducts.length > 0) throw new Error('countryProductsFound') 
         deleteCountry(props.id, state.countries)
         showMessage(labels.deleteSuccess)

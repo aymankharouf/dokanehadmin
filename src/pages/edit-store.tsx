@@ -11,7 +11,7 @@ interface Props {
 const EditStore = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [store] = useState(() => state.stores.find((s: any) => s.id === props.id)!)
+  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [type, setType] = useState(store.type)
   const [name, setName] = useState(store.name)
   const [mobile, setMobile] = useState(store.mobile)
@@ -27,7 +27,7 @@ const EditStore = (props: Props) => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
     }
-    const validateMobile = (value: any) => {
+    const validateMobile = (value: string) => {
       if (patterns.mobile.test(value)){
         setMobileErrorMessage('')
       } else {

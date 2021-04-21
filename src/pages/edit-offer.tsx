@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
@@ -14,17 +14,17 @@ const EditOffer = (props: Props) => {
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
-  const [subPercent, setSubPercent] = useState<any>((pack.subPercent ?? 0) * 100)
+  const [subPercent, setSubPercent] = useState((pack.subPercent ?? 0) * 100)
   const [bonusPackId, setBonusPackId] = useState(pack.bonusPackId)
   const [bonusQuantity, setBonusQuantity] = useState(pack.bonusQuantity)
-  const [bonusPercent, setBonusPercent] = useState<any>((pack.bonusPercent ?? 0) * 100)
+  const [bonusPercent, setBonusPercent] = useState((pack.bonusPercent ?? 0) * 100)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
-    const packs = state.packs.filter((p: any) => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
-    return packs.map((p: any) => {
+    const packs = state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight && p.forSale)
+    return packs.map(p => {
       return {
         id: p.id,
         name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
@@ -59,8 +59,9 @@ const EditOffer = (props: Props) => {
       setError('')
     }
   }, [error])
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)
@@ -98,7 +99,7 @@ const EditOffer = (props: Props) => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: (subQuantity ?? 0) * subPackInfo.unitsCount,
+        unitsCount: (subQuantity ?? 0) * (subPackInfo.unitsCount ?? 0),
         subPercent: subPercent / 100,
         subPackName: subPackInfo.name,
         isDivided: subPackInfo.isDivided,
@@ -144,7 +145,7 @@ const EditOffer = (props: Props) => {
         >
           <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
-            {packs.map((p: any) => 
+            {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
@@ -165,7 +166,7 @@ const EditOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubPercent(e.target.value)}
-          onInputClear={() => setSubPercent('')}
+          onInputClear={() => setSubPercent(0)}
         />
         <ListItem>
           <span>{labels.specialImage}</span>
@@ -205,7 +206,7 @@ const EditOffer = (props: Props) => {
         >
           <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)}>
             <option value=""></option>
-            {bonusPacks.map((p: any) => 
+            {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
@@ -226,7 +227,7 @@ const EditOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setBonusPercent(e.target.value)}
-          onInputClear={() => setBonusPercent('')}
+          onInputClear={() => setBonusPercent(0)}
         />
       </List>
       {!name || !subPackId || !subQuantity || !subPercent || !hasChanged ? '' :

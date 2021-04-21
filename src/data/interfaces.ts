@@ -52,6 +52,7 @@ export interface Pack {
   forSale?: boolean,
   unitsCount?: number,
   specialImage?: boolean,
+  packTypeId?: string
 }
 export interface PackPrice {
   storeId: string,
@@ -61,8 +62,14 @@ export interface PackPrice {
   offerEnd?: Date,
   isActive: boolean,
   isAuto: boolean,
-  packInfo?: Pack
-  time: Date
+  packInfo?: Pack,
+  storeInfo?: Store,
+  time: Date,
+  quantity?: number,
+  weight?: number,
+  subQuantity?: number,
+  unitPrice?: number,
+  unitCost?: number
 }
 export interface Notification {
   id: string,
@@ -82,7 +89,8 @@ export interface Rating {
   productId: string,
   status: string,
   userId: string,
-  userInfo?: User
+  userInfo?: User,
+  productInfo?: Product
 }
 export interface Alarm {
   id: string,
@@ -93,7 +101,8 @@ export interface Alarm {
   alternative?: string,
   offerDays?: number,
   status: string,
-  userId: string
+  userId: string,
+  time: Date
 }
 export interface User {
   id: string,
@@ -102,12 +111,12 @@ export interface User {
   locationId: string,
   storeName?: string,
   notifications?: Notification[],
-  notifyFriends?: Friend[],
   friends?: Friend[],
   ratings?: Rating[],
   favorites?: string[],
   alarms?: Alarm[],
-  colors?: string[]
+  colors?: string[],
+  time: Date
 }
 export interface Customer {
   id: string,
@@ -118,7 +127,8 @@ export interface Customer {
   deliveryFees: number,
   discounts: number,
   specialDiscount: number,
-  address: string
+  address: string,
+  time?: Date
 }
 export interface Advert {
   id?: string,
@@ -157,7 +167,7 @@ export interface Discount {
   type: string
 }
 export interface Product {
-  id: string,
+  id?: string,
   name: string,
   alias: string,
   description: string,
@@ -189,6 +199,11 @@ export interface Log {
   userId: string,
   time: Date,
   userInfo?: User
+}
+export interface AlarmType {
+  id: string,
+  name: string,
+  isAvailable: number
 }
 export interface State {
   user?: firebase.User,

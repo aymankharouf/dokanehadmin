@@ -1,3 +1,5 @@
+import { AlarmType } from "./interfaces"
+
 export const setup = {
   fixedFees: 0.01,
   maxDiscount: 10,
@@ -53,7 +55,7 @@ export const orderPackStatus = [
   {id: 'pr', name: 'مرتجع جزئي'}
 ]
 
-export const alarmTypes = [
+export const alarmTypes: AlarmType[] = [
   {id: 'cp', name: 'الابلاغ عن تغيير السعر', isAvailable: 1},
   {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', isAvailable: -1},
   {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', isAvailable: 1},

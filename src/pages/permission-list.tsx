@@ -15,9 +15,9 @@ const PermissionList = (props: Props) => {
   const [customers, setCustomers] = useState<Customer[]>([])
   useEffect(() => {
     setCustomers(() => {
-      const customers = state.customers.filter((c: any) => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
-      return customers.map((c: any) => {
-        const storeName = state.stores.find((s: any) => s.id === c.storeId)?.name || c.storeName || ''
+      const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
+      return customers.map(c => {
+        const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
         return {
           ...c,
           storeName
@@ -38,7 +38,7 @@ const PermissionList = (props: Props) => {
       f7.dialog.close()
     }
   }, [inprocess])
-  const handleUnPermit = (customer: any) => {
+  const handleUnPermit = (customer: Customer) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)

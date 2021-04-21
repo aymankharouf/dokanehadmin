@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
@@ -30,8 +30,9 @@ const AddPack = (props: Props) => {
       setByWeight(true)
     }
   }, [isDivided])
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)
@@ -46,7 +47,7 @@ const AddPack = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find((p: any) => p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
+      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
         throw new Error('duplicateName')
       }
       const pack = {

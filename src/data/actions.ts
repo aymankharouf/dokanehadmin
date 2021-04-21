@@ -611,6 +611,7 @@ export const approveUser = (id: string, name: string, mobile: string, locationId
   })
   const invitedBy = users.filter(u => u.friends?.find(f => f.mobile === mobile))
   invitedBy.forEach(u => {
+    if (!u.friends) return
     const friends = u.friends.slice()
     const invitationIndex = friends.findIndex(f => f.mobile === mobile)
     friends.splice(invitationIndex, 1, {
@@ -642,12 +643,13 @@ export const deleteUser = async (user: User) => {
 
 export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, customer: Customer, packPrices: PackPrice[], packs: Pack[]) => {
   const batch = firebase.firestore().batch()
+  if (!user.alarms) return
   const alarms = user.alarms.slice()
   const alarmIndex = alarms.findIndex(a => a.id === alarm.id)
   alarms.splice(alarmIndex, 1, {
     ...user.alarms[alarmIndex],
     status: 'a',
-    storeId: customer.storeId,
+    storeId: customer?.storeId,
     newPackId
   })
   const userRef = firebase.firestore().collection('users').doc(user.id)
@@ -697,18 +699,18 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
 export const approveRating = (rating: Rating, packs: Pack[]) => {
   const batch = firebase.firestore().batch()
   const ratings = rating.userInfo?.ratings?.slice()
-  if ()
-  const ratingIndex = ratings.findIndex(r => r.productId === rating.productInfo.id)
+  if (!ratings) return
+  const ratingIndex = ratings.findIndex(r => r.productId === rating.productInfo?.id)
   ratings.splice(ratingIndex, 1, {
     ...ratings[ratingIndex],
     status: 'a'
   })
-  const userRef = firebase.firestore().collection('users').doc(rating.userInfo.id)
+  const userRef = firebase.firestore().collection('users').doc(rating.userInfo?.id)
   batch.update(userRef, {
     ratings
   })
-  const oldRating = rating.productInfo.rating
-  const ratingCount = rating.productInfo.ratingCount
+  const oldRating = rating.productInfo?.rating ?? 0
+  const ratingCount = rating.productInfo?.ratingCount ?? 0
   const newRating = Math.round((oldRating * ratingCount + rating.value) / (ratingCount + 1))
   const productRef = firebase.firestore().collection('products').doc(rating.productInfo.id)
   batch.update(productRef, {
@@ -728,12 +730,15 @@ export const approveRating = (rating: Rating, packs: Pack[]) => {
 
 export const approveInvitation = (user: User, mobile: string, status: string) => {
   const batch = firebase.firestore().batch()
-  const friends = user.friends.slice()
+  const friends = user.friends?.slice()
+  if (!friends) return
   const invitationIndex = friends.findIndex(f => f.mobile === mobile)
-  friends.splice(invitationIndex, 1, {
-    ...user.friends[invitationIndex],
-    status
-  })
+  if (user.friends) {
+    friends.splice(invitationIndex, 1, {
+      ...user.friends[invitationIndex],
+      status
+    })
+  }
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
     friends
@@ -745,7 +750,8 @@ export const approveInvitation = (user: User, mobile: string, status: string) =>
 }
 
 export const deleteNotification = (user: User, notificationId: string) => {
-  const notifications = user.notifications.slice()
+  const notifications = user.notifications?.slice()
+  if (!notifications) return
   const notificationIndex = notifications.findIndex(n => n.id === notificationId)
   notifications.splice(notificationIndex, 1)
   firebase.firestore().collection('users').doc(user.id).update({

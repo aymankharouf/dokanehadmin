@@ -4,6 +4,7 @@ import RatingStars from './rating-stars'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
+import { Pack } from '../data/interfaces'
 
 interface Props {
   id: string,
@@ -13,17 +14,17 @@ const ProductPacks = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find(p => p.id === props.id)! : state.products.find(p => p.id === props.id)!)
-  const [packs, setPacks] = useState<any>([])
-  const [activePacks, setActivePacks] = useState([])
+  const [packs, setPacks] = useState<Pack[]>([])
+  const [activePacks, setActivePacks] = useState<Pack[]>([])
   const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     setPacks(() => {
-      const packs = props.type === 'a' ? state.archivedPacks.filter((p: any) => p.productId === props.id) : state.packs.filter((p: any) => p.productId === props.id)
-      return packs.sort((p1: any, p2: any) => p2.price - p1.price)
+      const packs = props.type === 'a' ? state.archivedPacks.filter(p => p.productId === props.id) : state.packs.filter(p => p.productId === props.id)
+      return packs.sort((p1, p2) => p2.price - p1.price)
     })
   }, [state.packs, state.archivedPacks, props.id, props.type])
   useEffect(() => {
-    setActivePacks(() => packs.filter((p: any) => p.price > 0))
+    setActivePacks(() => packs.filter(p => p.price > 0))
   }, [packs])
   useEffect(() => {
     if (error) {
@@ -65,7 +66,7 @@ const ProductPacks = (props: Props) => {
         </CardFooter>
       </Card>
       <List mediaList>
-        {packs.map((p: any) => 
+        {packs.map(p => 
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}

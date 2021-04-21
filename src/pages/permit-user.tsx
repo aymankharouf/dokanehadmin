@@ -15,17 +15,17 @@ const PermitUser = (props: Props) => {
   const [customerInfo] = useState(() => state.customers.find(c => c.id === props.id)!)
   const [storeId, setStoreId] = useState('')
   const [users] = useState(() => {
-    const users = state.users.map((u: any) => {
+    const users = state.users.map(u => {
       return {
         ...u,
         name: `${u.name}${u.storeName ? '-' + u.storeName : ''}:${u.mobile}`
       }
     })
-    return users.sort((u1: any, u2: any) => u1.name > u2.name ? 1 : -1)
+    return users.sort((u1, u2) => u1.name > u2.name ? 1 : -1)
   })
   const [stores] = useState(() => {
-    const stores = state.stores.filter((s: any) => s.id !== 's')
-    return stores.sort((s1: any, s2: any) => s1.name > s2.name ? 1 : -1)
+    const stores = state.stores.filter(s => s.id !== 's')
+    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
   }) 
   useEffect(() => {
     setStoreId(props.id === '0' ? '' : (customerInfo.storeId || ''))
@@ -82,7 +82,7 @@ const PermitUser = (props: Props) => {
         >
           <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
-            {users.map((u: any) => 
+            {users.map(u => 
               <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
@@ -101,7 +101,7 @@ const PermitUser = (props: Props) => {
         >
           <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {stores.map((s: any) => 
+            {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>

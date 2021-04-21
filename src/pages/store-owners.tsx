@@ -7,21 +7,22 @@ import { Customer } from '../data/interfaces'
 interface Props {
   id: string
 }
+type ExtendedCustomer = Customer & {customerInfo: Customer}
 const StoreOwners = (props: Props) => {
   const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
-  const [storeOwners, setStoreOwners] = useState<Customer[]>([])
+  const [storeOwners, setStoreOwners] = useState<ExtendedCustomer[]>([])
   useEffect(() => {
     setStoreOwners(() => {
-      let storeOwners = state.customers.filter(c => c.storeId === props.id)
-      storeOwners = storeOwners.map((o: any) => {
-        const customerInfo = state.customers.find(c => c.id === o.id)
+      const storeOwners = state.customers.filter(c => c.storeId === props.id)
+      const results = storeOwners.map(o => {
+        const customerInfo = state.customers.find(c => c.id === o.id)!
         return {
           ...o,
           customerInfo,
         }
       })
-      return storeOwners
+      return results
     })
   }, [state.customers, props.id])
   return (
@@ -31,7 +32,7 @@ const StoreOwners = (props: Props) => {
         <List mediaList>
           {storeOwners.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : storeOwners.map((o: any) => 
+          : storeOwners.map(o => 
               <ListItem 
                 link="#"
                 title={o.customerInfo.name} 

@@ -3,6 +3,7 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
+import { Store } from '../data/interfaces'
 
 interface Props {
   id: string
@@ -10,12 +11,12 @@ interface Props {
 const AddPackStore = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [cost, setCost] = useState<any>()
-  const [price, setPrice] = useState<any>()
+  const [cost, setCost] = useState(0)
+  const [price, setPrice] = useState(0)
   const [offerDays, setOfferDays] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [storeId, setStoreId] = useState('')
-  const [store, setStore] = useState<any>()
+  const [store, setStore] = useState<Store>()
   const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   useEffect(() => {
@@ -26,22 +27,22 @@ const AddPackStore = (props: Props) => {
   }, [error])
   useEffect(() => {
     if (storeId) {
-      setStore(state.stores.find((s: any) => s.id === storeId))
+      setStore(state.stores.find(s => s.id === storeId))
     }
   }, [state.stores, storeId])
   useEffect(() => {
-    setIsActive(store.isActive || false)
+    setIsActive(store?.isActive || false)
   }, [store])
   useEffect(() => {
     if (cost) {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))).toFixed(2))
+      setPrice((cost * (1 + (store?.isActive && store.type !== '5' ? 0 : (store?.discount ?? 0)))))
     } else {
       setPrice(0)
     }
   }, [cost, store])
   const handleSubmit = () => {
     try{
-      if (state.packPrices.find((p: any) => p.packId === pack.id && p.storeId === storeId)) {
+      if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
@@ -62,12 +63,13 @@ const AddPackStore = (props: Props) => {
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
       }
       const storePack = {
-        packId: pack.id,
+        packId: pack.id!,
         storeId,
         cost: cost * 100,
         price: price * 100,
         offerEnd,
         isActive,
+        isAuto: false,
         time: new Date()
       }
       addPackPrice(storePack, state.packPrices, state.packs)
@@ -96,7 +98,7 @@ const AddPackStore = (props: Props) => {
         >
           <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {stores.map((s: any) => 
+            {stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>
@@ -108,7 +110,7 @@ const AddPackStore = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setCost(e.target.value)}
-          onInputClear={() => setCost('')}
+          onInputClear={() => setCost(0)}
         />
         <ListInput 
           name="price" 
@@ -117,7 +119,7 @@ const AddPackStore = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
+          onInputClear={() => setPrice(0)}
         />
         <ListInput 
           name="offerDays" 

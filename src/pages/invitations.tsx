@@ -2,16 +2,17 @@ import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
+import { Friend, User } from '../data/interfaces'
 
-
+type ExtendedFriend = Friend & {userInfo: User}
 const Invitations = () => {
   const { state } = useContext(StateContext)
-  const [invitations, setInvitations] = useState<any>([])
+  const [invitations, setInvitations] = useState<ExtendedFriend[]>([])
   useEffect(() => {
     setInvitations(() => {
-      const invitations = state.invitations.filter((i: any) => i.status === 'n')
-      return invitations.map((i: any) => {
-        const userInfo = state.users.find((u: any) => u.id === i.userId)
+      const invitations = state.invitations.filter(i => i.status === 'n')
+      return invitations.map(i => {
+        const userInfo = state.users.find(u => u.id === i.userId)!
         return {
           ...i,
           userInfo
@@ -27,7 +28,7 @@ const Invitations = () => {
         <List mediaList>
           {invitations.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : invitations.map((i: any) => 
+          : invitations.map(i => 
               <ListItem
                 link={`/invitation-details/${i.userInfo.id}/mobile/${i.mobile}`}
                 title={`${i.userInfo.name}: ${i.userInfo.mobile}`}

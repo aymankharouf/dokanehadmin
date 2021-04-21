@@ -11,10 +11,10 @@ const Ratings = () => {
   const [ratings, setRatings] = useState<Rating[]>([])
   useEffect(() => {
     setRatings(() => {
-      const ratings = state.ratings.filter((r: any) => r.status === 'n')
-      return ratings.map((r: any) => {
-        const userInfo = state.users.find((u: any) => u.id === r.userId)
-        const productInfo = state.products.find((p: any) => p.id === r.productId)
+      const ratings = state.ratings.filter(r => r.status === 'n')
+      return ratings.map(r => {
+        const userInfo = state.users.find(u => u.id === r.userId)
+        const productInfo = state.products.find(p => p.id === r.productId)
         return {
           ...r,
           userInfo,
@@ -29,7 +29,7 @@ const Ratings = () => {
       setError('')
     }
   }, [error])
-  const handleApprove = (rating: any) => {
+  const handleApprove = (rating: Rating) => {
     try{
       approveRating(rating, state.packs)
       showMessage(labels.approveSuccess)
@@ -45,13 +45,13 @@ const Ratings = () => {
         <List mediaList>
           {ratings.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : ratings.map((r: any) => 
+          : ratings.map(r => 
               <ListItem
-                title={r.productInfo.name}
-                subtitle={`${r.userInfo.name}:${r.userInfo.mobile}`}
+                title={r.productInfo?.name}
+                subtitle={`${r.userInfo?.name}:${r.userInfo?.mobile}`}
                 key={i++}
               >
-                <img slot="media" src={r.productInfo.imageUrl} className="img-list" alt={r.productInfo.name} />
+                <img slot="media" src={r.productInfo?.imageUrl} className="img-list" alt={r.productInfo?.name} />
                 <Button text={labels.approve} slot="after" onClick={() => handleApprove(r)} />
               </ListItem>
             )

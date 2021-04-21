@@ -117,7 +117,7 @@ const AddBulk = (props: Props) => {
         >
           <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
-            {packs.map((p: any) => 
+            {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
@@ -129,7 +129,7 @@ const AddBulk = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onInputClear={() => setSubQuantity(0)}
           onBlur={() => generateName()}
         />
         <ListItem>

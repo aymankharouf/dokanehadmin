@@ -7,7 +7,6 @@ import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
 import { Log } from '../data/interfaces'
 
-
 const Logs = () => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
@@ -15,7 +14,7 @@ const Logs = () => {
   useEffect(() => {
     setLogs(() => {
       const logs = state.logs.map(l => {
-        const userInfo = state.users.find((u: any) => u.id === l.userId)
+        const userInfo = state.users.find(u => u.id === l.userId)
         return {
           ...l,
           userInfo
@@ -30,7 +29,7 @@ const Logs = () => {
       setError('')
     }
   }, [error])
-  const handleDelete = (log: any) => {
+  const handleDelete = (log: Log) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteLog(log)

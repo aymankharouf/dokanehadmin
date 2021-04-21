@@ -40,7 +40,7 @@ const EditPackType = (props: Props) => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        const infictedPacks = state.packs.filter((p: any) => p.packTypeId === props.id)
+        const infictedPacks = state.packs.filter(p => p.packTypeId === props.id)
         if (infictedPacks.length > 0) throw new Error('infictedPacksFound') 
         deleteCountry(props.id, state.countries)
         showMessage(labels.deleteSuccess)

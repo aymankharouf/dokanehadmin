@@ -40,7 +40,7 @@ const EditCountry = (props: Props) => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        const trademarkProducts = state.products.filter((p: any) => p.trademarkId === props.id)
+        const trademarkProducts = state.products.filter(p => p.trademarkId === props.id)
         if (trademarkProducts.length > 0) throw new Error('trademarkProductsFound') 
         deleteTrademark(props.id, state.trademarks)
         showMessage(labels.deleteSuccess)

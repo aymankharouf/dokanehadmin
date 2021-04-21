@@ -5,13 +5,19 @@ import labels from '../data/labels'
 import { randomColors } from '../data/config'
 import { Alarm, Customer, Friend, Rating, User } from '../data/interfaces'
 
+type Section = {
+  id: string,
+  name: string,
+  path: string,
+  count: number
+}
 const Approvals = () => {
   const { state } = useContext(StateContext)
   const [newUsers, setNewUsers] = useState<User[]>([])
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [ratings, setRatings] = useState<Rating[]>([])
   const [invitations, setInvitations] = useState<Friend[]>([])
-  const [sections, setSections] = useState<any>([])
+  const [sections, setSections] = useState<Section[]>([])
   const [newOwners, setNewOwners] = useState<Customer[]>([])
   const [notifyFriends, setNotifyFriends] = useState<User[]>([])
   useEffect(() => {
@@ -38,7 +44,7 @@ const Approvals = () => {
     <Page>
       <Navbar title={labels.approvals} backLink={labels.back} />
       <Block>
-        {sections.map((s: any) => 
+        {sections.map(s => 
           <Button 
             text={`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}
             large 

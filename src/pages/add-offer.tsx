@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, ChangeEvent } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, BlockTitle, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
@@ -12,11 +12,11 @@ const AddOffer = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState<any>()
+  const [subQuantity, setSubQuantity] = useState(0)
   const [subPercent, setSubPercent] = useState(100)
   const [bonusPackId, setBonusPackId] = useState('')
-  const [bonusQuantity, setBonusQuantity] = useState<any>()
-  const [bonusPercent, setBonusPercent] = useState<any>()
+  const [bonusQuantity, setBonusQuantity] = useState(0)
+  const [bonusPercent, setBonusPercent] = useState(0)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
@@ -47,7 +47,7 @@ const AddOffer = (props: Props) => {
     }
   }, [error])
   useEffect(() => {
-    setImageUrl(() => state.packs.find((p: any) => p.id === subPackId)?.imageUrl || '')
+    setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl || '')
   }, [state.packs, subPackId])
   const generateName = () => {
     let suggestedName
@@ -61,8 +61,9 @@ const AddOffer = (props: Props) => {
       setName(suggestedName)
     }
   }
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    if (!files) return
     const filename = files[0].name
     if (filename.lastIndexOf('.') <= 0) {
       setError(labels.invalidFile)
@@ -97,7 +98,7 @@ const AddOffer = (props: Props) => {
         subPackId,
         subQuantity: Number(subQuantity),
         subPercent: subPercent / 100,
-        unitsCount: subQuantity * subPackInfo.unitsCount,
+        unitsCount: subQuantity * (subPackInfo.unitsCount ?? 0),
         subPackName: subPackInfo.name,
         isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
@@ -145,7 +146,7 @@ const AddOffer = (props: Props) => {
         >
           <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
-            {packs.map((p: any) => 
+            {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
@@ -157,7 +158,7 @@ const AddOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onInputClear={() => setSubQuantity(0)}
           onBlur={() => generateName()}
         />
         <ListInput 
@@ -188,7 +189,7 @@ const AddOffer = (props: Props) => {
         >
           <select name="bonusPackId" value={bonusPackId} onChange={e => setBonusPackId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
-            {bonusPacks.map((p: any) => 
+            {bonusPacks.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
             )}
           </select>
@@ -200,7 +201,7 @@ const AddOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setBonusQuantity(e.target.value)}
-          onInputClear={() => setBonusQuantity('')}
+          onInputClear={() => setBonusQuantity(0)}
           onBlur={() => generateName()}
         />
         <ListInput 
@@ -210,7 +211,7 @@ const AddOffer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setBonusPercent(e.target.value)}
-          onInputClear={() => setBonusPercent('')}
+          onInputClear={() => setBonusPercent(0)}
         />
         <ListItem>
           <span>{labels.specialImage}</span>

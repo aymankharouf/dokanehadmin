@@ -16,8 +16,8 @@ const EditCustomer = (props: Props) => {
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [deliveryFees, setDeliveryFees] = useState<any>((customer.deliveryFees / 100).toFixed(2))
-  const [specialDiscount, setSpecialDiscount] = useState<any>((customer.specialDiscount / 100).toFixed(2))
+  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 100))
+  const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 100))
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
@@ -96,7 +96,7 @@ const EditCustomer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setDeliveryFees(e.target.value)}
-          onInputClear={() => setDeliveryFees('')}
+          onInputClear={() => setDeliveryFees(0)}
         />
         <ListInput 
           name="specialDiscount" 
@@ -105,7 +105,7 @@ const EditCustomer = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSpecialDiscount(e.target.value)}
-          onInputClear={() => setSpecialDiscount('')}
+          onInputClear={() => setSpecialDiscount(0)}
         />
         <ListInput 
           name="address" 
