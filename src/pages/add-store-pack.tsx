@@ -62,7 +62,7 @@ const AddStorePack = (props: Props) => {
       }
       const storePack = {
         packId,
-        storeId: store.id,
+        storeId: store.id!,
         cost: cost * 100,
         price: price * 100,
         offerEnd,

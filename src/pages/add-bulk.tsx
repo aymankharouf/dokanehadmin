@@ -70,6 +70,13 @@ const AddBulk = (props: Props) => {
       }
       const pack = {
         name,
+        productId: product.id!,
+        productName: product.name,
+        productAlias: product.alias,
+        categoryId: product.categoryId,
+        countryId: product.countryId,
+        rating: product.rating,
+        sales: product.sales,
         isOffer: false,
         price: 0,
         subPackId,

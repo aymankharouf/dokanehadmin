@@ -219,7 +219,7 @@ export const changeStorePackStatus = (storePack: PackPrice, packPrices: PackPric
     const { packId, ...others } = p
     return others
   })
-  let packRef = firebase.firestore().collection('packs').doc(packId)
+  let packRef = firebase.firestore().collection('packs').doc(storePack.packId)
   newBatch.update(packRef, {
     prices
   })
@@ -712,12 +712,12 @@ export const approveRating = (rating: Rating, packs: Pack[]) => {
   const oldRating = rating.productInfo?.rating ?? 0
   const ratingCount = rating.productInfo?.ratingCount ?? 0
   const newRating = Math.round((oldRating * ratingCount + rating.value) / (ratingCount + 1))
-  const productRef = firebase.firestore().collection('products').doc(rating.productInfo.id)
+  const productRef = firebase.firestore().collection('products').doc(rating.productInfo?.id)
   batch.update(productRef, {
     rating: newRating,
     ratingCount: ratingCount + 1
   })
-  const affectedPacks = packs.filter(p => p.productId === rating.productInfo.id)
+  const affectedPacks = packs.filter(p => p.productId === rating.productInfo?.id)
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     batch.update(packRef, {
@@ -777,9 +777,10 @@ export const sendNotification = (userId: string, title: string, message: string,
 }
 
 export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store[], packs: Pack[]) => {
-  const packStores = packPrices.filter(p => (p.packId === pack.id || packs.find(pa => pa.id === p.packId && pa.forSale && (pa.subPackId === pack.id || pa.bonusPackId === pack.id))) && (p.storeId !== 's' || addQuantity(p.quantity, -1 * (basketStockQuantity || 0)) > 0))
+  const packStores = packPrices.filter(p => p.packId === pack.id || packs.find(pa => pa.id === p.packId && pa.forSale && (pa.subPackId === pack.id || pa.bonusPackId === pack.id)))
   return packStores.map(s => {
-    let packId: string, unitPrice, unitCost, price, cost, subQuantity, offerInfo, isOffer
+    let packId = ''
+    let unitPrice, unitCost, price, cost, subQuantity, offerInfo, isOffer
     if (s.packId === pack.id) {
       packId = s.packId
       price = s.price
@@ -792,17 +793,17 @@ export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store
       price = s.price
       cost = s.cost
       if (offerInfo) {
-        packId = offerInfo.id
-        unitPrice = Math.round(s.price / offerInfo.subQuantity * offerInfo.subPercent * (1 + setup.profit))
-        unitCost = Math.round(s.cost / offerInfo.subQuantity * offerInfo.subPercent)
+        packId = offerInfo.id!
+        unitPrice = Math.round(s.price / (offerInfo.subQuantity ?? 0) * (offerInfo.subPercent ?? 0) * (1 + setup.profit))
+        unitCost = Math.round(s.cost / (offerInfo.subQuantity ?? 0) * (offerInfo.subPercent ?? 0))
         subQuantity = offerInfo.subQuantity
         isOffer = offerInfo.isOffer
       } else {
         offerInfo = packs.find(p => p.id === s.packId && p.bonusPackId === pack.id)
         if (offerInfo) {
-          packId = offerInfo.id
-          unitPrice = Math.round(s.price / offerInfo.bonusQuantity * offerInfo.bonusPercent * (1 + setup.profit))
-          unitCost = Math.round(s.cost / offerInfo.bonusQuantity * offerInfo.bonusPercent)
+          packId = offerInfo.id!
+          unitPrice = Math.round(s.price / (offerInfo.bonusQuantity ?? 0) * (offerInfo.bonusPercent ?? 0) * (1 + setup.profit))
+          unitCost = Math.round(s.cost / (offerInfo.bonusQuantity ?? 0) * (offerInfo.bonusPercent ?? 0))
           subQuantity = offerInfo.bonusQuantity
           isOffer = offerInfo.isOffer
         }

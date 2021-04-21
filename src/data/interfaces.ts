@@ -25,7 +25,7 @@ export interface Pack {
   imageUrl?: string,
   price: number,
   categoryId: string,
-  sales: number,
+  sales?: number,
   rating: number,
   subPackId?: string,
   subQuantity?: number,
@@ -89,6 +89,7 @@ export interface Rating {
   productId: string,
   status: string,
   userId: string,
+  value: number,
   userInfo?: User,
   productInfo?: Product
 }
@@ -102,7 +103,9 @@ export interface Alarm {
   offerDays?: number,
   status: string,
   userId: string,
-  time: Date
+  time: Date,
+  storeId?: string,
+  newPackId?: string
 }
 export interface User {
   id: string,
@@ -181,7 +184,7 @@ export interface Product {
   sales?: number
 }
 export interface Store {
-  id: string,
+  id?: string,
   type: string,
   name: string,
   isActive: boolean,

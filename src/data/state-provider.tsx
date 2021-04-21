@@ -173,6 +173,7 @@ const StateProvider = ({ children }: Props) => {
               locationId: doc.data().locationId,
               mobile: doc.data().mobile,
               name: doc.data().name,
+              time: doc.data().time
             })
             if (doc.data().notifications) {
               doc.data().notifications.forEach((n: Notification) => {

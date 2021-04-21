@@ -93,6 +93,13 @@ const AddOffer = (props: Props) => {
         throw new Error('invalidQuantity')
       }
       const pack = {
+        productId: product.id!,
+        productName: product.name,
+        productAlias: product.alias,
+        categoryId: product.categoryId,
+        countryId: product.countryId,
+        sales: product.sales,
+        rating: product.rating,
         name,
         isOffer: true,
         subPackId,

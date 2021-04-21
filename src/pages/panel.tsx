@@ -14,8 +14,7 @@ const Panel = () => {
     const invitations = state.invitations.filter(i => i.status === 'n').length
     const passwordRequests = state.passwordRequests.length
     const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
-    const notifyFriends = state.users.filter(u => (u.notifyFriends?.length ?? 0) > 0).length
-    setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners + notifyFriends)
+    setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners)
   }, [state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
   const handleLogout = () => {
     logout()
