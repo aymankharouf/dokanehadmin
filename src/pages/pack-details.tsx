@@ -4,11 +4,18 @@ import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, changeStorePackStatus, showMessage, showError, getMessage, quantityText } from '../data/actions'
 import moment from 'moment'
 import labels from '../data/labels'
-import { Pack, PackPrice } from '../data/types'
+import { Pack, PackPrice, Store } from '../data/types'
 
-type Props = {id: string}
-type ExtendedPack = Pack & {detailsCount: number} 
-
+type Props = {
+  id: string
+}
+type ExtendedPack = Pack & {
+  detailsCount: number
+}
+type ExtendedPackPrice = PackPrice & {
+  packInfo: Pack,
+  storeInfo: Store
+}
 const PackDetails = (props: Props) => {
   const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
@@ -22,24 +29,13 @@ const PackDetails = (props: Props) => {
       detailsCount
     }
   })
-  const [packStores, setPackStores] = useState<PackPrice[]>([])
+  const [packStores, setPackStores] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setPackStores(() => {
       const packStores = getPackStores(pack, state.packPrices, state.stores, state.packs)
       const today = new Date()
       today.setDate(today.getDate() - 30)
-      return packStores.sort((s1, s2) => 
-      {
-        if (s1.unitPrice === s2.unitPrice) {
-          if (s1.storeInfo?.type === s2.storeInfo?.type){
-            return Number(s2.storeInfo?.discount) - Number(s1.storeInfo?.discount)
-          } else {
-            return Number(s1.storeInfo?.type) - Number(s2.storeInfo?.type)
-          }
-        } else {
-          return (s1.unitPrice ?? 0) - (s2.unitPrice ?? 0)
-        }
-      })
+      return packStores.sort((s1, s2) => (s1.unitPrice ?? 0) - (s2.unitPrice ?? 0))
     })
   }, [pack, state.stores, state.packPrices, state.packs])
   useEffect(() => {
@@ -135,7 +131,6 @@ const PackDetails = (props: Props) => {
       packId: pack.id!,
       storeId: storePackInfo.storeId,
       price: storePackInfo.price,
-      cost: storePackInfo.cost,
       offerEnd: storePackInfo.offerEnd,
       isActive: storePackInfo.isActive,
       isAuto: false,
@@ -170,8 +165,7 @@ const PackDetails = (props: Props) => {
             className={currentStorePack?.storeId === s.storeId && currentStorePack?.packId === s.packId ? 'selected' : ''}
           >
             <div className="list-subtext1">{`${labels.price}: ${(s.price / 100).toFixed(2)}${s.price === s.unitPrice ? '' : '(' + ((s.unitPrice ?? 0)/ 100).toFixed(2) + ')'}`}</div>
-            <div className="list-subtext2">{`${labels.cost}: ${(s.cost / 100).toFixed(2)}${s.cost === s.unitCost ? '' : '(' + ((s.unitCost ?? 0) / 100).toFixed(2) + ')'}`}</div>
-            <div className="list-subtext3">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
+            <div className="list-subtext2">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
             {s.offerEnd ? <div className="list-subtext4">{labels.offerUpTo}: {moment(s.offerEnd).format('Y/M/D')}</div> : ''}
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.packId === pack.id && !s.isAuto ? <Link slot="after" iconMaterial="more_vert" onClick={()=> handleActions(s)}/> : ''}

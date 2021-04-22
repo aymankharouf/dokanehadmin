@@ -5,16 +5,19 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
-import { Log } from '../data/types'
+import { Log, User } from '../data/types'
 
+type ExtendedLog = Log & {
+  userInfo: User
+}
 const Logs = () => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [logs, setLogs] = useState<Log[]>([])
+  const [logs, setLogs] = useState<ExtendedLog[]>([])
   useEffect(() => {
     setLogs(() => {
       const logs = state.logs.map(l => {
-        const userInfo = state.users.find(u => u.id === l.userId)
+        const userInfo = state.users.find(u => u.id === l.userId)!
         return {
           ...l,
           userInfo

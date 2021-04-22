@@ -11,10 +11,10 @@ const EditCountry = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id)!)
-  const [name, setName] = useState(trademark?.name)
+  const [name, setName] = useState(trademark.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== trademark?.name) setHasChanged(true)
+    if (name !== trademark.name) setHasChanged(true)
     else setHasChanged(false)
   }, [trademark, name])
 
@@ -59,6 +59,7 @@ const EditCountry = (props: Props) => {
           label={labels.name}
           value={name}
           clearButton
+          autofocus
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}

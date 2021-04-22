@@ -61,7 +61,7 @@ const ProductPacks = (props: Props) => {
           <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{productOfText(product.trademarkId, product.countryId)}</p>
+          <p>{productOfText(state.trademarks.find(t => t.id === product.trademarkId)!.name, state.countries.find(c => c.id === product.countryId)!.name)}</p>
           <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> 
         </CardFooter>
       </Card>

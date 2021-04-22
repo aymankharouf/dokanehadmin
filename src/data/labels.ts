@@ -1,10 +1,8 @@
 import { Label } from './types'
 
 const labels: Label = {
-  offers: 'العروض',
   registerTitle: 'تسجيل جديد',
   name: 'اﻻسم',
-  ename: 'الاسم الانجليزي',
   mobile: 'الموبايل',
   password: 'كلمة السر',
   location: 'المنطقة',
@@ -17,9 +15,6 @@ const labels: Label = {
   auth_wrong_password: 'كلمة السر غير صحيحة',
   auth_invalid_email: 'الرجاء التأكد من البريد الالكتروني',
   productOf: 'انتاج',
-  basketFrom: 'سلة المشتريات من',
-  purchaseDetails: 'تفاصيل المشتريات',
-  purchases: 'المشتريات',
   category: 'الصنف',
   trademark: 'العلامة التجارية',
   country: 'الدولة',
@@ -44,16 +39,10 @@ const labels: Label = {
   address: 'العنوان',
   confirm: 'اعتماد',
   discount: 'الخصم',
-  net: 'الصافي',
-  delivery: 'خدمة التوصيل',
-  deliveryFees: 'رسوم التوصيل',
   cost: 'التكلفة',
-  profit: 'الربح',
   invalidPrice: 'الرجاء التأكد من السعر',
   invalidMobile: 'رقم الموبايل غير صحيح',
-  twoDiffStores: 'ﻻ يمكن التسوق من محلين مختلفين في نفس الوقت',
   invalidFile: 'الرجاء التأكد من ملف الصورة',
-  stockName: 'دكانة نت',
   passwordRequests: 'طلبات كلمة السر',
   customers: 'العملاء',
   pack: 'العبوة',
@@ -66,7 +55,6 @@ const labels: Label = {
   loginSuccess: 'اهلا وسهلا بك',
   email: 'البريد اﻻلكتروني',
   login: 'تسجيل دخول',
-  logon: 'دخول',
   logout: 'تسجيل خروج',
   mainPanelTitle: 'الوظائف المساندة',
   settings: 'اﻻعدادات',
@@ -160,7 +148,7 @@ const labels: Label = {
   offerDays: 'عرض لمدة',
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
   trademarkProductsFound: 'لا يمكن حذف العلامة التجارية ... يوجد منتجات مرتبطة بها',
-  countryProductsFound: 'لا يمكن حذ الدولة ... يوجد منتجات مرتبطة بها',
+  countryProductsFound: 'لا يمكن حذف الدولة ... يوجد منتجات مرتبطة بها',
   confirmationTitle: 'تأكيد العملية',
   haltOffer: 'تعليق العرض',
   storesBalance: 'ارصدة المحلات',
@@ -369,7 +357,9 @@ const labels: Label = {
   paymentDate: 'تاريخ الدفعة',
   packTypes: 'الاغلفة',
   addPackType: 'اضافة غلاف',
-  infictedPacksFound: 'يوجد مواد تستخدم هذا النوع من التغليف'
+  infictedPacksFound: 'يوجد مواد تستخدم هذا النوع من التغليف',
+  editPackType: 'تعديل غلاف',
+  units: 'الوحدات'
 }
 
 export default labels

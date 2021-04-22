@@ -3,20 +3,29 @@ import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText } from '../data/actions'
-import { Product } from '../data/types'
+import { Category, Country, Product, Trademark } from '../data/types'
 
+type ExtendedProduct = Product & {
+  categoryInfo: Category,
+  trademarkInfo: Trademark,
+  countryInfo: Country
+}
 const ArchivedProducts = () => {
   const { state, dispatch } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
       const products = state.archivedProducts.map(p => {
-        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
+        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)!
+        const countryInfo = state.countries.find(c => c.id === p.countryId)!
         return {
           ...p,
-          categoryInfo
+          categoryInfo,
+          trademarkInfo,
+          countryInfo
         }
       })
       return products.sort((p1, p2) => (p1.sales ?? 0) - (p2.sales ?? 0))
@@ -80,7 +89,7 @@ const ArchivedProducts = () => {
                   link={`/product-packs/${p.id}/type/a`}
                   title={p.name}
                   subtitle={getCategoryName(p.categoryInfo!, state.categories)}
-                  text={productOfText(p.trademarkId, p.countryId)}
+                  text={productOfText(p.trademarkInfo.name, p.countryInfo.name)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

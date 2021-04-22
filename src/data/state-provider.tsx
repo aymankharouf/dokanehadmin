@@ -29,7 +29,8 @@ const StateProvider = ({ children }: Props) => {
     alarms: [],
     ratings: [],
     invitations: [],
-    packTypes: []
+    packTypes: [],
+    units: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -213,7 +214,6 @@ const StateProvider = ({ children }: Props) => {
               address: doc.data().address,
               storeId: doc.data().storeId,
               storeName: doc.data().storeName,
-              deliveryFees: doc.data().deliveryFees,
               discounts: doc.data().discounts,
               isBlocked: doc.data().isBlocked,
               specialDiscount: doc.data().specialDiscount
@@ -230,10 +230,7 @@ const StateProvider = ({ children }: Props) => {
               id: doc.id,
               name: doc.data().name,
               mobile: doc.data().mobile,
-              type: doc.data().type,
               address: doc.data().address,
-              allowReturn: doc.data().allowReturn,
-              discount: doc.data().discount,
               isActive: doc.data().isActive,
               mapPosition: doc.data().mapPosition,
               openTime: doc.data().openTime

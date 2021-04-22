@@ -11,7 +11,8 @@ const Settings = () => {
     {id: '3', name: labels.categories, path: '/categories/0'},
     {id: '4', name: labels.locations, path: '/locations/'},
     {id: '5', name: labels.adverts, path: '/adverts/'},
-    {id: '6', name: labels.packTypes, path: '/packTypes/'},
+    {id: '6', name: labels.packTypes, path: '/pack-types/'},
+    {id: '7', name: labels.units, path: '/units/'},
   ])
   let i = 0
   return(

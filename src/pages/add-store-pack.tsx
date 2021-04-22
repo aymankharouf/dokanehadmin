@@ -31,25 +31,15 @@ const AddStorePack = (props: Props) => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (cost) {
-      setPrice((cost * (1 + (store.isActive && store.type !== '5' ? 0 : store.discount))))
-    } else {
-      setPrice(0)
-    }
-  }, [cost, store])
   const handleSubmit = () => {
     try{
       if (state.packPrices.find(p => p.packId === packId && p.storeId === store.id)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
-        throw new Error('invalidPrice')
-      }
       if (Number(price) !== Number(Number(price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
-      if (Number(price) < Number(cost)) {
+      if (Number(price) < 0) {
         throw new Error('invalidPrice')
       }
       if (offerDays && Number(offerDays) <= 0) {
@@ -63,7 +53,6 @@ const AddStorePack = (props: Props) => {
       const storePack = {
         packId,
         storeId: store.id!,
-        cost: cost * 100,
         price: price * 100,
         offerEnd,
         isAuto: false,
@@ -102,15 +91,6 @@ const AddStorePack = (props: Props) => {
           </select>
         </ListItem>
         <ListInput 
-          name="cost" 
-          label={labels.cost}
-          value={cost}
-          clearButton
-          type="number" 
-          onChange={e => setCost(e.target.value)}
-          onInputClear={() => setCost(0)}
-        />
-        <ListInput 
           name="price" 
           label={labels.price}
           value={price}
@@ -138,7 +118,7 @@ const AddStorePack = (props: Props) => {
           />
         </ListItem>
       </List>
-      {!packId || !cost ? '' :
+      {packId && price &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -58,18 +58,14 @@ export type PackPrice = {
   storeId: string,
   packId: string,
   price: number,
-  cost: number,
   offerEnd?: Date,
   isActive: boolean,
   isAuto: boolean,
-  packInfo?: Pack,
-  storeInfo?: Store,
   time: Date,
   quantity?: number,
   weight?: number,
   subQuantity?: number,
   unitPrice?: number,
-  unitCost?: number
 }
 export type Notification = {
   id: string,
@@ -127,7 +123,6 @@ export type Customer = {
   storeName: string,
   name: string,
   isBlocked: boolean,
-  deliveryFees: number,
   discounts: number,
   specialDiscount: number,
   address: string,
@@ -159,6 +154,11 @@ export type PackType = {
   id: string,
   name: string,
 }
+export type Unit = {
+  id: string,
+  name: string,
+  type: string
+}
 export type PasswordRequest = {
   id: string,
   mobile: string,
@@ -176,19 +176,15 @@ export type Product = {
   imageUrl: string,
   rating: number,
   ratingCount: number,
-  categoryInfo?: Category,
   sales?: number
 }
 export type Store = {
   id?: string,
-  type: string,
   name: string,
   isActive: boolean,
-  discount: number,
   mobile: string,
   address: string,
   mapPosition: string,
-  allowReturn: boolean,
   openTime: string
 }
 export type Log = {
@@ -197,7 +193,6 @@ export type Log = {
   page: string,
   userId: string,
   time: Date,
-  userInfo?: User
 }
 export type AlarmType = {
   id: string,
@@ -225,7 +220,8 @@ export type State = {
   alarms: Alarm[],
   ratings: Rating[],
   invitations: Friend[],
-  packTypes: PackType[]
+  packTypes: PackType[],
+  units: Unit[]
 }
 
 export type Action = {

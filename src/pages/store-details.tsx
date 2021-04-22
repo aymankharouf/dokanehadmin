@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { storeTypes } from '../data/config'
 
 type Props = {
   id: string
@@ -32,29 +31,6 @@ const StoreDetails = (props: Props) => {
           type="number"
           readonly
         />
-        <ListInput
-          name="type"
-          label={labels.type}
-          value={storeTypes.find(t => t.id === store.type)?.name}
-          type="text"
-          readonly
-        />
-        <ListInput
-          name="discount"
-          label={labels.discount}
-          value={store.discount * 100}
-          type="number"
-          readonly
-        />
-        <ListItem>
-          <span>{labels.allowReturn}</span>
-          <Toggle 
-            name="allowReturn" 
-            color="green" 
-            checked={store.allowReturn} 
-            disabled
-          />
-        </ListItem>
         <ListItem>
           <span>{labels.isActive}</span>
           <Toggle 

@@ -64,6 +64,7 @@ import EditTrademark from './pages/edit-trademark'
 import PackTypes from './pages/pack-types'
 import AddPackType from './pages/add-pack-type'
 import EditPackType from './pages/edit-pack-type'
+import Units from './pages/units'
 
 const routes = [
   {
@@ -337,8 +338,12 @@ const routes = [
     component: AddPackType
   },
   {
-    path: '/edit-pack-type/',
+    path: '/edit-pack-type/:id',
     component: EditPackType
+  },
+  {
+    path: '/units/',
+    component: Units
   },
   {
     path: '(.*)',

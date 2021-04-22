@@ -11,10 +11,10 @@ const EditCountry = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [country] = useState(() => state.countries.find(c => c.id === props.id)!)
-  const [name, setName] = useState(country?.name)
+  const [name, setName] = useState(country.name)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== country?.name) setHasChanged(true)
+    if (name !== country.name) setHasChanged(true)
     else setHasChanged(false)
   }, [country, name])
 
@@ -58,6 +58,7 @@ const EditCountry = (props: Props) => {
           name="name" 
           label={labels.name}
           value={name}
+          autofocus
           clearButton
           type="text" 
           onChange={e => setName(e.target.value)}

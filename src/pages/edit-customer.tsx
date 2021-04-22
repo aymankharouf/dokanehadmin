@@ -16,7 +16,6 @@ const EditCustomer = (props: Props) => {
   const [address, setAddress] = useState(customer.address)
   const [locationId, setLocationId] = useState(userInfo.locationId)
   const [isBlocked, setIsBlocked] = useState(customer.isBlocked)
-  const [deliveryFees, setDeliveryFees] = useState((customer.deliveryFees / 100))
   const [specialDiscount, setSpecialDiscount] = useState((customer.specialDiscount / 100))
   const [hasChanged, setHasChanged] = useState(false)
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
@@ -25,10 +24,9 @@ const EditCustomer = (props: Props) => {
     || address !== customer.address
     || locationId !== userInfo.locationId
     || isBlocked !== customer.isBlocked
-    || deliveryFees * 100 !== customer.deliveryFees
     || specialDiscount * 100 !== customer.specialDiscount) setHasChanged(true)
     else setHasChanged(false)
-  }, [customer, userInfo, name, address, locationId, isBlocked, deliveryFees, specialDiscount])
+  }, [customer, userInfo, name, address, locationId, isBlocked, specialDiscount])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -37,9 +35,6 @@ const EditCustomer = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (Number(deliveryFees) < 0 || Number(deliveryFees) !== Number(Number(deliveryFees).toFixed(2))) {
-        throw new Error('invalidValue')
-      }
       if (Number(specialDiscount) < 0 || Number(specialDiscount) !== Number(Number(specialDiscount).toFixed(2))) {
         throw new Error('invalidValue')
       }
@@ -47,7 +42,6 @@ const EditCustomer = (props: Props) => {
         ...customer,
         address,
         isBlocked,
-        deliveryFees: deliveryFees * 100,
         specialDiscount: specialDiscount * 100
       }
       editCustomer(newCustomer, name, locationId, userInfo.mobile, customer.storeId, state.stores)
@@ -89,15 +83,6 @@ const EditCustomer = (props: Props) => {
             )}
           </select>
         </ListItem>
-        <ListInput 
-          name="deliveryFees" 
-          label={labels.deliveryFees}
-          value={deliveryFees}
-          clearButton
-          type="number" 
-          onChange={e => setDeliveryFees(e.target.value)}
-          onInputClear={() => setDeliveryFees(0)}
-        />
         <ListInput 
           name="specialDiscount" 
           label={labels.specialDiscount}

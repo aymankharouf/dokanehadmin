@@ -3,26 +3,35 @@ import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { productOfText, getCategoryName } from '../data/actions'
-import { Product } from '../data/types'
+import { Category, Country, Product, Trademark } from '../data/types'
 
 type Props = {
   id: string
 }
+type ExtendedProduct = Product & {
+  categoryInfo: Category,
+  trademarkInfo: Trademark,
+  countryInfo: Country
+}
 const Products = (props: Props) => {
   const { state } = useContext(StateContext)
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
-      let products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.productId === p.id) || state.packs.filter(pa => pa.productId === p.id).length === state.packs.filter(pa => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
-      products = products.map(p => {
-        const categoryInfo = state.categories.find(c => c.id === p.categoryId)
+      const products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.productId === p.id) || state.packs.filter(pa => pa.productId === p.id).length === state.packs.filter(pa => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
+      const results = products.map(p => {
+        const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
+        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)!
+        const countryInfo = state.countries.find(c => c.id === p.countryId)!
         return {
           ...p,
-          categoryInfo
+          categoryInfo,
+          trademarkInfo,
+          countryInfo
         }
       })
-      return products.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo?.name! > p2.categoryInfo?.name! ? 1 : -1))
+      return results.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo?.name! > p2.categoryInfo?.name! ? 1 : -1))
     })
   }, [state.products, state.categories, state.packs, props.id])
   
@@ -55,7 +64,7 @@ const Products = (props: Props) => {
                   title={p.name}
                   subtitle={p.alias}
                   text={p.description}
-                  footer={productOfText(p.trademarkId, p.countryId)}
+                  footer={productOfText(p.trademarkInfo.name, p.countryInfo.name)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />

@@ -35,6 +35,7 @@ const AddCountry = () => {
       <Navbar title={labels.addCountry} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
+          autofocus
           name="name" 
           label={labels.name} 
           clearButton

@@ -11,13 +11,11 @@ type Props = {
 const AddPackStore = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [cost, setCost] = useState(0)
   const [price, setPrice] = useState(0)
   const [offerDays, setOfferDays] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState<Store>()
-  const [stores] = useState(() => state.stores.filter(s => s.id !== 's'))
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   useEffect(() => {
     if (error) {
@@ -33,25 +31,15 @@ const AddPackStore = (props: Props) => {
   useEffect(() => {
     setIsActive(store?.isActive || false)
   }, [store])
-  useEffect(() => {
-    if (cost) {
-      setPrice((cost * (1 + (store?.isActive && store.type !== '5' ? 0 : (store?.discount ?? 0)))))
-    } else {
-      setPrice(0)
-    }
-  }, [cost, store])
   const handleSubmit = () => {
     try{
       if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(cost) <= 0 || Number(cost) !== Number(Number(cost).toFixed(2))) {
-        throw new Error('invalidPrice')
-      }
       if (Number(price) !== Number(Number(price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
-      if (Number(price) < Number(cost)) {
+      if (Number(price) < 0) {
         throw new Error('invalidPrice')
       }
       if (offerDays && Number(offerDays) <= 0) {
@@ -65,7 +53,6 @@ const AddPackStore = (props: Props) => {
       const storePack = {
         packId: pack.id!,
         storeId,
-        cost: cost * 100,
         price: price * 100,
         offerEnd,
         isActive,
@@ -98,20 +85,11 @@ const AddPackStore = (props: Props) => {
         >
           <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
             <option value=""></option>
-            {stores.map(s => 
+            {state.stores.map(s => 
               <option key={s.id} value={s.id}>{s.name}</option>
             )}
           </select>
         </ListItem>
-        <ListInput 
-          name="cost" 
-          label={labels.cost}
-          value={cost}
-          clearButton
-          type="number" 
-          onChange={e => setCost(e.target.value)}
-          onInputClear={() => setCost(0)}
-        />
         <ListInput 
           name="price" 
           label={labels.price}
@@ -140,7 +118,7 @@ const AddPackStore = (props: Props) => {
           />
         </ListItem>
       </List>
-      {!storeId || !cost ? '' :
+      {storeId && price &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -2,18 +2,14 @@ import { useState, useEffect } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import labels from '../data/labels'
-import { storeTypes } from '../data/config'
 
 const AddStore = () => {
   const [error, setError] = useState('')
-  const [type, setType] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
-  const [discount, setDiscount] = useState(0)
   const [mapPosition, setMapPosition] = useState('')
-  const [allowReturn, setAllowReturn] = useState(false)
   const [isActive, setIsActive] = useState(false)
   const [openTime, setOpenTime] = useState('')
 
@@ -39,16 +35,10 @@ const AddStore = () => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (Number(discount) <= 0) {
-        throw new Error('invalidValue')
-      }
       const store = {
         name,
-        type,
-        discount : discount / 100,
         mobile,
         mapPosition,
-        allowReturn,
         isActive,
         openTime,
         address,
@@ -85,43 +75,6 @@ const AddStore = () => {
           onChange={e => setMobile(e.target.value)}
           onInputClear={() => setMobile('')}
         />
-        <ListItem
-          title={labels.type}
-          smartSelect
-          id="types"
-          smartSelectParams={{
-            el: '#types', 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="type" value={type} onChange={e => setType(e.target.value)}>
-            <option value=""></option>
-            {storeTypes.map(t => 
-              t.id === '1' ? '' : <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput
-          name="discount"
-          label={labels.discount}
-          value={discount}
-          clearButton
-          type="number"
-          onChange={e => setDiscount(e.target.value)}
-          onInputClear={() => setDiscount(0)}
-        />
-        <ListItem>
-          <span>{labels.allowReturn}</span>
-          <Toggle 
-            name="allowReturn" 
-            color="green" 
-            checked={allowReturn} 
-            onToggleChange={() => setAllowReturn(!allowReturn)}
-          />
-        </ListItem>
         <ListItem>
           <span>{labels.isActive}</span>
           <Toggle 
@@ -159,7 +112,7 @@ const AddStore = () => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {name && discount && type && !mobileErrorMessage &&
+      {name && !mobileErrorMessage &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

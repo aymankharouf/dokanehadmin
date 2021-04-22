@@ -48,6 +48,7 @@ const EditLocation = (props: Props) => {
           label={labels.name}
           value={name}
           clearButton
+          autofocus
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}

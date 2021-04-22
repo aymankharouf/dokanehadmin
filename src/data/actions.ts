@@ -42,8 +42,8 @@ export const addQuantity = (q1: number, q2: number, q3 = 0) => {
   return Math.trunc(q1 * 1000 + q2 * 1000 + q3 * 1000) / 1000
   }
 
-export const productOfText = (trademark: string, country: string) => {
-  return trademark ? `${labels.productFrom} ${trademark}-${country}` : `${labels.productOf} ${country}`
+export const productOfText = (trademarkName: string, countryName: string) => {
+  return trademarkName ? `${labels.productFrom} ${trademarkName}-${countryName}` : `${labels.productOf} ${countryName}`
 }
 
 export const login = (email: string, password: string) => {
@@ -78,7 +78,6 @@ export const addPackPrice = (storePack: PackPrice, packPrices: PackPrice[], pack
       const subStorePack = {
         packId: pack.subPackId!,
         storeId: storePack.storeId,
-        cost: Math.round(storePack.cost / (pack.subQuantity ?? 0)),
         price: Math.round(storePack.price / (pack.subQuantity ?? 0)),
         offerEnd: storePack.offerEnd,
         isActive: storePack.isActive,
@@ -194,7 +193,6 @@ export const editPrice = (storePack: PackPrice, oldPrice: number, packPrices: Pa
       const subStorePackOldPrice = subStorePack.price
       subStorePack = {
         ...subStorePack,
-        cost: Math.round(storePack.cost / (pack.subQuantity ?? 0)),
         price: Math.round(storePack.price / (pack.subQuantity ?? 0)),
       }
       editPrice(subStorePack, subStorePackOldPrice, packPrices, packs, newBatch)
@@ -780,22 +778,18 @@ export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store
   const packStores = packPrices.filter(p => p.packId === pack.id || packs.find(pa => pa.id === p.packId && pa.forSale && (pa.subPackId === pack.id || pa.bonusPackId === pack.id)))
   return packStores.map(s => {
     let packId = ''
-    let unitPrice, unitCost, price, cost, subQuantity, offerInfo, isOffer
+    let unitPrice, price, subQuantity, offerInfo, isOffer
     if (s.packId === pack.id) {
       packId = s.packId
       price = s.price
-      cost = s.cost
       unitPrice = s.price
-      unitCost = s.cost
       isOffer = pack.isOffer
     } else {
       offerInfo = packs.find(p => p.id === s.packId && p.subPackId === pack.id)
       price = s.price
-      cost = s.cost
       if (offerInfo) {
         packId = offerInfo.id!
         unitPrice = Math.round(s.price / (offerInfo.subQuantity ?? 0) * (offerInfo.subPercent ?? 0) * (1 + setup.profit))
-        unitCost = Math.round(s.cost / (offerInfo.subQuantity ?? 0) * (offerInfo.subPercent ?? 0))
         subQuantity = offerInfo.subQuantity
         isOffer = offerInfo.isOffer
       } else {
@@ -803,22 +797,19 @@ export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store
         if (offerInfo) {
           packId = offerInfo.id!
           unitPrice = Math.round(s.price / (offerInfo.bonusQuantity ?? 0) * (offerInfo.bonusPercent ?? 0) * (1 + setup.profit))
-          unitCost = Math.round(s.cost / (offerInfo.bonusQuantity ?? 0) * (offerInfo.bonusPercent ?? 0))
           subQuantity = offerInfo.bonusQuantity
           isOffer = offerInfo.isOffer
         }
       }
     }
-    const storeInfo = stores.find(st => st.id === s.storeId)
-    const packInfo = packs.find(p => p.id === packId)
+    const storeInfo = stores.find(st => st.id === s.storeId)!
+    const packInfo = packs.find(p => p.id === packId)!
     return {
       ...s,
       packId,
       price,
-      cost,
       subQuantity,
       unitPrice,
-      unitCost,
       isOffer,
       storeInfo,
       packInfo
