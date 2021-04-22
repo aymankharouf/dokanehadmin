@@ -30,7 +30,7 @@ const ArchivedProducts = () => {
       })
       return products.sort((p1, p2) => (p1.sales ?? 0) - (p2.sales ?? 0))
     })
-  }, [state.archivedProducts, state.categories])
+  }, [state.archivedProducts, state.categories, state.countries, state.trademarks])
   useEffect(() => {
     if (error) {
       showError(error)

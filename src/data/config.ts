@@ -43,3 +43,9 @@ export const friendStatus = [
   {id: 'r', name: 'مستخدم فعلي'}
 ]
 
+export const unitTypes = [
+  {id: 'w', name: 'وزن'},
+  {id: 'v', name: 'حجم'},
+  {id: 'c', name: 'عدد'},
+  {id: 'l', name: 'طول'}
+]

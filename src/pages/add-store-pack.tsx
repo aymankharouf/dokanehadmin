@@ -11,7 +11,6 @@ const AddStorePack = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
-  const [cost, setCost] = useState(0)
   const [price, setPrice] = useState(0)
   const [offerDays, setOfferDays] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)

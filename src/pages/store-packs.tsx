@@ -72,10 +72,9 @@ const StorePacks = (props: Props) => {
                 footer={moment(p.time).fromNow()}
                 key={i++}
               >
-                <div className="list-subtext1">{`${labels.cost}: ${(p.cost / 100).toFixed(2)}`}</div>
-                <div className="list-subtext2">{`${labels.price}: ${(p.price / 100).toFixed(2)}`}</div>
-                <div className="list-subtext3">{p.categoryInfo.name}</div>
-                <div className="list-subtext4">{p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd).format('Y/M/D')}` : ''}</div>
+                <div className="list-subtext1">{`${labels.price}: ${(p.price / 100).toFixed(2)}`}</div>
+                <div className="list-subtext2">{p.categoryInfo.name}</div>
+                <div className="list-subtext3">{p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd).format('Y/M/D')}` : ''}</div>
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
                 {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}

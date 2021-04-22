@@ -42,6 +42,8 @@ const Reducer = (state: State, action: Action) => {
         return {...state, archivedProducts: action.payload}
       case 'SET_ARCHIVED_PACKS':
         return {...state, archivedPacks: action.payload}
+      case 'SET_UNITS':
+        return {...state, units: action.payload}
       case 'LOGIN':
         return {...state, user: action.payload}
       default:

@@ -142,6 +142,11 @@ const StateProvider = ({ children }: Props) => {
         }, err => {
           unsubscribePackTypes()
         })
+        const unsubscribeUnits = firebase.firestore().collection('lookups').doc('u').onSnapshot(doc => {
+          if (doc.data()) dispatch({type: 'SET_UNITS', payload: doc.data()?.values})
+        }, err => {
+          unsubscribeUnits()
+        })
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products: Product[] = []
           docs.forEach(doc => {

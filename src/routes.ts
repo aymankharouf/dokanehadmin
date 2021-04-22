@@ -65,6 +65,7 @@ import PackTypes from './pages/pack-types'
 import AddPackType from './pages/add-pack-type'
 import EditPackType from './pages/edit-pack-type'
 import Units from './pages/units'
+import AddUnit from './pages/add-unit'
 
 const routes = [
   {
@@ -344,6 +345,10 @@ const routes = [
   {
     path: '/units/',
     component: Units
+  },
+  {
+    path: '/add-unit/',
+    component: AddUnit
   },
   {
     path: '(.*)',

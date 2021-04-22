@@ -9,7 +9,7 @@ const Units = () => {
   const [units, setUnits] = useState(() => [...state.units].sort((u1, u2) => u1.name > u2.name ? 1 : -1))
   useEffect(() => {
     setUnits(() => [...state.units].sort((u1, u2) => u1.name > u2.name ? 1 : -1))
-  }, [state.packTypes])
+  }, [state.units])
   return (
     <Page>
       <Navbar title={labels.units} backLink={labels.back} />
@@ -27,7 +27,7 @@ const Units = () => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-pack-type/">
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-unit/">
         <Icon material="add"></Icon>
       </Fab>
     </Page>

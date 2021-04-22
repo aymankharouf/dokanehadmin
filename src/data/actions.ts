@@ -3,7 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { setup, randomColors } from './config'
 import moment from 'moment'
-import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, User } from './types'
+import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -383,6 +383,30 @@ export const deletePackType = (packTypeId: string, packTypes: PackType[]) => {
   const packTypeIndex = values.findIndex(t => t.id === packTypeId)
   values.splice(packTypeIndex, 1)
   firebase.firestore().collection('lookups').doc('p').update({
+    values
+  })
+}
+
+export const addUnit = (unit: Unit) => {
+  firebase.firestore().collection('lookups').doc('u').set({
+    values: firebase.firestore.FieldValue.arrayUnion(unit)
+  }, {merge: true})
+}
+
+export const editUnit = (unit: Unit, units: Unit[]) => {
+  const values = units.slice()
+  const unitIndex = values.findIndex(u => u.id === unit.id)
+  values.splice(unitIndex, 1, unit)
+  firebase.firestore().collection('lookups').doc('u').update({
+    values
+  })
+}
+
+export const deleteUnit = (unitId: string, units: Unit[]) => {
+  const values = units.slice()
+  const unitIndex = values.findIndex(u => u.id === unitId)
+  values.splice(unitIndex, 1)
+  firebase.firestore().collection('lookups').doc('u').update({
     values
   })
 }

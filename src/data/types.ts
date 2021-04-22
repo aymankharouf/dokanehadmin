@@ -157,7 +157,8 @@ export type PackType = {
 export type Unit = {
   id: string,
   name: string,
-  type: string
+  type: string,
+  factor: number
 }
 export type PasswordRequest = {
   id: string,

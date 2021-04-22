@@ -33,7 +33,7 @@ const Products = (props: Props) => {
       })
       return results.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo?.name! > p2.categoryInfo?.name! ? 1 : -1))
     })
-  }, [state.products, state.categories, state.packs, props.id])
+  }, [state.products, state.categories, state.packs, state.countries, state.trademarks, props.id])
   
   if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
@@ -88,7 +88,6 @@ const Products = (props: Props) => {
           <FabButton color="red" onClick={() => f7.views.current.router.navigate('/products/-1')}>
             <Icon material="remove_shopping_cart"></Icon>
           </FabButton>
-
         </FabButtons>
       </Fab>
     </Page>

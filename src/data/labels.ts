@@ -359,7 +359,11 @@ const labels: Label = {
   addPackType: 'اضافة غلاف',
   infictedPacksFound: 'يوجد مواد تستخدم هذا النوع من التغليف',
   editPackType: 'تعديل غلاف',
-  units: 'الوحدات'
+  units: 'الوحدات',
+  addUnit: 'اضافة وحدة',
+  duplicateUnit: 'وحدة مكررة',
+  factor: 'معامل التحويل',
+  factorError: 'الرجاء التأكد من معامل التحويل'
 }
 
 export default labels
