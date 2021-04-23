@@ -28,7 +28,7 @@ const AlarmDetails = (props: Props) => {
     if (alarm.type === 'go') {
       packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
     } else if (alarm.type === 'eo') {
-      packs = packs.filter(p => p.productId === pack.productId && p.isOffer && p.closeExpired)
+      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
     }
     const shortPacks = packs.map(p => {
       return {

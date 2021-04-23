@@ -65,18 +65,16 @@ const StateProvider = ({ children }: Props) => {
           countryId: doc.data().countryId,
           imageUrl: doc.data().imageUrl,
           price: doc.data().price,
-          sales: doc.data().sales,
-          isDivided: doc.data().isDivided,
           isOffer: doc.data().isOffer,
           offerEnd: doc.data().offerEnd,
           rating: doc.data().rating,
-          closeExpired: doc.data().closeExpired,
           byWeight: doc.data().byWeight,
           ratingCount: doc.data().ratingCount,
           weightedPrice: doc.data().weightedPrice,
           unitsCount: doc.data().unitsCount,
           packTypeId: doc.data().packTypeId,
-          unitId: doc.data().unitId
+          unitId: doc.data().unitId,
+          specialImage: doc.data().specialImage
         })
         if (doc.data().prices) {
           doc.data().prices.forEach((p: PackPrice) => {

@@ -23,7 +23,7 @@ const EditOffer = (props: Props) => {
     return packs.map(p => {
       return {
         id: p.id,
-        name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
+        name: p.name
       }
     })
   })
@@ -60,7 +60,7 @@ const EditOffer = (props: Props) => {
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
@@ -71,11 +71,9 @@ const EditOffer = (props: Props) => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: (subQuantity ?? 0) * (subPackInfo.unitsCount ?? 0),
+        unitsCount: subQuantity! * subPackInfo.unitsCount!,
         subPackName: subPackInfo.name,
-        isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        closeExpired: subPackInfo.closeExpired,
       }
       editPack(newPack, pack, state.packs, image)
       showMessage(labels.editSuccess)

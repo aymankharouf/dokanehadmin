@@ -28,7 +28,7 @@ const ArchivedProducts = () => {
           countryInfo
         }
       })
-      return products.sort((p1, p2) => (p1.sales ?? 0) - (p2.sales ?? 0))
+      return products.sort((p1, p2) => p1.name > p2.name ? -1 : 1)
     })
   }, [state.archivedProducts, state.categories, state.countries, state.trademarks])
   useEffect(() => {

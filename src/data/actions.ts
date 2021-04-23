@@ -124,7 +124,6 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
       categoryId: product.categoryId,
       countryId: product.countryId,
       trademarkId: product.trademarkId,
-      sales: product.sales ?? 0,
       rating: product.rating,
       ratingCount: product.ratingCount,
       imageUrl
@@ -453,7 +452,6 @@ export const addPack = async (pack: Pack, product: Product, image?: File, subPac
     categoryId: product.categoryId,
     countryId: product.countryId,
     trademarkId: product.trademarkId,
-    sales: product.sales,
     rating: product.rating,
     ratingCount: product.ratingCount,
     imageUrl,
@@ -484,10 +482,8 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     const packInfo = {
       subPackName: newPack.name,
-      unitsCount: (p.subQuantity ?? 0) * (newPack.unitsCount ?? 0),
-      isDivided: newPack.isDivided,
+      unitsCount: p.subQuantity! * newPack.unitsCount!,
       byWeight: newPack.byWeight,
-      closeExpired: newPack.closeExpired,
       imageUrl
     }
     if (image && !p.specialImage) {
@@ -878,18 +874,16 @@ export const getArchivedPacks = async () => {
                 countryId: doc.data().countryId,
                 imageUrl: doc.data().imageUrl,
                 price: doc.data().price,
-                sales: doc.data().sales,
-                isDivided: doc.data().isDivided,
                 isOffer: doc.data().isOffer,
                 offerEnd: doc.data().offerEnd,
                 rating: doc.data().rating,
-                closeExpired: doc.data().closeExpired,
                 byWeight: doc.data().byWeight,
                 ratingCount: doc.data().ratingCount,
                 weightedPrice: doc.data().weightedPrice,
                 unitsCount: doc.data().unitsCount,
                 packTypeId: doc.data().packTypeId,
-                unitId: doc.data().unitId
+                unitId: doc.data().unitId,
+                specialImage: doc.data().specialImage
               })
             })
           })

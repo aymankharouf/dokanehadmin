@@ -69,7 +69,7 @@ const AddPackStore = (props: Props) => {
 
   return (
     <Page>
-      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}${pack.closeExpired ? '(' + labels.closeExpired + ')' : ''}`} backLink={labels.back} />
+      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListItem
           title={labels.store}

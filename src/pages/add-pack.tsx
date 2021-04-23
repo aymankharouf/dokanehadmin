@@ -14,7 +14,6 @@ const AddPack = (props: Props) => {
   const [unitsCount, setUnitsCount] = useState('')
   const [packTypeId, setPackTypeId] = useState('')
   const [unitId, setUnitId] = useState('')
-  const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
   const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
@@ -27,11 +26,6 @@ const AddPack = (props: Props) => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (isDivided) {
-      setByWeight(true)
-    }
-  }, [isDivided])
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -49,7 +43,7 @@ const AddPack = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
+      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       const pack = {
@@ -58,19 +52,17 @@ const AddPack = (props: Props) => {
         productAlias: product.alias,
         categoryId: product.categoryId,
         countryId: product.countryId,
-        sales: product.sales,
         rating: product.rating,
         name,
         unitsCount: Number(unitsCount),
         packTypeId,
         unitId,
-        isDivided,
         closeExpired,
         byWeight,
         isOffer: false,
         price: 0,
-        forSale: true,
         isArchived: false,
+        specialImage
       }
       addPack(pack, product, image)
       showMessage(labels.addSuccess)
@@ -144,22 +136,12 @@ const AddPack = (props: Props) => {
           onInputClear={() => setUnitsCount('')}
         />
         <ListItem>
-          <span>{labels.isDivided}</span>
-          <Toggle 
-            name="isDivived" 
-            color="green" 
-            checked={isDivided} 
-            onToggleChange={() => setIsDivided(!isDivided)}
-          />
-        </ListItem>
-        <ListItem>
           <span>{labels.byWeight}</span>
           <Toggle 
             name="byWeight" 
             color="green" 
             checked={byWeight} 
             onToggleChange={() => setByWeight(!byWeight)}
-            disabled={isDivided}
           />
         </ListItem>
         <ListItem>

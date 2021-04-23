@@ -25,26 +25,22 @@ export type Pack = {
   imageUrl?: string,
   price: number,
   categoryId: string,
-  sales?: number,
   rating: number,
   subPackId?: string,
   subQuantity?: number,
   subPackName?: string,
-  isOffer?: boolean,
+  isOffer: boolean,
   offerEnd?: Date,
   weightedPrice?: number,
-  isDivided?: boolean,
-  minStoreId?: string,
   trademarkId?: string,
   countryId: string,
-  closeExpired?: boolean,
   ratingCount?: number,
   categoryName?: string,
   trademarkName?: string,
   countryName?: string,
   byWeight?: boolean,
-  unitsCount?: number,
-  specialImage?: boolean,
+  unitsCount: number,
+  specialImage: boolean,
   packTypeId: string,
   unitId: string
 }
@@ -169,7 +165,6 @@ export type Product = {
   imageUrl: string,
   rating: number,
   ratingCount: number,
-  sales?: number
 }
 export type Store = {
   id?: string,

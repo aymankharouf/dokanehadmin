@@ -22,7 +22,7 @@ const AddOffer = (props: Props) => {
     return packs.map(p => {
       return {
         id: p.id,
-        name: `${p.name} ${p.closeExpired ? '(' + labels.closeExpired + ')' : ''}`
+        name: p.name
       }
     })
   })
@@ -61,7 +61,7 @@ const AddOffer = (props: Props) => {
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.productId === props.id && p.name === name && p.closeExpired === subPackInfo.closeExpired)) {
+      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
@@ -73,7 +73,6 @@ const AddOffer = (props: Props) => {
         productAlias: product.alias,
         categoryId: product.categoryId,
         countryId: product.countryId,
-        sales: product.sales,
         rating: product.rating,
         name,
         isOffer,
@@ -81,13 +80,12 @@ const AddOffer = (props: Props) => {
         subQuantity: Number(subQuantity),
         unitsCount: subQuantity * (subPackInfo.unitsCount ?? 0),
         subPackName: subPackInfo.name,
-        isDivided: subPackInfo.isDivided,
         byWeight: subPackInfo.byWeight,
-        closeExpired: subPackInfo.closeExpired,
         price: 0,
         isArchived: false,
         packTypeId: '0',
-        unitId: '0'
+        unitId: '0',
+        specialImage
       }
       addPack(pack, product, image, subPackInfo)
       showMessage(labels.addSuccess)

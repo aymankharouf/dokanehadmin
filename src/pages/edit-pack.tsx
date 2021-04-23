@@ -13,9 +13,7 @@ const EditPack = (props: Props) => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
-  const [isDivided, setIsDivided] = useState(pack.isDivided)
   const [byWeight, setByWeight] = useState(pack.byWeight)
-  const [closeExpired, setCloseExpired] = useState(pack.closeExpired)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState<File>()
@@ -23,18 +21,11 @@ const EditPack = (props: Props) => {
   useEffect(() => {
     if (name !== pack.name
     || unitsCount !== pack.unitsCount
-    || isDivided !== pack.isDivided
     || byWeight !== pack.byWeight
-    || closeExpired !== pack.closeExpired
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, isDivided, byWeight, closeExpired, specialImage, imageUrl])
-  useEffect(() => {
-    if (isDivided) {
-      setByWeight(true)
-    }
-  }, [isDivided])
+  }, [pack, name, unitsCount, byWeight, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -58,16 +49,14 @@ const EditPack = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name && p.closeExpired === closeExpired)) {
+      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       const newPack = {
         ...pack,
         name,
         unitsCount: Number(unitsCount),
-        isDivided,
         byWeight,
-        closeExpired
       }
       editPack(newPack, pack, state.packs, image)
       showMessage(labels.editSuccess)
@@ -99,30 +88,12 @@ const EditPack = (props: Props) => {
           onInputClear={() => setUnitsCount(0)}
         />
         <ListItem>
-          <span>{labels.isDivided}</span>
-          <Toggle 
-            name="isDivived" 
-            color="green" 
-            checked={isDivided} 
-            onToggleChange={() => setIsDivided(!isDivided)}
-          />
-        </ListItem>
-        <ListItem>
           <span>{labels.byWeight}</span>
           <Toggle 
             name="byWeight" 
             color="green" 
             checked={byWeight} 
             onToggleChange={() => setByWeight(!byWeight)}
-          />
-        </ListItem>
-        <ListItem>
-          <span>{labels.closeExpired}</span>
-          <Toggle 
-            name="closeExpired" 
-            color="green" 
-            checked={closeExpired} 
-            onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
         <ListItem>

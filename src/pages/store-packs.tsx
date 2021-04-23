@@ -77,7 +77,6 @@ const StorePacks = (props: Props) => {
                 <div className="list-subtext3">{p.offerEnd ? `${labels.offerUpTo}: ${moment(p.offerEnd).format('Y/M/D')}` : ''}</div>
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
                 {p.packInfo.isOffer ? <Badge slot="title" color='green'>{labels.offer}</Badge> : ''}
-                {p.packInfo.closeExpired ? <Badge slot="text" color="red">{labels.closeExpired}</Badge> : ''}
               </ListItem>
             )
           }

@@ -74,7 +74,6 @@ const ProductPacks = (props: Props) => {
             key={p.id} 
           >
             {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price > 0 ? (p.price / 100).toFixed(2) : labels.offer}</Badge> : ''}
-            {p.closeExpired ? <Badge slot="title" color="red">{labels.closeExpired}</Badge> : ''}
           </ListItem>
         )}
       </List>
