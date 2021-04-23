@@ -44,8 +44,6 @@ import StoreDetails from './pages/store-details'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
-import AddBulk from './pages/add-bulk'
-import EditBulk from './pages/edit-bulk'
 import Invitations from './pages/invitations'
 import InvitationDetails from './pages/invitation-details'
 import Notifications from './pages/notifications'
@@ -66,6 +64,7 @@ import AddPackType from './pages/add-pack-type'
 import EditPackType from './pages/edit-pack-type'
 import Units from './pages/units'
 import AddUnit from './pages/add-unit'
+import EditUnit from './pages/edit-unit'
 
 const routes = [
   {
@@ -283,14 +282,6 @@ const routes = [
     component: Logs
   },
   {
-    path: '/add-bulk/:id',
-    component: AddBulk
-  },
-  {
-    path: '/edit-bulk/:id',
-    component: EditBulk
-  },
-  {
     path: '/invitations/',
     component: Invitations
   },
@@ -349,6 +340,10 @@ const routes = [
   {
     path: '/add-unit/',
     component: AddUnit
+  },
+  {
+    path: '/edit-unit/',
+    component: EditUnit
   },
   {
     path: '(.*)',

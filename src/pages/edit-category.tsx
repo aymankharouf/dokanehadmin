@@ -65,6 +65,7 @@ const EditCategory = (props: Props) => {
           id="parents"
           smartSelectParams={{
             el: '#parents', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

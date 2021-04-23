@@ -85,7 +85,6 @@ const ProductPacks = (props: Props) => {
         <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
         <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
         <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-bulk/${props.id}`)}>{labels.addBulk}</ActionsButton>
         {activePacks.length === 0 && <ActionsButton onClick={() => handleArchive()}>{labels.archive}</ActionsButton>}
         {packs.length === 0 && <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>}
       </Actions>

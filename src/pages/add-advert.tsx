@@ -58,6 +58,7 @@ const AddAdvert = () => {
           id="types"
           smartSelectParams={{
             el: "#types", 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

@@ -149,6 +149,7 @@ const AlarmDetails = (props: Props) => {
             id="newPacks"
             smartSelectParams={{
               el: '#newPacks', 
+              openIn: "popup",
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: labels.search,
@@ -171,7 +172,6 @@ const AlarmDetails = (props: Props) => {
         {prices.map(p => 
           <ListItem 
             title={p.storeInfo.name}
-            subtitle={p.quantity ? `${labels.quantity}: ${p.quantity}` : ''}
             text={moment(p.time).fromNow()} 
             after={(p.price / 100).toFixed(2)} 
             key={i++} 

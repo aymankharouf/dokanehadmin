@@ -192,7 +192,7 @@ const labels: Label = {
   sell: 'بيع',
   cashing: 'بيع المواد',
   withGift: 'مع هدية',
-  addOffer: 'اضافة عرض',
+  addOffer: 'اضافة عرض/حزمة',
   details: 'تفاصيل',
   productDetails: 'تفاصيل المنتج',
   bonusProduct: 'المنتج اﻻضافي',
@@ -363,7 +363,8 @@ const labels: Label = {
   addUnit: 'اضافة وحدة',
   duplicateUnit: 'وحدة مكررة',
   factor: 'معامل التحويل',
-  factorError: 'الرجاء التأكد من معامل التحويل'
+  factorError: 'الرجاء التأكد من معامل التحويل',
+  unit: 'الوحدة'
 }
 
 export default labels

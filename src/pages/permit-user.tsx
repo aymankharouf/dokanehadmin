@@ -73,6 +73,7 @@ const PermitUser = (props: Props) => {
           id="users"
           smartSelectParams={{
             el: '#users', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -93,6 +94,7 @@ const PermitUser = (props: Props) => {
           id="stores"
           smartSelectParams={{
             el: '#stores', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

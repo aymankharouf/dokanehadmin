@@ -1,14 +1,5 @@
 import { AlarmType } from "./types"
 
-export const setup = {
-  fixedFees: 0.01,
-  maxDiscount: 10,
-  returnPenalty: 5,
-  invitationDiscount: 5,
-  firstOrderDiscount: 10,
-  profit: 0.05
-}
-
 export const randomColors = [
   {id: 0, name: 'red'},
   {id: 1, name: 'green'},

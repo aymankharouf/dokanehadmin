@@ -12,6 +12,8 @@ const AddPack = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
+  const [packTypeId, setPackTypeId] = useState('')
+  const [unitId, setUnitId] = useState('')
   const [isDivided, setIsDivided] = useState(false)
   const [byWeight, setByWeight] = useState(false)
   const [closeExpired, setCloseExpired] = useState(false)
@@ -60,6 +62,8 @@ const AddPack = (props: Props) => {
         rating: product.rating,
         name,
         unitsCount: Number(unitsCount),
+        packTypeId,
+        unitId,
         isDivided,
         closeExpired,
         byWeight,
@@ -88,6 +92,48 @@ const AddPack = (props: Props) => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListItem 
+          title={labels.type}
+          smartSelect
+          id="types"
+          smartSelectParams={{
+            el: "#types", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
+          }}
+        >
+          <select name="packTypeId" value={packTypeId} onChange={e => setPackTypeId(e.target.value)}>
+            <option value=""></option>
+            {state.packTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem 
+          title={labels.unit}
+          smartSelect
+          id="units"
+          smartSelectParams={{
+            el: "#units", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
+          }}
+        >
+          <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
+            <option value=""></option>
+            {state.units.map(u => 
+              <option key={u.id} value={u.id}>{u.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="unitsCount" 
           label={labels.unitsCount}
@@ -143,7 +189,7 @@ const AddPack = (props: Props) => {
         />}
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !unitsCount ? '' :
+      {name && packTypeId && unitId && unitsCount &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

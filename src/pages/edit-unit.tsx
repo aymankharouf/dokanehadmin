@@ -1,22 +1,25 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import { editPackType, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
+import { editUnit, showMessage, showError, getMessage, deleteUnit } from '../data/actions'
 import labels from '../data/labels'
+import { unitTypes } from '../data/config'
 
 type Props = {
   id: string
 }
-const EditPackType = (props: Props) => {
+const EditUnit = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [packType] = useState(() => state.packTypes.find(c => c.id === props.id)!)
-  const [name, setName] = useState(packType.name)
+  const [unit] = useState(() => state.units.find(u => u.id === props.id)!)
+  const [name, setName] = useState(unit.name)
+  const [type, setType] = useState('')
+  const [factor, setFactor] = useState(0)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
-    if (name !== packType.name) setHasChanged(true)
+    if (name !== unit.name || type !== unit.type || factor !== unit.factor) setHasChanged(true)
     else setHasChanged(false)
-  }, [packType, name])
+  }, [unit, name, type, factor])
 
   useEffect(() => {
     if (error) {
@@ -26,11 +29,13 @@ const EditPackType = (props: Props) => {
   }, [error])
   const handleEdit = () => {
     try{
-      const newPackType = {
-        ...packType,
+      const newUnit = {
+        ...unit,
         name,
+        type,
+        factor
       }
-      editPackType(newPackType, state.packTypes)
+      editUnit(newUnit, state.units)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -40,9 +45,9 @@ const EditPackType = (props: Props) => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        const infictedPacks = state.packs.filter(p => p.packTypeId === props.id)
+        const infictedPacks = state.packs.filter(p => p.unitId === props.id)
         if (infictedPacks.length > 0) throw new Error('infictedPacksFound') 
-        deleteCountry(props.id, state.countries)
+        deleteUnit(props.id, state.units)
         showMessage(labels.deleteSuccess)
         f7.views.current.router.back()
       } catch(err) {
@@ -64,13 +69,43 @@ const EditPackType = (props: Props) => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListItem 
+          title={labels.type}
+          smartSelect
+          id="types"
+          smartSelectParams={{
+            el: "#types", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
+          }}
+        >
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
+            <option value=""></option>
+            {unitTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListInput 
+          name="factor" 
+          label={labels.factor} 
+          clearButton
+          type="number"
+          value={factor}
+          onChange={e => setFactor(e.target.value)}
+          onInputClear={() => setFactor(0)}
+        />
       </List>
       <FabBackdrop slot="fixed" />
       <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          {name && hasChanged &&
+          {name && factor && type && hasChanged &&
             <FabButton color="green" onClick={() => handleEdit()}>
               <Icon material="done"></Icon>
             </FabButton>
@@ -83,4 +118,4 @@ const EditPackType = (props: Props) => {
     </Page>
   )
 }
-export default EditPackType
+export default EditUnit

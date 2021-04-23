@@ -101,6 +101,7 @@ const EditProduct = (props: Props) => {
           id="trademarks"
           smartSelectParams={{
             el: '#trademarks', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -120,6 +121,7 @@ const EditProduct = (props: Props) => {
           id="categories"
           smartSelectParams={{
             el: '#categories', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -139,6 +141,7 @@ const EditProduct = (props: Props) => {
           id="countries"
           smartSelectParams={{
             el: '#countries', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

@@ -37,6 +37,7 @@ const AddNotification = () => {
           id="users"
           smartSelectParams={{
             el: '#users', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

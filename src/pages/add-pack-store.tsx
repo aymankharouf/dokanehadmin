@@ -77,6 +77,7 @@ const AddPackStore = (props: Props) => {
           id="stores"
           smartSelectParams={{
             el: "#stores", 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

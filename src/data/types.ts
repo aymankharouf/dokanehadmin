@@ -29,13 +29,7 @@ export type Pack = {
   rating: number,
   subPackId?: string,
   subQuantity?: number,
-  subPercent?: number,
   subPackName?: string,
-  bonusPackId?: string,
-  bonusProductName?: string,
-  bonusPackName?: string,
-  bonusQuantity?: number,
-  bonusPercent?: number,
   isOffer?: boolean,
   offerEnd?: Date,
   weightedPrice?: number,
@@ -49,10 +43,10 @@ export type Pack = {
   trademarkName?: string,
   countryName?: string,
   byWeight?: boolean,
-  forSale?: boolean,
   unitsCount?: number,
   specialImage?: boolean,
-  packTypeId?: string
+  packTypeId: string,
+  unitId: string
 }
 export type PackPrice = {
   storeId: string,
@@ -62,8 +56,6 @@ export type PackPrice = {
   isActive: boolean,
   isAuto: boolean,
   time: Date,
-  quantity?: number,
-  weight?: number,
   subQuantity?: number,
   unitPrice?: number,
 }

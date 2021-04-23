@@ -84,6 +84,7 @@ const ApproveUser = (props: Props) => {
           id="locations"
           smartSelectParams={{
             el: "#locations",
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

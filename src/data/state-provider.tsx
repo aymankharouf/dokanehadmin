@@ -74,8 +74,9 @@ const StateProvider = ({ children }: Props) => {
           byWeight: doc.data().byWeight,
           ratingCount: doc.data().ratingCount,
           weightedPrice: doc.data().weightedPrice,
-          forSale: doc.data().forSale,
-          unitsCount: doc.data().unitsCount
+          unitsCount: doc.data().unitsCount,
+          packTypeId: doc.data().packTypeId,
+          unitId: doc.data().unitId
         })
         if (doc.data().prices) {
           doc.data().prices.forEach((p: PackPrice) => {
