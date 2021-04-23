@@ -58,10 +58,12 @@ const AddPackType = () => {
           id="types"
           smartSelectParams={{
             el: "#types", 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
           }}
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
