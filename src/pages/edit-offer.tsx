@@ -19,7 +19,7 @@ const EditOffer = (props: Props) => {
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
-    const packs = state.packs.filter(p => p.productId === pack.productId && !p.isOffer && !p.byWeight)
+    const packs = state.packs.filter(p => p.product.id === pack.product.id && !p.isOffer && !p.byWeight)
     return packs.map(p => {
       return {
         id: p.id,
@@ -60,7 +60,7 @@ const EditOffer = (props: Props) => {
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name)) {
+      if (state.packs.find(p => p.id !== pack.id && p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
@@ -71,8 +71,7 @@ const EditOffer = (props: Props) => {
         name,
         subPackId,
         subQuantity: Number(subQuantity),
-        unitsCount: subQuantity! * subPackInfo.unitsCount!,
-        subPackName: subPackInfo.name,
+        typeUnits: subQuantity! * subPackInfo.typeUnits!,
         byWeight: subPackInfo.byWeight,
       }
       editPack(newPack, pack, state.packs, image)
@@ -84,7 +83,7 @@ const EditOffer = (props: Props) => {
   }
   return (
     <Page>
-      <Navbar title={`${labels.editOffer} ${pack.productName}`} backLink={labels.back} />
+      <Navbar title={`${labels.editOffer} ${pack.product.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 
@@ -101,7 +100,6 @@ const EditOffer = (props: Props) => {
           id="subPacks"
           smartSelectParams={{
             el: '#subPacks', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

@@ -26,14 +26,14 @@ const AlarmDetails = (props: Props) => {
   const [packs] = useState(() => {
     let packs = state.packs.filter(p => p.id !== pack.id)
     if (alarm.type === 'go') {
-      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+      packs = packs.filter(p => p.product.id === pack.product.id && p.isOffer)
     } else if (alarm.type === 'eo') {
-      packs = packs.filter(p => p.productId === pack.productId && p.isOffer)
+      packs = packs.filter(p => p.product.id === pack.product.id && p.isOffer)
     }
     const shortPacks = packs.map(p => {
       return {
         id: p.id,
-        name: `${p.productName} ${p.name}`
+        name: `${p.product.name} ${p.name}`
       }
     })
     return shortPacks.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -85,7 +85,7 @@ const AlarmDetails = (props: Props) => {
         <ListInput 
           name="productName" 
           label={labels.product}
-          value={pack.productName}
+          value={pack.product.name}
           type="text" 
           readonly
         />
@@ -99,7 +99,7 @@ const AlarmDetails = (props: Props) => {
         <ListInput 
           name="currentPrice" 
           label={labels.currentPrice}
-          value={(pack.price / 100).toFixed(2)}
+          value={(pack.price! / 100).toFixed(2)}
           type="number" 
           readonly
         />
@@ -149,7 +149,6 @@ const AlarmDetails = (props: Props) => {
             id="newPacks"
             smartSelectParams={{
               el: '#newPacks', 
-              openIn: "popup",
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: labels.search,

@@ -12,7 +12,7 @@ const EditPack = (props: Props) => {
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
-  const [unitsCount, setUnitsCount] = useState(pack.unitsCount)
+  const [typeUnits, setTypeUnits] = useState(pack.typeUnits)
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
@@ -20,12 +20,12 @@ const EditPack = (props: Props) => {
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   useEffect(() => {
     if (name !== pack.name
-    || unitsCount !== pack.unitsCount
+    || typeUnits !== pack.typeUnits
     || byWeight !== pack.byWeight
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, byWeight, specialImage, imageUrl])
+  }, [pack, name, typeUnits, byWeight, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -49,13 +49,13 @@ const EditPack = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.id !== pack.id && p.productId === props.id && p.name === name)) {
+      if (state.packs.find(p => p.id !== pack.id && p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       const newPack = {
         ...pack,
         name,
-        unitsCount: Number(unitsCount),
+        typeUnits,
         byWeight,
       }
       editPack(newPack, pack, state.packs, image)
@@ -67,7 +67,7 @@ const EditPack = (props: Props) => {
   }
   return (
     <Page>
-      <Navbar title={`${labels.editPack} ${pack.productName}`} backLink={labels.back} />
+      <Navbar title={`${labels.editPack} ${pack.product.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 
@@ -83,9 +83,9 @@ const EditPack = (props: Props) => {
           label={labels.unitsCount}
           clearButton
           type="number" 
-          value={unitsCount} 
-          onChange={e => setUnitsCount(e.target.value)}
-          onInputClear={() => setUnitsCount(0)}
+          value={typeUnits} 
+          onChange={e => setTypeUnits(e.target.value)}
+          onInputClear={() => setTypeUnits(0)}
         />
         <ListItem>
           <span>{labels.byWeight}</span>
@@ -116,7 +116,7 @@ const EditPack = (props: Props) => {
         : ''}
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !unitsCount || !hasChanged ? '' :
+      {!name || !typeUnits || !hasChanged ? '' :
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

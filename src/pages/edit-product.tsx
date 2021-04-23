@@ -12,6 +12,7 @@ const EditProduct = (props: Props) => {
   const [error, setError] = useState('')
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [name, setName] = useState(product.name)
+  const [alias, setAlias] = useState(product.alias)
   const [description, setDescription] = useState(product.description)
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
@@ -40,13 +41,14 @@ const EditProduct = (props: Props) => {
   }
   useEffect(() => {
     if (name !== product.name
+    || alias !== product.alias
     || description !== product.description
     || countryId !== product.countryId
     || categoryId !== product.categoryId
     || trademarkId !== product.trademarkId
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, description, countryId, categoryId, trademarkId, imageUrl])
+  }, [product, name, alias, description, countryId, categoryId, trademarkId, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -62,6 +64,7 @@ const EditProduct = (props: Props) => {
         ...product,
         categoryId,
         name,
+        alias,
         description,
         trademarkId,
         countryId,
@@ -87,6 +90,15 @@ const EditProduct = (props: Props) => {
           onInputClear={() => setName('')}
         />
         <ListInput 
+          name="alias" 
+          label={labels.alias}
+          clearButton
+          type="text" 
+          value={name} 
+          onChange={e => setAlias(e.target.value)}
+          onInputClear={() => setAlias('')}
+        />
+        <ListInput 
           name="description" 
           label={labels.description}
           clearButton
@@ -101,7 +113,6 @@ const EditProduct = (props: Props) => {
           id="trademarks"
           smartSelectParams={{
             el: '#trademarks', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -121,7 +132,6 @@ const EditProduct = (props: Props) => {
           id="categories"
           smartSelectParams={{
             el: '#categories', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -141,7 +151,6 @@ const EditProduct = (props: Props) => {
           id="countries"
           smartSelectParams={{
             el: '#countries', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

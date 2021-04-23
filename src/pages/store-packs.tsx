@@ -22,14 +22,14 @@ const StorePacks = (props: Props) => {
       const storePacks = state.packPrices.filter(p => p.storeId === props.id && !p.isAuto)
       const results = storePacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)!
-        const categoryInfo = state.categories.find(c => c.id === packInfo.categoryId)!
+        const categoryInfo = state.categories.find(c => c.id === packInfo.product.categoryId)!
         return {
           ...p,
           packInfo,
           categoryInfo
         } 
       })
-      return results.sort((p1, p2) => p1.packInfo.categoryId === p2.packInfo.categoryId ? (p2.time > p1.time ? -1 : 1) : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
+      return results.sort((p1, p2) => p1.packInfo.product.categoryId === p2.packInfo.product.categoryId ? (p2.time > p1.time ? -1 : 1) : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
   }, [state.packPrices, state.packs, state.categories, props.id])
   useEffect(() => {
@@ -66,8 +66,8 @@ const StorePacks = (props: Props) => {
           : storePacks.map(p => 
               <ListItem
                 link={`/pack-details/${p.packId}`}
-                title={p.packInfo.productName}
-                subtitle={p.packInfo.productAlias}
+                title={p.packInfo.product.name}
+                subtitle={p.packInfo.product.alias}
                 text={p.packInfo.name}
                 footer={moment(p.time).fromNow()}
                 key={i++}

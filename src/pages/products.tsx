@@ -10,7 +10,7 @@ type Props = {
 }
 type ExtendedProduct = Product & {
   categoryInfo: Category,
-  trademarkInfo: Trademark,
+  trademarkInfo?: Trademark,
   countryInfo: Country
 }
 const Products = (props: Props) => {
@@ -19,10 +19,10 @@ const Products = (props: Props) => {
   const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
-      const products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.productId === p.id) || state.packs.filter(pa => pa.productId === p.id).length === state.packs.filter(pa => pa.productId === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
+      const products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.product.id === p.id) || state.packs.filter(pa => pa.product.id === p.id).length === state.packs.filter(pa => pa.product.id === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
       const results = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
-        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)!
+        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)
         const countryInfo = state.countries.find(c => c.id === p.countryId)!
         return {
           ...p,
@@ -64,7 +64,7 @@ const Products = (props: Props) => {
                   title={p.name}
                   subtitle={p.alias}
                   text={p.description}
-                  footer={productOfText(p.trademarkInfo.name, p.countryInfo.name)}
+                  footer={productOfText(p.countryInfo.name, p.trademarkInfo?.name)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={labels.noImage} />

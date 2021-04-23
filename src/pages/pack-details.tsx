@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import { getPackStores, deleteStorePack, refreshPackPrice, deletePack, showMessage, showError, getMessage } from '../data/actions'
+import { getPackStores, deleteStorePack, deletePack, showMessage, showError, getMessage } from '../data/actions'
 import moment from 'moment'
 import labels from '../data/labels'
 import { Pack, PackPrice, Store } from '../data/types'
@@ -50,14 +50,6 @@ const PackDetails = (props: Props) => {
       setError('')
     }
   }, [error])
-  const handleRefreshPrice = () => {
-    try{
-      refreshPackPrice(pack, state.packPrices)
-      showMessage(labels.refreshSuccess)
-    } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
-		}
-  }
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
@@ -83,22 +75,22 @@ const PackDetails = (props: Props) => {
   let i = 0
   return (
     <Page>
-      <Navbar title={`${pack.productName}${pack.productAlias ? '-' + pack.productAlias : ''}`} backLink={labels.back} />
+      <Navbar title={`${pack.product.name}${pack.product.alias ? '-' + pack.product.alias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
           <div className="card-title">{pack.name}</div>
           <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{(pack.price / 100).toFixed(2)}</p>
-          <p>{pack.unitsCount}</p>
+          <p>{(pack.price! / 100).toFixed(2)}</p>
+          <p>{pack.typeUnits}</p>
         </CardFooter>
       </Card>
       <List mediaList>
         {packStores.map(s => 
           <ListItem 
             title={s.storeInfo?.name}
-            subtitle={s.packId === pack.id ? '' : `${s.packInfo?.productName}${s.packInfo?.productAlias ? '-' + s.packInfo.productAlias : ''}`}
+            subtitle={s.packId === pack.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}
             text={s.packId === pack.id ? '' : s.packInfo?.name}
             footer={s.offerEnd ? `${labels.offerUpTo}: ${moment(s.offerEnd).format('Y/M/D')}` : ''}
             key={i++}
@@ -120,9 +112,6 @@ const PackDetails = (props: Props) => {
           </FabButton>
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack.subPackId ? 'edit-offer' : 'edit-pack'}/${props.id}`)}>
             <Icon material="edit"></Icon>
-          </FabButton>
-          <FabButton color="yellow" onClick={() => handleRefreshPrice()}>
-            <Icon material="cached"></Icon>
           </FabButton>
           {pack.detailsCount === 0 ? 
             <FabButton color="red" onClick={() => handleDelete()}>

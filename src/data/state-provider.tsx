@@ -57,21 +57,15 @@ const StateProvider = ({ children }: Props) => {
         packs.push({
           id: doc.id,
           name: doc.data().name,
-          productId: doc.data().productId,
-          productName: doc.data().productName,
-          productAlias: doc.data().productAlias,
-          productDescription: doc.data().productDescription,
-          categoryId: doc.data().categoryId,
-          countryId: doc.data().countryId,
+          product: doc.data().product,
           imageUrl: doc.data().imageUrl,
           price: doc.data().price,
           isOffer: doc.data().isOffer,
           offerEnd: doc.data().offerEnd,
-          rating: doc.data().rating,
           byWeight: doc.data().byWeight,
-          ratingCount: doc.data().ratingCount,
           weightedPrice: doc.data().weightedPrice,
-          unitsCount: doc.data().unitsCount,
+          typeUnits: doc.data().typeUnits,
+          standardUnits: doc.data().standardUnits,
           packTypeId: doc.data().packTypeId,
           unitId: doc.data().unitId,
           specialImage: doc.data().specialImage
@@ -157,9 +151,11 @@ const StateProvider = ({ children }: Props) => {
               categoryId: doc.data().categoryId,
               trademarkId: doc.data().trademarkId,
               countryId: doc.data().countryId,
+              unitType: doc.data().unitType,
               imageUrl: doc.data().imageUrl,
               rating: doc.data().rating,
-              ratingCount: doc.data().ratingCount
+              ratingCount: doc.data().ratingCount,
+              isArchived: doc.data().isArchived
             })
           })
           dispatch({type: 'SET_PRODUCTS', payload: products})

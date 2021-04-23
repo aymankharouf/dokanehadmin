@@ -3,6 +3,7 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framewor
 import { StateContext } from '../data/state-provider'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { unitTypes } from '../data/config'
 
 type Props = {
   id: string
@@ -16,6 +17,7 @@ const AddProduct = (props: Props) => {
   const [categoryId, setCategoryId] = useState(props.id === '0' ? '' : props.id)
   const [trademarkId, setTrademarkId] = useState('')
   const [countryId, setCountryId] = useState('')
+  const [unitType, setUnitType] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
   const [categories] = useState(() => {
@@ -58,10 +60,10 @@ const AddProduct = (props: Props) => {
         categoryId,
         trademarkId,
         countryId,
-        sales: 0,
         rating: 0,
         ratingCount: 0,
         isArchived: false,
+        unitType,
         imageUrl
       }
       addProduct(product, image)
@@ -108,7 +110,6 @@ const AddProduct = (props: Props) => {
           id= "trademarks"
           smartSelectParams={{
             el: '#trademarks', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -128,7 +129,6 @@ const AddProduct = (props: Props) => {
           id="categories"
           smartSelectParams={{
             el: '#categories', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -148,7 +148,6 @@ const AddProduct = (props: Props) => {
           id="countries"
           smartSelectParams={{
             el: '#countries', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -162,6 +161,26 @@ const AddProduct = (props: Props) => {
             )}
           </select>
         </ListItem>
+        <ListItem
+          title={labels.unitType}
+          smartSelect
+          id="unitTypes"
+          smartSelectParams={{
+            el: "#unitTypes", 
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
+          }}
+        >
+          <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>
+            <option value=""></option>
+            {unitTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="image" 
           label={labels.image} 
@@ -171,7 +190,7 @@ const AddProduct = (props: Props) => {
         />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && categoryId && countryId &&
+      {name && categoryId && countryId && unitType &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

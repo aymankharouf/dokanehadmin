@@ -69,7 +69,7 @@ const AddPackStore = (props: Props) => {
 
   return (
     <Page>
-      <Navbar title={`${labels.addPrice} ${pack.productName} ${pack.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.addPrice} ${pack.product.name} ${pack.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListItem
           title={labels.store}
@@ -77,7 +77,6 @@ const AddPackStore = (props: Props) => {
           id="stores"
           smartSelectParams={{
             el: "#stores", 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

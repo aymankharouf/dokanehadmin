@@ -7,7 +7,7 @@ import { Category, Country, Product, Trademark } from '../data/types'
 
 type ExtendedProduct = Product & {
   categoryInfo: Category,
-  trademarkInfo: Trademark,
+  trademarkInfo?: Trademark,
   countryInfo: Country
 }
 const ArchivedProducts = () => {
@@ -19,7 +19,7 @@ const ArchivedProducts = () => {
     setProducts(() => {
       const products = state.archivedProducts.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
-        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)!
+        const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)
         const countryInfo = state.countries.find(c => c.id === p.countryId)!
         return {
           ...p,
@@ -89,7 +89,7 @@ const ArchivedProducts = () => {
                   link={`/product-packs/${p.id}/type/a`}
                   title={p.name}
                   subtitle={getCategoryName(p.categoryInfo!, state.categories)}
-                  text={productOfText(p.trademarkInfo.name, p.countryInfo.name)}
+                  text={productOfText(p.countryInfo.name, p.trademarkInfo?.name)}
                   key={p.id}
                 >
                   <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />

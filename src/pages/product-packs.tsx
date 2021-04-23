@@ -19,12 +19,12 @@ const ProductPacks = (props: Props) => {
   const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     setPacks(() => {
-      const packs = props.type === 'a' ? state.archivedPacks.filter(p => p.productId === props.id) : state.packs.filter(p => p.productId === props.id)
-      return packs.sort((p1, p2) => p2.price - p1.price)
+      const packs = props.type === 'a' ? state.archivedPacks.filter(p => p.product.id === props.id) : state.packs.filter(p => p.product.id === props.id)
+      return packs.sort((p1, p2) => p2.price! - p1.price!)
     })
   }, [state.packs, state.archivedPacks, props.id, props.type])
   useEffect(() => {
-    setActivePacks(() => packs.filter(p => p.price > 0))
+    setActivePacks(() => packs.filter(p => p.price! > 0))
   }, [packs])
   useEffect(() => {
     if (error) {
@@ -61,7 +61,7 @@ const ProductPacks = (props: Props) => {
           <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{productOfText(state.trademarks.find(t => t.id === product.trademarkId)!.name, state.countries.find(c => c.id === product.countryId)!.name)}</p>
+          <p>{productOfText(state.countries.find(c => c.id === product.countryId)!.name, state.trademarks.find(t => t.id === product.trademarkId)?.name)}</p>
           <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> 
         </CardFooter>
       </Card>
@@ -70,10 +70,10 @@ const ProductPacks = (props: Props) => {
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}
-            after={p.isOffer || p.offerEnd || p.price === 0 ? '' : (p.price / 100).toFixed(2)} 
+            after={p.isOffer || p.offerEnd || p.price === 0 ? '' : (p.price! / 100).toFixed(2)} 
             key={p.id} 
           >
-            {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price > 0 ? (p.price / 100).toFixed(2) : labels.offer}</Badge> : ''}
+            {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price! > 0 ? (p.price! / 100).toFixed(2) : labels.offer}</Badge> : ''}
           </ListItem>
         )}
       </List>

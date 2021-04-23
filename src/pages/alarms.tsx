@@ -47,7 +47,7 @@ const Alarms = () => {
                   link={`/alarm-details/${a.id}/user/${a.userInfo.id}`}
                   title={a.alarmTypeInfo.name}
                   subtitle={a.customerInfo.name}
-                  text={`${a.packInfo.productName} ${a.packInfo.name}`}
+                  text={`${a.packInfo.product.name} ${a.packInfo.name}`}
                   footer={moment(a.time).fromNow()}
                   key={a.id}
                 >

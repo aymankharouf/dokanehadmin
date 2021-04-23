@@ -11,14 +11,14 @@ const AddPack = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [unitsCount, setUnitsCount] = useState('')
+  const [typeUnits, setTypeUnits] = useState(0)
   const [packTypeId, setPackTypeId] = useState('')
   const [unitId, setUnitId] = useState('')
   const [byWeight, setByWeight] = useState(false)
-  const [closeExpired, setCloseExpired] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
+  const [units] = useState(() => state.units.filter(u => u.type === product.unitType))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -43,24 +43,19 @@ const AddPack = (props: Props) => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
+      if (state.packs.find(p => p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
+      const standardUnits = units.find(u => u.id === unitId)!.factor * typeUnits
       const pack = {
-        productId: product.id!,
-        productName: product.name,
-        productAlias: product.alias,
-        categoryId: product.categoryId,
-        countryId: product.countryId,
-        rating: product.rating,
         name,
-        unitsCount: Number(unitsCount),
+        product,
+        typeUnits,
+        standardUnits,
         packTypeId,
         unitId,
-        closeExpired,
         byWeight,
         isOffer: false,
-        price: 0,
         isArchived: false,
         specialImage
       }
@@ -79,6 +74,7 @@ const AddPack = (props: Props) => {
           name="name" 
           label={labels.name}
           clearButton
+          autofocus
           type="text" 
           value={name} 
           onChange={e => setName(e.target.value)}
@@ -90,7 +86,6 @@ const AddPack = (props: Props) => {
           id="types"
           smartSelectParams={{
             el: "#types", 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -111,7 +106,6 @@ const AddPack = (props: Props) => {
           id="units"
           smartSelectParams={{
             el: "#units", 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -121,7 +115,7 @@ const AddPack = (props: Props) => {
         >
           <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
             <option value=""></option>
-            {state.units.map(u => 
+            {units.map(u => 
               <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
@@ -131,9 +125,9 @@ const AddPack = (props: Props) => {
           label={labels.unitsCount}
           clearButton
           type="number" 
-          value={unitsCount} 
-          onChange={e => setUnitsCount(e.target.value)}
-          onInputClear={() => setUnitsCount('')}
+          value={typeUnits} 
+          onChange={e => setTypeUnits(e.target.value)}
+          onInputClear={() => setTypeUnits(0)}
         />
         <ListItem>
           <span>{labels.byWeight}</span>
@@ -142,15 +136,6 @@ const AddPack = (props: Props) => {
             color="green" 
             checked={byWeight} 
             onToggleChange={() => setByWeight(!byWeight)}
-          />
-        </ListItem>
-        <ListItem>
-          <span>{labels.closeExpired}</span>
-          <Toggle 
-            name="closeExpired" 
-            color="green" 
-            checked={closeExpired} 
-            onToggleChange={() => setCloseExpired(!closeExpired)}
           />
         </ListItem>
         <ListItem>
@@ -171,7 +156,7 @@ const AddPack = (props: Props) => {
         />}
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && packTypeId && unitId && unitsCount &&
+      {name && packTypeId && unitId && typeUnits &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

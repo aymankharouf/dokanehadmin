@@ -19,7 +19,7 @@ const AddStorePack = (props: Props) => {
     const packs = state.packs.map(p => {
       return {
         id: p.id,
-        name: `${p.productName}-${p.productAlias} ${p.name}`
+        name: `${p.product.name}-${p.product.alias} ${p.name}`
       }
     })
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
@@ -76,7 +76,6 @@ const AddStorePack = (props: Props) => {
           id="packs"
           smartSelectParams={{
             el: '#packs', 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

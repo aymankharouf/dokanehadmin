@@ -15,34 +15,38 @@ export type Error = {
   code: string,
   message: string
 }
+
+export type Product = {
+  id?: string,
+  name: string,
+  alias?: string,
+  description?: string,
+  categoryId: string,
+  trademarkId?: string,
+  countryId: string,
+  imageUrl?: string,
+  rating: number,
+  ratingCount: number,
+  isArchived: boolean,
+  unitType: string
+}
 export type Pack = {
   id?: string,
   name: string,
-  productId: string,
-  productName: string,
-  productAlias: string,
-  productDescription?: string,
-  imageUrl?: string,
-  price: number,
-  categoryId: string,
-  rating: number,
+  product: Product,
+  price?: number,
   subPackId?: string,
   subQuantity?: number,
-  subPackName?: string,
   isOffer: boolean,
   offerEnd?: Date,
   weightedPrice?: number,
-  trademarkId?: string,
-  countryId: string,
-  ratingCount?: number,
-  categoryName?: string,
-  trademarkName?: string,
-  countryName?: string,
-  byWeight?: boolean,
-  unitsCount: number,
+  byWeight: boolean,
+  typeUnits: number,
+  standardUnits: number,
   specialImage: boolean,
   packTypeId: string,
-  unitId: string
+  unitId: string,
+  imageUrl?: string
 }
 export type PackPrice = {
   storeId: string,
@@ -153,18 +157,6 @@ export type PasswordRequest = {
   mobile: string,
   status: string,
   time: Date
-}
-export type Product = {
-  id?: string,
-  name: string,
-  alias: string,
-  description: string,
-  categoryId: string,
-  trademarkId: string,
-  countryId: string,
-  imageUrl: string,
-  rating: number,
-  ratingCount: number,
 }
 export type Store = {
   id?: string,

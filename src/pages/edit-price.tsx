@@ -58,7 +58,7 @@ const EditPrice = (props: Props) => {
         <ListInput 
           name="productName" 
           label={labels.product}
-          value={pack.productName}
+          value={pack.product.name}
           type="text" 
           readonly
         />

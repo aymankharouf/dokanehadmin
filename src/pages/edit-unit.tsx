@@ -75,7 +75,6 @@ const EditUnit = (props: Props) => {
           id="types"
           smartSelectParams={{
             el: "#types", 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

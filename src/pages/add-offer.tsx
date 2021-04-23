@@ -17,15 +17,7 @@ const AddOffer = (props: Props) => {
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
-  const [packs] = useState(() => {
-    const packs = state.packs.filter(p => p.productId === props.id && !p.isOffer && !p.byWeight)
-    return packs.map(p => {
-      return {
-        id: p.id,
-        name: p.name
-      }
-    })
-  })
+  const [packs] = useState(() => state.packs.filter(p => p.product.id === props.id && !p.isOffer && !p.byWeight))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -34,7 +26,7 @@ const AddOffer = (props: Props) => {
     }
   }, [error])
   useEffect(() => {
-    setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl || '')
+    setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl)
   }, [state.packs, subPackId])
   const generateName = () => {
     let suggestedName
@@ -61,30 +53,24 @@ const AddOffer = (props: Props) => {
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.productId === props.id && p.name === name)) {
+      if (state.packs.find(p => p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
         throw new Error('invalidQuantity')
       }
       const pack = {
-        productId: product.id!,
-        productName: product.name,
-        productAlias: product.alias,
-        categoryId: product.categoryId,
-        countryId: product.countryId,
-        rating: product.rating,
+        product,
         name,
         isOffer,
         subPackId,
-        subQuantity: Number(subQuantity),
-        unitsCount: subQuantity * (subPackInfo.unitsCount ?? 0),
-        subPackName: subPackInfo.name,
+        subQuantity,
+        typeUnits: subQuantity * subPackInfo.typeUnits!,
+        standardUnits: subQuantity * subPackInfo.standardUnits!,
         byWeight: subPackInfo.byWeight,
-        price: 0,
         isArchived: false,
-        packTypeId: '0',
-        unitId: '0',
+        packTypeId: subPackInfo.packTypeId,
+        unitId: subPackInfo.unitId,
         specialImage
       }
       addPack(pack, product, image, subPackInfo)
@@ -102,6 +88,7 @@ const AddOffer = (props: Props) => {
           name="name" 
           label={labels.name}
           clearButton
+          autofocus
           type="text" 
           value={name} 
           onChange={e => setName(e.target.value)}
@@ -113,7 +100,6 @@ const AddOffer = (props: Props) => {
           id="subPacks"
           smartSelectParams={{
             el: "#subPacks", 
-            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
