@@ -54,12 +54,16 @@ const StateProvider = ({ children }: Props) => {
       let packs: Pack[] = []
       let packPrices: PackPrice[] = []
       docs.forEach(doc => {
+        let prices, minPrice
+        if (doc.data().prices) {
+          prices = doc.data().prices.map((p: PackPrice) => p.price)
+          minPrice = prices.length > 0 ? Math.min(...prices) : undefined
+        }
         packs.push({
           id: doc.id,
           name: doc.data().name,
           product: doc.data().product,
           imageUrl: doc.data().imageUrl,
-          price: doc.data().price,
           isOffer: doc.data().isOffer,
           offerEnd: doc.data().offerEnd,
           byWeight: doc.data().byWeight,
@@ -68,7 +72,8 @@ const StateProvider = ({ children }: Props) => {
           standardUnits: doc.data().standardUnits,
           packTypeId: doc.data().packTypeId,
           unitId: doc.data().unitId,
-          specialImage: doc.data().specialImage
+          specialImage: doc.data().specialImage,
+          price: minPrice
         })
         if (doc.data().prices) {
           doc.data().prices.forEach((p: PackPrice) => {
@@ -233,7 +238,7 @@ const StateProvider = ({ children }: Props) => {
               address: doc.data().address,
               isActive: doc.data().isActive,
               mapPosition: doc.data().mapPosition,
-              openTime: doc.data().openTime
+              locationId: doc.data().locationId
             })
           })
           dispatch({type: 'SET_STORES', payload: stores})

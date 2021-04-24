@@ -70,9 +70,10 @@ const PermitUser = (props: Props) => {
         <ListItem
           title={labels.user}
           smartSelect
-          id="users"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#users', 
+            // el: '#users', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -90,9 +91,10 @@ const PermitUser = (props: Props) => {
         <ListItem
           title={labels.store}
           smartSelect
-          id="stores"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#stores', 
+            // el: '#stores', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

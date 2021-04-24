@@ -34,9 +34,10 @@ const AddNotification = () => {
         <ListItem
           title={labels.toCustomer}
           smartSelect
-          id="users"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#users', 
+            // el: '#users', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

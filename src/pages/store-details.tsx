@@ -42,8 +42,8 @@ const StoreDetails = (props: Props) => {
         </ListItem>
         <ListInput
           name="openTime"
-          label={labels.openTime}
-          value={store.openTime}
+          label={labels.location}
+          value={state.locations.find(l => l.id === store.locationId)?.name}
           type="text"
           readonly
         />
@@ -67,9 +67,6 @@ const StoreDetails = (props: Props) => {
           </FabButton>
           <FabButton color="red" onClick={() => f7.views.current.router.navigate(`/store-owners/${store.id}`)}>
             <Icon material="perm_identity"></Icon>
-          </FabButton>
-          <FabButton color="orange" onClick={() => f7.views.current.router.navigate(`/store-balance/${store.id}`)}>
-            <Icon material="attach_money"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

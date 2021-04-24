@@ -81,6 +81,7 @@ const AddProduct = (props: Props) => {
           name="name" 
           label={labels.name}
           clearButton
+          autofocus
           type="text" 
           value={name} 
           onChange={e => setName(e.target.value)}
@@ -107,9 +108,10 @@ const AddProduct = (props: Props) => {
         <ListItem
           title={labels.trademark}
           smartSelect
-          id= "trademarks"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#trademarks', 
+            // el: '#trademarks', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -126,9 +128,10 @@ const AddProduct = (props: Props) => {
         <ListItem
           title={labels.category}
           smartSelect
-          id="categories"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#categories', 
+            // el: '#categories',
+            openIn: 'popup', 
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -145,9 +148,10 @@ const AddProduct = (props: Props) => {
         <ListItem
           title={labels.country}
           smartSelect
-          id="countries"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#countries', 
+            // el: '#countries', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -164,14 +168,11 @@ const AddProduct = (props: Props) => {
         <ListItem
           title={labels.unitType}
           smartSelect
-          id="unitTypes"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#unitTypes", 
+            // el: "#unitTypes", 
+            openIn: "sheet",
             closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close,
-            renderPage: undefined
           }}
         >
           <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>

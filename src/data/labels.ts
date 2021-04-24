@@ -55,6 +55,7 @@ const labels: Label = {
   loginSuccess: 'اهلا وسهلا بك',
   email: 'البريد اﻻلكتروني',
   login: 'تسجيل دخول',
+  logon: 'دخول',
   logout: 'تسجيل خروج',
   mainPanelTitle: 'الوظائف المساندة',
   settings: 'اﻻعدادات',
@@ -364,7 +365,8 @@ const labels: Label = {
   duplicateUnit: 'وحدة مكررة',
   factor: 'معامل التحويل',
   factorError: 'الرجاء التأكد من معامل التحويل',
-  unit: 'الوحدة'
+  unit: 'الوحدة',
+  package: 'التغليف'
 }
 
 export default labels

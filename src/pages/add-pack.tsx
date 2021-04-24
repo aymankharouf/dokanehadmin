@@ -26,6 +26,14 @@ const AddPack = (props: Props) => {
       setError('')
     }
   }, [error])
+  const generateName = () => {
+    let suggestedName
+    if (packTypeId && unitId && typeUnits) {
+      suggestedName = `${state.packTypes.find(t => t.id === packTypeId)!.name} ${typeUnits} ${state.units.find(u => u.id === unitId)!.name}`
+      if (!name) setName(suggestedName)
+    }
+  }
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -81,19 +89,16 @@ const AddPack = (props: Props) => {
           onInputClear={() => setName('')}
         />
         <ListItem 
-          title={labels.type}
+          title={labels.package}
           smartSelect
-          id="types"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#types", 
+            // el: "#types", 
+            openIn: "sheet",
             closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close,
-            renderPage: undefined
           }}
         >
-          <select name="packTypeId" value={packTypeId} onChange={e => setPackTypeId(e.target.value)}>
+          <select name="packTypeId" value={packTypeId} onChange={e => setPackTypeId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {state.packTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
@@ -103,17 +108,14 @@ const AddPack = (props: Props) => {
         <ListItem 
           title={labels.unit}
           smartSelect
-          id="units"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#units", 
+            // el: "#units", 
+            openIn: "sheet",
             closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close,
-            renderPage: undefined
           }}
         >
-          <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
+          <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)} onBlur={() => generateName()}>
             <option value=""></option>
             {units.map(u => 
               <option key={u.id} value={u.id}>{u.name}</option>
@@ -121,13 +123,14 @@ const AddPack = (props: Props) => {
           </select>
         </ListItem>
         <ListInput 
-          name="unitsCount" 
+          name="typeUnits" 
           label={labels.unitsCount}
           clearButton
           type="number" 
           value={typeUnits} 
           onChange={e => setTypeUnits(e.target.value)}
           onInputClear={() => setTypeUnits(0)}
+          onBlur={() => generateName()}
         />
         <ListItem>
           <span>{labels.byWeight}</span>

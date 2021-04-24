@@ -97,9 +97,10 @@ const AddOffer = (props: Props) => {
         <ListItem
           title={labels.pack}
           smartSelect
-          id="subPacks"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#subPacks", 
+            // el: "#subPacks", 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

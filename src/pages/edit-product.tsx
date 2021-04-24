@@ -3,6 +3,7 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framewor
 import { StateContext } from '../data/state-provider'
 import { editProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
+import { unitTypes } from '../data/config'
 
 type Props = {
   id: string
@@ -17,6 +18,7 @@ const EditProduct = (props: Props) => {
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [countryId, setCountryId] = useState(product.countryId)
+  const [unitType, setUnitType] = useState('')
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -46,9 +48,10 @@ const EditProduct = (props: Props) => {
     || countryId !== product.countryId
     || categoryId !== product.categoryId
     || trademarkId !== product.trademarkId
+    || unitType !== product.unitType
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, alias, description, countryId, categoryId, trademarkId, imageUrl])
+  }, [product, name, alias, description, countryId, categoryId, trademarkId, unitType, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -68,6 +71,7 @@ const EditProduct = (props: Props) => {
         description,
         trademarkId,
         countryId,
+        unitType
       }
       editProduct(newProduct, product.name, state.packs, image)
       showMessage(labels.editSuccess)
@@ -84,6 +88,7 @@ const EditProduct = (props: Props) => {
           name="name" 
           label={labels.name}
           clearButton
+          autofocus
           type="text" 
           value={name} 
           onChange={e => setName(e.target.value)}
@@ -110,9 +115,10 @@ const EditProduct = (props: Props) => {
         <ListItem
           title={labels.trademark}
           smartSelect
-          id="trademarks"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#trademarks', 
+            // el: '#trademarks', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -129,9 +135,10 @@ const EditProduct = (props: Props) => {
         <ListItem
           title={labels.category}
           smartSelect
-          id="categories"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#categories', 
+            // el: '#categories', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -148,9 +155,10 @@ const EditProduct = (props: Props) => {
         <ListItem
           title={labels.country}
           smartSelect
-          id="countries"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#countries', 
+            // el: '#countries', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,
@@ -161,6 +169,23 @@ const EditProduct = (props: Props) => {
             <option value=""></option>
             {countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem
+          title={labels.unitType}
+          smartSelect
+          // @ts-ignore
+          smartSelectParams={{
+            // el: "#unitTypes", 
+            openIn: "sheet",
+            closeOnSelect: true, 
+          }}
+        >
+          <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>
+            <option value=""></option>
+            {unitTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>
         </ListItem>

@@ -146,9 +146,10 @@ const AlarmDetails = (props: Props) => {
           <ListItem
             title={labels.newProduct}
             smartSelect
-            id="newPacks"
+            // @ts-ignore
             smartSelectParams={{
-              el: '#newPacks', 
+              // el: '#newPacks', 
+              openIn: "popup",
               closeOnSelect: true, 
               searchbar: true, 
               searchbarPlaceholder: labels.search,

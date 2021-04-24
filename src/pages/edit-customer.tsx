@@ -67,9 +67,10 @@ const EditCustomer = (props: Props) => {
         <ListItem
           title={labels.location}
           smartSelect
-          id="locations"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#locations', 
+            // el: '#locations', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

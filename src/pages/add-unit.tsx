@@ -55,14 +55,11 @@ const AddPackType = () => {
         <ListItem
           title={labels.type}
           smartSelect
-          id="types"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#types", 
+            // el: "#types", 
+            openIn: "sheet",
             closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close,
-            renderPage: undefined
           }}
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>

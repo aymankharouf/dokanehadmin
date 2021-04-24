@@ -47,16 +47,20 @@ const Login = (props: Props) => {
           label={labels.email}
           type="text"
           value={email}
+          clearButton
           onChange={e => setEmail(e.target.value)}
+          onInputClear={() => setEmail('')}
         />
         <ListInput
           label={labels.password}
           type="text"
           value={password}
+          clearButton
           onChange={e => setPassword(e.target.value)}
+          onInputClear={() => setPassword('')}
         />
       </List>
-      {!email || !password ? '' : 
+      {email && password &&
         <Button text={labels.logon} large onClick={() => handleLogin()} />
       }
       <Toolbar bottom>

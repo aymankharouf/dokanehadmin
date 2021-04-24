@@ -165,7 +165,7 @@ export type Store = {
   mobile: string,
   address: string,
   mapPosition: string,
-  openTime: string
+  locationId: string
 }
 export type Log = {
   id: string,

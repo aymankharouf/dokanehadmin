@@ -62,9 +62,10 @@ const EditCategory = (props: Props) => {
         <ListItem
           title={labels.mainCategory}
           smartSelect
-          id="parents"
+          // @ts-ignore
           smartSelectParams={{
-            el: '#parents', 
+            // el: '#parents', 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

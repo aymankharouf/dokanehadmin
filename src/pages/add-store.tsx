@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import labels from '../data/labels'
+import { StateContext } from '../data/state-provider'
 
 const AddStore = () => {
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
@@ -11,8 +13,8 @@ const AddStore = () => {
   const [address, setAddress] = useState('')
   const [mapPosition, setMapPosition] = useState('')
   const [isActive, setIsActive] = useState(false)
-  const [openTime, setOpenTime] = useState('')
-
+  const [locationId, setLocationId] = useState('')
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -40,7 +42,7 @@ const AddStore = () => {
         mobile,
         mapPosition,
         isActive,
-        openTime,
+        locationId,
         address,
         time: new Date()
       }
@@ -60,6 +62,7 @@ const AddStore = () => {
           label={labels.name}
           value={name}
           clearButton 
+          autofocus
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
@@ -84,24 +87,26 @@ const AddStore = () => {
             onToggleChange={() => setIsActive(!isActive)}
           />
         </ListItem>
-        <ListInput
-          name="openTime"
-          label={labels.openTime}
-          value={openTime}
-          clearButton
-          type="text"
-          onChange={e => setOpenTime(e.target.value)}
-          onInputClear={() => setOpenTime('')}
-        />
-        <ListInput
-          name="mapPosition"
-          label={labels.mapPosition}
-          value={mapPosition}
-          clearButton
-          type="text"
-          onChange={e => setMapPosition(e.target.value)}
-          onInputClear={() => setMapPosition('')}
-        />
+        <ListItem 
+          title={labels.location}
+          smartSelect
+          // @ts-ignore
+          smartSelectParams={{
+            // el: "#locations", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+          }}
+        >
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="address" 
           label={labels.address}
@@ -112,7 +117,7 @@ const AddStore = () => {
           onInputClear={() => setAddress('')}
         />
       </List>
-      {name && !mobileErrorMessage &&
+      {name && locationId && !mobileErrorMessage &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

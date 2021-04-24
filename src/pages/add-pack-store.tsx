@@ -74,9 +74,10 @@ const AddPackStore = (props: Props) => {
         <ListItem
           title={labels.store}
           smartSelect
-          id="stores"
+          // @ts-ignore
           smartSelectParams={{
-            el: "#stores", 
+            // el: "#stores", 
+            openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
             searchbarPlaceholder: labels.search,

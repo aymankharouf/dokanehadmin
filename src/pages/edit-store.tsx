@@ -17,7 +17,7 @@ const EditStore = (props: Props) => {
   const [address, setAddress] = useState(store.address)
   const [mapPosition, setMapPosition] = useState(store.mapPosition)
   const [isActive, setIsActive] = useState(store.isActive)
-  const [openTime, setOpenTime] = useState(store.openTime)
+  const [locationId, setLocationId] = useState(store.locationId)
   const [hasChanged, setHasChanged] = useState(false)
   useEffect(() => {
     const patterns = {
@@ -39,9 +39,9 @@ const EditStore = (props: Props) => {
     || address !== store.address
     || mapPosition !== store.mapPosition
     || isActive !== store.isActive
-    || openTime !== store.openTime) setHasChanged(true)
+    || locationId !== store.locationId) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, address, mapPosition, isActive, openTime])
+  }, [store, name, mobile, address, mapPosition, isActive, locationId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -57,7 +57,7 @@ const EditStore = (props: Props) => {
         mobile,
         address,
         mapPosition,
-        openTime
+        locationId
       }
       editStore(newStore)
       showMessage(labels.editSuccess)
@@ -75,6 +75,7 @@ const EditStore = (props: Props) => {
           label={labels.name}
           value={name}
           clearButton 
+          autofocus
           type="text" 
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
@@ -99,24 +100,27 @@ const EditStore = (props: Props) => {
             onToggleChange={() => setIsActive(!isActive)}
           />
         </ListItem>
-        <ListInput
-          name="openTime"
-          label={labels.openTime}
-          value={openTime}
-          clearButton
-          type="text"
-          onChange={e => setOpenTime(e.target.value)}
-          onInputClear={() => setOpenTime('')}
-        />
-        <ListInput
-          name="mapPosition"
-          label={labels.mapPosition}
-          value={mapPosition}
-          clearButton
-          type="text"
-          onChange={e => setMapPosition(e.target.value)}
-          onInputClear={() => setMapPosition('')}
-        />
+        <ListItem 
+          title={labels.location}
+          smartSelect
+          // @ts-ignore
+          smartSelectParams={{
+            // el: "#locations", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close,
+            renderPage: undefined
+          }}
+        >
+          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
+            <option value=""></option>
+            {state.locations.map(l => 
+              <option key={l.id} value={l.id}>{l.name}</option>
+            )}
+          </select>
+        </ListItem>
         <ListInput 
           name="address" 
           label={labels.address}
