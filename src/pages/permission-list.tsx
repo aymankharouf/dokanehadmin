@@ -15,11 +15,11 @@ const PermissionList = (props: Props) => {
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
-      const customers = state.users.filter(u => (props.id === 's' && u.storeId) || (props.id === 'n' && u.storeName && !u.storeId))
-      return customers.map(c => {
-        const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
+      const users = state.users.filter(u => (props.id === 's' && u.storeId) || (props.id === 'n' && u.storeName && !u.storeId))
+      return users.map(u => {
+        const storeName = state.stores.find(s => s.id === u.storeId)?.name || u.storeName || ''
         return {
-          ...c,
+          ...u,
           storeName
         }
       })

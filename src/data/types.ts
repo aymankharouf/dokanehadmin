@@ -161,6 +161,15 @@ export type AlarmType = {
   name: string,
   isAvailable: number
 }
+export type ProductRequest = {
+  id: string,
+  userId: string,
+  name: string,
+  country: string,
+  weight: string,
+  imageUrl: string,
+  time: Date
+}
 export type State = {
   user?: firebase.User,
   users: User[],
@@ -181,7 +190,8 @@ export type State = {
   alarms: Alarm[],
   ratings: Rating[],
   packTypes: PackType[],
-  units: Unit[]
+  units: Unit[],
+  productRequests: ProductRequest[]
 }
 
 export type Action = {

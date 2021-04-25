@@ -622,7 +622,7 @@ export const permitUser = (user: User, address: string) => {
   batch.set(storeRef, store)
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
-    storeId: storeRef,
+    storeId: storeRef.id,
   })
   batch.commit()
   // const colors = userInfo.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)

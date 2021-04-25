@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Notification, Store } from './types'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Notification, Store, ProductRequest } from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -28,7 +28,8 @@ const StateProvider = ({ children }: Props) => {
     alarms: [],
     ratings: [],
     packTypes: [],
-    units: []
+    units: [],
+    productRequests: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -233,7 +234,25 @@ const StateProvider = ({ children }: Props) => {
           dispatch({type: 'SET_LOGS', payload: logs})
         }, err => {
           unsubscribeLogs()
+        })
+        const unsubscribeProductRequests = firebase.firestore().collection('product-requests').onSnapshot(docs => {
+          let productRequests: ProductRequest[] = []
+          docs.forEach(doc => {
+            productRequests.push({
+              id: doc.id,
+              name: doc.data().name,
+              country: doc.data().country,
+              weight: doc.data().weight,
+              userId: doc.data().userId,
+              imageUrl: doc.data().imageUrl,
+              time: doc.data().time.toDate()
+            })
+          })
+          dispatch({type: 'SET_PRODUCT_REQUESTS', payload: productRequests})
+        }, err => {
+          unsubscribeProductRequests()
         })  
+
       }
     })
   }, [])

@@ -59,6 +59,8 @@ import EditPackType from './pages/edit-pack-type'
 import Units from './pages/units'
 import AddUnit from './pages/add-unit'
 import EditUnit from './pages/edit-unit'
+import ProductRequests from './pages/product-requests'
+import ProductRequestDetails from './pages/product-request-details'
 
 const routes = [
   {
@@ -314,6 +316,14 @@ const routes = [
   {
     path: '/edit-unit/',
     component: EditUnit
+  },
+  {
+    path: '/product-requests/',
+    component: ProductRequests
+  },
+  {
+    path: '/product-request-details/:id',
+    component: ProductRequestDetails
   },
   {
     path: '(.*)',

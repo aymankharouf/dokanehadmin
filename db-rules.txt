@@ -30,6 +30,9 @@ service cloud.firestore {
     match /password-requests/{requestId} {
     	allow read, write;
     }
+    match /product-requests/{id} {
+    	allow read, write;
+    }
     match /logs/{logId} {
     	allow read: if request.auth.token.name == 'a';
       allow create: if request.auth.uid != null;

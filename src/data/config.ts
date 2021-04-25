@@ -27,13 +27,6 @@ export const advertType = [
   {id: 'n', name: 'تنويه'}
 ]
 
-export const friendStatus = [
-  {id: 'n', name: 'قيد الموافقة'},
-  {id: 's', name: 'ارسلت الدعوة'},
-  {id: 'o', name: 'مدعو سابقا'},
-  {id: 'r', name: 'مستخدم فعلي'}
-]
-
 export const unitTypes = [
   {id: 'w', name: 'وزن'},
   {id: 'v', name: 'حجم'},

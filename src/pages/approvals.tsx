@@ -28,8 +28,9 @@ const Approvals = () => {
       {id: '2', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
       {id: '3', name: labels.ratings, path: '/ratings/', count: ratings.length},
       {id: '4', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '5', name: labels.productRequests, path: '/product-requests/', count: state.productRequests.length},
     ])
-  }, [alarms, state.passwordRequests, ratings, newOwners])
+  }, [alarms, state.passwordRequests, state.productRequests, ratings, newOwners])
   let i = 0
   return(
     <Page>

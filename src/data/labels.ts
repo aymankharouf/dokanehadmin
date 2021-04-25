@@ -79,9 +79,6 @@ const labels: Label = {
   unitsCount: 'عدد الوحدات',
   storeName: 'اسم المحل',
   storeId: 'المحل',
-  customerDetails: 'تفاصيل العميل',
-  totalPayments: 'مجموع الدفعات',
-  editCustomer: 'تعديل بيانات عميل',
   type: 'التصنيف',
   store: 'المحل',
   newUsers: 'عملاء جدد',
@@ -160,7 +157,6 @@ const labels: Label = {
   orderRequests: 'تعديل الطلبات',
   logs: 'الاخطاء',
   refreshSuccess: 'تم التحديث',
-  customerInfo: 'معلومات العميل',
   isDivided: 'يجزأ؟',
   quantityNotAvaliable: 'الكمية غير متوفرة',
   enterWeight: 'ادخل الوزن الفعلي',
@@ -221,7 +217,6 @@ const labels: Label = {
   addChild: 'اضافة صنف فرعي',
   invitations: 'الدعوات',
   invitationDetails: 'تفاصيل الدعوة',
-  friendName: 'اسم الصديق',
   mobileCheck: 'التحقق',
   notUsedMobile: 'رقم الموبايل غير مستخدم',
   alternative: 'اسم البديل',
@@ -234,7 +229,6 @@ const labels: Label = {
   archive: 'ارشفة',
   deliveryDiscount: 'خصم التوصيل',
   addNotification: 'اضافة تنبيه',
-  allCustomers: 'جميع العملاء',
   notRead: 'غير مقروء',
   read: 'مقروء',
   notifications: 'التنبيهات',
@@ -251,7 +245,6 @@ const labels: Label = {
   approveMergeRequest: 'تم اعتماد طلبك بدمج طلبي شراء',
   approveEditRequest: 'تم اعتماد طلبك بتعديل طلب الشراء',
   approveInvitation: 'تم اعتماد دعوتك لصديق، سوف تحصل على خصم بمجرد تسجيله معنا',
-  customerHasBeenBlocked: 'تم للاسف حظر التعامل معك لعدم استلامك لطلبك الاخير',
   noArchiveBeforeMothlyTrans: 'لا يمكن الارشفة قبل اثبات الحركات الشهرية',
   trans: 'حركات',
   purchasePlan: 'خطة الشراء',
@@ -322,8 +315,6 @@ const labels: Label = {
   sellingLoss: 'خسائر البيع',
   grossLoss: 'اجمالي المصروفات',
   current: 'الحالي',
-  notifyFriends: 'ابلاغ الاصدقاء',
-  notifyFromFriend: 'تنبيه من صديقك',
   offerAvailableFor: 'هناك عرض على منتج',
   withPrice: 'بسعر',
   balance: 'الرصيد',
@@ -366,7 +357,8 @@ const labels: Label = {
   factor: 'معامل التحويل',
   factorError: 'الرجاء التأكد من معامل التحويل',
   unit: 'الوحدة',
-  package: 'التغليف'
+  package: 'التغليف',
+  productRequests: 'طلبات اضافة منتج'
 }
 
 export default labels

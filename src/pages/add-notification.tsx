@@ -32,7 +32,7 @@ const AddNotification = () => {
       <Navbar title={labels.addNotification} backLink={labels.back} />
       <List form inlineLabels>
         <ListItem
-          title={labels.toCustomer}
+          title={labels.toUser}
           smartSelect
           // @ts-ignore
           smartSelectParams={{
