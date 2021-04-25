@@ -2,29 +2,29 @@ import { useContext, useState, useEffect } from 'react'
 import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { Customer } from '../data/types'
+import { User } from '../data/types'
 
 type Props = {
   id: string
 }
-type ExtendedCustomer = Customer & {customerInfo: Customer}
+type ExtendedUser = User & {userInfo: User}
 const StoreOwners = (props: Props) => {
   const { state } = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
-  const [storeOwners, setStoreOwners] = useState<ExtendedCustomer[]>([])
+  const [storeOwners, setStoreOwners] = useState<ExtendedUser[]>([])
   useEffect(() => {
     setStoreOwners(() => {
-      const storeOwners = state.customers.filter(c => c.storeId === props.id)
+      const storeOwners = state.users.filter(u => u.storeId === props.id)
       const results = storeOwners.map(o => {
-        const customerInfo = state.customers.find(c => c.id === o.id)!
+        const userInfo = state.users.find(u => u.id === o.id)!
         return {
           ...o,
-          customerInfo,
+          userInfo,
         }
       })
       return results
     })
-  }, [state.customers, props.id])
+  }, [state.users, props.id])
   return (
     <Page>
       <Navbar title={`${labels.storeOwners} ${store.name}`} backLink={labels.back} />
@@ -35,7 +35,7 @@ const StoreOwners = (props: Props) => {
           : storeOwners.map(o => 
               <ListItem 
                 link="#"
-                title={o.customerInfo.name} 
+                title={o.userInfo.name} 
                 key={o.id} 
               />
             )

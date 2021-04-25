@@ -11,7 +11,7 @@ const AddNotification = () => {
   const [userId, setUserId] = useState('')
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('')
-  const [customers] = useState(() => [...state.customers].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
+  const [users] = useState(() => [...state.users].sort((u1, u2) => u1.mobile > u2.mobile ? 1 : -1))
   useEffect(() => {
     if (error) {
       showError(error)
@@ -46,8 +46,8 @@ const AddNotification = () => {
         >
           <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
             <option value=""></option>
-            {customers.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
+            {users.map(u => 
+              <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
         </ListItem>

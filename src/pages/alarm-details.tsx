@@ -19,10 +19,9 @@ const AlarmDetails = (props: Props) => {
   const [error, setError] = useState('')
   const [newPackId, setNewPackId] = useState('')
   const [userInfo] = useState(() => state.users.find(u => u.id === props.userId)!)
-  const [customerInfo] = useState(() => state.customers.find(c => c.id === props.userId)!)
   const [alarm] = useState(() => userInfo.alarms?.find(a => a.id === props.id)!)
   const [pack] = useState(() => state.packs.find(p => p.id === alarm.packId)!)
-  const [storeName] = useState(() => state.stores.find(s => s.id === customerInfo.storeId)?.name)
+  const [storeName] = useState(() => state.stores.find(s => s.id === userInfo.storeId)?.name)
   const [packs] = useState(() => {
     let packs = state.packs.filter(p => p.id !== pack.id)
     if (alarm.type === 'go') {
@@ -41,7 +40,7 @@ const AlarmDetails = (props: Props) => {
   const [prices, setPrices] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setPrices(() => {
-      const prices = state.packPrices.filter(p => p.storeId !== customerInfo.storeId && p.packId === (newPackId || pack.id))
+      const prices = state.packPrices.filter(p => p.storeId !== userInfo.storeId && p.packId === (newPackId || pack.id))
       const storePrices = prices.map(p => {
         const storeInfo = state.stores.find(s => s.id === p.storeId)!
         return {
@@ -51,7 +50,7 @@ const AlarmDetails = (props: Props) => {
       })
       return storePrices.sort((p1, p2) => p1.price - p2.price)
     })
-  }, [state.packPrices, state.stores, customerInfo, pack, newPackId])
+  }, [state.packPrices, state.stores, userInfo, pack, newPackId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -60,7 +59,7 @@ const AlarmDetails = (props: Props) => {
   }, [error])
   const handleApprove = () => {
     try{
-      approveAlarm(userInfo, alarm, newPackId, customerInfo, state.packPrices, state.packs)
+      approveAlarm(userInfo, alarm, newPackId, state.packPrices, state.packs)
       showMessage(labels.approveSuccess)
 			f7.views.current.router.back()
     } catch(err) {
@@ -78,7 +77,7 @@ const AlarmDetails = (props: Props) => {
         <ListInput 
           name="userName" 
           label={labels.user}
-          value={customerInfo.name}
+          value={userInfo.name}
           type="text" 
           readonly
         />

@@ -5,11 +5,10 @@ import 'moment/locale/ar'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { alarmTypes } from '../data/config'
-import { Alarm, AlarmType, Customer, Pack, User } from '../data/types'
+import { Alarm, AlarmType, Pack, User } from '../data/types'
 
 type ExtendedAlarms = Alarm & {
   userInfo: User,
-  customerInfo: Customer,
   packInfo: Pack,
   alarmTypeInfo: AlarmType
 }
@@ -23,18 +22,16 @@ const Alarms = () => {
         const userInfo = state.users.find(u => u.id === a.userId)!
         const alarmTypeInfo = alarmTypes.find(t => t.id === a.type)!
         const packInfo = state.packs.find(p => p.id === a.packId)!
-        const customerInfo = state.customers.find(c => c.id === a.userId)!
         return {
           ...a,
           userInfo,
-          customerInfo,
           packInfo,
           alarmTypeInfo
         }
       })
       return results.sort((a1, a2) => a1.time > a2.time ? -1 : 1)
     })
-  }, [state.alarms, state.packs, state.users, state.customers])
+  }, [state.alarms, state.packs, state.users])
   return(
     <Page>
       <Navbar title={labels.alarms} backLink={labels.back} />
@@ -46,7 +43,7 @@ const Alarms = () => {
                 <ListItem
                   link={`/alarm-details/${a.id}/user/${a.userInfo.id}`}
                   title={a.alarmTypeInfo.name}
-                  subtitle={a.customerInfo.name}
+                  subtitle={a.userInfo.name}
                   text={`${a.packInfo.product.name} ${a.packInfo.name}`}
                   footer={moment(a.time).fromNow()}
                   key={a.id}

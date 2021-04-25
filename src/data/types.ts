@@ -67,12 +67,6 @@ export type Notification = {
   time: Date,
   userId: string
 }
-export type Friend = {
-  userId: string,
-  mobile: string,
-  name: string,
-  status: string
-}
 export type Rating = {
   productId: string,
   status: string,
@@ -101,24 +95,13 @@ export type User = {
   mobile: string,
   locationId: string,
   storeName?: string,
+  storeId?: string,
   notifications?: Notification[],
-  friends?: Friend[],
   ratings?: Rating[],
   favorites?: string[],
   alarms?: Alarm[],
   colors?: string[],
   time: Date
-}
-export type Customer = {
-  id: string,
-  storeId: string,
-  storeName: string,
-  name: string,
-  isBlocked: boolean,
-  discounts: number,
-  specialDiscount: number,
-  address: string,
-  time?: Date
 }
 export type Advert = {
   id?: string,
@@ -182,7 +165,6 @@ export type AlarmType = {
 export type State = {
   user?: firebase.User,
   users: User[],
-  customers: Customer[],
   categories: Category[],
   packs: Pack[],
   packPrices: PackPrice[],
@@ -199,7 +181,6 @@ export type State = {
   notifications: Notification[],
   alarms: Alarm[],
   ratings: Rating[],
-  invitations: Friend[],
   packTypes: PackType[],
   units: Unit[]
 }

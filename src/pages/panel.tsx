@@ -8,14 +8,12 @@ const Panel = () => {
   const { state, dispatch } = useContext(StateContext)
   const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {
-    const newUsers = state.users.filter(u => !state.customers.find(c => c.id === u.id)).length
     const alarms = state.alarms.filter(a => a.status === 'n').length
     const ratings = state.ratings.filter(r => r.status === 'n').length
-    const invitations = state.invitations.filter(i => i.status === 'n').length
     const passwordRequests = state.passwordRequests.length
-    const newStoresOwners = state.customers.filter(c => c.storeName && !c.storeId).length
-    setApprovalsAcount(newUsers + alarms + ratings + invitations + passwordRequests + newStoresOwners)
-  }, [state.users, state.customers, state.passwordRequests, state.alarms, state.ratings, state.invitations])
+    const newStoresOwners = state.users.filter(u => u.storeName && !u.storeId).length
+    setApprovalsAcount(alarms + ratings + passwordRequests + newStoresOwners)
+  }, [state.users, state.passwordRequests, state.alarms, state.ratings])
   const handleLogout = () => {
     logout()
     f7.views.main.router.navigate('/home/', {reloadAll: true})

@@ -3,7 +3,7 @@ import labels from './labels'
 import { f7 } from 'framework7-react'
 import { randomColors } from './config'
 import moment from 'moment'
-import { Advert, Alarm, Category, Country, Customer, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, Unit, User } from './types'
+import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -401,23 +401,6 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
   batch.commit()
 }
 
-export const editCustomer = (customer: Customer, name: string, locationId: string, mobile: string, storeId: string, stores: Store[]) => {
-  const batch = firebase.firestore().batch()
-  const { id, ...others } = customer
-  const customerRef = firebase.firestore().collection('customers').doc(id)
-  const storeName = storeId ? `-${stores.find(s => s.id === storeId)?.name}`: ''
-  batch.update(customerRef, {
-    ...others,
-    name: `${name}${storeName}:${mobile}`,
-  })
-  const userRef = firebase.firestore().collection('users').doc(id)
-  batch.update(userRef, {
-    name,
-    locationId
-  })
-  batch.commit()
-}
-
 export const approveUser = (id: string, name: string, mobile: string, locationId: string, storeId: string, users: User[]) => {
   const batch = firebase.firestore().batch()
   const customerRef = firebase.firestore().collection('customers').doc(id)
@@ -437,20 +420,6 @@ export const approveUser = (id: string, name: string, mobile: string, locationId
     locationId,
     storeName: firebase.firestore.FieldValue.delete()
   })
-  const invitedBy = users.filter(u => u.friends?.find(f => f.mobile === mobile))
-  invitedBy.forEach(u => {
-    if (!u.friends) return
-    const friends = u.friends.slice()
-    const invitationIndex = friends.findIndex(f => f.mobile === mobile)
-    friends.splice(invitationIndex, 1, {
-      ...u.friends[invitationIndex],
-      status: 'r'
-    })
-    const userRef = firebase.firestore().collection('users').doc(u.id)
-    batch.update(userRef, {
-      friends
-    })
-  })
   batch.commit()
 }
 
@@ -463,7 +432,7 @@ export const deleteUser = async (user: User) => {
   return firebase.auth().currentUser?.delete()
 }
 
-export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, customer: Customer, packPrices: PackPrice[], packs: Pack[]) => {
+export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, packPrices: PackPrice[], packs: Pack[]) => {
   const batch = firebase.firestore().batch()
   if (!user.alarms) return
   const alarms = user.alarms.slice()
@@ -471,22 +440,22 @@ export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, custom
   alarms.splice(alarmIndex, 1, {
     ...user.alarms[alarmIndex],
     status: 'a',
-    storeId: customer?.storeId,
+    storeId: user.storeId,
     newPackId
   })
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
     alarms
   })
-  const storePack = packPrices.find(p => p.storeId === customer.storeId && p.packId === (newPackId || alarm.packId))!
+  const storePack = packPrices.find(p => p.storeId === user.storeId && p.packId === (newPackId || alarm.packId))!
   let offerEnd
   if (alarm.offerDays) {
     offerEnd = alarm.time
     offerEnd.setDate(offerEnd.getDate() + alarm.offerDays)
   }
   const newStorePack = { 
-    packId: newPackId || alarm.packId || '', 
-    storeId: customer.storeId,
+    packId: newPackId || alarm.packId!, 
+    storeId: user.storeId!,
     cost: alarm.price,
     price: alarm.price,
     offerEnd,
@@ -547,27 +516,6 @@ export const approveRating = (rating: Rating, packs: Pack[]) => {
       ratingCount: ratingCount + 1
     })
   })
-  batch.commit()
-}
-
-export const approveInvitation = (user: User, mobile: string, status: string) => {
-  const batch = firebase.firestore().batch()
-  const friends = user.friends?.slice()
-  if (!friends) return
-  const invitationIndex = friends.findIndex(f => f.mobile === mobile)
-  if (user.friends) {
-    friends.splice(invitationIndex, 1, {
-      ...user.friends[invitationIndex],
-      status
-    })
-  }
-  const userRef = firebase.firestore().collection('users').doc(user.id)
-  batch.update(userRef, {
-    friends
-  })
-  if (status === 's') {
-    sendNotification(user.id, labels.approval, labels.approveInvitation, batch)
-  }
   batch.commit()
 }
 

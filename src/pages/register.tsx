@@ -46,12 +46,15 @@ const Register = (props: Props) => {
         <ListInput
           label={labels.email}
           type="text"
+          clearButton
+          autofocus
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
         <ListInput
           label={labels.password}
           type="text"
+          clearButton
           value={password}
           onChange={e => setPassword(e.target.value)}
         />

@@ -3,7 +3,7 @@ import { Page, Block, Navbar, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
-import { Alarm, Customer, Friend, Rating, User } from '../data/types'
+import { Alarm, Rating, User } from '../data/types'
 
 type Section = {
   id: string,
@@ -13,29 +13,23 @@ type Section = {
 }
 const Approvals = () => {
   const { state } = useContext(StateContext)
-  const [newUsers, setNewUsers] = useState<User[]>([])
   const [alarms, setAlarms] = useState<Alarm[]>([])
   const [ratings, setRatings] = useState<Rating[]>([])
-  const [invitations, setInvitations] = useState<Friend[]>([])
   const [sections, setSections] = useState<Section[]>([])
-  const [newOwners, setNewOwners] = useState<Customer[]>([])
+  const [newOwners, setNewOwners] = useState<User[]>([])
   useEffect(() => {
-    setNewUsers(() => state.users.filter(u => !state.customers.find(c => c.id === u.id)))
     setAlarms(() => state.alarms.filter(a => a.status === 'n'))
     setRatings(() => state.ratings.filter(r => r.status === 'n'))
-    setInvitations(() => state.invitations.filter(i => i.status === 'n'))
-    setNewOwners(() => state.customers.filter(c => c.storeName && !c.storeId))
-  }, [state.users, state.customers, state.alarms, state.ratings, state.invitations])
+    setNewOwners(() => state.users.filter(u => u.storeName && !u.storeId))
+  }, [state.users, state.alarms, state.ratings])
   useEffect(() => {
     setSections(() => [
-      {id: '1', name: labels.newUsers, path: '/new-users/', count: newUsers.length},
-      {id: '2', name: labels.alarms, path: '/alarms/', count: alarms.length},
-      {id: '3', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
-      {id: '4', name: labels.ratings, path: '/ratings/', count: ratings.length},
-      {id: '5', name: labels.invitations, path: '/invitations/', count: invitations.length},
-      {id: '6', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '1', name: labels.alarms, path: '/alarms/', count: alarms.length},
+      {id: '2', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
+      {id: '3', name: labels.ratings, path: '/ratings/', count: ratings.length},
+      {id: '4', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
     ])
-  }, [newUsers, alarms, state.passwordRequests, ratings, invitations, newOwners])
+  }, [alarms, state.passwordRequests, ratings, newOwners])
   let i = 0
   return(
     <Page>

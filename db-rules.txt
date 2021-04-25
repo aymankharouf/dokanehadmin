@@ -16,23 +16,6 @@ service cloud.firestore {
     	allow create, delete: if request.auth.token.name == 'a';
       allow update: if request.auth.token.name == 's';
     }
-    match /purchases/{purshaseId} {
-    	allow read, write: if request.auth.token.name == 'a';
-    }
-    match /orders/{orderId} {
-    	allow read: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
-      allow create: if request.auth.uid == request.resource.data.userId;
-      allow update: if request.auth.uid == resource.data.userId || request.auth.token.name == 'a';
-      allow delete: if request.auth.token.name == 'a';
-    }
-		match /customers/{customerId} {
-			allow get: if request.auth.uid == customerId;
-      allow list: if request.auth.token.name == 'a';
-      allow write: if request.auth.token.name == 'a';
-		}
-		match /stock-trans/{transId} {
-			allow read, write: if request.auth.token.name == 'a';
-		}
     match /stores/{storeId} {
     	allow read, write: if request.auth.token.name == 'a';
     }
@@ -46,12 +29,6 @@ service cloud.firestore {
     }
     match /password-requests/{requestId} {
     	allow read, write;
-    }
-    match /spendings/{spendingId} {
-    	allow read, write: if request.auth.token.name == 'a';
-    }
-    match /monthly-trans/{transId} {
-    	allow read, write : if request.auth.token.name == 'a';
     }
     match /logs/{logId} {
     	allow read: if request.auth.token.name == 'a';

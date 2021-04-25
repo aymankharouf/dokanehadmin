@@ -16,7 +16,7 @@ import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
 import Categories from './pages/categories'
 import AddCategory from './pages/add-category'
-import Customers from './pages/customers'
+import Users from './pages/users'
 import PasswordRequests from './pages/password-requests'
 import AddPack from './pages/add-pack'
 import PackDetails from './pages/pack-details'
@@ -24,9 +24,6 @@ import EditPack from './pages/edit-pack'
 import EditCountry from './pages/edit-country'
 import EditCategory from './pages/edit-category'
 import EditStore from './pages/edit-store'
-import CustomerDetails from './pages/customer-details'
-import EditCustomer from './pages/edit-customer'
-import NewUsers from './pages/new-users'
 import ApproveUser from './pages/approve-user'
 import Alarms from './pages/alarms'
 import AlarmDetails from './pages/alarm-details'
@@ -44,8 +41,6 @@ import StoreDetails from './pages/store-details'
 import ProductDetails from './pages/product-details'
 import AddOffer from './pages/add-offer'
 import EditOffer from './pages/edit-offer'
-import Invitations from './pages/invitations'
-import InvitationDetails from './pages/invitation-details'
 import Notifications from './pages/notifications'
 import AddNotification from './pages/add-notification'
 import Adverts from './pages/adverts'
@@ -134,24 +129,12 @@ const routes = [
     component: AddStore
   },
   {
-    path: '/customers/',
-    component: Customers,
-  },
-  {
-    path: '/new-users/',
-    component: NewUsers
+    path: '/users/',
+    component: Users,
   },
   {
     path: '/approve-user/:id',
     component: ApproveUser
-  },
-  {
-    path: '/customer-details/:id',
-    component: CustomerDetails
-  },
-  {
-    path: '/edit-customer/:id',
-    component: EditCustomer
   },
   {
     path: '/store-details/:id',
@@ -280,14 +263,6 @@ const routes = [
   {
     path: '/logs/',
     component: Logs
-  },
-  {
-    path: '/invitations/',
-    component: Invitations
-  },
-  {
-    path: '/invitation-details/:userId/mobile/:mobile',
-    component: InvitationDetails
   },
   {
     path: '/notifications/',

@@ -48,6 +48,7 @@ const Login = (props: Props) => {
           type="text"
           value={email}
           clearButton
+          autofocus
           onChange={e => setEmail(e.target.value)}
           onInputClear={() => setEmail('')}
         />

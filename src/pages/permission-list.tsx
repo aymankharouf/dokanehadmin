@@ -3,7 +3,7 @@ import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, But
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
-import { Customer } from '../data/types'
+import { User } from '../data/types'
 
 type Props = {
   id: string
@@ -12,10 +12,10 @@ const PermissionList = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [customers, setCustomers] = useState<Customer[]>([])
+  const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
-    setCustomers(() => {
-      const customers = state.customers.filter(c => (props.id === 's' && c.storeId) || (props.id === 'n' && c.storeName && !c.storeId))
+    setUsers(() => {
+      const customers = state.users.filter(u => (props.id === 's' && u.storeId) || (props.id === 'n' && u.storeName && !u.storeId))
       return customers.map(c => {
         const storeName = state.stores.find(s => s.id === c.storeId)?.name || c.storeName || ''
         return {
@@ -24,7 +24,7 @@ const PermissionList = (props: Props) => {
         }
       })
     })
-  }, [state.customers, state.stores, state.users, props.id])
+  }, [state.stores, state.users, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -38,12 +38,12 @@ const PermissionList = (props: Props) => {
       f7.dialog.close()
     }
   }, [inprocess])
-  const handleUnPermit = (customer: Customer) => {
+  const handleUnPermit = (user: User) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
         setInprocess(true)
-        const storeId = props.id === 's' ? '' : customer.storeId
-        await permitUser(customer.id, storeId, state.users, state.stores)
+        const storeId = props.id === 's' ? '' : user.storeId!
+        await permitUser(user.id, storeId, state.users, state.stores)
         setInprocess(false)
         showMessage(labels.unPermitSuccess)
         f7.views.current.router.back()
@@ -76,18 +76,18 @@ const PermissionList = (props: Props) => {
           <ListItem title={labels.noData} />
         </List>
         <List mediaList className="search-list searchbar-found">
-          {customers.length === 0 ? 
+          {users.length === 0 ? 
             <ListItem title={labels.noData} /> 
-          : customers.map(c => 
+          : users.map(u => 
               <ListItem
-                title={c.name}
-                subtitle={c.storeName}
-                key={c.id}
+                title={u.name}
+                subtitle={u.storeName}
+                key={u.id}
               >
                 {props.id === 'n' ?
-                  <Button text={labels.permitUser} slot="after" onClick={() => f7.views.current.router.navigate(`/permit-user/${c.id}`)} />
+                  <Button text={labels.permitUser} slot="after" onClick={() => f7.views.current.router.navigate(`/permit-user/${u.id}`)} />
                 : 
-                  <Button text={labels.unPermitUser} slot="after" onClick={() => handleUnPermit(c)} />
+                  <Button text={labels.unPermitUser} slot="after" onClick={() => handleUnPermit(u)} />
                 }
               </ListItem>
             )

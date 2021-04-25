@@ -16,8 +16,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, alarms: action.payload}
       case 'SET_RATINGS':
         return {...state, ratings: action.payload}
-      case 'SET_INVITATIONS':
-        return {...state, invitations: action.payload}
       case 'SET_STORES':
         return {...state, stores: action.payload}
       case 'SET_CATEGORIES':
@@ -30,8 +28,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, products: action.payload}
       case 'SET_PACKS':
         return {...state, packs: action.payload}
-      case 'SET_CUSTOMERS':
-        return {...state, customers: action.payload}
       case 'SET_PACK_PRICES':
         return {...state, packPrices: action.payload}
       case 'SET_LOGS':
