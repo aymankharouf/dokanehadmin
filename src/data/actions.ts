@@ -356,15 +356,7 @@ export const addPack = async (pack: Pack, product: Product, image?: File, subPac
   }
   packRef.set({
     ...pack,
-    productId: product.id,
-    productName: product.name,
-    productAlias: product.alias,
-    productDescription: product.description,
-    categoryId: product.categoryId,
-    countryId: product.countryId,
-    trademarkId: product.trademarkId,
-    rating: product.rating,
-    ratingCount: product.ratingCount,
+    product,
     imageUrl,
     specialImage
   })
