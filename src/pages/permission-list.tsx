@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button, Fab, Icon } from 'framework7-react'
+import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
@@ -43,7 +43,7 @@ const PermissionList = (props: Props) => {
       try{
         setInprocess(true)
         const storeId = props.id === 's' ? '' : user.storeId!
-        await permitUser(user.id, storeId, state.users, state.stores)
+        await permitUser(user, storeId)
         setInprocess(false)
         showMessage(labels.unPermitSuccess)
         f7.views.current.router.back()
@@ -68,9 +68,6 @@ const PermissionList = (props: Props) => {
           placeholder={labels.search}
         />
       </Navbar>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/permit-user/0">
-        <Icon material="add"></Icon>
-      </Fab>
       <Block>
         <List className="searchbar-not-found">
           <ListItem title={labels.noData} />

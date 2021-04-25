@@ -24,7 +24,6 @@ import EditPack from './pages/edit-pack'
 import EditCountry from './pages/edit-country'
 import EditCategory from './pages/edit-category'
 import EditStore from './pages/edit-store'
-import ApproveUser from './pages/approve-user'
 import Alarms from './pages/alarms'
 import AlarmDetails from './pages/alarm-details'
 import RetreivePassword from './pages/retreive-password'
@@ -131,10 +130,6 @@ const routes = [
   {
     path: '/users/',
     component: Users,
-  },
-  {
-    path: '/approve-user/:id',
-    component: ApproveUser
   },
   {
     path: '/store-details/:id',

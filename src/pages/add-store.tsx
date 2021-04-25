@@ -11,7 +11,6 @@ const AddStore = () => {
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState('')
-  const [mapPosition, setMapPosition] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
@@ -40,7 +39,6 @@ const AddStore = () => {
       const store = {
         name,
         mobile,
-        mapPosition,
         isActive,
         locationId,
         address,

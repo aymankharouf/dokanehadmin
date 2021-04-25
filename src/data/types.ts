@@ -147,7 +147,6 @@ export type Store = {
   isActive: boolean,
   mobile: string,
   address: string,
-  mapPosition: string,
   locationId: string
 }
 export type Log = {

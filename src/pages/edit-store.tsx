@@ -15,7 +15,6 @@ const EditStore = (props: Props) => {
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
   const [address, setAddress] = useState(store.address)
-  const [mapPosition, setMapPosition] = useState(store.mapPosition)
   const [isActive, setIsActive] = useState(store.isActive)
   const [locationId, setLocationId] = useState(store.locationId)
   const [hasChanged, setHasChanged] = useState(false)
@@ -37,11 +36,10 @@ const EditStore = (props: Props) => {
     if (name !== store.name
     || mobile !== store.mobile
     || address !== store.address
-    || mapPosition !== store.mapPosition
     || isActive !== store.isActive
     || locationId !== store.locationId) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, address, mapPosition, isActive, locationId])
+  }, [store, name, mobile, address, isActive, locationId])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -56,7 +54,6 @@ const EditStore = (props: Props) => {
         isActive,
         mobile,
         address,
-        mapPosition,
         locationId
       }
       editStore(newStore)

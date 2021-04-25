@@ -2,7 +2,6 @@ import firebase, { prodApp } from './firebase'
 import labels from './labels'
 import { f7 } from 'framework7-react'
 import { randomColors } from './config'
-import moment from 'moment'
 import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
@@ -119,7 +118,6 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
 
 export const editPrice = (storePack: PackPrice, oldPrice: number, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
-  const pack = packs.find(p => p.id === storePack.packId)!
   const packStores = packPrices.filter(p => p.packId === storePack.packId)
   const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
   otherStores.push(storePack)
@@ -401,28 +399,6 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
   batch.commit()
 }
 
-export const approveUser = (id: string, name: string, mobile: string, locationId: string, storeId: string, users: User[]) => {
-  const batch = firebase.firestore().batch()
-  const customerRef = firebase.firestore().collection('customers').doc(id)
-  batch.set(customerRef, {
-    name: `${name}:${mobile}`,
-    isBlocked: false,
-    storeId,
-    deliveryFees: 0,
-    specialDiscount: 0,
-    discounts: 0,
-    mapPosition: '',
-    time: new Date()
-  })
-  const userRef = firebase.firestore().collection('users').doc(id)
-  batch.update(userRef, {
-    name,
-    locationId,
-    storeName: firebase.firestore.FieldValue.delete()
-  })
-  batch.commit()
-}
-
 export const deleteUser = async (user: User) => {
   const colors = user.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
   if (!colors) return
@@ -579,7 +555,6 @@ export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store
   })
 }
 
-
 export const updateAdvertStatus = (advert: Advert, adverts: Advert[]) => {
   const batch = firebase.firestore().batch()
   let advertRef = firebase.firestore().collection('adverts').doc(advert.id)
@@ -634,30 +609,30 @@ export const editAdvert = async (advert: Advert, image?: File) => {
   firebase.firestore().collection('adverts').doc(id).update(others)
 }
 
-export const permitUser = async (userId: string, storeId: string, users: User[], stores: Store[]) => {
-  const userInfo = users.find(u => u.id === userId)!
-  let name
-  if (storeId) {
-    name = `${userInfo.name}-${stores.find(s => s.id === storeId)?.name}:${userInfo.mobile}`
-    await firebase.firestore().collection('customers').doc(userId).update({
-      storeId,
-      name
-    })  
-  } else {
-    name = `${userInfo.name}:${userInfo.mobile}`
-    await firebase.firestore().collection('customers').doc(userId).update({
-      storeId: firebase.firestore.FieldValue.delete(),
-      name
-    })  
+export const permitUser = (user: User, address: string) => {
+  const batch = firebase.firestore().batch()
+  const store = {
+    name: user.storeName,
+    mobile: user.mobile,
+    isActive: true,
+    locationId: user.locationId,
+    address
   }
-  const colors = userInfo.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
-  if (!colors) return
-  const password = colors.join('')
-  await firebase.auth().signInWithEmailAndPassword(userInfo.mobile + '@gmail.com', userInfo.mobile.substring(9, 2) + password)
-  await firebase.auth().currentUser?.updateProfile({
-    displayName: storeId
+  const storeRef = firebase.firestore().collection('stores').doc()
+  batch.set(storeRef, store)
+  const userRef = firebase.firestore().collection('users').doc(user.id)
+  batch.update(userRef, {
+    storeId: storeRef,
   })
-  return firebase.auth().signOut()
+  batch.commit()
+  // const colors = userInfo.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
+  // if (!colors) return
+  // const password = colors.join('')
+  // await firebase.auth().signInWithEmailAndPassword(userInfo.mobile + '@gmail.com', userInfo.mobile.substring(9, 2) + password)
+  // await firebase.auth().currentUser?.updateProfile({
+  //   displayName: storeId
+  // })
+  // return firebase.auth().signOut()
 }
 
 export const registerUser = async (email: string, password: string) => {

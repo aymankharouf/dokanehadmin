@@ -176,6 +176,8 @@ const StateProvider = ({ children }: Props) => {
               locationId: doc.data().locationId,
               mobile: doc.data().mobile,
               name: doc.data().name,
+              storeId: doc.data().storeId,
+              storeName: doc.data().storeName,
               time: doc.data().time.toDate()
             })
             if (doc.data().notifications) {
@@ -210,7 +212,6 @@ const StateProvider = ({ children }: Props) => {
               mobile: doc.data().mobile,
               address: doc.data().address,
               isActive: doc.data().isActive,
-              mapPosition: doc.data().mapPosition,
               locationId: doc.data().locationId
             })
           })

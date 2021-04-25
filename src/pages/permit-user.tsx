@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, Button } from 'framework7-react'
+import { f7, Page, Navbar, List, Button, ListInput } from 'framework7-react'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { StateContext } from '../data/state-provider'
@@ -11,25 +11,8 @@ const PermitUser = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
-  const [userId, setUserId] = useState(props.id === '0' ? '' : props.id)
-  const [userInfo] = useState(() => state.users.find(u => u.id === props.id)!)
-  const [storeId, setStoreId] = useState('')
-  const [users] = useState(() => {
-    const users = state.users.map(u => {
-      return {
-        ...u,
-        name: `${u.name}${u.storeName ? '-' + u.storeName : ''}:${u.mobile}`
-      }
-    })
-    return users.sort((u1, u2) => u1.name > u2.name ? 1 : -1)
-  })
-  const [stores] = useState(() => {
-    const stores = state.stores.filter(s => s.id !== 's')
-    return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
-  }) 
-  useEffect(() => {
-    setStoreId(props.id === '0' ? '' : (userInfo.storeId || ''))
-  }, [userInfo, props.id])
+  const [user] = useState(() => state.users.find(u => u.id === props.id)!)
+  const [address, setAddress] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -43,17 +26,10 @@ const PermitUser = (props: Props) => {
       f7.dialog.close()
     }
   }, [inprocess])
-  useEffect(() => {
-    if (userId) {
-      setStoreId(state.users.find(u => u.id === userId)?.storeId || '')
-    } else {
-      setStoreId('')
-    }
-  }, [userId, state.users])
   const handlePermit = async () => {
     try{
       setInprocess(true)
-      await permitUser(userId, storeId, state.users, state.stores)
+      await permitUser(user, address)
       setInprocess(false)
       showMessage(labels.permitSuccess)
       f7.views.current.router.back()
@@ -67,49 +43,24 @@ const PermitUser = (props: Props) => {
     <Page>
       <Navbar title={labels.permitUser} backLink={labels.back} />
       <List form>
-        <ListItem
-          title={labels.user}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#users', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-          disabled={props.id !== '0'}
-        >
-          <select name="userId" value={userId} onChange={e => setUserId(e.target.value)}>
-            <option value=""></option>
-            {users.map(u => 
-              <option key={u.id} value={u.id}>{u.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.store}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#stores', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="store" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
+        <ListInput 
+          name="user" 
+          label={labels.user}
+          type="text" 
+          value={`${user.name} - ${user.storeName}:${user.mobile}`}
+          readonly
+        />
+        <ListInput 
+          name="address" 
+          label={labels.address}
+          value={address}
+          clearButton 
+          type="textarea" 
+          onChange={e => setAddress(e.target.value)}
+          onInputClear={() => setAddress('')}
+        />
       </List>
-      {!userId || !storeId ? '' :
+      {address &&
         <Button text={labels.permit} href="#" large onClick={() => handlePermit()} />
       }
     </Page>
