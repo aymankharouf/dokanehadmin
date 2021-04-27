@@ -10,7 +10,7 @@ const ProductRequests = () => {
   const { state } = useContext(StateContext)
   const [productRequests, setProductRequests] = useState<ProductRequest[]>([])
   useEffect(() => {
-    setProductRequests(() => [...state.productRequests].sort((r1, r2) => r1.time > r2.time ? 1 : -1))
+    setProductRequests(() => [...state.productRequests].sort((r1, r2) => r1.time > r2.time ? -1 : 1))
   }, [state.productRequests])
   return(
     <Page>

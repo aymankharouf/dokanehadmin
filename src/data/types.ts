@@ -167,6 +167,7 @@ export type ProductRequest = {
   name: string,
   country: string,
   weight: string,
+  price: number,
   imageUrl: string,
   time: Date
 }

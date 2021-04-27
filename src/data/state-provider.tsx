@@ -243,6 +243,7 @@ const StateProvider = ({ children }: Props) => {
               name: doc.data().name,
               country: doc.data().country,
               weight: doc.data().weight,
+              price: doc.data().price,
               userId: doc.data().userId,
               imageUrl: doc.data().imageUrl,
               time: doc.data().time.toDate()

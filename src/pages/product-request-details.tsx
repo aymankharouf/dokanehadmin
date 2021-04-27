@@ -9,6 +9,7 @@ type Props = {
 const ProductRequestDetails = (props: Props) => {
   const { state } = useContext(StateContext)
   const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === props.id)!)
+  console.log('price = ', productRequest)
   const [storeName, setStoreName] = useState('')
   useEffect(() => {
     setStoreName(() => {
@@ -42,6 +43,13 @@ const ProductRequestDetails = (props: Props) => {
           label={labels.country}
           type="text" 
           value={productRequest.country}
+          readonly
+        />
+        <ListInput 
+          name="price" 
+          label={labels.price}
+          type="text" 
+          value={productRequest.price}
           readonly
         />
         <ListInput 
