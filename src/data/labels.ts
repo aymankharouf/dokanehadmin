@@ -361,7 +361,8 @@ const labels: Label = {
   productRequests: 'طلبات اضافة منتج',
   approveProduct: 'تم اعتماد طلب اضافة منتج',
   rejection: 'رفض',
-  rejectProduct: 'تم رفض طلب منتج'
+  rejectProduct: 'تم رفض طلب منتج',
+  setImage: 'حمل الصورة'
 }
 
 export default labels

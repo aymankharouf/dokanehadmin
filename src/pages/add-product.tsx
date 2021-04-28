@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect, ChangeEvent } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
+import { useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
@@ -20,6 +20,8 @@ const AddProduct = (props: Props) => {
   const [unitType, setUnitType] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
+  const inputEl = useRef<HTMLInputElement | null>(null);
+
   const [categories] = useState(() => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -32,7 +34,9 @@ const AddProduct = (props: Props) => {
       setError('')
     }
   }, [error])
-
+  const onUploadClick = () => {
+    if (inputEl.current) inputEl.current.click();
+  };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -182,13 +186,14 @@ const AddProduct = (props: Props) => {
             )}
           </select>
         </ListItem>
-        <ListInput 
-          name="image" 
-          label={labels.image} 
+        <input 
+          ref={inputEl}
           type="file" 
           accept="image/*" 
+          style={{ display: "none" }}
           onChange={e => handleFileChange(e)}
         />
+        <ListButton title={labels.setImage} onClick={onUploadClick} />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {name && categoryId && countryId && unitType &&

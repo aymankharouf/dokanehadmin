@@ -19,7 +19,7 @@ const StorePacks = (props: Props) => {
   const [storePacks, setStorePacks] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setStorePacks(() => {
-      const storePacks = state.packPrices.filter(p => p.storeId === props.id && !p.isAuto)
+      const storePacks = state.packPrices.filter(p => p.storeId === props.id)
       const results = storePacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)!
         const categoryInfo = state.categories.find(c => c.id === packInfo.product.categoryId)!

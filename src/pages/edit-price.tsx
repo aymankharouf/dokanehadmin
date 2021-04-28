@@ -40,11 +40,11 @@ const EditPrice = (props: Props) => {
       }
       const newStorePack = {
         ...storePack,
-        price : price * 100,
+        price: +price,
         offerEnd,
         time: new Date()
       }
-      editPrice(newStorePack, storePack.price, state.packPrices, state.packs)
+      editPrice(newStorePack, state.packPrices)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -72,7 +72,7 @@ const EditPrice = (props: Props) => {
         <ListInput 
           name="oldPrice" 
           label={labels.oldPrice}
-          value={(storePack.price / 100).toFixed(2)}
+          value={storePack.price.toFixed(2)}
           type="text" 
           readonly
         />

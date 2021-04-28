@@ -54,7 +54,6 @@ export type PackPrice = {
   price: number,
   offerEnd?: Date,
   isActive: boolean,
-  isAuto: boolean,
   time: Date,
   subQuantity?: number,
   unitPrice?: number,

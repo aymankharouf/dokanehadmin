@@ -14,7 +14,6 @@ export const randomColors = [
 ]
 
 export const alarmTypes: AlarmType[] = [
-  {id: 'cp', name: 'الابلاغ عن تغيير السعر', isAvailable: 1},
   {id: 'av', name: 'الابلاغ عن توفر هذا المنتج/العرض', isAvailable: -1},
   {id: 'ua', name: 'الابلاغ عن عدم توفر هذا المنتج/العرض', isAvailable: 1},
   {id: 'aa', name: 'الابلاغ عن توفر بديل', isAvailable: 0},

@@ -3,7 +3,7 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from '
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
-import { Store } from '../data/types'
+import { PackPrice, Store } from '../data/types'
 
 type Props = {
   id: string
@@ -12,7 +12,7 @@ const AddPackStore = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [price, setPrice] = useState(0)
-  const [offerDays, setOfferDays] = useState('')
+  const [offerDays, setOfferDays] = useState(0)
   const [isActive, setIsActive] = useState(false)
   const [storeId, setStoreId] = useState('')
   const [store, setStore] = useState<Store>()
@@ -45,19 +45,18 @@ const AddPackStore = (props: Props) => {
       if (offerDays && Number(offerDays) <= 0) {
         throw new Error('invalidPeriod')
       }
+      const storePack: PackPrice = {
+        packId: pack.id!,
+        storeId,
+        price: +price,
+        isActive,
+        time: new Date()
+      }
       let offerEnd
       if (offerDays) {
         offerEnd = new Date()
         offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
-      }
-      const storePack = {
-        packId: pack.id!,
-        storeId,
-        price: price * 100,
-        offerEnd,
-        isActive,
-        isAuto: false,
-        time: new Date()
+        storePack.offerEnd = offerEnd
       }
       addPackPrice(storePack, state.packPrices, state.packs)
       showMessage(labels.addSuccess)
@@ -107,7 +106,7 @@ const AddPackStore = (props: Props) => {
           clearButton 
           type="number" 
           onChange={e => setOfferDays(e.target.value)}
-          onInputClear={() => setOfferDays('')}
+          onInputClear={() => setOfferDays(0)}
         />
         <ListItem>
           <span>{labels.isActive}</span>

@@ -50,7 +50,7 @@ const ProductRequestDetails = (props: Props) => {
 
   return (
     <Page>
-      <Navbar title={labels.productRequestDetails} backLink={labels.back} />
+      <Navbar title={productRequest?.name} backLink={labels.back} />
       <Card>
         <CardContent>
           <img src={productRequest?.imageUrl} className="img-card" alt={labels.noImage} />
@@ -59,9 +59,9 @@ const ProductRequestDetails = (props: Props) => {
       <List form inlineLabels>
         <ListInput 
           name="name" 
-          label={labels.name}
+          label={labels.storeName}
           type="text" 
-          value={productRequest?.name}
+          value={storeName}
           readonly
         />
         <ListInput 
@@ -83,13 +83,6 @@ const ProductRequestDetails = (props: Props) => {
           label={labels.price}
           type="text" 
           value={productRequest?.price.toFixed(2)}
-          readonly
-        />
-        <ListInput 
-          name="storeName" 
-          label={labels.storeName}
-          type="text" 
-          value={storeName}
           readonly
         />
       </List>

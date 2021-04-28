@@ -116,7 +116,7 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
   batch.commit()
 }
 
-export const editPrice = (storePack: PackPrice, oldPrice: number, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
+export const editPrice = (storePack: PackPrice, packPrices: PackPrice[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
   const packStores = packPrices.filter(p => p.packId === storePack.packId)
   const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
@@ -435,13 +435,11 @@ export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, packPr
     cost: alarm.price,
     price: alarm.price,
     offerEnd,
-    isAuto: false,
     isActive: true,
     time: new Date()
   }
   if (alarm.type === 'cp') {
-    const oldPrice = storePack.price
-    editPrice(newStorePack, oldPrice, packPrices, packs, batch)
+    editPrice(newStorePack, packPrices, batch)
     sendNotification(user.id, labels.approval, labels.approveOwnerChangePrice, batch)
   } else if (alarm.type === 'ua') {
     deleteStorePack(storePack, packPrices, packs, batch)

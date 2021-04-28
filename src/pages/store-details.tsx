@@ -43,7 +43,7 @@ const StoreDetails = (props: Props) => {
         <ListInput
           name="openTime"
           label={labels.location}
-          value={state.locations.find(l => l.id === store.locationId)?.name}
+          value={state.locations.find(l => l.id === store.locationId)?.name || ''}
           type="text"
           readonly
         />

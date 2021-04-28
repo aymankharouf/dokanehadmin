@@ -1,15 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import labels from '../data/labels'
 import { addCategory, showMessage, showError, getMessage } from '../data/actions'
+import { StateContext } from '../data/state-provider'
 
 type Props = {
   id: string
 }
 const AddCategory = (props: Props) => {
+  const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState('')
+  const [ordering, setOrdering] = useState(() => {
+    const siblings = state.categories.filter(c => c.id === props.id)
+    const siblingsOrder = siblings.map(s => s.ordering)
+    const maxOrder = Math.max(...siblingsOrder) || 0
+    return maxOrder + 1
+  })
   useEffect(() => {
     if (error) {
       showError(error)
@@ -18,7 +25,7 @@ const AddCategory = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      addCategory(props.id, name, Number(ordering))
+      addCategory(props.id, name, +ordering)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -34,6 +41,7 @@ const AddCategory = (props: Props) => {
           name="name" 
           label={labels.name}
           clearButton
+          autofocus
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
@@ -46,7 +54,7 @@ const AddCategory = (props: Props) => {
           type="number" 
           value={ordering}
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
+          onInputClear={() => setOrdering(0)}
         />
       </List>
       {name && ordering &&

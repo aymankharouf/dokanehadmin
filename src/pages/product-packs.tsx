@@ -70,7 +70,7 @@ const ProductPacks = (props: Props) => {
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}
-            after={p.isOffer || p.offerEnd || !p.price ? '' : (p.price / 100).toFixed(2)} 
+            after={p.isOffer || p.offerEnd || !p.price ? '' : p.price.toFixed(2)} 
             key={p.id} 
           >
             {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price! > 0 ? (p.price! / 100).toFixed(2) : labels.offer}</Badge> : ''}

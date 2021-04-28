@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect, ChangeEvent } from 'react'
+import { useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
 import { addPack, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 
@@ -20,12 +20,17 @@ const AddPack = (props: Props) => {
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [units] = useState(() => state.units.filter(u => u.type === product.unitType))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
+  const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
+  const onUploadClick = () => {
+    if (inputEl.current) inputEl.current.click();
+  };
+
   const generateName = () => {
     let suggestedName
     if (packTypeId && unitId && typeUnits) {
@@ -150,13 +155,17 @@ const AddPack = (props: Props) => {
             onToggleChange={() => setSpecialImage(!specialImage)}
           />
         </ListItem>
-        {specialImage && <ListInput 
-          name="image" 
-          label={labels.image} 
-          type="file" 
-          accept="image/*" 
-          onChange={e => handleFileChange(e)}
-        />}
+        {specialImage && <>
+          <input 
+            ref={inputEl}
+            type="file" 
+            accept="image/*" 
+            style={{ display: "none" }}
+            onChange={e => handleFileChange(e)}
+          />
+          <ListButton title={labels.setImage} onClick={onUploadClick} />
+        </>
+        }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {name && packTypeId && unitId && typeUnits &&

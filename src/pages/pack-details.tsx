@@ -82,8 +82,7 @@ const PackDetails = (props: Props) => {
           <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{(pack.price! / 100).toFixed(2)}</p>
-          <p>{pack.typeUnits}</p>
+          <p>{`${pack.typeUnits} ${state.units.find(u => u.id === pack.unitId)?.name}`}</p>
         </CardFooter>
       </Card>
       <List mediaList>
@@ -95,10 +94,10 @@ const PackDetails = (props: Props) => {
             footer={s.offerEnd ? `${labels.offerUpTo}: ${moment(s.offerEnd).format('Y/M/D')}` : ''}
             key={i++}
           >
-            <div className="list-subtext1">{`${labels.price}: ${(s.price / 100).toFixed(2)}${s.price === s.unitPrice ? '' : '(' + ((s.unitPrice ?? 0)/ 100).toFixed(2) + ')'}`}</div>
+            <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}${s.price === s.unitPrice ? '' : '(' + ((s.unitPrice ?? 0)/ 100).toFixed(2) + ')'}`}</div>
             <div className="list-subtext2">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
             {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
-            {s.packId === pack.id && !s.isAuto ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
+            {s.packId === pack.id ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
           </ListItem>
         )}
       </List>
