@@ -18,6 +18,7 @@ const Stores = () => {
       setError('')
     }
   }, [error])
+  if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return (
     <Page>
       <Navbar title={labels.stores} backLink={labels.back} />

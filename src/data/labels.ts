@@ -358,7 +358,10 @@ const labels: Label = {
   factorError: 'الرجاء التأكد من معامل التحويل',
   unit: 'الوحدة',
   package: 'التغليف',
-  productRequests: 'طلبات اضافة منتج'
+  productRequests: 'طلبات اضافة منتج',
+  approveProduct: 'تم اعتماد طلب اضافة منتج',
+  rejection: 'رفض',
+  rejectProduct: 'تم رفض طلب منتج'
 }
 
 export default labels

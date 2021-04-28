@@ -174,11 +174,12 @@ const StateProvider = ({ children }: Props) => {
           docs.forEach(doc => {
             users.push({
               id: doc.id,
-              locationId: doc.data().locationId,
+              position: doc.data().position,
               mobile: doc.data().mobile,
               name: doc.data().name,
               storeId: doc.data().storeId,
               storeName: doc.data().storeName,
+              colors: doc.data().colors,
               time: doc.data().time.toDate()
             })
             if (doc.data().notifications) {
@@ -197,6 +198,7 @@ const StateProvider = ({ children }: Props) => {
               })
             }
           })
+          console.log('notifications == ', notifications)
           dispatch({type: 'SET_USERS', payload: users})
           dispatch({type: 'SET_NOTIFICATIONS', payload: notifications})
           dispatch({type: 'SET_ALARMS', payload: alarms})
@@ -213,7 +215,8 @@ const StateProvider = ({ children }: Props) => {
               mobile: doc.data().mobile,
               address: doc.data().address,
               isActive: doc.data().isActive,
-              locationId: doc.data().locationId
+              locationId: doc.data().locationId,
+              position: doc.data().position
             })
           })
           dispatch({type: 'SET_STORES', payload: stores})
@@ -253,7 +256,8 @@ const StateProvider = ({ children }: Props) => {
         }, err => {
           unsubscribeProductRequests()
         })  
-
+      } else {
+        dispatch({type: 'LOGOUT'})
       }
     })
   }, [])

@@ -2,7 +2,7 @@ import firebase, { prodApp } from './firebase'
 import labels from './labels'
 import { f7 } from 'framework7-react'
 import { randomColors } from './config'
-import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, PackType, Product, Rating, Store, Trademark, Unit, User } from './types'
+import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, PackType, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -615,7 +615,7 @@ export const permitUser = (user: User, address: string) => {
     name: user.storeName,
     mobile: user.mobile,
     isActive: true,
-    locationId: user.locationId,
+    position: user.position,
     address
   }
   const storeRef = firebase.firestore().collection('stores').doc()
@@ -625,14 +625,6 @@ export const permitUser = (user: User, address: string) => {
     storeId: storeRef.id,
   })
   batch.commit()
-  // const colors = userInfo.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
-  // if (!colors) return
-  // const password = colors.join('')
-  // await firebase.auth().signInWithEmailAndPassword(userInfo.mobile + '@gmail.com', userInfo.mobile.substring(9, 2) + password)
-  // await firebase.auth().currentUser?.updateProfile({
-  //   displayName: storeId
-  // })
-  // return firebase.auth().signOut()
 }
 
 export const registerUser = async (email: string, password: string) => {
@@ -741,3 +733,26 @@ export const categoryChildren = (categoryId: string, categories: Category[]) => 
   }
   return result
 }
+
+export const approveProductRequest = async (productRequest: ProductRequest) => {
+  const batch = firebase.firestore().batch()
+  const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
+  batch.delete(productRequestRef)
+  sendNotification(productRequest.userId, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
+  batch.commit()
+  const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
+  const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
+  await image.delete()
+}
+
+export const rejectProductRequest = async (productRequest: ProductRequest) => {
+  const batch = firebase.firestore().batch()
+  const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
+  batch.delete(productRequestRef)
+  sendNotification(productRequest.userId, labels.rejection, `${labels.rejectProduct} ${productRequest.name}`, batch)
+  batch.commit()
+  const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
+  const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
+  await image.delete()
+}
+

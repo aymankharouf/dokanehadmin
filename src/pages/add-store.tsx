@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { addStore, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton } from 'framework7-react'
 import labels from '../data/labels'
 import { StateContext } from '../data/state-provider'
 
@@ -14,6 +14,7 @@ const AddStore = () => {
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [position, setPosition] = useState({lat: 0, lng: 0})
   useEffect(() => {
     const patterns = {
       mobile: /^07[7-9][0-9]{7}$/
@@ -34,6 +35,17 @@ const AddStore = () => {
       setError('')
     }
   }, [error])
+  const handleSetPosition = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setPosition({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      () => null
+    );
+  }
   const handleSubmit = () => {
     try{
       const store = {
@@ -42,6 +54,7 @@ const AddStore = () => {
         isActive,
         locationId,
         address,
+        position,
         time: new Date()
       }
       addStore(store)
@@ -114,8 +127,12 @@ const AddStore = () => {
           onChange={e => setAddress(e.target.value)}
           onInputClear={() => setAddress('')}
         />
+        <ListButton 
+          title={labels.setPosition} 
+          onClick={handleSetPosition}
+        />
       </List>
-      {name && locationId && !mobileErrorMessage &&
+      {name && locationId && !mobileErrorMessage && position.lat &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

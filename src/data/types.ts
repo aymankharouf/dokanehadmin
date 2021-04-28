@@ -89,11 +89,15 @@ export type Alarm = {
   storeId?: string,
   newPackId?: string
 }
+export type Position = {
+  lat: number, 
+  lng: number
+}
 export type User = {
   id: string,
   name: string,
   mobile: string,
-  locationId: string,
+  position: Position,
   storeName?: string,
   storeId?: string,
   notifications?: Notification[],
@@ -147,7 +151,8 @@ export type Store = {
   isActive: boolean,
   mobile: string,
   address: string,
-  locationId: string
+  position: Position,
+  locationId?: string
 }
 export type Log = {
   id: string,

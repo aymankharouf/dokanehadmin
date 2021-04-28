@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, Button, ListInput } from 'framework7-react'
+import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
 import { permitUser, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { StateContext } from '../data/state-provider'
@@ -26,10 +26,10 @@ const PermitUser = (props: Props) => {
       f7.dialog.close()
     }
   }, [inprocess])
-  const handlePermit = async () => {
+  const handlePermit = () => {
     try{
       setInprocess(true)
-      await permitUser(user, address)
+      permitUser(user, address)
       setInprocess(false)
       showMessage(labels.permitSuccess)
       f7.views.current.router.back()
@@ -61,7 +61,9 @@ const PermitUser = (props: Props) => {
         />
       </List>
       {address &&
-        <Button text={labels.permit} href="#" large onClick={() => handlePermit()} />
+        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={handlePermit}>
+          <Icon material="done"></Icon>
+        </Fab>
       }
     </Page>
   )
