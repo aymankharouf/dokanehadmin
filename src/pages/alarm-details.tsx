@@ -25,9 +25,9 @@ const AlarmDetails = (props: Props) => {
   const [packs] = useState(() => {
     let packs = state.packs.filter(p => p.id !== pack.id)
     if (alarm.type === 'go') {
-      packs = packs.filter(p => p.product.id === pack.product.id && p.isOffer)
+      packs = packs.filter(p => p.product.id === pack.product.id)
     } else if (alarm.type === 'eo') {
-      packs = packs.filter(p => p.product.id === pack.product.id && p.isOffer)
+      packs = packs.filter(p => p.product.id === pack.product.id)
     }
     const shortPacks = packs.map(p => {
       return {

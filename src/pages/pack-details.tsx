@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, Badge, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { getPackStores, deleteStorePack, deletePack, showMessage, showError, getMessage } from '../data/actions'
-import moment from 'moment'
 import labels from '../data/labels'
 import { Pack, PackPrice, Store } from '../data/types'
 
@@ -91,12 +90,10 @@ const PackDetails = (props: Props) => {
             title={s.storeInfo?.name}
             subtitle={s.packId === pack.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}
             text={s.packId === pack.id ? '' : s.packInfo?.name}
-            footer={s.offerEnd ? `${labels.offerUpTo}: ${moment(s.offerEnd).format('Y/M/D')}` : ''}
+            footer={s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}
             key={i++}
           >
             <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}${s.price === s.unitPrice ? '' : '(' + ((s.unitPrice ?? 0)/ 100).toFixed(2) + ')'}`}</div>
-            <div className="list-subtext2">{s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}</div>
-            {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
             {s.packId === pack.id ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
           </ListItem>
         )}

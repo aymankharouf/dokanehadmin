@@ -13,11 +13,10 @@ const AddOffer = (props: Props) => {
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState(0)
-  const [isOffer, setIsOffer] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
-  const [packs] = useState(() => state.packs.filter(p => p.product.id === props.id && !p.isOffer && !p.byWeight))
+  const [packs] = useState(() => state.packs.filter(p => p.product.id === props.id && !p.byWeight))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   useEffect(() => {
     if (error) {
@@ -62,7 +61,6 @@ const AddOffer = (props: Props) => {
       const pack = {
         product,
         name,
-        isOffer,
         subPackId,
         subQuantity,
         typeUnits: subQuantity * subPackInfo.typeUnits!,
@@ -124,15 +122,6 @@ const AddOffer = (props: Props) => {
           onInputClear={() => setSubQuantity(0)}
           onBlur={() => generateName()}
         />
-        <ListItem>
-          <span>{labels.offer}</span>
-          <Toggle 
-            name="isOffer" 
-            color="green" 
-            checked={isOffer} 
-            onToggleChange={() => setIsOffer(!isOffer)}
-          />
-        </ListItem>
         <ListItem>
           <span>{labels.specialImage}</span>
           <Toggle 

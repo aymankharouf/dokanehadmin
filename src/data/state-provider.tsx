@@ -63,8 +63,6 @@ const StateProvider = ({ children }: Props) => {
           name: doc.data().name,
           product: doc.data().product,
           imageUrl: doc.data().imageUrl,
-          isOffer: doc.data().isOffer,
-          offerEnd: doc.data().offerEnd,
           byWeight: doc.data().byWeight,
           weightedPrice: doc.data().weightedPrice,
           typeUnits: doc.data().typeUnits,
@@ -75,8 +73,13 @@ const StateProvider = ({ children }: Props) => {
           price: minPrice
         })
         if (doc.data().prices) {
-          doc.data().prices.forEach((p: PackPrice) => {
-            packPrices.push({...p, packId: doc.id})
+          doc.data().prices.forEach((p: any) => {
+            packPrices.push({
+              packId: doc.id,
+              storeId: p.storeId,
+              price: p.price,
+              time: p.time.toDate(),
+            })
           })
         }
       })

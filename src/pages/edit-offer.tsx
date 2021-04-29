@@ -19,7 +19,7 @@ const EditOffer = (props: Props) => {
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
-    const packs = state.packs.filter(p => p.product.id === pack.product.id && !p.isOffer && !p.byWeight)
+    const packs = state.packs.filter(p => p.product.id === pack.product.id && !p.byWeight)
     return packs.map(p => {
       return {
         id: p.id,

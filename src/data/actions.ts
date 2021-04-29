@@ -529,14 +529,12 @@ export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store
       packId = s.packId
       price = s.price
       unitPrice = s.price
-      isOffer = pack.isOffer
     } else {
       offerInfo = packs.find(p => p.id === s.packId && p.subPackId === pack.id)!
       price = s.price
       packId = offerInfo.id!
       unitPrice = Math.round(s.price / offerInfo.subQuantity!)
       subQuantity = offerInfo.subQuantity
-      isOffer = offerInfo.isOffer
     }
     const storeInfo = stores.find(st => st.id === s.storeId)!
     const packInfo = packs.find(p => p.id === packId)!
@@ -689,8 +687,6 @@ export const getArchivedPacks = async () => {
                 product: doc.data().product,
                 imageUrl: doc.data().imageUrl,
                 price: doc.data().price,
-                isOffer: doc.data().isOffer,
-                offerEnd: doc.data().offerEnd,
                 byWeight: doc.data().byWeight,
                 weightedPrice: doc.data().weightedPrice,
                 typeUnits: doc.data().typeUnits,

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Badge, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
+import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
 import RatingStars from './rating-stars'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
@@ -70,10 +70,9 @@ const ProductPacks = (props: Props) => {
           <ListItem 
             link={`/pack-details/${p.id}`}
             title={p.name}
-            after={p.isOffer || p.offerEnd || !p.price ? '' : p.price.toFixed(2)} 
+            after={!p.price ? '' : p.price.toFixed(2)} 
             key={p.id} 
           >
-            {p.isOffer || p.offerEnd ? <Badge slot="after" color="green">{p.price! > 0 ? (p.price! / 100).toFixed(2) : labels.offer}</Badge> : ''}
           </ListItem>
         )}
       </List>
