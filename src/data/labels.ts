@@ -75,7 +75,7 @@ const labels: Label = {
   addTrademark: 'اضافة علامة تجارية',
   close: 'اغلاق',
   editStore: 'تعديل محل',
-  unitType: 'الوحدة',
+  unitType: 'نوع الوحدة',
   unitsCount: 'عدد الوحدات',
   storeName: 'اسم المحل',
   storeId: 'المحل',
@@ -362,7 +362,8 @@ const labels: Label = {
   approveProduct: 'تم اعتماد طلب اضافة منتج',
   rejection: 'رفض',
   rejectProduct: 'تم رفض طلب منتج',
-  setImage: 'حمل الصورة'
+  setImage: 'حمل الصورة',
+  packName: 'اسم العبوة'
 }
 
 export default labels

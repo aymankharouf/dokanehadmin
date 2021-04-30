@@ -15,7 +15,6 @@ const EditPrice = (props: Props) => {
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
   const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)!)
   const [price, setPrice] = useState(0)
-  const [offerDays, setOfferDays] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -30,18 +29,9 @@ const EditPrice = (props: Props) => {
       if (Number(price) < 0) {
         throw new Error('invalidPrice')
       }
-      if (offerDays && Number(offerDays) <= 0) {
-        throw new Error('invalidPeriod')
-      }
-      let offerEnd
-      if (offerDays) {
-        offerEnd = new Date()
-        offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
-      }
       const newStorePack = {
         ...storePack,
         price: +price,
-        offerEnd,
         time: new Date()
       }
       editPrice(newStorePack, state.packPrices)
@@ -84,15 +74,6 @@ const EditPrice = (props: Props) => {
           value={price}
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice(0)}
-        />
-        <ListInput 
-          name="offerDays" 
-          label={labels.offerDays}
-          value={offerDays}
-          clearButton 
-          type="number" 
-          onChange={e => setOfferDays(e.target.value)}
-          onInputClear={() => setOfferDays('')}
         />
       </List>
       {price &&

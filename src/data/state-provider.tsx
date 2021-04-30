@@ -27,7 +27,6 @@ const StateProvider = ({ children }: Props) => {
     notifications: [],
     alarms: [],
     ratings: [],
-    packTypes: [],
     units: [],
     productRequests: []
   }
@@ -53,10 +52,10 @@ const StateProvider = ({ children }: Props) => {
       let packs: Pack[] = []
       let packPrices: PackPrice[] = []
       docs.forEach(doc => {
-        let prices, minPrice
+        let prices, minPrice = 0
         if (doc.data().prices) {
           prices = doc.data().prices.map((p: PackPrice) => p.price)
-          minPrice = prices.length > 0 ? Math.min(...prices) : undefined
+          minPrice = prices.length > 0 ? Math.min(...prices) : 0
         }
         packs.push({
           id: doc.id,
@@ -64,13 +63,14 @@ const StateProvider = ({ children }: Props) => {
           product: doc.data().product,
           imageUrl: doc.data().imageUrl,
           byWeight: doc.data().byWeight,
-          weightedPrice: doc.data().weightedPrice,
           typeUnits: doc.data().typeUnits,
           standardUnits: doc.data().standardUnits,
-          packTypeId: doc.data().packTypeId,
           unitId: doc.data().unitId,
           specialImage: doc.data().specialImage,
-          price: minPrice
+          subPackId: doc.data().subPackId,
+          subQuantity: doc.data().subQuantity,
+          price: minPrice,
+          weightedPrice: Math.floor(minPrice / doc.data().standardUnits),
         })
         if (doc.data().prices) {
           doc.data().prices.forEach((p: any) => {
@@ -136,11 +136,6 @@ const StateProvider = ({ children }: Props) => {
           if (doc.data()) dispatch({type: 'SET_TRADEMARKS', payload: doc.data()?.values})
         }, err => {
           unsubscribeTrademarks()
-        })
-        const unsubscribePackTypes = firebase.firestore().collection('lookups').doc('p').onSnapshot(doc => {
-          if (doc.data()) dispatch({type: 'SET_PACK_TYPES', payload: doc.data()?.values})
-        }, err => {
-          unsubscribePackTypes()
         })
         const unsubscribeUnits = firebase.firestore().collection('lookups').doc('u').onSnapshot(doc => {
           if (doc.data()) dispatch({type: 'SET_UNITS', payload: doc.data()?.values})

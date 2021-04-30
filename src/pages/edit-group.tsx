@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, ChangeEvent } from 'react'
-import { addPack, showMessage, showError, getMessage } from '../data/actions'
+import { editPack, showMessage, showError, getMessage } from '../data/actions'
 import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
@@ -7,33 +7,40 @@ import labels from '../data/labels'
 type Props = {
   id: string
 }
-const AddOffer = (props: Props) => {
+const EditGroup = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [name, setName] = useState('')
-  const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState(0)
-  const [specialImage, setSpecialImage] = useState(false)
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
+  const [name, setName] = useState(pack.name)
+  const [subPackId, setSubPackId] = useState(pack.subPackId)
+  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
+  const [hasChanged, setHasChanged] = useState(false)
+  const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState<File>()
-  const [product] = useState(() => state.products.find(p => p.id === props.id)!)
-  const [packs] = useState(() => state.packs.filter(p => p.product.id === props.id && !p.byWeight))
-  const [imageUrl, setImageUrl] = useState(product.imageUrl)
+  const [imageUrl, setImageUrl] = useState(pack.imageUrl)
+  const [packs] = useState(() => {
+    const packs = state.packs.filter(p => p.product.id === pack.product.id && !p.byWeight)
+    return packs.map(p => {
+      return {
+        id: p.id,
+        name: p.name
+      }
+    })
+  })
+  useEffect(() => {
+    if (name !== pack.name
+    || subPackId !== pack.subPackId
+    || subQuantity !== pack.subQuantity
+    || specialImage !== pack.specialImage
+    || imageUrl !== pack.imageUrl) setHasChanged(true)
+    else setHasChanged(false)
+  }, [pack, name, subPackId, subQuantity, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl)
-  }, [state.packs, subPackId])
-  const generateName = () => {
-    let suggestedName
-    if (subPackId && subQuantity) {
-      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
-      if (!name) setName(suggestedName)
-    }
-  }
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -49,30 +56,26 @@ const AddOffer = (props: Props) => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
+
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.product.id === props.id && p.name === name)) {
+      if (state.packs.find(p => p.id !== pack.id && p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (Number(subQuantity) <= 1) {
         throw new Error('invalidQuantity')
       }
-      const pack = {
-        product,
+      const newPack = {
+        ...pack,
         name,
         subPackId,
-        subQuantity,
-        typeUnits: subQuantity * subPackInfo.typeUnits!,
-        standardUnits: subQuantity * subPackInfo.standardUnits!,
+        subQuantity: Number(subQuantity),
+        typeUnits: subQuantity! * subPackInfo.typeUnits!,
         byWeight: subPackInfo.byWeight,
-        isArchived: false,
-        packTypeId: subPackInfo.packTypeId,
-        unitId: subPackInfo.unitId,
-        specialImage
       }
-      addPack(pack, product, image, subPackInfo)
-      showMessage(labels.addSuccess)
+      editPack(newPack, pack, state.packs, image)
+      showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
 			setError(getMessage(f7.views.current.router.currentRoute.path, err))
@@ -80,13 +83,12 @@ const AddOffer = (props: Props) => {
   }
   return (
     <Page>
-      <Navbar title={`${labels.addOffer} ${product.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.editOffer} ${pack.product.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 
           label={labels.name}
           clearButton
-          autofocus
           type="text" 
           value={name} 
           onChange={e => setName(e.target.value)}
@@ -97,7 +99,7 @@ const AddOffer = (props: Props) => {
           smartSelect
           // @ts-ignore
           smartSelectParams={{
-            // el: "#subPacks", 
+            // el: '#subPacks', 
             openIn: "popup",
             closeOnSelect: true, 
             searchbar: true, 
@@ -105,7 +107,7 @@ const AddOffer = (props: Props) => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)} onBlur={() => generateName()}>
+          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
             <option value=""></option>
             {packs.map(p => 
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -120,7 +122,6 @@ const AddOffer = (props: Props) => {
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
           onInputClear={() => setSubQuantity(0)}
-          onBlur={() => generateName()}
         />
         <ListItem>
           <span>{labels.specialImage}</span>
@@ -128,10 +129,10 @@ const AddOffer = (props: Props) => {
             name="specialImage" 
             color="green" 
             checked={specialImage} 
-            onToggleChange={() => setSpecialImage(!specialImage)}
+            onToggleChange={() => setSpecialImage(s => !s)}
           />
         </ListItem>
-        {specialImage && 
+        {specialImage &&
           <ListInput 
             name="image" 
             label={labels.image} 
@@ -142,7 +143,7 @@ const AddOffer = (props: Props) => {
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && subPackId && subQuantity &&
+      {name && subPackId && subQuantity && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
@@ -150,4 +151,4 @@ const AddOffer = (props: Props) => {
     </Page>
   )
 }
-export default AddOffer
+export default EditGroup

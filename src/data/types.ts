@@ -42,7 +42,6 @@ export type Pack = {
   typeUnits: number,
   standardUnits: number,
   specialImage: boolean,
-  packTypeId: string,
   unitId: string,
   imageUrl?: string
 }
@@ -124,10 +123,6 @@ export type Trademark = {
   id: string,
   name: string,
 }
-export type PackType = {
-  id: string,
-  name: string,
-}
 export type Unit = {
   id: string,
   name: string,
@@ -190,7 +185,6 @@ export type State = {
   notifications: Notification[],
   alarms: Alarm[],
   ratings: Rating[],
-  packTypes: PackType[],
   units: Unit[],
   productRequests: ProductRequest[]
 }

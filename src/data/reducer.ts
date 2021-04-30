@@ -8,8 +8,6 @@ const Reducer = (state: State, action: Action) => {
         return {...state, countries: action.payload}
       case 'SET_TRADEMARKS':
         return {...state, trademarks: action.payload}
-      case 'SET_PACK_TYPES':
-        return {...state, packTypes: action.payload}
       case 'SET_NOTIFICATIONS':
         return {...state, notifications: action.payload}
       case 'SET_ALARMS':

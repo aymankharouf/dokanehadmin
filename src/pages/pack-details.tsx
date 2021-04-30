@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
-import { getPackStores, deleteStorePack, deletePack, showMessage, showError, getMessage } from '../data/actions'
+import { deleteStorePack, deletePack, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { Pack, PackPrice, Store } from '../data/types'
 
@@ -29,8 +29,17 @@ const PackDetails = (props: Props) => {
   const [packStores, setPackStores] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setPackStores(() => {
-      const packStores = getPackStores(pack, state.packPrices, state.stores, state.packs)
-      return packStores.sort((s1, s2) => (s1.unitPrice ?? 0) - (s2.unitPrice ?? 0))
+      const packStores = state.packPrices.filter(p => p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && pa.subPackId === pack.id))
+      const results = packStores.map(s => {
+        const storeInfo = state.stores.find(st => st.id === s.storeId)!
+        const packInfo = state.packs.find(p => p.id === s.packId)!
+        return {
+          ...s,
+          storeInfo,
+          packInfo
+        }
+      })
+      return results.sort((s1, s2) => s1.price - s2.price)
     })
   }, [pack, state.stores, state.packPrices, state.packs])
   useEffect(() => {
@@ -93,7 +102,7 @@ const PackDetails = (props: Props) => {
             footer={s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}
             key={i++}
           >
-            <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}${s.price === s.unitPrice ? '' : '(' + ((s.unitPrice ?? 0)/ 100).toFixed(2) + ')'}`}</div>
+            <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}`}</div>
             {s.packId === pack.id ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
           </ListItem>
         )}

@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import { approveProductRequest, rejectProductRequest, showMessage, showError, getMessage } from '../data/actions'
+import { rejectProductRequest, showMessage, showError, getMessage } from '../data/actions'
 
 type Props = {
   id: string
@@ -27,15 +27,6 @@ const ProductRequestDetails = (props: Props) => {
       setError('')
     }
   }, [error])
-  const handleApproval = () => {
-    try {
-      approveProductRequest(productRequest!)
-      showMessage(labels.approveSuccess)
-      f7.views.current.router.back()
-    } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
-		}
-  }
   const handleRejection = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
@@ -91,7 +82,7 @@ const ProductRequestDetails = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={handleApproval}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${props.id}`)}>
             <Icon material="done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={handleRejection}>

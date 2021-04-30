@@ -93,7 +93,7 @@ const EditPack = (props: Props) => {
             name="byWeight" 
             color="green" 
             checked={byWeight} 
-            onToggleChange={() => setByWeight(!byWeight)}
+            onToggleChange={() => setByWeight(s => !s)}
           />
         </ListItem>
         <ListItem>
@@ -102,7 +102,7 @@ const EditPack = (props: Props) => {
             name="specialImage" 
             color="green" 
             checked={specialImage} 
-            onToggleChange={() => setSpecialImage(!specialImage)}
+            onToggleChange={() => setSpecialImage(s => !s)}
           />
         </ListItem>
         {specialImage ? 

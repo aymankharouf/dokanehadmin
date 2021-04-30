@@ -3,7 +3,6 @@ import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framewor
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
-import { PackPrice, Store } from '../data/types'
 
 type Props = {
   id: string
@@ -12,9 +11,7 @@ const AddPackStore = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
   const [price, setPrice] = useState(0)
-  const [offerDays, setOfferDays] = useState(0)
   const [storeId, setStoreId] = useState('')
-  const [store, setStore] = useState<Store>()
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   useEffect(() => {
     if (error) {
@@ -22,11 +19,6 @@ const AddPackStore = (props: Props) => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    if (storeId) {
-      setStore(state.stores.find(s => s.id === storeId))
-    }
-  }, [state.stores, storeId])
   const handleSubmit = () => {
     try{
       if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
@@ -38,16 +30,13 @@ const AddPackStore = (props: Props) => {
       if (Number(price) < 0) {
         throw new Error('invalidPrice')
       }
-      if (offerDays && Number(offerDays) <= 0) {
-        throw new Error('invalidPeriod')
-      }
-      const storePack: PackPrice = {
+      const storePack = {
         packId: pack.id!,
         storeId,
         price: +price,
         time: new Date()
       }
-      addPackPrice(storePack, state.packPrices, state.packs)
+      addPackPrice(storePack, state.packs)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -87,15 +76,6 @@ const AddPackStore = (props: Props) => {
           type="number" 
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice(0)}
-        />
-        <ListInput 
-          name="offerDays" 
-          label={labels.offerDays}
-          value={offerDays}
-          clearButton 
-          type="number" 
-          onChange={e => setOfferDays(e.target.value)}
-          onInputClear={() => setOfferDays(0)}
         />
       </List>
       {storeId && price &&

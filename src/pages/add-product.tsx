@@ -1,9 +1,10 @@
 import { useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import { addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { unitTypes } from '../data/config'
+import { Unit } from '../data/types'
 
 type Props = {
   id: string
@@ -11,23 +12,42 @@ type Props = {
 const AddProduct = (props: Props) => {
   const { state } = useContext(StateContext)
   const [error, setError] = useState('')
-  const [name, setName] = useState('')
+  const [productRequest] = useState(() => state.productRequests.find(r => r.id === props.id))
+  const [name, setName] = useState(productRequest?.name || '')
   const [alias, setAlias] = useState('')
   const [description, setDescription] = useState('')
-  const [categoryId, setCategoryId] = useState(props.id === '0' ? '' : props.id)
+  const [categoryId, setCategoryId] = useState('')
   const [trademarkId, setTrademarkId] = useState('')
   const [countryId, setCountryId] = useState('')
   const [unitType, setUnitType] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [packName, setPackName] = useState('')
+  const [typeUnits, setTypeUnits] = useState(0)
+  const [unitId, setUnitId] = useState('')
+  const [byWeight, setByWeight] = useState(false)
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
-
+  const [units, setUnits] = useState<Unit[]>([])
+  const [price, setPrice] = useState(productRequest?.price ?? 0)
+  const [storeId, setStoreId] = useState(() => state.users.find(u => u.id === productRequest?.userId)?.storeId || '')
   const [categories] = useState(() => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  useEffect(() => {
+    if (unitType !== 'w') {
+      setByWeight(false)
+    }
+    setUnits(() => state.units.filter(u => u.type === unitType))
+  }, [unitType, state.units])
+  useEffect(() => {
+    if (!byWeight) {
+      setUnitId('')
+      setTypeUnits(0)
+    }
+  }, [byWeight])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -70,9 +90,27 @@ const AddProduct = (props: Props) => {
         unitType,
         imageUrl
       }
-      addProduct(product, image)
+      const standardUnits = units.find(u => u.id === unitId)!.factor * typeUnits
+      const prices = [{
+        storeId, 
+        price: +price, 
+        time: new Date()
+      }]
+      const pack = {
+        name: packName,
+        product,
+        prices,
+        typeUnits,
+        standardUnits,
+        unitId,
+        byWeight,
+        isArchived: false,
+        specialImage: false
+      }
+      addProduct(product, pack, productRequest, image)
       showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      if (productRequest) f7.views.current.router.navigate('/home/')
+      else f7.views.current.router.back()
     } catch(err) {
 			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}
@@ -186,6 +224,86 @@ const AddProduct = (props: Props) => {
             )}
           </select>
         </ListItem>
+        {unitType === 'w' &&
+          <ListItem>
+            <span>{labels.byWeight}</span>
+            <Toggle 
+              name="byWeight" 
+              color="green" 
+              checked={byWeight} 
+              onToggleChange={() => setByWeight(s => !s)}
+            />
+          </ListItem>
+        }
+        {!byWeight &&
+          <ListItem 
+            title={labels.unit}
+            smartSelect
+            // @ts-ignore
+            smartSelectParams={{
+              // el: "#units", 
+              openIn: "sheet",
+              closeOnSelect: true, 
+            }}
+          >
+            <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
+              <option value=""></option>
+              {units.map(u => 
+                <option key={u.id} value={u.id}>{u.name}</option>
+              )}
+            </select>
+          </ListItem>
+        }
+        {!byWeight && 
+          <ListInput 
+            name="typeUnits" 
+            label={labels.unitsCount}
+            clearButton
+            type="number" 
+            value={typeUnits} 
+            onChange={e => setTypeUnits(e.target.value)}
+            onInputClear={() => setTypeUnits(0)}
+          />
+        }
+        <ListInput 
+          name="packName" 
+          label={labels.packName}
+          clearButton
+          type="text" 
+          value={packName} 
+          onChange={e => setPackName(e.target.value)}
+          onInputClear={() => setPackName('')}
+        />
+        <ListItem
+          title={labels.store}
+          disabled={!!productRequest}
+          smartSelect
+          // @ts-ignore
+          smartSelectParams={{
+            // el: "#stores", 
+            openIn: "popup",
+            closeOnSelect: true, 
+            searchbar: true, 
+            searchbarPlaceholder: labels.search,
+            popupCloseLinkText: labels.close
+          }}
+        >
+          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
+            <option value=""></option>
+            {state.stores.map(s => 
+              <option key={s.id} value={s.id}>{s.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListInput 
+          name="price" 
+          label={labels.price}
+          value={price}
+          clearButton
+          type="number" 
+          onChange={e => setPrice(e.target.value)}
+          onInputClear={() => setPrice(0)}
+        />
         <input 
           ref={inputEl}
           type="file" 
@@ -195,8 +313,10 @@ const AddProduct = (props: Props) => {
         />
         <ListButton title={labels.setImage} onClick={onUploadClick} />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
+
       </List>
-      {name && categoryId && countryId && unitType &&
+
+      {name && categoryId && countryId && unitType && packName && unitId && typeUnits && price && storeId &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

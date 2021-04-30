@@ -79,7 +79,7 @@ const Products = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate('/add-product/0')}>
             <Icon material="add"></Icon>
           </FabButton>
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate('/archived-products/')}>

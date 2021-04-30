@@ -2,7 +2,7 @@ import firebase, { prodApp } from './firebase'
 import labels from './labels'
 import { f7 } from 'framework7-react'
 import { randomColors } from './config'
-import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, PackType, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
+import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -53,7 +53,7 @@ export const logout = () => {
   firebase.auth().signOut()
 }
 
-export const addPackPrice = (storePack: PackPrice, packPrices: PackPrice[], packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
+export const addPackPrice = (storePack: PackPrice, packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
   const { packId, ...others } = storePack
   const pack = packs.find(p => p.id === packId)!
@@ -66,7 +66,8 @@ export const addPackPrice = (storePack: PackPrice, packPrices: PackPrice[], pack
   }
 }
 
-export const addProduct = async (product: Product, image?: File) => {
+export const addProduct = async (product: Product, pack: Pack, productRequest?: ProductRequest, image?: File) => {
+  const batch = firebase.firestore().batch()
   const productRef = firebase.firestore().collection('products').doc()
   let imageUrl = ''
   if (image) {
@@ -75,8 +76,21 @@ export const addProduct = async (product: Product, image?: File) => {
     const fileData = await firebase.storage().ref().child('products/' + productRef.id + ext).put(image)
     imageUrl = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
   }
-  product['imageUrl'] = imageUrl
-  productRef.set(product)
+  product.imageUrl = imageUrl
+  batch.set(productRef, product)
+  const packRef = firebase.firestore().collection('packs').doc()
+  pack.imageUrl = imageUrl
+  pack.product.id = productRef.id
+  batch.set(packRef, pack)
+  if (productRequest) {
+    const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
+    batch.delete(productRequestRef)
+    sendNotification(productRequest.userId, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
+    const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
+    const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
+    await image.delete()
+  }
+  batch.commit()
 }
 
 export const deleteProduct = async (product: Product) => {
@@ -181,30 +195,6 @@ export const editCountry = (country: Country, countries: Country[]) => {
   const countryIndex = values.findIndex(c => c.id === country.id)
   values.splice(countryIndex, 1, country)
   firebase.firestore().collection('lookups').doc('c').update({
-    values
-  })
-}
-
-export const addPackType = (packType: PackType) => {
-  firebase.firestore().collection('lookups').doc('p').set({
-    values: firebase.firestore.FieldValue.arrayUnion(packType)
-  }, {merge: true})
-}
-
-export const editPackType = (packType: PackType, packTypes: PackType[]) => {
-  const values = packTypes.slice()
-  const packTypeIndex = values.findIndex(t => t.id === packType.id)
-  values.splice(packTypeIndex, 1, packType)
-  firebase.firestore().collection('lookups').doc('p').update({
-    values
-  })
-}
-
-export const deletePackType = (packTypeId: string, packTypes: PackType[]) => {
-  const values = packTypes.slice()
-  const packTypeIndex = values.findIndex(t => t.id === packTypeId)
-  values.splice(packTypeIndex, 1)
-  firebase.firestore().collection('lookups').doc('p').update({
     values
   })
 }
@@ -385,7 +375,6 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
       typeUnits: p.subQuantity! * newPack.typeUnits!,
       standardUnits: p.subQuantity! * newPack.standardUnits!,
       byWeight: newPack.byWeight,
-      packTypeId: newPack.packTypeId,
       unitId: newPack.unitId,
       imageUrl
     }
@@ -445,7 +434,7 @@ export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, packPr
     deleteStorePack(storePack, packPrices, packs, batch)
     sendNotification(user.id, labels.approval, labels.approveOwnerDelete, batch)
   } else {
-    addPackPrice(newStorePack, packPrices, packs, batch)
+    addPackPrice(newStorePack, packs, batch)
     sendNotification(user.id, labels.approval, labels.approveOwnerAddPack, batch)
   }
   batch.commit()
@@ -518,37 +507,6 @@ export const sendNotification = (userId: string, title: string, message: string,
   if (!batch) {
     newBatch.commit()
   }
-}
-
-export const getPackStores = (pack: Pack, packPrices: PackPrice[], stores: Store[], packs: Pack[]) => {
-  const packStores = packPrices.filter(p => p.packId === pack.id || packs.find(pa => pa.id === p.packId && pa.subPackId === pack.id))
-  return packStores.map(s => {
-    let packId = ''
-    let unitPrice, price, subQuantity, offerInfo, isOffer
-    if (s.packId === pack.id) {
-      packId = s.packId
-      price = s.price
-      unitPrice = s.price
-    } else {
-      offerInfo = packs.find(p => p.id === s.packId && p.subPackId === pack.id)!
-      price = s.price
-      packId = offerInfo.id!
-      unitPrice = Math.round(s.price / offerInfo.subQuantity!)
-      subQuantity = offerInfo.subQuantity
-    }
-    const storeInfo = stores.find(st => st.id === s.storeId)!
-    const packInfo = packs.find(p => p.id === packId)!
-    return {
-      ...s,
-      packId,
-      price,
-      subQuantity,
-      unitPrice,
-      isOffer,
-      storeInfo,
-      packInfo
-    }
-  })
 }
 
 export const updateAdvertStatus = (advert: Advert, adverts: Advert[]) => {
@@ -691,7 +649,6 @@ export const getArchivedPacks = async () => {
                 weightedPrice: doc.data().weightedPrice,
                 typeUnits: doc.data().typeUnits,
                 standardUnits: doc.data().standardUnits,
-                packTypeId: doc.data().packTypeId,
                 unitId: doc.data().unitId,
                 specialImage: doc.data().specialImage
               })
@@ -726,17 +683,6 @@ export const categoryChildren = (categoryId: string, categories: Category[]) => 
     result.push(...childrenArray)
   }
   return result
-}
-
-export const approveProductRequest = async (productRequest: ProductRequest) => {
-  const batch = firebase.firestore().batch()
-  const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
-  batch.delete(productRequestRef)
-  sendNotification(productRequest.userId, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
-  batch.commit()
-  const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
-  const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
-  await image.delete()
 }
 
 export const rejectProductRequest = async (productRequest: ProductRequest) => {

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
+import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
@@ -12,9 +12,7 @@ const AddStorePack = (props: Props) => {
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
   const [price, setPrice] = useState(0)
-  const [offerDays, setOfferDays] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
-  const [isActive, setIsActive] = useState(store.isActive)
   const [packs] = useState(() => {
     const packs = state.packs.map(p => {
       return {
@@ -41,24 +39,13 @@ const AddStorePack = (props: Props) => {
       if (Number(price) < 0) {
         throw new Error('invalidPrice')
       }
-      if (offerDays && Number(offerDays) <= 0) {
-        throw new Error('invalidPeriod')
-      }
-      let offerEnd
-      if (offerDays) {
-        offerEnd = new Date()
-        offerEnd.setDate(offerEnd.getDate() + Number(offerDays))
-      }
       const storePack = {
         packId,
         storeId: store.id!,
-        price: price * 100,
-        offerEnd,
-        isAuto: false,
-        isActive,
+        price: +price,
         time: new Date()
       }
-      addPackPrice(storePack, state.packPrices, state.packs)
+      addPackPrice(storePack, state.packs)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -99,24 +86,6 @@ const AddStorePack = (props: Props) => {
           onChange={e => setPrice(e.target.value)}
           onInputClear={() => setPrice(0)}
         />
-        <ListInput 
-          name="offerDays" 
-          label={labels.offerDays}
-          value={offerDays}
-          clearButton 
-          type="number" 
-          onChange={e => setOfferDays(e.target.value)}
-          onInputClear={() => setOfferDays('')}
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive}
-            onToggleChange={() => setIsActive(!isActive)}
-          />
-        </ListItem>
       </List>
       {packId && price &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>

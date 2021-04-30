@@ -94,7 +94,7 @@ const EditStore = (props: Props) => {
             name="isActive" 
             color="green" 
             checked={isActive} 
-            onToggleChange={() => setIsActive(!isActive)}
+            onToggleChange={() => setIsActive(s => !s)}
           />
         </ListItem>
         <ListItem 

@@ -38,8 +38,8 @@ import AddPackStore from './pages/add-pack-store'
 import Logs from './pages/logs'
 import StoreDetails from './pages/store-details'
 import ProductDetails from './pages/product-details'
-import AddOffer from './pages/add-offer'
-import EditOffer from './pages/edit-offer'
+import AddGroup from './pages/add-group'
+import EditGroup from './pages/edit-group'
 import Notifications from './pages/notifications'
 import AddNotification from './pages/add-notification'
 import Adverts from './pages/adverts'
@@ -53,9 +53,6 @@ import ArchivedProducts from './pages/archived-products'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
-import PackTypes from './pages/pack-types'
-import AddPackType from './pages/add-pack-type'
-import EditPackType from './pages/edit-pack-type'
 import Units from './pages/units'
 import AddUnit from './pages/add-unit'
 import EditUnit from './pages/edit-unit'
@@ -210,8 +207,8 @@ const routes = [
     component: AddPack
   },
   {
-    path: '/add-offer/:id',
-    component: AddOffer
+    path: '/add-group/:id',
+    component: AddGroup
   },
   {
     path: '/pack-details/:id',
@@ -222,8 +219,8 @@ const routes = [
     component: EditPack
   },
   {
-    path: '/edit-offer/:id',
-    component: EditOffer
+    path: '/edit-group/:id',
+    component: EditGroup
   },
   {
     path: '/edit-price/:packId/store/:storeId',
@@ -292,18 +289,6 @@ const routes = [
   {
     path: '/archived-products/',
     component: ArchivedProducts
-  },
-  {
-    path: '/pack-types/',
-    component: PackTypes
-  },
-  {
-    path: '/add-pack-type/',
-    component: AddPackType
-  },
-  {
-    path: '/edit-pack-type/:id',
-    component: EditPackType
   },
   {
     path: '/units/',
