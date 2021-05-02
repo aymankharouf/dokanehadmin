@@ -1,14 +1,14 @@
-import { createContext, useReducer, useEffect } from 'react'
+import {createContext, useReducer, useEffect} from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Rating, Notification, Store, ProductRequest } from './types'
+import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Notification, Store, ProductRequest} from './types'
 
 export const StateContext = createContext({} as Context)
 
 type Props = {
   children: React.ReactElement
 }
-const StateProvider = ({ children }: Props) => {
+const StateProvider = ({children}: Props) => {
   const initState: State = {
     categories: [], 
     locations: [], 
@@ -182,7 +182,6 @@ const StateProvider = ({ children }: Props) => {
               })
             }
           })
-          console.log('notifications == ', notifications)
           dispatch({type: 'SET_USERS', payload: users})
           dispatch({type: 'SET_NOTIFICATIONS', payload: notifications})
         }, err => {

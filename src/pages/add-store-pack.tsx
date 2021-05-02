@@ -1,14 +1,14 @@
-import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useState, useContext, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { addPackPrice, showMessage, showError, getMessage } from '../data/actions'
+import {addPackPrice, showMessage, showError, getMessage} from '../data/actions'
 
 type Props = {
   id: string
 }
 const AddStorePack = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
   const [price, setPrice] = useState(0)

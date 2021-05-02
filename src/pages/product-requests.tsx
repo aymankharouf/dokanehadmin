@@ -1,13 +1,13 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, List, ListItem} from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StateContext } from '../data/state-provider'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { ProductRequest } from '../data/types'
+import {ProductRequest} from '../data/types'
 
 const ProductRequests = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [productRequests, setProductRequests] = useState<ProductRequest[]>([])
   useEffect(() => {
     setProductRequests(() => [...state.productRequests].sort((r1, r2) => r1.time > r2.time ? -1 : 1))

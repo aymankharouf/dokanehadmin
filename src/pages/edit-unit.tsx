@@ -1,15 +1,15 @@
-import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, ListItem } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { editUnit, showMessage, showError, getMessage, deleteUnit } from '../data/actions'
+import {useState, useContext, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop, ListItem} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {editUnit, showMessage, showError, getMessage, deleteUnit} from '../data/actions'
 import labels from '../data/labels'
-import { unitTypes } from '../data/config'
+import {unitTypes} from '../data/config'
 
 type Props = {
   id: string
 }
 const EditUnit = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [unit] = useState(() => state.units.find(u => u.id === props.id)!)
   const [name, setName] = useState(unit.name)

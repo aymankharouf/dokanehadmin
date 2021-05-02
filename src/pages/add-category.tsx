@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import {useState, useEffect, useContext} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import labels from '../data/labels'
-import { addCategory, showMessage, showError, getMessage } from '../data/actions'
-import { StateContext } from '../data/state-provider'
+import {addCategory, showMessage, showError, getMessage} from '../data/actions'
+import {StateContext} from '../data/state-provider'
 
 type Props = {
   id: string
 }
 const AddCategory = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [ordering, setOrdering] = useState(() => {

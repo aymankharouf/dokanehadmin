@@ -1,8 +1,8 @@
-import firebase, { prodApp } from './firebase'
+import firebase, {prodApp} from './firebase'
 import labels from './labels'
-import { f7 } from 'framework7-react'
-import { randomColors } from './config'
-import { Advert, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
+import {f7} from 'framework7-react'
+import {randomColors} from './config'
+import {Advert, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User} from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -51,7 +51,7 @@ export const logout = () => {
 
 export const addPackPrice = (storePack: PackPrice, packs: Pack[], batch?: firebase.firestore.WriteBatch) => {
   const newBatch = batch || firebase.firestore().batch()
-  const { packId, ...others } = storePack
+  const {packId, ...others} = storePack
   const pack = packs.find(p => p.id === packId)!
   let packRef = firebase.firestore().collection('packs').doc(pack.id)
   newBatch.update(packRef, {
@@ -102,7 +102,7 @@ export const deleteProduct = async (product: Product) => {
 
 export const editProduct = async (product: Product, oldName: string, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
-  const { id, ...others } = product
+  const {id, ...others} = product
   let imageUrl: string
   if (image) {
     const filename = image.name
@@ -119,7 +119,7 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
     if (image && ((!p.subPackId && !p.specialImage) || (p.subPackId && !p.specialImage && packs.find(sp => sp.id === p.subPackId)!.specialImage === false))) {
       batch.update(packRef, product)
     } else {
-      const { imageUrl, ...others } = product
+      const {imageUrl, ...others} = product
       batch.update(packRef, others)
     }
   })
@@ -132,7 +132,7 @@ export const editPrice = (storePack: PackPrice, packPrices: PackPrice[], batch?:
   const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
   otherStores.push(storePack)
   const prices = otherStores.map(p => {
-    const { packId, ...others } = p
+    const {packId, ...others} = p
     return others
   })
   let packRef = firebase.firestore().collection('packs').doc(storePack.packId)
@@ -150,7 +150,7 @@ export const deleteStorePack = (storePack: PackPrice, packPrices: PackPrice[], p
   const packStores = packPrices.filter(p => p.packId === storePack.packId)
   const otherStores = packStores.filter(p => p.storeId !== storePack.storeId)
   const prices = otherStores.map(p => {
-    const { packId, ...others } = p
+    const {packId, ...others} = p
     return others
   })
   let packRef = firebase.firestore().collection('packs').doc(pack.id)
@@ -167,7 +167,7 @@ export const addStore = (store: Store) => {
 }
 
 export const editStore = (store: Store) => {
-  const { id, ...others } = store
+  const {id, ...others} = store
   firebase.firestore().collection('stores').doc(id).update(others)
 }
 
@@ -280,7 +280,7 @@ export const addCategory = (parentId: string, name: string, ordering: number) =>
 
 export const editCategory = (category: Category, oldCategory: Category, categories: Category[]) => {
   const batch = firebase.firestore().batch()
-  const { id, ...others } = category
+  const {id, ...others} = category
   let categoryRef = firebase.firestore().collection('categories').doc(id)
   batch.update(categoryRef, others)
   if (category.parentId !== oldCategory.parentId) {
@@ -352,7 +352,7 @@ export const deletePack = (packId: string) => {
 
 export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
-  const { id, ...others } = newPack
+  const {id, ...others} = newPack
   let imageUrl: string
   if (image) {
     const filename = image.name
@@ -377,7 +377,7 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
     if (image && !p.specialImage) {
       batch.update(packRef, packInfo)
     } else {
-      const { imageUrl, ...others } = packInfo
+      const {imageUrl, ...others} = packInfo
       batch.update(packRef, others)
     }
   })
@@ -468,7 +468,7 @@ export const deleteAdvert = (advert: Advert) => {
 }
 
 export const editAdvert = async (advert: Advert, image?: File) => {
-  const { id, ...others } = advert
+  const {id, ...others} = advert
   if (image) {
     const filename = image.name
     const ext = filename.slice(filename.lastIndexOf('.'))

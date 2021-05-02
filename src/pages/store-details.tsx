@@ -1,13 +1,13 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const StoreDetails = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id)!)
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === props.id)!)

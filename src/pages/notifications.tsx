@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, Fab, Icon, Button} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { deleteNotification, showMessage, showError, getMessage } from '../data/actions'
-import { Notification, User } from '../data/types'
+import {deleteNotification, showMessage, showError, getMessage} from '../data/actions'
+import {Notification, User } from '../data/types'
 
 type ExtendedNotification = Notification & {userInfo: User}
 const Notifications = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [notifications, setNotifications] = useState<ExtendedNotification[]>([])
   useEffect(() => {
@@ -57,7 +57,6 @@ const Notifications = () => {
                 footer={moment(n.time).fromNow()}
                 key={n.id}
               >
-                <div className="list-subtext1">{n.status === 'n' ? labels.notRead : labels.read}</div>
                 <Button text={labels.delete} slot="after" onClick={() => handleDelete(n.userInfo, n.id)} />
               </ListItem>
             )

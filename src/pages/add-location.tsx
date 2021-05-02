@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react'
-import { addLocation, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import {useState, useEffect} from 'react'
+import {addLocation, showMessage, showError, getMessage} from '../data/actions'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import labels from '../data/labels'
 
 const AddLocation = () => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [ordering, setOrdering] = useState(0)
   useEffect(() => {
     if (error) {
       showError(error)
@@ -18,7 +17,6 @@ const AddLocation = () => {
       addLocation({
         id: Math.random().toString(),
         name,
-        ordering
       })
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
@@ -40,17 +38,8 @@ const AddLocation = () => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          clearButton
-          type="number" 
-          value={ordering} 
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering(0)}
-        />
       </List>
-      {name && ordering &&
+      {name && 
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

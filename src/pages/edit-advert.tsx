@@ -1,14 +1,14 @@
-import {useState, useContext, useEffect, ChangeEvent } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { editAdvert, showMessage, showError, getMessage } from '../data/actions'
+import {useState, useContext, useEffect, ChangeEvent} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {editAdvert, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const EditAdvert = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [advert] = useState(() => state.adverts.find(a => a.id === props.id)!)
   const [title, setTitle] = useState(advert?.title)

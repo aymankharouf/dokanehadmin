@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, Button } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, Button} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { randomColors } from '../data/config'
-import { Rating, User } from '../data/types'
+import {randomColors} from '../data/config'
+import {User} from '../data/types'
 
 type Section = {
   id: string,
@@ -12,7 +12,7 @@ type Section = {
   count: number
 }
 const Approvals = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [sections, setSections] = useState<Section[]>([])
   const [newOwners, setNewOwners] = useState<User[]>([])
   useEffect(() => {

@@ -1,16 +1,16 @@
-import { useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { addProduct, showMessage, showError, getMessage } from '../data/actions'
+import {useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle } from 'framework7-react'
+import {StateContext } from '../data/state-provider'
+import {addProduct, showMessage, showError, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import { unitTypes } from '../data/config'
-import { Unit } from '../data/types'
+import {unitTypes } from '../data/config'
+import {Unit } from '../data/types'
 
 type Props = {
   id: string
 }
 const AddProduct = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [productRequest] = useState(() => state.productRequests.find(r => r.id === props.id))
   const [name, setName] = useState(productRequest?.name || '')
@@ -308,7 +308,7 @@ const AddProduct = (props: Props) => {
           ref={inputEl}
           type="file" 
           accept="image/*" 
-          style={{ display: "none" }}
+          style={{display: "none" }}
           onChange={e => handleFileChange(e)}
         />
         <ListButton title={labels.setImage} onClick={onUploadClick} />

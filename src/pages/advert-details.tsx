@@ -1,13 +1,13 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, Card, CardContent, CardFooter, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Navbar, Card, CardContent, CardFooter, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const AdvertDetails = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [advert, setAdvert] = useState(() => state.adverts.find(a => a.id === props.id))
   useEffect(() => {
     setAdvert(() => state.adverts.find(a => a.id === props.id))

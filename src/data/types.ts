@@ -57,7 +57,6 @@ export type Notification = {
   id: string,
   title: string,
   message: string,
-  status: string,
   time: Date,
   userId: string
 }
@@ -98,7 +97,6 @@ export type Advert = {
 export type Location = {
   id: string,
   name: string,
-  ordering: number
 }
 export type Country = {
   id: string,

@@ -1,14 +1,14 @@
-import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { editTrademark, showMessage, showError, getMessage, deleteTrademark } from '../data/actions'
+import {useState, useContext, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {editTrademark, showMessage, showError, getMessage, deleteTrademark} from '../data/actions'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const EditCountry = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id)!)
   const [name, setName] = useState(trademark.name)

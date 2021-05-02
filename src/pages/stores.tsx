@@ -1,12 +1,12 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Fab, Icon, Badge } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { showError } from '../data/actions'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, List, ListItem, Fab, Icon, Badge} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {showError} from '../data/actions'
 import labels from '../data/labels'
-import { Store } from '../data/types'
+import {Store} from '../data/types'
 
 const Stores = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [stores, setStores] = useState<Store[]>([])
   useEffect(() => {

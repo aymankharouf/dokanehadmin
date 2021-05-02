@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { deleteStorePack, deletePack, showMessage, showError, getMessage } from '../data/actions'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {deleteStorePack, deletePack, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { Pack, PackPrice, Store } from '../data/types'
+import {Pack, PackPrice, Store} from '../data/types'
 
 type Props = {
   id: string
@@ -16,7 +16,7 @@ type ExtendedPackPrice = PackPrice & {
   storeInfo: Store
 }
 const PackDetails = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [pack, setPack] = useState<ExtendedPack>(() => {
     const pack = state.packs.find(p => p.id === props.id)!

@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
-import { addStore, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton } from 'framework7-react'
+import {useState, useEffect, useContext} from 'react'
+import {addStore, showMessage, showError, getMessage} from '../data/actions'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import labels from '../data/labels'
-import { StateContext } from '../data/state-provider'
+import {StateContext} from '../data/state-provider'
 
 const AddStore = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
@@ -13,7 +13,7 @@ const AddStore = () => {
   const [address, setAddress] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const [position, setPosition] = useState({lat: 0, lng: 0})
   useEffect(() => {
     const patterns = {

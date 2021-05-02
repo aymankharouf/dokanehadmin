@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Icon } from 'framework7-react'
+import {useState} from 'react'
+import {Icon} from 'framework7-react'
 
 type Props = {
   rating: number,

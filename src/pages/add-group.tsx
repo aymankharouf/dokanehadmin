@@ -1,14 +1,14 @@
-import { useState, useContext, useEffect, ChangeEvent } from 'react'
-import { addPack, showMessage, showError, getMessage } from '../data/actions'
-import { f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useState, useContext, useEffect, ChangeEvent} from 'react'
+import {addPack, showMessage, showError, getMessage} from '../data/actions'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const AddGroup = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')

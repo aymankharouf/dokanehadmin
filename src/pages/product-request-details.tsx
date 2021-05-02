@@ -1,14 +1,14 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { rejectProductRequest, showMessage, showError, getMessage } from '../data/actions'
+import {rejectProductRequest, showMessage, showError, getMessage} from '../data/actions'
 
 type Props = {
   id: string
 }
 const ProductRequestDetails = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === props.id))
   const [storeName, setStoreName] = useState('')

@@ -1,10 +1,10 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
-import { Category, Pack, PackPrice } from '../data/types'
+import {Category, Pack, PackPrice} from '../data/types'
 
 type Props = {
   id: string
@@ -14,7 +14,7 @@ type ExtendedPackPrice = PackPrice & {
   categoryInfo: Category
 }
 const StorePacks = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [storePacks, setStorePacks] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {

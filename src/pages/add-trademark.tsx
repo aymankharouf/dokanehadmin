@@ -1,12 +1,12 @@
-import { useContext, useState, useEffect } from 'react'
-import { StateContext } from '../data/state-provider'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
+import {useContext, useState, useEffect} from 'react'
+import {StateContext } from '../data/state-provider'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import labels from '../data/labels'
-import { addTrademark, showMessage, showError, getMessage } from '../data/actions'
+import {addTrademark, showMessage, showError, getMessage} from '../data/actions'
 
 
 const AddTrademark = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   useEffect(() => {

@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Button } from 'framework7-react'
-import { randomColors } from '../data/config'
+import {useState} from 'react'
+import {Page, Navbar, NavLeft, NavTitle, NavTitleLarge, Link, Block, Button} from 'framework7-react'
+import {randomColors} from '../data/config'
 import labels from '../data/labels'
 
 const Home = () => {

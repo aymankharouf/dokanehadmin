@@ -1,17 +1,17 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon } from 'framework7-react'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon} from 'framework7-react'
 import RatingStars from './rating-stars'
-import { StateContext } from '../data/state-provider'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText } from '../data/actions'
-import { Pack } from '../data/types'
+import {archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText} from '../data/actions'
+import {Pack} from '../data/types'
 
 type Props = {
   id: string,
   type: string
 }
 const ProductPacks = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [product] = useState(() => props.type === 'a' ? state.archivedProducts.find(p => p.id === props.id)! : state.products.find(p => p.id === props.id)!)
   const [packs, setPacks] = useState<Pack[]>([])
@@ -80,11 +80,25 @@ const ProductPacks = (props: Props) => {
         <Icon material="build"></Icon>
       </Fab>
       <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${props.id}`)}>{labels.details}</ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}`)}>{labels.addPack}</ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-offer/${props.id}`)}>{labels.addOffer}</ActionsButton>
-        {activePacks.length === 0 && <ActionsButton onClick={() => handleArchive()}>{labels.archive}</ActionsButton>}
-        {packs.length === 0 && <ActionsButton onClick={() => handleDelete()}>{labels.delete}</ActionsButton>}
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${props.id}`)}>
+          {labels.details}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}`)}>
+          {labels.addPack}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${props.id}`)}>
+          {labels.addGroup}
+        </ActionsButton>
+        {activePacks.length === 0 && 
+          <ActionsButton onClick={() => handleArchive()}>
+            {labels.archive}
+          </ActionsButton>
+        }
+        {packs.length === 0 && 
+          <ActionsButton onClick={() => handleDelete()}>
+            {labels.delete}
+          </ActionsButton>
+        }
       </Actions>
     </Page>
   )

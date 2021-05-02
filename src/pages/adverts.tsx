@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Block, Page, Navbar, List, ListItem, Fab, Icon, Link, Actions, ActionsButton} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert } from '../data/actions'
-import { advertType } from '../data/config'
-import { Advert } from '../data/types'
+import {updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert} from '../data/actions'
+import {advertType} from '../data/config'
+import {Advert} from '../data/types'
 
 const Adverts = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [currentAdvert, setCurrentAdvert] = useState<Advert>()
   const [error, setError] = useState('')
   const [adverts, setAdverts] = useState<Advert[]>([])

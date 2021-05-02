@@ -1,20 +1,18 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListItem } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { logout } from '../data/actions'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListItem} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {logout} from '../data/actions'
 import labels from '../data/labels'
 
 const Panel = () => {
-  const { state, dispatch } = useContext(StateContext)
+  const {state, dispatch} = useContext(StateContext)
   const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {
-    const alarms = state.alarms.filter(a => a.status === 'n').length
-    const ratings = state.ratings.filter(r => r.status === 'n').length
     const passwordRequests = state.passwordRequests.length
     const productRequests = state.productRequests.length
     const newStoresOwners = state.users.filter(u => u.storeName && !u.storeId).length
-    setApprovalsAcount(alarms + ratings + passwordRequests + productRequests + newStoresOwners)
-  }, [state.users, state.passwordRequests, state.productRequests, state.alarms, state.ratings])
+    setApprovalsAcount(passwordRequests + productRequests + newStoresOwners)
+  }, [state.users, state.passwordRequests, state.productRequests])
   const handleLogout = () => {
     logout()
     f7.views.main.router.navigate('/home/', {reloadAll: true})

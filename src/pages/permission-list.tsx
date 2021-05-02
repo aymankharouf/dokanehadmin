@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { permitUser, showMessage, showError, getMessage } from '../data/actions'
-import { User } from '../data/types'
+import {permitUser, showMessage, showError, getMessage} from '../data/actions'
+import {User} from '../data/types'
 
 type Props = {
   id: string
 }
 const PermissionList = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [users, setUsers] = useState<User[]>([])

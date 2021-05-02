@@ -1,14 +1,14 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, List, ListItem, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
 
 const Locations = () => {
-  const { state } = useContext(StateContext)
-  const [locations, setLocations] = useState(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+  const {state} = useContext(StateContext)
+  const [locations, setLocations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
-    setLocations(() => [...state.locations].sort((l1, l2) => l1.ordering - l2.ordering))
+    setLocations(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   }, [state.locations])
   return (
     <Page>

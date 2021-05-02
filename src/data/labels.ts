@@ -1,4 +1,4 @@
-import { Label } from './types'
+import {Label} from './types'
 
 const labels: Label = {
   registerTitle: 'تسجيل جديد',
@@ -189,7 +189,7 @@ const labels: Label = {
   sell: 'بيع',
   cashing: 'بيع المواد',
   withGift: 'مع هدية',
-  addOffer: 'اضافة عرض/حزمة',
+  addGroup: 'اضافة مجموعة',
   details: 'تفاصيل',
   productDetails: 'تفاصيل المنتج',
   bonusProduct: 'المنتج اﻻضافي',

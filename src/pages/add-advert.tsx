@@ -1,8 +1,8 @@
-import { useState, useEffect, ChangeEvent } from 'react'
-import { f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon } from 'framework7-react'
-import { addAdvert, showMessage, showError, getMessage } from '../data/actions'
+import {useState, useEffect, ChangeEvent} from 'react'
+import {f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon} from 'framework7-react'
+import {addAdvert, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { advertType } from '../data/config'
+import {advertType} from '../data/config'
 
 const AddAdvert = () => {
   const [error, setError] = useState('')

@@ -1,11 +1,11 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, List, ListItem, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
 
 const Countries = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [countries, setCountries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   useEffect(() => {
     setCountries(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))

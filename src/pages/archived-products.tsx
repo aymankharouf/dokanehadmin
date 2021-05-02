@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText } from '../data/actions'
-import { Category, Country, Product, Trademark } from '../data/types'
+import {getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText} from '../data/actions'
+import {Category, Country, Product, Trademark} from '../data/types'
 
 type ExtendedProduct = Product & {
   categoryInfo: Category,
@@ -11,7 +11,7 @@ type ExtendedProduct = Product & {
   countryInfo: Country
 }
 const ArchivedProducts = () => {
-  const { state, dispatch } = useContext(StateContext)
+  const {state, dispatch} = useContext(StateContext)
   const [error, setError] = useState('')
   const [inprocess, setInprocess] = useState(false)
   const [products, setProducts] = useState<ExtendedProduct[]>([])

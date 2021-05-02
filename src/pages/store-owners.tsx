@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { Page, Block, Navbar, List, ListItem } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {Page, Block, Navbar, List, ListItem} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { User } from '../data/types'
+import {User} from '../data/types'
 
 type Props = {
   id: string
 }
 type ExtendedUser = User & {userInfo: User}
 const StoreOwners = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [storeOwners, setStoreOwners] = useState<ExtendedUser[]>([])
   useEffect(() => {

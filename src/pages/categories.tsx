@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { deleteCategory, showMessage, showError, getMessage, categoryChildren } from '../data/actions'
-import { Category } from '../data/types'
+import {deleteCategory, showMessage, showError, getMessage, categoryChildren} from '../data/actions'
+import {Category} from '../data/types'
 
 type Props = {
   id: string
@@ -13,7 +13,7 @@ type ExtendedCategory = Category & {
   productsCount: number
 }
 const Categories = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [categories, setCategories] = useState<ExtendedCategory[]>([])
   const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id))

@@ -1,15 +1,15 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { resolvePasswordRequest, showMessage, showError, getMessage } from '../data/actions'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
+import {StateContext } from '../data/state-provider'
+import {resolvePasswordRequest, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { randomColors } from '../data/config'
+import {randomColors} from '../data/config'
 
 type Props = {
   id: string
 }
 const RetreivePassword = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === props.id))
   const [userInfo] = useState(() => state.users.find(u => u.mobile === passwordRequest?.mobile))

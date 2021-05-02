@@ -1,17 +1,17 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Button } from 'framework7-react'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, Button} from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import { StateContext } from '../data/state-provider'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { deleteLog, showMessage, showError, getMessage } from '../data/actions'
-import { Log, User } from '../data/types'
+import {deleteLog, showMessage, showError, getMessage} from '../data/actions'
+import {Log, User } from '../data/types'
 
 type ExtendedLog = Log & {
   userInfo: User
 }
 const Logs = () => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [logs, setLogs] = useState<ExtendedLog[]>([])
   useEffect(() => {

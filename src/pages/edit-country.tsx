@@ -1,14 +1,14 @@
-import { useState, useContext, useEffect } from 'react'
-import { f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
-import { editCountry, showMessage, showError, getMessage, deleteCountry } from '../data/actions'
+import {useState, useContext, useEffect} from 'react'
+import {f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
+import {editCountry, showMessage, showError, getMessage, deleteCountry} from '../data/actions'
 import labels from '../data/labels'
 
 type Props = {
   id: string
 }
 const EditCountry = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [country] = useState(() => state.countries.find(c => c.id === props.id)!)
   const [name, setName] = useState(country.name)

@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
-import { f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop } from 'framework7-react'
-import { StateContext } from '../data/state-provider'
+import {useContext, useState, useEffect} from 'react'
+import {f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { productOfText, getCategoryName } from '../data/actions'
-import { Category, Country, Product, Trademark } from '../data/types'
+import {productOfText, getCategoryName} from '../data/actions'
+import {Category, Country, Product, Trademark} from '../data/types'
 
 type Props = {
   id: string
@@ -14,7 +14,7 @@ type ExtendedProduct = Product & {
   countryInfo: Country
 }
 const Products = (props: Props) => {
-  const { state } = useContext(StateContext)
+  const {state} = useContext(StateContext)
   const [category] = useState(() => state.categories.find(c => c.id === props.id))
   const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {

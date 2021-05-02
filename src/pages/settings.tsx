@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Page, Block, Navbar, Button } from 'framework7-react'
+import {useState} from 'react'
+import {Page, Block, Navbar, Button} from 'framework7-react'
 import labels from '../data/labels'
-import { randomColors } from '../data/config'
+import {randomColors} from '../data/config'
 
 
 const Settings = () => {
