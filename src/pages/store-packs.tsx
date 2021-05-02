@@ -72,7 +72,7 @@ const StorePacks = (props: Props) => {
                 footer={moment(p.time).fromNow()}
                 key={i++}
               >
-                <div className="list-subtext1">{`${labels.price}: ${(p.price / 100).toFixed(2)}`}</div>
+                <div className="list-subtext1">{`${labels.price}: ${p.price.toFixed(2)}`}</div>
                 <div className="list-subtext2">{p.categoryInfo.name}</div>
                 <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               </ListItem>

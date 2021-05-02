@@ -118,11 +118,11 @@ const PackDetails = (props: Props) => {
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack.subPackId ? 'edit-offer' : 'edit-pack'}/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
-          {pack.detailsCount === 0 ? 
+          {pack.detailsCount === 0 && 
             <FabButton color="red" onClick={() => handleDelete()}>
               <Icon material="delete"></Icon>
             </FabButton>
-          : ''}
+          }
         </FabButtons>
       </Fab>
     </Page>

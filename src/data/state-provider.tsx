@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Alarm, Rating, Notification, Store, ProductRequest } from './types'
+import { State, Context, Category, PasswordRequest, Advert, Product, Log, PackPrice, Pack, User, Rating, Notification, Store, ProductRequest } from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -25,8 +25,6 @@ const StateProvider = ({ children }: Props) => {
     archivedProducts: [],
     archivedPacks: [],
     notifications: [],
-    alarms: [],
-    ratings: [],
     units: [],
     productRequests: []
   }
@@ -167,8 +165,6 @@ const StateProvider = ({ children }: Props) => {
         const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
           let users: User[] = []
           let notifications: Notification[] = []
-          let alarms: Alarm[] = []
-          let ratings: Rating[] = []
           docs.forEach(doc => {
             users.push({
               id: doc.id,
@@ -185,22 +181,10 @@ const StateProvider = ({ children }: Props) => {
                 notifications.push({...n, userId: doc.id})
               })
             }
-            if (doc.data().alarms) {
-              doc.data().alarms.forEach((a: Alarm) => {
-                alarms.push({...a, userId: doc.id})
-              })
-            }
-            if (doc.data().ratings) {
-              doc.data().ratings.forEach((r: Rating) => {
-                ratings.push({...r, userId: doc.id})
-              })
-            }
           })
           console.log('notifications == ', notifications)
           dispatch({type: 'SET_USERS', payload: users})
           dispatch({type: 'SET_NOTIFICATIONS', payload: notifications})
-          dispatch({type: 'SET_ALARMS', payload: alarms})
-          dispatch({type: 'SET_RATINGS', payload: ratings})
         }, err => {
           unsubscribeUsers()
         })  

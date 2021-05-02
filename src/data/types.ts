@@ -69,20 +69,6 @@ export type Rating = {
   userInfo?: User,
   productInfo?: Product
 }
-export type Alarm = {
-  id: string,
-  packId?: string,
-  type: string,
-  price: number,
-  quantity?: number,
-  alternative?: string,
-  offerDays?: number,
-  status: string,
-  userId: string,
-  time: Date,
-  storeId?: string,
-  newPackId?: string
-}
 export type Position = {
   lat: number, 
   lng: number
@@ -97,7 +83,6 @@ export type User = {
   notifications?: Notification[],
   ratings?: Rating[],
   favorites?: string[],
-  alarms?: Alarm[],
   colors?: string[],
   time: Date
 }
@@ -183,8 +168,6 @@ export type State = {
   logs: Log[],
   archivedPacks: Pack[],
   notifications: Notification[],
-  alarms: Alarm[],
-  ratings: Rating[],
   units: Unit[],
   productRequests: ProductRequest[]
 }

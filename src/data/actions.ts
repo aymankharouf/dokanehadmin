@@ -2,7 +2,7 @@ import firebase, { prodApp } from './firebase'
 import labels from './labels'
 import { f7 } from 'framework7-react'
 import { randomColors } from './config'
-import { Advert, Alarm, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
+import { Advert, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User } from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -36,10 +36,6 @@ export const showError = (messageText: string) => {
 export const quantityText = (quantity: number, weight?: number): string => {
   return weight && weight !== quantity ? `${quantityText(quantity)}(${quantityText(weight)})` : quantity === Math.trunc(quantity) ? quantity.toString() : quantity.toFixed(3)
 }
-
-export const addQuantity = (q1: number, q2: number, q3 = 0) => {
-  return Math.trunc(q1 * 1000 + q2 * 1000 + q3 * 1000) / 1000
-  }
 
 export const productOfText = (countryName: string, trademarkName?: string) => {
   return trademarkName ? `${labels.productFrom} ${trademarkName}-${countryName}` : `${labels.productOf} ${countryName}`
@@ -397,49 +393,6 @@ export const deleteUser = async (user: User) => {
   return firebase.auth().currentUser?.delete()
 }
 
-export const approveAlarm = (user: User, alarm: Alarm, newPackId: string, packPrices: PackPrice[], packs: Pack[]) => {
-  const batch = firebase.firestore().batch()
-  if (!user.alarms) return
-  const alarms = user.alarms.slice()
-  const alarmIndex = alarms.findIndex(a => a.id === alarm.id)
-  alarms.splice(alarmIndex, 1, {
-    ...user.alarms[alarmIndex],
-    status: 'a',
-    storeId: user.storeId,
-    newPackId
-  })
-  const userRef = firebase.firestore().collection('users').doc(user.id)
-  batch.update(userRef, {
-    alarms
-  })
-  const storePack = packPrices.find(p => p.storeId === user.storeId && p.packId === (newPackId || alarm.packId))!
-  let offerEnd
-  if (alarm.offerDays) {
-    offerEnd = alarm.time
-    offerEnd.setDate(offerEnd.getDate() + alarm.offerDays)
-  }
-  const newStorePack = { 
-    packId: newPackId || alarm.packId!, 
-    storeId: user.storeId!,
-    cost: alarm.price,
-    price: alarm.price,
-    offerEnd,
-    isActive: true,
-    time: new Date()
-  }
-  if (alarm.type === 'cp') {
-    editPrice(newStorePack, packPrices, batch)
-    sendNotification(user.id, labels.approval, labels.approveOwnerChangePrice, batch)
-  } else if (alarm.type === 'ua') {
-    deleteStorePack(storePack, packPrices, packs, batch)
-    sendNotification(user.id, labels.approval, labels.approveOwnerDelete, batch)
-  } else {
-    addPackPrice(newStorePack, packs, batch)
-    sendNotification(user.id, labels.approval, labels.approveOwnerAddPack, batch)
-  }
-  batch.commit()
-}
-
 export const changePassword = async (oldPassword: string, newPassword: string) => {
   let user = firebase.auth().currentUser
   if (!user) return
@@ -448,38 +401,6 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
   await firebase.auth().signInWithEmailAndPassword(email, oldPassword)
   user = firebase.auth().currentUser!
   return user.updatePassword(newPassword)
-}
-
-export const approveRating = (rating: Rating, packs: Pack[]) => {
-  const batch = firebase.firestore().batch()
-  const ratings = rating.userInfo?.ratings?.slice()
-  if (!ratings) return
-  const ratingIndex = ratings.findIndex(r => r.productId === rating.productInfo?.id)
-  ratings.splice(ratingIndex, 1, {
-    ...ratings[ratingIndex],
-    status: 'a'
-  })
-  const userRef = firebase.firestore().collection('users').doc(rating.userInfo?.id)
-  batch.update(userRef, {
-    ratings
-  })
-  const oldRating = rating.productInfo?.rating ?? 0
-  const ratingCount = rating.productInfo?.ratingCount ?? 0
-  const newRating = Math.round((oldRating * ratingCount + rating.value) / (ratingCount + 1))
-  const productRef = firebase.firestore().collection('products').doc(rating.productInfo?.id)
-  batch.update(productRef, {
-    rating: newRating,
-    ratingCount: ratingCount + 1
-  })
-  const affectedPacks = packs.filter(p => p.product.id === rating.productInfo?.id)
-  affectedPacks.forEach(p => {
-    const packRef = firebase.firestore().collection('packs').doc(p.id)
-    batch.update(packRef, {
-      rating: newRating,
-      ratingCount: ratingCount + 1
-    })
-  })
-  batch.commit()
 }
 
 export const deleteNotification = (user: User, notificationId: string) => {

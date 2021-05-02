@@ -3,7 +3,7 @@ import { Page, Block, Navbar, Button } from 'framework7-react'
 import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { randomColors } from '../data/config'
-import { Alarm, Rating, User } from '../data/types'
+import { Rating, User } from '../data/types'
 
 type Section = {
   id: string,
@@ -13,24 +13,18 @@ type Section = {
 }
 const Approvals = () => {
   const { state } = useContext(StateContext)
-  const [alarms, setAlarms] = useState<Alarm[]>([])
-  const [ratings, setRatings] = useState<Rating[]>([])
   const [sections, setSections] = useState<Section[]>([])
   const [newOwners, setNewOwners] = useState<User[]>([])
   useEffect(() => {
-    setAlarms(() => state.alarms.filter(a => a.status === 'n'))
-    setRatings(() => state.ratings.filter(r => r.status === 'n'))
     setNewOwners(() => state.users.filter(u => u.storeName && !u.storeId))
-  }, [state.users, state.alarms, state.ratings])
+  }, [state.users])
   useEffect(() => {
     setSections(() => [
-      {id: '1', name: labels.alarms, path: '/alarms/', count: alarms.length},
-      {id: '2', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
-      {id: '3', name: labels.ratings, path: '/ratings/', count: ratings.length},
-      {id: '4', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
-      {id: '5', name: labels.productRequests, path: '/product-requests/', count: state.productRequests.length},
+      {id: '1', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
+      {id: '2', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '3', name: labels.productRequests, path: '/product-requests/', count: state.productRequests.length},
     ])
-  }, [alarms, state.passwordRequests, state.productRequests, ratings, newOwners])
+  }, [state.passwordRequests, state.productRequests, newOwners])
   let i = 0
   return(
     <Page>

@@ -24,15 +24,12 @@ import EditPack from './pages/edit-pack'
 import EditCountry from './pages/edit-country'
 import EditCategory from './pages/edit-category'
 import EditStore from './pages/edit-store'
-import Alarms from './pages/alarms'
-import AlarmDetails from './pages/alarm-details'
 import RetreivePassword from './pages/retreive-password'
 import StoreOwners from './pages/store-owners'
 import ChangePassword from './pages/change-password'
 import Locations from './pages/locations'
 import AddLocation from './pages/add-location'
 import EditLocation from './pages/edit-location'
-import Ratings from './pages/ratings'
 import Approvals from './pages/approvals'
 import AddPackStore from './pages/add-pack-store'
 import Logs from './pages/logs'
@@ -139,14 +136,6 @@ const routes = [
     component: PasswordRequests
   },
   {
-    path: '/alarms/',
-    component: Alarms
-  },
-  {
-    path: '/alarm-details/:id/user/:userId',
-    component: AlarmDetails
-  },
-  {
     path: '/countries/',
     component: Countries,
   },
@@ -245,10 +234,6 @@ const routes = [
   {
     path: '/edit-location/:id',
     component: EditLocation
-  },
-  {
-    path: '/ratings/',
-    component: Ratings
   },
   {
     path: '/approvals/',

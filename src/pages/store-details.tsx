@@ -41,7 +41,7 @@ const StoreDetails = (props: Props) => {
           />
         </ListItem>
         <ListInput
-          name="openTime"
+          name="location"
           label={labels.location}
           value={state.locations.find(l => l.id === store.locationId)?.name || ''}
           type="text"
