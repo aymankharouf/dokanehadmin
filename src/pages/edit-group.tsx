@@ -13,7 +13,7 @@ const EditGroup = (props: Props) => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
-  const [subQuantity, setSubQuantity] = useState(pack.subQuantity)
+  const [subQuantity, setSubQuantity] = useState(pack.subQuantity?.toString() || '')
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState<File>()
@@ -30,7 +30,7 @@ const EditGroup = (props: Props) => {
   useEffect(() => {
     if (name !== pack.name
     || subPackId !== pack.subPackId
-    || subQuantity !== pack.subQuantity
+    || +subQuantity !== pack.subQuantity
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
@@ -70,8 +70,8 @@ const EditGroup = (props: Props) => {
         ...pack,
         name,
         subPackId,
-        subQuantity: Number(subQuantity),
-        typeUnits: subQuantity! * subPackInfo.typeUnits!,
+        subQuantity: +subQuantity,
+        unitsCount: +subQuantity! * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
       }
       editPack(newPack, pack, state.packs, image)
@@ -83,7 +83,7 @@ const EditGroup = (props: Props) => {
   }
   return (
     <Page>
-      <Navbar title={`${labels.editOffer} ${pack.product.name}`} backLink={labels.back} />
+      <Navbar title={`${labels.editGroup} ${pack.product.name}`} backLink={labels.back} />
       <List form inlineLabels>
         <ListInput 
           name="name" 
@@ -121,7 +121,7 @@ const EditGroup = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity(0)}
+          onInputClear={() => setSubQuantity('')}
         />
         <ListItem>
           <span>{labels.specialImage}</span>
@@ -138,7 +138,7 @@ const EditGroup = (props: Props) => {
             label={labels.image} 
             type="file" 
             accept="image/*" 
-            onChange={e => handleFileChange(e)}
+            onChange={(e) => handleFileChange(e)}
           />
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />

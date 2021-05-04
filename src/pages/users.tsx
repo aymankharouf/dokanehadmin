@@ -6,16 +6,22 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {User} from '../data/types'
 
-const Users = () => {
+type Props = {
+  id: string
+}
+const Users = (props: Props) => {
   const {state} = useContext(StateContext)
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
-    setUsers(() => [...state.users].sort((u1, u2) => u2.time > u1.time ? -1 : 1))
-  }, [state.users])
+    setUsers(() => {
+      const users = state.users.filter(u => props.id === 'o' ? u.storeName : !u.storeName)
+      return users.sort((u1, u2) => u1.time > u2.time ? -1 : 1)
+    })
+  }, [state.users, props.id])
   if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
-      <Navbar title={labels.users} backLink={labels.back}>
+      <Navbar title={props.id === 'o' ? labels.storesOwners : labels.users} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -39,7 +45,8 @@ const Users = () => {
               <ListItem
                 title={u.name}
                 subtitle={u.mobile}
-                text={moment(u.time).fromNow()}
+                text={u.storeName}
+                footer={moment(u.time).fromNow()}
                 key={u.id}
               />
             )

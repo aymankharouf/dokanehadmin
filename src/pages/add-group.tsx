@@ -12,7 +12,7 @@ const AddGroup = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState(0)
+  const [subQuantity, setSubQuantity] = useState('')
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
@@ -30,7 +30,7 @@ const AddGroup = (props: Props) => {
   const generateName = () => {
     let suggestedName
     if (subPackId && subQuantity) {
-      suggestedName = `${subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
+      suggestedName = `${+subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
       if (!name) setName(suggestedName)
     }
   }
@@ -62,12 +62,10 @@ const AddGroup = (props: Props) => {
         product,
         name,
         subPackId,
-        subQuantity,
-        typeUnits: subQuantity * subPackInfo.typeUnits!,
-        standardUnits: subQuantity * subPackInfo.standardUnits!,
+        subQuantity: +subQuantity,
+        unitsCount: +subQuantity * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
         isArchived: false,
-        unitId: subPackInfo.unitId,
         specialImage
       }
       addPack(pack, product, image, subPackInfo)
@@ -118,7 +116,7 @@ const AddGroup = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity(0)}
+          onInputClear={() => setSubQuantity('')}
           onBlur={() => generateName()}
         />
         <ListItem>
@@ -136,7 +134,7 @@ const AddGroup = (props: Props) => {
             label={labels.image} 
             type="file" 
             accept="image/*" 
-            onChange={e => handleFileChange(e)}
+            onChange={(e) => handleFileChange(e)}
           />
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />

@@ -50,9 +50,6 @@ import ArchivedProducts from './pages/archived-products'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
-import Units from './pages/units'
-import AddUnit from './pages/add-unit'
-import EditUnit from './pages/edit-unit'
 import ProductRequests from './pages/product-requests'
 import ProductRequestDetails from './pages/product-request-details'
 
@@ -124,7 +121,7 @@ const routes = [
     component: AddStore
   },
   {
-    path: '/users/',
+    path: '/users/:id',
     component: Users,
   },
   {
@@ -268,24 +265,12 @@ const routes = [
     component: EditAdvert
   },
   {
-    path: '/permission-list/:id',
+    path: '/permission-list/',
     component: PermissionList
   },
   {
     path: '/archived-products/',
     component: ArchivedProducts
-  },
-  {
-    path: '/units/',
-    component: Units
-  },
-  {
-    path: '/add-unit/',
-    component: AddUnit
-  },
-  {
-    path: '/edit-unit/',
-    component: EditUnit
   },
   {
     path: '/product-requests/',

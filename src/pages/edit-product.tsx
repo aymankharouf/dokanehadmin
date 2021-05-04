@@ -3,7 +3,7 @@ import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7
 import {StateContext} from '../data/state-provider'
 import {editProduct, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import {unitTypes} from '../data/config'
+import {units} from '../data/config'
 
 type Props = {
   id: string
@@ -18,7 +18,7 @@ const EditProduct = (props: Props) => {
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [countryId, setCountryId] = useState(product.countryId)
-  const [unitType, setUnitType] = useState('')
+  const [unit, setUnit] = useState('')
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -48,10 +48,10 @@ const EditProduct = (props: Props) => {
     || countryId !== product.countryId
     || categoryId !== product.categoryId
     || trademarkId !== product.trademarkId
-    || unitType !== product.unitType
+    || unit !== product.unit
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [product, name, alias, description, countryId, categoryId, trademarkId, unitType, imageUrl])
+  }, [product, name, alias, description, countryId, categoryId, trademarkId, unit, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -71,7 +71,7 @@ const EditProduct = (props: Props) => {
         description,
         trademarkId,
         countryId,
-        unitType
+        unit
       }
       editProduct(newProduct, product.name, state.packs, image)
       showMessage(labels.editSuccess)
@@ -182,10 +182,10 @@ const EditProduct = (props: Props) => {
             closeOnSelect: true, 
           }}
         >
-          <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>
+          <select name="unitType" value={unit} onChange={e => setUnit(e.target.value)}>
             <option value=""></option>
-            {unitTypes.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
+            {units.map(u => 
+              <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
         </ListItem>

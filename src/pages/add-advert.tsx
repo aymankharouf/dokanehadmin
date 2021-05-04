@@ -2,7 +2,7 @@ import {useState, useEffect, ChangeEvent} from 'react'
 import {f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon} from 'framework7-react'
 import {addAdvert, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import {advertType} from '../data/config'
+import {advertTypes} from '../data/config'
 
 const AddAdvert = () => {
   const [error, setError] = useState('')
@@ -68,7 +68,7 @@ const AddAdvert = () => {
         >
           <select name="type" value={type} onChange={e => setType(e.target.value)}>
             <option value=""></option>
-            {advertType.map(t => 
+            {advertTypes.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
           </select>

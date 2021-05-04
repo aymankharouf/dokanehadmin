@@ -14,17 +14,17 @@ type Section = {
 const Approvals = () => {
   const {state} = useContext(StateContext)
   const [sections, setSections] = useState<Section[]>([])
-  const [newOwners, setNewOwners] = useState<User[]>([])
+  const [newUsers, setNewUsers] = useState<User[]>([])
   useEffect(() => {
-    setNewOwners(() => state.users.filter(u => u.storeName && !u.storeId))
+    setNewUsers(() => state.users.filter(u => (u.storeName && !u.storeId) || (!u.storeName && !u.position.lat && !u.locationId)))
   }, [state.users])
   useEffect(() => {
     setSections(() => [
       {id: '1', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
-      {id: '2', name: labels.newOwners, path: '/permission-list/n', count: newOwners.length},
+      {id: '2', name: labels.newUsers, path: '/permission-list/', count: newUsers.length},
       {id: '3', name: labels.productRequests, path: '/product-requests/', count: state.productRequests.length},
     ])
-  }, [state.passwordRequests, state.productRequests, newOwners])
+  }, [state.passwordRequests, state.productRequests, newUsers])
   let i = 0
   return(
     <Page>

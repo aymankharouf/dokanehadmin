@@ -11,13 +11,6 @@ const ProductRequestDetails = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === props.id))
-  const [storeName, setStoreName] = useState('')
-  useEffect(() => {
-    setStoreName(() => {
-      const user = state.users.find(u => u.id === productRequest?.userId)
-      return state.stores.find(s => s.id === user?.storeId)?.name || ''
-    })
-  }, [productRequest, state.users, state.stores])
   useEffect(() => {
     setProductRequest(() => state.productRequests.find(p => p.id === props.id))
   }, [state.productRequests, props.id])
@@ -30,7 +23,7 @@ const ProductRequestDetails = (props: Props) => {
   const handleRejection = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
-        await rejectProductRequest(productRequest!)
+        await rejectProductRequest(productRequest!, state.users)
         showMessage(labels.rejectSuccess)
         f7.views.current.router.back()
       } catch(err) {
@@ -52,7 +45,7 @@ const ProductRequestDetails = (props: Props) => {
           name="name" 
           label={labels.storeName}
           type="text" 
-          value={storeName}
+          value={state.stores.find(s => s.id === productRequest?.storeId)?.name}
           readonly
         />
         <ListInput 

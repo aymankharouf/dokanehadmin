@@ -28,7 +28,7 @@ export type Product = {
   rating: number,
   ratingCount: number,
   isArchived: boolean,
-  unitType: string
+  unit: string
 }
 export type Pack = {
   id?: string,
@@ -39,10 +39,8 @@ export type Pack = {
   subQuantity?: number,
   weightedPrice?: number,
   byWeight: boolean,
-  typeUnits: number,
-  standardUnits: number,
+  unitsCount: number,
   specialImage: boolean,
-  unitId: string,
   imageUrl?: string
 }
 export type PackPrice = {
@@ -83,7 +81,9 @@ export type User = {
   ratings?: Rating[],
   favorites?: string[],
   colors?: string[],
-  time: Date
+  address?: string,
+  time: Date,
+  locationId?: string
 }
 export type Advert = {
   id?: string,
@@ -105,12 +105,6 @@ export type Country = {
 export type Trademark = {
   id: string,
   name: string,
-}
-export type Unit = {
-  id: string,
-  name: string,
-  type: string,
-  factor: number
 }
 export type PasswordRequest = {
   id: string,
@@ -141,7 +135,7 @@ export type AlarmType = {
 }
 export type ProductRequest = {
   id: string,
-  userId: string,
+  storeId: string,
   name: string,
   country: string,
   weight: string,
@@ -166,7 +160,6 @@ export type State = {
   logs: Log[],
   archivedPacks: Pack[],
   notifications: Notification[],
-  units: Unit[],
   productRequests: ProductRequest[]
 }
 

@@ -11,13 +11,11 @@ const AddPack = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
-  const [typeUnits, setTypeUnits] = useState(0)
-  const [unitId, setUnitId] = useState('')
+  const [unitsCount, setunitsCount] = useState('')
   const [byWeight, setByWeight] = useState(false)
   const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
-  const [units] = useState(() => state.units.filter(u => u.type === product.unitType))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -50,13 +48,10 @@ const AddPack = (props: Props) => {
       if (state.packs.find(p => p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
-      const standardUnits = units.find(u => u.id === unitId)!.factor * typeUnits
       const pack = {
         name,
         product,
-        typeUnits,
-        standardUnits,
-        unitId,
+        unitsCount: +unitsCount,
         byWeight,
         isArchived: false,
         specialImage
@@ -82,31 +77,14 @@ const AddPack = (props: Props) => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListItem 
-          title={labels.unit}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#units", 
-            openIn: "sheet",
-            closeOnSelect: true, 
-          }}
-        >
-          <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
-            <option value=""></option>
-            {units.map(u => 
-              <option key={u.id} value={u.id}>{u.name}</option>
-            )}
-          </select>
-        </ListItem>
         <ListInput 
-          name="typeUnits" 
+          name="unitsCount" 
           label={labels.unitsCount}
           clearButton
           type="number" 
-          value={typeUnits} 
-          onChange={e => setTypeUnits(e.target.value)}
-          onInputClear={() => setTypeUnits(0)}
+          value={unitsCount} 
+          onChange={e => setunitsCount(e.target.value)}
+          onInputClear={() => setunitsCount('')}
         />
         <ListItem>
           <span>{labels.byWeight}</span>
@@ -140,7 +118,7 @@ const AddPack = (props: Props) => {
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && unitId && typeUnits &&
+      {name && unitsCount &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -11,7 +11,7 @@ const AddStorePack = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
-  const [price, setPrice] = useState(0)
+  const [price, setPrice] = useState('')
   const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
   const [packs] = useState(() => {
     const packs = state.packs.map(p => {
@@ -84,7 +84,7 @@ const AddStorePack = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice(0)}
+          onInputClear={() => setPrice('')}
         />
       </List>
       {packId && price &&

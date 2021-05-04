@@ -5,7 +5,7 @@ import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
 import {updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert} from '../data/actions'
-import {advertType} from '../data/config'
+import {advertTypes} from '../data/config'
 import {Advert} from '../data/types'
 
 const Adverts = () => {
@@ -58,7 +58,7 @@ const Adverts = () => {
             <ListItem title={labels.noData} />
           : adverts.map(a =>
               <ListItem
-                title={advertType.find(t => t.id === a.type)?.name}
+                title={advertTypes.find(t => t.id === a.type)?.name}
                 subtitle={a.title}
                 text={a.text}
                 footer={moment(a.time).fromNow()}

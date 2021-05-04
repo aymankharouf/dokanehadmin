@@ -1,10 +1,9 @@
-import {useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle } from 'framework7-react'
+import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle, Input} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
-import {addProduct, showMessage, showError, getMessage } from '../data/actions'
+import {addProduct, showMessage, showError, getMessage, addTrademark} from '../data/actions'
 import labels from '../data/labels'
-import {unitTypes } from '../data/config'
-import {Unit } from '../data/types'
+import {units} from '../data/config'
 
 type Props = {
   id: string
@@ -19,35 +18,20 @@ const AddProduct = (props: Props) => {
   const [categoryId, setCategoryId] = useState('')
   const [trademarkId, setTrademarkId] = useState('')
   const [countryId, setCountryId] = useState('')
-  const [unitType, setUnitType] = useState('')
+  const [unit, setUnit] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [packName, setPackName] = useState('')
-  const [typeUnits, setTypeUnits] = useState(0)
-  const [unitId, setUnitId] = useState('')
+  const [unitsCount, setUnitsCount] = useState('')
   const [byWeight, setByWeight] = useState(false)
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
-  const [units, setUnits] = useState<Unit[]>([])
-  const [price, setPrice] = useState(productRequest?.price ?? 0)
-  const [storeId, setStoreId] = useState(() => state.users.find(u => u.id === productRequest?.userId)?.storeId || '')
+  const selectEl = useRef<HTMLInputElement | null>(null);
+  const [price, setPrice] = useState(productRequest?.price.toString() || '')
+  const [storeId, setStoreId] = useState(productRequest?.storeId || '')
   const [categories] = useState(() => {
     const categories = state.categories.filter(c => c.isLeaf)
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
   })
-  const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
-  const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
-  useEffect(() => {
-    if (unitType !== 'w') {
-      setByWeight(false)
-    }
-    setUnits(() => state.units.filter(u => u.type === unitType))
-  }, [unitType, state.units])
-  useEffect(() => {
-    if (!byWeight) {
-      setUnitId('')
-      setTypeUnits(0)
-    }
-  }, [byWeight])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -72,6 +56,27 @@ const AddProduct = (props: Props) => {
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
   }
+  const handleTrademarkChange = (value: string) => {
+    if (value === '0') {
+      f7.dialog.prompt(labels.tradematk, labels.add, newValue => {
+        try{
+          if (state.trademarks.filter(t => t.name === newValue).length > 0) {
+            throw new Error('duplicateName')
+          }
+          const id = Math.random().toString()
+          addTrademark({
+            id,
+            name: newValue
+          })
+          setTrademarkId(id)
+          const select = f7.smartSelect.get('#trademarks')
+          select.setValue('hhhhhh')
+        } catch(err) {
+          setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        }
+      })
+    } else setTrademarkId(value)
+  }
   const handleSubmit = () => {
     try{
       if (state.products.find(p => p.categoryId === categoryId && p.countryId === countryId && p.name === name && p.alias === alias)) {
@@ -87,10 +92,9 @@ const AddProduct = (props: Props) => {
         rating: 0,
         ratingCount: 0,
         isArchived: false,
-        unitType,
+        unit,
         imageUrl
       }
-      const standardUnits = units.find(u => u.id === unitId)!.factor * typeUnits
       const prices = [{
         storeId, 
         price: +price, 
@@ -100,14 +104,12 @@ const AddProduct = (props: Props) => {
         name: packName,
         product,
         prices,
-        typeUnits,
-        standardUnits,
-        unitId,
+        unitsCount: +unitsCount,
         byWeight,
         isArchived: false,
         specialImage: false
       }
-      addProduct(product, pack, productRequest, image)
+      addProduct(product, pack, state.users, productRequest, image)
       showMessage(labels.addSuccess)
       if (productRequest) f7.views.current.router.navigate('/home/')
       else f7.views.current.router.back()
@@ -126,7 +128,7 @@ const AddProduct = (props: Props) => {
           autofocus
           type="text" 
           value={name} 
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
         <ListInput 
@@ -135,7 +137,7 @@ const AddProduct = (props: Props) => {
           clearButton
           type="text" 
           value={alias} 
-          onChange={e => setAlias(e.target.value)}
+          onChange={(e) => setAlias(e.target.value)}
           onInputClear={() => setAlias('')}
         />
         <ListInput 
@@ -150,6 +152,7 @@ const AddProduct = (props: Props) => {
         <ListItem
           title={labels.trademark}
           smartSelect
+          className="ss"
           // @ts-ignore
           smartSelectParams={{
             // el: '#trademarks', 
@@ -160,11 +163,17 @@ const AddProduct = (props: Props) => {
             popupCloseLinkText: labels.close
           }}
         >
-          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
+          <select 
+            id="test"
+            name="trademarkId" 
+            value={trademarkId} 
+            onChange={e => handleTrademarkChange(e.target.value)} 
+          >
             <option value=""></option>
-            {trademarks.map(t => 
+            {state.trademarks.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
+            <option value="0">{labels.newValue}</option>
           </select>
         </ListItem>
         <ListItem
@@ -202,67 +211,46 @@ const AddProduct = (props: Props) => {
         >
           <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
             <option value=""></option>
-            {countries.map(c => 
+            {state.countries.map(c => 
               <option key={c.id} value={c.id}>{c.name}</option>
             )}
           </select>
         </ListItem>
-        <ListItem
-          title={labels.unitType}
+        <ListItem 
+          title={labels.unit}
           smartSelect
           // @ts-ignore
           smartSelectParams={{
-            // el: "#unitTypes", 
+            // el: "#units", 
             openIn: "sheet",
             closeOnSelect: true, 
           }}
         >
-          <select name="unitType" value={unitType} onChange={e => setUnitType(e.target.value)}>
+          <select name="unit" value={unit} onChange={e => setUnit(e.target.value)}>
             <option value=""></option>
-            {unitTypes.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
+            {units.map(u => 
+              <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
         </ListItem>
-        {unitType === 'w' &&
-          <ListItem>
-            <span>{labels.byWeight}</span>
-            <Toggle 
-              name="byWeight" 
-              color="green" 
-              checked={byWeight} 
-              onToggleChange={() => setByWeight(s => !s)}
-            />
-          </ListItem>
-        }
-        {!byWeight &&
-          <ListItem 
-            title={labels.unit}
-            smartSelect
-            // @ts-ignore
-            smartSelectParams={{
-              // el: "#units", 
-              openIn: "sheet",
-              closeOnSelect: true, 
-            }}
-          >
-            <select name="unitId" value={unitId} onChange={e => setUnitId(e.target.value)}>
-              <option value=""></option>
-              {units.map(u => 
-                <option key={u.id} value={u.id}>{u.name}</option>
-              )}
-            </select>
-          </ListItem>
-        }
+        <ListItem>
+          <span>{labels.byWeight}</span>
+          <Toggle 
+            name="byWeight" 
+            color="green" 
+            checked={byWeight} 
+            onToggleChange={() => setByWeight(s => !s)}
+          />
+        </ListItem>
         {!byWeight && 
           <ListInput 
-            name="typeUnits" 
+            name="unitsCount" 
             label={labels.unitsCount}
             clearButton
             type="number" 
-            value={typeUnits} 
-            onChange={e => setTypeUnits(e.target.value)}
-            onInputClear={() => setTypeUnits(0)}
+            value={unitsCount} 
+            onChange={e => setUnitsCount(e.target.value)}
+            onInputClear={() => setUnitsCount('')}
           />
         }
         <ListInput 
@@ -302,7 +290,7 @@ const AddProduct = (props: Props) => {
           clearButton
           type="number" 
           onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice(0)}
+          onInputClear={() => setPrice('')}
         />
         <input 
           ref={inputEl}
@@ -316,11 +304,13 @@ const AddProduct = (props: Props) => {
 
       </List>
 
-      {name && categoryId && countryId && unitType && packName && unitId && typeUnits && price && storeId &&
+      {name && categoryId && countryId && unit && packName && unitsCount && price && storeId &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>
       }
+              <button onClick={() => console.log('ss == ', f7.smartSelect.get("ss"))}>test</button>
+
     </Page>
   )
 }

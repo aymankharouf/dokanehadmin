@@ -14,7 +14,7 @@ const EditPrice = (props: Props) => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId)!)
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
   const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)!)
-  const [price, setPrice] = useState(0)
+  const [price, setPrice] = useState('')
   useEffect(() => {
     if (error) {
       showError(error)
@@ -73,7 +73,7 @@ const EditPrice = (props: Props) => {
           type="number" 
           value={price}
           onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice(0)}
+          onInputClear={() => setPrice('')}
         />
       </List>
       {price &&

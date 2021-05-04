@@ -81,7 +81,7 @@ const labels: Label = {
   storeId: 'المحل',
   type: 'التصنيف',
   store: 'المحل',
-  newUsers: 'عملاء جدد',
+  newUsers: 'مستخدمين جدد',
   approveSuccess: 'تم اﻻعتماد',
   approveUser: 'اعتماد عميل جديد',
   alarms: 'الاشعارات',
@@ -193,7 +193,7 @@ const labels: Label = {
   details: 'تفاصيل',
   productDetails: 'تفاصيل المنتج',
   bonusProduct: 'المنتج اﻻضافي',
-  editOffer: 'تعديل عرض',
+  editGroup: 'تعديل مجموعة/عرض',
   invalidPercents: 'الرجاء التأكد من النسب المدخلة',
   relatedProducts: 'المنتجات ذات العلاقة',
   closeExpired: 'صلاحية قصيرة',
@@ -363,7 +363,8 @@ const labels: Label = {
   rejection: 'رفض',
   rejectProduct: 'تم رفض طلب منتج',
   setImage: 'حمل الصورة',
-  packName: 'اسم العبوة'
+  packName: 'اسم العبوة',
+  newValue: 'قيمة جديدة'
 }
 
 export default labels

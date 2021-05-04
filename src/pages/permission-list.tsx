@@ -1,61 +1,23 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link, Button} from 'framework7-react'
+import {Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {permitUser, showMessage, showError, getMessage} from '../data/actions'
 import {User} from '../data/types'
+import moment from 'moment'
+import 'moment/locale/ar'
 
-type Props = {
-  id: string
-}
-const PermissionList = (props: Props) => {
+const PermissionList = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
-      const users = state.users.filter(u => (props.id === 's' && u.storeId) || (props.id === 'n' && u.storeName && !u.storeId))
-      return users.map(u => {
-        const storeName = state.stores.find(s => s.id === u.storeId)?.name || u.storeName || ''
-        return {
-          ...u,
-          storeName
-        }
-      })
+      const users = state.users.filter(u => (u.storeName && !u.storeId) || (!u.storeName && !u.position.lat && !u.locationId))
+      return users.sort((u1, u2) => u1.time > u2.time ? 1 : -1)
     })
-  }, [state.stores, state.users, props.id])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-  const handleUnPermit = (user: User) => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
-      try{
-        setInprocess(true)
-        const storeId = props.id === 's' ? '' : user.storeId!
-        await permitUser(user, storeId)
-        setInprocess(false)
-        showMessage(labels.unPermitSuccess)
-        f7.views.current.router.back()
-      } catch (err){
-        setInprocess(false)
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
-      }
-    })
-  }
+  }, [state.stores, state.users])
   return(
     <Page>
-      <Navbar title={props.id === 's' ? labels.storesOwners : labels.newOwners} backLink={labels.back}>
+      <Navbar title={labels.newUsers} backLink={labels.back}>
       <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>
@@ -77,16 +39,12 @@ const PermissionList = (props: Props) => {
             <ListItem title={labels.noData} /> 
           : users.map(u => 
               <ListItem
+                link={`/permit-user/${u.id}`}
                 title={u.name}
                 subtitle={u.storeName}
+                text={moment(u.time).fromNow()}
                 key={u.id}
-              >
-                {props.id === 'n' ?
-                  <Button text={labels.permitUser} slot="after" onClick={() => f7.views.current.router.navigate(`/permit-user/${u.id}`)} />
-                : 
-                  <Button text={labels.unPermitUser} slot="after" onClick={() => handleUnPermit(u)} />
-                }
-              </ListItem>
+              />
             )
           }
         </List>

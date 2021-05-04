@@ -25,7 +25,6 @@ const StateProvider = ({children}: Props) => {
     archivedProducts: [],
     archivedPacks: [],
     notifications: [],
-    units: [],
     productRequests: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
@@ -61,14 +60,12 @@ const StateProvider = ({children}: Props) => {
           product: doc.data().product,
           imageUrl: doc.data().imageUrl,
           byWeight: doc.data().byWeight,
-          typeUnits: doc.data().typeUnits,
-          standardUnits: doc.data().standardUnits,
-          unitId: doc.data().unitId,
+          unitsCount: doc.data().unitsCount,
           specialImage: doc.data().specialImage,
           subPackId: doc.data().subPackId,
           subQuantity: doc.data().subQuantity,
           price: minPrice,
-          weightedPrice: Math.floor(minPrice / doc.data().standardUnits),
+          weightedPrice: Math.floor(minPrice / doc.data().unitsCount),
         })
         if (doc.data().prices) {
           doc.data().prices.forEach((p: any) => {
@@ -151,7 +148,7 @@ const StateProvider = ({children}: Props) => {
               categoryId: doc.data().categoryId,
               trademarkId: doc.data().trademarkId,
               countryId: doc.data().countryId,
-              unitType: doc.data().unitType,
+              unit: doc.data().unit,
               imageUrl: doc.data().imageUrl,
               rating: doc.data().rating,
               ratingCount: doc.data().ratingCount,
@@ -174,6 +171,8 @@ const StateProvider = ({children}: Props) => {
               storeId: doc.data().storeId,
               storeName: doc.data().storeName,
               colors: doc.data().colors,
+              address: doc.data().address,
+              locationId: doc.data().locationId,
               time: doc.data().time.toDate()
             })
             if (doc.data().notifications) {
@@ -228,7 +227,7 @@ const StateProvider = ({children}: Props) => {
               country: doc.data().country,
               weight: doc.data().weight,
               price: doc.data().price,
-              userId: doc.data().userId,
+              storeId: doc.data().storeId,
               imageUrl: doc.data().imageUrl,
               time: doc.data().time.toDate()
             })

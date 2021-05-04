@@ -12,10 +12,10 @@ const AddCategory = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [ordering, setOrdering] = useState(() => {
-    const siblings = state.categories.filter(c => c.id === props.id)
+    const siblings = state.categories.filter(c => c.parentId === props.id)
     const siblingsOrder = siblings.map(s => s.ordering)
     const maxOrder = Math.max(...siblingsOrder) || 0
-    return maxOrder + 1
+    return (maxOrder + 1).toString()
   })
   useEffect(() => {
     if (error) {
@@ -54,7 +54,7 @@ const AddCategory = (props: Props) => {
           type="number" 
           value={ordering}
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering(0)}
+          onInputClear={() => setOrdering('')}
         />
       </List>
       {name && ordering &&

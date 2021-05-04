@@ -12,7 +12,7 @@ const EditCategory = (props: Props) => {
   const [error, setError] = useState('')
   const [category] = useState(() => state.categories.find(c => c.id === props.id)!)
   const [name, setName] = useState(category?.name)
-  const [ordering, setOrdering] = useState(category?.ordering)
+  const [ordering, setOrdering] = useState(category?.ordering.toString())
   const [parentId, setParentId] = useState(category?.parentId)
   const [isActive, setIsActive] = useState(category?.isActive)
   const [hasChanged, setHasChanged] = useState(false)
@@ -28,7 +28,7 @@ const EditCategory = (props: Props) => {
   })
   useEffect(() => {
     if (name !== category?.name
-    || ordering !== category?.ordering
+    || +ordering !== category?.ordering
     || parentId !== category?.parentId
     || isActive !== category?.isActive) setHasChanged(true)
     else setHasChanged(false)
@@ -45,7 +45,7 @@ const EditCategory = (props: Props) => {
         ...category,
         parentId,
         name,
-        ordering,
+        ordering: +ordering,
         isActive
       }
       editCategory(newCategory, category, state.categories)
@@ -95,7 +95,7 @@ const EditCategory = (props: Props) => {
           type="number" 
           value={ordering}
           onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering(0)}
+          onInputClear={() => setOrdering('')}
         />
         <ListItem>
           <span>{labels.isActive}</span>

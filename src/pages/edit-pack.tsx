@@ -12,7 +12,7 @@ const EditPack = (props: Props) => {
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
-  const [typeUnits, setTypeUnits] = useState(pack.typeUnits)
+  const [unitsCount, setUnitsCount] = useState(pack.unitsCount.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
@@ -20,12 +20,12 @@ const EditPack = (props: Props) => {
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   useEffect(() => {
     if (name !== pack.name
-    || typeUnits !== pack.typeUnits
+    || +unitsCount !== pack.unitsCount
     || byWeight !== pack.byWeight
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, typeUnits, byWeight, specialImage, imageUrl])
+  }, [pack, name, unitsCount, byWeight, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -55,7 +55,7 @@ const EditPack = (props: Props) => {
       const newPack = {
         ...pack,
         name,
-        typeUnits,
+        unitsCount: +unitsCount,
         byWeight,
       }
       editPack(newPack, pack, state.packs, image)
@@ -83,9 +83,9 @@ const EditPack = (props: Props) => {
           label={labels.unitsCount}
           clearButton
           type="number" 
-          value={typeUnits} 
-          onChange={e => setTypeUnits(e.target.value)}
-          onInputClear={() => setTypeUnits(0)}
+          value={unitsCount} 
+          onChange={e => setUnitsCount(e.target.value)}
+          onInputClear={() => setUnitsCount('')}
         />
         <ListItem>
           <span>{labels.byWeight}</span>
@@ -116,7 +116,7 @@ const EditPack = (props: Props) => {
         : ''}
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {!name || !typeUnits || !hasChanged ? '' :
+      {name && unitsCount && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

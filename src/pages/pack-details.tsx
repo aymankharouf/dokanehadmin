@@ -4,12 +4,10 @@ import {StateContext} from '../data/state-provider'
 import {deleteStorePack, deletePack, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {Pack, PackPrice, Store} from '../data/types'
+import {units} from '../data/config'
 
 type Props = {
   id: string
-}
-type ExtendedPack = Pack & {
-  detailsCount: number
 }
 type ExtendedPackPrice = PackPrice & {
   packInfo: Pack,
@@ -18,18 +16,11 @@ type ExtendedPackPrice = PackPrice & {
 const PackDetails = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
-  const [pack, setPack] = useState<ExtendedPack>(() => {
-    const pack = state.packs.find(p => p.id === props.id)!
-    const detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
-    return {
-      ...pack,
-      detailsCount
-    }
-  })
+  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
   const [packStores, setPackStores] = useState<ExtendedPackPrice[]>([])
   useEffect(() => {
     setPackStores(() => {
-      const packStores = state.packPrices.filter(p => p.packId === pack.id || state.packs.find(pa => pa.id === p.packId && pa.subPackId === pack.id))
+      const packStores = state.packPrices.filter(p => p.packId === pack?.id || state.packs.find(pa => pa.id === p.packId && pa.subPackId === pack?.id))
       const results = packStores.map(s => {
         const storeInfo = state.stores.find(st => st.id === s.storeId)!
         const packInfo = state.packs.find(p => p.id === s.packId)!
@@ -43,16 +34,6 @@ const PackDetails = (props: Props) => {
     })
   }, [pack, state.stores, state.packPrices, state.packs])
   useEffect(() => {
-    setPack(() => {
-      const pack = state.packs.find(p => p.id === props.id)!
-      let detailsCount = state.packPrices.filter(p => p.packId === pack.id).length
-      return {
-        ...pack,
-        detailsCount
-      }
-    })
-  }, [state.packs, state.packPrices, props.id])
-  useEffect(() => {
     if (error) {
       showError(error)
       setError('')
@@ -61,7 +42,7 @@ const PackDetails = (props: Props) => {
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        deletePack(pack.id!)
+        deletePack(pack?.id!)
         showMessage(labels.deleteSuccess)
         f7.views.current.router.back()
       } catch(err) {
@@ -83,27 +64,27 @@ const PackDetails = (props: Props) => {
   let i = 0
   return (
     <Page>
-      <Navbar title={`${pack.product.name}${pack.product.alias ? '-' + pack.product.alias : ''}`} backLink={labels.back} />
+      <Navbar title={`${pack?.product.name}${pack?.product.alias ? '-' + pack.product.alias : ''}`} backLink={labels.back} />
       <Card>
         <CardContent>
-          <div className="card-title">{pack.name}</div>
-          <img src={pack.imageUrl} className="img-card" alt={labels.noImage} />
+          <div className="card-title">{pack?.name}</div>
+          <img src={pack?.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
-          <p>{`${pack.typeUnits} ${state.units.find(u => u.id === pack.unitId)?.name}`}</p>
+          <p>{`${pack?.unitsCount} ${units.find(u => u.id === pack?.product.unit)?.name}`}</p>
         </CardFooter>
       </Card>
       <List mediaList>
         {packStores.map(s => 
           <ListItem 
             title={s.storeInfo?.name}
-            subtitle={s.packId === pack.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}
-            text={s.packId === pack.id ? '' : s.packInfo?.name}
+            subtitle={s.packId === pack?.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}
+            text={s.packId === pack?.id ? '' : s.packInfo?.name}
             footer={s.subQuantity ? `${labels.quantity}: ${s.subQuantity}` : ''}
             key={i++}
           >
             <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}`}</div>
-            {s.packId === pack.id ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
+            {s.packId === pack?.id ? <Link slot="after" iconMaterial="delete" onClick={()=> handleDeletePrice(s)}/> : ''}
           </ListItem>
         )}
       </List>
@@ -115,10 +96,10 @@ const PackDetails = (props: Props) => {
           <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-pack-store/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack.subPackId ? 'edit-offer' : 'edit-pack'}/${props.id}`)}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack?.subPackId ? 'edit-offer' : 'edit-pack'}/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
-          {pack.detailsCount === 0 && 
+          {state.packPrices.filter(p => p.packId === pack?.id).length === 0 && 
             <FabButton color="red" onClick={() => handleDelete()}>
               <Icon material="delete"></Icon>
             </FabButton>

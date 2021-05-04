@@ -2,7 +2,7 @@ import firebase, {prodApp} from './firebase'
 import labels from './labels'
 import {f7} from 'framework7-react'
 import {randomColors} from './config'
-import {Advert, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Rating, Store, Trademark, Unit, User} from './types'
+import {Advert, Category, Country, Error, Location, Log, Pack, PackPrice, Product, ProductRequest, Store, Trademark, User} from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -62,7 +62,7 @@ export const addPackPrice = (storePack: PackPrice, packs: Pack[], batch?: fireba
   }
 }
 
-export const addProduct = async (product: Product, pack: Pack, productRequest?: ProductRequest, image?: File) => {
+export const addProduct = async (product: Product, pack: Pack, users: User[], productRequest?: ProductRequest, image?: File) => {
   const batch = firebase.firestore().batch()
   const productRef = firebase.firestore().collection('products').doc()
   let imageUrl = ''
@@ -81,7 +81,8 @@ export const addProduct = async (product: Product, pack: Pack, productRequest?: 
   if (productRequest) {
     const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
     batch.delete(productRequestRef)
-    sendNotification(productRequest.userId, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
+    const user = users.find(u => u.storeId === productRequest.storeId)!
+    sendNotification(user.id, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
     const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
     const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
     await image.delete()
@@ -191,30 +192,6 @@ export const editCountry = (country: Country, countries: Country[]) => {
   const countryIndex = values.findIndex(c => c.id === country.id)
   values.splice(countryIndex, 1, country)
   firebase.firestore().collection('lookups').doc('c').update({
-    values
-  })
-}
-
-export const addUnit = (unit: Unit) => {
-  firebase.firestore().collection('lookups').doc('u').set({
-    values: firebase.firestore.FieldValue.arrayUnion(unit)
-  }, {merge: true})
-}
-
-export const editUnit = (unit: Unit, units: Unit[]) => {
-  const values = units.slice()
-  const unitIndex = values.findIndex(u => u.id === unit.id)
-  values.splice(unitIndex, 1, unit)
-  firebase.firestore().collection('lookups').doc('u').update({
-    values
-  })
-}
-
-export const deleteUnit = (unitId: string, units: Unit[]) => {
-  const values = units.slice()
-  const unitIndex = values.findIndex(u => u.id === unitId)
-  values.splice(unitIndex, 1)
-  firebase.firestore().collection('lookups').doc('u').update({
     values
   })
 }
@@ -368,10 +345,8 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     const packInfo = {
-      typeUnits: p.subQuantity! * newPack.typeUnits!,
-      standardUnits: p.subQuantity! * newPack.standardUnits!,
+      unitsCount: p.subQuantity! * newPack.unitsCount!,
       byWeight: newPack.byWeight,
-      unitId: newPack.unitId,
       imageUrl
     }
     if (image && !p.specialImage) {
@@ -484,13 +459,14 @@ export const editAdvert = async (advert: Advert, image?: File) => {
   firebase.firestore().collection('adverts').doc(id).update(others)
 }
 
-export const permitUser = (user: User, address: string) => {
+export const permitUser = (user: User, locationId: string, address: string) => {
   const batch = firebase.firestore().batch()
   const store = {
     name: user.storeName,
     mobile: user.mobile,
     isActive: true,
     position: user.position,
+    locationId,
     address
   }
   const storeRef = firebase.firestore().collection('stores').doc()
@@ -498,6 +474,7 @@ export const permitUser = (user: User, address: string) => {
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
     storeId: storeRef.id,
+    locationId
   })
   batch.commit()
 }
@@ -543,7 +520,7 @@ export const getArchivedProducts = async () => {
                 categoryId: doc.data().categoryId,
                 trademarkId: doc.data().trademarkId,
                 countryId: doc.data().countryId,
-                unitType: doc.data().unitType,
+                unit: doc.data().unit,
                 imageUrl: doc.data().imageUrl,
                 rating: doc.data().rating,
                 ratingCount: doc.data().ratingCount,
@@ -568,9 +545,7 @@ export const getArchivedPacks = async () => {
                 price: doc.data().price,
                 byWeight: doc.data().byWeight,
                 weightedPrice: doc.data().weightedPrice,
-                typeUnits: doc.data().typeUnits,
-                standardUnits: doc.data().standardUnits,
-                unitId: doc.data().unitId,
+                unitsCount: doc.data().unitsCount,
                 specialImage: doc.data().specialImage
               })
             })
@@ -606,11 +581,12 @@ export const categoryChildren = (categoryId: string, categories: Category[]) => 
   return result
 }
 
-export const rejectProductRequest = async (productRequest: ProductRequest) => {
+export const rejectProductRequest = async (productRequest: ProductRequest, users: User[]) => {
   const batch = firebase.firestore().batch()
   const productRequestRef = firebase.firestore().collection('product-requests').doc(productRequest.id)
   batch.delete(productRequestRef)
-  sendNotification(productRequest.userId, labels.rejection, `${labels.rejectProduct} ${productRequest.name}`, batch)
+  const user = users.find(u => u.storeId === productRequest.storeId)!
+  sendNotification(user.id, labels.rejection, `${labels.rejectProduct} ${productRequest.name}`, batch)
   batch.commit()
   const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
   const image = firebase.storage().ref().child('product-requests/' + productRequest.id + ext)
