@@ -64,6 +64,7 @@ const StateProvider = ({children}: Props) => {
           specialImage: doc.data().specialImage,
           subPackId: doc.data().subPackId,
           subQuantity: doc.data().subQuantity,
+          withGift: doc.data().withGift,
           price: minPrice,
           weightedPrice: Math.floor(minPrice / doc.data().unitsCount),
         })
@@ -152,7 +153,8 @@ const StateProvider = ({children}: Props) => {
               imageUrl: doc.data().imageUrl,
               rating: doc.data().rating,
               ratingCount: doc.data().ratingCount,
-              isArchived: doc.data().isArchived
+              isArchived: doc.data().isArchived,
+              demand: doc.data().demand
             })
           })
           dispatch({type: 'SET_PRODUCTS', payload: products})

@@ -10,7 +10,6 @@ import AddStorePack from './pages/add-store-pack'
 import AddProduct from './pages/add-product'
 import AddStore from './pages/add-store'
 import EditProduct from './pages/edit-product'
-import EditPrice from './pages/edit-price'
 import Countries from './pages/countries'
 import AddCountry from './pages/add-country'
 import Settings from './pages/settings'
@@ -97,7 +96,7 @@ const routes = [
     component: Products,
   },
   {
-    path: '/product-packs/:id/type/:type',
+    path: '/product-packs/:id/:type',
     component: ProductPacks
   },
   {
@@ -207,10 +206,6 @@ const routes = [
   {
     path: '/edit-group/:id',
     component: EditGroup
-  },
-  {
-    path: '/edit-price/:packId/store/:storeId',
-    component: EditPrice
   },
   {
     path: '/retreive-password/:id',

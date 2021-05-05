@@ -1,5 +1,5 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Block, Navbar, List, ListItem, Button} from 'framework7-react'
+import {f7, Page, Block, Navbar, List, ListItem, Link} from 'framework7-react'
 import moment from 'moment'
 import 'moment/locale/ar'
 import {StateContext} from '../data/state-provider'
@@ -33,16 +33,13 @@ const Logs = () => {
     }
   }, [error])
   const handleDelete = (log: Log) => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
-      try{
-        deleteLog(log)
-        showMessage(labels.deleteSuccess)
-      } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
-      }
-    })  
+    try{
+      deleteLog(log)
+      showMessage(labels.deleteSuccess)
+    } catch(err) {
+      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+    }
   }
-
   return(
     <Page>
       <Navbar title={labels.logs} backLink={labels.back} />
@@ -59,7 +56,7 @@ const Logs = () => {
                 key={l.id}
               >
                 <div className="list-subtext1">{l.error}</div>
-                <Button text={labels.delete} slot="after" onClick={() => handleDelete(l)} />
+                <Link slot="after" iconMaterial="delete" onClick={()=> handleDelete(l)}/>
               </ListItem>
             )
           }

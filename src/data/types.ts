@@ -28,7 +28,8 @@ export type Product = {
   rating: number,
   ratingCount: number,
   isArchived: boolean,
-  unit: string
+  unit: string,
+  demand: number
 }
 export type Pack = {
   id?: string,
@@ -41,7 +42,8 @@ export type Pack = {
   byWeight: boolean,
   unitsCount?: number,
   specialImage: boolean,
-  imageUrl?: string
+  imageUrl?: string,
+  withGift?: boolean
 }
 export type PackStore = {
   storeId: string,
@@ -79,7 +81,6 @@ export type User = {
   storeId?: string,
   notifications?: Notification[],
   ratings?: Rating[],
-  favorites?: string[],
   colors?: string[],
   address?: string,
   time: Date,

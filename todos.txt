@@ -101,10 +101,9 @@
 ---
 maps
 *alarm for false price/offer
-list of items to purchase for end user & list of requested items to store owner
+*list of items to purchase for end user & list of requested items to store owner
 salesmen adverts
 log for store activities
 store ordering
-add withgift flag
-add demand to product
-add rating after purchase
+*add withgift flag
+*add demand to product

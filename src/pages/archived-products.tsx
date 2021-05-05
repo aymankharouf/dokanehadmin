@@ -86,7 +86,7 @@ const ArchivedProducts = () => {
               <ListItem title={labels.noData} /> 
             : products.map(p => 
                 <ListItem
-                  link={`/product-packs/${p.id}/type/a`}
+                  link={`/product-packs/${p.id}/a`}
                   title={p.name}
                   subtitle={getCategoryName(p.categoryInfo!, state.categories)}
                   text={productOfText(p.countryInfo.name, p.trademarkInfo?.name)}

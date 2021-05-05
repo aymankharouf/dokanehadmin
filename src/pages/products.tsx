@@ -60,7 +60,7 @@ const Products = (props: Props) => {
               <ListItem title={labels.noData} /> 
             : products.map(p => 
                 <ListItem
-                  link={`/product-packs/${p.id}/type/n`}
+                  link={`/product-packs/${p.id}/n`}
                   title={p.name}
                   subtitle={p.alias}
                   text={p.description}

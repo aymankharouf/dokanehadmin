@@ -96,7 +96,7 @@ const PackDetails = (props: Props) => {
           <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-pack-store/${props.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack?.subPackId ? 'edit-offer' : 'edit-pack'}/${props.id}`)}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack?.subPackId ? 'edit-group' : 'edit-pack'}/${props.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
           {state.packStores.filter(p => p.packId === pack?.id).length === 0 && 

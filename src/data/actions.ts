@@ -522,7 +522,8 @@ export const getArchivedProducts = async () => {
                 imageUrl: doc.data().imageUrl,
                 rating: doc.data().rating,
                 ratingCount: doc.data().ratingCount,
-                isArchived: doc.data().isArchived
+                isArchived: doc.data().isArchived,
+                demand: doc.data().demand
               })
             })
           })
