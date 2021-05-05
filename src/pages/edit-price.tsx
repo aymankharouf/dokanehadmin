@@ -13,7 +13,7 @@ const EditPrice = (props: Props) => {
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === props.packId)!)
   const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
-  const [storePack] = useState(() => state.packPrices.find(p => p.packId === props.packId && p.storeId === props.storeId)!)
+  const [storePack] = useState(() => state.packStores.find(p => p.packId === props.packId && p.storeId === props.storeId)!)
   const [price, setPrice] = useState('')
   useEffect(() => {
     if (error) {
@@ -34,7 +34,7 @@ const EditPrice = (props: Props) => {
         price: +price,
         time: new Date()
       }
-      editPrice(newStorePack, state.packPrices)
+      editPrice(newStorePack, state.packStores)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {

@@ -39,11 +39,11 @@ export type Pack = {
   subQuantity?: number,
   weightedPrice?: number,
   byWeight: boolean,
-  unitsCount: number,
+  unitsCount?: number,
   specialImage: boolean,
   imageUrl?: string
 }
-export type PackPrice = {
+export type PackStore = {
   storeId: string,
   packId: string,
   price: number,
@@ -148,7 +148,7 @@ export type State = {
   users: User[],
   categories: Category[],
   packs: Pack[],
-  packPrices: PackPrice[],
+  packStores: PackStore[],
   adverts: Advert[],
   locations: Location[],
   countries: Country[],

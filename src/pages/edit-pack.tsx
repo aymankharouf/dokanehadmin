@@ -12,7 +12,7 @@ const EditPack = (props: Props) => {
   const [error, setError] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
-  const [unitsCount, setUnitsCount] = useState(pack.unitsCount.toString())
+  const [unitsCount, setUnitsCount] = useState(pack.unitsCount?.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
@@ -20,7 +20,7 @@ const EditPack = (props: Props) => {
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   useEffect(() => {
     if (name !== pack.name
-    || +unitsCount !== pack.unitsCount
+    || (Number(unitsCount) || 0) !== (pack.unitsCount ?? 0)
     || byWeight !== pack.byWeight
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
@@ -55,7 +55,7 @@ const EditPack = (props: Props) => {
       const newPack = {
         ...pack,
         name,
-        unitsCount: +unitsCount,
+        unitsCount: Number(unitsCount),
         byWeight,
       }
       editPack(newPack, pack, state.packs, image)

@@ -2,7 +2,7 @@ import {useState, useContext, useEffect} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {addPackPrice, showMessage, showError, getMessage} from '../data/actions'
+import {addPackStore, showMessage, showError, getMessage} from '../data/actions'
 
 type Props = {
   id: string
@@ -21,7 +21,7 @@ const AddPackStore = (props: Props) => {
   }, [error])
   const handleSubmit = () => {
     try{
-      if (state.packPrices.find(p => p.packId === pack.id && p.storeId === storeId)) {
+      if (state.packStores.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
       if (Number(price) !== Number(Number(price).toFixed(2))) {
@@ -36,7 +36,7 @@ const AddPackStore = (props: Props) => {
         price: +price,
         time: new Date()
       }
-      addPackPrice(storePack, state.packs)
+      addPackStore(storePack, state.packs)
       showMessage(labels.addSuccess)
       f7.views.current.router.back()
     } catch(err) {

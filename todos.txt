@@ -100,8 +100,11 @@
 *store trans per month
 ---
 maps
-special price for users
-alarm for false price/offer
+*alarm for false price/offer
 list of items to purchase for end user & list of requested items to store owner
-add units
-salesman adverts
+salesmen adverts
+log for store activities
+store ordering
+add withgift flag
+add demand to product
+add rating after purchase

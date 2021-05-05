@@ -1,9 +1,10 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle, Input} from 'framework7-react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle, Actions, ActionsButton} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
-import {addProduct, showMessage, showError, getMessage, addTrademark} from '../data/actions'
+import {addProduct, showMessage, showError, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
+import { Category } from '../data/types'
 
 type Props = {
   id: string
@@ -25,19 +26,25 @@ const AddProduct = (props: Props) => {
   const [byWeight, setByWeight] = useState(false)
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
-  const selectEl = useRef<HTMLInputElement | null>(null);
+  const [actionOpened, setActionOpened] = useState(false);
   const [price, setPrice] = useState(productRequest?.price.toString() || '')
   const [storeId, setStoreId] = useState(productRequest?.storeId || '')
-  const [categories] = useState(() => {
-    const categories = state.categories.filter(c => c.isLeaf)
-    return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-  })
+  const [categories, setCategories] = useState<Category[]>([])
+  useEffect(() => {
+    setCategories(() => {
+      const categories = state.categories.filter(c => c.isLeaf)
+      return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+    })
+  }, [state.categories])
   useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
+  useEffect(() => {
+    if (unitsCount && unit && !packName) setPackName(`${unitsCount} ${units.find(p => p.id === unit)?.name}`)
+  }, [unitsCount, unit, packName])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
@@ -55,27 +62,6 @@ const AddProduct = (props: Props) => {
     })
     fileReader.readAsDataURL(files[0])
     setImage(files[0])
-  }
-  const handleTrademarkChange = (value: string) => {
-    if (value === '0') {
-      f7.dialog.prompt(labels.tradematk, labels.add, newValue => {
-        try{
-          if (state.trademarks.filter(t => t.name === newValue).length > 0) {
-            throw new Error('duplicateName')
-          }
-          const id = Math.random().toString()
-          addTrademark({
-            id,
-            name: newValue
-          })
-          setTrademarkId(id)
-          const select = f7.smartSelect.get('#trademarks')
-          select.setValue('hhhhhh')
-        } catch(err) {
-          setError(getMessage(f7.views.current.router.currentRoute.path, err))
-        }
-      })
-    } else setTrademarkId(value)
   }
   const handleSubmit = () => {
     try{
@@ -95,7 +81,7 @@ const AddProduct = (props: Props) => {
         unit,
         imageUrl
       }
-      const prices = [{
+      const stores = [{
         storeId, 
         price: +price, 
         time: new Date()
@@ -103,7 +89,7 @@ const AddProduct = (props: Props) => {
       const pack = {
         name: packName,
         product,
-        prices,
+        stores,
         unitsCount: +unitsCount,
         byWeight,
         isArchived: false,
@@ -167,13 +153,12 @@ const AddProduct = (props: Props) => {
             id="test"
             name="trademarkId" 
             value={trademarkId} 
-            onChange={e => handleTrademarkChange(e.target.value)} 
+            onChange={e =>setTrademarkId(e.target.value)} 
           >
             <option value=""></option>
             {state.trademarks.map(t => 
               <option key={t.id} value={t.id}>{t.name}</option>
             )}
-            <option value="0">{labels.newValue}</option>
           </select>
         </ListItem>
         <ListItem
@@ -309,8 +294,20 @@ const AddProduct = (props: Props) => {
           <Icon material="done"></Icon>
         </Fab>
       }
-              <button onClick={() => console.log('ss == ', f7.smartSelect.get("ss"))}>test</button>
-
+      <Fab position="right-top" slot="fixed" className="top-fab" onClick={() => setActionOpened(true)}>
+        <Icon material="add"></Icon>
+      </Fab>
+      <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-trademark/')}>
+          {labels.addTrademark}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-country/')}>
+          {labels.addCountry}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-category/0')}>
+          {labels.addCategory}
+        </ActionsButton>
+      </Actions>
     </Page>
   )
 }

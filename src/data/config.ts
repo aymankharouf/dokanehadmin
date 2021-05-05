@@ -17,8 +17,8 @@ export const advertTypes = [
 ]
 
 export const units = [
-  {id: 'g', name: 'غم', type: 'w', factor: 1},
-  {id: 'kg', name: 'كغم', type: 'w', factor: 1000},
+  {id: 'g', name: 'غرام', type: 'w', factor: 1},
+  {id: 'kg', name: 'كيلو', type: 'w', factor: 1000},
   {id: 'l', name: 'لتر', type: 'v', factor: 1000},
   {id: 'ml', name: 'مل', type: 'v', factor: 1},
   {id: 'c', name: 'حبة', type: 'c', factor: 1},
