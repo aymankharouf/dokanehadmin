@@ -10,7 +10,7 @@ const Panel = () => {
   useEffect(() => {
     const passwordRequests = state.passwordRequests.length
     const productRequests = state.productRequests.length
-    const newUsers = state.users.filter(u => (u.storeName && !u.storeId) || (!u.storeName && !u.position.lat && !u.locationId)).length
+    const newUsers = state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)).length
     setApprovalsAcount(passwordRequests + productRequests + newUsers)
   }, [state.users, state.passwordRequests, state.productRequests])
   const handleLogout = () => {
@@ -29,7 +29,6 @@ const Panel = () => {
         {state.user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
         {state.user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/users/o" title={labels.storesOwners} view="#main-view" panelClose /> : ''}
       </List>
     </Page>
   )

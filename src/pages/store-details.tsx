@@ -2,6 +2,7 @@ import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { storeTypes } from '../data/config'
 
 type Props = {
   id: string
@@ -41,6 +42,13 @@ const StoreDetails = (props: Props) => {
           />
         </ListItem>
         <ListInput
+          name="type"
+          label={labels.type}
+          value={storeTypes.find(t => t.id === store.type)!.name}
+          type="text"
+          readonly
+        />
+        <ListInput
           name="location"
           label={labels.location}
           value={state.locations.find(l => l.id === store.locationId)?.name || ''}
@@ -64,9 +72,6 @@ const StoreDetails = (props: Props) => {
           </FabButton>
           <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-store/${props.id}`)}>
             <Icon material="edit"></Icon>
-          </FabButton>
-          <FabButton color="red" onClick={() => f7.views.current.router.navigate(`/store-owners/${store.id}`)}>
-            <Icon material="perm_identity"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>

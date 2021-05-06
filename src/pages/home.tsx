@@ -7,7 +7,7 @@ const Home = () => {
   const [mainPages] = useState(() => [
     {id: '1', name: labels.stores, path: '/stores/'},
     {id: '2', name: labels.products, path: '/products/0'},
-    {id: '3', name: labels.users, path: '/users/u'},
+    {id: '3', name: labels.users, path: '/user-types/'},
     {id: '4', name: labels.notifications, path: '/notifications/'}
   ])
   let i = 0

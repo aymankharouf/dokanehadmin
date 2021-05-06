@@ -28,8 +28,7 @@ export type Product = {
   rating: number,
   ratingCount: number,
   isArchived: boolean,
-  unit: string,
-  demand: number
+  unit: string
 }
 export type Pack = {
   id?: string,
@@ -84,7 +83,8 @@ export type User = {
   colors?: string[],
   address?: string,
   time: Date,
-  locationId?: string
+  locationId?: string,
+  type: string
 }
 export type Advert = {
   id?: string,
@@ -120,7 +120,8 @@ export type Store = {
   mobile: string,
   address: string,
   position: Position,
-  locationId?: string
+  locationId?: string,
+  type: string
 }
 export type Log = {
   id: string,

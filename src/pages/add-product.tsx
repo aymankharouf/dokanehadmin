@@ -77,7 +77,6 @@ const AddProduct = (props: Props) => {
         countryId,
         rating: 0,
         ratingCount: 0,
-        demand: 0,
         isArchived: false,
         unit,
         imageUrl

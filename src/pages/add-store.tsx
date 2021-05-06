@@ -3,6 +3,7 @@ import {addStore, showMessage, showError, getMessage} from '../data/actions'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
+import { storeTypes } from '../data/config'
 
 const AddStore = () => {
   const {state} = useContext(StateContext)
@@ -13,6 +14,7 @@ const AddStore = () => {
   const [address, setAddress] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
+  const [type, setType] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const [position, setPosition] = useState({lat: 0, lng: 0})
   useEffect(() => {
@@ -55,6 +57,7 @@ const AddStore = () => {
         locationId,
         address,
         position,
+        type,
         time: new Date()
       }
       addStore(store)
@@ -99,6 +102,23 @@ const AddStore = () => {
           />
         </ListItem>
         <ListItem 
+          title={labels.type}
+          smartSelect
+          // @ts-ignore
+          smartSelectParams={{
+            // el: "#locations", 
+            openIn: "sheet",
+            closeOnSelect: true, 
+          }}
+        >
+          <select name="type" value={type} onChange={e => setType(e.target.value)}>
+            <option value=""></option>
+            {storeTypes.map(t => 
+              <option key={t.id} value={t.id}>{t.name}</option>
+            )}
+          </select>
+        </ListItem>
+        <ListItem 
           title={labels.location}
           smartSelect
           // @ts-ignore
@@ -132,7 +152,7 @@ const AddStore = () => {
           onClick={handleSetPosition}
         />
       </List>
-      {name && locationId && !mobileErrorMessage && position.lat &&
+      {name && locationId && type && !mobileErrorMessage && position.lat &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

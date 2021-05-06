@@ -24,3 +24,15 @@ export const units = [
   {id: 'c', name: 'حبة', type: 'c', factor: 1},
   {id: 'd', name: 'دزينة', type: 'c', factor: 12}
 ]
+
+export const storeTypes = [
+  {id: 's', name: 'محل'},
+  {id: 'w', name: 'جملة'},
+  {id: 'd', name: 'موزع'}
+]
+
+export const userTypes = [
+  {id: 's', name: 'محل'},
+  {id: 'd', name: 'موزع/جملة'},
+  {id: 'n', name: 'عادي'}
+]

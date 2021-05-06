@@ -11,7 +11,7 @@ const PermissionList = () => {
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
-      const users = state.users.filter(u => (u.storeName && !u.storeId) || (!u.storeName && !u.position.lat && !u.locationId))
+      const users = state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId))
       return users.sort((u1, u2) => u1.time > u2.time ? 1 : -1)
     })
   }, [state.stores, state.users])

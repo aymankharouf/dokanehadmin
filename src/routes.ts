@@ -24,7 +24,6 @@ import EditCountry from './pages/edit-country'
 import EditCategory from './pages/edit-category'
 import EditStore from './pages/edit-store'
 import RetreivePassword from './pages/retreive-password'
-import StoreOwners from './pages/store-owners'
 import ChangePassword from './pages/change-password'
 import Locations from './pages/locations'
 import AddLocation from './pages/add-location'
@@ -51,6 +50,7 @@ import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
 import ProductRequests from './pages/product-requests'
 import ProductRequestDetails from './pages/product-request-details'
+import UserTypes from './pages/user-types'
 
 const routes = [
   {
@@ -212,10 +212,6 @@ const routes = [
     component: RetreivePassword,
   },
   {
-    path: '/store-owners/:id',
-    component: StoreOwners,
-  },
-  {
     path: '/locations/',
     component: Locations
   },
@@ -274,6 +270,10 @@ const routes = [
   {
     path: '/product-request-details/:id',
     component: ProductRequestDetails
+  },
+  {
+    path: '/user-types/',
+    component: UserTypes
   },
   {
     path: '(.*)',

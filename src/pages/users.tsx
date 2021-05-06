@@ -5,6 +5,7 @@ import 'moment/locale/ar'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {User} from '../data/types'
+import {userTypes} from '../data/config'
 
 type Props = {
   id: string
@@ -14,14 +15,14 @@ const Users = (props: Props) => {
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
-      const users = state.users.filter(u => props.id === 'o' ? u.storeName : !u.storeName)
+      const users = state.users.filter(u => u.type === props.id)
       return users.sort((u1, u2) => u1.time > u2.time ? -1 : 1)
     })
   }, [state.users, props.id])
   if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
-      <Navbar title={props.id === 'o' ? labels.storesOwners : labels.users} backLink={labels.back}>
+      <Navbar title={userTypes.find(t => t.id === props.id)?.name} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

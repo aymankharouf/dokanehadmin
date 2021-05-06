@@ -16,7 +16,7 @@ const Approvals = () => {
   const [sections, setSections] = useState<Section[]>([])
   const [newUsers, setNewUsers] = useState<User[]>([])
   useEffect(() => {
-    setNewUsers(() => state.users.filter(u => (u.storeName && !u.storeId) || (!u.storeName && !u.position.lat && !u.locationId)))
+    setNewUsers(() => state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)))
   }, [state.users])
   useEffect(() => {
     setSections(() => [

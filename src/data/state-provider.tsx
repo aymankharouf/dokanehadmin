@@ -153,8 +153,7 @@ const StateProvider = ({children}: Props) => {
               imageUrl: doc.data().imageUrl,
               rating: doc.data().rating,
               ratingCount: doc.data().ratingCount,
-              isArchived: doc.data().isArchived,
-              demand: doc.data().demand
+              isArchived: doc.data().isArchived
             })
           })
           dispatch({type: 'SET_PRODUCTS', payload: products})
@@ -175,7 +174,8 @@ const StateProvider = ({children}: Props) => {
               colors: doc.data().colors,
               address: doc.data().address,
               locationId: doc.data().locationId,
-              time: doc.data().time.toDate()
+              time: doc.data().time.toDate(),
+              type: doc.data().type
             })
             if (doc.data().notifications) {
               doc.data().notifications.forEach((n: Notification) => {
@@ -198,7 +198,8 @@ const StateProvider = ({children}: Props) => {
               address: doc.data().address,
               isActive: doc.data().isActive,
               locationId: doc.data().locationId,
-              position: doc.data().position
+              position: doc.data().position,
+              type: doc.data().type
             })
           })
           dispatch({type: 'SET_STORES', payload: stores})

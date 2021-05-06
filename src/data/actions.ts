@@ -457,23 +457,31 @@ export const editAdvert = async (advert: Advert, image?: File) => {
   firebase.firestore().collection('adverts').doc(id).update(others)
 }
 
-export const permitUser = (user: User, locationId: string, address: string) => {
+export const permitUser = (user: User, type: string, storeName: string, locationId: string, address: string) => {
   const batch = firebase.firestore().batch()
-  const store = {
-    name: user.storeName,
-    mobile: user.mobile,
-    isActive: true,
-    position: user.position,
-    locationId,
-    address
-  }
-  const storeRef = firebase.firestore().collection('stores').doc()
-  batch.set(storeRef, store)
   const userRef = firebase.firestore().collection('users').doc(user.id)
-  batch.update(userRef, {
-    storeId: storeRef.id,
-    locationId
-  })
+  if (user.type === 'n') {
+    batch.update(userRef, {
+      locationId,
+    })
+  } else {
+    const store = {
+      name: storeName,
+      mobile: user.mobile,
+      isActive: true,
+      position: user.position,
+      locationId,
+      address,
+      type
+    }
+    const storeRef = firebase.firestore().collection('stores').doc()
+    batch.set(storeRef, store)
+    batch.update(userRef, {
+      storeId: storeRef.id,
+      locationId,
+      type
+    })
+  }
   batch.commit()
 }
 
@@ -522,8 +530,7 @@ export const getArchivedProducts = async () => {
                 imageUrl: doc.data().imageUrl,
                 rating: doc.data().rating,
                 ratingCount: doc.data().ratingCount,
-                isArchived: doc.data().isArchived,
-                demand: doc.data().demand
+                isArchived: doc.data().isArchived
               })
             })
           })

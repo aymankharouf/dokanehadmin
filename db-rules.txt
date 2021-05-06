@@ -8,37 +8,43 @@ service cloud.firestore {
       allow update: if request.auth.uid == userId || request.auth.token.name == 'a';
       allow delete: if request.auth.token.name == 'a';
     }
-    match /products/{productId} {
-    	allow read, write: if request.auth.token.name == 'a';
+    match /products/{id} {
+    	allow read, create, delete: if request.auth.token.name == 'a';
+      allow update: if request.auth.uid != null;
     }
-    match /packs/{packId} {
+    match /pack-requests/{id} {
+    	allow read, write: if request.auth.token.name != 'n';
+    }
+    match /packs/{id} {
     	allow read;
-    	allow create, delete: if request.auth.token.name == 'a';
-      allow update: if request.auth.token.name == 's';
-    }
-    match /stores/{storeId} {
-    	allow read, write: if request.auth.token.name == 'a';
-    }
-    match /lookups/{lookupId} {
-    	allow read;
-      allow write: if request.auth.token.name == 'a';
-    }
-    match /categories/{categoryId} {
-    	allow read;
-    	allow write: if request.auth.token.name == 'a';
-    }
-    match /password-requests/{requestId} {
-    	allow read, write;
+    	allow create: if request.auth.token.name != 'n';
+      allow update: if request.auth.uid != null;
+      allow delete: if request.auth.token.name == 'a';
     }
     match /product-requests/{id} {
     	allow read, write;
     }
-    match /logs/{logId} {
+    match /stores/{id} {
+    	allow read, update: if request.auth.uid != 'null';
+      allow create, delete: if request.auth.token.name == 'a';
+    }
+    match /lookups/{id} {
+    	allow read;
+      allow write: if request.auth.token.name == 'a';
+    }
+    match /categories/{id} {
+    	allow read;
+    	allow write: if request.auth.token.name == 'a';
+    }
+    match /password-requests/{id} {
+    	allow read, write;
+    }
+    match /logs/{id} {
     	allow read: if request.auth.token.name == 'a';
       allow create: if request.auth.uid != null;
       allow update, delete: if request.auth.token.name == 'a';
     }
-     match /adverts/{advertId} {
+     match /adverts/{id} {
     	allow read;
       allow write: if request.auth.token.name == 'a';
     }
