@@ -54,7 +54,8 @@ const AddPack = (props: Props) => {
         unitsCount: +unitsCount,
         byWeight,
         isArchived: false,
-        specialImage
+        specialImage,
+        forSale: true
       }
       addPack(pack, product, image)
       showMessage(labels.addSuccess)

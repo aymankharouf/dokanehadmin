@@ -364,7 +364,8 @@ const labels: Label = {
   rejectProduct: 'تم رفض طلب منتج',
   setImage: 'حمل الصورة',
   packName: 'اسم العبوة',
-  newValue: 'قيمة جديدة'
+  newValue: 'قيمة جديدة',
+  permissionAdded: 'تم منحك صلاحيات'
 }
 
 export default labels

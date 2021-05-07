@@ -84,6 +84,7 @@ const AddProduct = (props: Props) => {
       const stores = [{
         storeId, 
         price: +price, 
+        isRetail: state.stores.find(s => s.id === storeId)!.type === 's', 
         time: new Date()
       }]
       const pack = {
@@ -93,7 +94,8 @@ const AddProduct = (props: Props) => {
         unitsCount: +unitsCount,
         byWeight,
         isArchived: false,
-        specialImage: false
+        specialImage: false,
+        forSale: true
       }
       addProduct(product, pack, state.users, productRequest, image)
       showMessage(labels.addSuccess)

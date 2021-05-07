@@ -1,7 +1,7 @@
 import firebase, {prodApp} from './firebase'
 import labels from './labels'
 import {f7} from 'framework7-react'
-import {randomColors} from './config'
+import {randomColors, storeTypes} from './config'
 import {Advert, Category, Country, Error, Location, Log, Pack, PackStore, Product, ProductRequest, Store, Trademark, User} from './types'
 
 export const getMessage = (path: string, error: Error) => {
@@ -481,6 +481,7 @@ export const permitUser = (user: User, type: string, storeName: string, location
       locationId,
       type
     })
+    sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${storeTypes.find(t => t.id === type)!.name}`, batch)
   }
   batch.commit()
 }
@@ -550,6 +551,7 @@ export const getArchivedPacks = async () => {
                 imageUrl: doc.data().imageUrl,
                 price: doc.data().price,
                 byWeight: doc.data().byWeight,
+                forSale: doc.data().forSale,
                 weightedPrice: doc.data().weightedPrice,
                 unitsCount: doc.data().unitsCount,
                 specialImage: doc.data().specialImage

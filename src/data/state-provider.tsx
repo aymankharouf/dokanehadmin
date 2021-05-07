@@ -65,6 +65,7 @@ const StateProvider = ({children}: Props) => {
           subPackId: doc.data().subPackId,
           subQuantity: doc.data().subQuantity,
           withGift: doc.data().withGift,
+          forSale: doc.data().forSale,
           price: minPrice,
           weightedPrice: Math.floor(minPrice / doc.data().unitsCount),
         })
@@ -74,6 +75,7 @@ const StateProvider = ({children}: Props) => {
               packId: doc.id,
               storeId: s.storeId,
               price: s.price,
+              isRetail: s.isRetail,
               time: s.time.toDate(),
             })
           })

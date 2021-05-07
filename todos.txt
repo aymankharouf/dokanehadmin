@@ -102,8 +102,8 @@
 maps
 *alarm for false price/offer
 *list of items to purchase for end user & list of requested items to store owner
-salesmen adverts
+*salesmen adverts
 log for store activities
-store ordering
+store ordering (distance, price, rating)
 *add withgift flag
-*add demand to product
+confirmatiom messages between users

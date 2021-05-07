@@ -14,6 +14,8 @@ const AddGroup = (props: Props) => {
   const [subPackId, setSubPackId] = useState('')
   const [subQuantity, setSubQuantity] = useState('')
   const [specialImage, setSpecialImage] = useState(false)
+  const [forSale, setForSale] = useState(true)
+  const [withGift, setWithGift] = useState(false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.id)!)
   const [packs] = useState(() => state.packs.filter(p => p.product.id === props.id && !p.byWeight))
@@ -66,7 +68,9 @@ const AddGroup = (props: Props) => {
         unitsCount: +subQuantity * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
         isArchived: false,
-        specialImage
+        specialImage,
+        withGift,
+        forSale
       }
       addPack(pack, product, image, subPackInfo)
       showMessage(labels.addSuccess)
@@ -119,6 +123,26 @@ const AddGroup = (props: Props) => {
           onInputClear={() => setSubQuantity('')}
           onBlur={() => generateName()}
         />
+        <ListItem>
+          <span>{labels.forSale}</span>
+          <Toggle 
+            name="forSale" 
+            color="green" 
+            checked={forSale} 
+            onToggleChange={() => setForSale(s => !s)}
+          />
+        </ListItem>
+        {forSale && 
+          <ListItem>
+            <span>{labels.withGift}</span>
+            <Toggle 
+              name="withGift" 
+              color="green" 
+              checked={withGift} 
+              onToggleChange={() => setWithGift(s => !s)}
+            />
+          </ListItem>
+        }
         <ListItem>
           <span>{labels.specialImage}</span>
           <Toggle 

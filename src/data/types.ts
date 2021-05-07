@@ -42,12 +42,14 @@ export type Pack = {
   unitsCount?: number,
   specialImage: boolean,
   imageUrl?: string,
-  withGift?: boolean
+  withGift?: boolean,
+  forSale: boolean
 }
 export type PackStore = {
   storeId: string,
   packId: string,
   price: number,
+  isRetail: boolean,
   time: Date,
   subQuantity?: number,
   unitPrice?: number,
