@@ -18,7 +18,7 @@ const EditProduct = (props: Props) => {
   const [categoryId, setCategoryId] = useState(product.categoryId)
   const [trademarkId, setTrademarkId] = useState(product.trademarkId)
   const [countryId, setCountryId] = useState(product.countryId)
-  const [unit, setUnit] = useState('')
+  const [unit, setUnit] = useState(product.unit)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState<File>()
   const [fileErrorMessage, setFileErrorMessage] = useState('')
@@ -99,7 +99,7 @@ const EditProduct = (props: Props) => {
           label={labels.alias}
           clearButton
           type="text" 
-          value={name} 
+          value={alias} 
           onChange={e => setAlias(e.target.value)}
           onInputClear={() => setAlias('')}
         />
@@ -173,7 +173,7 @@ const EditProduct = (props: Props) => {
           </select>
         </ListItem>
         <ListItem
-          title={labels.unitType}
+          title={labels.unit}
           smartSelect
           // @ts-ignore
           smartSelectParams={{
@@ -182,7 +182,7 @@ const EditProduct = (props: Props) => {
             closeOnSelect: true, 
           }}
         >
-          <select name="unitType" value={unit} onChange={e => setUnit(e.target.value)}>
+          <select name="unit" value={unit} onChange={e => setUnit(e.target.value)}>
             <option value=""></option>
             {units.map(u => 
               <option key={u.id} value={u.id}>{u.name}</option>

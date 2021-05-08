@@ -209,7 +209,7 @@ const labels: Label = {
   grossPrice: 'السعر اﻻجمالي',
   addBulk: 'اضافة حزمة تجميعية',
   editBulk: 'تعديل حزمة تجميعية',
-  invalidQuantity: 'الرجاء التأكد من الكمية المدخلة',
+  invalidCount: 'الرجاء التأكد من العدد المدخل',
   currentPrice: 'السعر الحالي',
   allocate: 'وضع',
   offerUpTo: 'عرض حتى تاريخ',
@@ -365,7 +365,8 @@ const labels: Label = {
   setImage: 'حمل الصورة',
   packName: 'اسم العبوة',
   newValue: 'قيمة جديدة',
-  permissionAdded: 'تم منحك صلاحيات'
+  permissionAdded: 'تم منحك صلاحيات',
+  count: 'العدد'
 }
 
 export default labels

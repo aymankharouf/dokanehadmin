@@ -24,6 +24,7 @@ const AddProduct = (props: Props) => {
   const [packName, setPackName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [byWeight, setByWeight] = useState(false)
+  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)!.type === 's')
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
   const [actionOpened, setActionOpened] = useState(false);
@@ -95,7 +96,7 @@ const AddProduct = (props: Props) => {
         byWeight,
         isArchived: false,
         specialImage: false,
-        forSale: true
+        forSale
       }
       addProduct(product, pack, state.users, productRequest, image)
       showMessage(labels.addSuccess)
@@ -219,6 +220,15 @@ const AddProduct = (props: Props) => {
               <option key={u.id} value={u.id}>{u.name}</option>
             )}
           </select>
+        </ListItem>
+        <ListItem>
+          <span>{labels.forSale}</span>
+          <Toggle 
+            name="forSale" 
+            color="green" 
+            checked={forSale} 
+            onToggleChange={() => setForSale(s => !s)}
+          />
         </ListItem>
         <ListItem>
           <span>{labels.byWeight}</span>

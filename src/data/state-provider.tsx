@@ -1,7 +1,7 @@
 import {createContext, useReducer, useEffect} from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest} from './types'
+import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest} from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -25,7 +25,8 @@ const StateProvider = ({children}: Props) => {
     archivedProducts: [],
     archivedPacks: [],
     notifications: [],
-    productRequests: []
+    productRequests: [],
+    storeRequests: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -63,7 +64,7 @@ const StateProvider = ({children}: Props) => {
           unitsCount: doc.data().unitsCount,
           specialImage: doc.data().specialImage,
           subPackId: doc.data().subPackId,
-          subQuantity: doc.data().subQuantity,
+          subCount: doc.data().subCount,
           withGift: doc.data().withGift,
           forSale: doc.data().forSale,
           price: minPrice,
@@ -134,11 +135,6 @@ const StateProvider = ({children}: Props) => {
           if (doc.data()) dispatch({type: 'SET_TRADEMARKS', payload: doc.data()?.values})
         }, err => {
           unsubscribeTrademarks()
-        })
-        const unsubscribeUnits = firebase.firestore().collection('lookups').doc('u').onSnapshot(doc => {
-          if (doc.data()) dispatch({type: 'SET_UNITS', payload: doc.data()?.values})
-        }, err => {
-          unsubscribeUnits()
         })
         const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
           let products: Product[] = []
@@ -241,6 +237,20 @@ const StateProvider = ({children}: Props) => {
         }, err => {
           unsubscribeProductRequests()
         })  
+        const unsubscribeStoreRequests = firebase.firestore().collection('store-requests').onSnapshot(docs => {
+          let storeRequests: StoreRequest[] = []
+          docs.forEach(doc => {
+            storeRequests.push({
+              id: doc.id,
+              storeId: doc.data().storeId,
+              packId: doc.data().packId,
+            })
+          })
+          dispatch({type: 'SET_STORE_REQUESTS', payload: storeRequests})
+        }, err => {
+          unsubscribeStoreRequests()
+        })  
+
       } else {
         dispatch({type: 'LOGOUT'})
       }

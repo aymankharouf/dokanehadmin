@@ -12,7 +12,7 @@ const AddGroup = (props: Props) => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [subPackId, setSubPackId] = useState('')
-  const [subQuantity, setSubQuantity] = useState('')
+  const [subCount, setSubCount] = useState('')
   const [specialImage, setSpecialImage] = useState(false)
   const [forSale, setForSale] = useState(true)
   const [withGift, setWithGift] = useState(false)
@@ -31,8 +31,8 @@ const AddGroup = (props: Props) => {
   }, [state.packs, subPackId])
   const generateName = () => {
     let suggestedName
-    if (subPackId && subQuantity) {
-      suggestedName = `${+subQuantity > 1 ? subQuantity + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
+    if (subPackId && subCount) {
+      suggestedName = `${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}`
       if (!name) setName(suggestedName)
     }
   }
@@ -57,15 +57,15 @@ const AddGroup = (props: Props) => {
       if (state.packs.find(p => p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
-      if (Number(subQuantity) <= 1) {
-        throw new Error('invalidQuantity')
+      if (Number(subCount) <= 1) {
+        throw new Error('invalidCount')
       }
       const pack = {
         product,
         name,
         subPackId,
-        subQuantity: +subQuantity,
-        unitsCount: +subQuantity * subPackInfo.unitsCount!,
+        subCount: +subCount,
+        unitsCount: +subCount * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
         isArchived: false,
         specialImage,
@@ -114,13 +114,13 @@ const AddGroup = (props: Props) => {
           </select>
         </ListItem>
         <ListInput 
-          name="subQuantity" 
-          label={labels.quantity}
-          value={subQuantity}
+          name="subCount" 
+          label={labels.count}
+          value={subCount}
           clearButton
           type="number" 
-          onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onChange={e => setSubCount(e.target.value)}
+          onInputClear={() => setSubCount('')}
           onBlur={() => generateName()}
         />
         <ListItem>
@@ -163,7 +163,7 @@ const AddGroup = (props: Props) => {
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && subPackId && subQuantity &&
+      {name && subPackId && subCount &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

@@ -343,7 +343,7 @@ export const editPack = async (newPack: Pack, oldPack: Pack, packs: Pack[], imag
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     const packInfo = {
-      unitsCount: p.subQuantity! * newPack.unitsCount!,
+      unitsCount: p.subCount! * newPack.unitsCount!,
       byWeight: newPack.byWeight,
       imageUrl
     }

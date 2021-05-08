@@ -12,7 +12,7 @@ service cloud.firestore {
     	allow read, create, delete: if request.auth.token.name == 'a';
       allow update: if request.auth.uid != null;
     }
-    match /pack-requests/{id} {
+    match /store-requests/{id} {
     	allow read, write: if request.auth.token.name != 'n';
     }
     match /packs/{id} {
@@ -22,7 +22,7 @@ service cloud.firestore {
       allow delete: if request.auth.token.name == 'a';
     }
     match /product-requests/{id} {
-    	allow read, write;
+    	allow read, write: if request.auth.token.name != 'n';
     }
     match /stores/{id} {
     	allow read, update: if request.auth.uid != 'null';

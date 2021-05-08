@@ -20,6 +20,8 @@ const Reducer = (state: State, action: Action) => {
         return {...state, passwordRequests: action.payload}
       case 'SET_PRODUCT_REQUESTS':
         return {...state, productRequests: action.payload}
+      case 'SET_STORE_REQUESTS':
+        return {...state, storeRequests: action.payload}
       case 'SET_PRODUCTS':
         return {...state, products: action.payload}
       case 'SET_PACKS':

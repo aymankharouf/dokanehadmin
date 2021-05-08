@@ -36,7 +36,7 @@ export type Pack = {
   product: Product,
   price?: number,
   subPackId?: string,
-  subQuantity?: number,
+  subCount?: number,
   weightedPrice?: number,
   byWeight: boolean,
   unitsCount?: number,
@@ -51,7 +51,7 @@ export type PackStore = {
   price: number,
   isRetail: boolean,
   time: Date,
-  subQuantity?: number,
+  subCount?: number,
   unitPrice?: number,
 }
 export type Notification = {
@@ -147,6 +147,11 @@ export type ProductRequest = {
   imageUrl: string,
   time: Date
 }
+export type StoreRequest = {
+  id?: string,
+  storeId: string,
+  packId: string
+}
 export type State = {
   user?: firebase.User,
   users: User[],
@@ -164,7 +169,8 @@ export type State = {
   logs: Log[],
   archivedPacks: Pack[],
   notifications: Notification[],
-  productRequests: ProductRequest[]
+  productRequests: ProductRequest[],
+  storeRequests: StoreRequest[]
 }
 
 export type Action = {

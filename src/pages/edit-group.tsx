@@ -13,7 +13,7 @@ const EditGroup = (props: Props) => {
   const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
-  const [subQuantity, setSubQuantity] = useState(pack.subQuantity?.toString() || '')
+  const [subCount, setSubCount] = useState(pack.subCount?.toString() || '')
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(pack.specialImage)
   const [image, setImage] = useState<File>()
@@ -30,11 +30,11 @@ const EditGroup = (props: Props) => {
   useEffect(() => {
     if (name !== pack.name
     || subPackId !== pack.subPackId
-    || +subQuantity !== pack.subQuantity
+    || +subCount !== pack.subCount
     || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, subPackId, subQuantity, specialImage, imageUrl])
+  }, [pack, name, subPackId, subCount, specialImage, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -63,15 +63,15 @@ const EditGroup = (props: Props) => {
       if (state.packs.find(p => p.id !== pack.id && p.product.id === props.id && p.name === name)) {
         throw new Error('duplicateName')
       }
-      if (Number(subQuantity) <= 1) {
-        throw new Error('invalidQuantity')
+      if (+subCount <= 1) {
+        throw new Error('invalidCount')
       }
       const newPack = {
         ...pack,
         name,
         subPackId,
-        subQuantity: +subQuantity,
-        unitsCount: +subQuantity! * subPackInfo.unitsCount!,
+        subCount: +subCount,
+        unitsCount: +subCount! * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
       }
       editPack(newPack, pack, state.packs, image)
@@ -115,13 +115,13 @@ const EditGroup = (props: Props) => {
           </select>
         </ListItem>
         <ListInput 
-          name="subQuantity" 
-          label={labels.quantity}
-          value={subQuantity}
+          name="subCount" 
+          label={labels.count}
+          value={subCount}
           clearButton
           type="number" 
-          onChange={e => setSubQuantity(e.target.value)}
-          onInputClear={() => setSubQuantity('')}
+          onChange={e => setSubCount(e.target.value)}
+          onInputClear={() => setSubCount('')}
         />
         <ListItem>
           <span>{labels.specialImage}</span>
@@ -143,7 +143,7 @@ const EditGroup = (props: Props) => {
         }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      {name && subPackId && subQuantity && hasChanged &&
+      {name && subPackId && subCount && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

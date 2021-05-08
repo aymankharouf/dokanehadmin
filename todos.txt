@@ -107,3 +107,4 @@ log for store activities
 store ordering (distance, price, rating)
 *add withgift flag
 confirmatiom messages between users
+store requests follow up in admin
