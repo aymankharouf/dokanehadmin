@@ -27,8 +27,8 @@ export type Product = {
   imageUrl?: string,
   rating: number,
   ratingCount: number,
-  isArchived: boolean,
-  unit: string
+  unit: string,
+  isActive: boolean
 }
 export type Pack = {
   id?: string,
@@ -39,20 +39,21 @@ export type Pack = {
   subCount?: number,
   weightedPrice?: number,
   byWeight: boolean,
-  unitsCount?: number,
+  unitsCount: number,
   specialImage: boolean,
   imageUrl?: string,
   withGift?: boolean,
-  forSale: boolean
+  forSale: boolean,
+  isActive: boolean,
+  lastTrans: Date
 }
 export type PackStore = {
   storeId: string,
   packId: string,
   price: number,
   isRetail: boolean,
+  isActive: boolean,
   time: Date,
-  subCount?: number,
-  unitPrice?: number,
 }
 export type Notification = {
   id: string,
@@ -132,10 +133,11 @@ export type Log = {
   userId: string,
   time: Date,
 }
-export type AlarmType = {
-  id: string,
-  name: string,
-  isAvailable: number
+export type Alarm = {
+  packId: string,
+  storeId: string,
+  type: string,
+  time: Date
 }
 export type ProductRequest = {
   id: string,
@@ -148,10 +150,23 @@ export type ProductRequest = {
   time: Date
 }
 export type StoreRequest = {
-  id?: string,
   storeId: string,
   packId: string
 }
+export type PackRequest = {
+  id: string,
+  storeId: string,
+  siblingPackId: string,
+  name: string,
+  imageUrl?: string,
+  price: number,
+  subCount?: number,
+  withGift?: boolean,
+  gift?: string,
+  specialImage: boolean,
+  time: Date
+}
+
 export type State = {
   user?: firebase.User,
   users: User[],
@@ -163,14 +178,14 @@ export type State = {
   countries: Country[],
   trademarks: Trademark[],
   passwordRequests: PasswordRequest[],
-  archivedProducts: Product[],
   stores: Store[],
   products: Product[],
   logs: Log[],
-  archivedPacks: Pack[],
   notifications: Notification[],
   productRequests: ProductRequest[],
-  storeRequests: StoreRequest[]
+  storeRequests: StoreRequest[],
+  alarms: Alarm[],
+  packRequests: PackRequest[]
 }
 
 export type Action = {

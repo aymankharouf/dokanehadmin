@@ -19,7 +19,7 @@ const labels: Label = {
   trademark: 'العلامة التجارية',
   country: 'الدولة',
   description: 'الوصف',
-  byWeight: 'بالوزن؟',
+  byWeight: 'بالوزن',
   isOffer: 'عرض؟',
   price: 'السعر',
   offerEnd: 'تاريخ انتهاء العرض',
@@ -366,7 +366,10 @@ const labels: Label = {
   packName: 'اسم العبوة',
   newValue: 'قيمة جديدة',
   permissionAdded: 'تم منحك صلاحيات',
-  count: 'العدد'
+  count: 'العدد',
+  packRequests: 'طلبات عبوات جديدة',
+  invalidCountWithoutGift: 'لا يوجد معني لعرض بنفس العبوة وبلا هدية',
+
 }
 
 export default labels

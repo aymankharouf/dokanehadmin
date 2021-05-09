@@ -2,18 +2,18 @@ import {useContext, useState, useEffect} from 'react'
 import {Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {rejectProductRequest, showMessage, showError, getMessage} from '../data/actions'
+import {showMessage, showError, getMessage, rejectPackRequest} from '../data/actions'
 
 type Props = {
   id: string
 }
-const ProductRequestDetails = (props: Props) => {
+const PackRequestDetails = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
-  const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === props.id))
+  const [packRequest, setPackRequest] = useState(() => state.packRequests.find(p => p.id === props.id))
   useEffect(() => {
-    setProductRequest(() => state.productRequests.find(p => p.id === props.id))
-  }, [state.productRequests, props.id])
+    setPackRequest(() => state.packRequests.find(p => p.id === props.id))
+  }, [state.packRequests, props.id])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -23,7 +23,7 @@ const ProductRequestDetails = (props: Props) => {
   const handleRejection = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
-        await rejectProductRequest(productRequest!, state.productRequests, state.users)
+        await rejectPackRequest(packRequest!, state.packRequests, state.users)
         showMessage(labels.rejectSuccess)
         f7.views.current.router.back()
       } catch(err) {
@@ -33,10 +33,10 @@ const ProductRequestDetails = (props: Props) => {
   }
   return (
     <Page>
-      <Navbar title={productRequest?.name} backLink={labels.back} />
+      <Navbar title={packRequest?.name} backLink={labels.back} />
       <Card>
         <CardContent>
-          <img src={productRequest?.imageUrl} className="img-card" alt={labels.noImage} />
+          <img src={packRequest?.specialImage ? packRequest.imageUrl : state.packs.find(p => p.id === packRequest?.siblingPackId)?.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
       </Card>
       <List form inlineLabels>
@@ -44,28 +44,21 @@ const ProductRequestDetails = (props: Props) => {
           name="name" 
           label={labels.storeName}
           type="text" 
-          value={state.stores.find(s => s.id === productRequest?.storeId)?.name}
+          value={state.stores.find(s => s.id === packRequest?.storeId)?.name}
           readonly
         />
         <ListInput 
-          name="weight" 
-          label={labels.weight}
+          name="product" 
+          label={labels.product}
           type="text" 
-          value={productRequest?.weight}
-          readonly
-        />
-        <ListInput 
-          name="country" 
-          label={labels.country}
-          type="text" 
-          value={productRequest?.country}
+          value={state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.name}
           readonly
         />
         <ListInput 
           name="price" 
           label={labels.price}
           type="text" 
-          value={productRequest?.price.toFixed(2)}
+          value={packRequest?.price.toFixed(2)}
           readonly
         />
       </List>
@@ -74,15 +67,18 @@ const ProductRequestDetails = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-${packRequest?.subCount ? 'group' : 'pack'}/${state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.id}/${props.id}`)}>
             <Icon material="done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={handleRejection}>
             <Icon material="delete"></Icon>
+          </FabButton>
+          <FabButton onClick={() => f7.views.current.router.navigate(`/product-packs/${state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.id}/n`)}>
+            <Icon material="history"></Icon>
           </FabButton>
         </FabButtons>
       </Fab>
     </Page>
   )
 }
-export default ProductRequestDetails
+export default PackRequestDetails

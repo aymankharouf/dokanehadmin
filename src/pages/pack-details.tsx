@@ -80,7 +80,7 @@ const PackDetails = (props: Props) => {
             title={s.storeInfo?.name}
             subtitle={s.packId === pack?.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}
             text={s.packId === pack?.id ? '' : s.packInfo?.name}
-            footer={s.subCount ? `${labels.count}: ${s.subCount}` : ''}
+            footer={s.packInfo.subCount ? `${labels.count}: ${s.packInfo.subCount}` : ''}
             key={i++}
           >
             <div className="list-subtext1">{`${labels.price}: ${s.price.toFixed(2)}`}</div>

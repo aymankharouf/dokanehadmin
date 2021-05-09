@@ -2,7 +2,7 @@ import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {getCategoryName, getArchivedProducts, getArchivedPacks, getMessage, showError, productOfText} from '../data/actions'
+import {getCategoryName, getArchivedProducts, getMessage, showError, productOfText} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
 
 type ExtendedProduct = Product & {
@@ -17,7 +17,8 @@ const ArchivedProducts = () => {
   const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
-      const products = state.archivedProducts.map(p => {
+      const archivedProducts = state.products.filter(p => !p.isActive)
+      const products = archivedProducts.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
         const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)
         const countryInfo = state.countries.find(c => c.id === p.countryId)!
@@ -30,7 +31,7 @@ const ArchivedProducts = () => {
       })
       return products.sort((p1, p2) => p1.name > p2.name ? -1 : 1)
     })
-  }, [state.archivedProducts, state.categories, state.countries, state.trademarks])
+  }, [state.products, state.categories, state.countries, state.trademarks])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -50,10 +51,6 @@ const ArchivedProducts = () => {
       const products = await getArchivedProducts()
       if (products.length > 0) {
         dispatch({type: 'SET_ARCHIVED_PRODUCTS', payload: products})
-      }
-      const packs = await getArchivedPacks()
-      if (packs.length > 0) {
-        dispatch({type: 'SET_ARCHIVED_PACKS', payload: packs})
       }
       setInprocess(false)
     } catch(err) {

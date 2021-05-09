@@ -12,17 +12,10 @@ service cloud.firestore {
     	allow read, create, delete: if request.auth.token.name == 'a';
       allow update: if request.auth.uid != null;
     }
-    match /store-requests/{id} {
-    	allow read, write: if request.auth.token.name != 'n';
-    }
     match /packs/{id} {
     	allow read;
-    	allow create: if request.auth.token.name != 'n';
       allow update: if request.auth.uid != null;
-      allow delete: if request.auth.token.name == 'a';
-    }
-    match /product-requests/{id} {
-    	allow read, write: if request.auth.token.name != 'n';
+      allow create, delete: if request.auth.token.name == 'a';
     }
     match /stores/{id} {
     	allow read, update: if request.auth.uid != 'null';

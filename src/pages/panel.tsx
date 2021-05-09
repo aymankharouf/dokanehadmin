@@ -8,11 +8,9 @@ const Panel = () => {
   const {state, dispatch} = useContext(StateContext)
   const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {
-    const passwordRequests = state.passwordRequests.length
-    const productRequests = state.productRequests.length
     const newUsers = state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)).length
-    setApprovalsAcount(passwordRequests + productRequests + newUsers)
-  }, [state.users, state.passwordRequests, state.productRequests])
+    setApprovalsAcount(state.passwordRequests.length + state.productRequests.length + state.packRequests.length + newUsers)
+  }, [state.users, state.passwordRequests, state.productRequests, state.packRequests])
   const handleLogout = () => {
     logout()
     f7.views.main.router.navigate('/home/', {reloadAll: true})

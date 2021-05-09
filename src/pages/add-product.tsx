@@ -24,12 +24,12 @@ const AddProduct = (props: Props) => {
   const [packName, setPackName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
   const [byWeight, setByWeight] = useState(false)
-  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)!.type === 's')
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
   const [actionOpened, setActionOpened] = useState(false);
   const [price, setPrice] = useState(productRequest?.price.toString() || '')
   const [storeId, setStoreId] = useState(productRequest?.storeId || '')
+  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
     setCategories(() => {
@@ -38,14 +38,17 @@ const AddProduct = (props: Props) => {
     })
   }, [state.categories])
   useEffect(() => {
+    if (byWeight) setUnitsCount('1')
+  }, [byWeight])
+  useEffect(() => {
     if (error) {
       showError(error)
       setError('')
     }
   }, [error])
   useEffect(() => {
-    if (unitsCount && unit && !packName) setPackName(`${unitsCount} ${units.find(p => p.id === unit)?.name}`)
-  }, [unitsCount, unit, packName])
+    if (unit && (byWeight || unitsCount)) setPackName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === unit)?.name}`)
+  }, [unitsCount, unit, byWeight])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
@@ -78,7 +81,7 @@ const AddProduct = (props: Props) => {
         countryId,
         rating: 0,
         ratingCount: 0,
-        isArchived: false,
+        isActive: true,
         unit,
         imageUrl
       }
@@ -86,6 +89,7 @@ const AddProduct = (props: Props) => {
         storeId, 
         price: +price, 
         isRetail: state.stores.find(s => s.id === storeId)!.type === 's', 
+        isActive: true,
         time: new Date()
       }]
       const pack = {
@@ -94,11 +98,12 @@ const AddProduct = (props: Props) => {
         stores,
         unitsCount: +unitsCount,
         byWeight,
-        isArchived: false,
+        isActive: true,
         specialImage: false,
-        forSale
+        forSale,
+        lastTrans: new Date()
       }
-      addProduct(product, pack, state.users, productRequest, image)
+      addProduct(product, pack, state.users, productRequest, state.productRequests, image)
       showMessage(labels.addSuccess)
       if (productRequest) f7.views.current.router.navigate('/home/')
       else f7.views.current.router.back()
@@ -153,7 +158,6 @@ const AddProduct = (props: Props) => {
           }}
         >
           <select 
-            id="test"
             name="trademarkId" 
             value={trademarkId} 
             onChange={e =>setTrademarkId(e.target.value)} 
@@ -298,9 +302,7 @@ const AddProduct = (props: Props) => {
         />
         <ListButton title={labels.setImage} onClick={onUploadClick} />
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
-
       </List>
-
       {name && categoryId && countryId && unit && packName && unitsCount && price && storeId &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>

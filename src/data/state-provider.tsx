@@ -1,7 +1,7 @@
 import {createContext, useReducer, useEffect} from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest} from './types'
+import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest, Alarm, PackRequest} from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -22,11 +22,11 @@ const StateProvider = ({children}: Props) => {
     packStores: [],
     logs: [],
     adverts: [],
-    archivedProducts: [],
-    archivedPacks: [],
     notifications: [],
     productRequests: [],
-    storeRequests: []
+    storeRequests: [],
+    alarms: [],
+    packRequests: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {
@@ -46,7 +46,7 @@ const StateProvider = ({children}: Props) => {
     }, err => {
       unsubscribeCategories()
     })
-    const unsubscribePacks = firebase.firestore().collection('packs').where('isArchived', '==', false).onSnapshot(docs => {
+    const unsubscribePacks = firebase.firestore().collection('packs').where('product.isActive', '==', true).onSnapshot(docs => {
       let packs: Pack[] = []
       let packStores: PackStore[] = []
       docs.forEach(doc => {
@@ -67,6 +67,8 @@ const StateProvider = ({children}: Props) => {
           subCount: doc.data().subCount,
           withGift: doc.data().withGift,
           forSale: doc.data().forSale,
+          isActive: doc.data().isActive,
+          lastTrans: doc.data().lastTrans.toDate(),
           price: minPrice,
           weightedPrice: Math.floor(minPrice / doc.data().unitsCount),
         })
@@ -77,6 +79,7 @@ const StateProvider = ({children}: Props) => {
               storeId: s.storeId,
               price: s.price,
               isRetail: s.isRetail,
+              isActive: s.isActive,
               time: s.time.toDate(),
             })
           })
@@ -136,7 +139,7 @@ const StateProvider = ({children}: Props) => {
         }, err => {
           unsubscribeTrademarks()
         })
-        const unsubscribeProducts = firebase.firestore().collection('products').where('isArchived', '==', false).onSnapshot(docs => {
+        const unsubscribeProducts = firebase.firestore().collection('products').where('isActive', '==', true).onSnapshot(docs => {
           let products: Product[] = []
           docs.forEach(doc => {
             products.push({
@@ -151,7 +154,7 @@ const StateProvider = ({children}: Props) => {
               imageUrl: doc.data().imageUrl,
               rating: doc.data().rating,
               ratingCount: doc.data().ratingCount,
-              isArchived: doc.data().isArchived
+              isActive: doc.data().isActive
             })
           })
           dispatch({type: 'SET_PRODUCTS', payload: products})
@@ -188,6 +191,10 @@ const StateProvider = ({children}: Props) => {
         })  
         const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores: Store[] = []
+          const alarms: Alarm[] = []
+          const productRequests: ProductRequest[] = []
+          const storeRequests: StoreRequest[] = []
+          const packRequests: PackRequest[] = []
           docs.forEach(doc => {
             stores.push({
               id: doc.id,
@@ -199,8 +206,53 @@ const StateProvider = ({children}: Props) => {
               position: doc.data().position,
               type: doc.data().type
             })
+            doc.data().alarms?.forEach((a: any) => {
+              alarms.push({
+                storeId: doc.id,
+                packId: a.packId,
+                type: a.type,
+                time: a.time.toDate()
+              })
+            })
+            doc.data().productRequests?.forEach((r: any) => {
+              productRequests.push({
+                id: r.id,
+                storeId: doc.id,
+                name: r.name,
+                country: r.country,
+                weight: r.weight,
+                price: r.price,
+                imageUrl: r.imageUrl,
+                time: r.time?.toDate()
+              })
+            })
+            doc.data().requests?.forEach((r: any) => {
+              storeRequests.push({
+                storeId: doc.id,
+                packId: r.packId
+              })
+            })
+            doc.data().packRequests?.forEach((r: any) => {
+              packRequests.push({
+                id: r.id,
+                storeId: doc.id,
+                siblingPackId: r.siblingPackId,
+                name: r.name,
+                specialImage: r.specialImage,
+                price: r.price,
+                withGift: r.withGift,
+                gift: r.gift,
+                subCount: r.subCount,
+                imageUrl: r.imageUrl,
+                time: r.time.toDate()
+              })
+            })
           })
           dispatch({type: 'SET_STORES', payload: stores})
+          dispatch({type: 'SET_ALARMS', payload: alarms})
+          dispatch({type: 'SET_PRODUCT_REQUESTS', payload: productRequests})
+          dispatch({type: 'SET_STORE_REQUESTS', payload: storeRequests})
+          dispatch({type: 'SET_PACK_REQUESTS', payload: packRequests})
         }, err => {
           unsubscribeStores()
         })  
@@ -219,38 +271,6 @@ const StateProvider = ({children}: Props) => {
         }, err => {
           unsubscribeLogs()
         })
-        const unsubscribeProductRequests = firebase.firestore().collection('product-requests').onSnapshot(docs => {
-          let productRequests: ProductRequest[] = []
-          docs.forEach(doc => {
-            productRequests.push({
-              id: doc.id,
-              name: doc.data().name,
-              country: doc.data().country,
-              weight: doc.data().weight,
-              price: doc.data().price,
-              storeId: doc.data().storeId,
-              imageUrl: doc.data().imageUrl,
-              time: doc.data().time.toDate()
-            })
-          })
-          dispatch({type: 'SET_PRODUCT_REQUESTS', payload: productRequests})
-        }, err => {
-          unsubscribeProductRequests()
-        })  
-        const unsubscribeStoreRequests = firebase.firestore().collection('store-requests').onSnapshot(docs => {
-          let storeRequests: StoreRequest[] = []
-          docs.forEach(doc => {
-            storeRequests.push({
-              id: doc.id,
-              storeId: doc.data().storeId,
-              packId: doc.data().packId,
-            })
-          })
-          dispatch({type: 'SET_STORE_REQUESTS', payload: storeRequests})
-        }, err => {
-          unsubscribeStoreRequests()
-        })  
-
       } else {
         dispatch({type: 'LOGOUT'})
       }

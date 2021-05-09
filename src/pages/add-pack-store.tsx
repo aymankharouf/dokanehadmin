@@ -35,6 +35,7 @@ const AddPackStore = (props: Props) => {
         storeId,
         price: +price,
         isRetail: state.stores.find(s => s.id === storeId)!.type === 's',
+        isActive: true,
         time: new Date()
       }
       addPackStore(storePack, state.packs)

@@ -51,6 +51,8 @@ import EditTrademark from './pages/edit-trademark'
 import ProductRequests from './pages/product-requests'
 import ProductRequestDetails from './pages/product-request-details'
 import UserTypes from './pages/user-types'
+import PackRequests from './pages/pack-requests'
+import PackRequestDetails from './pages/pack-request-details'
 
 const routes = [
   {
@@ -188,11 +190,11 @@ const routes = [
     component: AddProduct
   },
   {
-    path: '/add-pack/:id',
+    path: '/add-pack/:productId/:requestId',
     component: AddPack
   },
   {
-    path: '/add-group/:id',
+    path: '/add-group/:productId/:requestId',
     component: AddGroup
   },
   {
@@ -274,6 +276,14 @@ const routes = [
   {
     path: '/user-types/',
     component: UserTypes
+  },
+  {
+    path: '/pack-requests/',
+    component: PackRequests
+  },
+  {
+    path: '/pack-request-details/:id',
+    component: PackRequestDetails
   },
   {
     path: '(.*)',

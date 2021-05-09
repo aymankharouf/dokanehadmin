@@ -105,7 +105,7 @@ const EditPack = (props: Props) => {
             onToggleChange={() => setSpecialImage(s => !s)}
           />
         </ListItem>
-        {specialImage ? 
+        {specialImage &&
           <ListInput 
             name="image" 
             label={labels.image} 
@@ -113,7 +113,7 @@ const EditPack = (props: Props) => {
             accept="image/*" 
             onChange={e => handleFileChange(e)}
           />
-        : ''}
+        }
         <img src={imageUrl} className="img-card" alt={labels.noImage} />
       </List>
       {name && unitsCount && hasChanged &&

@@ -20,6 +20,8 @@ const Reducer = (state: State, action: Action) => {
         return {...state, passwordRequests: action.payload}
       case 'SET_PRODUCT_REQUESTS':
         return {...state, productRequests: action.payload}
+      case 'SET_PACK_REQUESTS':
+        return {...state, packRequests: action.payload}
       case 'SET_STORE_REQUESTS':
         return {...state, storeRequests: action.payload}
       case 'SET_PRODUCTS':
@@ -33,9 +35,9 @@ const Reducer = (state: State, action: Action) => {
       case 'SET_ADVERTS':
         return {...state, adverts: action.payload}
       case 'SET_ARCHIVED_PRODUCTS':
-        return {...state, archivedProducts: action.payload}
+        return {...state, products: [...state.products, ...action.payload]}
       case 'SET_ARCHIVED_PACKS':
-        return {...state, archivedPacks: action.payload}
+        return {...state, packs: [...state.packs, ...action.payload]}
       case 'SET_UNITS':
         return {...state, units: action.payload}
       case 'LOGIN':
