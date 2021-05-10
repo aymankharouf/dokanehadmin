@@ -15,12 +15,12 @@ const AddGroup = (props: Props) => {
   const [name, setName] = useState(packRequest?.name || '')
   const [subPackId, setSubPackId] = useState(packRequest?.siblingPackId || '')
   const [subCount, setSubCount] = useState('')
-  const [specialImage, setSpecialImage] = useState(packRequest?.specialImage || false)
+  const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
   const [withGift, setWithGift] = useState(false)
   const [image, setImage] = useState<File>()
   const [gift, setGift] = useState(packRequest?.gift || '')
   const [product] = useState(() => state.products.find(p => p.id === props.productId)!)
-  const [price, setPrice] = useState(packRequest?.price.toString() || '')
+  const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [storeId, setStoreId] = useState(packRequest?.storeId || '')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [packs] = useState(() => state.packs.filter(p => p.product.id === props.productId && !p.byWeight))
@@ -32,9 +32,6 @@ const AddGroup = (props: Props) => {
       setError('')
     }
   }, [error])
-  useEffect(() => {
-    setImageUrl(() => state.packs.find(p => p.id === subPackId)?.imageUrl)
-  }, [state.packs, subPackId])
   useEffect(() => {
     if (subCount || gift) setName(`${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}${withGift ? '+' + gift : ''}`)
   }, [subCount, gift, state.packs, withGift, subPackId])
@@ -85,7 +82,6 @@ const AddGroup = (props: Props) => {
         unitsCount: +subCount * subPackInfo.unitsCount,
         byWeight: subPackInfo.byWeight,
         isActive: true,
-        specialImage,
         withGift,
         gift,
         forSale,

@@ -27,7 +27,7 @@ const AddProduct = (props: Props) => {
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
   const [actionOpened, setActionOpened] = useState(false);
-  const [price, setPrice] = useState(productRequest?.price.toString() || '')
+  const [price, setPrice] = useState(productRequest?.price.toFixed(2) || '')
   const [storeId, setStoreId] = useState(productRequest?.storeId || '')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [categories, setCategories] = useState<Category[]>([])
@@ -99,7 +99,6 @@ const AddProduct = (props: Props) => {
         unitsCount: +unitsCount,
         byWeight,
         isActive: true,
-        specialImage: false,
         forSale,
         lastTrans: new Date()
       }

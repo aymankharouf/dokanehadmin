@@ -52,7 +52,7 @@ const StateProvider = ({children}: Props) => {
       docs.forEach(doc => {
         let prices, minPrice = 0
         if (doc.data().stores) {
-          prices = doc.data().stores.map((p: PackStore) => p.price)
+          prices = doc.data().stores.map((s: PackStore) => s.isRetail ? s.price : 0)
           minPrice = prices.length > 0 ? Math.min(...prices) : 0
         }
         packs.push({
@@ -62,7 +62,6 @@ const StateProvider = ({children}: Props) => {
           imageUrl: doc.data().imageUrl,
           byWeight: doc.data().byWeight,
           unitsCount: doc.data().unitsCount,
-          specialImage: doc.data().specialImage,
           subPackId: doc.data().subPackId,
           subCount: doc.data().subCount,
           withGift: doc.data().withGift,
@@ -79,7 +78,6 @@ const StateProvider = ({children}: Props) => {
               storeId: s.storeId,
               price: s.price,
               isRetail: s.isRetail,
-              isActive: s.isActive,
               time: s.time.toDate(),
             })
           })
@@ -178,11 +176,15 @@ const StateProvider = ({children}: Props) => {
               time: doc.data().time.toDate(),
               type: doc.data().type
             })
-            if (doc.data().notifications) {
-              doc.data().notifications.forEach((n: Notification) => {
-                notifications.push({...n, userId: doc.id})
+            doc.data().notifications?.forEach((n: any) => {
+              notifications.push({
+                userId: doc.id,
+                id: n.id,
+                message: n.message,
+                title: n.title,
+                time: n.time.toDate()
               })
-            }
+            })
           })
           dispatch({type: 'SET_USERS', payload: users})
           dispatch({type: 'SET_NOTIFICATIONS', payload: notifications})
@@ -229,7 +231,7 @@ const StateProvider = ({children}: Props) => {
             doc.data().requests?.forEach((r: any) => {
               storeRequests.push({
                 storeId: doc.id,
-                packId: r.packId
+                packId: r
               })
             })
             doc.data().packRequests?.forEach((r: any) => {
@@ -238,7 +240,6 @@ const StateProvider = ({children}: Props) => {
                 storeId: doc.id,
                 siblingPackId: r.siblingPackId,
                 name: r.name,
-                specialImage: r.specialImage,
                 price: r.price,
                 withGift: r.withGift,
                 gift: r.gift,

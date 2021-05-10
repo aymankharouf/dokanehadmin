@@ -369,7 +369,8 @@ const labels: Label = {
   count: 'العدد',
   packRequests: 'طلبات عبوات جديدة',
   invalidCountWithoutGift: 'لا يوجد معني لعرض بنفس العبوة وبلا هدية',
-
+  packs: 'العبوات',
+  activatePack: 'تفعيل عبوة',
 }
 
 export default labels

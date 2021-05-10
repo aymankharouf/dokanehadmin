@@ -67,7 +67,7 @@ const StorePacks = (props: Props) => {
               >
                 <div className="list-subtext1">{`${labels.price}: ${p.price.toFixed(2)}`}</div>
                 <div className="list-subtext2">{p.categoryInfo.name}</div>
-                <img src={p.packInfo.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
+                <img src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
               </ListItem>
             )
           }

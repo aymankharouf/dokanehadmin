@@ -5,6 +5,8 @@ import {deleteStorePack, deletePack, showMessage, showError, getMessage} from '.
 import labels from '../data/labels'
 import {Pack, PackStore, Store} from '../data/types'
 import {units} from '../data/config'
+import moment from 'moment'
+import 'moment/locale/ar'
 
 type Props = {
   id: string
@@ -68,10 +70,11 @@ const PackDetails = (props: Props) => {
       <Card>
         <CardContent>
           <div className="card-title">{pack?.name}</div>
-          <img src={pack?.imageUrl} className="img-card" alt={labels.noImage} />
+          <img src={pack?.imageUrl || pack?.product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
         <CardFooter>
           <p>{`${pack?.unitsCount} ${units.find(u => u.id === pack?.product.unit)?.name}`}</p>
+          <p>{moment(pack?.lastTrans).fromNow()}</p>
         </CardFooter>
       </Card>
       <List mediaList>

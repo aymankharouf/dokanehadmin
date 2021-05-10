@@ -24,10 +24,7 @@ const AddPackStore = (props: Props) => {
       if (state.packStores.find(p => p.packId === pack.id && p.storeId === storeId)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(price) !== Number(Number(price).toFixed(2))) {
-        throw new Error('invalidPrice')
-      }
-      if (Number(price) < 0) {
+      if (+price <= 0 || +price !== Number((+price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
       const storePack = {

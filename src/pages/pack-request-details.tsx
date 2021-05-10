@@ -1,5 +1,5 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent} from 'framework7-react'
+import {Page, Navbar, List, ListInput, Fab, Icon, f7, Card, CardContent, Actions, ActionsButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {showMessage, showError, getMessage, rejectPackRequest} from '../data/actions'
@@ -10,10 +10,9 @@ type Props = {
 const PackRequestDetails = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
-  const [packRequest, setPackRequest] = useState(() => state.packRequests.find(p => p.id === props.id))
-  useEffect(() => {
-    setPackRequest(() => state.packRequests.find(p => p.id === props.id))
-  }, [state.packRequests, props.id])
+  const [packRequest] = useState(() => state.packRequests.find(p => p.id === props.id))
+  const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
+  const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     if (error) {
       showError(error)
@@ -36,7 +35,7 @@ const PackRequestDetails = (props: Props) => {
       <Navbar title={packRequest?.name} backLink={labels.back} />
       <Card>
         <CardContent>
-          <img src={packRequest?.specialImage ? packRequest.imageUrl : state.packs.find(p => p.id === packRequest?.siblingPackId)?.imageUrl} className="img-card" alt={labels.noImage} />
+          <img src={packRequest?.imageUrl || siblingPack?.product.imageUrl} className="img-card" alt={labels.noImage} />
         </CardContent>
       </Card>
       <List form inlineLabels>
@@ -51,7 +50,7 @@ const PackRequestDetails = (props: Props) => {
           name="product" 
           label={labels.product}
           type="text" 
-          value={state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.name}
+          value={siblingPack?.product.name}
           readonly
         />
         <ListInput 
@@ -62,22 +61,23 @@ const PackRequestDetails = (props: Props) => {
           readonly
         />
       </List>
-      <FabBackdrop slot="fixed" />
-      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-${packRequest?.subCount ? 'group' : 'pack'}/${state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.id}/${props.id}`)}>
-            <Icon material="done"></Icon>
-          </FabButton>
-          <FabButton color="red" onClick={handleRejection}>
-            <Icon material="delete"></Icon>
-          </FabButton>
-          <FabButton onClick={() => f7.views.current.router.navigate(`/product-packs/${state.packs.find(p => p.id === packRequest?.siblingPackId)?.product.id}/n`)}>
-            <Icon material="history"></Icon>
-          </FabButton>
-        </FabButtons>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => setActionOpened(true)}>
+        <Icon material="build"></Icon>
       </Fab>
+      <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-packs/${siblingPack?.product.id}/n`)}>
+          {labels.packs}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-${packRequest?.subCount ? 'group' : 'pack'}/${siblingPack?.product.id}/${props.id}`)}>
+          {labels.addPack}
+        </ActionsButton>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-store-pack/${packRequest?.storeId}/${props.id}`)}>
+          {labels.activatePack}
+        </ActionsButton>
+        <ActionsButton onClick={handleRejection}>
+          {labels.rejection}
+        </ActionsButton>
+      </Actions>
     </Page>
   )
 }

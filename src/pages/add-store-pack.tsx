@@ -5,21 +5,29 @@ import labels from '../data/labels'
 import {addPackStore, showMessage, showError, getMessage} from '../data/actions'
 
 type Props = {
-  id: string
+  storeId: string,
+  requestId: string
 }
 const AddStorePack = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [packId, setPackId] = useState('')
-  const [price, setPrice] = useState('')
-  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
+  const [packRequest] = useState(() => state.packRequests.find(r => r.id === props.requestId))
+  const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
+  const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [packs] = useState(() => {
-    const packs = state.packs.map(p => {
-      return {
-        id: p.id,
-        name: `${p.product.name}-${p.product.alias} ${p.name}`
-      }
-    })
+    let packs
+    if (props.requestId) {
+      const siblingPack = state.packs.find(p => p.id === packRequest?.siblingPackId)
+      packs = state.packs.filter(p => p.product.id === siblingPack?.product.id)
+    } else {
+      packs = state.packs.map(p => {
+        return {
+          ...p,
+          name: `${p.product.name}-${p.product.alias} ${p.name}`
+        }
+      })
+    }
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }) 
   useEffect(() => {
@@ -33,23 +41,20 @@ const AddStorePack = (props: Props) => {
       if (state.packStores.find(p => p.packId === packId && p.storeId === store.id)) {
         throw new Error('duplicatePackInStore')
       }
-      if (Number(price) !== Number(Number(price).toFixed(2))) {
+      if (+price <= 0 || +price !== Number((+price).toFixed(2))) {
         throw new Error('invalidPrice')
       }
-      if (Number(price) < 0) {
-        throw new Error('invalidPrice')
-      }
-      const storePack = {
+      const packStore = {
         packId,
         storeId: store.id!,
         price: +price,
-        isRetail: state.stores.find(s => s.id === store.id)!.type === 's',
-        isActive: true,
+        isRetail: store.type === 's',
         time: new Date()
       }
-      addPackStore(storePack, state.packs)
+      addPackStore(packStore, state.packs, state.users, state.packRequests, packRequest)
       showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      if (packRequest) f7.views.current.router.navigate('/home/')
+      else f7.views.current.router.back()
     } catch(err) {
 			setError(getMessage(f7.views.current.router.currentRoute.path, err))
 		}

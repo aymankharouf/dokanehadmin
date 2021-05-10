@@ -14,18 +14,22 @@ const EditPack = (props: Props) => {
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount?.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
+  const [isActive, setIsActive] = useState(pack.isActive)
   const [hasChanged, setHasChanged] = useState(false)
-  const [specialImage, setSpecialImage] = useState(pack.specialImage)
+  const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   useEffect(() => {
     if (name !== pack.name
-    || (Number(unitsCount) || 0) !== (pack.unitsCount ?? 0)
+    || +unitsCount !== pack.unitsCount
+    || isActive !== pack.isActive
     || byWeight !== pack.byWeight
-    || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, byWeight, specialImage, imageUrl])
+  }, [pack, name, unitsCount, byWeight, isActive, imageUrl])
+  useEffect(() => {
+    if (byWeight) setUnitsCount('1')
+  }, [byWeight])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -55,10 +59,11 @@ const EditPack = (props: Props) => {
       const newPack = {
         ...pack,
         name,
-        unitsCount: Number(unitsCount),
+        unitsCount: +unitsCount,
         byWeight,
+        isActive
       }
-      editPack(newPack, pack, state.packs, image)
+      editPack(newPack, state.packs, image)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -78,15 +83,15 @@ const EditPack = (props: Props) => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
-        <ListInput 
-          name="unitsCount" 
-          label={labels.unitsCount}
-          clearButton
-          type="number" 
-          value={unitsCount} 
-          onChange={e => setUnitsCount(e.target.value)}
-          onInputClear={() => setUnitsCount('')}
-        />
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(s => !s)}
+          />
+        </ListItem>
         <ListItem>
           <span>{labels.byWeight}</span>
           <Toggle 
@@ -96,6 +101,17 @@ const EditPack = (props: Props) => {
             onToggleChange={() => setByWeight(s => !s)}
           />
         </ListItem>
+        {!byWeight && 
+          <ListInput 
+            name="unitsCount" 
+            label={labels.unitsCount}
+            clearButton
+            type="number" 
+            value={unitsCount} 
+            onChange={e => setUnitsCount(e.target.value)}
+            onInputClear={() => setUnitsCount('')}
+          />
+        }
         <ListItem>
           <span>{labels.specialImage}</span>
           <Toggle 
@@ -114,7 +130,9 @@ const EditPack = (props: Props) => {
             onChange={e => handleFileChange(e)}
           />
         }
-        <img src={imageUrl} className="img-card" alt={labels.noImage} />
+        {specialImage &&
+          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+        }
       </List>
       {name && unitsCount && hasChanged &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>

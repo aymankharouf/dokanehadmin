@@ -33,7 +33,7 @@ const Notifications = () => {
   const handleDelete = (userInfo: User, notificationId: string) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
-        deleteNotification(userInfo, notificationId,)
+        deleteNotification(userInfo, notificationId, state.notifications)
         showMessage(labels.deleteSuccess)
       } catch(err) {
         setError(getMessage(f7.views.current.router.currentRoute.path, err))

@@ -178,7 +178,7 @@ const routes = [
     component: EditStore
   },
   {
-    path: '/add-store-pack/:id',
+    path: '/add-store-pack/:storeId/:requestId',
     component: AddStorePack
   },
   {

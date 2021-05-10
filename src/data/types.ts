@@ -40,7 +40,6 @@ export type Pack = {
   weightedPrice?: number,
   byWeight: boolean,
   unitsCount: number,
-  specialImage: boolean,
   imageUrl?: string,
   withGift?: boolean,
   forSale: boolean,
@@ -52,7 +51,6 @@ export type PackStore = {
   packId: string,
   price: number,
   isRetail: boolean,
-  isActive: boolean,
   time: Date,
 }
 export type Notification = {
@@ -81,8 +79,6 @@ export type User = {
   position: Position,
   storeName?: string,
   storeId?: string,
-  notifications?: Notification[],
-  ratings?: Rating[],
   colors?: string[],
   address?: string,
   time: Date,
@@ -163,7 +159,6 @@ export type PackRequest = {
   subCount?: number,
   withGift?: boolean,
   gift?: string,
-  specialImage: boolean,
   time: Date
 }
 

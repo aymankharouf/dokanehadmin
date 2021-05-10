@@ -1,5 +1,5 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon} from 'framework7-react'
+import {f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon, Badge} from 'framework7-react'
 import RatingStars from './rating-stars'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
@@ -33,7 +33,7 @@ const ProductPacks = (props: Props) => {
     })
   }, [state.packs, props.id])
   useEffect(() => {
-    setActivePacks(() => packs.filter(p => p.price! > 0))
+    setActivePacks(() => packs.filter(p => p.isActive))
   }, [packs])
   useEffect(() => {
     if (error) {
@@ -82,6 +82,7 @@ const ProductPacks = (props: Props) => {
             after={!p.price ? '' : p.price.toFixed(2)} 
             key={p.id} 
           >
+            {!p.isActive && <Badge slot="title" color='red'>{labels.inActive}</Badge>}
           </ListItem>
         )}
       </List>
@@ -92,10 +93,10 @@ const ProductPacks = (props: Props) => {
         <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${props.id}`)}>
           {labels.details}
         </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}`)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}/0`)}>
           {labels.addPack}
         </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${props.id}`)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${props.id}/0`)}>
           {labels.addGroup}
         </ActionsButton>
         {activePacks.length === 0 && 

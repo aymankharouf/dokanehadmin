@@ -13,14 +13,14 @@ const AddPack = (props: Props) => {
   const {state} = useContext(StateContext)
   const [error, setError] = useState('')
   const [packRequest] = useState(() => state.packRequests.find(r => r.id === props.requestId))
-  const [pack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
+  const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
   const [name, setName] = useState(packRequest?.name || '')
   const [unitsCount, setUnitsCount] = useState('')
-  const [byWeight, setByWeight] = useState(pack?.byWeight || false)
-  const [specialImage, setSpecialImage] = useState(packRequest?.specialImage || false)
+  const [byWeight, setByWeight] = useState(siblingPack?.byWeight || false)
+  const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
   const [image, setImage] = useState<File>()
   const [product] = useState(() => state.products.find(p => p.id === props.productId)!)
-  const [price, setPrice] = useState(packRequest?.price.toString() || '')
+  const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [storeId, setStoreId] = useState(packRequest?.storeId || '')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
@@ -74,7 +74,6 @@ const AddPack = (props: Props) => {
         unitsCount: +unitsCount,
         byWeight,
         isActive: true,
-        specialImage,
         forSale,
         lastTrans: new Date()
       }

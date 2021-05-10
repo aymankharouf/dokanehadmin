@@ -14,8 +14,9 @@ const EditGroup = (props: Props) => {
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
   const [subCount, setSubCount] = useState(pack.subCount?.toString() || '')
+  const [isActive, setIsActive] = useState(pack.isActive)
   const [hasChanged, setHasChanged] = useState(false)
-  const [specialImage, setSpecialImage] = useState(pack.specialImage)
+  const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const [packs] = useState(() => {
@@ -29,12 +30,12 @@ const EditGroup = (props: Props) => {
   })
   useEffect(() => {
     if (name !== pack.name
+    || isActive !== pack.isActive
     || subPackId !== pack.subPackId
     || +subCount !== pack.subCount
-    || specialImage !== pack.specialImage
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, subPackId, subCount, specialImage, imageUrl])
+  }, [pack, name, subPackId, subCount, isActive, imageUrl])
   useEffect(() => {
     if (error) {
       showError(error)
@@ -73,8 +74,9 @@ const EditGroup = (props: Props) => {
         subCount: +subCount,
         unitsCount: +subCount! * subPackInfo.unitsCount!,
         byWeight: subPackInfo.byWeight,
+        isActive
       }
-      editPack(newPack, pack, state.packs, image)
+      editPack(newPack, state.packs, image)
       showMessage(labels.editSuccess)
       f7.views.current.router.back()
     } catch(err) {
@@ -94,6 +96,15 @@ const EditGroup = (props: Props) => {
           onChange={e => setName(e.target.value)}
           onInputClear={() => setName('')}
         />
+        <ListItem>
+          <span>{labels.isActive}</span>
+          <Toggle 
+            name="isActive" 
+            color="green" 
+            checked={isActive} 
+            onToggleChange={() => setIsActive(s => !s)}
+          />
+        </ListItem>
         <ListItem
           title={labels.pack}
           smartSelect
