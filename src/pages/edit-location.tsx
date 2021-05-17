@@ -1,57 +1,63 @@
-import {useState, useContext, useEffect } from 'react'
-import {editLocation, showMessage, showError, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
+import {useState, useContext} from 'react'
+import {editLocation, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditLocation = (props: Props) => {
+const EditLocation = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [location] = useState(() => state.locations.find(l => l.id === props.id)!)
-  const [name, setName] = useState(location?.name)
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [currentLocation] = useState(() => state.locations.find(l => l.id === params.id)!)
+  const [name, setName] = useState(currentLocation?.name)
   const handleEdit = () => {
     try{
       const newLocation = {
-        ...location,
+        ...currentLocation,
         name,
       }
       editLocation(newLocation, state.locations)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()  
+      message(labels.editSuccess, 3000)
+      history.goBack() 
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.editLocation} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={name}
-          clearButton
-          autofocus
-          type="text" 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-      </List>
-      {name && (name !== location?.name) &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.editLocation} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+      </IonContent>
+        {name && (name !== currentLocation.name) &&
+          <IonFab vertical="top" horizontal="end" slot="fixed">
+            <IonFabButton onClick={handleEdit}>
+              <IonIcon ios={checkmarkOutline} />
+            </IonFabButton>
+          </IonFab>
+        }
+    </IonPage>
   )
 }
 export default EditLocation

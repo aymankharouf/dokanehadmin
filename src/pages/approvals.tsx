@@ -1,9 +1,10 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Block, Navbar, Button} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {randomColors} from '../data/config'
 import {User} from '../data/types'
+import { IonButton, IonContent, IonPage } from '@ionic/react'
+import Header from './header'
 
 type Section = {
   id: string,
@@ -20,30 +21,31 @@ const Approvals = () => {
   }, [state.users])
   useEffect(() => {
     setSections(() => [
-      {id: '1', name: labels.passwordRequests, path: '/password-requests/', count: state.passwordRequests.length},
-      {id: '2', name: labels.newUsers, path: '/permission-list/', count: newUsers.length},
-      {id: '3', name: labels.productRequests, path: '/product-requests/', count: state.productRequests.length},
-      {id: '4', name: labels.packRequests, path: '/pack-requests/', count: state.packRequests.length},
+      {id: '1', name: labels.passwordRequests, path: '/password-requests', count: state.passwordRequests.length},
+      {id: '2', name: labels.newUsers, path: '/permission-list', count: newUsers.length},
+      {id: '3', name: labels.productRequests, path: '/product-requests', count: state.productRequests.length},
+      {id: '4', name: labels.packRequests, path: '/pack-requests', count: state.packRequests.length},
     ])
   }, [state.passwordRequests, state.productRequests, state.packRequests, newUsers])
   let i = 0
   return(
-    <Page>
-      <Navbar title={labels.approvals} backLink={labels.back} />
-      <Block>
+    <IonPage>
+      <Header title={labels.approvals} />
+      <IonContent fullscreen className="ion-padding">
         {sections.map(s => 
-          <Button 
-            text={`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}
-            large 
-            fill 
+          <IonButton
+            routerLink={s.path} 
+            expand="block"
+            shape="round"
+            color={randomColors[i++ % 5].name}
             className="sections" 
-            color={randomColors[i++ % 10].name} 
-            href={s.path} 
             key={s.id}
-          />
+          >
+            {`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}
+          </IonButton>
         )}
-      </Block>
-    </Page>
+      </IonContent>
+    </IonPage>
   )
 }
 

@@ -147,6 +147,7 @@ const labels: Label = {
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
   trademarkProductsFound: 'لا يمكن حذف العلامة التجارية ... يوجد منتجات مرتبطة بها',
   countryProductsFound: 'لا يمكن حذف الدولة ... يوجد منتجات مرتبطة بها',
+  locationInUse: 'لا يمكن حذف الموقع...يوجد بيانات مرتبطة به',
   confirmationTitle: 'تأكيد العملية',
   haltOffer: 'تعليق العرض',
   storesBalance: 'ارصدة المحلات',

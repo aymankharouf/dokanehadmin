@@ -2,16 +2,18 @@ import {useContext, useState, useEffect} from 'react'
 import {Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { useParams } from 'react-router'
 
-type Props = {
+type Params = {
   id: string
 }
-const ProductDetails = (props: Props) => {
+const ProductDetails = () => {
   const {state} = useContext(StateContext)
-  const [product, setProduct] = useState(() => state.products.find(p => p.id === props.id)!)
+  const params = useParams<Params>()
+  const [product, setProduct] = useState(() => state.products.find(p => p.id === params.id)!)
   useEffect(() => {
-    setProduct(() => state.products.find(p => p.id === props.id)!)
-  }, [state.products, props.id])
+    setProduct(() => state.products.find(p => p.id === params.id)!)
+  }, [state.products, params.id])
   return (
     <Page>
       <Navbar title={labels.productDetails} backLink={labels.back} />
@@ -60,7 +62,7 @@ const ProductDetails = (props: Props) => {
         />
         <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
       </List>
-      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-product/${props.id}`}>
+      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-product/${params.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
     </Page>

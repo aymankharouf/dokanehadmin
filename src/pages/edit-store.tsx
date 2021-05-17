@@ -2,15 +2,20 @@ import {useState, useContext, useEffect} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {editStore, showMessage, showError, getMessage} from '../data/actions'
+import {editStore, getMessage} from '../data/actions'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditStore = (props: Props) => {
+const EditStore = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [store] = useState(() => state.stores.find(s => s.id === params.id)!)
   const [name, setName] = useState(store.name)
   const [mobile, setMobile] = useState(store.mobile)
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
@@ -40,12 +45,6 @@ const EditStore = (props: Props) => {
     || locationId !== store.locationId) setHasChanged(true)
     else setHasChanged(false)
   }, [store, name, mobile, address, isActive, locationId])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       const newStore = {
@@ -57,10 +56,10 @@ const EditStore = (props: Props) => {
         locationId
       }
       editStore(newStore)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

@@ -1,37 +1,38 @@
-import {useState, useEffect, ChangeEvent} from 'react'
+import {useState, ChangeEvent} from 'react'
 import {f7, Page, Navbar, List, ListInput, ListItem, Fab, Icon} from 'framework7-react'
-import {addAdvert, showMessage, showError, getMessage} from '../data/actions'
+import {addAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {advertTypes} from '../data/config'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 const AddAdvert = () => {
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [type, setType] = useState('')
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-    const filename = files[0].name
-    if (filename.lastIndexOf('.') <= 0) {
-      setError(labels.invalidFile)
-      return
+    try {
+      const files = e.target.files
+      if (!files) return
+      const filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        throw new Error('invalidFile')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        if (fileReader.result) setImageUrl(fileReader.result?.toString())
+      })
+      fileReader.readAsDataURL(files[0])
+      setImage(files[0])
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
     }
-    const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      if (fileReader.result) setImageUrl(fileReader.result?.toString())
-    })
-    fileReader.readAsDataURL(files[0])
-    setImage(files[0])
   }
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       const advert = {
@@ -42,12 +43,13 @@ const AddAdvert = () => {
         time: new Date()
       }
       addAdvert(advert, image)
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
+  
   return (
     <Page>
       <Navbar title={labels.addAdvert} backLink={labels.back} />

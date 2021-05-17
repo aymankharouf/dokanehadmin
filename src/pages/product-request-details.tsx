@@ -2,32 +2,34 @@ import {useContext, useState, useEffect} from 'react'
 import {Page, Navbar, List, ListInput, Fab, Icon, FabBackdrop, FabButtons, FabButton, f7, Card, CardContent} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {rejectProductRequest, showMessage, showError, getMessage} from '../data/actions'
+import {rejectProductRequest, getMessage} from '../data/actions'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonLoading, useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const ProductRequestDetails = (props: Props) => {
+const ProductRequestDetails = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === props.id))
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
+  const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === params.id))
   useEffect(() => {
-    setProductRequest(() => state.productRequests.find(p => p.id === props.id))
-  }, [state.productRequests, props.id])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
+    setProductRequest(() => state.productRequests.find(p => p.id === params.id))
+  }, [state.productRequests, params.id])
   const handleRejection = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, async () => {
       try{
+        loading()
         await rejectProductRequest(productRequest!, state.productRequests, state.users)
-        showMessage(labels.rejectSuccess)
-        f7.views.current.router.back()
+        dismiss()
+        message(labels.rejectSuccess, 3000)
+        history.goBack()
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })
   }
@@ -74,7 +76,7 @@ const ProductRequestDetails = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-product/${params.id}`)}>
             <Icon material="done"></Icon>
           </FabButton>
           <FabButton color="red" onClick={handleRejection}>

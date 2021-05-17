@@ -1,37 +1,70 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Block, Navbar, List, ListItem, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
+import Header from './header'
+import { addOutline, trashOutline } from 'ionicons/icons'
+import { deleteCountry, getMessage } from '../data/actions'
+import { useLocation } from 'react-router'
 
 
 const Countries = () => {
   const {state} = useContext(StateContext)
+  const location = useLocation()
+  const [message] = useIonToast()
+  const [alert] = useIonAlert();
   const [countries, setCountries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   useEffect(() => {
     setCountries(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   }, [state.countries])
-  let i = 0
+  const handleDelete = (countryId: string) => {
+    alert({
+      header: labels.confirmationTitle,
+      message: labels.confirmationText,
+      buttons: [
+        {text: labels.cancel},
+        {text: labels.ok, handler: async () => {
+          try{
+            const countryProducts = state.products.filter(p => p.countryId === countryId)
+            if (countryProducts.length > 0) throw new Error('countryProductsFound') 
+            deleteCountry(countryId, state.countries)
+            message(labels.deleteSuccess, 3000)
+          } catch(err) {
+            message(getMessage(location.pathname, err), 3000)
+          }    
+        }},
+      ],
+    })
+  }
   return (
-    <Page>
-      <Navbar title={labels.countries} backLink={labels.back} />
-      <Block>
-        <List>
+    <IonPage>
+      <Header title={labels.countries} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
           {countries.length === 0 ? 
-            <ListItem title={labels.noData} />
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem>
           : countries.map(c =>
-              <ListItem
-                link={`/edit-country/${c.id}`}
-                title={c.name} 
-                key={i++}
-              />
+              <IonItem key={c.id} routerLink={`/edit-country/${c.id}`}>
+                <IonLabel>{c.name}</IonLabel>
+                <IonIcon 
+                  ios={trashOutline} 
+                  slot="end" 
+                  style={{fontSize: '20px', marginRight: '10px'}} 
+                  onClick={()=> handleDelete(c.id)}
+                />
+              </IonItem>  
             )
           }
-        </List>
-      </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-country/">
-        <Icon material="add"></Icon>
-      </Fab>
-    </Page>
+        </IonList>
+      </IonContent>
+      <IonFab vertical="top" horizontal="end" slot="fixed">
+        <IonFabButton routerLink="/add-country">
+          <IonIcon ios={addOutline} />
+        </IonFabButton>
+      </IonFab>
+    </IonPage>
   )
 }
 

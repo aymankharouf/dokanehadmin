@@ -4,8 +4,9 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {productOfText, getCategoryName} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
+import { useParams } from 'react-router'
 
-type Props = {
+type Params = {
   id: string
 }
 type ExtendedProduct = Product & {
@@ -13,13 +14,14 @@ type ExtendedProduct = Product & {
   trademarkInfo?: Trademark,
   countryInfo: Country
 }
-const Products = (props: Props) => {
+const Products = () => {
   const {state} = useContext(StateContext)
-  const [category] = useState(() => state.categories.find(c => c.id === props.id))
+  const params = useParams<Params>()
+  const [category] = useState(() => state.categories.find(c => c.id === params.id))
   const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
-      const products = state.products.filter(p => props.id === '-1' ? !state.packs.find(pa => pa.product.id === p.id) || state.packs.filter(pa => pa.product.id === p.id).length === state.packs.filter(pa => pa.product.id === p.id && pa.price === 0).length : props.id === '0' || p.categoryId === props.id)
+      const products = state.products.filter(p => params.id === '-1' ? !state.packs.find(pa => pa.product.id === p.id) || state.packs.filter(pa => pa.product.id === p.id).length === state.packs.filter(pa => pa.product.id === p.id && pa.price === 0).length : params.id === '0' || p.categoryId === params.id)
       const results = products.map(p => {
         const categoryInfo = state.categories.find(c => c.id === p.categoryId)!
         const trademarkInfo = state.trademarks.find(t => t.id === p.trademarkId)
@@ -33,12 +35,12 @@ const Products = (props: Props) => {
       })
       return results.sort((p1, p2) => p1.categoryId === p2.categoryId ? (p1.name > p2.name ? 1 : -1) : (p1.categoryInfo?.name! > p2.categoryInfo?.name! ? 1 : -1))
     })
-  }, [state.products, state.categories, state.packs, state.countries, state.trademarks, props.id])
+  }, [state.products, state.categories, state.packs, state.countries, state.trademarks, params.id])
   
   if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
     <Page>
-      <Navbar title={props.id === '-1' ? labels.notUsedProducts : (props.id === '0' ? labels.products : category?.name || '')} backLink={labels.back}>
+      <Navbar title={params.id === '-1' ? labels.notUsedProducts : (params.id === '0' ? labels.products : category?.name || '')} backLink={labels.back}>
         <NavRight>
           <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
         </NavRight>

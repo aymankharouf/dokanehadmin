@@ -1,15 +1,19 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useContext} from 'react'
 import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import labels from '../data/labels'
-import {addCategory, showMessage, showError, getMessage} from '../data/actions'
+import {addCategory, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 type Props = {
   id: string
 }
 const AddCategory = (props: Props) => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [name, setName] = useState('')
   const [ordering, setOrdering] = useState(() => {
     const siblings = state.categories.filter(c => c.parentId === props.id)
@@ -17,19 +21,13 @@ const AddCategory = (props: Props) => {
     const maxOrder = Math.max(...siblingsOrder) || 0
     return (maxOrder + 1).toString()
   })
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       addCategory(props.id, name, +ordering)
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   

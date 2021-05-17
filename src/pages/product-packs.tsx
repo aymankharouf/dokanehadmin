@@ -3,61 +3,63 @@ import {f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions
 import RatingStars from './rating-stars'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {archiveProduct, deleteProduct, showMessage, getMessage, showError, productOfText, getArchivedPacks} from '../data/actions'
+import {archiveProduct, deleteProduct, getMessage, productOfText, getArchivedPacks} from '../data/actions'
 import {Pack} from '../data/types'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonLoading, useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string,
   type: string
 }
-const ProductPacks = (props: Props) => {
+const ProductPacks = () => {
   const {state, dispatch} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [product] = useState(() => state.products.find(p => p.id === props.id && (p.isActive || props.type === 'a'))!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
+  const [product] = useState(() => state.products.find(p => p.id === params.id && (p.isActive || params.type === 'a'))!)
   const [packs, setPacks] = useState<Pack[]>([])
   const [activePacks, setActivePacks] = useState<Pack[]>([])
   const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     const getPacks = async () => {
-      const packs = await getArchivedPacks(props.id)
+      loading()
+      const packs = await getArchivedPacks(params.id)
+      dismiss()
       if (packs.length > 0) {
         dispatch({type: 'SET_ARCHIVED_PACKS', payload: packs})
       }
     }
-    if (props.type === 'a') getPacks()
-  }, [dispatch, props.id, props.type])
+    if (params.type === 'a') getPacks()
+  }, [dispatch, params.id, params.type])
   useEffect(() => {
     setPacks(() => {
-      const packs = state.packs.filter(p => p.product.id === props.id)
+      const packs = state.packs.filter(p => p.product.id === params.id)
       return packs.sort((p1, p2) => p2.price! - p1.price!)
     })
-  }, [state.packs, props.id])
+  }, [state.packs, params.id])
   useEffect(() => {
     setActivePacks(() => packs.filter(p => p.isActive))
   }, [packs])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleArchive = () => {
     try{
       archiveProduct(product, state.packs)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteProduct(product)
-        showMessage(labels.deleteSuccess)
-        f7.views.current.router.back()
+        message(labels.deleteSuccess, 3000)
+        history.goBack()
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })
   }
@@ -90,13 +92,13 @@ const ProductPacks = (props: Props) => {
         <Icon material="build"></Icon>
       </Fab>
       <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${props.id}`)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${params.id}`)}>
           {labels.details}
         </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${props.id}/0`)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${params.id}/0`)}>
           {labels.addPack}
         </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${props.id}/0`)}>
+        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${params.id}/0`)}>
           {labels.addGroup}
         </ActionsButton>
         {activePacks.length === 0 && 

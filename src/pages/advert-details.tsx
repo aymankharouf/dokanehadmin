@@ -2,20 +2,22 @@ import {useContext, useState, useEffect} from 'react'
 import {Page, Navbar, Card, CardContent, CardFooter, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { useParams } from 'react-router'
 
-type Props = {
+type Params = {
   id: string
 }
-const AdvertDetails = (props: Props) => {
+const AdvertDetails = () => {
   const {state} = useContext(StateContext)
-  const [advert, setAdvert] = useState(() => state.adverts.find(a => a.id === props.id))
+  const params = useParams<Params>()
+  const [advert, setAdvert] = useState(() => state.adverts.find(a => a.id === params.id))
   useEffect(() => {
-    setAdvert(() => state.adverts.find(a => a.id === props.id))
-  }, [state.adverts, props.id])
+    setAdvert(() => state.adverts.find(a => a.id === params.id))
+  }, [state.adverts, params.id])
   return (
     <Page>
       <Navbar title={labels.advertDetails} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-advert/${props.id}`}>
+      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-advert/${params.id}`}>
         <Icon material="edit"></Icon>
       </Fab>
       <Card>

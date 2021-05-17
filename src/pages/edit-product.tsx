@@ -1,17 +1,22 @@
 import {useState, useContext, useEffect, ChangeEvent} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
-import {editProduct, showMessage, showError, getMessage} from '../data/actions'
+import {editProduct, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditProduct = (props: Props) => {
+const EditProduct = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [product] = useState(() => state.products.find(p => p.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [product] = useState(() => state.products.find(p => p.id === params.id)!)
   const [name, setName] = useState(product.name)
   const [alias, setAlias] = useState(product.alias)
   const [description, setDescription] = useState(product.description)
@@ -52,12 +57,6 @@ const EditProduct = (props: Props) => {
     || imageUrl !== product.imageUrl) setHasChanged(true)
     else setHasChanged(false)
   }, [product, name, alias, description, countryId, categoryId, trademarkId, unit, imageUrl])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       if (state.products.find(p => p.id !== product.id && p.categoryId === categoryId && p.countryId === countryId && p.name === name)) {
@@ -74,10 +73,10 @@ const EditProduct = (props: Props) => {
         unit
       }
       editProduct(newProduct, product.name, state.packs, image)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

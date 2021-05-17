@@ -1,16 +1,21 @@
 import {useState, useContext, useEffect, ChangeEvent} from 'react'
 import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
-import {editAdvert, showMessage, showError, getMessage} from '../data/actions'
+import {editAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditAdvert = (props: Props) => {
+const EditAdvert = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [advert] = useState(() => state.adverts.find(a => a.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [advert] = useState(() => state.adverts.find(a => a.id === params.id)!)
   const [title, setTitle] = useState(advert?.title)
   const [text, setText] = useState(advert?.text)
   const [imageUrl, setImageUrl] = useState(advert?.imageUrl)
@@ -38,12 +43,6 @@ const EditAdvert = (props: Props) => {
     || imageUrl !== advert?.imageUrl) setHasChanged(true)
     else setHasChanged(false)
   }, [advert, title, text, imageUrl])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       const newAdvert = {
@@ -52,10 +51,10 @@ const EditAdvert = (props: Props) => {
         text,
       }
       editAdvert(newAdvert, image)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

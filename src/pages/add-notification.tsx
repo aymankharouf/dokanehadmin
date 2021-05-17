@@ -1,30 +1,28 @@
-import {useContext, useState, useEffect} from 'react'
-import {sendNotification, showMessage, showError, getMessage} from '../data/actions'
+import {useContext, useState} from 'react'
+import {sendNotification, getMessage} from '../data/actions'
 import {f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem} from 'framework7-react'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 
 const AddNotification = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [userId, setUserId] = useState('')
   const [title, setTitle] = useState('')
-  const [message, setMessage] = useState('')
+  const [messageText, setMessageText] = useState('')
   const [users] = useState(() => [...state.users].sort((u1, u2) => u1.mobile > u2.mobile ? 1 : -1))
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
-      sendNotification(userId, title, message)
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      sendNotification(userId, title, messageText)
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (
@@ -66,8 +64,8 @@ const AddNotification = () => {
           clearButton
           type="text"
           value={message}
-          onChange={e => setMessage(e.target.value)}
-          onInputClear={() => setMessage('')}
+          onChange={e => setMessageText(e.target.value)}
+          onInputClear={() => setMessageText('')}
         />
       </List>
       {userId && title && message &&

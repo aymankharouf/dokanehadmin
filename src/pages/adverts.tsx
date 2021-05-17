@@ -4,25 +4,22 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {updateAdvertStatus, showMessage, showError, getMessage, deleteAdvert} from '../data/actions'
+import {updateAdvertStatus, getMessage, deleteAdvert} from '../data/actions'
 import {advertTypes} from '../data/config'
 import {Advert} from '../data/types'
+import { useIonToast } from '@ionic/react'
+import { useLocation } from 'react-router'
 
 const Adverts = () => {
   const {state} = useContext(StateContext)
+  const [message] = useIonToast()
+  const location = useLocation()
   const [currentAdvert, setCurrentAdvert] = useState<Advert>()
-  const [error, setError] = useState('')
   const [adverts, setAdverts] = useState<Advert[]>([])
   const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     setAdverts(() => [...state.adverts].sort((a1, a2) => a2.time > a1.time ? 1 : -1))
   }, [state.adverts])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleAction = (advert: Advert) => {
     setCurrentAdvert(advert)
     setActionOpened(true)
@@ -32,9 +29,9 @@ const Adverts = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         updateAdvertStatus(currentAdvert, state.adverts)
-        showMessage(labels.editSuccess)
+        message(labels.editSuccess, 3000)
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })  
   }
@@ -43,9 +40,9 @@ const Adverts = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteAdvert(currentAdvert)
-        showMessage(labels.deleteSuccess)
+        message(labels.deleteSuccess, 3000)
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })  
   }

@@ -1,68 +1,64 @@
-import {useState, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListInput, Button} from 'framework7-react'
-import {registerUser, showMessage, showError, getMessage} from '../data/actions'
+import {useState} from 'react'
+import {registerUser, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { useHistory, useLocation } from 'react-router'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonLoading, useIonToast } from '@ionic/react'
+import Header from './header'
 
-type Props = {
-  id: string
-}
-const Register = (props: Props) => {
+const Register = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
   const handleRegister = async () => {
     try{
-      setInprocess(true)
+      loading()
       await registerUser(email, password)
-      setInprocess(false)
-      showMessage(labels.registerSuccess)
-      f7.views.current.router.back()
-      f7.panel.close('right') 
+      dismiss()
+      message(labels.registerSuccess, 3000)
+      history.goBack()
     } catch (err){
-      setInprocess(false)
-      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      dismiss()
+      message(getMessage(location.pathname, err), 3000)
     }
   }
 
   return (
-    <Page>
-      <Navbar title={labels.registerTitle} backLink={labels.back} />
-      <List form>
-        <ListInput
-          label={labels.email}
-          type="text"
-          clearButton
-          autofocus
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <ListInput
-          label={labels.password}
-          type="text"
-          clearButton
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-      </List>
-      {!email || !password ? '' :
-        <Button text={labels.register} href="#" large onClick={() => handleRegister()} />
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.registerTitle} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.email}
+            </IonLabel>
+            <IonInput 
+              value={email} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setEmail(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.password}
+            </IonLabel>
+            <IonInput 
+              value={password} 
+              type="text" 
+              clearInput
+              onIonChange={e => setPassword(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+        {email && password &&
+          <IonButton expand="block" fill="clear" onClick={handleRegister}>{labels.register}</IonButton>
+        }
+      </IonContent>
+    </IonPage>
   )
 }
 export default Register

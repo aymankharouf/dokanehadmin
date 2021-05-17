@@ -1,23 +1,28 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {addPackStore, showMessage, showError, getMessage} from '../data/actions'
+import {addPackStore, getMessage} from '../data/actions'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   storeId: string,
   requestId: string
 }
-const AddStorePack = (props: Props) => {
+const AddStorePack = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [packId, setPackId] = useState('')
-  const [packRequest] = useState(() => state.packRequests.find(r => r.id === props.requestId))
-  const [store] = useState(() => state.stores.find(s => s.id === props.storeId)!)
+  const [packRequest] = useState(() => state.packRequests.find(r => r.id === params.requestId))
+  const [store] = useState(() => state.stores.find(s => s.id === params.storeId)!)
   const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [packs] = useState(() => {
     let packs
-    if (props.requestId) {
+    if (params.requestId) {
       const siblingPack = state.packs.find(p => p.id === packRequest?.siblingPackId)
       packs = state.packs.filter(p => p.product.id === siblingPack?.product.id)
     } else {
@@ -30,12 +35,6 @@ const AddStorePack = (props: Props) => {
     }
     return packs.sort((p1, p2) => p1.name > p2.name ? 1 : -1)
   }) 
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSubmit = () => {
     try{
       if (state.packStores.find(p => p.packId === packId && p.storeId === store.id)) {
@@ -52,11 +51,11 @@ const AddStorePack = (props: Props) => {
         time: new Date()
       }
       addPackStore(packStore, state.packs, state.users, state.packRequests, packRequest)
-      showMessage(labels.addSuccess)
-      if (packRequest) f7.views.current.router.navigate('/home/')
-      else f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      if (packRequest) history.push('/')
+      else history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
 

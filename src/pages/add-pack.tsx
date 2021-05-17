@@ -1,25 +1,30 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
-import {addPack, showMessage, showError, getMessage} from '../data/actions'
+import {addPack, getMessage} from '../data/actions'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {units} from '../data/config'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   productId: string,
   requestId: string
 }
-const AddPack = (props: Props) => {
+const AddPack = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [packRequest] = useState(() => state.packRequests.find(r => r.id === props.requestId))
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [packRequest] = useState(() => state.packRequests.find(r => r.id === params.requestId))
   const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
   const [name, setName] = useState(packRequest?.name || '')
   const [unitsCount, setUnitsCount] = useState('')
   const [byWeight, setByWeight] = useState(siblingPack?.byWeight || false)
   const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
   const [image, setImage] = useState<File>()
-  const [product] = useState(() => state.products.find(p => p.id === props.productId)!)
+  const [product] = useState(() => state.products.find(p => p.id === params.productId)!)
   const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [storeId, setStoreId] = useState(packRequest?.storeId || '')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
@@ -29,35 +34,32 @@ const AddPack = (props: Props) => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
   useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
     if (byWeight || unitsCount) setName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === product.unit)?.name}`)
   }, [unitsCount, product, byWeight])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-    const filename = files[0].name
-    if (filename.lastIndexOf('.') <= 0) {
-      setError(labels.invalidFile)
-      return
+    try {
+      const files = e.target.files
+      if (!files) return
+      const filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        throw new Error('invalidFile')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        if (fileReader.result) setImageUrl(fileReader.result.toString())
+      })
+      fileReader.readAsDataURL(files[0])
+      setImage(files[0])
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
     }
-    const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      if (fileReader.result) setImageUrl(fileReader.result.toString())
-    })
-    fileReader.readAsDataURL(files[0])
-    setImage(files[0])
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.product.id === props.productId && p.name === name)) {
+      if (state.packs.find(p => p.product.id === params.productId && p.name === name)) {
         throw new Error('duplicateName')
       }
       const stores = [{
@@ -78,11 +80,11 @@ const AddPack = (props: Props) => {
         lastTrans: new Date()
       }
       addPack(pack, product, state.users, state.packRequests, packRequest, image)
-      showMessage(labels.addSuccess)
-      if (packRequest) f7.views.current.router.navigate('/home/')
-      else f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      if (packRequest) history.push('/')
+      else history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

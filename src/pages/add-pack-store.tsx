@@ -1,24 +1,23 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {addPackStore, showMessage, showError, getMessage} from '../data/actions'
+import {addPackStore, getMessage} from '../data/actions'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const AddPackStore = (props: Props) => {
+const AddPackStore = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [price, setPrice] = useState('')
   const [storeId, setStoreId] = useState('')
-  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
+  const [pack] = useState(() => state.packs.find(p => p.id === params.id)!)
   const handleSubmit = () => {
     try{
       if (state.packStores.find(p => p.packId === pack.id && p.storeId === storeId)) {
@@ -36,10 +35,10 @@ const AddPackStore = (props: Props) => {
         time: new Date()
       }
       addPackStore(storePack, state.packs)
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-    	setError(getMessage(f7.views.current.router.currentRoute.path, err))
+    	message(getMessage(location.pathname, err), 3000)
     }
   }
 

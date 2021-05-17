@@ -1,6 +1,5 @@
 import firebase, {prodApp} from './firebase'
 import labels from './labels'
-import {f7} from 'framework7-react'
 import {randomColors, storeTypes} from './config'
 import {Advert, Category, Country, Error, Location, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification} from './types'
 
@@ -15,22 +14,6 @@ export const getMessage = (path: string, error: Error) => {
     })
   }
   return labels[errorCode] || labels['unknownError']
-}
-
-export const showMessage = (messageText: string) => {
-  const message = f7.toast.create({
-    text: `<span class="success">${messageText}<span>`,
-    closeTimeout: 3000,
-  })
-  message.open()
-}
-
-export const showError = (messageText: string) => {
-  const message = f7.toast.create({
-    text: `<span class="error">${messageText}<span>`,
-    closeTimeout: 3000,
-  })
-  message.open()
 }
 
 export const quantityText = (quantity: number, weight?: number): string => {
@@ -207,6 +190,13 @@ export const addLocation = (location: Location) => {
 export const editLocation = (location: Location, locations: Location[]) => {
   const values = locations.filter(l => l.id !== location.id)
   values.push(location)
+  firebase.firestore().collection('lookups').doc('l').update({
+    values
+  })
+}
+
+export const deleteLocation = (locationId: string, locations: Location[]) => {
+  const values = locations.filter(l => l.id !== locationId)
   firebase.firestore().collection('lookups').doc('l').update({
     values
   })

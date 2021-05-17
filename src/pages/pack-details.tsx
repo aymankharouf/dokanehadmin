@@ -1,24 +1,29 @@
 import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Navbar, Card, CardContent, CardFooter, Link, List, ListItem, Icon, Fab, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
-import {deleteStorePack, deletePack, showMessage, showError, getMessage} from '../data/actions'
+import {deleteStorePack, deletePack, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {Pack, PackStore, Store} from '../data/types'
 import {units} from '../data/config'
 import moment from 'moment'
 import 'moment/locale/ar'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
 type ExtendedPackStore = PackStore & {
   packInfo: Pack,
   storeInfo: Store
 }
-const PackDetails = (props: Props) => {
+const PackDetails = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [pack] = useState(() => state.packs.find(p => p.id === props.id))
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [pack] = useState(() => state.packs.find(p => p.id === params.id))
   const [packStores, setPackStores] = useState<ExtendedPackStore[]>([])
   useEffect(() => {
     setPackStores(() => {
@@ -35,20 +40,14 @@ const PackDetails = (props: Props) => {
       return results.sort((s1, s2) => s1.price - s2.price)
     })
   }, [pack, state.stores, state.packStores, state.packs])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleDelete = () => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deletePack(pack?.id!)
-        showMessage(labels.deleteSuccess)
-        f7.views.current.router.back()
+        message(labels.deleteSuccess, 3000)
+        history.goBack()
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })
   }
@@ -56,9 +55,9 @@ const PackDetails = (props: Props) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteStorePack(storePackInfo, state.packStores, state.packs)
-        showMessage(labels.deleteSuccess)
+        message(labels.deleteSuccess, 3000)
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })
   }
@@ -96,10 +95,10 @@ const PackDetails = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-pack-store/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-pack-store/${params.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack?.subPackId ? 'edit-group' : 'edit-pack'}/${props.id}`)}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/${pack?.subPackId ? 'edit-group' : 'edit-pack'}/${params.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
           {state.packStores.filter(p => p.packId === pack?.id).length === 0 && 

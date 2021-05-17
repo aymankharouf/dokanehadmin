@@ -1,13 +1,17 @@
 import {useState, useEffect, useContext} from 'react'
-import {addStore, showMessage, showError, getMessage} from '../data/actions'
+import {addStore, getMessage} from '../data/actions'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
 import { storeTypes } from '../data/config'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 const AddStore = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
   const [mobileErrorMessage, setMobileErrorMessage] = useState('')
@@ -31,12 +35,6 @@ const AddStore = () => {
     if (mobile) validateMobile(mobile)
     else setMobileErrorMessage('')
   }, [mobile])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleSetPosition = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -61,10 +59,10 @@ const AddStore = () => {
         time: new Date()
       }
       addStore(store)
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

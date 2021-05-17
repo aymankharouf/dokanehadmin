@@ -1,18 +1,23 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle, Actions, ActionsButton} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
-import {addProduct, showMessage, showError, getMessage} from '../data/actions'
+import {addProduct, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { Category } from '../data/types'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const AddProduct = (props: Props) => {
+const AddProduct = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [productRequest] = useState(() => state.productRequests.find(r => r.id === props.id))
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [productRequest] = useState(() => state.productRequests.find(r => r.id === params.id))
   const [name, setName] = useState(productRequest?.name || '')
   const [alias, setAlias] = useState('')
   const [description, setDescription] = useState('')
@@ -41,31 +46,28 @@ const AddProduct = (props: Props) => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
   useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
     if (unit && (byWeight || unitsCount)) setPackName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === unit)?.name}`)
   }, [unitsCount, unit, byWeight])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-    const filename = files[0].name
-    if (filename.lastIndexOf('.') <= 0) {
-      setError(labels.invalidFile)
-      return
+    try {
+      const files = e.target.files
+      if (!files) return
+      const filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        throw new Error('invalidFile')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        if (fileReader.result) setImageUrl(fileReader.result.toString())
+      })
+      fileReader.readAsDataURL(files[0])
+      setImage(files[0])
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
     }
-    const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      if (fileReader.result) setImageUrl(fileReader.result.toString())
-    })
-    fileReader.readAsDataURL(files[0])
-    setImage(files[0])
   }
   const handleSubmit = () => {
     try{
@@ -103,11 +105,11 @@ const AddProduct = (props: Props) => {
         lastTrans: new Date()
       }
       addProduct(product, pack, state.users, productRequest, state.productRequests, image)
-      showMessage(labels.addSuccess)
-      if (productRequest) f7.views.current.router.navigate('/home/')
-      else f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      if (productRequest) history.push('/')
+      else history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

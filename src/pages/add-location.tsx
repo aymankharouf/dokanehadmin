@@ -1,50 +1,55 @@
-import {useState, useEffect} from 'react'
-import {addLocation, showMessage, showError, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
+import {useState} from 'react'
+import {addLocation, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 const AddLocation = () => {
-  const [error, setError] = useState('')
   const [name, setName] = useState('')
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const handleSubmit = () => {
     try{
       addLocation({
         id: Math.random().toString(),
         name,
       })
-      showMessage(labels.addSuccess)
-      f7.views.current.router.back()
+      message(labels.addSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.addLocation} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name} 
-          clearButton
-          autofocus
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-      </List>
-      {name && 
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+    <IonPage>
+      <Header title={labels.addLocation} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+      </IonContent>
+      {name &&
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-    </Page>
+    </IonPage>
   )
 }
 export default AddLocation

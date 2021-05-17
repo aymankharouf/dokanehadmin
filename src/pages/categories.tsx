@@ -2,26 +2,31 @@ import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {deleteCategory, showMessage, showError, getMessage, categoryChildren} from '../data/actions'
+import {deleteCategory, getMessage, categoryChildren} from '../data/actions'
 import {Category} from '../data/types'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
 type ExtendedCategory = Category & {
   childrenCount: number,
   productsCount: number
 }
-const Categories = (props: Props) => {
+const Categories = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [categories, setCategories] = useState<ExtendedCategory[]>([])
-  const [currentCategory] = useState(() => state.categories.find(c => c.id === props.id))
+  const [currentCategory] = useState(() => state.categories.find(c => c.id === params.id))
   const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
   const [categoryProductsCount] = useState(() => state.products.filter(p => p.categoryId === currentCategory?.id).length)
   useEffect(() => {
     setCategories(() => {
-      const children = state.categories.filter(c => c.parentId === props.id)
+      const children = state.categories.filter(c => c.parentId === params.id)
       let categories = children.map(c => {
         const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
         const categoryChildrens = categoryChildren(c.id, state.categories)
@@ -34,21 +39,15 @@ const Categories = (props: Props) => {
       })
       return categories.sort((c1, c2) => c1.ordering - c2.ordering)
     })
-  }, [state.categories, state.products, props.id])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
+  }, [state.categories, state.products, params.id])
   const handleDelete = () => {
     try{
       if (!currentCategory) return
       deleteCategory(currentCategory, state.categories)
-      showMessage(labels.deleteSuccess)
-      f7.views.current.router.back()
+      message(labels.deleteSuccess, 3000)
+      history.goBack()
     } catch(err) {
-      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      message(getMessage(location.pathname, err), 3000)
     }
   }
 
@@ -79,20 +78,20 @@ const Categories = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-category/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-category/${params.id}`)}>
             <Icon material="add"></Icon>
           </FabButton>
-          {props.id === '0' ? '' :
-            <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-category/${props.id}`)}>
+          {params.id === '0' ? '' :
+            <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-category/${params.id}`)}>
               <Icon material="edit"></Icon>
             </FabButton>
           }
-          {props.id !== '0' && categoryChildrenCount + categoryProductsCount === 0 ?
+          {params.id !== '0' && categoryChildrenCount + categoryProductsCount === 0 ?
             <FabButton color="red" onClick={() => handleDelete()}>
               <Icon material="delete"></Icon>
             </FabButton>
           : ''}
-          <FabButton color="orange" onClick={() => f7.views.current.router.navigate(`/products/${props.id}`)}>
+          <FabButton color="orange" onClick={() => f7.views.current.router.navigate(`/products/${params.id}`)}>
             <Icon material="shopping_cart"></Icon>
           </FabButton>
 

@@ -4,15 +4,19 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {deleteLog, showMessage, showError, getMessage} from '../data/actions'
+import {deleteLog, getMessage} from '../data/actions'
 import {Log, User } from '../data/types'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 type ExtendedLog = Log & {
   userInfo: User
 }
 const Logs = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
   const [logs, setLogs] = useState<ExtendedLog[]>([])
   useEffect(() => {
     setLogs(() => {
@@ -26,18 +30,12 @@ const Logs = () => {
       return logs.sort((l1, l2) => l2.time > l1.time ? 1 : -1)
     })
   }, [state.logs, state.users])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleDelete = (log: Log) => {
     try{
       deleteLog(log)
-      showMessage(labels.deleteSuccess)
+      message(labels.deleteSuccess, 3000)
     } catch(err) {
-      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      message(getMessage(location.pathname, err), 3000)
     }
   }
   return(

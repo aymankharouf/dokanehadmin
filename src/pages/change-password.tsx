@@ -1,37 +1,27 @@
 import {useState, useEffect} from 'react'
 import {f7, Page, Navbar, List, ListInput, Button} from 'framework7-react'
-import {changePassword, showMessage, showError, getMessage} from '../data/actions'
+import {changePassword, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { useIonLoading, useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
   const handleSubmit = async () => {
     try{
-      setInprocess(true)
+      loading()
       await changePassword(oldPassword, newPassword)
-      setInprocess(false)
-      showMessage(labels.changePasswordSuccess)
-      f7.views.current.router.back()
+      dismiss()
+      message(labels.changePasswordSuccess, 3000)
+      history.goBack()
     } catch(err) {
-      setInprocess(false)
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      dismiss()
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
 

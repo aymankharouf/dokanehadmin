@@ -1,34 +1,57 @@
-import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListItem} from 'framework7-react'
+import {useContext, useState, useEffect, useRef} from 'react'
 import {StateContext} from '../data/state-provider'
 import {logout} from '../data/actions'
 import labels from '../data/labels'
+import { IonBadge, IonContent, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle } from '@ionic/react'
+import { useHistory } from 'react-router'
 
 const Panel = () => {
   const {state, dispatch} = useContext(StateContext)
   const [approvalsCount, setApprovalsAcount] = useState(0)
+  const menuEl = useRef<HTMLIonMenuElement | null>(null);
+  const history = useHistory()
   useEffect(() => {
     const newUsers = state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)).length
     setApprovalsAcount(state.passwordRequests.length + state.productRequests.length + state.packRequests.length + newUsers)
   }, [state.users, state.passwordRequests, state.productRequests, state.packRequests])
   const handleLogout = () => {
     logout()
-    f7.views.main.router.navigate('/home/', {reloadAll: true})
-    f7.panel.close('right') 
-    dispatch({type: 'CLEAR_BASKET'})
+    dispatch({type: 'LOGOUT'})
+    history.push('/')
+    if (menuEl.current) menuEl.current.close()
   }
 
   return(
-    <Page>
-      <Navbar title={labels.mainPanelTitle} />
-      <List>
-        {state.user ? <ListItem link="#" title={labels.logout} onClick={() => handleLogout()} />
-        : <ListItem link="/panel-login/" title={labels.login} />}
-        {state.user ? <ListItem link="/settings/" title={labels.settings} view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/approvals/" title={labels.approvals} badge={approvalsCount} badgeColor="red" view="#main-view" panelClose /> : ''}
-        {state.user ? <ListItem link="/logs/" title={labels.logs} view="#main-view" panelClose /> : ''}
-      </List>
-    </Page>
+    <IonMenu contentId="main" type="overlay" ref={menuEl}>
+      <IonContent>
+        <IonList>
+          <IonListHeader>{labels.mainPanelTitle}</IonListHeader>
+          <IonMenuToggle autoHide={false}>
+            {state.user ?
+              <>
+                <IonItem href="#" onClick={handleLogout}>
+                  <IonLabel>{labels.logout}</IonLabel>
+                </IonItem>
+                <IonItem routerLink="/settings">
+                  <IonLabel>{labels.settings}</IonLabel>
+                </IonItem>
+                <IonItem routerLink="/approvals">
+                  <IonLabel>{labels.approvals}</IonLabel>
+                  <IonBadge color="danger">{approvalsCount}</IonBadge>
+                </IonItem>
+                <IonItem routerLink="/logs">
+                  <IonLabel>{labels.logs}</IonLabel>
+                  <IonBadge color="danger">{state.logs.length}</IonBadge>
+                </IonItem>
+                </>
+            : <IonItem routerLink='/login'>
+                <IonLabel>{labels.login}</IonLabel>
+              </IonItem>
+            }
+          </IonMenuToggle>
+        </IonList>
+      </IonContent>
+    </IonMenu>
   )
 }
 export default Panel

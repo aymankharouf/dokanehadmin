@@ -4,13 +4,18 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {deleteNotification, showMessage, showError, getMessage} from '../data/actions'
+import {deleteNotification, getMessage} from '../data/actions'
 import {Notification, User } from '../data/types'
+import { useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
 
-type ExtendedNotification = Notification & {userInfo: User}
+type ExtendedNotification = Notification & {
+  userInfo: User
+}
 const Notifications = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
+  const [message] = useIonToast()
+  const location = useLocation()
   const [notifications, setNotifications] = useState<ExtendedNotification[]>([])
   useEffect(() => {
     setNotifications(() => {
@@ -24,19 +29,13 @@ const Notifications = () => {
       return notifications.sort((n1, n2) => n2.time > n1.time ? -1 : 1)
     })
   }, [state.users, state.notifications])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleDelete = (userInfo: User, notificationId: string) => {
     f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
       try{
         deleteNotification(userInfo, notificationId, state.notifications)
-        showMessage(labels.deleteSuccess)
+        message(labels.deleteSuccess, 3000)
       } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
+        message(getMessage(location.pathname, err), 3000)
       }
     })  
   }

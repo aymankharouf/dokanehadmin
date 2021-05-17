@@ -1,16 +1,21 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
-import {editPack, showMessage, showError, getMessage} from '../data/actions'
+import {editPack, getMessage} from '../data/actions'
 import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditPack = (props: Props) => {
+const EditPack = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [pack] = useState(() => state.packs.find(p => p.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [pack] = useState(() => state.packs.find(p => p.id === params.id)!)
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount?.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
@@ -31,33 +36,30 @@ const EditPack = (props: Props) => {
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-    const filename = files[0].name
-    if (filename.lastIndexOf('.') <= 0) {
-      setError(labels.invalidFile)
-      return
+    try {
+      const files = e.target.files
+      if (!files) return
+      const filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        throw new Error(labels.invalidFile)
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        if (fileReader.result) setImageUrl(fileReader.result.toString())
+      })
+      fileReader.readAsDataURL(files[0])
+      setImage(files[0])
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
     }
-    const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      if (fileReader.result) setImageUrl(fileReader.result.toString())
-    })
-    fileReader.readAsDataURL(files[0])
-    setImage(files[0])
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.id !== pack.id && p.product.id === props.id && p.name === name)) {
+      if (state.packs.find(p => p.id !== pack.id && p.product.id === params.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       const newPack = {
@@ -68,10 +70,10 @@ const EditPack = (props: Props) => {
         isActive
       }
       editPack(newPack, state.packs, image)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return (

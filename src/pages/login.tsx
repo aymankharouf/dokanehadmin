@@ -1,75 +1,75 @@
-import {useState, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListInput, Button, Toolbar, Link} from 'framework7-react'
-import {login, showMessage, showError, getMessage} from '../data/actions'
+import {useState} from 'react'
+import {login, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { IonButton, IonButtons, IonContent, IonFooter, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, useIonLoading, useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
+import Header from './header'
+import { Link } from 'react-router-dom'
 
-type Props = {
-  id: string
-}
-const Login = (props: Props) => {
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
+const Login = () => {
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
-
   const handleLogin = async () => {
     try{
-      setInprocess(true)
+      loading()
       await login(email, password)
-      setInprocess(false)
-      showMessage(labels.loginSuccess)
-      f7.views.current.router.back()
-      f7.panel.close('right')  
+      dismiss()
+      message(labels.loginSuccess, 3000)
+      history.goBack()
     } catch(err) {
-      setInprocess(false)
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      dismiss()
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
 
   return (
-    <Page>
-      <Navbar title={labels.login} backLink={labels.back} />
-      <List form>
-        <ListInput
-          label={labels.email}
-          type="text"
-          value={email}
-          clearButton
-          autofocus
-          onChange={e => setEmail(e.target.value)}
-          onInputClear={() => setEmail('')}
-        />
-        <ListInput
-          label={labels.password}
-          type="text"
-          value={password}
-          clearButton
-          onChange={e => setPassword(e.target.value)}
-          onInputClear={() => setPassword('')}
-        />
-      </List>
-      {email && password &&
-        <Button text={labels.logon} large onClick={() => handleLogin()} />
-      }
-      <Toolbar bottom>
-        <Link href="/register/">{labels.registerTitle}</Link>
-        <Link href="/change-password/">{labels.changePassword}</Link>
-      </Toolbar>
-
-    </Page>
+    <IonPage>
+      <Header title={labels.login} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.email}
+            </IonLabel>
+            <IonInput 
+              value={email} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setEmail(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.password}
+            </IonLabel>
+            <IonInput 
+              value={password} 
+              type="text" 
+              clearInput
+              onIonChange={e => setPassword(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+        {email && password &&
+          <IonButton expand="block" fill="clear" onClick={handleLogin}>{labels.login}</IonButton>
+        }
+      </IonContent>
+      <IonFooter>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <Link to="/register">{labels.registerTitle}</Link>
+          </IonButtons>
+          <IonButtons slot="end">
+            <Link to="/change-password">{labels.changePassword}</Link>
+          </IonButtons>
+        </IonToolbar>
+      </IonFooter>
+    </IonPage>
   )
 }
 export default Login

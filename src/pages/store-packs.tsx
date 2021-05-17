@@ -5,21 +5,23 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
 import {Category, Pack, PackStore} from '../data/types'
+import { useParams } from 'react-router'
 
-type Props = {
+type Params = {
   id: string
 }
 type ExtendedPackStore = PackStore & {
   packInfo: Pack,
   categoryInfo: Category
 }
-const StorePacks = (props: Props) => {
+const StorePacks = () => {
   const {state} = useContext(StateContext)
-  const [store] = useState(() => state.stores.find(s => s.id === props.id)!)
+  const params = useParams<Params>()
+  const [store] = useState(() => state.stores.find(s => s.id === params.id)!)
   const [storePacks, setStorePacks] = useState<ExtendedPackStore[]>([])
   useEffect(() => {
     setStorePacks(() => {
-      const storePacks = state.packStores.filter(p => p.storeId === props.id)
+      const storePacks = state.packStores.filter(p => p.storeId === params.id)
       const results = storePacks.map(p => {
         const packInfo = state.packs.find(pa => pa.id === p.packId)!
         const categoryInfo = state.categories.find(c => c.id === packInfo.product.categoryId)!
@@ -31,7 +33,7 @@ const StorePacks = (props: Props) => {
       })
       return results.sort((p1, p2) => p1.packInfo.product.categoryId === p2.packInfo.product.categoryId ? (p2.time > p1.time ? -1 : 1) : (p1.categoryInfo.name > p2.categoryInfo.name ? 1 : -1))
     })
-  }, [state.packStores, state.packs, state.categories, props.id])
+  }, [state.packStores, state.packs, state.categories, params.id])
 
   let i = 0
   return(
@@ -73,7 +75,7 @@ const StorePacks = (props: Props) => {
           }
         </List>
       </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/add-store-pack/${props.id}`}>
+      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/add-store-pack/${params.id}`}>
         <Icon material="add"></Icon>
       </Fab>
     </Page>

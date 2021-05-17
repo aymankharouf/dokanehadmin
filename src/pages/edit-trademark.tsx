@@ -1,29 +1,23 @@
-import {useState, useContext, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
+import {useState, useContext} from 'react'
 import {StateContext} from '../data/state-provider'
-import {editTrademark, showMessage, showError, getMessage, deleteTrademark} from '../data/actions'
+import {editTrademark, getMessage} from '../data/actions'
 import labels from '../data/labels'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
-type Props = {
+type Params = {
   id: string
 }
-const EditCountry = (props: Props) => {
+const EditCountry = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [trademark] = useState(() => state.trademarks.find(t => t.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [trademark] = useState(() => state.trademarks.find(t => t.id === params.id)!)
   const [name, setName] = useState(trademark.name)
-  const [hasChanged, setHasChanged] = useState(false)
-  useEffect(() => {
-    if (name !== trademark.name) setHasChanged(true)
-    else setHasChanged(false)
-  }, [trademark, name])
-
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleEdit = () => {
     try{
       const newTrademark = {
@@ -31,56 +25,39 @@ const EditCountry = (props: Props) => {
         name
       }
       editTrademark(newTrademark, state.trademarks)
-      showMessage(labels.editSuccess)
-      f7.views.current.router.back()
+      message(labels.editSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
-  const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
-      try{
-        const trademarkProducts = state.products.filter(p => p.trademarkId === props.id)
-        if (trademarkProducts.length > 0) throw new Error('trademarkProductsFound') 
-        deleteTrademark(props.id, state.trademarks)
-        showMessage(labels.deleteSuccess)
-        f7.views.current.router.back()
-      } catch(err) {
-        setError(getMessage(f7.views.current.router.currentRoute.path, err))
-      }
-    })
-  }
   return (
-    <Page>
-      <Navbar title={labels.editTrademark} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={name}
-          clearButton
-          autofocus
-          type="text" 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-      </List>
-      <FabBackdrop slot="fixed" />
-      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          {!name || !hasChanged ? '' :
-            <FabButton color="green" onClick={() => handleEdit()}>
-              <Icon material="done"></Icon>
-            </FabButton>
-          }
-          <FabButton color="red" onClick={() => handleDelete()}>
-            <Icon material="delete"></Icon>
-          </FabButton>
-        </FabButtons>
-      </Fab>
-    </Page>
+    <IonPage>
+      <Header title={labels.editTrademark} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+      </IonContent>
+        {name && (name !== trademark.name) &&
+          <IonFab vertical="top" horizontal="end" slot="fixed">
+            <IonFabButton onClick={handleEdit}>
+              <IonIcon ios={checkmarkOutline} />
+            </IonFabButton>
+          </IonFab>
+        }
+    </IonPage>
   )
 }
 export default EditCountry

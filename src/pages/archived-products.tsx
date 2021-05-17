@@ -2,8 +2,10 @@ import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {getCategoryName, getArchivedProducts, getMessage, showError, productOfText} from '../data/actions'
+import {getCategoryName, getArchivedProducts, getMessage, productOfText} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
+import { useIonLoading, useIonToast } from '@ionic/react'
+import { useLocation } from 'react-router'
 
 type ExtendedProduct = Product & {
   categoryInfo: Category,
@@ -12,8 +14,9 @@ type ExtendedProduct = Product & {
 }
 const ArchivedProducts = () => {
   const {state, dispatch} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
+  const [message] = useIonToast()
+  const location = useLocation()
+  const [loading, dismiss] = useIonLoading()
   const [products, setProducts] = useState<ExtendedProduct[]>([])
   useEffect(() => {
     setProducts(() => {
@@ -32,30 +35,17 @@ const ArchivedProducts = () => {
       return products.sort((p1, p2) => p1.name > p2.name ? -1 : 1)
     })
   }, [state.products, state.categories, state.countries, state.trademarks])
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
   const handleRetreive = async () => {
     try{
-      setInprocess(true)
+      loading()
       const products = await getArchivedProducts()
       if (products.length > 0) {
         dispatch({type: 'SET_ARCHIVED_PRODUCTS', payload: products})
       }
-      setInprocess(false)
+      dismiss()
     } catch(err) {
-      setInprocess(false)
-      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      dismiss()
+      message(getMessage(location.pathname, err), 3000)
     }
   }
   if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>

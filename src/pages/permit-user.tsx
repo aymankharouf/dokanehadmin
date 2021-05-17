@@ -1,46 +1,38 @@
 import {useContext, useState, useEffect} from 'react'
 import {f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem} from 'framework7-react'
-import {permitUser, showMessage, showError, getMessage} from '../data/actions'
+import {permitUser, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
 import { storeTypes } from '../data/config'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonLoading, useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const PermitUser = (props: Props) => {
+const PermitUser = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [inprocess, setInprocess] = useState(false)
-  const [user] = useState(() => state.users.find(u => u.id === props.id)!)
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [loading, dismiss] = useIonLoading()
+  const [user] = useState(() => state.users.find(u => u.id === params.id)!)
   const [storeName, setStoreName] = useState(user.storeName || '')
   const [address, setAddress] = useState(user.address || '')
   const [locationId, setLocationId] = useState('')
   const [type, setType] = useState('')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
-  useEffect(() => {
-    if (inprocess) {
-      f7.dialog.preloader(labels.inprocess)
-    } else {
-      f7.dialog.close()
-    }
-  }, [inprocess])
   const handlePermit = () => {
     try{
-      setInprocess(true)
+      loading()
       permitUser(user, type, storeName, locationId, address)
-      setInprocess(false)
-      showMessage(labels.permitSuccess)
-      f7.views.current.router.back()
+      dismiss()
+      message(labels.permitSuccess, 3000)
+      history.goBack()
     } catch (err){
-      setInprocess(false)
-      setError(getMessage(f7.views.current.router.currentRoute.path, err))
+      dismiss()
+      message(getMessage(location.pathname, err), 3000)
     }
   }
 

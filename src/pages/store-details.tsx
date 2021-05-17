@@ -3,16 +3,18 @@ import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButto
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
+import { useParams } from 'react-router'
 
-type Props = {
+type Params = {
   id: string
 }
-const StoreDetails = (props: Props) => {
+const StoreDetails = () => {
   const {state} = useContext(StateContext)
-  const [store, setStore] = useState(() => state.stores.find(s => s.id === props.id)!)
+  const params = useParams<Params>()
+  const [store, setStore] = useState(() => state.stores.find(s => s.id === params.id)!)
   useEffect(() => {
-    setStore(() => state.stores.find(s => s.id === props.id)!)
-  }, [state.stores, props.id])
+    setStore(() => state.stores.find(s => s.id === params.id)!)
+  }, [state.stores, params.id])
 
   return (
     <Page>
@@ -67,10 +69,10 @@ const StoreDetails = (props: Props) => {
         <Icon material="keyboard_arrow_down"></Icon>
         <Icon material="close"></Icon>
         <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/store-packs/${props.id}`)}>
+          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/store-packs/${params.id}`)}>
             <Icon material="shopping_cart"></Icon>
           </FabButton>
-          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-store/${props.id}`)}>
+          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-store/${params.id}`)}>
             <Icon material="edit"></Icon>
           </FabButton>
         </FabButtons>

@@ -1,35 +1,34 @@
-import {useContext, useState, useEffect} from 'react'
+import {useContext, useState} from 'react'
 import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
-import {resolvePasswordRequest, showMessage, showError, getMessage} from '../data/actions'
+import {resolvePasswordRequest, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {randomColors} from '../data/config'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { useIonToast } from '@ionic/react'
 
-type Props = {
+type Params = {
   id: string
 }
-const RetreivePassword = (props: Props) => {
+const RetreivePassword = () => {
   const {state} = useContext(StateContext)
-  const [error, setError] = useState('')
-  const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === props.id))
+  const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
+  const history = useHistory()
+  const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === params.id))
   const [userInfo] = useState(() => state.users.find(u => u.mobile === passwordRequest?.mobile))
   const [password] = useState(() => {
     const password = userInfo?.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
     return password?.join('')
   })
-  useEffect(() => {
-    if (error) {
-      showError(error)
-      setError('')
-    }
-  }, [error])
   const handleResolve = () => {
     try{
-      resolvePasswordRequest(props.id)
-      showMessage(labels.sendSuccess)
-      f7.views.current.router.back()
+      resolvePasswordRequest(params.id)
+      message(labels.sendSuccess, 3000)
+      history.goBack()
     } catch(err) {
-			setError(getMessage(f7.views.current.router.currentRoute.path, err))
+			message(getMessage(location.pathname, err), 3000)
 		}
   }
   return(
