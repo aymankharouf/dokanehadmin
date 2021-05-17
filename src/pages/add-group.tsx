@@ -14,7 +14,7 @@ const AddGroup = (props: Props) => {
   const [packRequest] = useState(() => state.packRequests.find(r => r.id === props.requestId))
   const [name, setName] = useState(packRequest?.name || '')
   const [subPackId, setSubPackId] = useState(packRequest?.siblingPackId || '')
-  const [subCount, setSubCount] = useState('')
+  const [subCount, setSubCount] = useState(packRequest?.subCount || '')
   const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
   const [withGift, setWithGift] = useState(false)
   const [image, setImage] = useState<File>()
@@ -225,7 +225,7 @@ const AddGroup = (props: Props) => {
           <img src={imageUrl} className="img-card" alt={labels.noImage} />
         }
       </List>
-      {name && subPackId && subCount &&
+      {name && subPackId && subCount && (gift || !withGift) &&
         <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
           <Icon material="done"></Icon>
         </Fab>

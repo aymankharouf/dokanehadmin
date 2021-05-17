@@ -42,6 +42,7 @@ export type Pack = {
   unitsCount: number,
   imageUrl?: string,
   withGift?: boolean,
+  gift?: string,
   forSale: boolean,
   isActive: boolean,
   lastTrans: Date

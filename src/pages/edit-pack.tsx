@@ -1,6 +1,6 @@
-import {useState, useContext, useEffect, ChangeEvent} from 'react'
+import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {editPack, showMessage, showError, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle} from 'framework7-react'
+import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 
@@ -19,6 +19,7 @@ const EditPack = (props: Props) => {
   const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
+  const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (name !== pack.name
     || +unitsCount !== pack.unitsCount
@@ -36,6 +37,9 @@ const EditPack = (props: Props) => {
       setError('')
     }
   }, [error])
+  const onUploadClick = () => {
+    if (inputEl.current) inputEl.current.click();
+  };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
@@ -122,13 +126,16 @@ const EditPack = (props: Props) => {
           />
         </ListItem>
         {specialImage &&
-          <ListInput 
-            name="image" 
-            label={labels.image} 
+          <input 
+            ref={inputEl}
             type="file" 
             accept="image/*" 
+            style={{display: "none"}}
             onChange={e => handleFileChange(e)}
           />
+        }
+        {specialImage &&
+          <ListButton title={labels.setImage} onClick={onUploadClick} />
         }
         {specialImage &&
           <img src={imageUrl} className="img-card" alt={labels.noImage} />
