@@ -1,9 +1,9 @@
-import {useState, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListInput, Button} from 'framework7-react'
+import {useState} from 'react'
 import {changePassword, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { useIonLoading, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonLoading, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
+import Header from './header'
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('')
@@ -24,32 +24,40 @@ const ChangePassword = () => {
 			message(getMessage(location.pathname, err), 3000)
 		}
   }
-
   return (
-    <Page>
-      <Navbar title={labels.changePassword} backLink={labels.back} />
-      <List form>
-        <ListInput
-          label={labels.oldPassword}
-          type="text"
-          name="oldPassword"
-          clearButton
-          onChange={e => setOldPassword(e.target.value)}
-          onInputClear={() => setOldPassword('')}
-        />
-        <ListInput
-          label={labels.newPassword}
-          type="text"
-          name="newPassword"
-          clearButton
-          onChange={e => setNewPassword(e.target.value)}
-          onInputClear={() => setNewPassword('')}
-        />
-      </List>
-      {!oldPassword || !newPassword || oldPassword === newPassword ? '' :
-        <Button text={labels.submit} large onClick={() => handleSubmit()} />
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.login} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.oldPassword}
+            </IonLabel>
+            <IonInput 
+              value={oldPassword} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setOldPassword(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.newPassword}
+            </IonLabel>
+            <IonInput 
+              value={newPassword} 
+              type="text" 
+              clearInput
+              onIonChange={e => setNewPassword(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+        {oldPassword && newPassword && oldPassword !== newPassword &&
+          <IonButton expand="block" fill="clear" onClick={handleSubmit}>{labels.submit}</IonButton>
+        }
+      </IonContent>
+    </IonPage>
   )
 }
 export default ChangePassword

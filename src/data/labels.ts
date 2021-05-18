@@ -372,6 +372,10 @@ const labels: Label = {
   invalidCountWithoutGift: 'لا يوجد معني لعرض بنفس العبوة وبلا هدية',
   packs: 'العبوات',
   activatePack: 'تفعيل عبوة',
+  cancel: 'تراجع',
+  ok: 'موافق',
+  save: 'حفظ',
+  setPosition: 'حدد الموقع'
 }
 
 export default labels

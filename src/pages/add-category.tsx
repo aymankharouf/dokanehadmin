@@ -1,10 +1,10 @@
 import {useState, useContext} from 'react'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import labels from '../data/labels'
 import {addCategory, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
+import Header from './header'
 
 type Props = {
   id: string
@@ -32,35 +32,45 @@ const AddCategory = (props: Props) => {
   }
   
   return (
-    <Page>
-      <Navbar title={labels.addCategory} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          autofocus
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          clearButton
-          type="number" 
-          value={ordering}
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
-        />
-      </List>
-      {name && ordering &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.addCategory} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.ordering}
+            </IonLabel>
+            <IonInput 
+              value={ordering} 
+              type="number" 
+              clearInput
+              onIonChange={e => setOrdering(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+        {name && ordering && 
+          <IonButton 
+            expand="block" 
+            fill="clear" 
+            onClick={handleSubmit}
+          >
+            {labels.save}
+          </IonButton>
+        }
+      </IonContent>
+    </IonPage>
   )
 }
 export default AddCategory

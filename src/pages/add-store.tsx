@@ -1,11 +1,12 @@
 import {useState, useEffect, useContext} from 'react'
 import {addStore, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
-import { storeTypes } from '../data/config'
-import { useIonToast } from '@ionic/react'
+import { storeTypes, patterns } from '../data/config'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 const AddStore = () => {
   const {state} = useContext(StateContext)
@@ -14,7 +15,7 @@ const AddStore = () => {
   const history = useHistory()
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
-  const [mobileErrorMessage, setMobileErrorMessage] = useState('')
+  const [mobileInvalid, setMobileInvalid] = useState(true)
   const [address, setAddress] = useState('')
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
@@ -22,18 +23,7 @@ const AddStore = () => {
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const [position, setPosition] = useState({lat: 0, lng: 0})
   useEffect(() => {
-    const patterns = {
-      mobile: /^07[7-9][0-9]{7}$/
-    }
-    const validateMobile = (value: string) => {
-      if (patterns.mobile.test(value)){
-        setMobileErrorMessage('')
-      } else {
-        setMobileErrorMessage(labels.invalidMobile)
-      }
-    }
-    if (mobile) validateMobile(mobile)
-    else setMobileErrorMessage('')
+    setMobileInvalid(!mobile || !patterns.mobile.test(mobile))
   }, [mobile])
   const handleSetPosition = () => {
     navigator.geolocation.getCurrentPosition(
@@ -66,96 +56,80 @@ const AddStore = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.newStore} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={name}
-          clearButton 
-          autofocus
-          type="text" 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput
-          name="mobile"
-          label={labels.mobile}
-          value={mobile}
-          clearButton
-          type="number"
-          errorMessage={mobileErrorMessage}
-          errorMessageForce
-          onChange={e => setMobile(e.target.value)}
-          onInputClear={() => setMobile('')}
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(s => !s)}
-          />
-        </ListItem>
-        <ListItem 
-          title={labels.type}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#locations", 
-            openIn: "sheet",
-            closeOnSelect: true, 
-          }}
-        >
-          <select name="type" value={type} onChange={e => setType(e.target.value)}>
-            <option value=""></option>
-            {storeTypes.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem 
-          title={labels.location}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#locations", 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close,
-          }}
-        >
-          <select name="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
-            <option value=""></option>
-            {locations.map(l => 
-              <option key={l.id} value={l.id}>{l.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="address" 
-          label={labels.address}
-          value={address}
-          clearButton 
-          type="textarea" 
-          onChange={e => setAddress(e.target.value)}
-          onInputClear={() => setAddress('')}
-        />
-        <ListButton 
-          title={labels.setPosition} 
-          onClick={handleSetPosition}
-        />
-      </List>
-      {name && locationId && type && !mobileErrorMessage && position.lat &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.newStore} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel 
+              position="floating" 
+              color={mobileInvalid ? 'danger' : 'primary'}
+            >
+              {labels.mobile}
+            </IonLabel>
+            <IonInput 
+              value={mobile} 
+              type="number" 
+              clearInput
+              onIonChange={e => setMobile(e.detail.value!)} 
+              color={mobileInvalid ? 'danger' : 'primary'}
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
+            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setType(e.detail.value)}>
+              {storeTypes.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.location}</IonLabel>
+            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setLocationId(e.detail.value)}>
+              {locations.map(l => <IonSelectOption key={l.id} value={l.id}>{l.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.address}</IonLabel>
+            <IonInput 
+              value={address} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setAddress(e.detail.value!)} 
+            />
+          </IonItem>
+          {!position.lat &&
+            <IonButton 
+              expand="block" 
+              fill="clear" 
+              onClick={handleSetPosition}
+            >
+              {labels.setPosition}
+            </IonButton>
+          }
+        </IonList>
+        {name && locationId && type && !mobileInvalid && position.lat &&
+          <IonFab vertical="top" horizontal="end" slot="fixed">
+            <IonFabButton onClick={handleSubmit}>
+              <IonIcon ios={checkmarkOutline} />
+            </IonFabButton>
+          </IonFab>
+        }
+      </IonContent>
+    </IonPage>
   )
 }
 export default AddStore

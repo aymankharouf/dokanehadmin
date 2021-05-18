@@ -1,10 +1,11 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Block, Navbar, List, ListItem, NavRight, Searchbar, Link} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {User} from '../data/types'
 import moment from 'moment'
 import 'moment/locale/ar'
+import { IonContent, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
+import Header from './header'
 
 const PermissionList = () => {
   const {state} = useContext(StateContext)
@@ -16,40 +17,27 @@ const PermissionList = () => {
     })
   }, [state.stores, state.users])
   return(
-    <Page>
-      <Navbar title={labels.newUsers} backLink={labels.back}>
-      <NavRight>
-          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
-        </NavRight>
-        <Searchbar
-          className="searchbar"
-          searchContainer=".search-list"
-          searchIn=".item-inner"
-          clearButton
-          expandable
-          placeholder={labels.search}
-        />
-      </Navbar>
-      <Block>
-        <List className="searchbar-not-found">
-          <ListItem title={labels.noData} />
-        </List>
-        <List mediaList className="search-list searchbar-found">
-          {users.length === 0 ? 
-            <ListItem title={labels.noData} /> 
+    <IonPage>
+      <Header title={labels.newUsers} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          {users.length === 0 ?
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem>
           : users.map(u => 
-              <ListItem
-                link={`/permit-user/${u.id}`}
-                title={u.name}
-                subtitle={u.storeName}
-                text={moment(u.time).fromNow()}
-                key={u.id}
-              />
+              <IonItem key={u.id} routerLink={`/permit-user/${u.id}`}>
+                <IonLabel>
+                  <div className="list-row1">{u.name}</div>
+                  <div className="list-row2">{u.storeName}</div>
+                  <div className="list-row3">{moment(u.time).fromNow()}</div>
+                </IonLabel>
+              </IonItem>    
             )
           }
-        </List>
-      </Block>
-    </Page>
+        </IonList>
+      </IonContent>
+    </IonPage>
   )
 }
 

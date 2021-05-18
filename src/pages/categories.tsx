@@ -1,11 +1,13 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Block, Navbar, List, ListItem, Fab, Icon, FabButton, FabButtons, Badge, FabBackdrop} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {deleteCategory, getMessage, categoryChildren} from '../data/actions'
 import {Category} from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonBadge, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from '@ionic/react'
+import Header from './header'
+import { addOutline, cartOutline, chevronDownOutline, pencilOutline, trashOutline } from 'ionicons/icons'
+import {randomColors} from '../data/config'
 
 type Params = {
   id: string
@@ -50,54 +52,53 @@ const Categories = () => {
       message(getMessage(location.pathname, err), 3000)
     }
   }
-
   return (
-    <Page>
-      <Navbar title={currentCategory?.name || labels.categories} backLink={labels.back} />
-      <Block>
-        <List mediaList>
-          {categories.length === 0 ? 
-            <ListItem title={labels.noData} /> 
-          : categories.map(c =>
-              <ListItem 
-                link={`/categories/${c.id}`} 
-                title={c.name}
-                subtitle={`${labels.childrenCount}: ${c.childrenCount}`}
-                text={`${labels.attachedProducts}: ${c.productsCount}`}
-                after={c.ordering}
-                key={c.id} 
-              >
-                {c.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
-              </ListItem>
+    <IonPage>
+      <Header title={currentCategory?.name || labels.categories} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          {categories.length === 0 ?
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem>
+          : categories.map(c => 
+              <IonItem key={c.id} routerLink={`/categories/${c.id}`}>
+                <IonLabel>
+                  <IonText color={randomColors[0].name}>{c.name}</IonText>
+                  <IonText color={randomColors[1].name}>{`${labels.childrenCount}: ${c.childrenCount}`}</IonText>
+                  <IonText color={randomColors[2].name}>{`${labels.attachedProducts}: ${c.productsCount}`}</IonText>
+                  <IonText color={randomColors[3].name}>{`${labels.ordering}:${c.ordering}`}</IonText>
+                </IonLabel>
+                {!c.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
+              </IonItem>    
             )
           }
-        </List>
-      </Block>
-      <FabBackdrop slot="fixed" />
-      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/add-category/${params.id}`)}>
-            <Icon material="add"></Icon>
-          </FabButton>
-          {params.id === '0' ? '' :
-            <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-category/${params.id}`)}>
-              <Icon material="edit"></Icon>
-            </FabButton>
+        </IonList>
+      </IonContent>
+      <IonFab horizontal="end" vertical="top" slot="fixed">
+        <IonFabButton>
+          <IonIcon ios={chevronDownOutline}></IonIcon>
+        </IonFabButton>
+        <IonFabList>
+          <IonFabButton color="success" routerLink={`/add-category/${params.id}`}>
+            <IonIcon ios={addOutline}></IonIcon>
+          </IonFabButton>
+          {params.id !== '0' &&
+            <IonFabButton color="warning" routerLink={`/edit-category/${params.id}`}>
+              <IonIcon ios={pencilOutline}></IonIcon>
+            </IonFabButton>
           }
-          {params.id !== '0' && categoryChildrenCount + categoryProductsCount === 0 ?
-            <FabButton color="red" onClick={() => handleDelete()}>
-              <Icon material="delete"></Icon>
-            </FabButton>
-          : ''}
-          <FabButton color="orange" onClick={() => f7.views.current.router.navigate(`/products/${params.id}`)}>
-            <Icon material="shopping_cart"></Icon>
-          </FabButton>
-
-        </FabButtons>
-      </Fab>
-    </Page>
+          {params.id !== '0' && categoryChildrenCount + categoryProductsCount === 0 &&
+            <IonFabButton color="danger" onClick={handleDelete}>
+              <IonIcon ios={trashOutline}></IonIcon>
+            </IonFabButton>
+          }
+          <IonFabButton color="secondary" routerLink={`/products/${params.id}`}>
+            <IonIcon ios={cartOutline}></IonIcon>
+          </IonFabButton>
+        </IonFabList>
+      </IonFab>
+    </IonPage>
   )
 }
 

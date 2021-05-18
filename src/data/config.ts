@@ -1,6 +1,6 @@
 export const randomColors = [
   {id: 0, name: 'primary'},
-  {id: 1, name: 'tertiary'},
+  {id: 1, name: 'secondary'},
   {id: 2, name: 'success'},
   {id: 3, name: 'warning'},
   {id: 4, name: 'danger'},
@@ -30,3 +30,9 @@ export const userTypes = [
   {id: 'd', name: 'موزع/جملة'},
   {id: 'n', name: 'عادي'}
 ]
+
+export const patterns = {
+  password: /^.{4}$/,
+  name: /^.{4,50}$/,
+  mobile: /^07[7-9][0-9]{7}$/
+}

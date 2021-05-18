@@ -1,10 +1,10 @@
 import {useState, useContext, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon, ListItem, Toggle} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {editCategory, getMessage, getCategoryName} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import Header from './header'
 
 type Params = {
   id: string
@@ -55,63 +55,55 @@ const EditCategory = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.editCategory} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListItem
-          title={labels.mainCategory}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#parents', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="parentId" value={parentId} onChange={e => setParentId(e.target.value)}>
-            <option value=""></option>
-            {categories.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={name}
-          clearButton
-          type="text" 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="ordering" 
-          label={labels.ordering}
-          clearButton
-          type="number" 
-          value={ordering}
-          onChange={e => setOrdering(e.target.value)}
-          onInputClear={() => setOrdering('')}
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(s => !s)}
-          />
-        </ListItem>
-      </List>
-      {name && ordering && hasChanged &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleEdit()}>
-          <Icon material="done"></Icon>
-        </Fab>
-      }
-    </Page>
+    <IonPage>
+      <Header title={labels.editCategory} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.mainCategory}</IonLabel>
+            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setParentId(e.detail.value)}>
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.ordering}
+            </IonLabel>
+            <IonInput 
+              value={ordering} 
+              type="number" 
+              clearInput
+              onIonChange={e => setOrdering(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+        </IonList>
+        {name && ordering && hasChanged && 
+          <IonButton 
+            expand="block" 
+            fill="clear" 
+            onClick={handleEdit}
+          >
+            {labels.save}
+          </IonButton>
+        }
+      </IonContent>
+    </IonPage>
   )
 }
 export default EditCategory

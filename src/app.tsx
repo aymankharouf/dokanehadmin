@@ -40,39 +40,39 @@ import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
 import UserTypes from './pages/user-types'
+import Users from './pages/users'
+import Stores from './pages/stores'
+import AddStore from './pages/add-store'
+import EditStore from './pages/edit-store'
+import Notifications from './pages/notifications'
+import AddNotification from './pages/add-notification'
+import Logs from './pages/logs'
+import PasswordRequests from './pages/password-requests'
+import RetreivePassword from './pages/retreive-password'
+import ChangePassword from './pages/change-password'
+import PermissionList from './pages/permission-list'
+import PermitUser from './pages/permit-user'
+import Categories from './pages/categories'
+import AddCategory from './pages/add-category'
+import EditCategory from './pages/edit-category'
 // import Products from './pages/products'
 // import ProductPacks from './pages/product-packs'
-// import Stores from './pages/stores'
 // import StorePacks from './pages/store-packs'
 // import AddStorePack from './pages/add-store-pack'
 // import AddProduct from './pages/add-product'
-// import AddStore from './pages/add-store'
 // import EditProduct from './pages/edit-product'
-// import Categories from './pages/categories'
-// import AddCategory from './pages/add-category'
-// import Users from './pages/users'
-// import PasswordRequests from './pages/password-requests'
 // import AddPack from './pages/add-pack'
 // import PackDetails from './pages/pack-details'
 // import EditPack from './pages/edit-pack'
-// import EditCategory from './pages/edit-category'
-// import EditStore from './pages/edit-store'
-// import RetreivePassword from './pages/retreive-password'
-// import ChangePassword from './pages/change-password'
 // import AddPackStore from './pages/add-pack-store'
-// import Logs from './pages/logs'
 // import StoreDetails from './pages/store-details'
 // import ProductDetails from './pages/product-details'
 // import AddGroup from './pages/add-group'
 // import EditGroup from './pages/edit-group'
-// import Notifications from './pages/notifications'
-// import AddNotification from './pages/add-notification'
 // import Adverts from './pages/adverts'
 // import AddAdvert from './pages/add-advert'
 // import AdvertDetails from './pages/advert-details'
 // import EditAdvert from './pages/edit-advert'
-// import PermitUser from './pages/permit-user'
-// import PermissionList from './pages/permission-list'
 // import ArchivedProducts from './pages/archived-products'
 // import ProductRequests from './pages/product-requests'
 // import ProductRequestDetails from './pages/product-request-details'
@@ -102,44 +102,44 @@ const app = () => {
               <Route path="/add-trademark" exact={true} component={AddTrademark} />
               <Route path="/edit-trademark/:id" exact={true} component={EditTrademark} />
               <Route path="/user-types" exact={true} component={UserTypes} />
-              {/* <Route path="/permit-user/:id" exact={true} component={PermitUser} />
-              <Route path="/change-password" exact={true} component={ChangePassword} />
-              <Route path="/products/:id" exact={true} component={Products} />
-              <Route path="/product-packs/:id/:type" exact={true} component={ProductPacks} />
-              <Route path="/product-details/:id" exact={true} component={ProductDetails} />
-              <Route path="/edit-product/:id" exact={true} component={EditProduct} />
+              <Route path="/users/:id" exact={true} component={Users} />
               <Route path="/stores" exact={true} component={Stores} />
               <Route path="/add-store" exact={true} component={AddStore} />
-              <Route path="/users/:id" exact={true} component={Users} />
-              <Route path="/store-details/:id" exact={true} component={StoreDetails} />
+              <Route path="/edit-store/:id" exact={true} component={EditStore} />
+              <Route path="/notifications" exact={true} component={Notifications} />
+              <Route path="/add-notification" exact={true} component={AddNotification} />
+              <Route path="/logs" exact={true} component={Logs} />
               <Route path="/password-requests" exact={true} component={PasswordRequests} />
+              <Route path="/retreive-password/:id" exact={true} component={RetreivePassword} />
+              <Route path="/change-password" exact={true} component={ChangePassword} />
+              <Route path="/permission-list" exact={true} component={PermissionList} />
+              <Route path="/permit-user/:id" exact={true} component={PermitUser} />
               <Route path="/categories/:id" exact={true} component={Categories} />
               <Route path="/add-category/:id" exact={true} component={AddCategory} />
               <Route path="/edit-category/:id" exact={true} component={EditCategory} />
-              <Route path="/store-packs/:id" exact={true} component={StorePacks} />
-              <Route path="/edit-store/:id" exact={true} component={EditStore} />
-              <Route path="/add-store-pack/:storeId/:requestId" exact={true} component={AddStorePack} />
-              <Route path="/add-pack-store/:id" exact={true} component={AddPackStore} />
-              <Route path="/add-product/:id" exact={true} component={AddProduct} />
-              <Route path="/add-pack/:productId/:requestId" exact={true} component={AddPack} />
-              <Route path="/add-group/:productId/:requestId" exact={true} component={AddGroup} />
-              <Route path="/pack-details/:id" exact={true} component={PackDetails} />
-              <Route path="/edit-pack/:id" exact={true} component={EditPack} />
-              <Route path="/edit-group/:id" exact={true} component={EditGroup} />
-              <Route path="/retreive-password/:id" exact={true} component={RetreivePassword} />
-              <Route path="/logs" exact={true} component={Logs} />
-              <Route path="/notifications" exact={true} component={Notifications} />
-              <Route path="/add-notification" exact={true} component={AddNotification} />
-              <Route path="/adverts" exact={true} component={Adverts} />
-              <Route path="/add-advert" exact={true} component={AddAdvert} />
-              <Route path="/advert-details/:id" exact={true} component={AdvertDetails} />
-              <Route path="/edit-advert/:id" exact={true} component={EditAdvert} />
-              <Route path="/permission-list" exact={true} component={PermissionList} />
-              <Route path="/archived-products" exact={true} component={ArchivedProducts} />
-              <Route path="/product-requests" exact={true} component={ProductRequests} />
-              <Route path="/product-request-details/:id" exact={true} component={ProductRequestDetails} />
-              <Route path="/pack-requests" exact={true} component={PackRequests} />
-              <Route path="/pack-request-details/:id" exact={true} component={PackRequestDetails} /> */}
+              {/* <Route path="/products/:id" exact={true} component={Products} /> */}
+              {/* <Route path="/product-packs/:id/:type" exact={true} component={ProductPacks} /> */}
+              {/* <Route path="/product-details/:id" exact={true} component={ProductDetails} /> */}
+              {/* <Route path="/edit-product/:id" exact={true} component={EditProduct} /> */}
+              {/* <Route path="/store-details/:id" exact={true} component={StoreDetails} /> */}
+              {/* <Route path="/store-packs/:id" exact={true} component={StorePacks} /> */}
+              {/* <Route path="/add-store-pack/:storeId/:requestId" exact={true} component={AddStorePack} /> */}
+              {/* <Route path="/add-pack-store/:id" exact={true} component={AddPackStore} /> */}
+              {/* <Route path="/add-product/:id" exact={true} component={AddProduct} /> */}
+              {/* <Route path="/add-pack/:productId/:requestId" exact={true} component={AddPack} /> */}
+              {/* <Route path="/add-group/:productId/:requestId" exact={true} component={AddGroup} /> */}
+              {/* <Route path="/pack-details/:id" exact={true} component={PackDetails} /> */}
+              {/* <Route path="/edit-pack/:id" exact={true} component={EditPack} /> */}
+              {/* <Route path="/edit-group/:id" exact={true} component={EditGroup} /> */}
+              {/* <Route path="/adverts" exact={true} component={Adverts} /> */}
+              {/* <Route path="/add-advert" exact={true} component={AddAdvert} /> */}
+              {/* <Route path="/advert-details/:id" exact={true} component={AdvertDetails} /> */}
+              {/* <Route path="/edit-advert/:id" exact={true} component={EditAdvert} /> */}
+              {/* <Route path="/archived-products" exact={true} component={ArchivedProducts} /> */}
+              {/* <Route path="/product-requests" exact={true} component={ProductRequests} /> */}
+              {/* <Route path="/product-request-details/:id" exact={true} component={ProductRequestDetails} /> */}
+              {/* <Route path="/pack-requests" exact={true} component={PackRequests} /> */}
+              {/* <Route path="/pack-request-details/:id" exact={true} component={PackRequestDetails} /> */}
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

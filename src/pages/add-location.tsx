@@ -1,10 +1,9 @@
 import {useState} from 'react'
 import {addLocation, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
-import { checkmarkOutline } from 'ionicons/icons'
 
 const AddLocation = () => {
   const [name, setName] = useState('')
@@ -41,14 +40,16 @@ const AddLocation = () => {
             />
           </IonItem>
         </IonList>
+        {name && 
+          <IonButton 
+            expand="block" 
+            fill="clear" 
+            onClick={handleSubmit}
+          >
+            {labels.save}
+          </IonButton>
+        }
       </IonContent>
-      {name &&
-        <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
-            <IonIcon ios={checkmarkOutline} />
-          </IonFabButton>
-        </IonFab>
-      }
     </IonPage>
   )
 }

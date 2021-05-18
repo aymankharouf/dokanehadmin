@@ -1,9 +1,11 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Block, Navbar, List, ListItem, Fab, Icon, Badge} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {Store} from '../data/types'
 import { storeTypes } from '../data/config'
+import { IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
+import Header from './header'
+import { addOutline } from 'ionicons/icons'
 
 const Stores = () => {
   const {state} = useContext(StateContext)
@@ -14,31 +16,33 @@ const Stores = () => {
       return stores.sort((s1, s2) => s1.name > s2.name ? 1 : -1)
     })
   }, [state.stores])
-  if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return (
-    <Page>
-      <Navbar title={labels.stores} backLink={labels.back} />
-      <Block>
-        <List>
+    <IonPage>
+      <Header title={labels.stores} />
+      <IonContent fullscreen className="ion-padding">
+      <IonList>
           {stores.length === 0 ? 
-            <ListItem title={labels.noData} /> 
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem> 
           : stores.map(s =>
-              <ListItem 
-                link={`/store-details/${s.id}`} 
-                title={s.name}
-                subtitle={storeTypes.find(t => t.id === s.type)!.name}
-                key={s.id} 
-              >
-                {s.isActive ? '' : <Badge slot="title" color='red'>{labels.inActive}</Badge>}
-              </ListItem>
+              <IonItem key={s.id} routerLink={`/store-details/${s.id}`}>
+                <IonLabel>
+                  <div className="list-row1">{s.name}</div>
+                  <div className="list-row2">{storeTypes.find(t => t.id === s.type)!.name}</div>
+                </IonLabel>
+                {!s.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
+              </IonItem> 
             )
           }
-        </List>
-      </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href="/add-store/">
-        <Icon material="add"></Icon>
-      </Fab>
-    </Page>
+        </IonList>
+      </IonContent>
+      <IonFab vertical="top" horizontal="end" slot="fixed">
+        <IonFabButton routerLink="/add-store">
+          <IonIcon ios={addOutline} />
+        </IonFabButton>
+      </IonFab>
+    </IonPage>
   )
 }
 

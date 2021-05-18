@@ -1,25 +1,50 @@
 /* Your app styles here */
 /* Your app styles here */
 
+ion-item {
+  font-size: 1rem;
+}
+
+ion-text {
+  display: block;
+  font-size: 0.8rem;
+}
+
 .sections {
     margin: 1rem;
 }
-  
+
 .center {
   text-align: center;
 }
 
-.total-price {
-  margin: 20px;
-}
-
-.order-button {
-  margin: 20px;
-  width: 10em;
-}
-
 .search-icon {
   margin-top: 0.8rem;
+}
+
+.primary {
+  --color: var(--ion-color-primary);
+  --button-color: var(--ion-color-primary);
+}
+
+.secondary {
+  --color: var(--ion-color-secondary);
+  --button-color: var(--ion-color-secondary);
+}
+
+.success {
+  --color: var(--ion-color-success);
+  --button-color: var(--ion-color-success);
+}
+
+.warning {
+  --color: var(--ion-color-warning);
+  --button-color: var(--ion-color-warning);
+}
+
+.danger {
+  --color: var(--ion-color-danger);
+  --button-color: var(--ion-color-danger);
 }
 
 .star {

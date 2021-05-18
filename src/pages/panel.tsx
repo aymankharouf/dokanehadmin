@@ -41,7 +41,7 @@ const Panel = () => {
                 </IonItem>
                 <IonItem routerLink="/logs">
                   <IonLabel>{labels.logs}</IonLabel>
-                  <IonBadge color="danger">{state.logs.length}</IonBadge>
+                  {state.logs.length > 0 && <IonBadge color="danger">{state.logs.length}</IonBadge>}
                 </IonItem>
                 </>
             : <IonItem routerLink='/login'>

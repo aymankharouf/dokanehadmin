@@ -1,11 +1,11 @@
 import {useState, useContext} from 'react'
 import {StateContext} from '../data/state-provider'
-import {editTrademark, getMessage} from '../data/actions'
+import {deleteTrademark, editTrademark, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
-import { checkmarkOutline } from 'ionicons/icons'
+import { trashOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -31,6 +31,26 @@ const EditCountry = () => {
 			message(getMessage(location.pathname, err), 3000)
 		}
   }
+  const handleDelete = () => {
+    alert({
+      header: labels.confirmationTitle,
+      message: labels.confirmationText,
+      buttons: [
+        {text: labels.cancel},
+        {text: labels.ok, handler: async () => {
+          try{
+            const trademarkProducts = state.products.filter(p => p.trademarkId === params.id)
+            if (trademarkProducts.length > 0) throw new Error('trademarkProductsFound') 
+            deleteTrademark(params.id, state.trademarks)
+            message(labels.deleteSuccess, 3000)
+            history.goBack()
+          } catch(err) {
+            message(getMessage(location.pathname, err), 3000)
+          }
+        }},
+      ],
+    })
+  }
   return (
     <IonPage>
       <Header title={labels.editTrademark} />
@@ -48,12 +68,21 @@ const EditCountry = () => {
               onIonChange={e => setName(e.detail.value!)} 
             />
           </IonItem>
+          {name && (name !== trademark.name) && 
+            <IonButton 
+              expand="block" 
+              fill="clear" 
+              onClick={handleEdit}
+            >
+              {labels.save}
+            </IonButton>
+          }
         </IonList>
       </IonContent>
         {name && (name !== trademark.name) &&
           <IonFab vertical="top" horizontal="end" slot="fixed">
-            <IonFabButton onClick={handleEdit}>
-              <IonIcon ios={checkmarkOutline} />
+            <IonFabButton onClick={handleDelete} color="danger">
+              <IonIcon ios={trashOutline} />
             </IonFabButton>
           </IonFab>
         }

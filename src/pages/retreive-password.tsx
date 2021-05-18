@@ -1,11 +1,12 @@
 import {useContext, useState} from 'react'
-import {f7, Page, Navbar, List, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
 import {resolvePasswordRequest, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {randomColors} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -32,35 +33,46 @@ const RetreivePassword = () => {
 		}
   }
   return(
-    <Page>
-      <Navbar title={labels.retreivePassword} backLink={labels.back} />
-      <List form>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={userInfo?.name || labels.unknown}
-          type="text" 
-          readonly
-        />
-        <ListInput 
-          name="mobile" 
-          label={labels.mobile}
-          value={passwordRequest?.mobile}
-          type="number"
-          readonly
-        />
-        <ListInput 
-          name="password" 
-          label={labels.password}
-          value={password || ''}
-          type="number"
-          readonly
-        />
-      </List>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleResolve()}>
-        <Icon material="done"></Icon>
-      </Fab>
-    </Page>
+    <IonPage>
+    <Header title={labels.retreivePassword} />
+    <IonContent fullscreen className="ion-padding">
+      <IonList>
+        <IonItem>
+          <IonLabel position="floating">
+            {labels.name}
+          </IonLabel>
+          <IonInput 
+            value={userInfo?.name || labels.unknown}
+            readonly
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="floating">
+            {labels.mobile}
+          </IonLabel>
+          <IonInput 
+            value={passwordRequest?.mobile} 
+            readonly
+          />
+        </IonItem>
+        <IonItem>
+          <IonLabel position="floating">
+            {labels.password}
+          </IonLabel>
+          <IonInput 
+            value={password || ''} 
+            readonly
+          />
+        </IonItem>
+      </IonList>
+    </IonContent>
+    <IonFab vertical="top" horizontal="end" slot="fixed">
+      <IonFabButton onClick={handleResolve}>
+        <IonIcon ios={checkmarkOutline} />
+      </IonFabButton>
+    </IonFab>
+  </IonPage>
+
   )
 }
 export default RetreivePassword
