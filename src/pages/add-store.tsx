@@ -121,14 +121,14 @@ const AddStore = () => {
             </IonButton>
           }
         </IonList>
-        {name && locationId && type && !mobileInvalid && position.lat &&
-          <IonFab vertical="top" horizontal="end" slot="fixed">
-            <IonFabButton onClick={handleSubmit}>
-              <IonIcon ios={checkmarkOutline} />
-            </IonFabButton>
-          </IonFab>
-        }
       </IonContent>
+      {name && locationId && type && !mobileInvalid && position.lat &&
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
+      }
     </IonPage>
   )
 }

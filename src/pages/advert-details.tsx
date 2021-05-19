@@ -1,8 +1,10 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Navbar, Card, CardContent, CardFooter, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { useParams } from 'react-router'
+import { IonCard, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonPage, IonRow } from '@ionic/react'
+import Header from './header'
+import { pencilOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -15,21 +17,28 @@ const AdvertDetails = () => {
     setAdvert(() => state.adverts.find(a => a.id === params.id))
   }, [state.adverts, params.id])
   return (
-    <Page>
-      <Navbar title={labels.advertDetails} backLink={labels.back} />
-      <Fab position="left-top" slot="fixed" color="red" className="top-fab" href={`/edit-advert/${params.id}`}>
-        <Icon material="edit"></Icon>
-      </Fab>
-      <Card>
-        <CardContent>
-          <div className="card-title">{advert?.title}</div>
-          <img src={advert?.imageUrl} className="img-card" alt={advert?.title} />
-        </CardContent>
-        <CardFooter>
-          <p>{advert?.text}</p>
-        </CardFooter>
-      </Card>
-    </Page>
+    <IonPage>
+      <Header title={labels.advertDetails} />
+      <IonContent fullscreen>
+        <IonCard>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonImg src={advert?.imageUrl} alt={advert?.title} />
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>{advert?.text}</IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
+      </IonContent>
+      <IonFab vertical="top" horizontal="end" slot="fixed">
+        <IonFabButton routerLink={`/edit-advert/${params.id}`}>
+          <IonIcon ios={pencilOutline} />
+        </IonFabButton>
+      </IonFab>
+    </IonPage>
   )
 }
 

@@ -1,10 +1,11 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {editPack, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -77,78 +78,72 @@ const EditPack = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={`${labels.editPack} ${pack.product.name}`} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          type="text" 
-          value={name} 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(s => !s)}
-          />
-        </ListItem>
-        <ListItem>
-          <span>{labels.byWeight}</span>
-          <Toggle 
-            name="byWeight" 
-            color="green" 
-            checked={byWeight} 
-            onToggleChange={() => setByWeight(s => !s)}
-          />
-        </ListItem>
-        {!byWeight && 
-          <ListInput 
-            name="unitsCount" 
-            label={labels.unitsCount}
-            clearButton
-            type="number" 
-            value={unitsCount} 
-            onChange={e => setUnitsCount(e.target.value)}
-            onInputClear={() => setUnitsCount('')}
-          />
-        }
-        <ListItem>
-          <span>{labels.specialImage}</span>
-          <Toggle 
-            name="specialImage" 
-            color="green" 
-            checked={specialImage} 
-            onToggleChange={() => setSpecialImage(s => !s)}
-          />
-        </ListItem>
-        {specialImage &&
-          <input 
-            ref={inputEl}
-            type="file" 
-            accept="image/*" 
-            style={{display: "none"}}
-            onChange={e => handleFileChange(e)}
-          />
-        }
-        {specialImage &&
-          <ListButton title={labels.setImage} onClick={onUploadClick} />
-        }
-        {specialImage &&
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
-        }
-      </List>
+    <IonPage>
+      <Header title={`${labels.editPack} ${pack.product.name}`} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.byWeight}</IonLabel>
+            <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
+          </IonItem>
+          {!byWeight &&
+            <IonItem>
+              <IonLabel position="floating" color="primary">
+                {labels.unitsCount}
+              </IonLabel>
+              <IonInput 
+                value={unitsCount} 
+                type="number"
+                clearInput
+                onIonChange={e => setUnitsCount(e.detail.value!)} 
+              />
+            </IonItem>
+          }
+          <IonItem>
+            <IonLabel color="primary">{labels.specialImage}</IonLabel>
+            <IonToggle checked={specialImage} onIonChange={() => setSpecialImage(s => !s)}/>
+          </IonItem>
+          {specialImage && <>
+            <input 
+              ref={inputEl}
+              type="file" 
+              accept="image/*" 
+              style={{display: "none"}}
+              onChange={e => handleFileChange(e)}
+            />
+            <IonButton 
+              expand="block" 
+              fill="clear" 
+              onClick={onUploadClick}
+            >
+              {labels.setImage}
+            </IonButton>
+            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          </>}
+        </IonList>
+      </IonContent>
       {name && unitsCount && hasChanged &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-    </Page>
+    </IonPage>
   )
 }
 export default EditPack

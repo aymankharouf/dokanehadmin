@@ -1,11 +1,12 @@
-import {useState, useContext, useEffect, ChangeEvent} from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
+import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {StateContext} from '../data/state-provider'
 import {editProduct, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -26,25 +27,31 @@ const EditProduct = () => {
   const [unit, setUnit] = useState(product.unit)
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const [image, setImage] = useState<File>()
-  const [fileErrorMessage, setFileErrorMessage] = useState('')
+  const inputEl = useRef<HTMLInputElement | null>(null);
   const [hasChanged, setHasChanged] = useState(false)
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  const onUploadClick = () => {
+    if (inputEl.current) inputEl.current.click();
+  };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files) return
-    const filename = files[0].name
-    if (filename.lastIndexOf('.') <= 0) {
-      setFileErrorMessage(labels.invalidFile)
-      return
+    try {
+      const files = e.target.files
+      if (!files) return
+      const filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        throw new Error('invalidFile')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        if (fileReader.result) setImageUrl(fileReader.result.toString())
+      })
+      fileReader.readAsDataURL(files[0])
+      setImage(files[0])
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
     }
-    const fileReader = new FileReader()
-    fileReader.addEventListener('load', () => {
-      if (fileReader.result) setImageUrl(fileReader.result.toString())
-    })
-    fileReader.readAsDataURL(files[0])
-    setImage(files[0])
   }
   useEffect(() => {
     if (name !== product.name
@@ -80,131 +87,103 @@ const EditProduct = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.editProduct} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          autofocus
-          type="text" 
-          value={name} 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="alias" 
-          label={labels.alias}
-          clearButton
-          type="text" 
-          value={alias} 
-          onChange={e => setAlias(e.target.value)}
-          onInputClear={() => setAlias('')}
-        />
-        <ListInput 
-          name="description" 
-          label={labels.description}
-          clearButton
-          type="text" 
-          value={description} 
-          onChange={e => setDescription(e.target.value)}
-          onInputClear={() => setDescription('')}
-        />
-        <ListItem
-          title={labels.trademark}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#trademarks', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="trademarkId" value={trademarkId} onChange={e => setTrademarkId(e.target.value)}>
-            <option value=""></option>
-            {trademarks.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.category}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#categories', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
-            <option value=""></option>
-            {categories.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.country}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#countries', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
-            <option value=""></option>
-            {countries.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.unit}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#unitTypes", 
-            openIn: "sheet",
-            closeOnSelect: true, 
-          }}
-        >
-          <select name="unit" value={unit} onChange={e => setUnit(e.target.value)}>
-            <option value=""></option>
-            {units.map(u => 
-              <option key={u.id} value={u.id}>{u.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="image" 
-          label="Image" 
-          type="file" 
-          accept="image/*" 
-          errorMessage={fileErrorMessage}
-          errorMessageForce
-          onChange={e => handleFileChange(e)}
-        />
-        <img src={imageUrl} className="img-card" alt={labels.noImage} />
-      </List>
-      {!name || !categoryId || !countryId || !hasChanged ? '' :
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+    <IonPage>
+      <Header title={labels.editProduct} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.alias}</IonLabel>
+            <IonInput 
+              value={alias} 
+              type="text" 
+              clearInput
+              onIonChange={e => setAlias(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.description}</IonLabel>
+            <IonInput 
+              value={description} 
+              type="text" 
+              clearInput
+              onIonChange={e => setDescription(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.trademark}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setTrademarkId(e.detail.value)}
+            >
+              {trademarks.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.category}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setCategoryId(e.detail.value)}
+            >
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.country}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setCountryId(e.detail.value)}
+            >
+              {countries.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.unit}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setUnit(e.detail.value)}
+            >
+              {units.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <input 
+            ref={inputEl}
+            type="file" 
+            accept="image/*" 
+            style={{display: "none" }}
+            onChange={e => handleFileChange(e)}
+          />
+          <IonButton 
+            expand="block" 
+            fill="clear" 
+            onClick={onUploadClick}
+          >
+            {labels.setImage}
+          </IonButton>
+          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+        </IonList>
+      </IonContent>
+      {name && categoryId && countryId && hasChanged &&
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-    </Page>
+    </IonPage>
   )
 }
 export default EditProduct

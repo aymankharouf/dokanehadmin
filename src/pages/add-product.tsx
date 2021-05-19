@@ -1,12 +1,13 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, ListButton, Toggle, Actions, ActionsButton} from 'framework7-react'
 import {StateContext } from '../data/state-provider'
 import {addProduct, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { Category } from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonActionSheet, IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import Header from './header'
+import { addOutline, checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -113,217 +114,181 @@ const AddProduct = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={labels.addProduct} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          autofocus
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListInput 
-          name="alias" 
-          label={labels.alias}
-          clearButton
-          type="text" 
-          value={alias} 
-          onChange={(e) => setAlias(e.target.value)}
-          onInputClear={() => setAlias('')}
-        />
-        <ListInput 
-          name="description" 
-          label={labels.description}
-          clearButton
-          type="text" 
-          value={description} 
-          onChange={e => setDescription(e.target.value)}
-          onInputClear={() => setDescription('')}
-        />
-        <ListItem
-          title={labels.trademark}
-          smartSelect
-          className="ss"
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#trademarks', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select 
-            name="trademarkId" 
-            value={trademarkId} 
-            onChange={e =>setTrademarkId(e.target.value)} 
+    <IonPage>
+      <Header title={labels.addProduct} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.alias}</IonLabel>
+            <IonInput 
+              value={alias} 
+              type="text" 
+              clearInput
+              onIonChange={e => setAlias(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.description}</IonLabel>
+            <IonInput 
+              value={description} 
+              type="text" 
+              clearInput
+              onIonChange={e => setDescription(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.trademark}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setTrademarkId(e.detail.value)}
+            >
+              {state.trademarks.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.category}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setCategoryId(e.detail.value)}
+            >
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.country}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setCountryId(e.detail.value)}
+            >
+              {state.countries.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.unit}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setUnit(e.detail.value)}
+            >
+              {units.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.forSale}</IonLabel>
+            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.byWeight}</IonLabel>
+            <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
+          </IonItem>
+          {!byWeight &&
+            <IonItem>
+              <IonLabel position="floating" color="primary">
+                {labels.unitsCount}
+              </IonLabel>
+              <IonInput 
+                value={unitsCount} 
+                type="number"
+                clearInput
+                onIonChange={e => setUnitsCount(e.detail.value!)} 
+              />
+            </IonItem>
+          }
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.packName}</IonLabel>
+            <IonInput 
+              value={packName} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setPackName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setStoreId(e.detail.value)}
+            >
+              {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.price}
+            </IonLabel>
+            <IonInput 
+              value={price} 
+              type="number" 
+              clearInput
+              onIonChange={e => setPrice(e.detail.value!)} 
+            />
+          </IonItem>
+          <input 
+            ref={inputEl}
+            type="file" 
+            accept="image/*" 
+            style={{display: "none" }}
+            onChange={e => handleFileChange(e)}
+          />
+          <IonButton 
+            expand="block" 
+            fill="clear" 
+            onClick={onUploadClick}
           >
-            <option value=""></option>
-            {state.trademarks.map(t => 
-              <option key={t.id} value={t.id}>{t.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.category}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#categories',
-            openIn: 'popup', 
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
-            <option value=""></option>
-            {categories.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem
-          title={labels.country}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#countries', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="countryId" value={countryId} onChange={e => setCountryId(e.target.value)}>
-            <option value=""></option>
-            {state.countries.map(c => 
-              <option key={c.id} value={c.id}>{c.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem 
-          title={labels.unit}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#units", 
-            openIn: "sheet",
-            closeOnSelect: true, 
-          }}
-        >
-          <select name="unit" value={unit} onChange={e => setUnit(e.target.value)}>
-            <option value=""></option>
-            {units.map(u => 
-              <option key={u.id} value={u.id}>{u.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListItem>
-          <span>{labels.forSale}</span>
-          <Toggle 
-            name="forSale" 
-            color="green" 
-            checked={forSale} 
-            onToggleChange={() => setForSale(s => !s)}
-          />
-        </ListItem>
-        <ListItem>
-          <span>{labels.byWeight}</span>
-          <Toggle 
-            name="byWeight" 
-            color="green" 
-            checked={byWeight} 
-            onToggleChange={() => setByWeight(s => !s)}
-          />
-        </ListItem>
-        {!byWeight && 
-          <ListInput 
-            name="unitsCount" 
-            label={labels.unitsCount}
-            clearButton
-            type="number" 
-            value={unitsCount} 
-            onChange={e => setUnitsCount(e.target.value)}
-            onInputClear={() => setUnitsCount('')}
-          />
-        }
-        <ListInput 
-          name="packName" 
-          label={labels.packName}
-          clearButton
-          type="text" 
-          value={packName} 
-          onChange={e => setPackName(e.target.value)}
-          onInputClear={() => setPackName('')}
-        />
-        <ListItem
-          title={labels.store}
-          disabled={!!productRequest}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#stores", 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {state.stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="price" 
-          label={labels.price}
-          value={price}
-          clearButton
-          type="number" 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
-        />
-        <input 
-          ref={inputEl}
-          type="file" 
-          accept="image/*" 
-          style={{display: "none" }}
-          onChange={e => handleFileChange(e)}
-        />
-        <ListButton title={labels.setImage} onClick={onUploadClick} />
-        <img src={imageUrl} className="img-card" alt={labels.noImage} />
-      </List>
+            {labels.setImage}
+          </IonButton>
+          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+        </IonList>
+      </IonContent>
       {name && categoryId && countryId && unit && packName && unitsCount && price && storeId &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-      <Fab position="right-top" slot="fixed" className="top-fab" onClick={() => setActionOpened(true)}>
-        <Icon material="add"></Icon>
-      </Fab>
-      <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
-        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-trademark/')}>
-          {labels.addTrademark}
-        </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-country/')}>
-          {labels.addCountry}
-        </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate('/add-category/0')}>
-          {labels.addCategory}
-        </ActionsButton>
-      </Actions>
-    </Page>
+      <IonFab vertical="top" horizontal="start" slot="fixed">
+        <IonFabButton onClick={() => setActionOpened(true)}>
+          <IonIcon ios={addOutline} />
+        </IonFabButton>
+      </IonFab>
+      <IonActionSheet
+          isOpen={actionOpened}
+          onDidDismiss={() => setActionOpened(false)}
+          buttons={[
+            {
+              text: labels.addTrademark,
+              cssClass: 'primary',
+              handler: () => history.push('/add-trademark')
+            },
+            {
+              text: labels.addCountry,
+              cssClass: 'secondary',
+              handler: () => history.push('/add-country')
+            },
+            {
+              text: labels.addCategory,
+              cssClass: 'success',
+              handler: () => history.push('/add-category/0')
+            },
+          ]}
+        />
+    </IonPage>
   )
 }
 export default AddProduct

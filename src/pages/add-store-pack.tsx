@@ -1,10 +1,11 @@
 import {useState, useContext} from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {addPackStore, getMessage} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   storeId: string,
@@ -60,46 +61,41 @@ const AddStorePack = () => {
   }
 
   return (
-    <Page>
-      <Navbar title={`${labels.addProduct} ${store.name}`} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListItem
-          title={labels.product}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#packs', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="packId" value={packId} onChange={e => setPackId(e.target.value)}>
-            <option value=""></option>
-            {packs.map(p => 
-              <option key={p.id} value={p.id}>{p.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="price" 
-          label={labels.price}
-          value={price}
-          clearButton
-          type="number" 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
-        />
-      </List>
+    <IonPage>
+      <Header title={`${labels.addProduct} ${store.name}`} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.product}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setPackId(e.detail.value)}
+            >
+              {packs.map(p => <IonSelectOption key={p.id} value={p.id}>{p.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.price}
+            </IonLabel>
+            <IonInput 
+              value={price} 
+              type="number" 
+              clearInput
+              onIonChange={e => setPrice(e.detail.value!)} 
+            />
+          </IonItem>
+        </IonList>
+      </IonContent>
       {packId && price &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-      
-    </Page>
+    </IonPage>
   )
 }
 export default AddStorePack

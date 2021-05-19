@@ -1,9 +1,11 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, FabButton, FabButtons, FabBackdrop} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { storeTypes } from '../data/config'
 import { useParams } from 'react-router'
+import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle } from '@ionic/react'
+import Header from './header'
+import { cartOutline, chevronDownOutline, pencilOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -17,67 +19,75 @@ const StoreDetails = () => {
   }, [state.stores, params.id])
 
   return (
-    <Page>
-      <Navbar title={labels.storeDetails} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          value={store.name}
-          type="text" 
-          readonly
-        />
-        <ListInput
-          name="mobile"
-          label={labels.mobile}
-          value={store.mobile}
-          type="number"
-          readonly
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={store.isActive} 
-            disabled
-          />
-        </ListItem>
-        <ListInput
-          name="type"
-          label={labels.type}
-          value={storeTypes.find(t => t.id === store.type)!.name}
-          type="text"
-          readonly
-        />
-        <ListInput
-          name="location"
-          label={labels.location}
-          value={state.locations.find(l => l.id === store.locationId)?.name || ''}
-          type="text"
-          readonly
-        />
-        <ListInput 
-          name="address" 
-          label={labels.address}
-          value={store.address}
-          type="text"
-        />
-      </List>
-      <FabBackdrop slot="fixed" />
-      <Fab position="left-top" slot="fixed" color="orange" className="top-fab">
-        <Icon material="keyboard_arrow_down"></Icon>
-        <Icon material="close"></Icon>
-        <FabButtons position="bottom">
-          <FabButton color="green" onClick={() => f7.views.current.router.navigate(`/store-packs/${params.id}`)}>
-            <Icon material="shopping_cart"></Icon>
-          </FabButton>
-          <FabButton color="blue" onClick={() => f7.views.current.router.navigate(`/edit-store/${params.id}`)}>
-            <Icon material="edit"></Icon>
-          </FabButton>
-        </FabButtons>
-      </Fab>
-    </Page>
+    <IonPage>
+      <Header title={labels.storeDetails} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
+            <IonInput 
+              value={store.name} 
+              readonly
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.mobile}
+            </IonLabel>
+            <IonInput 
+              value={store.mobile} 
+              readonly
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={store.isActive} disabled/>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.type}
+            </IonLabel>
+            <IonInput 
+              value={storeTypes.find(t => t.id === store.type)!.name} 
+              readonly
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.location}
+            </IonLabel>
+            <IonInput 
+              value={state.locations.find(l => l.id === store.locationId)?.name || ''} 
+              readonly
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.address}
+            </IonLabel>
+            <IonInput 
+              value={store.address} 
+              readonly
+            />
+          </IonItem>
+        </IonList>
+      </IonContent>
+      <IonFab horizontal="end" vertical="top" slot="fixed">
+        <IonFabButton>
+          <IonIcon ios={chevronDownOutline}></IonIcon>
+        </IonFabButton>
+        <IonFabList>
+          <IonFabButton color="success" routerLink={`/store-packs/${params.id}`}>
+            <IonIcon ios={cartOutline}></IonIcon>
+          </IonFabButton>
+          <IonFabButton color="warning" routerLink={`/edit-store/${params.id}`}>
+            <IonIcon ios={pencilOutline}></IonIcon>
+          </IonFabButton>
+        </IonFabList>
+      </IonFab>
+    </IonPage>
   )
 }
 export default StoreDetails

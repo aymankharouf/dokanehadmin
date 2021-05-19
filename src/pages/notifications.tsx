@@ -5,10 +5,11 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import {deleteNotification, getMessage} from '../data/actions'
 import {Notification, User } from '../data/types'
-import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonAlert, useIonToast } from '@ionic/react'
 import { useLocation } from 'react-router'
 import { addOutline, trashOutline } from 'ionicons/icons'
 import Header from './header'
+import { randomColors } from '../data/config'
 
 type ExtendedNotification = Notification & {
   userInfo: User
@@ -61,10 +62,10 @@ const Notifications = () => {
           : notifications.map(n => 
               <IonItem key={n.id}>
                 <IonLabel>
-                  <div className="list-row1">{`${n.userInfo.name}:${n.userInfo.mobile}`}</div>
-                  <div className="list-row2">{n.title}</div>
-                  <div className="list-row3">{n.message}</div>
-                  <div className="list-row4">{moment(n.time).fromNow()}</div>
+                  <IonText color={randomColors[0].name}>{`${n.userInfo.name}:${n.userInfo.mobile}`}</IonText>
+                  <IonText color={randomColors[1].name}>{n.title}</IonText>
+                  <IonText color={randomColors[2].name}>{n.message}</IonText>
+                  <IonText color={randomColors[3].name}>{moment(n.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonIcon 
                   ios={trashOutline} 

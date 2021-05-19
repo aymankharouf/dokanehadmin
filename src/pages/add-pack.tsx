@@ -1,11 +1,12 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {addPack, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   productId: string,
@@ -28,7 +29,7 @@ const AddPack = () => {
   const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
   const [storeId, setStoreId] = useState(packRequest?.storeId || '')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
-  const [imageUrl, setImageUrl] = useState(product.imageUrl)
+  const [imageUrl, setImageUrl] = useState('')
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
@@ -88,109 +89,89 @@ const AddPack = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={`${labels.addPack} ${product.name}`} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          autofocus
-          type="text" 
-          value={name} 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListItem>
-          <span>{labels.forSale}</span>
-          <Toggle 
-            name="forSale" 
-            color="green" 
-            checked={forSale} 
-            onToggleChange={() => setForSale(s => !s)}
-          />
-        </ListItem>
-        <ListItem>
-          <span>{labels.byWeight}</span>
-          <Toggle 
-            name="byWeight" 
-            color="green" 
-            checked={byWeight} 
-            onToggleChange={() => setByWeight(s => !s)}
-          />
-        </ListItem>
-        {!byWeight &&
-          <ListInput 
-            name="unitsCount" 
-            label={labels.unitsCount}
-            clearButton
-            type="number" 
-            value={unitsCount} 
-            onChange={e => setUnitsCount(e.target.value)}
-            onInputClear={() => setUnitsCount('')}
-          />
-        }
-        <ListItem
-          title={labels.store}
-          disabled={!!packRequest}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: "#stores", 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="storeId" value={storeId} onChange={e => setStoreId(e.target.value)}>
-            <option value=""></option>
-            {state.stores.map(s => 
-              <option key={s.id} value={s.id}>{s.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="price" 
-          label={labels.price}
-          value={price}
-          clearButton
-          type="number" 
-          onChange={e => setPrice(e.target.value)}
-          onInputClear={() => setPrice('')}
-        />
-        <ListItem>
-          <span>{labels.specialImage}</span>
-          <Toggle 
-            name="specialImage" 
-            color="green" 
-            checked={specialImage} 
-            onToggleChange={() => setSpecialImage(!specialImage)}
-          />
-        </ListItem>
-        {specialImage &&
-          <input 
-            ref={inputEl}
-            type="file" 
-            accept="image/*" 
-            style={{display: "none"}}
-            onChange={e => handleFileChange(e)}
-          />
-        }
-        {specialImage &&
-          <ListButton title={labels.setImage} onClick={onUploadClick} />
-        }
-        {specialImage &&
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
-        }
-      </List>
+    <IonPage>
+      <Header title={`${labels.addPack} ${product.name}`} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.forSale}</IonLabel>
+            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.byWeight}</IonLabel>
+            <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
+          </IonItem>
+          {!byWeight &&
+            <IonItem>
+              <IonLabel position="floating" color="primary">
+                {labels.unitsCount}
+              </IonLabel>
+              <IonInput 
+                value={unitsCount} 
+                type="number"
+                clearInput
+                onIonChange={e => setUnitsCount(e.detail.value!)} 
+              />
+            </IonItem>
+          }
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
+            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setStoreId(e.detail.value)}>
+              {state.stores.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.price}
+            </IonLabel>
+            <IonInput 
+              value={price} 
+              type="number" 
+              clearInput
+              onIonChange={e => setPrice(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.specialImage}</IonLabel>
+            <IonToggle checked={specialImage} onIonChange={() => setSpecialImage(s => !s)}/>
+          </IonItem>
+          {specialImage && <>
+            <input 
+              ref={inputEl}
+              type="file" 
+              accept="image/*" 
+              style={{display: "none"}}
+              onChange={e => handleFileChange(e)}
+            />
+            <IonButton 
+              expand="block" 
+              fill="clear" 
+              onClick={onUploadClick}
+            >
+              {labels.setImage}
+            </IonButton>
+            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          </>}
+        </IonList>
+      </IonContent>
       {name && unitsCount &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-    </Page>
+    </IonPage>
   )
 }
 export default AddPack

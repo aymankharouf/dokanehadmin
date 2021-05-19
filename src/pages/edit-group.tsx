@@ -1,10 +1,11 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {editPack, getMessage} from '../data/actions'
-import {f7, Page, Navbar, List, ListItem, ListInput, Fab, Icon, Toggle, ListButton} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -102,118 +103,99 @@ const EditGroup = () => {
 		}
   }
   return (
-    <Page>
-      <Navbar title={`${labels.editGroup} ${pack.product.name}`} backLink={labels.back} />
-      <List form inlineLabels>
-        <ListInput 
-          name="name" 
-          label={labels.name}
-          clearButton
-          type="text" 
-          value={name} 
-          onChange={e => setName(e.target.value)}
-          onInputClear={() => setName('')}
-        />
-        <ListItem>
-          <span>{labels.isActive}</span>
-          <Toggle 
-            name="isActive" 
-            color="green" 
-            checked={isActive} 
-            onToggleChange={() => setIsActive(s => !s)}
-          />
-        </ListItem>
-        <ListItem
-          title={labels.pack}
-          smartSelect
-          // @ts-ignore
-          smartSelectParams={{
-            // el: '#subPacks', 
-            openIn: "popup",
-            closeOnSelect: true, 
-            searchbar: true, 
-            searchbarPlaceholder: labels.search,
-            popupCloseLinkText: labels.close
-          }}
-        >
-          <select name="subPackId" value={subPackId} onChange={e => setSubPackId(e.target.value)}>
-            <option value=""></option>
-            {packs.map(p => 
-              <option key={p.id} value={p.id}>{p.name}</option>
-            )}
-          </select>
-        </ListItem>
-        <ListInput 
-          name="subCount" 
-          label={labels.count}
-          value={subCount}
-          clearButton
-          type="number" 
-          onChange={e => setSubCount(e.target.value)}
-          onInputClear={() => setSubCount('')}
-        />
-        <ListItem>
-          <span>{labels.forSale}</span>
-          <Toggle 
-            name="forSale" 
-            color="green" 
-            checked={forSale} 
-            onToggleChange={() => setForSale(s => !s)}
-          />
-        </ListItem>
-        {forSale && 
-          <ListItem>
-            <span>{labels.withGift}</span>
-            <Toggle 
-              name="withGift" 
-              color="green" 
-              checked={withGift} 
-              onToggleChange={() => setWithGift(s => !s)}
+    <IonPage>
+      <Header title={`${labels.editGroup} ${pack.product.name}`} />
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
             />
-          </ListItem>
-        }
-        {withGift &&
-          <ListInput 
-            name="gift" 
-            label={labels.gift}
-            clearButton
-            type="text" 
-            value={gift} 
-            onChange={e => setGift(e.target.value)}
-            onInputClear={() => setGift('')}
-          />
-        }
-        <ListItem>
-          <span>{labels.specialImage}</span>
-          <Toggle 
-            name="specialImage" 
-            color="green" 
-            checked={specialImage} 
-            onToggleChange={() => setSpecialImage(s => !s)}
-          />
-        </ListItem>
-        {specialImage &&
-          <input 
-            ref={inputEl}
-            type="file" 
-            accept="image/*" 
-            style={{display: "none"}}
-            onChange={e => handleFileChange(e)}
-          />
-        }
-        {specialImage &&
-          <ListButton title={labels.setImage} onClick={onUploadClick} />
-        }
-        {specialImage &&
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
-        }
-      </List>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.pack}</IonLabel>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              onIonChange={e => setSubPackId(e.detail.value)}
+            >
+              {packs.map(p => <IonSelectOption key={p.id} value={p.id}>{p.name}</IonSelectOption>)}
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.count}
+            </IonLabel>
+            <IonInput 
+              value={subCount} 
+              type="number"
+              clearInput
+              onIonChange={e => setSubCount(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.forSale}</IonLabel>
+            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
+          </IonItem>
+          {forSale &&
+            <IonItem>
+              <IonLabel color="primary">{labels.withGift}</IonLabel>
+              <IonToggle checked={withGift} onIonChange={() => setWithGift(s => !s)}/>
+            </IonItem>
+          }
+          {withGift &&
+            <IonItem>
+              <IonLabel position="floating" color="primary">
+                {labels.gift}
+              </IonLabel>
+              <IonInput 
+                value={gift} 
+                type="text"
+                clearInput
+                onIonChange={e => setGift(e.detail.value!)} 
+              />
+            </IonItem>
+          }
+          <IonItem>
+            <IonLabel color="primary">{labels.specialImage}</IonLabel>
+            <IonToggle checked={specialImage} onIonChange={() => setSpecialImage(s => !s)}/>
+          </IonItem>
+          {specialImage && <>
+            <input 
+              ref={inputEl}
+              type="file" 
+              accept="image/*" 
+              style={{display: "none"}}
+              onChange={e => handleFileChange(e)}
+            />
+            <IonButton 
+              expand="block" 
+              fill="clear" 
+              onClick={onUploadClick}
+            >
+              {labels.setImage}
+            </IonButton>
+            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          </>}
+        </IonList>
+      </IonContent>
       {name && subPackId && subCount && (gift || !withGift) && hasChanged &&
-        <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleSubmit()}>
-          <Icon material="done"></Icon>
-        </Fab>
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
       }
-    </Page>
+    </IonPage>
   )
 }
 export default EditGroup

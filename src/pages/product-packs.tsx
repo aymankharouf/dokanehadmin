@@ -1,12 +1,14 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Navbar, Card, CardContent, CardFooter, List, ListItem, Actions, ActionsButton, Fab, Icon, Badge} from 'framework7-react'
 import RatingStars from './rating-stars'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {archiveProduct, deleteProduct, getMessage, productOfText, getArchivedPacks} from '../data/actions'
 import {Pack} from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { useIonLoading, useIonToast } from '@ionic/react'
+import { IonActionSheet, IonBadge, IonCard, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
+import Header from './header'
+import { randomColors } from '../data/config'
+import { settingsOutline } from 'ionicons/icons'
 
 type Params = {
   id: string,
@@ -19,6 +21,7 @@ const ProductPacks = () => {
   const location = useLocation()
   const history = useHistory()
   const [loading, dismiss] = useIonLoading()
+  const [alert] = useIonAlert()
   const [product] = useState(() => state.products.find(p => p.id === params.id && (p.isActive || params.type === 'a'))!)
   const [packs, setPacks] = useState<Pack[]>([])
   const [activePacks, setActivePacks] = useState<Pack[]>([])
@@ -33,7 +36,7 @@ const ProductPacks = () => {
       }
     }
     if (params.type === 'a') getPacks()
-  }, [dispatch, params.id, params.type])
+  }, [dispatch, params.id, params.type, loading, dismiss])
   useEffect(() => {
     setPacks(() => {
       const packs = state.packs.filter(p => p.product.id === params.id)
@@ -53,66 +56,91 @@ const ProductPacks = () => {
 		}
   }
   const handleDelete = () => {
-    f7.dialog.confirm(labels.confirmationText, labels.confirmationTitle, () => {
-      try{
-        deleteProduct(product)
-        message(labels.deleteSuccess, 3000)
-        history.goBack()
-      } catch(err) {
-        message(getMessage(location.pathname, err), 3000)
-      }
+    alert({
+      header: labels.confirmationTitle,
+      message: labels.confirmationText,
+      buttons: [
+        {text: labels.cancel},
+        {text: labels.ok, handler: () => {
+          try{
+            deleteProduct(product)
+            message(labels.deleteSuccess, 3000)
+            history.goBack()
+          } catch(err) {
+            message(getMessage(location.pathname, err), 3000)
+          }    
+        }},
+      ],
     })
   }
 
   return (
-    <Page>
-      <Navbar title={`${product.name}${product.alias ? '-' + product.alias : ''}`} backLink={labels.back} />
-      <Card>
-        <CardContent>
-          <img src={product.imageUrl} className="img-card" alt={labels.noImage} />
-        </CardContent>
-        <CardFooter>
-          <p>{productOfText(state.countries.find(c => c.id === product.countryId)!.name, state.trademarks.find(t => t.id === product.trademarkId)?.name)}</p>
-          <p><RatingStars rating={product.rating} count={product.ratingCount} /></p> 
-        </CardFooter>
-      </Card>
-      <List mediaList>
-        {packs.map(p => 
-          <ListItem 
-            link={`/pack-details/${p.id}`}
-            title={p.name}
-            after={!p.price ? '' : p.price.toFixed(2)} 
-            key={p.id} 
-          >
-            {!p.isActive && <Badge slot="title" color='red'>{labels.inActive}</Badge>}
-          </ListItem>
-        )}
-      </List>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => setActionOpened(true)}>
-        <Icon material="build"></Icon>
-      </Fab>
-      <Actions opened={actionOpened} onActionsClosed={() => setActionOpened(false)}>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/product-details/${params.id}`)}>
-          {labels.details}
-        </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-pack/${params.id}/0`)}>
-          {labels.addPack}
-        </ActionsButton>
-        <ActionsButton onClick={() => f7.views.current.router.navigate(`/add-group/${params.id}/0`)}>
-          {labels.addGroup}
-        </ActionsButton>
-        {activePacks.length === 0 && 
-          <ActionsButton onClick={() => handleArchive()}>
-            {labels.archive}
-          </ActionsButton>
-        }
-        {packs.length === 0 && 
-          <ActionsButton onClick={() => handleDelete()}>
-            {labels.delete}
-          </ActionsButton>
-        }
-      </Actions>
-    </Page>
+    <IonPage>
+      <Header title={`${product.name}${product.alias ? '-' + product.alias : ''}`} />
+      <IonContent fullscreen>
+        <IonCard>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonImg src={product.imageUrl} alt={labels.noImage} />
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>{productOfText(state.countries.find(c => c.id === product.countryId)!.name, state.trademarks.find(t => t.id === product.trademarkId)?.name)}</IonCol>
+              <IonCol className="ion-text-end"><RatingStars rating={product.rating ?? 0} count={product.ratingCount ?? 0} /></IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCard>
+        <IonList>
+          {packs.map(p => 
+            <IonItem key={p.id} routerLink={`/pack-details/${p.id}`}>
+              <IonLabel>
+                <IonText color={randomColors[0].name}>{p.name}</IonText>
+              </IonLabel>
+              <IonLabel slot="end" className="ion-text-end">{!p.price ? '' : p.price.toFixed(2)}</IonLabel>
+              {!p.isActive &&  <IonBadge color="danger">{labels.inActive}</IonBadge>}
+            </IonItem>
+          )}
+        </IonList>
+      </IonContent>
+      <IonFab vertical="top" horizontal="end" slot="fixed">
+        <IonFabButton onClick={() => setActionOpened(true)}>
+          <IonIcon ios={settingsOutline} />
+        </IonFabButton>
+      </IonFab>
+      <IonActionSheet
+          isOpen={actionOpened}
+          onDidDismiss={() => setActionOpened(false)}
+          buttons={[
+            {
+              text: labels.edit,
+              cssClass: 'primary',
+              handler: () => history.push(`/edit-product/${params.id}`)
+            },
+            {
+              text: labels.addPack,
+              cssClass: 'secondary',
+              handler: () => history.push(`/add-pack/${params.id}/0`)
+            },
+            {
+              text: labels.addGroup,
+              cssClass: 'success',
+              handler: () => history.push(`/add-group/${params.id}/0`)
+            },
+            {
+              text: labels.archive,
+              cssClass: activePacks.length === 0 ? 'warning' : 'ion-hide',
+              handler: () => handleArchive()
+            },
+            {
+              text: labels.delete,
+              cssClass: packs.length === 0 ? 'danger' : 'ion-hide',
+              handler: () => handleDelete()
+            },
+
+          ]}
+        />
+    </IonPage>
   )
 }
 

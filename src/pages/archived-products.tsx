@@ -1,11 +1,13 @@
 import {useContext, useState, useEffect} from 'react'
-import {f7, Page, Block, Navbar, List, ListItem, Searchbar, NavRight, Link, Fab, Icon} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {getCategoryName, getArchivedProducts, getMessage, productOfText} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
-import { useIonLoading, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail, useIonLoading, useIonToast } from '@ionic/react'
 import { useLocation } from 'react-router'
+import Header from './header'
+import { randomColors } from '../data/config'
+import { cloudDownloadOutline } from 'ionicons/icons'
 
 type ExtendedProduct = Product & {
   categoryInfo: Category,
@@ -48,47 +50,38 @@ const ArchivedProducts = () => {
       message(getMessage(location.pathname, err), 3000)
     }
   }
-  if (!state.user) return <Page><h3 className="center"><a href="/login/">{labels.relogin}</a></h3></Page>
   return(
-    <Page>
-      <Navbar title={labels.archivedProducts} backLink={labels.back}>
-        <NavRight>
-          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
-        </NavRight>
-        <Searchbar
-          className="searchbar"
-          searchContainer=".search-list"
-          searchIn=".item-inner"
-          clearButton
-          expandable
-          placeholder={labels.search}
-        />
-      </Navbar>
-        <Block>
-          <List className="searchbar-not-found">
-            <ListItem title={labels.noData} />
-          </List>
-          <List mediaList className="search-list searchbar-found">
-            {products.length === 0 ? 
-              <ListItem title={labels.noData} /> 
-            : products.map(p => 
-                <ListItem
-                  link={`/product-packs/${p.id}/a`}
-                  title={p.name}
-                  subtitle={getCategoryName(p.categoryInfo!, state.categories)}
-                  text={productOfText(p.countryInfo.name, p.trademarkInfo?.name)}
-                  key={p.id}
-                >
-                  <img slot="media" src={p.imageUrl} className="img-list" alt={p.name} />
-                </ListItem>
-              )
-            }
-          </List>
-      </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" onClick={() => handleRetreive()}>
-        <Icon material="cached"></Icon>
-      </Fab>
-    </Page>
+    <IonPage>
+      <Header title={labels.archivedProducts} withSearch/>
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          {products.length === 0 ?
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem>
+          : products.map(p => 
+              <IonItem key={p.id} routerLink={`/product-packs/${p.id}/a`}>
+                <IonThumbnail slot="start">
+                  <IonImg src={p.imageUrl} alt={labels.noImage} />
+                </IonThumbnail>
+                <IonLabel>
+                  <IonText color={randomColors[0].name}>{p.name}</IonText>
+                  <IonText color={randomColors[1].name}>{p.alias}</IonText>
+                  <IonText color={randomColors[2].name}>{p.description}</IonText>
+                  <IonText color={randomColors[3].name}>{getCategoryName(p.categoryInfo!, state.categories)}</IonText>
+                  <IonText color={randomColors[4].name}>{productOfText(p.countryInfo.name, p.trademarkInfo?.name)}</IonText>
+                </IonLabel>
+              </IonItem>    
+            )
+          }
+        </IonList>
+      </IonContent>
+      <IonFab horizontal="end" vertical="top" slot="fixed">
+        <IonFabButton onClick={handleRetreive}>
+          <IonIcon ios={cloudDownloadOutline}></IonIcon>
+        </IonFabButton>
+      </IonFab>
+    </IonPage>
   )
 }
 

@@ -1,11 +1,14 @@
 import {useContext, useState, useEffect} from 'react'
-import {Page, Block, Fab, Icon, Navbar, List, ListItem, Searchbar, NavRight, Link} from 'framework7-react'
 import {StateContext} from '../data/state-provider'
 import moment from 'moment'
 import 'moment/locale/ar'
 import labels from '../data/labels'
 import {Category, Pack, PackStore} from '../data/types'
 import { useParams } from 'react-router'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
+import Header from './header'
+import { randomColors } from '../data/config'
+import { addOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -35,50 +38,39 @@ const StorePacks = () => {
     })
   }, [state.packStores, state.packs, state.categories, params.id])
 
-  let i = 0
   return(
-    <Page>
-      <Navbar title={store.name} backLink={labels.back}>
-        <NavRight>
-          <Link searchbarEnable=".searchbar" iconMaterial="search"></Link>
-        </NavRight>
-        <Searchbar
-          className="searchbar"
-          searchContainer=".search-list"
-          searchIn=".item-inner"
-          clearButton
-          expandable
-          placeholder={labels.search}
-        ></Searchbar>
-      </Navbar>
-      <Block>
-        <List className="searchbar-not-found">
-          <ListItem title={labels.noData} />
-        </List>
-        <List mediaList className="search-list searchbar-found">
-          {storePacks.length === 0 ? 
-            <ListItem title={labels.noData} /> 
-          : storePacks.map(p => 
-              <ListItem
-                link={`/pack-details/${p.packId}`}
-                title={p.packInfo.product.name}
-                subtitle={p.packInfo.product.alias}
-                text={p.packInfo.name}
-                footer={moment(p.time).fromNow()}
-                key={i++}
-              >
-                <div className="list-subtext1">{`${labels.price}: ${p.price.toFixed(2)}`}</div>
-                <div className="list-subtext2">{p.categoryInfo.name}</div>
-                <img src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} slot="media" className="img-list" alt={labels.noImage} />
-              </ListItem>
+    <IonPage>
+      <Header title={store.name} withSearch/>
+      <IonContent fullscreen className="ion-padding">
+        <IonList>
+          {storePacks.length === 0 ?
+            <IonItem> 
+              <IonLabel>{labels.noData}</IonLabel>
+            </IonItem>
+          : storePacks.map((p, i) => 
+              <IonItem key={i} routerLink={`/pack-details/${p.packId}`}>
+                <IonThumbnail slot="start">
+                  <IonImg src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} alt={labels.noImage} />
+                </IonThumbnail>
+                <IonLabel>
+                  <IonText color={randomColors[0].name}>{p.packInfo.product.name}</IonText>
+                  <IonText color={randomColors[1].name}>{p.packInfo.product.alias}</IonText>
+                  <IonText color={randomColors[2].name}>{p.packInfo.name}</IonText>
+                  <IonText color={randomColors[3].name}>{`${labels.price}: ${p.price.toFixed(2)}`}</IonText>
+                  <IonText color={randomColors[4].name}>{p.categoryInfo.name}</IonText>
+                  <IonText color={randomColors[0].name}>{moment(p.time).fromNow()}</IonText>
+                </IonLabel>
+              </IonItem>    
             )
           }
-        </List>
-      </Block>
-      <Fab position="left-top" slot="fixed" color="green" className="top-fab" href={`/add-store-pack/${params.id}`}>
-        <Icon material="add"></Icon>
-      </Fab>
-    </Page>
+        </IonList>
+      </IonContent>
+      <IonFab horizontal="end" vertical="top" slot="fixed">
+        <IonFabButton routerLink={`/add-store-pack/${params.id}`}>
+          <IonIcon ios={addOutline}></IonIcon>
+        </IonFabButton>
+      </IonFab>
+    </IonPage>
   )
 }
 
