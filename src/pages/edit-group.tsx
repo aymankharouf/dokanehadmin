@@ -126,6 +126,7 @@ const EditGroup = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={subPackId}
               onIonChange={e => setSubPackId(e.detail.value)}
             >
               {packs.map(p => <IonSelectOption key={p.id} value={p.id}>{p.name}</IonSelectOption>)}

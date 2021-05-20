@@ -1,6 +1,6 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {StateContext} from '../data/state-provider'
-import {editProduct, getMessage} from '../data/actions'
+import {editProduct, getCategoryName, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
@@ -32,6 +32,11 @@ const EditProduct = () => {
   const [categories] = useState(() => [...state.categories].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
+  useEffect(() => {
+    if (countryId === '0') history.push('/add-country')
+    if (trademarkId === '0') history.push('/add-trademark')
+    if (categoryId === '0') history.push('/add-category/0')
+  }, [countryId, trademarkId, categoryId, history])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
@@ -124,8 +129,11 @@ const EditProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={trademarkId}
               onIonChange={e => setTrademarkId(e.detail.value)}
             >
+              <IonSelectOption value=""></IonSelectOption>
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
               {trademarks.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
@@ -134,9 +142,11 @@ const EditProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={categoryId}
               onIonChange={e => setCategoryId(e.detail.value)}
             >
-              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id} disabled={!c.isLeaf}>{getCategoryName(c, state.categories)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
@@ -144,8 +154,10 @@ const EditProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={countryId}
               onIonChange={e => setCountryId(e.detail.value)}
             >
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
               {countries.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
@@ -154,6 +166,7 @@ const EditProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={unit}
               onIonChange={e => setUnit(e.detail.value)}
             >
               {units.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}

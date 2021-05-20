@@ -2,28 +2,42 @@ import {useState, useContext} from 'react'
 import labels from '../data/labels'
 import {addCategory, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
-import { useHistory, useLocation } from 'react-router'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
+import { useHistory, useLocation, useParams } from 'react-router'
 import Header from './header'
+import { Category } from '../data/types'
 
-type Props = {
+type Params = {
   id: string
 }
-const AddCategory = (props: Props) => {
+const AddCategory = () => {
   const {state} = useContext(StateContext)
+  const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
   const [name, setName] = useState('')
+  const [isActive, setIsActive] = useState(true)
   const [ordering, setOrdering] = useState(() => {
-    const siblings = state.categories.filter(c => c.parentId === props.id)
-    const siblingsOrder = siblings.map(s => s.ordering)
-    const maxOrder = Math.max(...siblingsOrder) || 0
+    const siblings = state.categories.filter(c => c.parentId === params.id)
+    const siblingsOrders = siblings.map(s => s.ordering)
+    const maxOrder = siblingsOrders.length > 0 ? Math.max(...siblingsOrders) : 0
     return (maxOrder + 1).toString()
   })
   const handleSubmit = () => {
     try{
-      addCategory(props.id, name, +ordering)
+      const newCategory: Category = {
+        parentId: params.id,
+        name,
+        ordering: +ordering,
+        isActive,
+        isLeaf: true
+      }
+      if (params.id !== '0') {
+        const parentCategory = state.categories.find(c => c.id === params.id)!
+        newCategory.mainId = parentCategory.mainId || parentCategory.id
+      }
+      addCategory(newCategory)
       message(labels.addSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -58,6 +72,10 @@ const AddCategory = (props: Props) => {
               clearInput
               onIonChange={e => setOrdering(e.detail.value!)} 
             />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
           </IonItem>
         </IonList>
         {name && ordering && 

@@ -1,25 +1,20 @@
 import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {StateContext } from '../data/state-provider'
-import {addProduct, getMessage} from '../data/actions'
+import {addProduct, getCategoryName, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { Category } from '../data/types'
-import { useHistory, useLocation, useParams } from 'react-router'
-import { IonActionSheet, IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { useHistory, useLocation } from 'react-router'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
-import { addOutline, checkmarkOutline } from 'ionicons/icons'
+import { checkmarkOutline } from 'ionicons/icons'
 
-type Params = {
-  id: string
-}
 const AddProduct = () => {
   const {state} = useContext(StateContext)
-  const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [productRequest] = useState(() => state.productRequests.find(r => r.id === params.id))
-  const [name, setName] = useState(productRequest?.name || '')
+  const [name, setName] = useState('')
   const [alias, setAlias] = useState('')
   const [description, setDescription] = useState('')
   const [categoryId, setCategoryId] = useState('')
@@ -32,16 +27,12 @@ const AddProduct = () => {
   const [byWeight, setByWeight] = useState(false)
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
-  const [actionOpened, setActionOpened] = useState(false);
-  const [price, setPrice] = useState(productRequest?.price.toFixed(2) || '')
-  const [storeId, setStoreId] = useState(productRequest?.storeId || '')
+  const [price, setPrice] = useState('')
+  const [storeId, setStoreId] = useState('')
   const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
-    setCategories(() => {
-      const categories = state.categories.filter(c => c.isLeaf)
-      return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
-    })
+    setCategories(() => state.categories.filter(c => c.isLeaf).sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   }, [state.categories])
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
@@ -49,9 +40,14 @@ const AddProduct = () => {
   useEffect(() => {
     if (unit && (byWeight || unitsCount)) setPackName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === unit)?.name}`)
   }, [unitsCount, unit, byWeight])
+  useEffect(() => {
+    if (countryId === '0') history.push('/add-country')
+    if (trademarkId === '0') history.push('/add-trademark')
+    if (categoryId === '0') history.push('/add-category/0')
+  }, [countryId, trademarkId, categoryId, history])
   const onUploadClick = () => {
-    if (inputEl.current) inputEl.current.click();
-  };
+    if (inputEl.current) inputEl.current.click()
+  }
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     try {
       const files = e.target.files
@@ -105,10 +101,9 @@ const AddProduct = () => {
         forSale,
         lastTrans: new Date()
       }
-      addProduct(product, pack, state.users, productRequest, state.productRequests, image)
+      addProduct(product, pack, image)
       message(labels.addSuccess, 3000)
-      if (productRequest) history.push('/')
-      else history.goBack()
+      history.goBack()
     } catch(err) {
 			message(getMessage(location.pathname, err), 3000)
 		}
@@ -151,8 +146,11 @@ const AddProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={trademarkId}
               onIonChange={e => setTrademarkId(e.detail.value)}
             >
+              <IonSelectOption value=""></IonSelectOption>
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
               {state.trademarks.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
@@ -161,9 +159,11 @@ const AddProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={categoryId}
               onIonChange={e => setCategoryId(e.detail.value)}
             >
-              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{getCategoryName(c, state.categories)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
@@ -171,8 +171,10 @@ const AddProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={countryId}
               onIonChange={e => setCountryId(e.detail.value)}
             >
+              <IonSelectOption value="0">{labels.new}</IonSelectOption>
               {state.countries.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
@@ -181,6 +183,7 @@ const AddProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={unit}
               onIonChange={e => setUnit(e.detail.value)}
             >
               {units.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}
@@ -222,6 +225,7 @@ const AddProduct = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={storeId}
               onIonChange={e => setStoreId(e.detail.value)}
             >
               {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}
@@ -252,7 +256,7 @@ const AddProduct = () => {
           >
             {labels.setImage}
           </IonButton>
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
       {name && categoryId && countryId && unit && packName && unitsCount && price && storeId &&
@@ -262,32 +266,6 @@ const AddProduct = () => {
           </IonFabButton>
         </IonFab>
       }
-      <IonFab vertical="top" horizontal="start" slot="fixed">
-        <IonFabButton onClick={() => setActionOpened(true)}>
-          <IonIcon ios={addOutline} />
-        </IonFabButton>
-      </IonFab>
-      <IonActionSheet
-          isOpen={actionOpened}
-          onDidDismiss={() => setActionOpened(false)}
-          buttons={[
-            {
-              text: labels.addTrademark,
-              cssClass: 'primary',
-              handler: () => history.push('/add-trademark')
-            },
-            {
-              text: labels.addCountry,
-              cssClass: 'secondary',
-              handler: () => history.push('/add-country')
-            },
-            {
-              text: labels.addCategory,
-              cssClass: 'success',
-              handler: () => history.push('/add-category/0')
-            },
-          ]}
-        />
     </IonPage>
   )
 }

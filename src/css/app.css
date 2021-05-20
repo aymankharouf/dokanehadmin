@@ -10,6 +10,16 @@ ion-text {
   font-size: 0.8rem;
 }
 
+ion-toast {
+  color: var(--ion-color-secondary);
+}
+
+.dark {
+  --ion-background-color: var(--ion-color-dark);
+  --ion-text-color: var(--ion-color-secondary);
+  --ion-border-color: var(--ion-color-secondary);
+}
+
 .sections {
     margin: 1rem;
 }
@@ -92,9 +102,10 @@ ion-text {
 }
 
 .price {
-  font-size: 1.2rem;
-  color: blue;
-  margin-right: 0.2rem;
+  text-align: end;
+  color: red;
+  max-width: 15%;
+  font-size: 1.1rem;
 }
 
 .avatar {

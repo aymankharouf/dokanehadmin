@@ -1,7 +1,7 @@
 import {useContext, useState, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {rejectProductRequest, getMessage} from '../data/actions'
+import {resolveProductRequest, getMessage} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -22,7 +22,18 @@ const ProductRequestDetails = () => {
   useEffect(() => {
     setProductRequest(() => state.productRequests.find(p => p.id === params.id))
   }, [state.productRequests, params.id])
-  const handleRejection = () => {
+  const handleAccept = async () => {
+    try{
+      loading()
+      await resolveProductRequest('a', productRequest!, state.productRequests, state.users)
+      dismiss()
+      message(labels.approveSuccess, 3000)
+      history.goBack()
+    } catch(err) {
+      message(getMessage(location.pathname, err), 3000)
+    }
+  }
+  const handleReject = () => {
     alert({
       header: labels.confirmationTitle,
       message: labels.confirmationText,
@@ -31,7 +42,7 @@ const ProductRequestDetails = () => {
         {text: labels.ok, handler: async () => {
           try{
             loading()
-            await rejectProductRequest(productRequest!, state.productRequests, state.users)
+            await resolveProductRequest('r', productRequest!, state.productRequests, state.users)
             dismiss()
             message(labels.rejectSuccess, 3000)
             history.goBack()
@@ -93,10 +104,10 @@ const ProductRequestDetails = () => {
           <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
         <IonFabList>
-          <IonFabButton color="success" routerLink={`/add-product/${params.id}`}>
+          <IonFabButton color="success" onClick={handleAccept}>
             <IonIcon ios={checkmarkOutline}></IonIcon>
           </IonFabButton>
-          <IonFabButton color="danger" onClick={handleRejection}>
+          <IonFabButton color="danger" onClick={handleReject}>
             <IonIcon ios={trashOutline}></IonIcon>
           </IonFabButton>
         </IonFabList>

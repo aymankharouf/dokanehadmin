@@ -59,7 +59,7 @@ export const addPackStore = async (packStore: PackStore, packs: Pack[], users?: 
   batch.commit()
 }
 
-export const addProduct = async (product: Product, pack: Pack, users: User[], productRequest?: ProductRequest, productRequests?: ProductRequest[], image?: File) => {
+export const addProduct = async (product: Product, pack: Pack, image?: File) => {
   const batch = firebase.firestore().batch()
   const productRef = firebase.firestore().collection('products').doc()
   if (image) {
@@ -72,18 +72,6 @@ export const addProduct = async (product: Product, pack: Pack, users: User[], pr
   const packRef = firebase.firestore().collection('packs').doc()
   pack.product.id = productRef.id
   batch.set(packRef, pack)
-  if (productRequest) {
-    const storeRef = firebase.firestore().collection('stores').doc(productRequest.storeId)
-    const otherProductRequests = productRequests?.filter(r => r.storeId === productRequest.storeId && r.id !== productRequest.id)
-    batch.update(storeRef, {
-      productRequests: otherProductRequests
-    })
-    const user = users.find(u => u.storeId === productRequest.storeId)!
-    sendNotification(user.id, labels.approval, `${labels.approveProduct} ${productRequest.name}`, batch)
-    const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
-    const image = firebase.storage().ref().child('requests/' + productRequest.id + ext)
-    await image.delete()
-  }
   batch.commit()
 }
 
@@ -223,23 +211,17 @@ export const deleteTrademark = (trademarkId: string, trademarks: Trademark[]) =>
   })
 }
 
-export const addCategory = (parentId: string, name: string, ordering: number) => {
+export const addCategory = (category: Category) => {
   const batch = firebase.firestore().batch()
   let categoryRef
-  if (parentId !== '0') {
-    categoryRef = firebase.firestore().collection('categories').doc(parentId)
+  if (category.parentId !== '0') {
+    categoryRef = firebase.firestore().collection('categories').doc(category.parentId)
     batch.update(categoryRef, {
       isLeaf: false
     })
   }
   categoryRef = firebase.firestore().collection('categories').doc()
-  batch.set(categoryRef, {
-    parentId,
-    name,
-    ordering,
-    isLeaf: true,
-    isActive: false
-  })
+  batch.set(categoryRef, category)
   batch.commit()
 }
 
@@ -281,8 +263,8 @@ export const getCategoryName = (category: Category, categories: Category[]): str
   if (category.parentId === '0') {
     return category.name
   } else {
-    const categoryParent = categories.find(c => c.id === category.parentId)!
-    return getCategoryName(categoryParent, categories) + '-' + category.name
+    const mainCategory = categories.find(c => c.id === category.mainId)
+    return mainCategory?.name + '-' + category.name
   }
 }
 
@@ -310,7 +292,7 @@ export const addPack = async (pack: Pack, product: Product, users: User[], packR
       packRequests: otherPackRequests
     })
     const user = users.find(u => u.storeId === packRequest.storeId)!
-    sendNotification(user.id, labels.approval, `${labels.approveProduct} ${packRequest.name}`, batch)
+    sendNotification(user.id, labels.approval, `${labels.approvePack} ${packRequest.name} ${product.name}`, batch)
     if (packRequest.imageUrl) {
       const ext = packRequest.imageUrl.slice(packRequest.imageUrl.lastIndexOf('.'), packRequest.imageUrl.indexOf('?'))
       const image = firebase.storage().ref().child('requests/' + packRequest.id + ext)
@@ -586,21 +568,23 @@ export const categoryChildren = (categoryId: string, categories: Category[]) => 
   let result = [categoryId]
   const children = categories.filter(c => c.parentId === categoryId)
   for (let child of children) {
-    const childrenArray = categoryChildren(child.id, categories)
+    const childrenArray = categoryChildren(child.id!, categories)
     result.push(...childrenArray)
   }
   return result
 }
 
-export const rejectProductRequest = async (productRequest: ProductRequest, productRequests: ProductRequest[], users: User[]) => {
+export const resolveProductRequest = async (type: string, productRequest: ProductRequest, productRequests: ProductRequest[], users: User[]) => {
   const batch = firebase.firestore().batch()
   const storeRef = firebase.firestore().collection('stores').doc(productRequest.storeId)
   const otherProductRequests = productRequests.filter(r => r.storeId === productRequest.storeId && r.id !== productRequest.id)
   batch.update(storeRef, {
-    productRequest: otherProductRequests
+    productRequests: otherProductRequests
   })
   const user = users.find(u => u.storeId === productRequest.storeId)!
-  sendNotification(user.id, labels.rejection, `${labels.rejectProduct} ${productRequest.name}`, batch)
+  const notificationTitle = type === 'a' ? labels.approval : labels.rejection
+  const notificationText = type === 'a' ? `${labels.approveProduct} ${productRequest.name}` : `${labels.rejectProduct} ${productRequest.name}`
+  sendNotification(user.id, notificationTitle, notificationText, batch)
   batch.commit()
   const ext = productRequest.imageUrl.slice(productRequest.imageUrl.lastIndexOf('.'), productRequest.imageUrl.indexOf('?'))
   const image = firebase.storage().ref().child('requests/' + productRequest.id + ext)

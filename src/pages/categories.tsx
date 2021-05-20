@@ -23,15 +23,18 @@ const Categories = () => {
   const location = useLocation()
   const history = useHistory()
   const [categories, setCategories] = useState<ExtendedCategory[]>([])
-  const [currentCategory] = useState(() => state.categories.find(c => c.id === params.id))
+  const [currentCategory, setCurrentCategory] = useState<Category>()
   const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
   const [categoryProductsCount] = useState(() => state.products.filter(p => p.categoryId === currentCategory?.id).length)
+  useEffect(() => {
+    setCurrentCategory(() => state.categories.find(c => c.id === params.id))
+  }, [state.categories, params.id])
   useEffect(() => {
     setCategories(() => {
       const children = state.categories.filter(c => c.parentId === params.id)
       let categories = children.map(c => {
         const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
-        const categoryChildrens = categoryChildren(c.id, state.categories)
+        const categoryChildrens = categoryChildren(c.id!, state.categories)
         const productsCount = state.products.filter(p => categoryChildrens.includes(p.categoryId)).length
         return {
           ...c,

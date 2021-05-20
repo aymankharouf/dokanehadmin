@@ -4,8 +4,9 @@ export type Label = {
     [key: string]: string
 }
 export type Category = {
-  id: string,
+  id?: string,
   name: string,
+  mainId?: string,
   parentId: string,
   ordering: number,
   isLeaf: boolean,
@@ -21,6 +22,7 @@ export type Product = {
   name: string,
   alias?: string,
   description?: string,
+  // mainCategoryId: string,
   categoryId: string,
   trademarkId?: string,
   countryId: string,
@@ -70,7 +72,7 @@ export type Rating = {
   productInfo?: Product
 }
 export type Position = {
-  lat: number, 
+  lat: number,
   lng: number
 }
 export type User = {
@@ -98,6 +100,7 @@ export type Advert = {
 export type Location = {
   id: string,
   name: string,
+  position: Position
 }
 export type Country = {
   id: string,

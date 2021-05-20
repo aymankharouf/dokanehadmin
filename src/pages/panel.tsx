@@ -2,7 +2,7 @@ import {useContext, useState, useEffect, useRef} from 'react'
 import {StateContext} from '../data/state-provider'
 import {logout} from '../data/actions'
 import labels from '../data/labels'
-import { IonBadge, IonContent, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle } from '@ionic/react'
+import { IonBadge, IonContent, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle } from '@ionic/react'
 import { useHistory } from 'react-router'
 
 const Panel = () => {
@@ -22,10 +22,9 @@ const Panel = () => {
   }
 
   return(
-    <IonMenu contentId="main" type="overlay" ref={menuEl}>
+    <IonMenu contentId="main" type="overlay" ref={menuEl} className="dark">
       <IonContent>
         <IonList>
-          <IonListHeader>{labels.mainPanelTitle}</IonListHeader>
           <IonMenuToggle autoHide={false}>
             {state.user ?
               <>
@@ -37,7 +36,7 @@ const Panel = () => {
                 </IonItem>
                 <IonItem routerLink="/approvals">
                   <IonLabel>{labels.approvals}</IonLabel>
-                  <IonBadge color="danger">{approvalsCount}</IonBadge>
+                  {approvalsCount > 0 && <IonBadge color="danger">{approvalsCount}</IonBadge>}
                 </IonItem>
                 <IonItem routerLink="/logs">
                   <IonLabel>{labels.logs}</IonLabel>

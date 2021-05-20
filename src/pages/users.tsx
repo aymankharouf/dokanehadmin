@@ -4,9 +4,9 @@ import 'moment/locale/ar'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {User} from '../data/types'
-import {userTypes} from '../data/config'
+import {randomColors, userTypes} from '../data/config'
 import { useParams } from 'react-router'
-import { IonContent, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
+import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
 
 type Params = {
@@ -34,10 +34,12 @@ const Users = () => {
           : users.map(u =>
               <IonItem key={u.id}>
                 <IonLabel>
-                  <div className="list-row1">{u.name}</div>
-                  <div className="list-row2">{u.mobile}</div>
-                  <div className="list-row3">{u.storeName}</div>
-                  <div className="list-row4">{moment(u.time).fromNow()}</div>
+                  <IonText color={randomColors[0].name}>{`${labels.name}: ${u.name}`}</IonText>
+                  <IonText color={randomColors[1].name}>{`${labels.mobile}: ${u.mobile}`}</IonText>
+                  {u.storeName && <IonText color={randomColors[2].name}>{`${labels.storeName}: ${u.storeName}`}</IonText>}
+                  {u.locationId && <IonText color={randomColors[3].name}>{`${labels.location}: ${state.locations.find(l => l.id === u.locationId)?.name}`}</IonText>}
+                  {u.address && <IonText color={randomColors[4].name}>{`${labels.address}: ${u.address}`}</IonText>}
+                  <IonText color={randomColors[0].name}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>  
             )

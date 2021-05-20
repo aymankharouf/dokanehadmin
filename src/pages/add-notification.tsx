@@ -32,7 +32,12 @@ const AddNotification = () => {
       <IonList>
         <IonItem>
           <IonLabel position="floating" color="primary">{labels.toUser}</IonLabel>
-          <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setUserId(e.detail.value)}>
+          <IonSelect 
+            ok-text={labels.ok} 
+            cancel-text={labels.cancel} 
+            value={userId}
+            onIonChange={e => setUserId(e.detail.value)}
+          >
             {users.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}
           </IonSelect>
         </IonItem>

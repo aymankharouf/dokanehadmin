@@ -7,15 +7,19 @@ import Header from './header'
 
 const AddLocation = () => {
   const [name, setName] = useState('')
+  const [lat, setLat] = useState('')
+  const [lng, setLng] = useState('')
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
   const handleSubmit = () => {
     try{
-      addLocation({
+      const location = {
         id: Math.random().toString(),
         name,
-      })
+        position: {lat: +lat, lng: +lng}
+      }
+      addLocation(location)
       message(labels.addSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -37,6 +41,28 @@ const AddLocation = () => {
               autofocus
               clearInput
               onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.latitude}
+            </IonLabel>
+            <IonInput 
+              value={lat} 
+              type="number" 
+              clearInput
+              onIonChange={e => setLat(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.longitude}
+            </IonLabel>
+            <IonInput 
+              value={lng} 
+              type="number" 
+              clearInput
+              onIonChange={e => setLng(e.detail.value!)} 
             />
           </IonItem>
         </IonList>

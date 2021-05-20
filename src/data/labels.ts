@@ -361,6 +361,7 @@ const labels: Label = {
   package: 'التغليف',
   productRequests: 'طلبات اضافة منتج',
   approveProduct: 'تم اعتماد طلب اضافة منتج',
+  approvePack: 'تم اعتماد طلب اضافة عبوة',
   rejection: 'رفض',
   rejectProduct: 'تم رفض طلب منتج',
   setImage: 'حمل الصورة',
@@ -375,7 +376,9 @@ const labels: Label = {
   cancel: 'تراجع',
   ok: 'موافق',
   save: 'حفظ',
-  setPosition: 'حدد الموقع'
+  setPosition: 'حدد الموقع',
+  latitude: 'العرض',
+  longitude: 'الطول'
 }
 
 export default labels

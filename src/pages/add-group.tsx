@@ -118,6 +118,7 @@ const AddGroup = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={subPackId}
               disabled={!!packRequest}
               onIonChange={e => setSubPackId(e.detail.value)}
             >
@@ -163,6 +164,7 @@ const AddGroup = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={storeId}
               disabled={!!packRequest}
               onIonChange={e => setStoreId(e.detail.value)}
             >

@@ -126,7 +126,12 @@ const AddPack = () => {
           }
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
-            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setStoreId(e.detail.value)}>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              value={storeId}
+              onIonChange={e => setStoreId(e.detail.value)}
+            >
               {state.stores.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>

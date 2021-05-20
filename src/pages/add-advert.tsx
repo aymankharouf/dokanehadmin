@@ -65,6 +65,7 @@ const AddAdvert = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={type}
               onIonChange={e => setType(e.detail.value)}
             >
               {advertTypes.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}

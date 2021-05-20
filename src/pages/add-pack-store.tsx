@@ -53,6 +53,7 @@ const AddPackStore = () => {
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
+              value={storeId}
               onIonChange={e => setStoreId(e.detail.value)}
             >
               {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}

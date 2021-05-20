@@ -61,7 +61,12 @@ const EditCategory = () => {
         <IonList>
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.mainCategory}</IonLabel>
-            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setParentId(e.detail.value)}>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              value={parentId}
+              onIonChange={e => setParentId(e.detail.value)}
+            >
               {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{c.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>

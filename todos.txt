@@ -108,3 +108,7 @@ store ordering (distance, price, rating)
 *add withgift flag
 confirmatiom messages between users
 store requests follow up in admin
+*restore basket from store requests when loading the app
+alarm details in store details page
+add link between store and users
+study how to define a product

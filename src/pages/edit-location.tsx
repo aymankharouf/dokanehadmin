@@ -17,12 +17,15 @@ const EditLocation = () => {
   const location = useLocation()
   const history = useHistory()
   const [currentLocation] = useState(() => state.locations.find(l => l.id === params.id)!)
-  const [name, setName] = useState(currentLocation?.name)
+  const [name, setName] = useState(currentLocation.name)
+  const [lat, setLat] = useState(currentLocation.position.lat.toString())
+  const [lng, setLng] = useState(currentLocation.position.lng.toString())
   const handleEdit = () => {
     try{
       const newLocation = {
         ...currentLocation,
         name,
+        position: {lat: +lat, lng: +lng}
       }
       editLocation(newLocation, state.locations)
       message(labels.editSuccess, 3000)
@@ -69,8 +72,30 @@ const EditLocation = () => {
               onIonChange={e => setName(e.detail.value!)} 
             />
           </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.latitude}
+            </IonLabel>
+            <IonInput 
+              value={lat} 
+              type="number" 
+              clearInput
+              onIonChange={e => setLat(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">
+              {labels.longitude}
+            </IonLabel>
+            <IonInput 
+              value={lng} 
+              type="number" 
+              clearInput
+              onIonChange={e => setLng(e.detail.value!)} 
+            />
+          </IonItem>
         </IonList>
-        {name && (name !== currentLocation.name) && 
+        {name && (name !== currentLocation.name || +lat !== currentLocation.position.lat || +lng !== currentLocation.position.lng) && 
           <IonButton 
             expand="block" 
             fill="clear" 

@@ -93,13 +93,23 @@ const EditStore = () => {
           </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
-            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setType(e.detail.value)}>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              value={type}
+              onIonChange={e => setType(e.detail.value)}
+            >
               {storeTypes.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.location}</IonLabel>
-            <IonSelect ok-text={labels.ok} cancel-text={labels.cancel} onIonChange={e => setLocationId(e.detail.value)}>
+            <IonSelect 
+              ok-text={labels.ok} 
+              cancel-text={labels.cancel} 
+              value={locationId}
+              onIonChange={e => setLocationId(e.detail.value)}
+            >
               {locations.map(l => <IonSelectOption key={l.id} value={l.id}>{l.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
@@ -114,14 +124,14 @@ const EditStore = () => {
             />
           </IonItem>
         </IonList>
-        {name && !mobileInvalid && hasChanged &&
-          <IonFab vertical="top" horizontal="end" slot="fixed">
-            <IonFabButton onClick={handleSubmit}>
-              <IonIcon ios={checkmarkOutline} />
-            </IonFabButton>
-          </IonFab>
-        }
       </IonContent>
+      {name && !mobileInvalid && hasChanged &&
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit}>
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
+      }
     </IonPage>
   )
 }

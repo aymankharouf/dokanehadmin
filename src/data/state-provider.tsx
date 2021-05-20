@@ -36,6 +36,7 @@ const StateProvider = ({children}: Props) => {
         categories.push({
           id: doc.id,
           name: doc.data().name,
+          mainId: doc.data().mainId,
           parentId: doc.data().parentId,
           ordering: doc.data().ordering,
           isLeaf: doc.data().isLeaf,
@@ -69,7 +70,7 @@ const StateProvider = ({children}: Props) => {
           isActive: doc.data().isActive,
           lastTrans: doc.data().lastTrans.toDate(),
           price: minPrice,
-          weightedPrice: Math.floor(minPrice / doc.data().unitsCount),
+          weightedPrice: minPrice / doc.data().unitsCount,
         })
         if (doc.data().stores) {
           doc.data().stores.forEach((s: any) => {

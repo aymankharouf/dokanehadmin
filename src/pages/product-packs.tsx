@@ -97,8 +97,8 @@ const ProductPacks = () => {
               <IonLabel>
                 <IonText color={randomColors[0].name}>{p.name}</IonText>
               </IonLabel>
-              <IonLabel slot="end" className="ion-text-end">{!p.price ? '' : p.price.toFixed(2)}</IonLabel>
-              {!p.isActive &&  <IonBadge color="danger">{labels.inActive}</IonBadge>}
+              {p.price! > 0 && <IonLabel slot="end" className="price">{p.price!.toFixed(2)}</IonLabel>}
+              {!p.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
             </IonItem>
           )}
         </IonList>

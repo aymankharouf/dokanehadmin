@@ -4,10 +4,9 @@ import labels from '../data/labels'
 import {productOfText, getCategoryName} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
 import { useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
+import { IonButton, IonContent, IonFooter, IonGrid, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonThumbnail, IonToolbar } from '@ionic/react'
 import Header from './header'
 import { randomColors } from '../data/config'
-import { addOutline, chevronDownOutline, cloudUploadOutline, warningOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -66,22 +65,17 @@ const Products = () => {
           }
         </IonList>
       </IonContent>
-      <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton>
-          <IonIcon ios={chevronDownOutline}></IonIcon>
-        </IonFabButton>
-        <IonFabList>
-          <IonFabButton color="success" routerLink="/add-product/0">
-            <IonIcon ios={addOutline}></IonIcon>
-          </IonFabButton>
-          <IonFabButton color="warning" routerLink="/archived-products">
-            <IonIcon ios={cloudUploadOutline}></IonIcon>
-          </IonFabButton>
-          <IonFabButton color="secondary" routerLink="/products/-1">
-            <IonIcon ios={warningOutline}></IonIcon>
-          </IonFabButton>
-        </IonFabList>
-      </IonFab>
+      <IonFooter>
+        <IonToolbar className="ion-justify-content-center">
+          <IonGrid>
+            <IonRow className="ion-justify-content-around">
+              <IonButton size="small" style={{width: '120px'}} routerLink="/add-product/0">{labels.addProduct}</IonButton>
+              <IonButton size="small" style={{width: '120px'}} color="secondary" routerLink="/archived-products">{labels.archivedProducts}</IonButton>
+              <IonButton size="small" style={{width: '120px'}} color="danger" routerLink="/products/-1">{labels.notUsedProducts}</IonButton>
+            </IonRow>
+          </IonGrid>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   )
 }

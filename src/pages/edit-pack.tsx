@@ -20,6 +20,7 @@ const EditPack = () => {
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount?.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
+  const [forSale, setForSale] = useState(pack.forSale)
   const [isActive, setIsActive] = useState(pack.isActive)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
@@ -31,9 +32,10 @@ const EditPack = () => {
     || +unitsCount !== pack.unitsCount
     || isActive !== pack.isActive
     || byWeight !== pack.byWeight
+    || forSale !== pack.forSale
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, byWeight, isActive, imageUrl])
+  }, [pack, name, unitsCount, byWeight, isActive, forSale, imageUrl])
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
@@ -68,6 +70,7 @@ const EditPack = () => {
         name,
         unitsCount: +unitsCount,
         byWeight,
+        forSale,
         isActive
       }
       editPack(newPack, state.packs, image)
@@ -95,6 +98,10 @@ const EditPack = () => {
           <IonItem>
             <IonLabel color="primary">{labels.isActive}</IonLabel>
             <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.forSale}</IonLabel>
+            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
           </IonItem>
           <IonItem>
             <IonLabel color="primary">{labels.byWeight}</IonLabel>

@@ -5,10 +5,11 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {deleteLog, getMessage} from '../data/actions'
 import {Log, User } from '../data/types'
-import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
+import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonAlert, useIonToast } from '@ionic/react'
 import { useLocation } from 'react-router'
 import Header from './header'
 import { trashOutline } from 'ionicons/icons'
+import { randomColors } from '../data/config'
 
 type ExtendedLog = Log & {
   userInfo: User
@@ -60,11 +61,11 @@ const Logs = () => {
           : logs.map(l => 
               <IonItem key={l.id}>
                 <IonLabel>
-                  <div className="list-row1">{`${labels.user}: ${l.userInfo?.name || l.userId}`}</div>
-                  <div className="list-row2">{l.userInfo?.mobile ? `${labels.mobile}: ${l.userInfo.mobile}` : ''}</div>
-                  <div className="list-row3">{l.page}</div>
-                  <div className="list-row4">{l.error}</div>
-                  <div className="list-row5">{moment(l.time).fromNow()}</div>
+                  <IonText color={randomColors[0].name}>{`${labels.user}: ${l.userInfo?.name || l.userId}`}</IonText>
+                  <IonText color={randomColors[1].name}>{l.userInfo?.mobile ? `${labels.mobile}: ${l.userInfo.mobile}` : ''}</IonText>
+                  <IonText color={randomColors[2].name}>{l.page}</IonText>
+                  <IonText color={randomColors[3].name}>{l.error}</IonText>
+                  <IonText color={randomColors[4].name}>{moment(l.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonIcon 
                   ios={trashOutline} 

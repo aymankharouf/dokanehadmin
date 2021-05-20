@@ -1,13 +1,16 @@
-import {Action, State} from "./types"
+import {Action, State, Location, Country, Trademark} from "./types"
 
 const Reducer = (state: State, action: Action) => {
     switch (action.type){
       case 'SET_LOCATIONS':
-        return {...state, locations: action.payload}
+        const locations: Location[] = action.payload
+        return {...state, locations: locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)}
       case 'SET_COUNTRIES':
-        return {...state, countries: action.payload}
+        const countries: Country[] = action.payload
+        return {...state, countries: countries.sort((c1, c2) => c1.name > c2.name ? 1 : -1)}
       case 'SET_TRADEMARKS':
-        return {...state, trademarks: action.payload}
+        const trademarks: Trademark[] = action.payload
+        return {...state, trademarks: trademarks.sort((t1, t2) => t1.name > t2.name ? 1 : -1)}
       case 'SET_NOTIFICATIONS':
         return {...state, notifications: action.payload}
       case 'SET_STORES':
