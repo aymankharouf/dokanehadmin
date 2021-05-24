@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {changePassword, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonLoading, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 
@@ -11,16 +11,12 @@ const ChangePassword = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const handleSubmit = async () => {
     try{
-      loading()
       await changePassword(oldPassword, newPassword)
-      dismiss()
       message(labels.changePasswordSuccess, 3000)
       history.goBack()
     } catch(err) {
-      dismiss()
 			message(getMessage(location.pathname, err), 3000)
 		}
   }

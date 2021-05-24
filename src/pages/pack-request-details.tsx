@@ -1,11 +1,11 @@
 import {useContext, useState} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {getMessage, rejectPackRequest} from '../data/actions'
+import {getMessage, resolvePackRequest} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonActionSheet, IonCard, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
+import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
-import { settingsOutline } from 'ionicons/icons'
+import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -16,12 +16,19 @@ const PackRequestDetails = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const [alert] = useIonAlert()
   const [packRequest] = useState(() => state.packRequests.find(p => p.id === params.id))
   const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
-  const [actionOpened, setActionOpened] = useState(false);
-  const handleRejection = () => {
+  const handleAccept = async () => {
+    try{
+      await resolvePackRequest('a', packRequest!, state.packRequests, state.users)
+      message(labels.approveSuccess, 3000)
+      history.goBack()
+    } catch(err) {
+      message(getMessage(location.pathname, err), 3000)
+    }    
+  }
+  const handleReject = () => {
     alert({
       header: labels.confirmationTitle,
       message: labels.confirmationText,
@@ -29,9 +36,7 @@ const PackRequestDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: async () => {
           try{
-            loading()
-            await rejectPackRequest(packRequest!, state.packRequests, state.users)
-            dismiss()
+            await resolvePackRequest('r', packRequest!, state.packRequests, state.users)
             message(labels.rejectSuccess, 3000)
             history.goBack()
           } catch(err) {
@@ -78,38 +83,19 @@ const PackRequestDetails = () => {
           </IonItem>
         </IonList>
       </IonContent>
-      <IonFab vertical="top" horizontal="end" slot="fixed">
-        <IonFabButton onClick={() => setActionOpened(true)}>
-          <IonIcon ios={settingsOutline} />
+      <IonFab horizontal="end" vertical="top" slot="fixed">
+        <IonFabButton>
+          <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
+        <IonFabList>
+          <IonFabButton color="success" onClick={handleAccept}>
+            <IonIcon ios={checkmarkOutline}></IonIcon>
+          </IonFabButton>
+          <IonFabButton color="danger" onClick={handleReject}>
+            <IonIcon ios={trashOutline}></IonIcon>
+          </IonFabButton>
+        </IonFabList>
       </IonFab>
-      <IonActionSheet
-          isOpen={actionOpened}
-          onDidDismiss={() => setActionOpened(false)}
-          buttons={[
-            {
-              text: labels.packs,
-              cssClass: 'primary',
-              handler: () => history.push(`/product-packs/${siblingPack?.product.id}/n`)
-            },
-            {
-              text: labels.addPack,
-              cssClass: 'secondary',
-              handler: () => history.push(`/add-${packRequest?.subCount ? 'group' : 'pack'}/${siblingPack?.product.id}/${params.id}`)
-            },
-            {
-              text: labels.activatePack,
-              cssClass: 'success',
-              handler: () => history.push(`/add-store-pack/${packRequest?.storeId}/${params.id}`)
-            },
-            {
-              text: labels.rejection,
-              cssClass: 'danger',
-              handler: () => handleRejection()
-            },
-
-          ]}
-        />
     </IonPage>
   )
 }

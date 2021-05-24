@@ -5,10 +5,9 @@ import 'moment/locale/ar'
 import labels from '../data/labels'
 import {Category, Pack, PackStore} from '../data/types'
 import { useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
+import { IonContent, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
 import Header from './header'
 import { randomColors } from '../data/config'
-import { addOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -65,11 +64,6 @@ const StorePacks = () => {
           }
         </IonList>
       </IonContent>
-      <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton routerLink={`/add-store-pack/${params.id}`}>
-          <IonIcon ios={addOutline}></IonIcon>
-        </IonFabButton>
-      </IonFab>
     </IonPage>
   )
 }

@@ -112,3 +112,6 @@ store requests follow up in admin
 alarm details in store details page
 add link between store and users
 study how to define a product
+log for user activities
+save basket to ordinary user for sharing between phones
+add location to store name

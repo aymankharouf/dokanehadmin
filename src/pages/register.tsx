@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {registerUser, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation } from 'react-router'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonLoading, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
 
 const Register = () => {
@@ -11,16 +11,12 @@ const Register = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const handleRegister = async () => {
     try{
-      loading()
       await registerUser(email, password)
-      dismiss()
       message(labels.registerSuccess, 3000)
       history.goBack()
     } catch (err){
-      dismiss()
       message(getMessage(location.pathname, err), 3000)
     }
   }

@@ -120,12 +120,12 @@ const ProductPacks = () => {
             {
               text: labels.addPack,
               cssClass: 'secondary',
-              handler: () => history.push(`/add-pack/${params.id}/0`)
+              handler: () => history.push(`/add-pack/${params.id}`)
             },
             {
               text: labels.addGroup,
               cssClass: 'success',
-              handler: () => history.push(`/add-group/${params.id}/0`)
+              handler: () => history.push(`/add-group/${params.id}`)
             },
             {
               text: labels.archive,

@@ -7,6 +7,7 @@ import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel,
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 import { storeTypes, patterns } from '../data/config'
+import { User } from '../data/types'
 
 type Params = {
   id: string
@@ -26,6 +27,7 @@ const EditStore = () => {
   const [isActive, setIsActive] = useState(store.isActive)
   const [locationId, setLocationId] = useState(store.locationId)
   const [hasChanged, setHasChanged] = useState(false)
+  const [owner, setOwner] = useState<User>()
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   useEffect(() => {
     setMobileInvalid(!mobile || !patterns.mobile.test(mobile))
@@ -50,7 +52,7 @@ const EditStore = () => {
         type,
         locationId
       }
-      editStore(newStore)
+      editStore(newStore, owner)
       message(labels.editSuccess, 3000)
       history.goBack()
     } catch(err) {

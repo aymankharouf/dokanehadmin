@@ -215,7 +215,6 @@ const labels: Label = {
   allocate: 'وضع',
   offerUpTo: 'عرض حتى تاريخ',
   addBrother: 'اضافة صنف بنفس المستوى',
-  addChild: 'اضافة صنف فرعي',
   invitations: 'الدعوات',
   invitationDetails: 'تفاصيل الدعوة',
   mobileCheck: 'التحقق',
@@ -378,7 +377,9 @@ const labels: Label = {
   save: 'حفظ',
   setPosition: 'حدد الموقع',
   latitude: 'العرض',
-  longitude: 'الطول'
+  longitude: 'الطول',
+  addChild: 'اضافة فرع',
+  unregisteredOwner: 'غير مسجل'
 }
 
 export default labels

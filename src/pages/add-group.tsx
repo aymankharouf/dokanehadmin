@@ -8,8 +8,7 @@ import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
-  productId: string,
-  requestId: string
+  id: string
 }
 const AddGroup = () => {
   const {state} = useContext(StateContext)
@@ -17,19 +16,16 @@ const AddGroup = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [packRequest] = useState(() => state.packRequests.find(r => r.id === params.requestId))
-  const [name, setName] = useState(packRequest?.name || '')
-  const [subPackId, setSubPackId] = useState(packRequest?.siblingPackId || '')
-  const [subCount, setSubCount] = useState(packRequest?.subCount || '')
-  const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
+  const [name, setName] = useState('')
+  const [subPackId, setSubPackId] = useState('')
+  const [subCount, setSubCount] = useState('')
+  const [specialImage, setSpecialImage] = useState(false)
   const [withGift, setWithGift] = useState(false)
   const [image, setImage] = useState<File>()
-  const [gift, setGift] = useState(packRequest?.gift || '')
-  const [product] = useState(() => state.products.find(p => p.id === params.productId)!)
-  const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
-  const [storeId, setStoreId] = useState(packRequest?.storeId || '')
-  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
-  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.productId && !p.byWeight && !p.subPackId))
+  const [gift, setGift] = useState('')
+  const [product] = useState(() => state.products.find(p => p.id === params.id)!)
+  const [forSale, setForSale] = useState(true)
+  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.id && !p.byWeight && !p.subPackId))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -60,7 +56,7 @@ const AddGroup = () => {
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
-      if (state.packs.find(p => p.product.id === params.productId && p.name === name)) {
+      if (state.packs.find(p => p.product.id === params.id && p.name === name)) {
         throw new Error('duplicateName')
       }
       if (+subCount === 0 || +subCount !== Math.floor(+subCount)){
@@ -69,17 +65,9 @@ const AddGroup = () => {
       if (!withGift && +subCount === 1) {
         throw new Error('invalidCountWithoutGift')
       }
-      const stores = [{
-        storeId, 
-        price: +price, 
-        isRetail: state.stores.find(s => s.id === storeId)!.type === 's', 
-        isActive: true,
-        time: new Date()
-      }]
       const pack = {
         product,
         name,
-        stores,
         subPackId,
         subCount: +subCount,
         unitsCount: +subCount * subPackInfo.unitsCount,
@@ -90,10 +78,9 @@ const AddGroup = () => {
         forSale,
         lastTrans: new Date()
       }
-      addPack(pack, product, state.users, state.packRequests, packRequest, image, subPackInfo)
+      addPack(pack, product, image)
       message(labels.addSuccess, 3000)
-      if (packRequest) history.push('/')
-      else history.goBack()
+      history.goBack()
     } catch(err) {
 			message(getMessage(location.pathname, err), 3000)
 		}
@@ -119,7 +106,6 @@ const AddGroup = () => {
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
               value={subPackId}
-              disabled={!!packRequest}
               onIonChange={e => setSubPackId(e.detail.value)}
             >
               {packs.map(p => <IonSelectOption key={p.id} value={p.id}>{p.name}</IonSelectOption>)}
@@ -159,29 +145,6 @@ const AddGroup = () => {
               />
             </IonItem>
           }
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
-            <IonSelect 
-              ok-text={labels.ok} 
-              cancel-text={labels.cancel} 
-              value={storeId}
-              disabled={!!packRequest}
-              onIonChange={e => setStoreId(e.detail.value)}
-            >
-              {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              {labels.price}
-            </IonLabel>
-            <IonInput 
-              value={price} 
-              type="number" 
-              clearInput
-              onIonChange={e => setPrice(e.detail.value!)} 
-            />
-          </IonItem>
           <IonItem>
             <IonLabel color="primary">{labels.specialImage}</IonLabel>
             <IonToggle checked={specialImage} onIonChange={() => setSpecialImage(s => !s)}/>

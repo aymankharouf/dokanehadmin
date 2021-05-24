@@ -5,7 +5,7 @@ import labels from '../data/labels'
 import {units} from '../data/config'
 import { Category } from '../data/types'
 import { useHistory, useLocation } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -22,24 +22,12 @@ const AddProduct = () => {
   const [countryId, setCountryId] = useState('')
   const [unit, setUnit] = useState('')
   const [imageUrl, setImageUrl] = useState('')
-  const [packName, setPackName] = useState('')
-  const [unitsCount, setUnitsCount] = useState('')
-  const [byWeight, setByWeight] = useState(false)
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null);
-  const [price, setPrice] = useState('')
-  const [storeId, setStoreId] = useState('')
-  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
     setCategories(() => state.categories.filter(c => c.isLeaf).sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   }, [state.categories])
-  useEffect(() => {
-    if (byWeight) setUnitsCount('1')
-  }, [byWeight])
-  useEffect(() => {
-    if (unit && (byWeight || unitsCount)) setPackName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === unit)?.name}`)
-  }, [unitsCount, unit, byWeight])
   useEffect(() => {
     if (countryId === '0') history.push('/add-country')
     if (trademarkId === '0') history.push('/add-trademark')
@@ -84,24 +72,7 @@ const AddProduct = () => {
         unit,
         imageUrl
       }
-      const stores = [{
-        storeId, 
-        price: +price, 
-        isRetail: state.stores.find(s => s.id === storeId)!.type === 's', 
-        isActive: true,
-        time: new Date()
-      }]
-      const pack = {
-        name: packName,
-        product,
-        stores,
-        unitsCount: +unitsCount,
-        byWeight,
-        isActive: true,
-        forSale,
-        lastTrans: new Date()
-      }
-      addProduct(product, pack, image)
+      addProduct(product, image)
       message(labels.addSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -189,59 +160,6 @@ const AddProduct = () => {
               {units.map(u => <IonSelectOption key={u.id} value={u.id}>{u.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.forSale}</IonLabel>
-            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
-          </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.byWeight}</IonLabel>
-            <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
-          </IonItem>
-          {!byWeight &&
-            <IonItem>
-              <IonLabel position="floating" color="primary">
-                {labels.unitsCount}
-              </IonLabel>
-              <IonInput 
-                value={unitsCount} 
-                type="number"
-                clearInput
-                onIonChange={e => setUnitsCount(e.detail.value!)} 
-              />
-            </IonItem>
-          }
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.packName}</IonLabel>
-            <IonInput 
-              value={packName} 
-              type="text" 
-              autofocus
-              clearInput
-              onIonChange={e => setPackName(e.detail.value!)} 
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
-            <IonSelect 
-              ok-text={labels.ok} 
-              cancel-text={labels.cancel} 
-              value={storeId}
-              onIonChange={e => setStoreId(e.detail.value)}
-            >
-              {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              {labels.price}
-            </IonLabel>
-            <IonInput 
-              value={price} 
-              type="number" 
-              clearInput
-              onIonChange={e => setPrice(e.detail.value!)} 
-            />
-          </IonItem>
           <input 
             ref={inputEl}
             type="file" 
@@ -259,7 +177,7 @@ const AddProduct = () => {
           <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
-      {name && categoryId && countryId && unit && packName && unitsCount && price && storeId &&
+      {name && categoryId && countryId && unit &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
           <IonFabButton onClick={handleSubmit}>
             <IonIcon ios={checkmarkOutline} />

@@ -66,7 +66,6 @@ import EditProduct from './pages/edit-product'
 import Adverts from './pages/adverts'
 import AddAdvert from './pages/add-advert'
 import EditAdvert from './pages/edit-advert'
-import AddStorePack from './pages/add-store-pack'
 import AddPackStore from './pages/add-pack-store'
 import StoreDetails from './pages/store-details'
 import AdvertDetails from './pages/advert-details'
@@ -118,8 +117,8 @@ const app = () => {
               <Route path="/edit-category/:id" exact={true} component={EditCategory} />
               <Route path="/products/:id" exact={true} component={Products} />
               <Route path="/product-packs/:id/:type" exact={true} component={ProductPacks} />
-              <Route path="/add-pack/:productId/:requestId" exact={true} component={AddPack} />
-              <Route path="/add-group/:productId/:requestId" exact={true} component={AddGroup} />
+              <Route path="/add-pack/:id" exact={true} component={AddPack} />
+              <Route path="/add-group/:id" exact={true} component={AddGroup} />
               <Route path="/edit-pack/:id" exact={true} component={EditPack} />
               <Route path="/edit-group/:id" exact={true} component={EditGroup} />
               <Route path="/add-product/:id" exact={true} component={AddProduct} />
@@ -128,7 +127,6 @@ const app = () => {
               <Route path="/add-advert" exact={true} component={AddAdvert} />
               <Route path="/edit-advert/:id" exact={true} component={EditAdvert} />
               <Route path="/add-pack-store/:id" exact={true} component={AddPackStore} />
-              <Route path="/add-store-pack/:storeId/:requestId" exact={true} component={AddStorePack} />
               <Route path="/store-details/:id" exact={true} component={StoreDetails} />
               <Route path="/advert-details/:id" exact={true} component={AdvertDetails} />
               <Route path="/archived-products" exact={true} component={ArchivedProducts} />

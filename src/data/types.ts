@@ -22,7 +22,6 @@ export type Product = {
   name: string,
   alias?: string,
   description?: string,
-  // mainCategoryId: string,
   categoryId: string,
   trademarkId?: string,
   countryId: string,
@@ -54,6 +53,8 @@ export type PackStore = {
   packId: string,
   price: number,
   isRetail: boolean,
+  isActive: boolean,
+  claimUserId?: string,
   time: Date,
 }
 export type Notification = {
@@ -124,7 +125,8 @@ export type Store = {
   address: string,
   position: Position,
   locationId?: string,
-  type: string
+  type: string,
+  claimsCount: number
 }
 export type Log = {
   id: string,

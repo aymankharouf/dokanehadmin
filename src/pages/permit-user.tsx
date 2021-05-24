@@ -4,7 +4,7 @@ import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
 import { storeTypes } from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonLoading, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -17,7 +17,6 @@ const PermitUser = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const [user] = useState(() => state.users.find(u => u.id === params.id)!)
   const [storeName, setStoreName] = useState(user.storeName || '')
   const [address, setAddress] = useState(user.address || '')
@@ -26,13 +25,10 @@ const PermitUser = () => {
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const handlePermit = () => {
     try{
-      loading()
       permitUser(user, type, storeName, locationId, address)
-      dismiss()
       message(labels.permitSuccess, 3000)
       history.goBack()
     } catch (err){
-      dismiss()
       message(getMessage(location.pathname, err), 3000)
     }
   }

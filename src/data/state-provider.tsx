@@ -79,6 +79,8 @@ const StateProvider = ({children}: Props) => {
               storeId: s.storeId,
               price: s.price,
               isRetail: s.isRetail,
+              isActive: s.isActive,
+              claimUserId: s.claimUserId,
               time: s.time.toDate(),
             })
           })
@@ -207,7 +209,8 @@ const StateProvider = ({children}: Props) => {
               isActive: doc.data().isActive,
               locationId: doc.data().locationId,
               position: doc.data().position,
-              type: doc.data().type
+              type: doc.data().type,
+              claimsCount: doc.data().claimsCount
             })
             doc.data().alarms?.forEach((a: any) => {
               alarms.push({

@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {login, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { IonButton, IonButtons, IonContent, IonFooter, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, useIonLoading, useIonToast } from '@ionic/react'
+import { IonButton, IonButtons, IonContent, IonFooter, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { Link } from 'react-router-dom'
@@ -10,18 +10,14 @@ const Login = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const handleLogin = async () => {
     try{
-      loading()
       await login(email, password)
-      dismiss()
       message(labels.loginSuccess, 3000)
       history.goBack()
     } catch(err) {
-      dismiss()
 			message(getMessage(location.pathname, err), 3000)
 		}
   }

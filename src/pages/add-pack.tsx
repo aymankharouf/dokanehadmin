@@ -4,13 +4,12 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
-  productId: string,
-  requestId: string
+  id: string,
 }
 const AddPack = () => {
   const {state} = useContext(StateContext)
@@ -18,17 +17,12 @@ const AddPack = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [packRequest] = useState(() => state.packRequests.find(r => r.id === params.requestId))
-  const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
-  const [name, setName] = useState(packRequest?.name || '')
+  const [name, setName] = useState('')
   const [unitsCount, setUnitsCount] = useState('')
-  const [byWeight, setByWeight] = useState(siblingPack?.byWeight || false)
-  const [specialImage, setSpecialImage] = useState(!!packRequest?.imageUrl || false)
+  const [byWeight, setByWeight] = useState(false)
+  const [specialImage, setSpecialImage] = useState(false)
   const [image, setImage] = useState<File>()
-  const [product] = useState(() => state.products.find(p => p.id === params.productId)!)
-  const [price, setPrice] = useState(packRequest?.price.toFixed(2) || '')
-  const [storeId, setStoreId] = useState(packRequest?.storeId || '')
-  const [forSale, setForSale] = useState(() => state.stores.find(s => s.id === storeId)?.type === 's')
+  const [product] = useState(() => state.products.find(p => p.id === params.id)!)
   const [imageUrl, setImageUrl] = useState('')
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -60,30 +54,21 @@ const AddPack = () => {
   }
   const handleSubmit = () => {
     try{
-      if (state.packs.find(p => p.product.id === params.productId && p.name === name)) {
+      if (state.packs.find(p => p.product.id === params.id && p.name === name)) {
         throw new Error('duplicateName')
       }
-      const stores = [{
-        storeId, 
-        price: +price, 
-        isRetail: state.stores.find(s => s.id === storeId)!.type === 's', 
-        isActive: true,
-        time: new Date()
-      }]
       const pack = {
         name,
         product,
-        stores,
         unitsCount: +unitsCount,
         byWeight,
         isActive: true,
-        forSale,
+        forSale: true,
         lastTrans: new Date()
       }
-      addPack(pack, product, state.users, state.packRequests, packRequest, image)
+      addPack(pack, product, image)
       message(labels.addSuccess, 3000)
-      if (packRequest) history.push('/')
-      else history.goBack()
+      history.goBack()
     } catch(err) {
 			message(getMessage(location.pathname, err), 3000)
 		}
@@ -94,22 +79,8 @@ const AddPack = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
-            <IonInput 
-              value={name} 
-              type="text" 
-              autofocus
-              clearInput
-              onIonChange={e => setName(e.detail.value!)} 
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.forSale}</IonLabel>
-            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
-          </IonItem>
-          <IonItem>
             <IonLabel color="primary">{labels.byWeight}</IonLabel>
-            <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
+            <IonToggle slot="end" checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
           </IonItem>
           {!byWeight &&
             <IonItem>
@@ -125,25 +96,12 @@ const AddPack = () => {
             </IonItem>
           }
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
-            <IonSelect 
-              ok-text={labels.ok} 
-              cancel-text={labels.cancel} 
-              value={storeId}
-              onIonChange={e => setStoreId(e.detail.value)}
-            >
-              {state.stores.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              {labels.price}
-            </IonLabel>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
             <IonInput 
-              value={price} 
-              type="number" 
+              value={name} 
+              type="text" 
               clearInput
-              onIonChange={e => setPrice(e.detail.value!)} 
+              onIonChange={e => setName(e.detail.value!)} 
             />
           </IonItem>
           <IonItem>

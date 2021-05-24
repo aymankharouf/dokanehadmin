@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {resolveProductRequest, getMessage} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
+import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
 
@@ -17,16 +17,13 @@ const ProductRequestDetails = () => {
   const location = useLocation()
   const history = useHistory()
   const [alert] = useIonAlert()
-  const [loading, dismiss] = useIonLoading()
   const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === params.id))
   useEffect(() => {
     setProductRequest(() => state.productRequests.find(p => p.id === params.id))
   }, [state.productRequests, params.id])
   const handleAccept = async () => {
     try{
-      loading()
       await resolveProductRequest('a', productRequest!, state.productRequests, state.users)
-      dismiss()
       message(labels.approveSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -41,9 +38,7 @@ const ProductRequestDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: async () => {
           try{
-            loading()
             await resolveProductRequest('r', productRequest!, state.productRequests, state.users)
-            dismiss()
             message(labels.rejectSuccess, 3000)
             history.goBack()
           } catch(err) {

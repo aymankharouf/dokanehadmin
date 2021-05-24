@@ -7,6 +7,7 @@ import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
+import { User } from '../data/types'
 
 const AddStore = () => {
   const {state} = useContext(StateContext)
@@ -21,12 +22,15 @@ const AddStore = () => {
   const [isActive, setIsActive] = useState(false)
   const [locationId, setLocationId] = useState('')
   const [type, setType] = useState('')
+  const [owner, setOwner] = useState<User>()
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
   useEffect(() => {
     setMobileInvalid(!mobile || !patterns.mobile.test(mobile))
-  }, [mobile])
+    const user = mobile.length === 10 ? state.users.find(u => u.mobile === mobile) : undefined
+    setOwner(user)
+  }, [mobile, state.users])
   const handleSetPosition = () => {
     loading()
     navigator.geolocation.getCurrentPosition(
@@ -48,9 +52,10 @@ const AddStore = () => {
         address,
         position: {lat: +lat, lng: +lng},
         type,
+        claimsCount: 0,
         time: new Date()
       }
-      addStore(store)
+      addStore(store, owner)
       message(labels.addSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -86,6 +91,7 @@ const AddStore = () => {
               onIonChange={e => setMobile(e.detail.value!)} 
               color={mobileInvalid ? 'danger' : 'primary'}
             />
+            <div>{owner?.name || labels.unregisteredOwner}</div>
           </IonItem>
           <IonItem>
             <IonLabel color="primary">{labels.isActive}</IonLabel>

@@ -4,9 +4,9 @@ import labels from '../data/labels'
 import {deleteCategory, getMessage, categoryChildren} from '../data/actions'
 import {Category} from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonBadge, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from '@ionic/react'
+import { IonActionSheet, IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from '@ionic/react'
 import Header from './header'
-import { addOutline, cartOutline, chevronDownOutline, pencilOutline, trashOutline } from 'ionicons/icons'
+import { chevronDownOutline } from 'ionicons/icons'
 import {randomColors} from '../data/config'
 
 type Params = {
@@ -24,11 +24,16 @@ const Categories = () => {
   const history = useHistory()
   const [categories, setCategories] = useState<ExtendedCategory[]>([])
   const [currentCategory, setCurrentCategory] = useState<Category>()
-  const [categoryChildrenCount] = useState(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
-  const [categoryProductsCount] = useState(() => state.products.filter(p => p.categoryId === currentCategory?.id).length)
+  const [childrenCount, setChildrenCount] = useState(0)
+  const [productsCount, setProductsCount] = useState(0)
+  const [actionOpened, setActionOpened] = useState(false);
   useEffect(() => {
     setCurrentCategory(() => state.categories.find(c => c.id === params.id))
   }, [state.categories, params.id])
+  useEffect(() => {
+    setChildrenCount(() => state.categories.filter(c => c.parentId === currentCategory?.id).length)
+    setProductsCount(() => state.products.filter(p => p.categoryId === currentCategory?.id).length)
+  }, [currentCategory, state.categories, state.products])
   useEffect(() => {
     setCategories(() => {
       const children = state.categories.filter(c => c.parentId === params.id)
@@ -55,6 +60,7 @@ const Categories = () => {
       message(getMessage(location.pathname, err), 3000)
     }
   }
+  let i = 0
   return (
     <IonPage>
       <Header title={currentCategory?.name || labels.categories} />
@@ -79,28 +85,36 @@ const Categories = () => {
         </IonList>
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton>
+        <IonFabButton onClick={() => setActionOpened(true)}>
           <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
-        <IonFabList>
-          <IonFabButton color="success" routerLink={`/add-category/${params.id}`}>
-            <IonIcon ios={addOutline}></IonIcon>
-          </IonFabButton>
-          {params.id !== '0' &&
-            <IonFabButton color="warning" routerLink={`/edit-category/${params.id}`}>
-              <IonIcon ios={pencilOutline}></IonIcon>
-            </IonFabButton>
-          }
-          {params.id !== '0' && categoryChildrenCount + categoryProductsCount === 0 &&
-            <IonFabButton color="danger" onClick={handleDelete}>
-              <IonIcon ios={trashOutline}></IonIcon>
-            </IonFabButton>
-          }
-          <IonFabButton color="secondary" routerLink={`/products/${params.id}`}>
-            <IonIcon ios={cartOutline}></IonIcon>
-          </IonFabButton>
-        </IonFabList>
       </IonFab>
+      <IonActionSheet
+        isOpen={actionOpened}
+        onDidDismiss={() => setActionOpened(false)}
+        buttons={[
+          {
+            text: labels.addChild,
+            cssClass: randomColors[i++ % 5].name,
+            handler: () => history.push(`/add-category/${params.id}`)
+          },
+          {
+            text: labels.products,
+            cssClass: productsCount > 0 ? randomColors[i++ % 5].name : 'ion-hide',
+            handler: () => history.push(`/products/${params.id}`)
+          },
+          {
+            text: labels.edit,
+            cssClass: params.id !== '0' ? randomColors[i++ % 5].name : 'ion-hide',
+            handler: () => history.push(`/edit-category/${params.id}`)
+          },
+          {
+            text: labels.delete,
+            cssClass: params.id !== '0' && childrenCount + productsCount === 0 ? randomColors[i++ % 5].name : 'ion-hide',
+            handler: () => handleDelete()
+          },
+        ]}
+      />
     </IonPage>
   )
 }
