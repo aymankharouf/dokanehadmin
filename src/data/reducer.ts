@@ -2,6 +2,8 @@ import {Action, State, Location, Country, Trademark} from "./types"
 
 const Reducer = (state: State, action: Action) => {
     switch (action.type){
+      case 'SET_MAP_POSITION':
+        return {...state, mapPosition: action.payload}
       case 'SET_LOCATIONS':
         const locations: Location[] = action.payload
         return {...state, locations: locations.sort((l1, l2) => l1.name > l2.name ? 1 : -1)}

@@ -1,11 +1,13 @@
 import {useContext, useState, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { storeTypes } from '../data/config'
-import { useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle } from '@ionic/react'
+import { userTypes } from '../data/config'
+import { useLocation, useParams } from 'react-router'
+import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
-import { cartOutline, chevronDownOutline, pencilOutline } from 'ionicons/icons'
+import { attachOutline, cartOutline, chevronDownOutline, pencilOutline } from 'ionicons/icons'
+import { User } from '../data/types'
+import { getMessage, linkOwner } from '../data/actions'
 
 type Params = {
   id: string
@@ -13,11 +15,27 @@ type Params = {
 const StoreDetails = () => {
   const {state} = useContext(StateContext)
   const params = useParams<Params>()
+  const [message] = useIonToast()
+  const location = useLocation()
   const [store, setStore] = useState(() => state.stores.find(s => s.id === params.id)!)
+  const [owner, setOwner] = useState<User | undefined>()
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === params.id)!)
   }, [state.stores, params.id])
-
+  useEffect(() => {
+    setOwner(() => state.users.find(u => u.storeId === store.id || u.mobile === store.mobile))
+  }, [state.users, store])
+  const handleLinkOwner = () => {
+    try {
+      if (state.users.find(u => u.storeId === store.id)?.mobile !== store.mobile) {
+        throw new Error('conflictOwner')
+      }
+      linkOwner(owner!, store)
+      message(labels.editSuccess, 3000)
+    } catch (err) {
+      message(getMessage(location.pathname, err), 3000)
+    }
+  }
   return (
     <IonPage>
       <Header title={labels.storeDetails} />
@@ -42,6 +60,15 @@ const StoreDetails = () => {
             />
           </IonItem>
           <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.owner}
+            </IonLabel>
+            <IonInput 
+              value={owner ? `${owner.name}-${userTypes.find(t => t.id === owner.type)?.name}` : labels.unregisteredOwner} 
+              readonly
+            />
+          </IonItem>
+          <IonItem>
             <IonLabel color="primary">{labels.isActive}</IonLabel>
             <IonToggle checked={store.isActive} disabled/>
           </IonItem>
@@ -50,7 +77,7 @@ const StoreDetails = () => {
               {labels.type}
             </IonLabel>
             <IonInput 
-              value={storeTypes.find(t => t.id === store.type)!.name} 
+              value={userTypes.find(t => t.id === store.type)!.name} 
               readonly
             />
           </IonItem>
@@ -85,6 +112,11 @@ const StoreDetails = () => {
           <IonFabButton color="warning" routerLink={`/edit-store/${params.id}`}>
             <IonIcon ios={pencilOutline}></IonIcon>
           </IonFabButton>
+          {owner?.type === 'n' && 
+            <IonFabButton color="secondary" onClick={handleLinkOwner}>
+              <IonIcon ios={attachOutline}></IonIcon>
+            </IonFabButton>
+          }
         </IonFabList>
       </IonFab>
     </IonPage>

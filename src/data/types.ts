@@ -72,10 +72,6 @@ export type Rating = {
   userInfo?: User,
   productInfo?: Product
 }
-export type Position = {
-  lat: number,
-  lng: number
-}
 export type User = {
   id: string,
   name: string,
@@ -135,12 +131,6 @@ export type Log = {
   userId: string,
   time: Date,
 }
-export type Alarm = {
-  packId: string,
-  storeId: string,
-  type: string,
-  time: Date
-}
 export type ProductRequest = {
   id: string,
   storeId: string,
@@ -167,7 +157,10 @@ export type PackRequest = {
   gift?: string,
   time: Date
 }
-
+export type Position = {
+  lat: number,
+  lng: number
+}
 export type State = {
   user?: firebase.User,
   users: User[],
@@ -185,8 +178,8 @@ export type State = {
   notifications: Notification[],
   productRequests: ProductRequest[],
   storeRequests: StoreRequest[],
-  alarms: Alarm[],
-  packRequests: PackRequest[]
+  packRequests: PackRequest[],
+  mapPosition?: Position
 }
 
 export type Action = {

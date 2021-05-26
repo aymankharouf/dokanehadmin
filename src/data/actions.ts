@@ -1,6 +1,6 @@
 import firebase, {prodApp} from './firebase'
 import labels from './labels'
-import {randomColors, storeTypes} from './config'
+import {randomColors, userTypes} from './config'
 import {Advert, Category, Country, Error, Location, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification} from './types'
 
 export const getMessage = (path: string, error: Error) => {
@@ -423,30 +423,24 @@ export const editAdvert = async (advert: Advert, image?: File) => {
 export const permitUser = (user: User, type: string, storeName: string, locationId: string, address: string) => {
   const batch = firebase.firestore().batch()
   const userRef = firebase.firestore().collection('users').doc(user.id)
-  if (user.type === 'n') {
-    batch.update(userRef, {
-      locationId,
-    })
-  } else {
-    const store = {
-      name: storeName,
-      mobile: user.mobile,
-      isActive: true,
-      position: user.position,
-      locationId,
-      address,
-      type,
-      claimsCount: 0
-    }
-    const storeRef = firebase.firestore().collection('stores').doc()
-    batch.set(storeRef, store)
-    batch.update(userRef, {
-      storeId: storeRef.id,
-      locationId,
-      type
-    })
-    sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${storeTypes.find(t => t.id === type)!.name}`, batch)
+  const store = {
+    name: storeName,
+    mobile: user.mobile,
+    isActive: true,
+    position: user.position,
+    locationId,
+    address,
+    type,
+    claimsCount: 0
   }
+  const storeRef = firebase.firestore().collection('stores').doc()
+  batch.set(storeRef, store)
+  batch.update(userRef, {
+    storeId: storeRef.id,
+    locationId,
+    type
+  })
+  sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === type)!.name}`, batch)
   batch.commit()
 }
 
@@ -596,3 +590,14 @@ export const resolvePackRequest = async (type: string, packRequest: PackRequest,
   }
 }
 
+export const linkOwner = (user: User, store: Store) => {
+  const batch = firebase.firestore().batch()
+  const userRef = firebase.firestore().collection('users').doc(user.id)
+  batch.update(userRef, {
+    storeId: store.id,
+    locationId: store.locationId,
+    type: store.type
+  })
+  sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === store.type)!.name}`, batch)
+  batch.commit()
+}

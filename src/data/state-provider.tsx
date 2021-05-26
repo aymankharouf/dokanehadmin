@@ -1,7 +1,7 @@
 import {createContext, useReducer, useEffect} from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest, Alarm, PackRequest} from './types'
+import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest, PackRequest} from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -25,7 +25,6 @@ const StateProvider = ({children}: Props) => {
     notifications: [],
     productRequests: [],
     storeRequests: [],
-    alarms: [],
     packRequests: []
   }
   const [state, dispatch] = useReducer(Reducer, initState)
@@ -196,7 +195,6 @@ const StateProvider = ({children}: Props) => {
         })  
         const unsubscribeStores = firebase.firestore().collection('stores').onSnapshot(docs => {
           let stores: Store[] = []
-          const alarms: Alarm[] = []
           const productRequests: ProductRequest[] = []
           const storeRequests: StoreRequest[] = []
           const packRequests: PackRequest[] = []
@@ -211,14 +209,6 @@ const StateProvider = ({children}: Props) => {
               position: doc.data().position,
               type: doc.data().type,
               claimsCount: doc.data().claimsCount
-            })
-            doc.data().alarms?.forEach((a: any) => {
-              alarms.push({
-                storeId: doc.id,
-                packId: a.packId,
-                type: a.type,
-                time: a.time.toDate()
-              })
             })
             doc.data().productRequests?.forEach((r: any) => {
               productRequests.push({
@@ -254,7 +244,6 @@ const StateProvider = ({children}: Props) => {
             })
           })
           dispatch({type: 'SET_STORES', payload: stores})
-          dispatch({type: 'SET_ALARMS', payload: alarms})
           dispatch({type: 'SET_PRODUCT_REQUESTS', payload: productRequests})
           dispatch({type: 'SET_STORE_REQUESTS', payload: storeRequests})
           dispatch({type: 'SET_PACK_REQUESTS', payload: packRequests})

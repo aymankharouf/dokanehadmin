@@ -76,6 +76,7 @@ import ProductRequests from './pages/product-requests'
 import ProductRequestDetails from './pages/product-request-details'
 import PackRequests from './pages/pack-requests'
 import PackRequestDetails from './pages/pack-request-details'
+import Map from './pages/map';
 
 const app = () => {
   return (
@@ -136,6 +137,7 @@ const app = () => {
               <Route path="/product-request-details/:id" exact={true} component={ProductRequestDetails} />
               <Route path="/pack-requests" exact={true} component={PackRequests} />
               <Route path="/pack-request-details/:id" exact={true} component={PackRequestDetails} />
+              <Route path="/map/:lat/:lng" exact={true} component={Map} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

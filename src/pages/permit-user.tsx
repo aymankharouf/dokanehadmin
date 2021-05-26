@@ -2,7 +2,7 @@ import {useContext, useState} from 'react'
 import {permitUser, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
-import { storeTypes } from '../data/config'
+import { userTypes } from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -21,10 +21,16 @@ const PermitUser = () => {
   const [storeName, setStoreName] = useState(user.storeName || '')
   const [address, setAddress] = useState(user.address || '')
   const [locationId, setLocationId] = useState('')
-  const [type, setType] = useState('')
+  const [type, setType] = useState(user.type || '')
   const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
   const handlePermit = () => {
     try{
+      if (state.stores.find(s => s.mobile === user.mobile)) {
+        throw new Error('duplicateStoreMobile')
+      }
+      if (state.stores.find(s => s.locationId === user.locationId && s.name === storeName)) {
+        throw new Error('duplicateStoreName')
+      }
       permitUser(user, type, storeName, locationId, address)
       message(labels.permitSuccess, 3000)
       history.goBack()
@@ -77,7 +83,7 @@ const PermitUser = () => {
                 value={type}
                 onIonChange={e => setType(e.detail.value)}
               >
-                {storeTypes.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
+                {userTypes.map(t => t.id === 'n' ? null : <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
               </IonSelect>
             </IonItem>
           </>}

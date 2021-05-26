@@ -16,7 +16,7 @@ const Home = () => {
   ])
   const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {
-    const newUsers = state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)).length
+    const newUsers = state.users.filter(u => u.type !== 'n' && !u.storeId).length
     setApprovalsAcount(state.passwordRequests.length + state.productRequests.length + state.packRequests.length + newUsers)
   }, [state.users, state.passwordRequests, state.productRequests, state.packRequests])
 

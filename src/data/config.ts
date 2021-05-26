@@ -19,16 +19,11 @@ export const units = [
   {id: 'c', name: 'حبة', type: 'c', factor: 1},
 ]
 
-export const storeTypes = [
-  {id: 's', name: 'محل'},
-  {id: 'w', name: 'جملة'},
-  {id: 'd', name: 'موزع'}
-]
-
 export const userTypes = [
-  {id: 's', name: 'محل'},
-  {id: 'd', name: 'موزع/جملة'},
-  {id: 'n', name: 'عادي'}
+  {id: 'n', name: 'مستخدم عادي', isStore: false},
+  {id: 's', name: 'محل تجزئة', isStore: true},
+  {id: 'w', name: 'محل جملة', isStore: true},
+  {id: 'd', name: 'موزع', isStore: true}
 ]
 
 export const patterns = {
