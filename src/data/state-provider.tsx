@@ -11,7 +11,7 @@ type Props = {
 const StateProvider = ({children}: Props) => {
   const initState: State = {
     categories: [], 
-    locations: [], 
+    regions: [], 
     countries: [],
     trademarks: [],
     stores: [], 
@@ -50,9 +50,10 @@ const StateProvider = ({children}: Props) => {
       let packs: Pack[] = []
       let packStores: PackStore[] = []
       docs.forEach(doc => {
-        let prices, minPrice = 0
+        let minPrice = 0
         if (doc.data().stores) {
-          prices = doc.data().stores.map((s: PackStore) => s.isRetail ? s.price : 0)
+          const activePrices = doc.data().stores.filter((s: PackStore) => s.isRetail && s.isActive)
+          const prices = activePrices.map((p: PackStore) => p.price)
           minPrice = prices.length > 0 ? Math.min(...prices) : 0
         }
         packs.push({
@@ -79,7 +80,7 @@ const StateProvider = ({children}: Props) => {
               price: s.price,
               isRetail: s.isRetail,
               isActive: s.isActive,
-              claimUserId: s.claimUserId,
+              claimUserId: s.claimUserId || null,
               time: s.time.toDate(),
             })
           })
@@ -124,10 +125,10 @@ const StateProvider = ({children}: Props) => {
     firebase.auth().onAuthStateChanged(user => {
       if (user){
         dispatch({type: 'LOGIN', payload: user})
-        const unsubscribeLocations = firebase.firestore().collection('lookups').doc('l').onSnapshot(doc => {
-          if (doc.data()) dispatch({type: 'SET_LOCATIONS', payload: doc.data()?.values})
+        const unsubscribeRegions = firebase.firestore().collection('lookups').doc('r').onSnapshot(doc => {
+          if (doc.data()) dispatch({type: 'SET_REGIONS', payload: doc.data()?.values})
         }, err => {
-          unsubscribeLocations()
+          unsubscribeRegions()
         })  
         const unsubscribeCountries = firebase.firestore().collection('lookups').doc('c').onSnapshot(doc => {
           if (doc.data()) dispatch({type: 'SET_COUNTRIES', payload: doc.data()?.values})
@@ -174,9 +175,10 @@ const StateProvider = ({children}: Props) => {
               storeName: doc.data().storeName,
               colors: doc.data().colors,
               address: doc.data().address,
-              locationId: doc.data().locationId,
+              regionId: doc.data().regionId,
               time: doc.data().time.toDate(),
-              type: doc.data().type
+              type: doc.data().type,
+              isActive: doc.data().isActive
             })
             doc.data().notifications?.forEach((n: any) => {
               notifications.push({
@@ -205,7 +207,7 @@ const StateProvider = ({children}: Props) => {
               mobile: doc.data().mobile,
               address: doc.data().address,
               isActive: doc.data().isActive,
-              locationId: doc.data().locationId,
+              regionId: doc.data().regionId,
               position: doc.data().position,
               type: doc.data().type,
               claimsCount: doc.data().claimsCount

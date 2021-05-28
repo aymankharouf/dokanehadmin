@@ -1,7 +1,7 @@
 import {useState, useContext} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {addPackStore, getMessage} from '../data/actions'
+import {addPackStore, getMessage, getStoreName} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -56,7 +56,7 @@ const AddPackStore = () => {
               value={storeId}
               onIonChange={e => setStoreId(e.detail.value)}
             >
-              {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{s.name}</IonSelectOption>)}
+              {state.stores.map(s => <IonSelectOption key={s.id} value={s.id}>{getStoreName(s, state.regions)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
@@ -74,7 +74,7 @@ const AddPackStore = () => {
       </IonContent>
       {storeId && price &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

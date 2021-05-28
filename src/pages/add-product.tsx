@@ -177,7 +177,7 @@ const AddProduct = () => {
           <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
-      {name && categoryId && countryId && unit &&
+      {name && categoryId && countryId && unit && imageUrl &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
           <IonFabButton onClick={handleSubmit}>
             <IonIcon ios={checkmarkOutline} />

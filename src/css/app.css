@@ -14,6 +14,10 @@ ion-toast {
   color: var(--ion-color-secondary);
 }
 
+ion-backdrop {
+  opacity: 0.3;
+}
+
 .dark {
   --ion-background-color: var(--ion-color-dark);
   --ion-text-color: var(--ion-color-secondary);
@@ -42,6 +46,11 @@ ion-toast {
   --button-color: var(--ion-color-secondary);
 }
 
+.tertiary {
+  --color: var(--ion-color-tertiary);
+  --button-color: var(--ion-color-tertiary);
+}
+
 .success {
   --color: var(--ion-color-success);
   --button-color: var(--ion-color-success);
@@ -55,6 +64,11 @@ ion-toast {
 .danger {
   --color: var(--ion-color-danger);
   --button-color: var(--ion-color-danger);
+}
+
+.dark {
+  --color: var(--ion-color-dark);
+  --button-color: var(--ion-color-dark);
 }
 
 .star {

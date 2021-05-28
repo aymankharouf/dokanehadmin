@@ -17,7 +17,7 @@ const UserTypes = () => {
             routerLink={`/users/${t.id}`} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 5].name}
+            color={randomColors[i++ % 7].name}
             className="sections" 
             key={t.id}
           >

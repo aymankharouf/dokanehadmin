@@ -33,9 +33,9 @@ import Approvals from './pages/approvals'
 import Countries from './pages/countries'
 import AddCountry from './pages/add-country'
 import EditCountry from './pages/edit-country'
-import Locations from './pages/locations'
-import AddLocation from './pages/add-location'
-import EditLocation from './pages/edit-location'
+import Regions from './pages/regions'
+import AddRegion from './pages/add-region'
+import EditRegion from './pages/edit-region'
 import Trademarks from './pages/trademarks'
 import AddTrademark from './pages/add-trademark'
 import EditTrademark from './pages/edit-trademark'
@@ -94,9 +94,9 @@ const app = () => {
               <Route path="/countries" exact={true} component={Countries} />
               <Route path="/add-country" exact={true} component={AddCountry} />
               <Route path="/edit-country/:id" exact={true} component={EditCountry} />
-              <Route path="/locations" exact={true} component={Locations} />
-              <Route path="/add-location" exact={true} component={AddLocation} />
-              <Route path="/edit-location/:id" exact={true} component={EditLocation} />
+              <Route path="/regions" exact={true} component={Regions} />
+              <Route path="/add-region" exact={true} component={AddRegion} />
+              <Route path="/edit-region/:id" exact={true} component={EditRegion} />
               <Route path="/trademarks" exact={true} component={Trademarks} />
               <Route path="/add-trademark" exact={true} component={AddTrademark} />
               <Route path="/edit-trademark/:id" exact={true} component={EditTrademark} />

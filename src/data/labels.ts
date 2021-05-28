@@ -5,7 +5,7 @@ const labels: Label = {
   name: 'اﻻسم',
   mobile: 'الموبايل',
   password: 'كلمة السر',
-  location: 'المنطقة',
+  region: 'المنطقة',
   register: 'تسجيل',
   error: 'خطأ',
   noData: 'ﻻ يوجد بيانات',
@@ -21,7 +21,7 @@ const labels: Label = {
   description: 'الوصف',
   byWeight: 'بالوزن',
   price: 'السعر',
-  stores: 'المحال التجارية',
+  stores: 'المحلات',
   image: 'الصورة',
   submit: 'موافق',
   products: 'المنتجات',
@@ -94,9 +94,9 @@ const labels: Label = {
   oldPassword: 'كلمة السر الحالية',
   newPassword: 'كلمة السر الجديدة',
   changePasswordSuccess: 'تم تغيير كلمة السر',
-  locations: 'المناطق',
-  addLocation: 'اضافة منطقة',
-  editLocation: 'تعديل منطقة',
+  regions: 'المناطق',
+  addRegion: 'اضافة منطقة',
+  editRegion: 'تعديل منطقة',
   ratings: 'التقييمات',
   approvals: 'الموافقات',
   ratingDetails: 'تفاصيل التقييم',
@@ -109,7 +109,7 @@ const labels: Label = {
   duplicatePackInStore: 'هذا المنتج معرف سابقا في هذا المحل',
   trademarkProductsFound: 'لا يمكن حذف العلامة التجارية ... يوجد منتجات مرتبطة بها',
   countryProductsFound: 'لا يمكن حذف الدولة ... يوجد منتجات مرتبطة بها',
-  locationInUse: 'لا يمكن حذف الموقع...يوجد بيانات مرتبطة به',
+  regionInUse: 'لا يمكن حذف الموقع...يوجد بيانات مرتبطة به',
   confirmationTitle: 'تأكيد العملية',
   orderPrice: 'السعر عند الطلب',
   addPrice: 'اضافة سعر',
@@ -220,7 +220,7 @@ const labels: Label = {
   owner: 'اسم صاحب المحل',
   duplicateStoreMobile: 'هناك محل آخر بنفس رقم الموبايل',
   duplicateStoreName: 'هناك محل آخر بنفس الاسم في المنطقة',
-  conflictOwner: 'هناك مستخدم آخر معرف كصاحب هذا المحل'
+  conflictOwner: 'هناك مستخدم آخر معرف كصاحب هذا المحل',
 }
 
 export default labels

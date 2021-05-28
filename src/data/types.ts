@@ -6,7 +6,7 @@ export type Label = {
 export type Category = {
   id?: string,
   name: string,
-  mainId?: string,
+  mainId: string | null,
   parentId: string,
   ordering: number,
   isLeaf: boolean,
@@ -20,12 +20,12 @@ export type Error = {
 export type Product = {
   id?: string,
   name: string,
-  alias?: string,
-  description?: string,
+  alias: string,
+  description: string,
   categoryId: string,
-  trademarkId?: string,
+  trademarkId: string,
   countryId: string,
-  imageUrl?: string,
+  imageUrl: string,
   rating: number,
   ratingCount: number,
   unit: string,
@@ -54,7 +54,7 @@ export type PackStore = {
   price: number,
   isRetail: boolean,
   isActive: boolean,
-  claimUserId?: string,
+  claimUserId?: string | null,
   time: Date,
 }
 export type Notification = {
@@ -69,8 +69,6 @@ export type Rating = {
   status: string,
   userId: string,
   value: number,
-  userInfo?: User,
-  productInfo?: Product
 }
 export type User = {
   id: string,
@@ -82,8 +80,9 @@ export type User = {
   colors?: string[],
   address?: string,
   time: Date,
-  locationId?: string,
-  type: string
+  regionId?: string,
+  type: string,
+  isActive: boolean
 }
 export type Advert = {
   id?: string,
@@ -94,9 +93,10 @@ export type Advert = {
   imageUrl?: string,
   time: Date
 }
-export type Location = {
+export type Region = {
   id: string,
   name: string,
+  ordering: number,
   position: Position
 }
 export type Country = {
@@ -120,7 +120,7 @@ export type Store = {
   mobile: string,
   address: string,
   position: Position,
-  locationId?: string,
+  regionId?: string,
   type: string,
   claimsCount: number
 }
@@ -168,7 +168,7 @@ export type State = {
   packs: Pack[],
   packStores: PackStore[],
   adverts: Advert[],
-  locations: Location[],
+  regions: Region[],
   countries: Country[],
   trademarks: Trademark[],
   passwordRequests: PasswordRequest[],

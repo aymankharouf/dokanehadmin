@@ -1,7 +1,7 @@
 import firebase, {prodApp} from './firebase'
 import labels from './labels'
 import {randomColors, userTypes} from './config'
-import {Advert, Category, Country, Error, Location, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification} from './types'
+import {Advert, Category, Country, Error, Region, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification, Position} from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -22,6 +22,10 @@ export const quantityText = (quantity: number, weight?: number): string => {
 
 export const productOfText = (countryName: string, trademarkName?: string) => {
   return trademarkName ? `${labels.productFrom} ${trademarkName}-${countryName}` : `${labels.productOf} ${countryName}`
+}
+
+export const getStoreName = (store: Store, regions: Region[]) => {
+  return `${store.name} ${store.regionId ? '-' + regions.find(r => r.id === store.regionId)!.name : ''} (${userTypes.find(t => t.id === store.type)!.name})`
 }
 
 export const login = (email: string, password: string) => {
@@ -118,34 +122,49 @@ export const deleteStorePack = (packStore: PackStore, packStores: PackStore[], p
   }
 }
 
-export const addStore = (store: Store, user?: User) => {
-  const batch = firebase.firestore().batch()
+export const addStore = (store: Store) => {
   const storeRef = firebase.firestore().collection('stores').doc()
-  batch.set(storeRef, store)
-  if (user) {
-    const userRef = firebase.firestore().collection('users').doc(user.id)
+  storeRef.set(store)
+}
+
+export const editStore = (store: Store) => {
+  const {id, ...others} = store
+  const storeRef = firebase.firestore().collection('stores').doc(id)
+  storeRef.update(others)
+}
+
+export const changeStoreStatus = (store: Store, packStores: PackStore[], users: User[]) => {
+  const batch = firebase.firestore().batch()
+  const storeRef = firebase.firestore().collection('stores').doc(store.id)
+  batch.update(storeRef, {
+    isActive: !store.isActive
+  })
+  const storeOwner = users.find(u => u.storeId === store.id)
+  if (storeOwner) {
+    const userRef = firebase.firestore().collection('users').doc(storeOwner.id)
     batch.update(userRef, {
-      type: store.type,
-      storeId: storeRef.id
+      isActive: !store.isActive
     })
   }
+  const affectedPackStores = packStores.filter(p => p.storeId === store.id)
+  affectedPackStores.forEach(p => {
+    const otherStores = packStores.filter(s => s.packId === p.packId && s.storeId !== p.storeId)
+    otherStores.push({
+      ...p,
+      isActive: !store.isActive
+    })
+    const stores = otherStores.map(p => {
+      const {packId, ...others} = p
+      return others
+    })
+    const packRef = firebase.firestore().collection('packs').doc(p.packId)
+    batch.update(packRef, {
+      stores
+    })
+  })
   batch.commit()
 }
 
-export const editStore = (store: Store, user?: User) => {
-  const {id, ...others} = store
-  const batch = firebase.firestore().batch()
-  const storeRef = firebase.firestore().collection('stores').doc(id)
-  batch.update(storeRef, others)
-  if (user) {
-    const userRef = firebase.firestore().collection('users').doc(user.id)
-    batch.update(userRef, {
-      type: store.type,
-      storeId: storeRef.id
-    })
-  }
-  batch.commit()
-}
 
 export const addCountry = (country: Country) => {
   firebase.firestore().collection('lookups').doc('c').set({
@@ -168,22 +187,22 @@ export const editCountry = (country: Country, countries: Country[]) => {
   })
 }
 
-export const addLocation = (location: Location) => {
-  firebase.firestore().collection('lookups').doc('l').set({
-    values: firebase.firestore.FieldValue.arrayUnion(location)
+export const addRegion = (region: Region) => {
+  firebase.firestore().collection('lookups').doc('r').set({
+    values: firebase.firestore.FieldValue.arrayUnion(region)
   }, {merge: true})
 }
 
-export const editLocation = (location: Location, locations: Location[]) => {
-  const values = locations.filter(l => l.id !== location.id)
-  values.push(location)
-  firebase.firestore().collection('lookups').doc('l').update({
+export const editRegion = (region: Region, regions: Region[]) => {
+  const values = regions.filter(r => r.id !== region.id)
+  values.push(region)
+  firebase.firestore().collection('lookups').doc('r').update({
     values
   })
 }
 
-export const deleteLocation = (locationId: string, locations: Location[]) => {
-  const values = locations.filter(l => l.id !== locationId)
+export const deleteRegion = (regionId: string, regions: Region[]) => {
+  const values = regions.filter(r => r.id !== regionId)
   firebase.firestore().collection('lookups').doc('l').update({
     values
   })
@@ -420,26 +439,41 @@ export const editAdvert = async (advert: Advert, image?: File) => {
   firebase.firestore().collection('adverts').doc(id).update(others)
 }
 
-export const permitUser = (user: User, type: string, storeName: string, locationId: string, address: string) => {
+export const permitUser = (user: User, type: string, storeName: string, regionId: string, address: string, position: Position) => {
   const batch = firebase.firestore().batch()
   const userRef = firebase.firestore().collection('users').doc(user.id)
-  const store = {
-    name: storeName,
-    mobile: user.mobile,
-    isActive: true,
-    position: user.position,
-    locationId,
-    address,
-    type,
-    claimsCount: 0
-  }
   const storeRef = firebase.firestore().collection('stores').doc()
-  batch.set(storeRef, store)
-  batch.update(userRef, {
-    storeId: storeRef.id,
-    locationId,
-    type
-  })
+  if (type === 'd') {
+    batch.set(storeRef, {
+      name: user.name,
+      mobile: user.mobile,
+      isActive: true,
+      type,
+      position
+    })
+    batch.update(userRef, {
+      storeId: storeRef.id,
+      type,
+      position
+    })  
+  } else {
+    batch.set(storeRef, {
+      name: storeName,
+      mobile: user.mobile,
+      isActive: true,
+      position,
+      regionId,
+      address,
+      type,
+      claimsCount: 0
+    })
+    batch.update(userRef, {
+      storeId: storeRef.id,
+      regionId,
+      type,
+      position
+    })  
+  }
   sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === type)!.name}`, batch)
   batch.commit()
 }
@@ -524,23 +558,23 @@ export const getArchivedPacks = async (productId: string) => {
   return packs
 }
 
-export const getProdData = async () => {
-  let categories: Category[] = []
-  await prodApp.firestore().collection('categories')
-          .get().then(docs => {
-            docs.forEach(doc => {
-              categories.push({
-                id: doc.id,
-                name: doc.data().name,
-                parentId: doc.data().parentId,
-                ordering: doc.data().ordering,
-                isLeaf: doc.data().isLeaf,
-                isActive: doc.data().isActive
-              })
-            })
-          })
-  return categories
-}
+// export const getProdData = async () => {
+//   let categories: Category[] = []
+//   await prodApp.firestore().collection('categories')
+//           .get().then(docs => {
+//             docs.forEach(doc => {
+//               categories.push({
+//                 id: doc.id,
+//                 name: doc.data().name,
+//                 parentId: doc.data().parentId,
+//                 ordering: doc.data().ordering,
+//                 isLeaf: doc.data().isLeaf,
+//                 isActive: doc.data().isActive
+//               })
+//             })
+//           })
+//   return categories
+// }
 
 export const categoryChildren = (categoryId: string, categories: Category[]) => {
   let result = [categoryId]
@@ -580,8 +614,6 @@ export const resolvePackRequest = async (type: string, packRequest: PackRequest,
   const notificationTitle = type === 'a' ? labels.approval : labels.rejection
   const notificationText = type === 'a' ? `${labels.approveProduct} ${packRequest.name}` : `${labels.rejectProduct} ${packRequest.name}`
   sendNotification(user.id, notificationTitle, notificationText, batch)
-
-  sendNotification(user.id, labels.rejection, `${labels.rejectProduct} ${packRequest.name}`, batch)
   batch.commit()
   if (packRequest.imageUrl) {
     const ext = packRequest.imageUrl.slice(packRequest.imageUrl.lastIndexOf('.'), packRequest.imageUrl.indexOf('?'))
@@ -595,7 +627,7 @@ export const linkOwner = (user: User, store: Store) => {
   const userRef = firebase.firestore().collection('users').doc(user.id)
   batch.update(userRef, {
     storeId: store.id,
-    locationId: store.locationId,
+    regionId: store.regionId,
     type: store.type
   })
   sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === store.type)!.name}`, batch)

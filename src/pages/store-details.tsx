@@ -3,11 +3,11 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { userTypes } from '../data/config'
 import { useLocation, useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
-import { attachOutline, cartOutline, chevronDownOutline, pencilOutline } from 'ionicons/icons'
+import { attachOutline, cartOutline, chevronDownOutline, flashOffOutline, flashOutline, pencilOutline } from 'ionicons/icons'
 import { User } from '../data/types'
-import { getMessage, linkOwner } from '../data/actions'
+import { changeStoreStatus, getMessage, linkOwner } from '../data/actions'
 
 type Params = {
   id: string
@@ -16,6 +16,7 @@ const StoreDetails = () => {
   const {state} = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
+  const [alert] = useIonAlert()
   const location = useLocation()
   const [store, setStore] = useState(() => state.stores.find(s => s.id === params.id)!)
   const [owner, setOwner] = useState<User | undefined>()
@@ -35,6 +36,23 @@ const StoreDetails = () => {
     } catch (err) {
       message(getMessage(location.pathname, err), 3000)
     }
+  }
+  const handleChangeStatus = () => {
+    alert({
+      header: labels.confirmationTitle,
+      message: labels.confirmationText,
+      buttons: [
+        {text: labels.cancel},
+        {text: labels.ok, handler: () => {
+          try{
+            changeStoreStatus(store, state.packStores, state.users)
+            message(labels.editSuccess, 3000)
+          } catch(err) {
+            message(getMessage(location.pathname, err), 3000)
+          }    
+        }},
+      ],
+    })
   }
   return (
     <IonPage>
@@ -83,10 +101,10 @@ const StoreDetails = () => {
           </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">
-              {labels.location}
+              {labels.region}
             </IonLabel>
             <IonInput 
-              value={state.locations.find(l => l.id === store.locationId)?.name || ''} 
+              value={state.regions.find(r => r.id === store.regionId)?.name || ''} 
               readonly
             />
           </IonItem>
@@ -111,6 +129,9 @@ const StoreDetails = () => {
           </IonFabButton>
           <IonFabButton color="warning" routerLink={`/edit-store/${params.id}`}>
             <IonIcon ios={pencilOutline}></IonIcon>
+          </IonFabButton>
+          <IonFabButton color="danger" onClick={handleChangeStatus}>
+            <IonIcon ios={store.isActive ? flashOffOutline: flashOutline}></IonIcon>
           </IonFabButton>
           {owner?.type === 'n' && 
             <IonFabButton color="secondary" onClick={handleLinkOwner}>

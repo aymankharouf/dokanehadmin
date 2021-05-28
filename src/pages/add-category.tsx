@@ -26,16 +26,14 @@ const AddCategory = () => {
   })
   const handleSubmit = () => {
     try{
+      const parentCategory = state.categories.find(c => c.id === params.id)
       const newCategory: Category = {
         parentId: params.id,
         name,
         ordering: +ordering,
         isActive,
-        isLeaf: true
-      }
-      if (params.id !== '0') {
-        const parentCategory = state.categories.find(c => c.id === params.id)!
-        newCategory.mainId = parentCategory.mainId || parentCategory.id
+        isLeaf: true,
+        mainId: parentCategory?.mainId || parentCategory?.id || null
       }
       addCategory(newCategory)
       message(labels.addSuccess, 3000)

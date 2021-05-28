@@ -1,35 +1,31 @@
-import {useContext, useState, useEffect} from 'react'
+import {useContext} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
 
-const Locations = () => {
+const Regions = () => {
   const {state} = useContext(StateContext)
-  const [locations, setLocations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  useEffect(() => {
-    setLocations(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  }, [state.locations])
   return (
     <IonPage>
-      <Header title={labels.locations} />
+      <Header title={labels.regions} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
-          {locations.length === 0 ? 
+          {state.regions.length === 0 ? 
             <IonItem> 
               <IonLabel>{labels.noData}</IonLabel>
             </IonItem>
-          : locations.map(l =>
-              <IonItem key={l.id} routerLink={`/edit-location/${l.id}`}>
-                <IonLabel>{l.name}</IonLabel>
+          : state.regions.map(r =>
+              <IonItem key={r.id} routerLink={`/edit-region/${r.id}`}>
+                <IonLabel>{r.name}</IonLabel>
               </IonItem>  
             )
           }
         </IonList>
       </IonContent>
       <IonFab vertical="top" horizontal="end" slot="fixed">
-        <IonFabButton routerLink="/add-location">
+        <IonFabButton routerLink="/add-region">
           <IonIcon ios={addOutline} />
         </IonFabButton>
       </IonFab>
@@ -37,4 +33,4 @@ const Locations = () => {
   )
 }
 
-export default Locations
+export default Regions

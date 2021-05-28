@@ -17,7 +17,7 @@ const Approvals = () => {
   const [sections, setSections] = useState<Section[]>([])
   const [newUsers, setNewUsers] = useState<User[]>([])
   useEffect(() => {
-    setNewUsers(() => state.users.filter(u => (u.type !== 'n' && !u.storeId) || (u.type === 'n' && !u.position.lat && !u.locationId)))
+    setNewUsers(() => state.users.filter(u => u.type !== 'n' && !u.storeId))
   }, [state.users])
   useEffect(() => {
     setSections(() => [
@@ -37,7 +37,7 @@ const Approvals = () => {
             routerLink={s.path} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 5].name}
+            color={randomColors[i++ % 7].name}
             className="sections" 
             key={s.id}
           >

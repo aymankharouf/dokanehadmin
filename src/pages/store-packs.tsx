@@ -57,7 +57,7 @@ const StorePacks = () => {
                   <IonText color={randomColors[2].name}>{p.packInfo.name}</IonText>
                   <IonText color={randomColors[3].name}>{`${labels.price}: ${p.price.toFixed(2)}`}</IonText>
                   <IonText color={randomColors[4].name}>{p.categoryInfo.name}</IonText>
-                  <IonText color={randomColors[0].name}>{moment(p.time).fromNow()}</IonText>
+                  <IonText color={randomColors[5].name}>{moment(p.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

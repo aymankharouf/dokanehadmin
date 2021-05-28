@@ -9,7 +9,7 @@ const Settings = () => {
     {id: '1', name: labels.countries, path: '/countries'},
     {id: '2', name: labels.trademarks, path: '/trademarks'},
     {id: '3', name: labels.categories, path: '/categories/0'},
-    {id: '4', name: labels.locations, path: '/locations'},
+    {id: '4', name: labels.regions, path: '/regions'},
     {id: '5', name: labels.adverts, path: '/adverts'},
   ])
   let i = 0
@@ -22,7 +22,7 @@ const Settings = () => {
             routerLink={s.path} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 5].name}
+            color={randomColors[i++ % 7].name}
             className="sections" 
             key={s.id}
           >

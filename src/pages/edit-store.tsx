@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {editStore, getMessage} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 import { userTypes, patterns } from '../data/config'
@@ -23,11 +23,9 @@ const EditStore = () => {
   const [mobileInvalid, setMobileInvalid] = useState(false)
   const [address, setAddress] = useState(store.address)
   const [type, setType] = useState(store.type)
-  const [isActive, setIsActive] = useState(store.isActive)
-  const [locationId, setLocationId] = useState(store.locationId)
+  const [regionId, setRegionId] = useState(store.regionId)
   const [hasChanged, setHasChanged] = useState(false)
-  const [position, setPosition] = useState({lat: 0, lng: 0})
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
+  const [position, setPosition] = useState(store.position)
   useEffect(() => {
     setMobileInvalid(!mobile || !patterns.mobile.test(mobile))
   }, [mobile])
@@ -38,10 +36,9 @@ const EditStore = () => {
     || address !== store.address
     || position.lat !== store.position.lat
     || position.lng !== store.position.lng
-    || isActive !== store.isActive
-    || locationId !== store.locationId) setHasChanged(true)
+    || regionId !== store.regionId) setHasChanged(true)
     else setHasChanged(false)
-  }, [store, name, mobile, address, isActive, type, locationId, position])
+  }, [store, name, mobile, address, type, regionId, position])
   useEffect(() => {
     if (state.mapPosition) setPosition(state.mapPosition)
     return function cleanUp() {
@@ -54,17 +51,16 @@ const EditStore = () => {
       if (state.stores.find(s => s.id !== store.id && s.mobile === mobile)) {
         throw new Error('dubplicateStoreMobile')
       }
-      if (state.stores.find(s => s.id !== store.id && s.locationId === locationId && s.name === name)) {
+      if (state.stores.find(s => s.id !== store.id && s.regionId === regionId && s.name === name)) {
         throw new Error('duplicateStoreName')
       }
       const newStore = {
         ...store,
         name,
-        isActive,
         mobile,
         address,
         type,
-        locationId,
+        regionId,
         position
       }
       editStore(newStore)
@@ -105,10 +101,6 @@ const EditStore = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel color="primary">{labels.isActive}</IonLabel>
-            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
-          </IonItem>
-          <IonItem>
             <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
@@ -120,14 +112,14 @@ const EditStore = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.location}</IonLabel>
+            <IonLabel position="floating" color="primary">{labels.region}</IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
-              value={locationId}
-              onIonChange={e => setLocationId(e.detail.value)}
+              value={regionId}
+              onIonChange={e => setRegionId(e.detail.value)}
             >
-              {locations.map(l => <IonSelectOption key={l.id} value={l.id}>{l.name}</IonSelectOption>)}
+              {state.regions.map(r => <IonSelectOption key={r.id} value={r.id}>{r.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
@@ -140,18 +132,21 @@ const EditStore = () => {
               onIonChange={e => setAddress(e.detail.value!)} 
             />
           </IonItem>
+        </IonList>
+        <div className="ion-text-center">
           <IonButton 
-            expand="block" 
-            fill="clear" 
+            fill="solid" 
+            shape="round"
+            style={{width: '10rem'}}
             routerLink={`/map/${store.position.lat}/${store.position.lng}`}
           >
             {labels.map}
           </IonButton>
-        </IonList>
+        </div>
       </IonContent>
       {name && !mobileInvalid && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

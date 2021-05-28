@@ -3,56 +3,53 @@ import {addStore, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {StateContext} from '../data/state-provider'
 import { userTypes, patterns } from '../data/config'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonLoading, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
+import { Region } from '../data/types'
 
 const AddStore = () => {
-  const {state} = useContext(StateContext)
+  const {state, dispatch} = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [loading, dismiss] = useIonLoading()
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
   const [mobileInvalid, setMobileInvalid] = useState(true)
   const [address, setAddress] = useState('')
   const [isActive, setIsActive] = useState(false)
-  const [locationId, setLocationId] = useState('')
+  const [regionId, setRegionId] = useState('')
   const [type, setType] = useState('')
-  const [locations] = useState(() => [...state.locations].sort((l1, l2) => l1.name > l2.name ? 1 : -1))
-  const [lat, setLat] = useState(0)
-  const [lng, setLng] = useState(0)
+  const [position, setPosition] = useState({lat: 0, lng: 0})
+  const [regionInfo, setRegionInfo] = useState<Region>()
+  useEffect(() => {
+    if (state.mapPosition) setPosition(state.mapPosition)
+    return function cleanUp() {
+      dispatch({type: 'CLEAR_MAP_POSITION'})
+    }
+  }, [state.mapPosition, dispatch])
   useEffect(() => {
     setMobileInvalid(!mobile || !patterns.mobile.test(mobile))
   }, [mobile])
-  const handleSetPosition = () => {
-    loading()
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        dismiss()
-        setLat(position.coords.latitude)
-        setLng(position.coords.longitude)
-      },
-      () => null
-    );
-  }
+  useEffect(() => {
+    if (regionId) setRegionInfo(() => state.regions.find(r => r.id === regionId))
+  }, [regionId, state.regions])
   const handleSubmit = () => {
     try{
       if (state.stores.find(s => s.mobile === mobile)) {
         throw new Error('dubplicateStoreMobile')
       }
-      if (state.stores.find(s => s.locationId === locationId && s.name === name)) {
+      if (state.stores.find(s => s.regionId === regionId && s.name === name)) {
         throw new Error('duplicateStoreName')
       }
       const store = {
         name,
         mobile,
         isActive,
-        locationId,
+        regionId,
         address,
-        position: {lat: +lat, lng: +lng},
+        position,
         type,
         claimsCount: 0,
         time: new Date()
@@ -110,14 +107,14 @@ const AddStore = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.location}</IonLabel>
+            <IonLabel position="floating" color="primary">{labels.region}</IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
-              value={locationId}
-              onIonChange={e => setLocationId(e.detail.value)}
+              value={regionId}
+              onIonChange={e => setRegionId(e.detail.value)}
             >
-              {locations.map(l => <IonSelectOption key={l.id} value={l.id}>{l.name}</IonSelectOption>)}
+              {state.regions.map(r => <IonSelectOption key={r.id} value={r.id}>{r.name}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>
@@ -130,20 +127,23 @@ const AddStore = () => {
               onIonChange={e => setAddress(e.detail.value!)} 
             />
           </IonItem>
-          {!lat &&
-            <IonButton 
-              expand="block" 
-              fill="clear" 
-              onClick={handleSetPosition}
-            >
-              {labels.setPosition}
-            </IonButton>
-          }
         </IonList>
+        {regionId &&
+          <div className="ion-text-center">
+            <IonButton 
+              fill="solid" 
+              shape="round"
+              style={{width: '10rem'}}
+              routerLink={`/map/${regionInfo?.position.lat}/${regionInfo?.position.lng}`}
+            >
+              {labels.map}
+            </IonButton>
+          </div>
+        }
       </IonContent>
-      {name && locationId && type && !mobileInvalid && lat &&
+      {name && regionId && type && !mobileInvalid && position.lat &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

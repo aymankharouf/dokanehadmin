@@ -95,22 +95,22 @@ const Categories = () => {
         buttons={[
           {
             text: labels.addChild,
-            cssClass: randomColors[i++ % 5].name,
+            cssClass: randomColors[i++ % 7].name,
             handler: () => history.push(`/add-category/${params.id}`)
           },
           {
             text: labels.products,
-            cssClass: productsCount > 0 ? randomColors[i++ % 5].name : 'ion-hide',
+            cssClass: productsCount > 0 ? randomColors[i++ % 7].name : 'ion-hide',
             handler: () => history.push(`/products/${params.id}`)
           },
           {
             text: labels.edit,
-            cssClass: params.id !== '0' ? randomColors[i++ % 5].name : 'ion-hide',
+            cssClass: params.id !== '0' ? randomColors[i++ % 7].name : 'ion-hide',
             handler: () => history.push(`/edit-category/${params.id}`)
           },
           {
             text: labels.delete,
-            cssClass: params.id !== '0' && childrenCount + productsCount === 0 ? randomColors[i++ % 5].name : 'ion-hide',
+            cssClass: params.id !== '0' && childrenCount + productsCount === 0 ? randomColors[i++ % 7].name : 'ion-hide',
             handler: () => handleDelete()
           },
         ]}

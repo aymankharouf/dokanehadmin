@@ -1,9 +1,9 @@
 import {useContext, useState} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {getMessage, resolvePackRequest} from '../data/actions'
+import {getMessage, getStoreName, resolvePackRequest} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
+import { IonBackdrop, IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
 
@@ -19,6 +19,8 @@ const PackRequestDetails = () => {
   const [alert] = useIonAlert()
   const [packRequest] = useState(() => state.packRequests.find(p => p.id === params.id))
   const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
+  const [storeInfo] = useState(() => state.stores.find(s => s.id === packRequest?.storeId)!)
+  const [showBackDrop, setShowBackDrop] = useState(false)
   const handleAccept = async () => {
     try{
       await resolvePackRequest('a', packRequest!, state.packRequests, state.users)
@@ -50,6 +52,7 @@ const PackRequestDetails = () => {
     <IonPage>
       <Header title={packRequest?.name} />
       <IonContent fullscreen>
+        <IonBackdrop visible={showBackDrop}/>
         <IonCard>
           <IonImg src={packRequest?.imageUrl || siblingPack?.product.imageUrl} alt={labels.noImage} />
         </IonCard>
@@ -59,7 +62,7 @@ const PackRequestDetails = () => {
               {labels.storeName}
             </IonLabel>
             <IonInput 
-              value={state.stores.find(s => s.id === packRequest?.storeId)?.name} 
+              value={getStoreName(storeInfo, state.regions)} 
               readonly
             />
           </IonItem>
@@ -84,7 +87,7 @@ const PackRequestDetails = () => {
         </IonList>
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton>
+        <IonFabButton onClick={() => setShowBackDrop(s => !s)}>
           <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
         <IonFabList>

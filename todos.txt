@@ -99,19 +99,24 @@
 *navigation & performance
 *store trans per month
 ---
-maps
+*maps
 *alarm for false price/offer
 *list of items to purchase for end user & list of requested items to store owner
 *salesmen adverts
 log for store activities
-store ordering (distance, price, rating)
+*store ordering (distance, price, rating)
 *add withgift flag
 confirmatiom messages between users
 store requests follow up in admin
 *restore basket from store requests when loading the app
-alarm details in store details page
-add link between store and users
-study how to define a product
+*alarm details in store details page
+*add link between store and users
+*study how to define a product
 log for user activities
-save basket to ordinary user for sharing between phones
-add location to store name
+*save basket to ordinary user for sharing between phones
+*add location to store name
+normal user can change his position
+contact us
+adverts
+study & test store inactivity 
+add backdrop and check the fab list
