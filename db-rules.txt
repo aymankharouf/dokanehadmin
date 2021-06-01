@@ -43,3 +43,16 @@ service cloud.firestore {
     }
   }
 }
+
+-----
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /requests/{id} {
+			allow read, write, delete: if request.auth.uid != null
+    }
+    match /{allPaths=**} {
+      allow read;
+      allow write, delete: if request.auth.token.name == 'a';
+    }
+  }
+}

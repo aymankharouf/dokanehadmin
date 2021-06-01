@@ -1,4 +1,4 @@
-import firebase, {prodApp} from './firebase'
+import firebase from './firebase'
 import labels from './labels'
 import {randomColors, userTypes} from './config'
 import {Advert, Category, Country, Error, Region, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification, Position} from './types'
@@ -69,7 +69,7 @@ export const deleteProduct = async (product: Product) => {
   firebase.firestore().collection('products').doc(product.id).delete()
 }
 
-export const editProduct = async (product: Product, oldName: string, packs: Pack[], image?: File) => {
+export const editProduct = async (product: Product, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
   const {id, ...others} = product
   if (image) {
@@ -83,7 +83,7 @@ export const editProduct = async (product: Product, oldName: string, packs: Pack
   let affectedPacks = packs.filter(p => p.product.id === id)
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
-    batch.update(packRef, product)
+    batch.update(packRef, {product})
   })
   batch.commit()
 }
@@ -308,34 +308,27 @@ export const deletePack = (packId: string) => {
   firebase.firestore().collection('packs').doc(packId).delete()
 }
 
-export const editPack = async (newPack: Pack, packs: Pack[], image?: File) => {
+export const editPack = async (pack: Pack, packs: Pack[], image?: File) => {
   const batch = firebase.firestore().batch()
-  const pack = {
-    name: newPack.name,
-    unitsCount: newPack.unitsCount,
-    byWeight: newPack.byWeight,
-    isActive: newPack.isActive,
-    imageUrl: undefined,
-    subPackId: newPack.subPackId,
-    subCount: newPack.subCount,
-  }
+  let imageUrl = pack.imageUrl
   if (image) {
     const filename = image.name
     const ext = filename.slice(filename.lastIndexOf('.'))
-    const fileData = await firebase.storage().ref().child('packs/' + newPack.id + ext).put(image)
-    pack.imageUrl = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
+    const fileData = await firebase.storage().ref().child('packs/' + pack.id + ext).put(image)
+    imageUrl = await firebase.storage().ref().child(fileData.metadata.fullPath).getDownloadURL()
   }
-  if (!pack.imageUrl) delete pack.imageUrl
-  if (!pack.subPackId) delete pack.subPackId
-  if (!pack.subCount) delete pack.subCount
-  const packRef = firebase.firestore().collection('packs').doc(newPack.id)
-  batch.update(packRef, pack)
-  let affectedPacks = packs.filter(p => p.subPackId === newPack.id)
+  const {price, weightedPrice, ...others} = pack
+  const packRef = firebase.firestore().collection('packs').doc(pack.id)
+  batch.update(packRef, {
+    ...others,
+    imageUrl
+  })
+  let affectedPacks = packs.filter(p => p.subPackId === pack.id)
   affectedPacks.forEach(p => {
     const packRef = firebase.firestore().collection('packs').doc(p.id)
     const packInfo = {
-      unitsCount: p.subCount! * newPack.unitsCount!,
-      byWeight: newPack.byWeight,
+      unitsCount: p.subCount! * pack.unitsCount!,
+      byWeight: pack.byWeight,
     }
     batch.update(packRef, packInfo)
   })
@@ -454,7 +447,8 @@ export const permitUser = (user: User, type: string, storeName: string, regionId
     batch.update(userRef, {
       storeId: storeRef.id,
       type,
-      position
+      position,
+      isActive: true
     })  
   } else {
     batch.set(storeRef, {
@@ -471,7 +465,8 @@ export const permitUser = (user: User, type: string, storeName: string, regionId
       storeId: storeRef.id,
       regionId,
       type,
-      position
+      position,
+      isActive: true
     })  
   }
   sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === type)!.name}`, batch)
@@ -545,10 +540,12 @@ export const getArchivedPacks = async (productId: string) => {
                 name: doc.data().name,
                 product: doc.data().product,
                 imageUrl: doc.data().imageUrl,
-                price: doc.data().price,
                 byWeight: doc.data().byWeight,
                 forSale: doc.data().forSale,
-                weightedPrice: doc.data().weightedPrice,
+                withGift: doc.data().withGift,
+                gift: doc.data().gift,
+                subCount: doc.data().subCount,
+                subPackId: doc.data().subPackId,
                 unitsCount: doc.data().unitsCount,
                 isActive: doc.data().isActive,
                 lastTrans: doc.data().lastTrans

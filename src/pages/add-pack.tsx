@@ -62,6 +62,11 @@ const AddPack = () => {
         product,
         unitsCount: +unitsCount,
         byWeight,
+        subPackId: null,
+        subCount: null,
+        imageUrl,
+        withGift: false,
+        gift: null,
         isActive: true,
         forSale: true,
         lastTrans: new Date()
@@ -129,7 +134,7 @@ const AddPack = () => {
       </IonContent>
       {name && unitsCount &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

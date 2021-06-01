@@ -221,6 +221,7 @@ const labels: Label = {
   duplicateStoreMobile: 'هناك محل آخر بنفس رقم الموبايل',
   duplicateStoreName: 'هناك محل آخر بنفس الاسم في المنطقة',
   conflictOwner: 'هناك مستخدم آخر معرف كصاحب هذا المحل',
+  gift: 'الهدية'
 }
 
 export default labels

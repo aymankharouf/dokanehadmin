@@ -84,7 +84,7 @@ const EditProduct = () => {
         countryId,
         unit
       }
-      editProduct(newProduct, product.name, state.packs, image)
+      editProduct(newProduct, state.packs, image)
       message(labels.editSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -191,7 +191,7 @@ const EditProduct = () => {
       </IonContent>
       {name && categoryId && countryId && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

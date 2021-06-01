@@ -107,7 +107,7 @@ log for store activities
 *store ordering (distance, price, rating)
 *add withgift flag
 confirmatiom messages between users
-store requests follow up in admin
+*store requests follow up in admin
 *restore basket from store requests when loading the app
 *alarm details in store details page
 *add link between store and users
@@ -119,4 +119,5 @@ normal user can change his position
 contact us
 adverts
 study & test store inactivity 
-add backdrop and check the fab list
+*solve crashes whe refresh
+*pwa

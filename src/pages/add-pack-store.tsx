@@ -45,7 +45,7 @@ const AddPackStore = () => {
 
   return (
     <IonPage>
-      <Header title={`${labels.addPrice} ${pack.product.name} ${pack.name}`} />
+      <Header title={labels.addPrice} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>

@@ -2,9 +2,10 @@ import {useContext, useState} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {addCountry, getMessage} from '../data/actions'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 const AddCountry = () => {
   const {state} = useContext(StateContext)
@@ -45,16 +46,14 @@ const AddCountry = () => {
             />
           </IonItem>
         </IonList>
-        {name && 
-          <IonButton 
-            expand="block" 
-            fill="clear" 
-            onClick={handleSubmit}
-          >
-            {labels.save}
-          </IonButton>
-        }
       </IonContent>
+      {name && 
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit} color="success">
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
+      }
     </IonPage>
   )
 }

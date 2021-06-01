@@ -68,10 +68,10 @@ const Products = () => {
       <IonFooter>
         <IonToolbar className="ion-justify-content-center">
           <IonGrid>
-            <IonRow className="ion-justify-content-around">
-              <IonButton size="small" style={{width: '120px'}} routerLink="/add-product/0">{labels.addProduct}</IonButton>
-              <IonButton size="small" style={{width: '120px'}} color="secondary" routerLink="/archived-products">{labels.archivedProducts}</IonButton>
-              <IonButton size="small" style={{width: '120px'}} color="danger" routerLink="/products/-1">{labels.notUsedProducts}</IonButton>
+            <IonRow>
+              <IonButton size="small" style={{width: '30vw'}} routerLink="/add-product/0">{labels.addProduct}</IonButton>
+              <IonButton size="small" style={{width: '30vw', marginRight: '5px'}} color="secondary" routerLink="/archived-products">{labels.archivedProducts}</IonButton>
+              <IonButton size="small" style={{width: '30vw', marginRight: '5px'}} color="danger" routerLink="/products/-1">{labels.notUsedProducts}</IonButton>
             </IonRow>
           </IonGrid>
         </IonToolbar>

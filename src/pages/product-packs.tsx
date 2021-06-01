@@ -91,7 +91,7 @@ const ProductPacks = () => {
             </IonRow>
           </IonGrid>
         </IonCard>
-        <IonList>
+        <IonList className="list">
           {packs.map(p => 
             <IonItem key={p.id} routerLink={`/pack-details/${p.id}`}>
               <IonLabel>
@@ -109,37 +109,37 @@ const ProductPacks = () => {
         </IonFabButton>
       </IonFab>
       <IonActionSheet
-          isOpen={actionOpened}
-          onDidDismiss={() => setActionOpened(false)}
-          buttons={[
-            {
-              text: labels.edit,
-              cssClass: 'primary',
-              handler: () => history.push(`/edit-product/${params.id}`)
-            },
-            {
-              text: labels.addPack,
-              cssClass: 'secondary',
-              handler: () => history.push(`/add-pack/${params.id}`)
-            },
-            {
-              text: labels.addGroup,
-              cssClass: 'success',
-              handler: () => history.push(`/add-group/${params.id}`)
-            },
-            {
-              text: labels.archive,
-              cssClass: activePacks.length === 0 ? 'warning' : 'ion-hide',
-              handler: () => handleArchive()
-            },
-            {
-              text: labels.delete,
-              cssClass: packs.length === 0 ? 'danger' : 'ion-hide',
-              handler: () => handleDelete()
-            },
+        isOpen={actionOpened}
+        onDidDismiss={() => setActionOpened(false)}
+        buttons={[
+          {
+            text: labels.edit,
+            cssClass: 'primary',
+            handler: () => history.push(`/edit-product/${params.id}`)
+          },
+          {
+            text: labels.addPack,
+            cssClass: 'secondary',
+            handler: () => history.push(`/add-pack/${params.id}`)
+          },
+          {
+            text: labels.addGroup,
+            cssClass: 'tertiary',
+            handler: () => history.push(`/add-group/${params.id}`)
+          },
+          {
+            text: labels.archive,
+            cssClass: activePacks.length === 0 ? 'success' : 'ion-hide',
+            handler: () => handleArchive()
+          },
+          {
+            text: labels.delete,
+            cssClass: packs.length === 0 ? 'danger' : 'ion-hide',
+            handler: () => handleDelete()
+          },
 
-          ]}
-        />
+        ]}
+      />
     </IonPage>
   )
 }

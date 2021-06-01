@@ -28,7 +28,7 @@ const StoreDetails = () => {
   }, [state.users, store])
   const handleLinkOwner = () => {
     try {
-      if (state.users.find(u => u.storeId === store.id)?.mobile !== store.mobile) {
+      if (state.users.find(u => u.storeId === store.id)) {
         throw new Error('conflictOwner')
       }
       linkOwner(owner!, store)

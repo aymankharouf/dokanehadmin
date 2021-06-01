@@ -6,6 +6,7 @@ import { useHistory, useLocation, useParams } from 'react-router'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
+import { units } from '../data/config'
 
 type Params = {
   id: string
@@ -20,7 +21,6 @@ const EditPack = () => {
   const [name, setName] = useState(pack.name)
   const [unitsCount, setUnitsCount] = useState(pack.unitsCount?.toString())
   const [byWeight, setByWeight] = useState(pack.byWeight)
-  const [forSale, setForSale] = useState(pack.forSale)
   const [isActive, setIsActive] = useState(pack.isActive)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
@@ -32,13 +32,16 @@ const EditPack = () => {
     || +unitsCount !== pack.unitsCount
     || isActive !== pack.isActive
     || byWeight !== pack.byWeight
-    || forSale !== pack.forSale
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [pack, name, unitsCount, byWeight, isActive, forSale, imageUrl])
+  }, [pack, name, unitsCount, byWeight, isActive, imageUrl])
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
+  useEffect(() => {
+    if (byWeight || unitsCount) setName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === pack.product.unit)?.name}`)
+  }, [unitsCount, pack, byWeight])
+
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
@@ -70,7 +73,6 @@ const EditPack = () => {
         name,
         unitsCount: +unitsCount,
         byWeight,
-        forSale,
         isActive
       }
       editPack(newPack, state.packs, image)
@@ -82,27 +84,9 @@ const EditPack = () => {
   }
   return (
     <IonPage>
-      <Header title={`${labels.editPack} ${pack.product.name}`} />
+      <Header title={labels.editPack} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
-            <IonInput 
-              value={name} 
-              type="text" 
-              autofocus
-              clearInput
-              onIonChange={e => setName(e.detail.value!)} 
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.isActive}</IonLabel>
-            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
-          </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.forSale}</IonLabel>
-            <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
-          </IonItem>
           <IonItem>
             <IonLabel color="primary">{labels.byWeight}</IonLabel>
             <IonToggle checked={byWeight} onIonChange={() => setByWeight(s => !s)}/>
@@ -120,6 +104,20 @@ const EditPack = () => {
               />
             </IonItem>
           }
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              autofocus
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
           <IonItem>
             <IonLabel color="primary">{labels.specialImage}</IonLabel>
             <IonToggle checked={specialImage} onIonChange={() => setSpecialImage(s => !s)}/>
@@ -139,13 +137,13 @@ const EditPack = () => {
             >
               {labels.setImage}
             </IonButton>
-            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+            <img src={imageUrl || ''} className="img-card" alt={labels.noImage} />
           </>}
         </IonList>
       </IonContent>
       {name && unitsCount && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

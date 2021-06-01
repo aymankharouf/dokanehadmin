@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route } from 'react-router-dom';
+import { Route, useHistory, useLocation } from 'react-router-dom';
 import StateProvider from './data/state-provider'
 
 
@@ -78,7 +78,11 @@ import PackRequests from './pages/pack-requests'
 import PackRequestDetails from './pages/pack-request-details'
 import Map from './pages/map';
 
-const app = () => {
+const App = () => {
+  const href = window.location.href
+  if (href.length - href.replaceAll('/', '').length !== (href.endsWith('/') ? 3 : 2)) {
+    window.location.href = window.location.hostname === 'localhost' ? href.substr(0, 21) : href.substr(0, 28)
+  }
   return (
     <StateProvider>
       <IonApp dir="rtl">
@@ -146,5 +150,5 @@ const app = () => {
   );
 };
 
-export default app;
+export default App;
 

@@ -71,6 +71,13 @@ ion-backdrop {
   --button-color: var(--ion-color-dark);
 }
 
+.list {
+  border-style: outset;
+  border-width: 2px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
 .star {
   color: yellow;
   margin: 3px;
@@ -194,26 +201,6 @@ ion-backdrop {
 .item-footer {
   font-size: 0.8rem !important;
   color: green !important;
-}
-
-.list-subtext1 {
-  font-size: 0.8rem;
-  color:purple;
-}
-
-.list-subtext2 {
-  font-size: 0.8rem;
-  color:deeppink;
-}
-
-.list-subtext3 {
-  font-size: 0.8rem;
-  color:teal;
-}
-
-.list-subtext4 {
-  font-size: 0.8rem;
-  color:orange;
 }
 
 .actions-button-text {

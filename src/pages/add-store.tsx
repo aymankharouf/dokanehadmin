@@ -38,7 +38,7 @@ const AddStore = () => {
   const handleSubmit = () => {
     try{
       if (state.stores.find(s => s.mobile === mobile)) {
-        throw new Error('dubplicateStoreMobile')
+        throw new Error('duplicateStoreMobile')
       }
       if (state.stores.find(s => s.regionId === regionId && s.name === name)) {
         throw new Error('duplicateStoreName')

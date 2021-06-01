@@ -2,10 +2,11 @@ import {useState, useContext} from 'react'
 import labels from '../data/labels'
 import {addCategory, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation, useParams } from 'react-router'
 import Header from './header'
 import { Category } from '../data/types'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -76,16 +77,14 @@ const AddCategory = () => {
             <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
           </IonItem>
         </IonList>
-        {name && ordering && 
-          <IonButton 
-            expand="block" 
-            fill="clear" 
-            onClick={handleSubmit}
-          >
-            {labels.save}
-          </IonButton>
-        }
       </IonContent>
+      {name && ordering && 
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit} color="success">
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
+      }
     </IonPage>
   )
 }

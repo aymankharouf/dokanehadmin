@@ -20,7 +20,6 @@ const PackRequestDetails = () => {
   const [packRequest] = useState(() => state.packRequests.find(p => p.id === params.id))
   const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
   const [storeInfo] = useState(() => state.stores.find(s => s.id === packRequest?.storeId)!)
-  const [showBackDrop, setShowBackDrop] = useState(false)
   const handleAccept = async () => {
     try{
       await resolvePackRequest('a', packRequest!, state.packRequests, state.users)
@@ -52,7 +51,6 @@ const PackRequestDetails = () => {
     <IonPage>
       <Header title={packRequest?.name} />
       <IonContent fullscreen>
-        <IonBackdrop visible={showBackDrop}/>
         <IonCard>
           <IonImg src={packRequest?.imageUrl || siblingPack?.product.imageUrl} alt={labels.noImage} />
         </IonCard>
@@ -87,7 +85,7 @@ const PackRequestDetails = () => {
         </IonList>
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton onClick={() => setShowBackDrop(s => !s)}>
+        <IonFabButton>
           <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
         <IonFabList>

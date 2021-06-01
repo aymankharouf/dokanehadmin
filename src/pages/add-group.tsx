@@ -76,6 +76,7 @@ const AddGroup = () => {
         withGift,
         gift,
         forSale,
+        imageUrl,
         lastTrans: new Date()
       }
       addPack(pack, product, image)
@@ -90,16 +91,6 @@ const AddGroup = () => {
       <Header title={`${labels.addGroup} ${product.name}`} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
-            <IonInput 
-              value={name} 
-              type="text" 
-              autofocus
-              clearInput
-              onIonChange={e => setName(e.detail.value!)} 
-            />
-          </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.pack}</IonLabel>
             <IonSelect 
@@ -120,6 +111,15 @@ const AddGroup = () => {
               type="number"
               clearInput
               onIonChange={e => setSubCount(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
             />
           </IonItem>
           <IonItem>
@@ -170,7 +170,7 @@ const AddGroup = () => {
       </IonContent>
       {name && subPackId && subCount && (gift || !withGift) &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

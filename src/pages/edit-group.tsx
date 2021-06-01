@@ -19,11 +19,11 @@ const EditGroup = () => {
   const [pack] = useState(() => state.packs.find(p => p.id === params.id)!)
   const [name, setName] = useState(pack.name)
   const [subPackId, setSubPackId] = useState(pack.subPackId)
-  const [subCount, setSubCount] = useState(pack.subCount?.toString() || '')
+  const [subCount, setSubCount] = useState(pack.subCount!.toString())
   const [isActive, setIsActive] = useState(pack.isActive)
   const [forSale, setForSale] = useState(pack.forSale)
   const [withGift, setWithGift] = useState(pack.withGift)
-  const [gift, setGift] = useState(pack.gift || '')
+  const [gift, setGift] = useState(pack.gift)
   const [hasChanged, setHasChanged] = useState(false)
   const [specialImage, setSpecialImage] = useState(!!pack.imageUrl)
   const [image, setImage] = useState<File>()
@@ -50,7 +50,7 @@ const EditGroup = () => {
     else setHasChanged(false)
   }, [pack, name, subPackId, subCount, isActive, withGift, gift, forSale, imageUrl])
   useEffect(() => {
-    if (subCount || gift) setName(`${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}${withGift ? '+' + gift : ''}`)
+    if (subCount || gift) setName(`${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}${withGift ? '+' + (gift || '') : ''}`)
   }, [subCount, gift, state.packs, withGift, subPackId])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
@@ -73,7 +73,6 @@ const EditGroup = () => {
       message(getMessage(location.pathname, err), 3000)
     }
   }
-
   const handleSubmit = () => {
     try{
       const subPackInfo = state.packs.find(p => p.id === subPackId)!
@@ -104,23 +103,9 @@ const EditGroup = () => {
   }
   return (
     <IonPage>
-      <Header title={`${labels.editGroup} ${pack.product.name}`} />
+      <Header title={labels.editGroup} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
-            <IonInput 
-              value={name} 
-              type="text" 
-              autofocus
-              clearInput
-              onIonChange={e => setName(e.detail.value!)} 
-            />
-          </IonItem>
-          <IonItem>
-            <IonLabel color="primary">{labels.isActive}</IonLabel>
-            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
-          </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.pack}</IonLabel>
             <IonSelect 
@@ -144,8 +129,21 @@ const EditGroup = () => {
             />
           </IonItem>
           <IonItem>
+            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonInput 
+              value={name} 
+              type="text" 
+              clearInput
+              onIonChange={e => setName(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
             <IonLabel color="primary">{labels.forSale}</IonLabel>
             <IonToggle checked={forSale} onIonChange={() => setForSale(s => !s)}/>
+          </IonItem>
+          <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
           </IonItem>
           {forSale &&
             <IonItem>
@@ -185,13 +183,13 @@ const EditGroup = () => {
             >
               {labels.setImage}
             </IonButton>
-            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+            <img src={imageUrl || ''} className="img-card" alt={labels.noImage} />
           </>}
         </IonList>
       </IonContent>
       {name && subPackId && subCount && (gift || !withGift) && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

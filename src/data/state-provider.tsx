@@ -66,6 +66,7 @@ const StateProvider = ({children}: Props) => {
           subPackId: doc.data().subPackId,
           subCount: doc.data().subCount,
           withGift: doc.data().withGift,
+          gift: doc.data().gift,
           forSale: doc.data().forSale,
           isActive: doc.data().isActive,
           lastTrans: doc.data().lastTrans.toDate(),
