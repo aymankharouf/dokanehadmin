@@ -49,9 +49,6 @@ const EditGroup = () => {
     || imageUrl !== pack.imageUrl) setHasChanged(true)
     else setHasChanged(false)
   }, [pack, name, subPackId, subCount, isActive, withGift, gift, forSale, imageUrl])
-  useEffect(() => {
-    if (subCount || gift) setName(`${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}${withGift ? '+' + (gift || '') : ''}`)
-  }, [subCount, gift, state.packs, withGift, subPackId])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };

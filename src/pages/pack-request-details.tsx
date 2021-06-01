@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {getMessage, getStoreName, resolvePackRequest} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonBackdrop, IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
+import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
 
@@ -17,9 +17,9 @@ const PackRequestDetails = () => {
   const location = useLocation()
   const history = useHistory()
   const [alert] = useIonAlert()
-  const [packRequest] = useState(() => state.packRequests.find(p => p.id === params.id))
-  const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest?.siblingPackId))
-  const [storeInfo] = useState(() => state.stores.find(s => s.id === packRequest?.storeId)!)
+  const [packRequest] = useState(() => state.packRequests.find(p => p.id === params.id)!)
+  const [siblingPack] = useState(() => state.packs.find(p => p.id === packRequest.siblingPackId))
+  const [storeInfo] = useState(() => state.stores.find(s => s.id === packRequest.storeId)!)
   const handleAccept = async () => {
     try{
       await resolvePackRequest('a', packRequest!, state.packRequests, state.users)
@@ -49,10 +49,10 @@ const PackRequestDetails = () => {
   }
   return (
     <IonPage>
-      <Header title={packRequest?.name} />
+      <Header title={packRequest.name} />
       <IonContent fullscreen>
         <IonCard>
-          <IonImg src={packRequest?.imageUrl || siblingPack?.product.imageUrl} alt={labels.noImage} />
+          <IonImg src={packRequest.imageUrl || siblingPack?.product.imageUrl} alt={labels.noImage} />
         </IonCard>
         <IonList>
           <IonItem>
@@ -78,7 +78,7 @@ const PackRequestDetails = () => {
               {labels.price}
             </IonLabel>
             <IonInput 
-              value={packRequest?.price.toFixed(2)} 
+              value={packRequest.price.toFixed(2)} 
               readonly
             />
           </IonItem>

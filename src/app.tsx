@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route, useHistory, useLocation } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import StateProvider from './data/state-provider'
 
 

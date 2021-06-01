@@ -25,7 +25,7 @@ export const productOfText = (countryName: string, trademarkName?: string) => {
 }
 
 export const getStoreName = (store: Store, regions: Region[]) => {
-  return `${store.name} ${store.regionId ? '-' + regions.find(r => r.id === store.regionId)!.name : ''} (${userTypes.find(t => t.id === store.type)!.name})`
+  return `${store.name}${store.regionId ? '-' + regions.find(r => r.id === store.regionId)!.name : ''}${store.type === 's' ? '' : '(' + userTypes.find(t => t.id === store.type)!.name + ')'}`
 }
 
 export const login = (email: string, password: string) => {
@@ -545,6 +545,7 @@ export const getArchivedPacks = async (productId: string) => {
                 withGift: doc.data().withGift,
                 gift: doc.data().gift,
                 subCount: doc.data().subCount,
+                mainPackId: doc.data().mainPackId,
                 subPackId: doc.data().subPackId,
                 unitsCount: doc.data().unitsCount,
                 isActive: doc.data().isActive,

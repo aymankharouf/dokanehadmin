@@ -25,7 +25,7 @@ const AddGroup = () => {
   const [gift, setGift] = useState('')
   const [product] = useState(() => state.products.find(p => p.id === params.id)!)
   const [forSale, setForSale] = useState(true)
-  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.id && !p.byWeight && !p.subPackId))
+  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.id && !p.byWeight))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -55,7 +55,6 @@ const AddGroup = () => {
   }
   const handleSubmit = () => {
     try{
-      const subPackInfo = state.packs.find(p => p.id === subPackId)!
       if (state.packs.find(p => p.product.id === params.id && p.name === name)) {
         throw new Error('duplicateName')
       }
@@ -65,9 +64,11 @@ const AddGroup = () => {
       if (!withGift && +subCount === 1) {
         throw new Error('invalidCountWithoutGift')
       }
+      const subPackInfo = state.packs.find(p => p.id === subPackId)!
       const pack = {
         product,
         name,
+        mainPackId: subPackInfo.subPackId || subPackId,
         subPackId,
         subCount: +subCount,
         unitsCount: +subCount * subPackInfo.unitsCount,
@@ -76,7 +77,7 @@ const AddGroup = () => {
         withGift,
         gift,
         forSale,
-        imageUrl,
+        imageUrl: null,
         lastTrans: new Date()
       }
       addPack(pack, product, image)

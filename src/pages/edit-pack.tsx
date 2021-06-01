@@ -6,7 +6,6 @@ import { useHistory, useLocation, useParams } from 'react-router'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
-import { units } from '../data/config'
 
 type Params = {
   id: string
@@ -38,10 +37,6 @@ const EditPack = () => {
   useEffect(() => {
     if (byWeight) setUnitsCount('1')
   }, [byWeight])
-  useEffect(() => {
-    if (byWeight || unitsCount) setName(byWeight ? labels.byWeight : `${unitsCount} ${units.find(u => u.id === pack.product.unit)?.name}`)
-  }, [unitsCount, pack, byWeight])
-
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };

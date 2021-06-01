@@ -62,6 +62,7 @@ const AddPack = () => {
         product,
         unitsCount: +unitsCount,
         byWeight,
+        mainPackId: null,
         subPackId: null,
         subCount: null,
         imageUrl,

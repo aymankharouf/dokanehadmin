@@ -32,7 +32,7 @@ const PackDetails = () => {
   }, [state.packs, params.id])
   useEffect(() => {
     setPackStores(() => {
-      const packStores = state.packStores.filter(p => p.packId === pack?.id || state.packs.find(pa => pa.id === p.packId && pa.subPackId === pack?.id))
+      const packStores = state.packStores.filter(p => p.packId === pack?.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack?.id || pa.mainPackId === pack?.id)))
       const results = packStores.map(s => {
         const storeInfo = state.stores.find(st => st.id === s.storeId)!
         const packInfo = state.packs.find(p => p.id === s.packId)!
@@ -102,9 +102,8 @@ const PackDetails = () => {
             <IonItem key={i}>
               <IonLabel>
                 <IonText color={randomColors[0].name}>{getStoreName(s.storeInfo, state.regions)}</IonText>
-                <IonText color={randomColors[1].name}>{s.packId === pack?.id ? '' : `${s.packInfo?.product.name}${s.packInfo?.product.alias ? '-' + s.packInfo.product.alias : ''}`}</IonText>
-                <IonText color={randomColors[2].name}>{s.packId === pack?.id ? '' : s.packInfo?.name}</IonText>
-                <IonText color={randomColors[3].name}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
+                {s.packId !== pack?.id && <IonText color={randomColors[1].name}>{s.packInfo?.name}</IonText>}
+                <IonText color={randomColors[2].name}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
               </IonLabel>
               {s.packId === pack?.id && 
                 <IonIcon 

@@ -96,6 +96,7 @@ const ProductPacks = () => {
             <IonItem key={p.id} routerLink={`/pack-details/${p.id}`}>
               <IonLabel>
                 <IonText color={randomColors[0].name}>{p.name}</IonText>
+                <IonText color={randomColors[1].name}>{`${labels.stores}: ${state.packStores.filter(s => s.packId === p.id).length}`}</IonText>
               </IonLabel>
               {p.price! > 0 && <IonLabel slot="end" className="price">{p.price!.toFixed(2)}</IonLabel>}
               {!p.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}

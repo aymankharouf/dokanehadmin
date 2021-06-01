@@ -21,7 +21,7 @@ const UserTypes = () => {
             className="sections" 
             key={t.id}
           >
-            {`${t.name}(${state.users.filter(u => u.type === t.id).length})`}
+            {`${t.name} (${state.users.filter(u => u.type === t.id).length})`}
           </IonButton>
         )}
       </IonContent>

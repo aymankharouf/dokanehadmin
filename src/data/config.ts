@@ -22,9 +22,9 @@ export const units = [
 ]
 
 export const userTypes = [
-  {id: 'n', name: 'مستخدم عادي', isStore: false},
-  {id: 's', name: 'محل تجزئة', isStore: true},
-  {id: 'w', name: 'محل جملة', isStore: true},
+  {id: 'n', name: 'مستخدم', isStore: false},
+  {id: 's', name: 'تجزئة', isStore: true},
+  {id: 'w', name: 'جملة', isStore: true},
   {id: 'd', name: 'موزع', isStore: true}
 ]
 

@@ -1,7 +1,7 @@
-import {useContext, useState, useEffect} from 'react'
+import {useContext, useState} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {resolveProductRequest, getMessage} from '../data/actions'
+import {resolveProductRequest, getMessage, getStoreName} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -17,13 +17,10 @@ const ProductRequestDetails = () => {
   const location = useLocation()
   const history = useHistory()
   const [alert] = useIonAlert()
-  const [productRequest, setProductRequest] = useState(() => state.productRequests.find(p => p.id === params.id))
-  useEffect(() => {
-    setProductRequest(() => state.productRequests.find(p => p.id === params.id))
-  }, [state.productRequests, params.id])
+  const [productRequest] = useState(() => state.productRequests.find(p => p.id === params.id)!)
   const handleAccept = async () => {
     try{
-      await resolveProductRequest('a', productRequest!, state.productRequests, state.users)
+      await resolveProductRequest('a', productRequest, state.productRequests, state.users)
       message(labels.approveSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -38,7 +35,7 @@ const ProductRequestDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: async () => {
           try{
-            await resolveProductRequest('r', productRequest!, state.productRequests, state.users)
+            await resolveProductRequest('r', productRequest, state.productRequests, state.users)
             message(labels.rejectSuccess, 3000)
             history.goBack()
           } catch(err) {
@@ -50,10 +47,10 @@ const ProductRequestDetails = () => {
   }
   return (
     <IonPage>
-      <Header title={productRequest?.name} />
+      <Header title={productRequest.name} />
       <IonContent fullscreen>
         <IonCard>
-          <IonImg src={productRequest?.imageUrl} alt={labels.noImage} />
+          <IonImg src={productRequest.imageUrl} alt={labels.noImage} />
         </IonCard>
         <IonList>
           <IonItem>
@@ -61,7 +58,7 @@ const ProductRequestDetails = () => {
               {labels.storeName}
             </IonLabel>
             <IonInput 
-              value={state.stores.find(s => s.id === productRequest?.storeId)?.name} 
+              value={getStoreName(state.stores.find(s => s.id === productRequest.storeId)!, state.regions)} 
               readonly
             />
           </IonItem>
@@ -70,7 +67,7 @@ const ProductRequestDetails = () => {
               {labels.weight}
             </IonLabel>
             <IonInput 
-              value={productRequest?.weight} 
+              value={productRequest.weight} 
               readonly
             />
           </IonItem>
@@ -79,7 +76,7 @@ const ProductRequestDetails = () => {
               {labels.country}
             </IonLabel>
             <IonInput 
-              value={productRequest?.country} 
+              value={productRequest.country} 
               readonly
             />
           </IonItem>
@@ -88,7 +85,7 @@ const ProductRequestDetails = () => {
               {labels.price}
             </IonLabel>
             <IonInput 
-              value={productRequest?.price.toFixed(2)} 
+              value={productRequest.price.toFixed(2)} 
               readonly
             />
           </IonItem>

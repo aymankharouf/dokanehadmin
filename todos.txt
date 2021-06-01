@@ -119,5 +119,7 @@ normal user can change his position
 contact us
 adverts
 study & test store inactivity 
-*solve crashes whe refresh
+*solve crashes when refresh
 *pwa
+add quantity to store request?
+*store products from store details page
