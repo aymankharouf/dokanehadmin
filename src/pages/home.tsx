@@ -41,8 +41,8 @@ const Home = () => {
           routerLink="/approvals" 
           expand="block"
           shape="round"
-          color={randomColors[i++ % 7].name}
-          className="sections" 
+          className={randomColors[i++ % 7].name}
+          style={{margin: '0.9rem'}}
         >
           {`${labels.approvals} ${approvalsCount > 0 ? '(' + approvalsCount + ')' : ''}`}
         </IonButton>
@@ -51,8 +51,8 @@ const Home = () => {
             routerLink={p.path} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 7].name}
-            className="sections" 
+            className={randomColors[i++ % 7].name}
+            style={{margin: '0.9rem'}}
             key={p.id}
           >
             {p.name}

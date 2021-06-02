@@ -25,8 +25,8 @@ const Users = () => {
   return(
     <IonPage>
       <Header title={userTypes.find(t => t.id === params.id)?.name} />
-      <IonContent fullscreen className="ion-padding">
-      <IonList>
+      <IonContent fullscreen>
+      <IonList className="ion-padding">
           {users.length === 0 ? 
             <IonItem> 
               <IonLabel>{labels.noData}</IonLabel>
@@ -34,12 +34,12 @@ const Users = () => {
           : users.map(u =>
               <IonItem key={u.id}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{`${labels.name}: ${u.name}`}</IonText>
-                  <IonText color={randomColors[1].name}>{`${labels.mobile}: ${u.mobile}`}</IonText>
-                  {u.storeName && <IonText color={randomColors[2].name}>{`${labels.storeName}: ${u.storeName}`}</IonText>}
-                  {u.regionId && <IonText color={randomColors[3].name}>{`${labels.region}: ${state.regions.find(r => r.id === u.regionId)?.name}`}</IonText>}
-                  {u.address && <IonText color={randomColors[4].name}>{`${labels.address}: ${u.address}`}</IonText>}
-                  <IonText color={randomColors[5].name}>{moment(u.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{`${labels.name}: ${u.name}`}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{`${labels.mobile}: ${u.mobile}`}</IonText>
+                  {u.storeName && <IonText style={{color: randomColors[2].name}}>{`${labels.storeName}: ${u.storeName}`}</IonText>}
+                  {u.regionId && <IonText style={{color: randomColors[3].name}}>{`${labels.region}: ${state.regions.find(r => r.id === u.regionId)?.name}`}</IonText>}
+                  {u.address && <IonText style={{color: randomColors[4].name}}>{`${labels.address}: ${u.address}`}</IonText>}
+                  <IonText style={{color: randomColors[5].name}}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
                 {!u.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem>  

@@ -73,10 +73,10 @@ const Categories = () => {
           : categories.map(c => 
               <IonItem key={c.id} routerLink={`/categories/${c.id}`}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{c.name}</IonText>
-                  <IonText color={randomColors[1].name}>{`${labels.childrenCount}: ${c.childrenCount}`}</IonText>
-                  <IonText color={randomColors[2].name}>{`${labels.attachedProducts}: ${c.productsCount}`}</IonText>
-                  <IonText color={randomColors[3].name}>{`${labels.ordering}:${c.ordering}`}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{c.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{`${labels.childrenCount}: ${c.childrenCount}`}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{`${labels.attachedProducts}: ${c.productsCount}`}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{`${labels.ordering}:${c.ordering}`}</IonText>
                 </IonLabel>
                 {!c.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem>    

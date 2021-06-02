@@ -22,10 +22,13 @@ const ProductPacks = () => {
   const history = useHistory()
   const [loading, dismiss] = useIonLoading()
   const [alert] = useIonAlert()
-  const [product] = useState(() => state.products.find(p => p.id === params.id && (p.isActive || params.type === 'a'))!)
+  const [product, setProduct] = useState(() => state.products.find(p => p.id === params.id)!)
   const [packs, setPacks] = useState<Pack[]>([])
   const [activePacks, setActivePacks] = useState<Pack[]>([])
-  const [actionOpened, setActionOpened] = useState(false);
+  const [actionOpened, setActionOpened] = useState(false)
+  useEffect(() => {
+    setProduct(() => state.products.find(p => p.id === params.id)!)
+  }, [state.products])
   useEffect(() => {
     const getPacks = async () => {
       loading()
@@ -73,16 +76,26 @@ const ProductPacks = () => {
       ],
     })
   }
-
+  let i = 0
   return (
     <IonPage>
-      <Header title={`${product.name}${product.alias ? '-' + product.alias : ''}`} />
+      <Header title={product.name} />
       <IonContent fullscreen>
         <IonCard>
           <IonGrid>
             <IonRow>
+              <IonCol className="card-title">
+                {product.alias}
+              </IonCol>
+            </IonRow>
+            <IonRow>
               <IonCol>
                 <IonImg src={product.imageUrl} alt={labels.noImage} />
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol style={{textAlign: 'center'}}>
+                {product.description}
               </IonCol>
             </IonRow>
             <IonRow>
@@ -95,8 +108,8 @@ const ProductPacks = () => {
           {packs.map(p => 
             <IonItem key={p.id} routerLink={`/pack-details/${p.id}`}>
               <IonLabel>
-                <IonText color={randomColors[0].name}>{p.name}</IonText>
-                <IonText color={randomColors[1].name}>{`${labels.stores}: ${state.packStores.filter(s => s.packId === p.id).length}`}</IonText>
+                <IonText style={{color: randomColors[0].name}}>{p.name}</IonText>
+                <IonText style={{color: randomColors[1].name}}>{`${labels.stores}: ${state.packStores.filter(s => s.packId === p.id).length}`}</IonText>
               </IonLabel>
               {p.price! > 0 && <IonLabel slot="end" className="price">{p.price!.toFixed(2)}</IonLabel>}
               {!p.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
@@ -115,27 +128,27 @@ const ProductPacks = () => {
         buttons={[
           {
             text: labels.edit,
-            cssClass: 'primary',
+            cssClass: randomColors[i++ % 7].name,
             handler: () => history.push(`/edit-product/${params.id}`)
           },
           {
             text: labels.addPack,
-            cssClass: 'secondary',
+            cssClass: randomColors[i++ % 7].name,
             handler: () => history.push(`/add-pack/${params.id}`)
           },
           {
             text: labels.addGroup,
-            cssClass: 'tertiary',
+            cssClass: randomColors[i++ % 7].name,
             handler: () => history.push(`/add-group/${params.id}`)
           },
           {
             text: labels.archive,
-            cssClass: activePacks.length === 0 ? 'success' : 'ion-hide',
+            cssClass: activePacks.length === 0 ? randomColors[i++ % 7].name : 'ion-hide',
             handler: () => handleArchive()
           },
           {
             text: labels.delete,
-            cssClass: packs.length === 0 ? 'danger' : 'ion-hide',
+            cssClass: packs.length === 0 ? randomColors[i++ % 7].name : 'ion-hide',
             handler: () => handleDelete()
           },
 

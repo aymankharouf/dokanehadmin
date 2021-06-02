@@ -61,11 +61,11 @@ const Logs = () => {
           : logs.map(l => 
               <IonItem key={l.id}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{`${labels.user}: ${l.userInfo?.name || l.userId}`}</IonText>
-                  <IonText color={randomColors[1].name}>{l.userInfo?.mobile ? `${labels.mobile}: ${l.userInfo.mobile}` : ''}</IonText>
-                  <IonText color={randomColors[2].name}>{l.page}</IonText>
-                  <IonText color={randomColors[3].name}>{l.error}</IonText>
-                  <IonText color={randomColors[4].name}>{moment(l.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{`${labels.user}: ${l.userInfo?.name || l.userId}`}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{l.userInfo?.mobile ? `${labels.mobile}: ${l.userInfo.mobile}` : ''}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{l.page}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{l.error}</IonText>
+                  <IonText style={{color: randomColors[4].name}}>{moment(l.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonIcon 
                   ios={trashOutline} 

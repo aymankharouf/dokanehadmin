@@ -4,7 +4,7 @@ import {editProduct, getCategoryName, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -33,9 +33,18 @@ const EditProduct = () => {
   const [countries] = useState(() => [...state.countries].sort((c1, c2) => c1.name > c2.name ? 1 : -1))
   const [trademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
   useEffect(() => {
-    if (countryId === '0') history.push('/add-country')
-    if (trademarkId === '0') history.push('/add-trademark')
-    if (categoryId === '0') history.push('/add-category/0')
+    if (countryId === '0') {
+      history.push('/add-country')
+      setCountryId('')
+    }
+    if (trademarkId === '0') {
+      history.push('/add-trademark')
+      setTrademarkId('')
+    } 
+    if (categoryId === '0') {
+      history.push('/add-category/0')
+      setCategoryId('')
+    }
   }, [countryId, trademarkId, categoryId, history])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
@@ -186,7 +195,7 @@ const EditProduct = () => {
           >
             {labels.setImage}
           </IonButton>
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
       {name && categoryId && countryId && hasChanged &&

@@ -2,7 +2,7 @@ import {useState, ChangeEvent, useRef} from 'react'
 import {addAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import {advertTypes} from '../data/config'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
@@ -106,7 +106,7 @@ const AddAdvert = () => {
           >
             {labels.setImage}
           </IonButton>
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
       {title && (text || !imageUrl) &&

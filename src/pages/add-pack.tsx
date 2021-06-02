@@ -4,7 +4,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {units} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -128,7 +128,7 @@ const AddPack = () => {
             >
               {labels.setImage}
             </IonButton>
-            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+            <IonImg src={imageUrl} alt={labels.noImage} />
           </>}
         </IonList>
       </IonContent>

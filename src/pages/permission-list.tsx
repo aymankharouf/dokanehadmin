@@ -29,9 +29,9 @@ const PermissionList = () => {
           : users.map(u => 
               <IonItem key={u.id} routerLink={`/permit-user/${u.id}`}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{`${u.name}-${userTypes.find(t => t.id === u.type)!.name}`}</IonText>
-                  <IonText color={randomColors[1].name}>{u.storeName}</IonText>
-                  <IonText color={randomColors[2].name}>{moment(u.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{`${u.name}-${userTypes.find(t => t.id === u.type)!.name}`}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{u.storeName}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

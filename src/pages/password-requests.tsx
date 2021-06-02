@@ -23,9 +23,9 @@ const PasswordRequests = () => {
           : passwordRequests.map(r => 
               <IonItem key={r.id} routerLink={`/retreive-password/${r.id}`}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{r.mobile}</IonText>
-                  <IonText color={randomColors[1].name}>{r.status === 'n' ? labels.new : labels.resolved}</IonText>
-                  <IonText color={randomColors[2].name}>{moment(r.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{r.mobile}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{r.status === 'n' ? labels.new : labels.resolved}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{moment(r.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

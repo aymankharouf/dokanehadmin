@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import {editAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -104,7 +104,7 @@ const EditAdvert = () => {
           >
             {labels.setImage}
           </IonButton>
-          <img src={imageUrl} className="img-card" alt={labels.noImage} />
+          <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
       {title && (text || imageUrl) && hasChanged &&

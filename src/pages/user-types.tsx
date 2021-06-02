@@ -11,14 +11,14 @@ const UserTypes = () => {
   return (
     <IonPage>
       <Header title={labels.users} />
-      <IonContent fullscreen className="ion-padding">
+      <IonContent fullscreen>
         {userTypes.map(t => 
           <IonButton
             routerLink={`/users/${t.id}`} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 7].name}
-            className="sections" 
+            className={randomColors[i++ % 7].name}
+            style={{margin: '0.9rem'}} 
             key={t.id}
           >
             {`${t.name} (${state.users.filter(u => u.type === t.id).length})`}

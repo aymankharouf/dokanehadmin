@@ -2,7 +2,7 @@ import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
 import {addPack, getMessage} from '../data/actions'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation, useParams } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
@@ -168,7 +168,7 @@ const AddGroup = () => {
             >
               {labels.setImage}
             </IonButton>
-            <img src={imageUrl} className="img-card" alt={labels.noImage} />
+            <IonImg src={imageUrl} alt={labels.noImage} />
           </>}
         </IonList>
       </IonContent>

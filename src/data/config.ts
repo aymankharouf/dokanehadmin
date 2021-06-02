@@ -1,11 +1,11 @@
 export const randomColors = [
-  {id: 0, name: 'primary'},
-  {id: 1, name: 'secondary'},
-  {id: 2, name: 'tertiary'},
-  {id: 3, name: 'success'},
-  {id: 4, name: 'danger'},
-  {id: 5, name: 'dark'},
-  {id: 6, name: 'warning'},
+  {id: 0, name: 'darkblue'},
+  {id: 1, name: 'deeppink'},
+  {id: 2, name: 'dodgerblue'},
+  {id: 3, name: 'red'},
+  {id: 4, name: 'purple'},
+  {id: 5, name: 'green'},
+  {id: 6, name: 'crimson'},
 ]
 
 export const advertTypes = [

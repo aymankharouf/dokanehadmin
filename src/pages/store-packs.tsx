@@ -52,12 +52,12 @@ const StorePacks = () => {
                   <IonImg src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} alt={labels.noImage} />
                 </IonThumbnail>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{p.packInfo.product.name}</IonText>
-                  <IonText color={randomColors[1].name}>{p.packInfo.product.alias}</IonText>
-                  <IonText color={randomColors[2].name}>{p.packInfo.name}</IonText>
-                  <IonText color={randomColors[3].name}>{`${labels.price}: ${p.price.toFixed(2)}`}</IonText>
-                  <IonText color={randomColors[4].name}>{p.categoryInfo.name}</IonText>
-                  <IonText color={randomColors[5].name}>{moment(p.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{p.packInfo.product.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{p.packInfo.product.alias}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{p.packInfo.name}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{`${labels.price}: ${p.price.toFixed(2)}`}</IonText>
+                  <IonText style={{color: randomColors[4].name}}>{p.categoryInfo.name}</IonText>
+                  <IonText style={{color: randomColors[5].name}}>{moment(p.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

@@ -19,8 +19,8 @@ const Stores = () => {
   return (
     <IonPage>
       <Header title={labels.stores} />
-      <IonContent fullscreen className="ion-padding">
-        <IonList>
+      <IonContent fullscreen>
+        <IonList className="ion-padding">
           {stores.length === 0 ? 
             <IonItem> 
               <IonLabel>{labels.noData}</IonLabel>
@@ -28,8 +28,8 @@ const Stores = () => {
           : stores.map(s =>
               <IonItem key={s.id} routerLink={`/store-details/${s.id}`}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{s.name}</IonText>
-                  <IonText color={randomColors[1].name}>{userTypes.find(t => t.id === s.type)!.name}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{s.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{userTypes.find(t => t.id === s.type)!.name}</IonText>
                 </IonLabel>
                 {!s.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem> 

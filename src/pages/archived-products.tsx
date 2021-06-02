@@ -65,11 +65,11 @@ const ArchivedProducts = () => {
                   <IonImg src={p.imageUrl} alt={labels.noImage} />
                 </IonThumbnail>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{p.name}</IonText>
-                  <IonText color={randomColors[1].name}>{p.alias}</IonText>
-                  <IonText color={randomColors[2].name}>{p.description}</IonText>
-                  <IonText color={randomColors[3].name}>{getCategoryName(p.categoryInfo!, state.categories)}</IonText>
-                  <IonText color={randomColors[4].name}>{productOfText(p.countryInfo.name, p.trademarkInfo?.name)}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{p.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{p.alias}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{p.description}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{getCategoryName(p.categoryInfo!, state.categories)}</IonText>
+                  <IonText style={{color: randomColors[4].name}}>{productOfText(p.countryInfo.name, p.trademarkInfo?.name)}</IonText>
                 </IonLabel>
               </IonItem>    
             )

@@ -97,27 +97,6 @@ ion-backdrop {
   color: cyan;
 }
 
-.green {
-  color: green;
-}
-
-.blue {
-  color: blue;
-}
-
-.red {
-  color: red;
-}
-
-.logo {
-  width: 120px;
-  margin-bottom: -10px;
-}
-
-.icons {
-  color: white;
-}
-
 .block-title {
   color: blue;
 }
@@ -129,22 +108,6 @@ ion-backdrop {
   font-size: 1.1rem;
 }
 
-.avatar {
-  width: 100px;
-}
-
-.section-label {
-  font-size: 1.2rem;
-}
-
-.img-card {
-  max-width: 100%;
-  height: 18rem;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .img-list {
   width: 4.5rem;
   height: 6rem;
@@ -153,63 +116,11 @@ ion-backdrop {
   margin-right: auto;
 }
 
-.top-fab {
-  top: 0px !important;
-}
-
-.total {
-  color: purple;
-}
-
-.fees {
-  color: red;
-}
-
-.discount {
-  color: green;
-}
-
-.net {
-  color: blue;
-}
-
 .card-title {
   text-align: center;
   font-size: 1rem;
-  color: blue;
-}
-
-.navbar-inner {
-  font-size: 1rem;
-  color: blue;
-}
-
-.item-title-row {
-  font-size: 0.8rem;
-}
-
-.item-subtitle {
-  font-size: 0.8rem !important;
-  color:red !important;
-}
-
-.item-text {
-  font-size: 0.8rem !important;
-  color: blue !important;
-}
-
-.item-footer {
-  font-size: 0.8rem !important;
-  color: green !important;
-}
-
-.actions-button-text {
-  font-size: 1rem;
-  text-align: center;
-}
-
-.actions-button {
-  height: 3rem;
+  font-weight: bold;
+  color: var(--ion-color-primary);
 }
 
 .note {
@@ -222,12 +133,42 @@ ion-backdrop {
   background-color: lightskyblue;
 }
 
-.toolbar-inner .link {
-  font-size: 0.8rem;
-}
-
 .card-footer {
   padding-top: 0;
   height: 2rem;
 }
 
+.darkblue {
+  --background: darkblue;
+  --button-color: darkblue;
+}
+
+.deeppink {
+  --background: deeppink;
+  --button-color: deeppink;
+}
+
+.dodgerblue {
+  --background: dodgerblue;
+  --button-color: dodgerblue;
+}
+
+.red {
+  --background: red;
+  --button-color: red;
+}
+
+.purple {
+  --background: purple;
+  --button-color: purple;
+}
+
+.green {
+  --background: green;
+  --button-color: green;
+}
+
+.crimson {
+  --background: crimson;
+  --button-color: crimson;
+}

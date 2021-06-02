@@ -82,10 +82,15 @@ const PackDetails = () => {
   }
   return (
     <IonPage>
-      <Header title={`${pack?.product.name}${pack?.product.alias ? '-' + pack.product.alias : ''}`} />
+      <Header title={pack?.product.name} />
       <IonContent fullscreen>
         <IonCard>
           <IonGrid>
+            <IonRow>
+              <IonCol className="card-title">
+                {pack?.product.alias}
+              </IonCol>
+            </IonRow>
             <IonRow>
               <IonCol>
                 <IonImg src={pack?.imageUrl || pack?.product.imageUrl} alt={labels.noImage} />
@@ -101,9 +106,9 @@ const PackDetails = () => {
           {packStores.map((s, i) => 
             <IonItem key={i}>
               <IonLabel>
-                <IonText color={randomColors[0].name}>{getStoreName(s.storeInfo, state.regions)}</IonText>
-                {s.packId !== pack?.id && <IonText color={randomColors[1].name}>{s.packInfo?.name}</IonText>}
-                <IonText color={randomColors[2].name}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
+                <IonText style={{color: randomColors[0].name}}>{getStoreName(s.storeInfo, state.regions)}</IonText>
+                {s.packId !== pack?.id && <IonText style={{color: randomColors[1].name}}>{s.packInfo?.name}</IonText>}
+                <IonText style={{color: randomColors[2].name}}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
               </IonLabel>
               {s.packId === pack?.id && 
                 <IonIcon 

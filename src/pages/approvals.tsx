@@ -31,14 +31,14 @@ const Approvals = () => {
   return(
     <IonPage>
       <Header title={labels.approvals} />
-      <IonContent fullscreen className="ion-padding">
+      <IonContent fullscreen>
         {sections.map(s => 
           <IonButton
             routerLink={s.path} 
             expand="block"
             shape="round"
-            color={randomColors[i++ % 7].name}
-            className="sections" 
+            className={randomColors[i++ % 7].name}
+            style={{margin: '0.9rem'}} 
             key={s.id}
           >
             {`${s.name} ${s.count > 0 ? '(' + s.count + ')' : ''}`}

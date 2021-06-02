@@ -42,10 +42,10 @@ const PackRequests = () => {
                   <IonImg src={r.imageUrl || state.packs.find(p => p.id === r.siblingPackId)?.product.imageUrl} alt={labels.noImage} />
                 </IonThumbnail>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{state.packs.find(p => p.id === r.siblingPackId)?.product.name}</IonText>
-                  <IonText color={randomColors[1].name}>{r.name}</IonText>
-                  <IonText color={randomColors[2].name}>{`${labels.store}: ${getStoreName(r.storeInfo, state.regions)}`}</IonText>
-                  <IonText color={randomColors[3].name}>{moment(r.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{state.packs.find(p => p.id === r.siblingPackId)?.product.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{r.name}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{`${labels.store}: ${getStoreName(r.storeInfo, state.regions)}`}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{moment(r.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonLabel slot="end" className="price">{r.price!.toFixed(2)}</IonLabel>
               </IonItem> 

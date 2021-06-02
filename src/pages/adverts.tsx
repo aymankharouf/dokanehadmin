@@ -75,11 +75,11 @@ const Adverts = () => {
           : adverts.map(a => 
               <IonItem key={a.id} className={currentAdvert && currentAdvert.id === a.id ? 'selected' : ''}>
                 <IonLabel>
-                  <IonText color={randomColors[0].name}>{advertTypes.find(t => t.id === a.type)?.name}</IonText>
-                  <IonText color={randomColors[1].name}>{a.title}</IonText>
-                  <IonText color={randomColors[2].name}>{a.text}</IonText>
-                  <IonText color={randomColors[3].name}>{a.isActive ? labels.isActive : labels.inActive}</IonText>
-                  <IonText color={randomColors[4].name}>{moment(a.time).fromNow()}</IonText>
+                  <IonText style={{color: randomColors[0].name}}>{advertTypes.find(t => t.id === a.type)?.name}</IonText>
+                  <IonText style={{color: randomColors[1].name}}>{a.title}</IonText>
+                  <IonText style={{color: randomColors[2].name}}>{a.text}</IonText>
+                  <IonText style={{color: randomColors[3].name}}>{a.isActive ? labels.isActive : labels.inActive}</IonText>
+                  <IonText style={{color: randomColors[4].name}}>{moment(a.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonIcon 
                   ios={ellipsisVerticalOutline} 
