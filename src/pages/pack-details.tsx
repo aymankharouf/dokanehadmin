@@ -32,7 +32,7 @@ const PackDetails = () => {
   }, [state.packs, params.id])
   useEffect(() => {
     setPackStores(() => {
-      const packStores = state.packStores.filter(p => p.packId === pack?.id || state.packs.find(pa => pa.id === p.packId && (pa.subPackId === pack?.id || pa.mainPackId === pack?.id)))
+      const packStores = state.packStores.filter(p => p.packId === pack?.id || state.packs.find(pa => pa.id === p.packId && pa.product.id === pack?.product.id))
       const results = packStores.map(s => {
         const storeInfo = state.stores.find(st => st.id === s.storeId)!
         const packInfo = state.packs.find(p => p.id === s.packId)!

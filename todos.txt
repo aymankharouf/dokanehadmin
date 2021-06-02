@@ -116,10 +116,13 @@ log for user activities
 *save basket to ordinary user for sharing between phones
 *add location to store name
 normal user can change his position
-contact us
+*contact us
 adverts
-study & test store inactivity 
+*study & test store inactivity 
 *solve crashes when refresh
 *pwa
 add quantity to store request?
 *store products from store details page
+*add resturant
+username & password length
+study add group price

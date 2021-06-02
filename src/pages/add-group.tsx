@@ -31,7 +31,11 @@ const AddGroup = () => {
   useEffect(() => {
     if (subCount || gift) setName(`${+subCount > 1 ? subCount + '×' : ''}${state.packs.find(p => p.id === subPackId)?.name}${withGift ? '+' + gift : ''}`)
   }, [subCount, gift, state.packs, withGift, subPackId])
-
+  useEffect(() => {
+    if (!withGift) {
+      setGift('')
+    }
+  }, [withGift])
   const onUploadClick = () => {
     if (inputEl.current) inputEl.current.click();
   };
@@ -68,7 +72,6 @@ const AddGroup = () => {
       const pack = {
         product,
         name,
-        mainPackId: subPackInfo.subPackId || subPackId,
         subPackId,
         subCount: +subCount,
         unitsCount: +subCount * subPackInfo.unitsCount,

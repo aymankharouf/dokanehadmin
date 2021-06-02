@@ -545,7 +545,6 @@ export const getArchivedPacks = async (productId: string) => {
                 withGift: doc.data().withGift,
                 gift: doc.data().gift,
                 subCount: doc.data().subCount,
-                mainPackId: doc.data().mainPackId,
                 subPackId: doc.data().subPackId,
                 unitsCount: doc.data().unitsCount,
                 isActive: doc.data().isActive,

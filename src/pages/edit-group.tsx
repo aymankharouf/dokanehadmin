@@ -39,6 +39,11 @@ const EditGroup = () => {
     })
   })
   useEffect(() => {
+    if (!withGift) {
+      setGift('')
+    }
+  }, [withGift])
+  useEffect(() => {
     if (name !== pack.name
     || isActive !== pack.isActive
     || forSale !== pack.forSale
@@ -89,7 +94,7 @@ const EditGroup = () => {
         withGift,
         gift,
         forSale,
-        isActive
+        isActive,
       }
       editPack(newPack, state.packs, image)
       message(labels.editSuccess, 3000)

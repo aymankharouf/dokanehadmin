@@ -23,9 +23,10 @@ export const units = [
 
 export const userTypes = [
   {id: 'n', name: 'مستخدم', isStore: false},
-  {id: 's', name: 'تجزئة', isStore: true},
+  {id: 's', name: 'دكانة', isStore: true},
   {id: 'w', name: 'جملة', isStore: true},
-  {id: 'd', name: 'موزع', isStore: true}
+  {id: 'd', name: 'موزع', isStore: true},
+  {id: 'r', name: 'مطعم', isStore: true}
 ]
 
 export const patterns = {
