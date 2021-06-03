@@ -104,7 +104,6 @@ const EditPack = () => {
             <IonInput 
               value={name} 
               type="text" 
-              autofocus
               clearInput
               onIonChange={e => setName(e.detail.value!)} 
             />

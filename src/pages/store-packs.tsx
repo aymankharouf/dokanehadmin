@@ -5,7 +5,7 @@ import 'moment/locale/ar'
 import labels from '../data/labels'
 import {Category, Pack, PackStore} from '../data/types'
 import { useParams } from 'react-router'
-import { IonContent, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
+import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
 import Header from './header'
 import { randomColors } from '../data/config'
 
@@ -49,7 +49,7 @@ const StorePacks = () => {
           : storePacks.map((p, i) => 
               <IonItem key={i} routerLink={`/pack-details/${p.packId}`}>
                 <IonThumbnail slot="start">
-                  <IonImg src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} alt={labels.noImage} />
+                  <img src={p.packInfo.imageUrl || p.packInfo.product.imageUrl} alt={labels.noImage} />
                 </IonThumbnail>
                 <IonLabel>
                   <IonText style={{color: randomColors[0].name}}>{p.packInfo.product.name}</IonText>

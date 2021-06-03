@@ -19,7 +19,7 @@ const AddPackStore = () => {
   const [price, setPrice] = useState('')
   const [storeId, setStoreId] = useState('')
   const [pack] = useState(() => state.packs.find(p => p.id === params.id)!)
-  const [stores] = useState(() => state.stores.filter(s => pack.forSale || ['d', 'w'].includes(s.type)))
+  const [stores] = useState(() => state.stores.filter(s => (pack.forSale && s.type !== 'r') || ['d', 'w'].includes(s.type)))
   const handleSubmit = () => {
     try{
       if (state.packStores.find(p => p.packId === pack.id && p.storeId === storeId)) {

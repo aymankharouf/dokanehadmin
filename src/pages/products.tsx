@@ -4,7 +4,7 @@ import labels from '../data/labels'
 import {productOfText, getCategoryName} from '../data/actions'
 import {Category, Country, Product, Trademark} from '../data/types'
 import { useParams } from 'react-router'
-import { IonButton, IonContent, IonFooter, IonGrid, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonThumbnail, IonToolbar } from '@ionic/react'
+import { IonButton, IonContent, IonFooter, IonGrid, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonThumbnail, IonToolbar } from '@ionic/react'
 import Header from './header'
 import { randomColors } from '../data/config'
 
@@ -51,7 +51,7 @@ const Products = () => {
           : products.map(p => 
               <IonItem key={p.id} routerLink={`/product-packs/${p.id}/n`}>
                 <IonThumbnail slot="start">
-                  <IonImg src={p.imageUrl} alt={labels.noImage} />
+                  <img src={p.imageUrl} alt={labels.noImage} />
                 </IonThumbnail>
                 <IonLabel>
                   <IonText style={{color: randomColors[0].name}}>{p.name}</IonText>

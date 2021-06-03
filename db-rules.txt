@@ -5,7 +5,7 @@ service cloud.firestore {
       allow get: if request.auth.uid == userId;
       allow list: if request.auth.token.name == 'a';
       allow create: if request.auth.uid == userId;
-      allow update: if request.auth.uid == userId || request.auth.token.name == 'a';
+      allow update: if request.auth.uid != null;
       allow delete: if request.auth.token.name == 'a';
     }
     match /products/{id} {

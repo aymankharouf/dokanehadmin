@@ -30,7 +30,7 @@ const EditGroup = () => {
   const [imageUrl, setImageUrl] = useState(pack.imageUrl)
   const inputEl = useRef<HTMLInputElement | null>(null);
   const [packs] = useState(() => {
-    const packs = state.packs.filter(p => p.product.id === pack.product.id && !p.byWeight)
+    const packs = state.packs.filter(p => p.product.id === pack.product.id && p.forSale)
     return packs.map(p => {
       return {
         id: p.id,

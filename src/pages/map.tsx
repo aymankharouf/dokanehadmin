@@ -1,4 +1,5 @@
-import { IonButton, IonPage } from "@ionic/react"
+import { IonFab, IonFabButton, IonIcon, IonPage } from "@ionic/react"
+import { checkmarkOutline } from "ionicons/icons"
 import { useContext, useState } from "react"
 import { MapContainer, TileLayer, Marker, useMapEvent } from 'react-leaflet'
 import { useHistory, useParams } from "react-router"
@@ -40,7 +41,7 @@ const Map = () => {
           center={{lat: +params.lat, lng: +params.lng}} 
           zoom={17} 
           scrollWheelZoom
-          style={{height: '95%'}}
+          style={{height: '100%'}}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -49,17 +50,11 @@ const Map = () => {
           <MyMarker position={position} setPosition={setPosition} />
         </MapContainer>
         {position.lat !== +params.lat &&
-          <div className="ion-text-center">
-            <IonButton 
-              fill="solid" 
-              size="small"
-              shape="round"
-              style={{width: '10rem'}}
-              onClick={handleOk}
-            >
-              {labels.ok}
-            </IonButton>
-          </div>
+          <IonFab vertical="top" horizontal="end" slot="fixed">
+            <IonFabButton onClick={handleOk} color="success">
+              <IonIcon ios={checkmarkOutline} />
+            </IonFabButton>
+          </IonFab>
         }
       </div>
     </IonPage>

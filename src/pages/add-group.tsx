@@ -25,7 +25,7 @@ const AddGroup = () => {
   const [gift, setGift] = useState('')
   const [product] = useState(() => state.products.find(p => p.id === params.id)!)
   const [forSale, setForSale] = useState(true)
-  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.id && !p.byWeight))
+  const [packs] = useState(() => state.packs.filter(p => p.product.id === params.id && p.forSale))
   const [imageUrl, setImageUrl] = useState(product.imageUrl)
   const inputEl = useRef<HTMLInputElement | null>(null);
   useEffect(() => {

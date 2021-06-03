@@ -8,11 +8,6 @@ export const randomColors = [
   {id: 6, name: 'crimson'},
 ]
 
-export const advertTypes = [
-  {id: 'a', name: 'اعلان'},
-  {id: 'n', name: 'تنويه'}
-]
-
 export const units = [
   {id: 'g', name: 'غرام', type: 'w', factor: 1},
   {id: 'kg', name: 'كيلو', type: 'w', factor: 1000},
@@ -23,7 +18,7 @@ export const units = [
 
 export const userTypes = [
   {id: 'n', name: 'مستخدم', isStore: false},
-  {id: 's', name: 'دكانة', isStore: true},
+  {id: 's', name: 'محل', isStore: true},
   {id: 'w', name: 'جملة', isStore: true},
   {id: 'd', name: 'موزع', isStore: true},
   {id: 'r', name: 'مطعم', isStore: true}

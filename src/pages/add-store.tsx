@@ -52,6 +52,7 @@ const AddStore = () => {
         position,
         type,
         claimsCount: 0,
+        ownerId: null,
         time: new Date()
       }
       addStore(store)

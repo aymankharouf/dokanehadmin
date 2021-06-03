@@ -1,7 +1,7 @@
 import firebase from './firebase'
 import labels from './labels'
 import {randomColors, userTypes} from './config'
-import {Advert, Category, Country, Error, Region, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Notification, Position} from './types'
+import {Advert, Category, Country, Error, Region, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Position} from './types'
 
 export const getMessage = (path: string, error: Error) => {
   const errorCode = error.code ? error.code.replace(/-|\//g, '_') : error.message
@@ -354,46 +354,23 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
   return user.updatePassword(newPassword)
 }
 
-export const deleteNotification = (user: User, notificationId: string, notifications: Notification[]) => {
-  const otherNotifications = notifications.filter(n => n.userId === user.id && n.id !== notificationId)
-  firebase.firestore().collection('users').doc(user.id).update({
-    notifications: otherNotifications
-  })
-}
-
 export const sendNotification = (userId: string, title: string, message: string, batch?: firebase.firestore.WriteBatch) => {
   const newBatch =  batch || firebase.firestore().batch()
   const userRef = firebase.firestore().collection('users').doc(userId)
   newBatch.update(userRef, {
     notifications: firebase.firestore.FieldValue.arrayUnion({
       id: Math.random().toString(),
+      userId: null,
+      userName: labels.admin,
       title,
       message,
-      status: 'n',
+      isResponse: false,
       time: new Date()
     })
   })
   if (!batch) {
     newBatch.commit()
   }
-}
-
-export const updateAdvertStatus = (advert: Advert, adverts: Advert[]) => {
-  const batch = firebase.firestore().batch()
-  let advertRef = firebase.firestore().collection('adverts').doc(advert.id)
-  batch.update(advertRef, {
-    isActive: !advert.isActive
-  })
-  if (!advert.isActive) {
-    const activeAdvert = adverts.find(a => a.isActive)
-    if (activeAdvert) {
-      advertRef = firebase.firestore().collection('adverts').doc(activeAdvert.id)
-      batch.update(advertRef, {
-        isActive: false
-      })
-    }
-  }
-  batch.commit()
 }
 
 export const addAdvert = async (advert: Advert, image?: File) => {
@@ -442,7 +419,8 @@ export const permitUser = (user: User, type: string, storeName: string, regionId
       mobile: user.mobile,
       isActive: true,
       type,
-      position
+      position,
+      ownerID: userRef.id
     })
     batch.update(userRef, {
       storeId: storeRef.id,
@@ -459,7 +437,8 @@ export const permitUser = (user: User, type: string, storeName: string, regionId
       regionId,
       address,
       type,
-      claimsCount: 0
+      claimsCount: 0,
+      ownerId: userRef.id
     })
     batch.update(userRef, {
       storeId: storeRef.id,
@@ -626,6 +605,10 @@ export const linkOwner = (user: User, store: Store) => {
     storeId: store.id,
     regionId: store.regionId,
     type: store.type
+  })
+  const storeRef = firebase.firestore().collection('stores').doc(store.id)
+  batch.update(storeRef, {
+    ownerId: user.id
   })
   sendNotification(user.id, labels.approval, `${labels.permissionAdded} ${userTypes.find(t => t.id === store.type)!.name}`, batch)
   batch.commit()

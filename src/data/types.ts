@@ -57,13 +57,6 @@ export type PackStore = {
   claimUserId?: string | null,
   time: Date,
 }
-export type Notification = {
-  id: string,
-  title: string,
-  message: string,
-  time: Date,
-  userId: string
-}
 export type Rating = {
   productId: string,
   status: string,
@@ -86,7 +79,6 @@ export type User = {
 }
 export type Advert = {
   id?: string,
-  type: string,
   title: string,
   text: string,
   isActive: boolean,
@@ -120,9 +112,10 @@ export type Store = {
   mobile: string,
   address: string,
   position: Position,
-  regionId?: string,
+  regionId: string | null,
   type: string,
-  claimsCount: number
+  claimsCount: number,
+  ownerId: string | null
 }
 export type Log = {
   id: string,
@@ -175,7 +168,6 @@ export type State = {
   stores: Store[],
   products: Product[],
   logs: Log[],
-  notifications: Notification[],
   productRequests: ProductRequest[],
   storeRequests: StoreRequest[],
   packRequests: PackRequest[],

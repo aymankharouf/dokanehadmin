@@ -28,7 +28,7 @@ const ProductPacks = () => {
   const [actionOpened, setActionOpened] = useState(false)
   useEffect(() => {
     setProduct(() => state.products.find(p => p.id === params.id)!)
-  }, [state.products])
+  }, [state.products, params])
   useEffect(() => {
     const getPacks = async () => {
       loading()

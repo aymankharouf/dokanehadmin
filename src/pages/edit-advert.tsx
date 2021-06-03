@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import {editAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
@@ -19,6 +19,7 @@ const EditAdvert = () => {
   const [advert] = useState(() => state.adverts.find(a => a.id === params.id)!)
   const [title, setTitle] = useState(advert?.title)
   const [text, setText] = useState(advert?.text)
+  const [isActive, setIsActive] = useState(advert.isActive)
   const [imageUrl, setImageUrl] = useState(advert?.imageUrl)
   const [image, setImage] = useState<File>()
   const [hasChanged, setHasChanged] = useState(false)
@@ -45,15 +46,17 @@ const EditAdvert = () => {
     }
   }
   useEffect(() => {
-    if (title !== advert?.title
-    || text !== advert?.text
-    || imageUrl !== advert?.imageUrl) setHasChanged(true)
+    if (title !== advert.title
+    || text !== advert.text
+    || isActive !== advert.isActive
+    || imageUrl !== advert.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [advert, title, text, imageUrl])
+  }, [advert, title, text, isActive, imageUrl])
   const handleSubmit = () => {
     try{
       const newAdvert = {
         ...advert,
+        isActive,
         title,
         text,
       }
@@ -80,13 +83,17 @@ const EditAdvert = () => {
             />
           </IonItem>
           <IonItem>
+            <IonLabel color="primary">{labels.isActive}</IonLabel>
+            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+          </IonItem>
+
+          <IonItem>
             <IonLabel position="floating" color="primary">
               {labels.text}
             </IonLabel>
-            <IonInput 
+            <IonTextarea 
               value={text} 
-              type="text"
-              clearInput
+              wrap="soft"
               onIonChange={e => setText(e.detail.value!)} 
             />
           </IonItem>
@@ -109,7 +116,7 @@ const EditAdvert = () => {
       </IonContent>
       {title && (text || imageUrl) && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>

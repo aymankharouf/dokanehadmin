@@ -6,7 +6,6 @@ import { useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
 import { attachOutline, cartOutline, chevronDownOutline, flashOffOutline, flashOutline, pencilOutline } from 'ionicons/icons'
-import { User } from '../data/types'
 import { changeStoreStatus, getMessage, linkOwner } from '../data/actions'
 
 type Params = {
@@ -19,20 +18,18 @@ const StoreDetails = () => {
   const [alert] = useIonAlert()
   const location = useLocation()
   const [store, setStore] = useState(() => state.stores.find(s => s.id === params.id)!)
-  const [owner, setOwner] = useState<User | undefined>()
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === params.id)!)
   }, [state.stores, params.id])
-  useEffect(() => {
-    setOwner(() => state.users.find(u => u.storeId === store.id || u.mobile === store.mobile))
-  }, [state.users, store])
   const handleLinkOwner = () => {
     try {
-      if (state.users.find(u => u.storeId === store.id)) {
-        throw new Error('conflictOwner')
+      const owner = state.users.find(u => u.mobile === store.mobile)
+      if (owner) {
+        linkOwner(owner, store)
+        message(labels.editSuccess, 3000)
+      } else {
+        throw new Error('noMatchingMobile')
       }
-      linkOwner(owner!, store)
-      message(labels.editSuccess, 3000)
     } catch (err) {
       message(getMessage(location.pathname, err), 3000)
     }
@@ -82,7 +79,7 @@ const StoreDetails = () => {
               {labels.owner}
             </IonLabel>
             <IonInput 
-              value={owner ? `${owner.name}-${userTypes.find(t => t.id === owner.type)?.name}` : labels.unregisteredOwner} 
+              value={state.users.find(u => u.id === store.ownerId)?.name} 
               readonly
             />
           </IonItem>
@@ -133,7 +130,7 @@ const StoreDetails = () => {
           <IonFabButton color="danger" onClick={handleChangeStatus}>
             <IonIcon ios={store.isActive ? flashOffOutline: flashOutline}></IonIcon>
           </IonFabButton>
-          {owner?.type === 'n' && 
+          {!store.ownerId && 
             <IonFabButton color="secondary" onClick={handleLinkOwner}>
               <IonIcon ios={attachOutline}></IonIcon>
             </IonFabButton>

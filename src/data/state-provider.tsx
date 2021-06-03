@@ -1,7 +1,7 @@
 import {createContext, useReducer, useEffect} from 'react'
 import Reducer from './reducer'
 import firebase from './firebase'
-import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Notification, Store, ProductRequest, StoreRequest, PackRequest} from './types'
+import {State, Context, Category, PasswordRequest, Advert, Product, Log, PackStore, Pack, User, Store, ProductRequest, StoreRequest, PackRequest} from './types'
 
 export const StateContext = createContext({} as Context)
 
@@ -22,7 +22,6 @@ const StateProvider = ({children}: Props) => {
     packStores: [],
     logs: [],
     adverts: [],
-    notifications: [],
     productRequests: [],
     storeRequests: [],
     packRequests: []
@@ -111,7 +110,6 @@ const StateProvider = ({children}: Props) => {
       docs.forEach(doc => {
         adverts.push({
           id: doc.id,
-          type: doc.data().type,
           text: doc.data().text,
           title: doc.data().title,
           isActive: doc.data().isActive,
@@ -165,7 +163,6 @@ const StateProvider = ({children}: Props) => {
         })    
         const unsubscribeUsers = firebase.firestore().collection('users').onSnapshot(docs => {
           let users: User[] = []
-          let notifications: Notification[] = []
           docs.forEach(doc => {
             users.push({
               id: doc.id,
@@ -181,18 +178,8 @@ const StateProvider = ({children}: Props) => {
               type: doc.data().type,
               isActive: doc.data().isActive
             })
-            doc.data().notifications?.forEach((n: any) => {
-              notifications.push({
-                userId: doc.id,
-                id: n.id,
-                message: n.message,
-                title: n.title,
-                time: n.time.toDate()
-              })
-            })
           })
           dispatch({type: 'SET_USERS', payload: users})
-          dispatch({type: 'SET_NOTIFICATIONS', payload: notifications})
         }, err => {
           unsubscribeUsers()
         })  
@@ -206,6 +193,7 @@ const StateProvider = ({children}: Props) => {
               id: doc.id,
               name: doc.data().name,
               mobile: doc.data().mobile,
+              ownerId: doc.data().ownerId,
               address: doc.data().address,
               isActive: doc.data().isActive,
               regionId: doc.data().regionId,

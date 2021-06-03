@@ -6,8 +6,10 @@ import labels from '../data/labels'
 import {User} from '../data/types'
 import {randomColors, userTypes} from '../data/config'
 import { useParams } from 'react-router'
-import { IonBadge, IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
+import { IonBadge, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
+import { mailOutline } from 'ionicons/icons'
+import { getMessage, sendNotification } from '../data/actions'
 
 type Params = {
   id: string
@@ -15,6 +17,8 @@ type Params = {
 const Users = () => {
   const {state} = useContext(StateContext)
   const params = useParams<Params>()
+  const [message] = useIonToast()
+  const [alert] = useIonAlert()
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
@@ -22,11 +26,28 @@ const Users = () => {
       return users.sort((u1, u2) => u1.time > u2.time ? -1 : 1)
     })
   }, [state.users, params.id])
+  const handleNotify = (userId: string) => {
+    try {
+      alert({
+        header: labels.enterMessage,
+        inputs: [{name: 'message', type: 'text'}],
+        buttons: [
+          {text: labels.cancel},
+          {text: labels.ok, handler: (e) => {
+            sendNotification(userId, labels.notification, e.message)
+            message(labels.sendSuccess, 3000)
+          }}
+        ],
+      })
+    } catch(err) {
+			message(getMessage(location.pathname, err), 3000)
+		}
+  }
   return(
     <IonPage>
       <Header title={userTypes.find(t => t.id === params.id)?.name} />
       <IonContent fullscreen>
-      <IonList className="ion-padding">
+        <IonList className="ion-padding">
           {users.length === 0 ? 
             <IonItem> 
               <IonLabel>{labels.noData}</IonLabel>
@@ -42,6 +63,13 @@ const Users = () => {
                   <IonText style={{color: randomColors[5].name}}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
                 {!u.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
+                <IonIcon 
+                  ios={mailOutline} 
+                  slot="end" 
+                  color="danger"
+                  style={{fontSize: '20px', marginRight: '10px'}} 
+                  onClick={()=> handleNotify(u.id)}
+                />
               </IonItem>  
             )
           }

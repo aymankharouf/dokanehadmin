@@ -105,7 +105,6 @@
 *salesmen adverts
 *store ordering (distance, price, rating)
 *add withgift flag
-confirmatiom messages between users
 *store requests follow up in admin
 *restore basket from store requests when loading the app
 *alarm details in store details page
@@ -113,17 +112,15 @@ confirmatiom messages between users
 *study how to define a product
 *save basket to ordinary user for sharing between phones
 *add location to store name
-normal user can change his position
 *contact us
 *study & test store inactivity 
 *solve crashes when refresh
 *pwa
-add quantity to store request?
 *store products from store details page
 *add resturant
 *username & password length
 *add pack name and price in store details page
 *production description and alias
-adverts
-log for user activities
-log for store activities
+*test weight
+*adverts
+confirmatiom messages between users

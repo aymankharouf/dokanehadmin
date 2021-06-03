@@ -12,7 +12,6 @@ const Home = () => {
     {id: '3', name: labels.stores, path: '/stores'},
     {id: '4', name: labels.users, path: '/user-types'},
     {id: '5', name: labels.logs, path: '/logs'},
-    {id: '6', name: labels.notifications, path: '/notifications'}
   ])
   const [approvalsCount, setApprovalsAcount] = useState(0)
   useEffect(() => {

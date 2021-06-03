@@ -44,8 +44,6 @@ import Users from './pages/users'
 import Stores from './pages/stores'
 import AddStore from './pages/add-store'
 import EditStore from './pages/edit-store'
-import Notifications from './pages/notifications'
-import AddNotification from './pages/add-notification'
 import Logs from './pages/logs'
 import PasswordRequests from './pages/password-requests'
 import RetreivePassword from './pages/retreive-password'
@@ -109,8 +107,6 @@ const App = () => {
               <Route path="/stores" exact={true} component={Stores} />
               <Route path="/add-store" exact={true} component={AddStore} />
               <Route path="/edit-store/:id" exact={true} component={EditStore} />
-              <Route path="/notifications" exact={true} component={Notifications} />
-              <Route path="/add-notification" exact={true} component={AddNotification} />
               <Route path="/logs" exact={true} component={Logs} />
               <Route path="/password-requests" exact={true} component={PasswordRequests} />
               <Route path="/retreive-password/:id" exact={true} component={RetreivePassword} />

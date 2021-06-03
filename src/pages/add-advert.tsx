@@ -1,8 +1,7 @@
 import {useState, ChangeEvent, useRef} from 'react'
 import {addAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import {advertTypes} from '../data/config'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
@@ -11,7 +10,6 @@ const AddAdvert = () => {
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
-  const [type, setType] = useState('')
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -41,7 +39,6 @@ const AddAdvert = () => {
   const handleSubmit = () => {
     try{
       const advert = {
-        type,
         title,
         text,
         isActive: false,
@@ -58,19 +55,8 @@ const AddAdvert = () => {
   return (
     <IonPage>
       <Header title={labels.addAdvert} />
-      <IonContent fullscreen className="ion-padding">
-        <IonList>
-          <IonItem>
-            <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
-            <IonSelect 
-              ok-text={labels.ok} 
-              cancel-text={labels.cancel} 
-              value={type}
-              onIonChange={e => setType(e.detail.value)}
-            >
-              {advertTypes.map(t => <IonSelectOption key={t.id} value={t.id}>{t.name}</IonSelectOption>)}
-            </IonSelect>
-          </IonItem>
+      <IonContent fullscreen>
+        <IonList className="ion-padding">
           <IonItem>
             <IonLabel position="floating" color="primary">{labels.title}</IonLabel>
             <IonInput 
@@ -85,10 +71,9 @@ const AddAdvert = () => {
             <IonLabel position="floating" color="primary">
               {labels.text}
             </IonLabel>
-            <IonInput 
+            <IonTextarea 
               value={text} 
-              type="text"
-              clearInput
+              wrap="soft"
               onIonChange={e => setText(e.detail.value!)} 
             />
           </IonItem>
@@ -109,9 +94,9 @@ const AddAdvert = () => {
           <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
-      {title && (text || !imageUrl) &&
+      {title && (text || imageUrl) &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
-          <IonFabButton onClick={handleSubmit}>
+          <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
         </IonFab>
