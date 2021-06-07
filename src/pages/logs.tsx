@@ -29,7 +29,7 @@ const Logs = () => {
           userInfo
         }
       })
-      return logs.sort((l1, l2) => l2.time > l1.time ? 1 : -1)
+      return logs
     })
   }, [state.logs, state.users])
   const handleDelete = (log: Log) => {

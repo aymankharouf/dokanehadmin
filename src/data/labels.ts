@@ -150,7 +150,7 @@ const labels: Label = {
   unknown: 'غير معروف',
   units: 'الوحدات',
   unit: 'الوحدة',
-  productRequests: 'طلبات اضافة منتج',
+  productRequests: 'طلبات منتجات جديدة',
   approveProduct: 'تم اعتماد طلب اضافة منتج',
   approvePack: 'تم اعتماد طلب اضافة عبوة',
   rejection: 'رفض',
@@ -173,7 +173,8 @@ const labels: Label = {
   notification: 'تنويه',
   admin: 'الادارة',
   notUsedPacks: 'عبوات بلا سعر',
-  storePacks: 'منتجات'
+  storePacks: 'منتجات',
+  attachOwner: 'تعريف صاحب المحل'
 }
 
 export default labels

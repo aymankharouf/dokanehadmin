@@ -39,7 +39,7 @@ const RetreivePassword = () => {
     <IonContent fullscreen className="ion-padding">
       <IonList>
         <IonItem>
-          <IonLabel position="floating">
+          <IonLabel position="floating" color="primary">
             {labels.name}
           </IonLabel>
           <IonInput 
@@ -48,7 +48,7 @@ const RetreivePassword = () => {
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="floating">
+          <IonLabel position="floating" color="primary">
             {labels.mobile}
           </IonLabel>
           <IonInput 
@@ -57,7 +57,7 @@ const RetreivePassword = () => {
           />
         </IonItem>
         <IonItem>
-          <IonLabel position="floating">
+          <IonLabel position="floating" color="primary">
             {labels.password}
           </IonLabel>
           <IonInput 
@@ -68,7 +68,7 @@ const RetreivePassword = () => {
       </IonList>
     </IonContent>
     <IonFab vertical="top" horizontal="end" slot="fixed">
-      <IonFabButton onClick={handleResolve}>
+      <IonFabButton onClick={handleResolve} color="success">
         <IonIcon ios={checkmarkOutline} />
       </IonFabButton>
     </IonFab>

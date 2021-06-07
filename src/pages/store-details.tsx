@@ -1,11 +1,11 @@
 import {useContext, useState, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import { userTypes } from '../data/config'
-import { useLocation, useParams } from 'react-router'
-import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonAlert, useIonToast } from '@ionic/react'
+import { colors, userTypes } from '../data/config'
+import { useHistory, useLocation, useParams } from 'react-router'
+import { IonActionSheet, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
-import { attachOutline, cartOutline, chevronDownOutline, flashOffOutline, flashOutline, pencilOutline } from 'ionicons/icons'
+import { settingsOutline } from 'ionicons/icons'
 import { changeStoreStatus, getMessage, linkOwner } from '../data/actions'
 
 type Params = {
@@ -16,8 +16,10 @@ const StoreDetails = () => {
   const params = useParams<Params>()
   const [message] = useIonToast()
   const [alert] = useIonAlert()
+  const history = useHistory()
   const location = useLocation()
   const [store, setStore] = useState(() => state.stores.find(s => s.id === params.id)!)
+  const [actionOpened, setActionOpened] = useState(false)
   useEffect(() => {
     setStore(() => state.stores.find(s => s.id === params.id)!)
   }, [state.stores, params.id])
@@ -51,6 +53,7 @@ const StoreDetails = () => {
       ],
     })
   }
+  let i = 0
   return (
     <IonPage>
       <Header title={labels.storeDetails} />
@@ -116,27 +119,43 @@ const StoreDetails = () => {
           </IonItem>
         </IonList>
       </IonContent>
-      <IonFab horizontal="end" vertical="top" slot="fixed">
-        <IonFabButton>
-          <IonIcon ios={chevronDownOutline}></IonIcon>
+      <IonFab vertical="top" horizontal="end" slot="fixed">
+        <IonFabButton onClick={() => setActionOpened(true)}>
+          <IonIcon ios={settingsOutline} />
         </IonFabButton>
-        <IonFabList>
-          <IonFabButton color="success" routerLink={`/packs/${params.id}`}>
-            <IonIcon ios={cartOutline}></IonIcon>
-          </IonFabButton>
-          <IonFabButton color="warning" routerLink={`/edit-store/${params.id}`}>
-            <IonIcon ios={pencilOutline}></IonIcon>
-          </IonFabButton>
-          <IonFabButton color="danger" onClick={handleChangeStatus}>
-            <IonIcon ios={store.isActive ? flashOffOutline: flashOutline}></IonIcon>
-          </IonFabButton>
-          {!store.ownerId && 
-            <IonFabButton color="secondary" onClick={handleLinkOwner}>
-              <IonIcon ios={attachOutline}></IonIcon>
-            </IonFabButton>
-          }
-        </IonFabList>
       </IonFab>
+      <IonActionSheet
+        isOpen={actionOpened}
+        onDidDismiss={() => setActionOpened(false)}
+        buttons={[
+          {
+            text: labels.edit,
+            cssClass: colors[i++ % 10].name,
+            handler: () => history.push(`/edit-store/${params.id}`)
+          },
+          {
+            text: labels.stop,
+            cssClass: store.isActive ? colors[i++ % 10].name : 'ion-hide',
+            handler: () => handleChangeStatus()
+          },
+          {
+            text: labels.activate,
+            cssClass: !store.isActive ? colors[i++ % 10].name : 'ion-hide',
+            handler: () => handleChangeStatus()
+          },
+          {
+            text: labels.attachOwner,
+            cssClass: !store.ownerId ? colors[i++ % 10].name : 'ion-hide',
+            handler: () => handleLinkOwner()
+          },
+          {
+            text: labels.storePacks,
+            cssClass: colors[i++ % 10].name,
+            handler: () => history.push(`/packs/${params.id}`)
+          },
+
+        ]}
+      />
     </IonPage>
   )
 }

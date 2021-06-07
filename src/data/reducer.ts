@@ -1,4 +1,4 @@
-import {Action, State, Region, Country, Trademark} from "./types"
+import {Action, State, Region, Country, Trademark, PasswordRequest, ProductRequest, PackRequest, Log} from "./types"
 
 const Reducer = (state: State, action: Action) => {
     switch (action.type){
@@ -15,8 +15,6 @@ const Reducer = (state: State, action: Action) => {
       case 'SET_TRADEMARKS':
         const trademarks: Trademark[] = action.payload
         return {...state, trademarks: trademarks.sort((t1, t2) => t1.name > t2.name ? 1 : -1)}
-      case 'SET_NOTIFICATIONS':
-        return {...state, notifications: action.payload}
       case 'SET_STORES':
         return {...state, stores: action.payload}
       case 'SET_CATEGORIES':
@@ -24,11 +22,14 @@ const Reducer = (state: State, action: Action) => {
       case 'SET_USERS':
         return {...state, users: action.payload}
       case 'SET_PASSWORD_REQUESTS':
-        return {...state, passwordRequests: action.payload}
+        const passwordRequests: PasswordRequest[] = action.payload
+        return {...state, passwordRequests: passwordRequests.sort((r1, r2) => r1.time > r2.time ? -1 : 1)}
       case 'SET_PRODUCT_REQUESTS':
-        return {...state, productRequests: action.payload}
+        const productRequests: ProductRequest[] = action.payload
+        return {...state, productRequests: productRequests.sort((r1, r2) => r1.time > r2.time ? -1 : 1)}
       case 'SET_PACK_REQUESTS':
-        return {...state, packRequests: action.payload}
+        const packRequests: PackRequest[] = action.payload
+        return {...state, packRequests: packRequests.sort((r1, r2) => r1.time > r2.time ? -1 : 1)}
       case 'SET_STORE_REQUESTS':
         return {...state, storeRequests: action.payload}
       case 'SET_PRODUCTS':
@@ -38,15 +39,14 @@ const Reducer = (state: State, action: Action) => {
       case 'SET_PACK_STORES':
         return {...state, packStores: action.payload}
       case 'SET_LOGS':
-        return {...state, logs: action.payload}
+        const logs: Log[] = action.payload
+        return {...state, logs: logs.sort((l1, l2) => l1.time > l2.time ? -1 : 1)}
       case 'SET_ADVERTS':
         return {...state, adverts: action.payload}
       case 'SET_ARCHIVED_PRODUCTS':
         return {...state, products: [...state.products, ...action.payload]}
       case 'SET_ARCHIVED_PACKS':
         return {...state, packs: [...state.packs, ...action.payload]}
-      case 'SET_UNITS':
-        return {...state, units: action.payload}
       case 'LOGIN':
         return {...state, user: action.payload}
       case 'LOGOUT':

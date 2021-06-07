@@ -30,6 +30,7 @@ const Stores = () => {
                 <IonLabel>
                   <IonText style={{color: colors[0].name}}>{s.name}</IonText>
                   <IonText style={{color: colors[1].name}}>{userTypes.find(t => t.id === s.type)!.name}</IonText>
+                  <IonText style={{color: colors[2].name}}>{state.regions.find(r => r.id === s.regionId)!.name}</IonText>
                 </IonLabel>
                 {!s.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem> 
