@@ -81,7 +81,8 @@ export type Advert = {
   id?: string,
   title: string,
   text: string,
-  isActive: boolean,
+  startDate: number,
+  endDate: number,
   imageUrl?: string,
   time: Date
 }

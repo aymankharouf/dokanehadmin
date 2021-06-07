@@ -174,7 +174,11 @@ const labels: Label = {
   admin: 'الادارة',
   notUsedPacks: 'عبوات بلا سعر',
   storePacks: 'منتجات',
-  attachOwner: 'تعريف صاحب المحل'
+  attachOwner: 'تعريف صاحب المحل',
+  startDate: 'تاريخ البداية',
+  endDate: 'تاريخ النهاية',
+  invalidDates: 'الرجاء التأكد من التواريخ',
+  overlapDates: 'هناك تداخل بين فترات الاعلانات'
 }
 
 export default labels

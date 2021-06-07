@@ -28,7 +28,7 @@ const Adverts = () => {
               <IonItem key={a.id} routerLink={`/advert-details/${a.id}`}>
                 <IonLabel>
                   <IonText style={{color: colors[0].name}}>{a.title}</IonText>
-                  <IonText style={{color: colors[1].name}}>{a.isActive ? labels.isActive : labels.inActive}</IonText>
+                  <IonText style={{color: colors[1].name}}>{`${moment(a.startDate.toString(), 'YYYYMMDD').format('YYYY/MM/DD')} - ${moment(a.endDate.toString(), 'YYYYMMDD').format('YYYY/MM/DD')}`}</IonText>
                   <IonText style={{color: colors[2].name}}>{moment(a.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    

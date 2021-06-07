@@ -113,7 +113,8 @@ const StateProvider = ({children}: Props) => {
           id: doc.id,
           text: doc.data().text,
           title: doc.data().title,
-          isActive: doc.data().isActive,
+          startDate: doc.data().startDate,
+          endDate: doc.data().endDate,
           imageUrl: doc.data().imageUrl,
           time: doc.data().time.toDate()
         })

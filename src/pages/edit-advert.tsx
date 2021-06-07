@@ -3,9 +3,10 @@ import {StateContext} from '../data/state-provider'
 import {editAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonToggle, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonDatetime, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, useIonToast } from '@ionic/react'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
+import moment from 'moment'
 
 type Params = {
   id: string
@@ -19,7 +20,8 @@ const EditAdvert = () => {
   const [advert] = useState(() => state.adverts.find(a => a.id === params.id)!)
   const [title, setTitle] = useState(advert?.title)
   const [text, setText] = useState(advert?.text)
-  const [isActive, setIsActive] = useState(advert.isActive)
+  const [startDate, setStartDate] = useState(moment(advert.startDate.toString(), 'YYYYMMDD').toString())
+  const [endDate, setEndDate] = useState(moment(advert.endDate.toString(), 'YYYYMMDD').toString())
   const [imageUrl, setImageUrl] = useState(advert?.imageUrl)
   const [image, setImage] = useState<File>()
   const [hasChanged, setHasChanged] = useState(false)
@@ -48,15 +50,29 @@ const EditAdvert = () => {
   useEffect(() => {
     if (title !== advert.title
     || text !== advert.text
-    || isActive !== advert.isActive
+    || startDate !== moment(advert.startDate.toString(), 'YYYYMMDD').toString()
+    || endDate !== moment(advert.endDate.toString(), 'YYYYMMDD').toString()
     || imageUrl !== advert.imageUrl) setHasChanged(true)
     else setHasChanged(false)
-  }, [advert, title, text, isActive, imageUrl])
+  }, [advert, title, text, startDate, endDate, imageUrl])
   const handleSubmit = () => {
     try{
+      const start = new Date(startDate)
+      const end = new Date(endDate)
+      const today = new Date()
+      const startNumber = start.getFullYear() * 10000 + (start.getMonth() + 1) * 100 + start.getDate()
+      const endNumber = end.getFullYear() * 10000 + (end.getMonth() + 1) * 100 + end.getDate()
+      const todayNumber = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+      if (endNumber < startNumber || startNumber < todayNumber) {
+        throw new Error('invalidDates')
+      }
+      if (state.adverts.find(a => a.id !== advert.id && ((a.startDate >= startNumber && a.startDate <= endNumber) || (startNumber >= a.startDate && startNumber <= a.endDate)))) {
+        throw new Error('overlapDates')
+      }
       const newAdvert = {
         ...advert,
-        isActive,
+        startDate: startNumber,
+        endDate: endNumber,
         title,
         text,
       }
@@ -85,10 +101,25 @@ const EditAdvert = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel color="primary">{labels.isActive}</IonLabel>
-            <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
+            <IonLabel position="floating" color="primary">
+              {labels.startDate}
+            </IonLabel>
+            <IonDatetime 
+              displayFormat="DD/MM/YYYY" 
+              value={startDate} 
+              onIonChange={e => setStartDate(e.detail.value!)}
+            />
           </IonItem>
-
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.endDate}
+            </IonLabel>
+            <IonDatetime 
+              displayFormat="DD/MM/YYYY" 
+              value={endDate} 
+              onIonChange={e => setEndDate(e.detail.value!)}
+            />
+          </IonItem>
           <IonItem>
             <IonLabel position="floating" color="primary">
               {labels.text}

@@ -1,17 +1,21 @@
-import {useState, ChangeEvent, useRef} from 'react'
+import {useState, ChangeEvent, useRef, useContext} from 'react'
 import {addAdvert, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, useIonToast } from '@ionic/react'
+import { IonButton, IonContent, IonDatetime, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
+import { StateContext } from '../data/state-provider'
 
 const AddAdvert = () => {
+  const {state} = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
   const inputEl = useRef<HTMLInputElement | null>(null)
@@ -38,10 +42,23 @@ const AddAdvert = () => {
   }
   const handleSubmit = () => {
     try{
+      const start = new Date(startDate)
+      const end = new Date(endDate)
+      const today = new Date()
+      const startNumber = start.getFullYear() * 10000 + (start.getMonth() + 1) * 100 + start.getDate()
+      const endNumber = end.getFullYear() * 10000 + (end.getMonth() + 1) * 100 + end.getDate()
+      const todayNumber = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+      if (endNumber < startNumber || startNumber < todayNumber) {
+        throw new Error('invalidDates')
+      }
+      if (state.adverts.find(a => (a.startDate >= startNumber && a.startDate <= endNumber) || (startNumber >= a.startDate && startNumber <= a.endDate))) {
+        throw new Error('overlapDates')
+      }
       const advert = {
         title,
         text,
-        isActive: false,
+        startDate: startNumber,
+        endDate: endNumber,
         time: new Date()
       }
       addAdvert(advert, image)
@@ -67,6 +84,26 @@ const AddAdvert = () => {
               autofocus
               clearInput
               onIonChange={e => setTitle(e.detail.value!)} 
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.startDate}
+            </IonLabel>
+            <IonDatetime 
+              displayFormat="DD/MM/YYYY" 
+              value={startDate} 
+              onIonChange={e => setStartDate(e.detail.value!)}
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              {labels.endDate}
+            </IonLabel>
+            <IonDatetime 
+              displayFormat="DD/MM/YYYY" 
+              value={endDate} 
+              onIonChange={e => setEndDate(e.detail.value!)}
             />
           </IonItem>
           <IonItem>
