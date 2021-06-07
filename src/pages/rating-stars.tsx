@@ -1,45 +1,24 @@
-import {useState} from 'react'
 import {IonIcon} from '@ionic/react'
 import { star, starHalfOutline, starOutline } from 'ionicons/icons'
 
 type Props = {
   rating: number,
-  count: number
+  count: number,
+  size: string
 }
 const RatingStars = (props: Props) => {
-  const [stars] = useState(() => {
-    const rating_int = props.rating
-    const rating_fraction = Number(props.rating) - rating_int
-    let color
-    switch(rating_int){
-      case 1:
-      case 2:
-        color = 'danger'
-        break
-      case 4:
-      case 5:
-        color = 'success'
-        break
-      default:
-        color = 'warning'
-    }
-    let stars = []
-    let i = 0
-    while (++i <= rating_int) {
-      stars.push(<IonIcon key={i} style={{fontSize: '20px'}} ios={star} color={color}></IonIcon>)
-    }
-    if (rating_fraction > 0) {
-      stars.unshift(<IonIcon key={i} style={{fontSize: '20px'}} ios={starHalfOutline} color={color}></IonIcon>)
-      i++
-    }
-    while (i++ <= 5) {
-      stars.unshift(<IonIcon key={i} style={{fontSize: '20px'}} ios={starOutline} color={color}></IonIcon>)
-    }
-    return stars
-  })
-  return(
+  const fill = Math.floor(props.rating)
+  const fillArray = Array.from(Array(fill).keys())
+  const half = props.rating - fill >= 0.5 ? 1 : 0
+  const outline = 5 - fill - half
+  const outlineArray = Array.from(Array(outline).keys())
+  const color = props.rating === 0 ? 'warning' : props.rating < 2.5 ? 'danger' : props.rating < 4 ? 'primary' : 'success'
+  return (
     <>
-      {props.count > 0 ? '(' + props.count + ')' : ''}{stars}
+      {props.count > 0 ? '(' + props.count + ')' : ''}
+      {outlineArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starOutline} color={color}></IonIcon>)}
+      {half === 0 ? '' : <IonIcon style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starHalfOutline} color={color}></IonIcon>}
+      {fillArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={star} color={color}></IonIcon>)}
     </>
   )
 }

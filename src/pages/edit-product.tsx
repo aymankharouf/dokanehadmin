@@ -106,7 +106,9 @@ const EditProduct = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
             <IonInput 
               value={name} 
               type="text" 
@@ -116,7 +118,9 @@ const EditProduct = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.alias}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.alias}
+            </IonLabel>
             <IonInput 
               value={alias} 
               type="text" 
@@ -125,7 +129,9 @@ const EditProduct = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.description}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.description}
+            </IonLabel>
             <IonInput 
               value={description} 
               type="text" 
@@ -134,7 +140,9 @@ const EditProduct = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.trademark}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.trademark}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -147,7 +155,9 @@ const EditProduct = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.category}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.category}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -159,7 +169,9 @@ const EditProduct = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.country}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.country}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -171,7 +183,9 @@ const EditProduct = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.unit}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.unit}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 

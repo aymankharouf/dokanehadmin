@@ -28,7 +28,7 @@ const Login = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.email}
             </IonLabel>
             <IonInput 
@@ -40,7 +40,7 @@ const Login = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.password}
             </IonLabel>
             <IonInput 
@@ -52,13 +52,24 @@ const Login = () => {
           </IonItem>
         </IonList>
         {email && password &&
-          <IonButton expand="block" fill="clear" onClick={handleLogin}>{labels.login}</IonButton>
+          <div className="ion-padding" style={{textAlign: 'center'}}>
+            <IonButton 
+              fill="solid" 
+              shape="round"
+              style={{width: '10rem'}}
+              onClick={handleLogin}
+            >
+              {labels.login}
+            </IonButton>
+          </div>
         }
       </IonContent>
       <IonFooter>
         <IonToolbar>
           <IonButtons slot="start">
-            <Link to="/register">{labels.registerTitle}</Link>
+            <IonButton fill="clear" onClick={() => history.replace('/register')}>
+              {labels.newUser}
+            </IonButton>
           </IonButtons>
           <IonButtons slot="end">
             <Link to="/change-password">{labels.changePassword}</Link>

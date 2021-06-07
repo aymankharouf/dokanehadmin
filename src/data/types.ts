@@ -70,7 +70,7 @@ export type User = {
   position: Position,
   storeName: string | null,
   storeId?: string,
-  colors?: string[],
+  colors: string,
   address?: string,
   time: Date,
   regionId: string | null,
@@ -171,7 +171,8 @@ export type State = {
   productRequests: ProductRequest[],
   storeRequests: StoreRequest[],
   packRequests: PackRequest[],
-  mapPosition?: Position
+  mapPosition?: Position,
+  searchText: string,
 }
 
 export type Action = {

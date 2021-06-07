@@ -14,9 +14,9 @@ const AddAdvert = () => {
   const [text, setText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [image, setImage] = useState<File>()
-  const inputEl = useRef<HTMLInputElement | null>(null);
+  const inputEl = useRef<HTMLInputElement | null>(null)
   const onUploadClick = () => {
-    if (inputEl.current) inputEl.current.click();
+    if (inputEl.current) inputEl.current.click()
   };
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     try {
@@ -58,7 +58,9 @@ const AddAdvert = () => {
       <IonContent fullscreen>
         <IonList className="ion-padding">
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.title}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.title}
+            </IonLabel>
             <IonInput 
               value={title} 
               type="text" 

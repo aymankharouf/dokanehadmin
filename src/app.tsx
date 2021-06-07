@@ -68,13 +68,13 @@ import AddPackStore from './pages/add-pack-store'
 import StoreDetails from './pages/store-details'
 import AdvertDetails from './pages/advert-details'
 import ArchivedProducts from './pages/archived-products'
-import StorePacks from './pages/store-packs'
 import PackDetails from './pages/pack-details'
 import ProductRequests from './pages/product-requests'
 import ProductRequestDetails from './pages/product-request-details'
 import PackRequests from './pages/pack-requests'
 import PackRequestDetails from './pages/pack-request-details'
 import Map from './pages/map';
+import Packs from './pages/packs';
 
 const App = () => {
   const href = window.location.href
@@ -131,13 +131,13 @@ const App = () => {
               <Route path="/store-details/:id" exact={true} component={StoreDetails} />
               <Route path="/advert-details/:id" exact={true} component={AdvertDetails} />
               <Route path="/archived-products" exact={true} component={ArchivedProducts} />
-              <Route path="/store-packs/:id" exact={true} component={StorePacks} />
               <Route path="/pack-details/:id" exact={true} component={PackDetails} />
               <Route path="/product-requests" exact={true} component={ProductRequests} />
               <Route path="/product-request-details/:id" exact={true} component={ProductRequestDetails} />
               <Route path="/pack-requests" exact={true} component={PackRequests} />
               <Route path="/pack-request-details/:id" exact={true} component={PackRequestDetails} />
               <Route path="/map/:lat/:lng" exact={true} component={Map} />
+              <Route path="/packs/:id" exact={true} component={Packs} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

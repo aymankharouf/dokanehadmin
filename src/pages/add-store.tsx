@@ -68,7 +68,9 @@ const AddStore = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
             <IonInput 
               value={name} 
               type="text" 
@@ -97,7 +99,9 @@ const AddStore = () => {
             <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.type}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel}
@@ -108,7 +112,9 @@ const AddStore = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.region}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.region}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -119,7 +125,9 @@ const AddStore = () => {
             </IonSelect>
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.address}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.address}
+            </IonLabel>
             <IonInput 
               value={address} 
               type="text" 

@@ -70,10 +70,12 @@ const EditAdvert = () => {
   return (
     <IonPage>
       <Header title={labels.editAdvert} />
-      <IonContent fullscreen className="ion-padding">
-        <IonList>
+      <IonContent fullscreen>
+        <IonList className="ion-padding">
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.title}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.title}
+            </IonLabel>
             <IonInput 
               value={title} 
               type="text" 

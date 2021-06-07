@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/ar'
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
-import { randomColors, userTypes } from '../data/config'
+import { colors, userTypes } from '../data/config'
 
 const PermissionList = () => {
   const {state} = useContext(StateContext)
@@ -29,9 +29,9 @@ const PermissionList = () => {
           : users.map(u => 
               <IonItem key={u.id} routerLink={`/permit-user/${u.id}`}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{`${u.name}-${userTypes.find(t => t.id === u.type)!.name}`}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{u.storeName}</IonText>
-                  <IonText style={{color: randomColors[2].name}}>{moment(u.time).fromNow()}</IonText>
+                  <IonText style={{color: colors[0].name}}>{`${u.name}-${userTypes.find(t => t.id === u.type)!.name}`}</IonText>
+                  <IonText style={{color: colors[1].name}}>{u.storeName}</IonText>
+                  <IonText style={{color: colors[2].name}}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

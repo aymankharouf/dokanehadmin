@@ -96,7 +96,9 @@ const AddGroup = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.pack}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.pack}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -118,7 +120,9 @@ const AddGroup = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
             <IonInput 
               value={name} 
               type="text" 

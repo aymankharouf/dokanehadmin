@@ -1,7 +1,7 @@
 import {useContext, useState, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import {User} from '../data/types'
 import { IonButton, IonContent, IonPage } from '@ionic/react'
 import Header from './header'
@@ -37,7 +37,7 @@ const Approvals = () => {
             routerLink={s.path} 
             expand="block"
             shape="round"
-            className={randomColors[i++ % 7].name}
+            className={colors[i++ % 10].name}
             style={{margin: '0.9rem'}} 
             key={s.id}
           >

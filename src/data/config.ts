@@ -1,11 +1,14 @@
-export const randomColors = [
+export const colors = [
   {id: 0, name: 'darkblue'},
   {id: 1, name: 'deeppink'},
-  {id: 2, name: 'dodgerblue'},
+  {id: 2, name: 'darkgreen'},
   {id: 3, name: 'red'},
   {id: 4, name: 'purple'},
-  {id: 5, name: 'green'},
-  {id: 6, name: 'crimson'},
+  {id: 5, name: 'maroon'},
+  {id: 6, name: 'darkslategray'},
+  {id: 7, name: 'crimson'},
+  {id: 8, name: 'chocolate'},
+  {id: 9, name: 'darkolivegreen'},
 ]
 
 export const units = [

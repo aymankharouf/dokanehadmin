@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import labels from '../data/labels'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import { IonButton, IonContent, IonPage } from '@ionic/react'
 import Header from './header'
 
@@ -22,7 +22,7 @@ const Settings = () => {
             routerLink={s.path} 
             expand="block"
             shape="round"
-            className={randomColors[i++ % 7].name}
+            className={colors[i++ % 10].name}
             style={{margin: '0.9rem'}} 
             key={s.id}
           >

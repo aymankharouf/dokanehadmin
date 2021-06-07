@@ -2,7 +2,7 @@ import {useContext, useState, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {Store} from '../data/types'
-import { randomColors, userTypes } from '../data/config'
+import { colors, userTypes } from '../data/config'
 import { IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
@@ -28,8 +28,8 @@ const Stores = () => {
           : stores.map(s =>
               <IonItem key={s.id} routerLink={`/store-details/${s.id}`}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{s.name}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{userTypes.find(t => t.id === s.type)!.name}</IonText>
+                  <IonText style={{color: colors[0].name}}>{s.name}</IonText>
+                  <IonText style={{color: colors[1].name}}>{userTypes.find(t => t.id === s.type)!.name}</IonText>
                 </IonLabel>
                 {!s.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem> 

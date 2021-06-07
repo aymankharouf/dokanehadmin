@@ -100,7 +100,9 @@ const EditPack = () => {
             </IonItem>
           }
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
             <IonInput 
               value={name} 
               type="text" 

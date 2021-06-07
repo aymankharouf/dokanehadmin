@@ -50,7 +50,9 @@ const PermitUser = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.user}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.user}
+            </IonLabel>
             <IonInput 
               value={user.name} 
               type="text" 
@@ -58,10 +60,7 @@ const PermitUser = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel 
-              position="floating" 
-              color="primary"
-            >
+            <IonLabel position="floating" color="primary">
               {labels.mobile}
             </IonLabel>
             <IonInput 
@@ -71,7 +70,9 @@ const PermitUser = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.type}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.type}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -83,7 +84,9 @@ const PermitUser = () => {
           </IonItem>
           {type !== 'd' && <>
             <IonItem>
-              <IonLabel position="floating" color="primary">{labels.storeName}</IonLabel>
+              <IonLabel position="floating" color="primary">
+                {labels.storeName}
+              </IonLabel>
               <IonInput 
                 value={storeName} 
                 type="text" 
@@ -93,7 +96,9 @@ const PermitUser = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel position="floating" color="primary">{labels.region}</IonLabel>
+              <IonLabel position="floating" color="primary">
+                {labels.region}
+              </IonLabel>
               <IonSelect 
                 ok-text={labels.ok} 
                 cancel-text={labels.cancel} 
@@ -104,7 +109,9 @@ const PermitUser = () => {
               </IonSelect>
             </IonItem>
             <IonItem>
-              <IonLabel position="floating" color="primary">{labels.address}</IonLabel>
+              <IonLabel position="floating" color="primary">
+                {labels.address}
+              </IonLabel>
               <IonInput 
                 value={address} 
                 type="text" 

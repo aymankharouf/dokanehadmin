@@ -5,7 +5,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
-import { randomColors } from '../data/config'
+import { colors } from '../data/config'
 
 const PasswordRequests = () => {
   const {state} = useContext(StateContext)
@@ -23,9 +23,9 @@ const PasswordRequests = () => {
           : passwordRequests.map(r => 
               <IonItem key={r.id} routerLink={`/retreive-password/${r.id}`}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{r.mobile}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{r.status === 'n' ? labels.new : labels.resolved}</IonText>
-                  <IonText style={{color: randomColors[2].name}}>{moment(r.time).fromNow()}</IonText>
+                  <IonText style={{color: colors[0].name}}>{r.mobile}</IonText>
+                  <IonText style={{color: colors[1].name}}>{r.status === 'n' ? labels.new : labels.resolved}</IonText>
+                  <IonText style={{color: colors[2].name}}>{moment(r.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

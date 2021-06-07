@@ -3,8 +3,9 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {editCategory, getMessage, getCategoryName} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import Header from './header'
+import { checkmarkOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -38,7 +39,7 @@ const EditCategory = () => {
     || isActive !== category?.isActive) setHasChanged(true)
     else setHasChanged(false)
   }, [category, name, ordering, parentId, isActive])
-  const handleEdit = () => {
+  const handleSubmit = () => {
     try{
       const newCategory = {
         ...category,
@@ -57,10 +58,12 @@ const EditCategory = () => {
   return (
     <IonPage>
       <Header title={labels.editCategory} />
-      <IonContent fullscreen className="ion-padding">
-        <IonList>
+      <IonContent fullscreen>
+        <IonList  className="ion-padding">
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.mainCategory}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.mainCategory}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -98,16 +101,14 @@ const EditCategory = () => {
             <IonToggle checked={isActive} onIonChange={() => setIsActive(s => !s)}/>
           </IonItem>
         </IonList>
-        {name && ordering && hasChanged && 
-          <IonButton 
-            expand="block" 
-            fill="clear" 
-            onClick={handleEdit}
-          >
-            {labels.save}
-          </IonButton>
-        }
       </IonContent>
+      {name && ordering && hasChanged && 
+        <IonFab vertical="top" horizontal="end" slot="fixed">
+          <IonFabButton onClick={handleSubmit} color="success">
+            <IonIcon ios={checkmarkOutline} />
+          </IonFabButton>
+        </IonFab>
+      }
     </IonPage>
   )
 }

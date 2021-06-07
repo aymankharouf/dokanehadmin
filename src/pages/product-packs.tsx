@@ -7,7 +7,7 @@ import {Pack} from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonActionSheet, IonBadge, IonCard, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
 import Header from './header'
-import { randomColors } from '../data/config'
+import { colors } from '../data/config'
 import { settingsOutline } from 'ionicons/icons'
 
 type Params = {
@@ -100,7 +100,7 @@ const ProductPacks = () => {
             </IonRow>
             <IonRow>
               <IonCol>{productOfText(state.countries.find(c => c.id === product.countryId)!.name, state.trademarks.find(t => t.id === product.trademarkId)?.name)}</IonCol>
-              <IonCol className="ion-text-end"><RatingStars rating={product.rating ?? 0} count={product.ratingCount ?? 0} /></IonCol>
+              <IonCol className="ion-text-end"><RatingStars rating={product.rating} count={product.ratingCount} size="m"/></IonCol>
             </IonRow>
           </IonGrid>
         </IonCard>
@@ -108,8 +108,8 @@ const ProductPacks = () => {
           {packs.map(p => 
             <IonItem key={p.id} routerLink={`/pack-details/${p.id}`}>
               <IonLabel>
-                <IonText style={{color: randomColors[0].name}}>{p.name}</IonText>
-                <IonText style={{color: randomColors[1].name}}>{`${labels.stores}: ${state.packStores.filter(s => s.packId === p.id).length}`}</IonText>
+                <IonText style={{color: colors[0].name}}>{p.name}</IonText>
+                <IonText style={{color: colors[1].name}}>{`${labels.stores}: ${state.packStores.filter(s => s.packId === p.id).length}`}</IonText>
               </IonLabel>
               {p.price! > 0 && <IonLabel slot="end" className="price">{p.price!.toFixed(2)}</IonLabel>}
               {!p.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
@@ -128,27 +128,27 @@ const ProductPacks = () => {
         buttons={[
           {
             text: labels.edit,
-            cssClass: randomColors[i++ % 7].name,
+            cssClass: colors[i++ % 10].name,
             handler: () => history.push(`/edit-product/${params.id}`)
           },
           {
             text: labels.addPack,
-            cssClass: randomColors[i++ % 7].name,
+            cssClass: colors[i++ % 10].name,
             handler: () => history.push(`/add-pack/${params.id}`)
           },
           {
             text: labels.addGroup,
-            cssClass: randomColors[i++ % 7].name,
+            cssClass: colors[i++ % 10].name,
             handler: () => history.push(`/add-group/${params.id}`)
           },
           {
             text: labels.archive,
-            cssClass: activePacks.length === 0 ? randomColors[i++ % 7].name : 'ion-hide',
+            cssClass: activePacks.length === 0 ? colors[i++ % 10].name : 'ion-hide',
             handler: () => handleArchive()
           },
           {
             text: labels.delete,
-            cssClass: packs.length === 0 ? randomColors[i++ % 7].name : 'ion-hide',
+            cssClass: packs.length === 0 ? colors[i++ % 10].name : 'ion-hide',
             handler: () => handleDelete()
           },
 

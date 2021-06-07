@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from 'react'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import labels from '../data/labels'
 import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react'
 import { StateContext } from '../data/state-provider'
@@ -36,27 +36,33 @@ const Home = () => {
             <IonTitle size="large"><img src="/dokaneh_logo.png" alt="logo" style={{width: '120px', marginBottom: '-15px'}} /></IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonButton
-          routerLink="/approvals" 
-          expand="block"
-          shape="round"
-          className={randomColors[i++ % 7].name}
-          style={{margin: '0.9rem'}}
-        >
-          {`${labels.approvals} ${approvalsCount > 0 ? '(' + approvalsCount + ')' : ''}`}
-        </IonButton>
-        {mainPages.map(p => 
+        {state.user ? <>
           <IonButton
-            routerLink={p.path} 
+            routerLink="/approvals" 
             expand="block"
             shape="round"
-            className={randomColors[i++ % 7].name}
+            className={colors[i++ % 10].name}
             style={{margin: '0.9rem'}}
-            key={p.id}
           >
-            {p.name}
+            {`${labels.approvals} ${approvalsCount > 0 ? '(' + approvalsCount + ')' : ''}`}
           </IonButton>
-        )}
+          {mainPages.map(p => 
+            <IonButton
+              routerLink={p.path} 
+              expand="block"
+              shape="round"
+              className={colors[i++ % 10].name}
+              style={{margin: '0.9rem'}}
+              key={p.id}
+            >
+              {p.name}
+            </IonButton>
+          )}
+        </> : 
+          <div className="help">
+            {labels.relogin}
+          </div>
+        }
       </IonContent>
     </IonPage>
   )

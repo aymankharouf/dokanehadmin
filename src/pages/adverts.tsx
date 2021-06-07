@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import {Advert} from '../data/types'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
@@ -27,9 +27,9 @@ const Adverts = () => {
           : adverts.map(a => 
               <IonItem key={a.id} routerLink={`/advert-details/${a.id}`}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{a.title}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{a.isActive ? labels.isActive : labels.inActive}</IonText>
-                  <IonText style={{color: randomColors[2].name}}>{moment(a.time).fromNow()}</IonText>
+                  <IonText style={{color: colors[0].name}}>{a.title}</IonText>
+                  <IonText style={{color: colors[1].name}}>{a.isActive ? labels.isActive : labels.inActive}</IonText>
+                  <IonText style={{color: colors[2].name}}>{moment(a.time).fromNow()}</IonText>
                 </IonLabel>
               </IonItem>    
             )

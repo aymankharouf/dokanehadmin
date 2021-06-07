@@ -26,7 +26,7 @@ const ChangePassword = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.oldPassword}
             </IonLabel>
             <IonInput 
@@ -38,7 +38,7 @@ const ChangePassword = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.newPassword}
             </IonLabel>
             <IonInput 
@@ -50,7 +50,16 @@ const ChangePassword = () => {
           </IonItem>
         </IonList>
         {oldPassword && newPassword && oldPassword !== newPassword &&
-          <IonButton expand="block" fill="clear" onClick={handleSubmit}>{labels.submit}</IonButton>
+          <div className="ion-padding" style={{textAlign: 'center'}}>
+            <IonButton 
+              fill="solid" 
+              shape="round"
+              style={{width: '10rem'}}
+              onClick={handleSubmit}
+            >
+              {labels.submit}
+            </IonButton>
+          </div>
         }
       </IonContent>
     </IonPage>

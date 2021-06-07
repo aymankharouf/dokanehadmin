@@ -3,7 +3,7 @@ import {StateContext} from '../data/state-provider'
 import {deleteStorePack, deletePack, getMessage, getStoreName} from '../data/actions'
 import labels from '../data/labels'
 import {Pack, PackStore, Store} from '../data/types'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { useHistory, useLocation, useParams } from 'react-router'
@@ -106,9 +106,9 @@ const PackDetails = () => {
           {packStores.map((s, i) => 
             <IonItem key={i}>
               <IonLabel>
-                <IonText style={{color: randomColors[0].name}}>{getStoreName(s.storeInfo, state.regions)}</IonText>
-                {s.packId !== pack?.id && <IonText style={{color: randomColors[1].name}}>{s.packInfo?.name}</IonText>}
-                <IonText style={{color: randomColors[2].name}}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
+                <IonText style={{color: colors[0].name}}>{getStoreName(s.storeInfo, state.regions)}</IonText>
+                {s.packId !== pack?.id && <IonText style={{color: colors[1].name}}>{s.packInfo?.name}</IonText>}
+                <IonText style={{color: colors[2].name}}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
               </IonLabel>
               {s.packId === pack?.id && 
                 <IonIcon 

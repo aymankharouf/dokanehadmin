@@ -2,7 +2,7 @@ import {useContext, useState} from 'react'
 import {StateContext } from '../data/state-provider'
 import {resolvePasswordRequest, getMessage} from '../data/actions'
 import labels from '../data/labels'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -20,7 +20,8 @@ const RetreivePassword = () => {
   const [passwordRequest] = useState(() => state.passwordRequests.find(r => r.id === params.id))
   const [userInfo] = useState(() => state.users.find(u => u.mobile === passwordRequest?.mobile))
   const [password] = useState(() => {
-    const password = userInfo?.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
+    const userColors = userInfo?.colors?.split(' ')
+    const password = userColors?.map(c => colors.find(rc => rc.name === c)?.id)
     return password?.join('')
   })
   const handleResolve = () => {

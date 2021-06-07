@@ -23,7 +23,7 @@ const Register = () => {
 
   return (
     <IonPage>
-      <Header title={labels.registerTitle} />
+      <Header title={labels.newUser} />
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
@@ -51,7 +51,16 @@ const Register = () => {
           </IonItem>
         </IonList>
         {email && password &&
-          <IonButton expand="block" fill="clear" onClick={handleRegister}>{labels.register}</IonButton>
+          <div className="ion-padding" style={{textAlign: 'center'}}>
+            <IonButton 
+              fill="solid" 
+              shape="round"
+              style={{width: '10rem'}}
+              onClick={handleRegister}
+            >
+              {labels.register}
+            </IonButton>
+          </div>
         }
       </IonContent>
     </IonPage>

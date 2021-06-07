@@ -7,7 +7,7 @@ import { useHistory, useLocation, useParams } from 'react-router'
 import { IonActionSheet, IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from '@ionic/react'
 import Header from './header'
 import { chevronDownOutline } from 'ionicons/icons'
-import {randomColors} from '../data/config'
+import {colors} from '../data/config'
 
 type Params = {
   id: string
@@ -73,10 +73,10 @@ const Categories = () => {
           : categories.map(c => 
               <IonItem key={c.id} routerLink={`/categories/${c.id}`}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{c.name}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{`${labels.childrenCount}: ${c.childrenCount}`}</IonText>
-                  <IonText style={{color: randomColors[2].name}}>{`${labels.attachedProducts}: ${c.productsCount}`}</IonText>
-                  <IonText style={{color: randomColors[3].name}}>{`${labels.ordering}:${c.ordering}`}</IonText>
+                  <IonText style={{color: colors[0].name}}>{c.name}</IonText>
+                  <IonText style={{color: colors[1].name}}>{`${labels.childrenCount}: ${c.childrenCount}`}</IonText>
+                  <IonText style={{color: colors[2].name}}>{`${labels.attachedProducts}: ${c.productsCount}`}</IonText>
+                  <IonText style={{color: colors[3].name}}>{`${labels.ordering}:${c.ordering}`}</IonText>
                 </IonLabel>
                 {!c.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
               </IonItem>    
@@ -95,22 +95,22 @@ const Categories = () => {
         buttons={[
           {
             text: labels.addChild,
-            cssClass: randomColors[i++ % 7].name,
+            cssClass: colors[i++ % 10].name,
             handler: () => history.push(`/add-category/${params.id}`)
           },
           {
             text: labels.products,
-            cssClass: productsCount > 0 ? randomColors[i++ % 7].name : 'ion-hide',
+            cssClass: productsCount > 0 ? colors[i++ % 10].name : 'ion-hide',
             handler: () => history.push(`/products/${params.id}`)
           },
           {
             text: labels.edit,
-            cssClass: params.id !== '0' ? randomColors[i++ % 7].name : 'ion-hide',
+            cssClass: params.id !== '0' ? colors[i++ % 10].name : 'ion-hide',
             handler: () => history.push(`/edit-category/${params.id}`)
           },
           {
             text: labels.delete,
-            cssClass: params.id !== '0' && childrenCount + productsCount === 0 ? randomColors[i++ % 7].name : 'ion-hide',
+            cssClass: params.id !== '0' && childrenCount + productsCount === 0 ? colors[i++ % 10].name : 'ion-hide',
             handler: () => handleDelete()
           },
         ]}

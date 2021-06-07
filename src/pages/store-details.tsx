@@ -121,7 +121,7 @@ const StoreDetails = () => {
           <IonIcon ios={chevronDownOutline}></IonIcon>
         </IonFabButton>
         <IonFabList>
-          <IonFabButton color="success" routerLink={`/store-packs/${params.id}`}>
+          <IonFabButton color="success" routerLink={`/packs/${params.id}`}>
             <IonIcon ios={cartOutline}></IonIcon>
           </IonFabButton>
           <IonFabButton color="warning" routerLink={`/edit-store/${params.id}`}>

@@ -50,7 +50,9 @@ const AddPackStore = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.store}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.store}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 

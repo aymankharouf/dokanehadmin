@@ -42,7 +42,7 @@ const AddLocation = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.name}
             </IonLabel>
             <IonInput 
@@ -54,7 +54,7 @@ const AddLocation = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.ordering}
             </IonLabel>
             <IonInput 

@@ -51,6 +51,10 @@ const Reducer = (state: State, action: Action) => {
         return {...state, user: action.payload}
       case 'LOGOUT':
         return {...state, user: undefined}
+      case 'SET_SEARCH':
+        return {...state, searchText: action.payload}
+      case 'CLEAR_SEARCH':
+        return {...state, searchText: ''}
       default:
         return state
     }

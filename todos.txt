@@ -123,4 +123,6 @@
 *production description and alias
 *test weight
 *adverts
-confirmatiom messages between users
+*confirmatiom messages between users
+*search in products & archived products
+pack ordering inhance

@@ -1,11 +1,11 @@
-import {useState, useContext} from 'react'
+import {useState, useContext, useRef, useEffect} from 'react'
 import {StateContext} from '../data/state-provider'
 import {deleteTrademark, editTrademark, getMessage} from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
-import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
+import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
-import { trashOutline } from 'ionicons/icons'
+import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -18,7 +18,16 @@ const EditCountry = () => {
   const history = useHistory()
   const [trademark] = useState(() => state.trademarks.find(t => t.id === params.id)!)
   const [name, setName] = useState(trademark.name)
-  const handleEdit = () => {
+  const [hasChanged, setHasChanged] = useState(false)
+  const fabList = useRef<HTMLIonFabElement | null>(null)
+  useEffect(() => {
+    if (hasChanged && fabList.current) fabList.current!.close()
+  }, [hasChanged])
+  useEffect(() => {
+    if (name !== trademark.name) setHasChanged(true)
+    else setHasChanged(false)
+  }, [trademark, name])
+  const handleSubmit = () => {
     try{
       const newTrademark = {
         ...trademark,
@@ -57,7 +66,7 @@ const EditCountry = () => {
       <IonContent fullscreen className="ion-padding">
         <IonList>
           <IonItem>
-            <IonLabel position="floating">
+            <IonLabel position="floating" color="primary">
               {labels.name}
             </IonLabel>
             <IonInput 
@@ -68,24 +77,25 @@ const EditCountry = () => {
               onIonChange={e => setName(e.detail.value!)} 
             />
           </IonItem>
-          {name && (name !== trademark.name) && 
-            <IonButton 
-              expand="block" 
-              fill="clear" 
-              onClick={handleEdit}
-            >
-              {labels.save}
-            </IonButton>
-          }
         </IonList>
       </IonContent>
-        {name && (name !== trademark.name) &&
-          <IonFab vertical="top" horizontal="end" slot="fixed">
-            <IonFabButton onClick={handleDelete} color="danger">
-              <IonIcon ios={trashOutline} />
+      <IonFab horizontal="end" vertical="top" slot="fixed" ref={fabList}>
+        <IonFabButton>
+          <IonIcon ios={chevronDownOutline}></IonIcon>
+        </IonFabButton>
+        <IonFabList>
+          {name && hasChanged &&
+            <IonFabButton color="success" onClick={handleSubmit}>
+              <IonIcon ios={checkmarkOutline}></IonIcon>
             </IonFabButton>
-          </IonFab>
-        }
+          }
+          {state.products.filter(p => p.trademarkId === params.id).length === 0 &&
+            <IonFabButton color="danger" onClick={handleDelete}>
+              <IonIcon ios={trashOutline}></IonIcon>
+            </IonFabButton>
+          }
+        </IonFabList>
+      </IonFab>
     </IonPage>
   )
 }

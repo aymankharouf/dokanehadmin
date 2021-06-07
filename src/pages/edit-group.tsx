@@ -106,10 +106,12 @@ const EditGroup = () => {
   return (
     <IonPage>
       <Header title={labels.editGroup} />
-      <IonContent fullscreen className="ion-padding">
-        <IonList>
+      <IonContent fullscreen>
+        <IonList className="ion-padding">
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.pack}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.pack}
+            </IonLabel>
             <IonSelect 
               ok-text={labels.ok} 
               cancel-text={labels.cancel} 
@@ -131,7 +133,9 @@ const EditGroup = () => {
             />
           </IonItem>
           <IonItem>
-            <IonLabel position="floating" color="primary">{labels.name}</IonLabel>
+            <IonLabel position="floating" color="primary">
+              {labels.name}
+            </IonLabel>
             <IonInput 
               value={name} 
               type="text" 

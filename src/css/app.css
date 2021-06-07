@@ -148,9 +148,9 @@ ion-backdrop {
   --button-color: deeppink;
 }
 
-.dodgerblue {
-  --background: dodgerblue;
-  --button-color: dodgerblue;
+.maroon {
+  --background: maroon;
+  --button-color: maroon;
 }
 
 .red {
@@ -163,12 +163,34 @@ ion-backdrop {
   --button-color: purple;
 }
 
-.green {
-  --background: green;
-  --button-color: green;
+.darkgreen {
+  --background: darkgreen;
+  --button-color: darkgreen;
+}
+
+.darkslategray {
+  --background: darkslategray;
+  --button-color: darkslategray;
 }
 
 .crimson {
   --background: crimson;
   --button-color: crimson;
+}
+
+.chocolate {
+  --background: chocolate;
+  --button-color: chocolate;
+}
+
+.darkolivegreen {
+  --background: darkolivegreen;
+  --button-color: darkolivegreen;
+}
+
+.help {
+  margin: 20px;
+  font-size: 1.5rem;
+  color: var(--ion-color-primary);
+  text-align: center;
 }

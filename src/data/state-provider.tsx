@@ -24,7 +24,8 @@ const StateProvider = ({children}: Props) => {
     adverts: [],
     productRequests: [],
     storeRequests: [],
-    packRequests: []
+    packRequests: [],
+    searchText: ''
   }
   const [state, dispatch] = useReducer(Reducer, initState)
   useEffect(() => {

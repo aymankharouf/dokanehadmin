@@ -8,8 +8,12 @@ type Props = {
   withSearch?: boolean
 }
 const Header = (props: Props) => {
-  const {dispatch} = useContext(StateContext)
+  const {state, dispatch} = useContext(StateContext)
   const [visible, setVisible] = useState(false)
+  const handleVisible = () => {
+    dispatch({type: 'CLEAR_SEARCH'})
+    setVisible(true)
+  }
   return (
     <IonHeader>
       <IonToolbar>
@@ -17,7 +21,7 @@ const Header = (props: Props) => {
           <IonBackButton text={labels.back} defaultHref="/" />
         </IonButtons>
         {props.withSearch && 
-          <IonButtons slot="end" onClick={() => setVisible(true)}>
+          <IonButtons slot="end" onClick={handleVisible}>
             <IonIcon 
               name="search-outline" 
               color="primary" 
@@ -30,7 +34,7 @@ const Header = (props: Props) => {
       </IonToolbar>
       {visible && 
         <IonToolbar>
-          <IonSearchbar placeholder={labels.search} onIonChange={e => dispatch({type: 'SET_SEARCH', payload: e.detail.value})}/>
+          <IonSearchbar placeholder={labels.search} value={state.searchText} onIonChange={e => dispatch({type: 'SET_SEARCH', payload: e.detail.value})}/>
         </IonToolbar>
       }
     </IonHeader>

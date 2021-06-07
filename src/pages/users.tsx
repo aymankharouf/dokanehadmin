@@ -4,8 +4,8 @@ import 'moment/locale/ar'
 import {StateContext} from '../data/state-provider'
 import labels from '../data/labels'
 import {User} from '../data/types'
-import {randomColors, userTypes} from '../data/config'
-import { useParams } from 'react-router'
+import {colors, userTypes} from '../data/config'
+import { useLocation, useParams } from 'react-router'
 import { IonBadge, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
 import { mailOutline } from 'ionicons/icons'
@@ -19,6 +19,7 @@ const Users = () => {
   const params = useParams<Params>()
   const [message] = useIonToast()
   const [alert] = useIonAlert()
+  const location = useLocation()
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {
@@ -55,12 +56,12 @@ const Users = () => {
           : users.map(u =>
               <IonItem key={u.id}>
                 <IonLabel>
-                  <IonText style={{color: randomColors[0].name}}>{`${labels.name}: ${u.name}`}</IonText>
-                  <IonText style={{color: randomColors[1].name}}>{`${labels.mobile}: ${u.mobile}`}</IonText>
-                  {u.storeName && <IonText style={{color: randomColors[2].name}}>{`${labels.storeName}: ${u.storeName}`}</IonText>}
-                  {u.regionId && <IonText style={{color: randomColors[3].name}}>{`${labels.region}: ${state.regions.find(r => r.id === u.regionId)?.name}`}</IonText>}
-                  {u.address && <IonText style={{color: randomColors[4].name}}>{`${labels.address}: ${u.address}`}</IonText>}
-                  <IonText style={{color: randomColors[5].name}}>{moment(u.time).fromNow()}</IonText>
+                  <IonText style={{color: colors[0].name}}>{`${labels.name}: ${u.name}`}</IonText>
+                  <IonText style={{color: colors[1].name}}>{`${labels.mobile}: ${u.mobile}`}</IonText>
+                  {u.storeName && <IonText style={{color: colors[2].name}}>{`${labels.storeName}: ${u.storeName}`}</IonText>}
+                  {u.regionId && <IonText style={{color: colors[3].name}}>{`${labels.region}: ${state.regions.find(r => r.id === u.regionId)?.name}`}</IonText>}
+                  {u.address && <IonText style={{color: colors[4].name}}>{`${labels.address}: ${u.address}`}</IonText>}
+                  <IonText style={{color: colors[5].name}}>{moment(u.time).fromNow()}</IonText>
                 </IonLabel>
                 {!u.isActive && <IonBadge color="danger">{labels.inActive}</IonBadge>}
                 <IonIcon 

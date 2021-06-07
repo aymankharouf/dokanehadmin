@@ -1,6 +1,6 @@
 import firebase from './firebase'
 import labels from './labels'
-import {randomColors, userTypes} from './config'
+import {colors, userTypes} from './config'
 import {Advert, Category, Country, Error, Region, Log, Pack, PackRequest, PackStore, Product, ProductRequest, Store, Trademark, User, Position} from './types'
 
 export const getMessage = (path: string, error: Error) => {
@@ -336,9 +336,10 @@ export const editPack = async (pack: Pack, packs: Pack[], image?: File) => {
 }
 
 export const deleteUser = async (user: User) => {
-  const colors = user.colors?.map(c => randomColors.find(rc => rc.name === c)?.id)
-  if (!colors) return
-  const password = colors.join('')
+  if (!user.colors) return
+  const userColors = user.colors.split(' ')
+  const numbers = userColors.map(c => colors.find(rc => rc.name === c)?.id)
+  const password = numbers.join('')
   await firebase.firestore().collection('users').doc(user.id).delete()
   await firebase.auth().signInWithEmailAndPassword(user.mobile + '@gmail.com', user.mobile.substring(9, 2) + password)
   return firebase.auth().currentUser?.delete()
