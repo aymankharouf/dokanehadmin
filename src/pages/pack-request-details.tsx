@@ -5,7 +5,7 @@ import {getMessage, getStoreName, resolvePackRequest} from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
-import { checkmarkOutline, chevronDownOutline, trashOutline } from 'ionicons/icons'
+import { checkmarkOutline, chevronDownOutline, closeOutline } from 'ionicons/icons'
 
 type Params = {
   id: string
@@ -93,7 +93,7 @@ const PackRequestDetails = () => {
             <IonIcon ios={checkmarkOutline}></IonIcon>
           </IonFabButton>
           <IonFabButton color="danger" onClick={handleReject}>
-            <IonIcon ios={trashOutline}></IonIcon>
+            <IonIcon ios={closeOutline}></IonIcon>
           </IonFabButton>
         </IonFabList>
       </IonFab>

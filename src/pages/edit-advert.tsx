@@ -107,6 +107,8 @@ const EditAdvert = () => {
             <IonDatetime 
               displayFormat="DD/MM/YYYY" 
               value={startDate} 
+              cancelText={labels.cancel}
+              doneText={labels.ok}
               onIonChange={e => setStartDate(e.detail.value!)}
             />
           </IonItem>
@@ -117,6 +119,8 @@ const EditAdvert = () => {
             <IonDatetime 
               displayFormat="DD/MM/YYYY" 
               value={endDate} 
+              cancelText={labels.cancel}
+              doneText={labels.ok}
               onIonChange={e => setEndDate(e.detail.value!)}
             />
           </IonItem>
@@ -147,7 +151,7 @@ const EditAdvert = () => {
           <IonImg src={imageUrl} alt={labels.noImage} />
         </IonList>
       </IonContent>
-      {title && (text || imageUrl) && hasChanged &&
+      {title && startDate && endDate && (text || imageUrl) && hasChanged &&
         <IonFab vertical="top" horizontal="end" slot="fixed">
           <IonFabButton onClick={handleSubmit} color="success">
             <IonIcon ios={checkmarkOutline} />

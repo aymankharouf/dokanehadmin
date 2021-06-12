@@ -59,7 +59,6 @@ export type PackStore = {
 }
 export type Rating = {
   productId: string,
-  status: string,
   userId: string,
   value: number,
 }
