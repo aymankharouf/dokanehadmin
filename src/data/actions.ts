@@ -8,7 +8,7 @@ export const getMessage = (path: string, error: Error) => {
   if (!labels[errorCode]) {
     firebase.firestore().collection('logs').add({
       userId: firebase.auth().currentUser?.uid,
-      error: error.code,
+      error: errorCode,
       page: path,
       time: new Date()
     })

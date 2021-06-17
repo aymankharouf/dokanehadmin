@@ -36,41 +36,6 @@ ion-backdrop {
   margin-top: 0.8rem;
 }
 
-.primary {
-  --color: var(--ion-color-primary);
-  --button-color: var(--ion-color-primary);
-}
-
-.secondary {
-  --color: var(--ion-color-secondary);
-  --button-color: var(--ion-color-secondary);
-}
-
-.tertiary {
-  --color: var(--ion-color-tertiary);
-  --button-color: var(--ion-color-tertiary);
-}
-
-.success {
-  --color: var(--ion-color-success);
-  --button-color: var(--ion-color-success);
-}
-
-.warning {
-  --color: var(--ion-color-warning);
-  --button-color: var(--ion-color-warning);
-}
-
-.danger {
-  --color: var(--ion-color-danger);
-  --button-color: var(--ion-color-danger);
-}
-
-.dark {
-  --color: var(--ion-color-dark);
-  --button-color: var(--ion-color-dark);
-}
-
 .list {
   border-style: outset;
   border-width: 2px;
