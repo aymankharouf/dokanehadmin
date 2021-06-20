@@ -39,7 +39,7 @@ const Categories = () => {
       const children = state.categories.filter(c => c.parentId === params.id)
       let categories = children.map(c => {
         const childrenCount = state.categories.filter(cc => cc.parentId === c.id).length
-        const categoryChildrens = categoryChildren(c.id!, state.categories)
+        const categoryChildrens = categoryChildren(c.id!, state)
         const productsCount = state.products.filter(p => categoryChildrens.includes(p.categoryId)).length
         return {
           ...c,
@@ -53,7 +53,7 @@ const Categories = () => {
   const handleDelete = () => {
     try{
       if (!currentCategory) return
-      deleteCategory(currentCategory, state.categories)
+      deleteCategory(currentCategory, state)
       message(labels.deleteSuccess, 3000)
       history.goBack()
     } catch(err) {

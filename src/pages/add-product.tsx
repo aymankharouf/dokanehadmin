@@ -153,7 +153,7 @@ const AddProduct = () => {
               onIonChange={e => setCategoryId(e.detail.value)}
             >
               <IonSelectOption value="0">{labels.new}</IonSelectOption>
-              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{getCategoryName(c, state.categories)}</IonSelectOption>)}
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id}>{getCategoryName(c, state)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>

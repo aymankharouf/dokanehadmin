@@ -93,7 +93,7 @@ const EditProduct = () => {
         countryId,
         unit
       }
-      editProduct(newProduct, state.packs, image)
+      editProduct(newProduct, state, image)
       message(labels.editSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -165,7 +165,7 @@ const EditProduct = () => {
               onIonChange={e => setCategoryId(e.detail.value)}
             >
               <IonSelectOption value="0">{labels.new}</IonSelectOption>
-              {categories.map(c => <IonSelectOption key={c.id} value={c.id} disabled={!c.isLeaf}>{getCategoryName(c, state.categories)}</IonSelectOption>)}
+              {categories.map(c => <IonSelectOption key={c.id} value={c.id} disabled={!c.isLeaf}>{getCategoryName(c, state)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>

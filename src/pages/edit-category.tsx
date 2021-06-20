@@ -27,7 +27,7 @@ const EditCategory = () => {
     let categories = otherCategories.map(c => {
       return {
         id: c.id,
-        name: getCategoryName(c, state.categories)
+        name: getCategoryName(c, state)
       }
     })
     return categories.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
@@ -48,7 +48,7 @@ const EditCategory = () => {
         ordering: +ordering,
         isActive
       }
-      editCategory(newCategory, category, state.categories)
+      editCategory(newCategory, category, state)
       message(labels.editSuccess, 3000)
       history.goBack()
     } catch(err) {

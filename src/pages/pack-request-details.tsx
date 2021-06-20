@@ -22,7 +22,7 @@ const PackRequestDetails = () => {
   const [storeInfo] = useState(() => state.stores.find(s => s.id === packRequest.storeId)!)
   const handleAccept = async () => {
     try{
-      await resolvePackRequest('a', packRequest!, state.packRequests, state.users)
+      await resolvePackRequest('a', packRequest!, state)
       message(labels.approveSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -37,7 +37,7 @@ const PackRequestDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: async () => {
           try{
-            await resolvePackRequest('r', packRequest!, state.packRequests, state.users)
+            await resolvePackRequest('r', packRequest!, state)
             message(labels.rejectSuccess, 3000)
             history.goBack()
           } catch(err) {
@@ -60,7 +60,7 @@ const PackRequestDetails = () => {
               {labels.storeName}
             </IonLabel>
             <IonInput 
-              value={getStoreName(storeInfo, state.regions)} 
+              value={getStoreName(storeInfo, state)} 
               readonly
             />
           </IonItem>

@@ -37,7 +37,7 @@ const Products = () => {
         const countryName = state.countries.find(c => c.id === p.countryId)!.name
         return {
           ...p,
-          categoryName: getCategoryName(categoryInfo, state.categories),
+          categoryName: getCategoryName(categoryInfo, state),
           trademarkName,
           countryName
         }

@@ -126,3 +126,6 @@
 *confirmatiom messages between users
 *search in products & archived products
 *pack ordering inhance
+user rewards
+advert by location
+enhancement in state

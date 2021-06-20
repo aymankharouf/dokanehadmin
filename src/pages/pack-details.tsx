@@ -53,7 +53,7 @@ const PackDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: () => {
           try{
-            deleteStorePack(storePackInfo, state.packStores, state.packs)
+            deleteStorePack(storePackInfo, state)
             message(labels.deleteSuccess, 3000)
           } catch(err) {
             message(getMessage(location.pathname, err), 3000)
@@ -106,7 +106,7 @@ const PackDetails = () => {
           {packStores.map((s, i) => 
             <IonItem key={i}>
               <IonLabel>
-                <IonText style={{color: colors[0].name}}>{getStoreName(s.storeInfo, state.regions)}</IonText>
+                <IonText style={{color: colors[0].name}}>{getStoreName(s.storeInfo, state)}</IonText>
                 {s.packId !== pack?.id && <IonText style={{color: colors[1].name}}>{s.packInfo?.name}</IonText>}
                 <IonText style={{color: colors[2].name}}>{`${labels.price}: ${s.price.toFixed(2)} ${s.isActive ? '' : '(' + labels.inActive + ')'}`}</IonText>
               </IonLabel>

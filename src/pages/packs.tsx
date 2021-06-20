@@ -30,7 +30,7 @@ const Packs = () => {
         const countryName = state.countries.find(c => c.id === p.product.countryId)!.name
         return {
           ...p,
-          categoryName: getCategoryName(categoryInfo, state.categories),
+          categoryName: getCategoryName(categoryInfo, state),
           trademarkName,
           countryName,
           price: params.id === '0' ? 0 : state.packStores.find(s => s.storeId === params.id && s.packId === p.id)?.price
