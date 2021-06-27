@@ -36,7 +36,7 @@ const ArchivedProducts = () => {
         const countryName = state.countries.find(c => c.id === p.countryId)!.name
         return {
           ...p,
-          categoryName: getCategoryName(categoryInfo, state),
+          categoryName: getCategoryName(categoryInfo, state.categories),
           trademarkName,
           countryName
         }

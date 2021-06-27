@@ -44,7 +44,7 @@ const StoreDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: () => {
           try{
-            changeStoreStatus(store, state)
+            changeStoreStatus(store, state.users, state.packStores)
             message(labels.editSuccess, 3000)
           } catch(err) {
             message(getMessage(location.pathname, err), 3000)

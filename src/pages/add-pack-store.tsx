@@ -36,7 +36,7 @@ const AddPackStore = () => {
         isActive: true,
         time: new Date()
       }
-      addPackStore(storePack, state)
+      addPackStore(storePack, state.packs)
       message(labels.addSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -59,7 +59,7 @@ const AddPackStore = () => {
               value={storeId}
               onIonChange={e => setStoreId(e.detail.value)}
             >
-              {stores.map(s => <IonSelectOption key={s.id} value={s.id}>{getStoreName(s, state)}</IonSelectOption>)}
+              {stores.map(s => <IonSelectOption key={s.id} value={s.id}>{getStoreName(s, state.regions)}</IonSelectOption>)}
             </IonSelect>
           </IonItem>
           <IonItem>

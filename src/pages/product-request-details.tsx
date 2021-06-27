@@ -20,7 +20,7 @@ const ProductRequestDetails = () => {
   const [productRequest] = useState(() => state.productRequests.find(p => p.id === params.id)!)
   const handleAccept = async () => {
     try{
-      await resolveProductRequest('a', productRequest, state)
+      await resolveProductRequest('a', productRequest, state.productRequests, state.users)
       message(labels.approveSuccess, 3000)
       history.goBack()
     } catch(err) {
@@ -35,7 +35,7 @@ const ProductRequestDetails = () => {
         {text: labels.cancel},
         {text: labels.ok, handler: async () => {
           try{
-            await resolveProductRequest('r', productRequest, state)
+            await resolveProductRequest('r', productRequest, state.productRequests, state.users)
             message(labels.rejectSuccess, 3000)
             history.goBack()
           } catch(err) {
@@ -58,7 +58,7 @@ const ProductRequestDetails = () => {
               {labels.storeName}
             </IonLabel>
             <IonInput 
-              value={getStoreName(state.stores.find(s => s.id === productRequest.storeId)!, state)} 
+              value={getStoreName(state.stores.find(s => s.id === productRequest.storeId)!, state.regions)} 
               readonly
             />
           </IonItem>

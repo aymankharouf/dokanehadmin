@@ -28,7 +28,7 @@ const ProductRequests = () => {
                   <IonText style={{color: colors[0].name}}>{r.name}</IonText>
                   <IonText style={{color: colors[1].name}}>{r.weight}</IonText>
                   <IonText style={{color: colors[2].name}}>{r.country}</IonText>
-                  <IonText style={{color: colors[3].name}}>{`${labels.store}: ${getStoreName(state.stores.find(s => s.id === r.storeId)!, state)}`}</IonText>
+                  <IonText style={{color: colors[3].name}}>{`${labels.store}: ${getStoreName(state.stores.find(s => s.id === r.storeId)!, state.regions)}`}</IonText>
                   <IonText style={{color: colors[4].name}}>{moment(r.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonLabel slot="end" className="price">{r.price!.toFixed(2)}</IonLabel>

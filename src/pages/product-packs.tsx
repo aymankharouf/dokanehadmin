@@ -51,7 +51,7 @@ const ProductPacks = () => {
   }, [packs])
   const handleArchive = () => {
     try{
-      archiveProduct(product, state)
+      archiveProduct(product, state.packs)
       message(labels.editSuccess, 3000)
       history.goBack()
     } catch(err) {

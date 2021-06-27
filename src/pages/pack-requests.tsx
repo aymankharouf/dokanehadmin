@@ -27,7 +27,7 @@ const PackRequests = () => {
                 <IonLabel>
                   <IonText style={{color: colors[0].name}}>{state.packs.find(p => p.id === r.siblingPackId)?.product.name}</IonText>
                   <IonText style={{color: colors[1].name}}>{r.name}</IonText>
-                  <IonText style={{color: colors[2].name}}>{`${labels.store}: ${getStoreName(state.stores.find(s => s.id === r.storeId)!, state)}`}</IonText>
+                  <IonText style={{color: colors[2].name}}>{`${labels.store}: ${getStoreName(state.stores.find(s => s.id === r.storeId)!, state.regions)}`}</IonText>
                   <IonText style={{color: colors[3].name}}>{moment(r.time).fromNow()}</IonText>
                 </IonLabel>
                 <IonLabel slot="end" className="price">{r.price!.toFixed(2)}</IonLabel>
