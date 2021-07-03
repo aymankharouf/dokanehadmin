@@ -1,7 +1,7 @@
-import {useState, useEffect, useContext} from 'react'
-import {addStore, getMessage} from '../data/actions'
+import { useState, useEffect, useContext } from 'react'
+import { addStore, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import { userTypes, patterns } from '../data/config'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
@@ -10,7 +10,7 @@ import { checkmarkOutline } from 'ionicons/icons'
 import { Region } from '../data/types'
 
 const AddStore = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()

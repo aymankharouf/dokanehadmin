@@ -1,9 +1,9 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
-import {deleteStorePack, deletePack, getMessage, getStoreName} from '../data/actions'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
+import { deleteStorePack, deletePack, getMessage, getStoreName } from '../data/actions'
 import labels from '../data/labels'
-import {Pack, PackStore, Store} from '../data/types'
-import {colors} from '../data/config'
+import { Pack, PackStore, Store } from '../data/types'
+import { colors } from '../data/config'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { useHistory, useLocation, useParams } from 'react-router'
@@ -19,7 +19,7 @@ type ExtendedPackStore = PackStore & {
   storeInfo: Store,
 }
 const PackDetails = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

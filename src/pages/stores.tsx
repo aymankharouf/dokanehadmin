@@ -1,14 +1,14 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {Store} from '../data/types'
+import { Store } from '../data/types'
 import { colors, userTypes } from '../data/config'
 import { IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
 
 const Stores = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [stores, setStores] = useState<Store[]>([])
   useEffect(() => {
     setStores(() => {

@@ -1,12 +1,12 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
 
 const Trademarks = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [trademarks, setTrademarks] = useState(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))
   useEffect(() => {
     setTrademarks(() => [...state.trademarks].sort((t1, t2) => t1.name > t2.name ? 1 : -1))

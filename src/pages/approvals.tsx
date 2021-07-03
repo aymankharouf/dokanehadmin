@@ -1,8 +1,8 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {colors} from '../data/config'
-import {User} from '../data/types'
+import { colors } from '../data/config'
+import { User } from '../data/types'
 import { IonButton, IonContent, IonPage } from '@ionic/react'
 import Header from './header'
 
@@ -13,7 +13,7 @@ type Section = {
   count: number
 }
 const Approvals = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [sections, setSections] = useState<Section[]>([])
   const [newUsers, setNewUsers] = useState<User[]>([])
   useEffect(() => {

@@ -1,6 +1,6 @@
-import {useState, useContext, useRef, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
-import {deleteCountry, editCountry, getMessage} from '../data/actions'
+import { useState, useContext, useRef, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
+import { deleteCountry, editCountry, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
@@ -11,7 +11,7 @@ type Params = {
   id: string
 }
 const EditCountry = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

@@ -1,12 +1,12 @@
-import {useContext} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
 
 const Regions = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   return (
     <IonPage>
       <Header title={labels.regions} />

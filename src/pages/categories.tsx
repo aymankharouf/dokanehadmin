@@ -1,13 +1,13 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {deleteCategory, getMessage, categoryChildren} from '../data/actions'
-import {Category} from '../data/types'
+import { deleteCategory, getMessage, categoryChildren } from '../data/actions'
+import { Category } from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonActionSheet, IonBadge, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonToast } from '@ionic/react'
 import Header from './header'
 import { chevronDownOutline } from 'ionicons/icons'
-import {colors} from '../data/config'
+import { colors } from '../data/config'
 
 type Params = {
   id: string
@@ -17,7 +17,7 @@ type ExtendedCategory = Category & {
   productsCount: number
 }
 const Categories = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

@@ -12,7 +12,7 @@ type Params = {
   id: string,
 }
 const AddPack = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

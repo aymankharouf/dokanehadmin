@@ -1,8 +1,8 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {productOfText, getCategoryName} from '../data/actions'
-import {Product} from '../data/types'
+import { productOfText, getCategoryName } from '../data/actions'
+import { Product } from '../data/types'
 import { useParams } from 'react-router'
 import { IonButton, IonContent, IonFooter, IonGrid, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, IonThumbnail, IonToolbar } from '@ionic/react'
 import Header from './header'
@@ -18,7 +18,7 @@ type ExtendedProduct = Product & {
   countryName: string
 }
 const Products = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const params = useParams<Params>()
   const [category] = useState(() => state.categories.find(c => c.id === params.id))
   const [products, setProducts] = useState<ExtendedProduct[]>([])

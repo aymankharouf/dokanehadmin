@@ -1,5 +1,5 @@
-import {useContext, useEffect, useState} from 'react'
-import {addRegion, getMessage} from '../data/actions'
+import { useContext, useEffect, useState } from 'react'
+import { addRegion, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
@@ -8,7 +8,7 @@ import { StateContext } from '../data/state-provider'
 import { checkmarkOutline } from 'ionicons/icons'
 
 const AddLocation = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const [name, setName] = useState('')
   const [ordering, setOrdering] = useState('')
   const [position, setPosition] = useState({lat: 0, lng: 0})

@@ -1,8 +1,8 @@
-import {useState, useContext, useEffect, ChangeEvent, useRef} from 'react'
-import {StateContext } from '../data/state-provider'
-import {addProduct, getCategoryName, getMessage} from '../data/actions'
+import { useState, useContext, useEffect, ChangeEvent, useRef } from 'react'
+import { StateContext } from '../data/state-provider'
+import { addProduct, getCategoryName, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import {units} from '../data/config'
+import { units } from '../data/config'
 import { Category } from '../data/types'
 import { useHistory, useLocation } from 'react-router'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
@@ -10,7 +10,7 @@ import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
 const AddProduct = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()

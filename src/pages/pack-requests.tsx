@@ -1,7 +1,7 @@
-import {useContext} from 'react'
+import { useContext } from 'react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
 import Header from './header'
@@ -9,7 +9,7 @@ import { colors } from '../data/config'
 import { getStoreName } from '../data/actions'
 
 const PackRequests = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   return(
     <IonPage>
       <Header title={labels.packRequests} />

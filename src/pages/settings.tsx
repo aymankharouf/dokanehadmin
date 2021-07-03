@@ -1,6 +1,6 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import labels from '../data/labels'
-import {colors} from '../data/config'
+import { colors } from '../data/config'
 import { IonButton, IonContent, IonPage } from '@ionic/react'
 import Header from './header'
 

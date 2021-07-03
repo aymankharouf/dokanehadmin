@@ -1,8 +1,8 @@
-import {useContext, useState} from 'react'
-import {StateContext } from '../data/state-provider'
-import {resolvePasswordRequest, getMessage} from '../data/actions'
+import { useContext, useState } from 'react'
+import { StateContext } from '../data/state-provider'
+import { resolvePasswordRequest, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import {colors} from '../data/config'
+import { colors } from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -12,7 +12,7 @@ type Params = {
   id: string
 }
 const RetreivePassword = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

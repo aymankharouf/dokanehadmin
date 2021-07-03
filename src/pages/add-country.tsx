@@ -1,14 +1,14 @@
-import {useContext, useState} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {addCountry, getMessage} from '../data/actions'
+import { addCountry, getMessage } from '../data/actions'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
 import Header from './header'
 import { checkmarkOutline } from 'ionicons/icons'
 
 const AddCountry = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()

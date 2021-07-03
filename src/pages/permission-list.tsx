@@ -1,7 +1,7 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {User} from '../data/types'
+import { User } from '../data/types'
 import moment from 'moment'
 import 'moment/locale/ar'
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
@@ -9,7 +9,7 @@ import Header from './header'
 import { colors, userTypes } from '../data/config'
 
 const PermissionList = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [users, setUsers] = useState<User[]>([])
   useEffect(() => {
     setUsers(() => {

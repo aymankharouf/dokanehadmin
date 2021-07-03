@@ -1,9 +1,9 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {colors} from '../data/config'
-import {getCategoryName, productOfText} from '../data/actions'
-import {Pack} from '../data/types'
+import { colors} from '../data/config'
+import { getCategoryName, productOfText } from '../data/actions'
+import { Pack } from '../data/types'
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail } from '@ionic/react'
 import Header from './header'
 import { useParams } from 'react-router'
@@ -17,7 +17,7 @@ type ExtendedPack = Pack & {
   trademarkName?: string,
 }
 const Packs = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [store] = useState(() => state.stores.find(s => s.id === params.id)!)
   const [packs, setPacks] = useState<ExtendedPack[]>([])

@@ -25,7 +25,7 @@ type Params = {
 }
 
 const Map = () => {
-  const {dispatch} = useContext(StateContext)
+  const { dispatch } = useContext(StateContext)
   const params = useParams<Params>()
   const history = useHistory()
   const [position, setPosition] = useState({lat: +params.lat, lng: +params.lng})

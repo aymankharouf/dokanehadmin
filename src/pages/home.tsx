@@ -1,11 +1,11 @@
-import {useContext, useEffect, useState} from 'react'
-import {colors} from '../data/config'
+import { useContext, useEffect, useState } from 'react'
+import { colors } from '../data/config'
 import labels from '../data/labels'
 import { IonButton, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react'
 import { StateContext } from '../data/state-provider'
 
 const Home = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [mainPages] = useState(() => [
     {id: '1', name: labels.products, path: '/products/0'},
     {id: '2', name: labels.settings, path: '/settings'},

@@ -1,16 +1,16 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {colors} from '../data/config'
-import {Advert} from '../data/types'
+import { colors } from '../data/config'
+import { Advert } from '../data/types'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
 import { addOutline } from 'ionicons/icons'
 
 const Adverts = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [adverts, setAdverts] = useState<Advert[]>([])
   useEffect(() => {
     setAdverts(() => [...state.adverts].sort((a1, a2) => a2.time > a1.time ? 1 : -1))

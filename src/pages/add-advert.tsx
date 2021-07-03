@@ -1,5 +1,5 @@
-import {useState, ChangeEvent, useRef, useContext} from 'react'
-import {addAdvert, getMessage} from '../data/actions'
+import { useState, ChangeEvent, useRef, useContext } from 'react'
+import { addAdvert, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { IonButton, IonContent, IonDatetime, IonFab, IonFabButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'
@@ -8,7 +8,7 @@ import { checkmarkOutline } from 'ionicons/icons'
 import { StateContext } from '../data/state-provider'
 
 const AddAdvert = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const history = useHistory()

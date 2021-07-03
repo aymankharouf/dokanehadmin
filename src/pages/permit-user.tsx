@@ -1,7 +1,7 @@
-import {useContext, useEffect, useState} from 'react'
-import {permitUser, getMessage} from '../data/actions'
+import { useContext, useEffect, useState } from 'react'
+import { permitUser, getMessage } from '../data/actions'
 import labels from '../data/labels'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import { userTypes } from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonButton, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonSelect, IonSelectOption, useIonToast } from '@ionic/react'
@@ -12,7 +12,7 @@ type Params = {
   id: string
 }
 const PermitUser = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

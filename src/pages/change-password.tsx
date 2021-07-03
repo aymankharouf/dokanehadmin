@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {changePassword, getMessage} from '../data/actions'
+import { useState } from 'react'
+import { changePassword, getMessage } from '../data/actions'
 import labels from '../data/labels'
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, useIonToast } from '@ionic/react'
 import { useHistory, useLocation } from 'react-router'

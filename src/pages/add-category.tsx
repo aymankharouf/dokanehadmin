@@ -1,7 +1,7 @@
-import {useState, useContext} from 'react'
+import { useState, useContext } from 'react'
 import labels from '../data/labels'
-import {addCategory, getMessage} from '../data/actions'
-import {StateContext} from '../data/state-provider'
+import { addCategory, getMessage } from '../data/actions'
+import { StateContext} from '../data/state-provider'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToggle, useIonToast } from '@ionic/react'
 import { useHistory, useLocation, useParams } from 'react-router'
 import Header from './header'
@@ -12,7 +12,7 @@ type Params = {
   id: string
 }
 const AddCategory = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

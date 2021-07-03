@@ -1,7 +1,7 @@
-import {useContext, useState} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {getMessage, getStoreName, resolvePackRequest} from '../data/actions'
+import { getMessage, getStoreName, resolvePackRequest } from '../data/actions'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonCard, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -11,7 +11,7 @@ type Params = {
   id: string
 }
 const PackRequestDetails = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()

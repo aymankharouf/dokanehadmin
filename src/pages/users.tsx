@@ -1,10 +1,10 @@
-import {useContext, useState, useEffect} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {User} from '../data/types'
-import {colors, userTypes} from '../data/config'
+import { User } from '../data/types'
+import { colors, userTypes } from '../data/config'
 import { useLocation, useParams } from 'react-router'
 import { IonBadge, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonText, useIonAlert, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -15,7 +15,7 @@ type Params = {
   id: string
 }
 const Users = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const [alert] = useIonAlert()

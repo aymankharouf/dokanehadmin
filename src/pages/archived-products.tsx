@@ -1,8 +1,8 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {getCategoryName, getArchivedProducts, getMessage, productOfText} from '../data/actions'
-import {Product} from '../data/types'
+import { getCategoryName, getArchivedProducts, getMessage, productOfText } from '../data/actions'
+import { Product} from '../data/types'
 import { IonContent, IonFab, IonFabButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonText, IonThumbnail, useIonLoading, useIonToast } from '@ionic/react'
 import { useLocation } from 'react-router'
 import Header from './header'
@@ -16,7 +16,7 @@ type ExtendedProduct = Product & {
   countryName: string
 }
 const ArchivedProducts = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const [message] = useIonToast()
   const location = useLocation()
   const [loading, dismiss] = useIonLoading()

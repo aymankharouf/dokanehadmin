@@ -1,14 +1,14 @@
-import {useContext} from 'react'
+import { useContext } from 'react'
 import moment from 'moment'
 import 'moment/locale/ar'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonText } from '@ionic/react'
 import Header from './header'
 import { colors } from '../data/config'
 
 const PasswordRequests = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
 
   return(
     <IonPage>

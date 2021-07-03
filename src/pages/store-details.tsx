@@ -1,5 +1,5 @@
-import {useContext, useState, useEffect} from 'react'
-import {StateContext} from '../data/state-provider'
+import { useContext, useState, useEffect } from 'react'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
 import { colors, userTypes } from '../data/config'
 import { useHistory, useLocation, useParams } from 'react-router'
@@ -12,7 +12,7 @@ type Params = {
   id: string
 }
 const StoreDetails = () => {
-  const {state} = useContext(StateContext)
+  const { state } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const [alert] = useIonAlert()

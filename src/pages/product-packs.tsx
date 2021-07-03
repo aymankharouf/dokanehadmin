@@ -1,9 +1,9 @@
-import {useContext, useState, useEffect} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import RatingStars from './rating-stars'
-import {StateContext} from '../data/state-provider'
+import { StateContext } from '../data/state-provider'
 import labels from '../data/labels'
-import {archiveProduct, deleteProduct, getMessage, productOfText, getArchivedPacks} from '../data/actions'
-import {Pack} from '../data/types'
+import { archiveProduct, deleteProduct, getMessage, productOfText, getArchivedPacks } from '../data/actions'
+import { Pack } from '../data/types'
 import { useHistory, useLocation, useParams } from 'react-router'
 import { IonActionSheet, IonBadge, IonCard, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonIcon, IonImg, IonItem, IonLabel, IonList, IonPage, IonRow, IonText, useIonAlert, useIonLoading, useIonToast } from '@ionic/react'
 import Header from './header'
@@ -15,7 +15,7 @@ type Params = {
   type: string
 }
 const ProductPacks = () => {
-  const {state, dispatch} = useContext(StateContext)
+  const { state, dispatch } = useContext(StateContext)
   const params = useParams<Params>()
   const [message] = useIonToast()
   const location = useLocation()
@@ -151,7 +151,6 @@ const ProductPacks = () => {
             cssClass: packs.length === 0 ? colors[i++ % 10].name : 'ion-hide',
             handler: () => handleDelete()
           },
-
         ]}
       />
     </IonPage>
