@@ -81,17 +81,17 @@ const EditCountry = () => {
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed" ref={fabList}>
         <IonFabButton>
-          <IonIcon ios={chevronDownOutline}></IonIcon>
+          <IonIcon ios={chevronDownOutline} />
         </IonFabButton>
         <IonFabList>
           {name && hasChanged &&
             <IonFabButton color="success" onClick={handleSubmit}>
-              <IonIcon ios={checkmarkOutline}></IonIcon>
+              <IonIcon ios={checkmarkOutline} />
             </IonFabButton>
           }
           {state.products.filter(p => p.countryId === params.id).length === 0 &&
             <IonFabButton color="danger" onClick={handleDelete}>
-              <IonIcon ios={trashOutline}></IonIcon>
+              <IonIcon ios={trashOutline} />
             </IonFabButton>
           }
         </IonFabList>

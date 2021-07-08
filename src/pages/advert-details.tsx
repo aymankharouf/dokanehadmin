@@ -61,14 +61,14 @@ const AdvertDetails = () => {
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed">
         <IonFabButton>
-          <IonIcon ios={chevronDownOutline}></IonIcon>
+          <IonIcon ios={chevronDownOutline} />
         </IonFabButton>
         <IonFabList>
           <IonFabButton color="success" routerLink={`/edit-advert/${params.id}`}>
-            <IonIcon ios={pencilOutline}></IonIcon>
+            <IonIcon ios={pencilOutline} />
           </IonFabButton>
           <IonFabButton color="danger" onClick={handleDelete}>
-            <IonIcon ios={trashOutline}></IonIcon>
+            <IonIcon ios={trashOutline} />
           </IonFabButton>
         </IonFabList>
       </IonFab>

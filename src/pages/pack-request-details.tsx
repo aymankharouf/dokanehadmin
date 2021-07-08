@@ -86,14 +86,14 @@ const PackRequestDetails = () => {
       </IonContent>
       <IonFab horizontal="end" vertical="top" slot="fixed">
         <IonFabButton>
-          <IonIcon ios={chevronDownOutline}></IonIcon>
+          <IonIcon ios={chevronDownOutline} />
         </IonFabButton>
         <IonFabList>
           <IonFabButton color="success" onClick={handleAccept}>
-            <IonIcon ios={checkmarkOutline}></IonIcon>
+            <IonIcon ios={checkmarkOutline} />
           </IonFabButton>
           <IonFabButton color="danger" onClick={handleReject}>
-            <IonIcon ios={closeOutline}></IonIcon>
+            <IonIcon ios={closeOutline} />
           </IonFabButton>
         </IonFabList>
       </IonFab>

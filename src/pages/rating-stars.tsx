@@ -16,9 +16,9 @@ const RatingStars = (props: Props) => {
   return (
     <>
       {props.count > 0 ? '(' + props.count + ')' : ''}
-      {outlineArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starOutline} color={color}></IonIcon>)}
-      {half === 0 ? '' : <IonIcon style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starHalfOutline} color={color}></IonIcon>}
-      {fillArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={star} color={color}></IonIcon>)}
+      {outlineArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starOutline} color={color} />)}
+      {half === 0 ? '' : <IonIcon style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={starHalfOutline} color={color} />}
+      {fillArray.map(i => <IonIcon key={i} style={{fontSize: props.size === 's' ? '10px' : '20px'}} ios={star} color={color} />)}
     </>
   )
 }

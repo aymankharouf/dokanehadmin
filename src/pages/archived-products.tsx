@@ -99,7 +99,7 @@ const ArchivedProducts = () => {
         </IonList>
         <IonFab horizontal="end" vertical="top" slot="fixed" style={{top: '-10px'}}>
           <IonFabButton onClick={handleRetreive} size="small">
-            <IonIcon ios={cloudDownloadOutline}></IonIcon>
+            <IonIcon ios={cloudDownloadOutline} />
           </IonFabButton>
         </IonFab>
       </IonContent>

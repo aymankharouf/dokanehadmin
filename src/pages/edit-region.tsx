@@ -121,11 +121,11 @@ const EditLocation = () => {
         </IonFabButton>
         <IonFabList>
           <IonFabButton color="danger" onClick={handleDelete}>
-            <IonIcon ios={trashOutline}></IonIcon>
+            <IonIcon ios={trashOutline} />
           </IonFabButton>
           {name && hasChanged && 
             <IonFabButton color="success" onClick={handleEdit}>
-              <IonIcon ios={checkmarkOutline}></IonIcon>
+              <IonIcon ios={checkmarkOutline} />
             </IonFabButton>
           }
         </IonFabList>
